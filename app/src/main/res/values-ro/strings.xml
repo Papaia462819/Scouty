@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Scouty</string>
+
+    <string name="nav_map">Hartă</string>
+    <string name="nav_sos">SOS</string>
+
+    <string name="header_status">Asistent outdoor offline-first</string>
+    <string name="state_offline">Mod offline pregătit</string>
+    <string name="state_battery_ok">Baterie %1$d%%</string>
+    <string name="state_battery_safe">Battery Safe activ</string>
+    <string name="state_gps_waiting">GPS: în așteptare fix</string>
+    <string name="state_gps_fixed">GPS: fix disponibil</string>
+
+    <string name="map_section_title">Navigație și teren</string>
+    <string name="map_placeholder">Placeholder hartă MapLibre</string>
+    <string name="overlay_protected_areas">Arii protejate</string>
+    <string name="overlay_wildlife_risk">Zone risc faună</string>
+    <string name="overlay_trails">Trasee montane</string>
+    <string name="overlay_difficulty">Dificultate traseu</string>
+    <string name="overlay_terrain">Relief</string>
+    <string name="overlay_peaks">Etichete vârfuri</string>
+    <string name="overlay_places">Localități</string>
+    <string name="overlay_water_points">Apă și râuri</string>
+    <string name="overlay_attractions">Atracții</string>
+    <string name="map_missing_config_title">Configurarea hărții este incompletă</string>
+    <string name="map_missing_config_body">Adaugă tokenul și tileset-urile Mapbox în local.properties înainte să deschizi harta.</string>
+    <string name="map_search_placeholder">Caută vârfuri, refugii, trasee...</string>
+
+    <string name="assistant_section_title">Asistent medical și supraviețuire</string>
+    <string name="assistant_hint">Descrie situația...</string>
+    <string name="assistant_send">Trimite</string>
+    <string name="assistant_prompt_ankle">Mi-am sucit glezna</string>
+    <string name="assistant_prompt_water">Cum pot purifica apa?</string>
+    <string name="assistant_prompt_bear">Urme de urs în apropiere, ce fac?</string>
+    <string name="assistant_disclaimer">Doar suport informativ. În urgență sună la 112.</string>
+
+    <string name="sos_section_title">Flux de urgență</string>
+    <string name="sos_desc">Generează mesaj SOS compact din GPS, timp până la apus și rezumat incident.</string>
+    <string name="sos_compose">Compune mesaj SOS</string>
+    <string name="sos_preview">Preview SOS: Lat/Lon; Apus în 2h; Suspect fractură; Baterie 14%%.</string>
+    <string name="sos_notice">Trimiterea prin satelit depinde de suportul OS/dispozitiv.</string>
+</resources>

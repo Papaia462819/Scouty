@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Scouty</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_map">Map</string>
+    <string name="nav_chat">Chat</string>
+    <string name="nav_sos">SOS</string>
+    <string name="nav_gear">Gear</string>
+    <string name="nav_profile">Profile</string>
+
+    <string name="header_status">Offline-first outdoor assistant</string>
+    <string name="state_offline">OFFLINE</string>
+    <string name="state_gps_lock">GPS Lock</string>
+    <string name="state_gps_waiting">GPS: waiting for fix</string>
+    <string name="state_gps_fixed">GPS: fix available</string>
+    <string name="state_battery_ok">Battery %1$d%%</string>
+    <string name="state_battery_safe">Battery Safe ON</string>
+
+    <string name="home_active_trail">ACTIVE TRAIL</string>
+    <string name="home_view_all">View all \u2192</string>
+    <string name="home_quick_actions">QUICK ACTIONS</string>
+    <string name="home_nearby_trails">NEARBY TRAILS</string>
+
+    <string name="action_sos">SOS</string>
+    <string name="action_compass">Compass</string>
+    <string name="action_shelter">Shelter</string>
+    <string name="action_water">Water</string>
+
+    <string name="map_section_title">Navigation and Terrain</string>
+    <string name="map_placeholder">MapLibre map placeholder</string>
+    <string name="map_missing_config_title">Map configuration is incomplete</string>
+    <string name="map_missing_config_body">Add your Mapbox token and tileset ids in local.properties before opening the map.</string>
+    <string name="map_search_placeholder">Search peaks, huts, trails...</string>
+    <string name="map_topo">Topo</string>
+    <string name="map_satellite">Satellite</string>
+    <string name="map_trail">Trail</string>
+    <string name="overlay_terrain">Terrain shading</string>
+    <string name="overlay_protected_areas">Protected areas</string>
+    <string name="overlay_wildlife_risk">Wildlife risk zones</string>
+    <string name="overlay_trails">Mountain trails</string>
+    <string name="overlay_difficulty">Trail difficulty</string>
+    <string name="overlay_peaks">Peak labels</string>
+    <string name="overlay_places">Settlements</string>
+    <string name="overlay_water_points">Water and rivers</string>
+    <string name="overlay_attractions">Attractions</string>
+
+    <string name="chat_hint">Ask anything...</string>
+    <string name="chat_prompt_ankle">I twisted my ankle</string>
+    <string name="chat_prompt_water">How can I purify water?</string>
+    <string name="chat_prompt_bear">Bear signs nearby, what do I do?</string>
+
+    <string name="sos_title">EMERGENCY</string>
+    <string name="sos_desc">Generate a compact SOS message from GPS, time to sunset, and incident summary.</string>
+    <string name="sos_compose">Compose SOS message</string>
+    <string name="sos_preview">SOS preview: Lat/Lon; Sunset in 2h; Suspected fracture; Battery 14%.</string>
+    <string name="sos_notice">Device satellite handoff depends on OS/device support.</string>
+    <string name="sos_hold_hint">Press and hold to send GPS location to Salvamont</string>
+    <string name="sos_button">SOS</string>
+    <string name="sos_hold_time">HOLD 3s</string>
+    <string name="sos_your_location">Your Location</string>
+    <string name="sos_contacts">EMERGENCY CONTACTS</string>
+
+    <string name="gear_title">Gear Checklist</string>
+    <string name="gear_items_packed">%1$d / %2$d items</string>
+    <string name="gear_critical">CRITICAL</string>
+
+    <string name="profile_title">Profile</string>
+    <string name="profile_level">Level %1$d \u00B7 %2$s</string>
+    <string name="profile_member_since">Member since %1$s</string>
+    <string name="profile_stats_trails">Trails</string>
+    <string name="profile_stats_km">km</string>
+    <string name="profile_stats_gain">m gained</string>
+    <string name="profile_offline_storage">OFFLINE STORAGE</string>
+
+    <!-- Legacy strings for compatibility during cleanup -->
+    <string name="assistant_prompt_ankle">I twisted my ankle</string>
+    <string name="assistant_prompt_water">How can I purify water?</string>
+    <string name="assistant_prompt_bear">Bear signs nearby, what should I do?</string>
+    <string name="assistant_section_title">Assistant</string>
+    <string name="assistant_hint">Describe your situation...</string>
+    <string name="assistant_send">Send</string>
+    <string name="assistant_disclaimer">Informational support only.</string>
+    <string name="sos_section_title">Emergency</string>
+</resources>

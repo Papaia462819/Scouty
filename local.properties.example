@@ -1,0 +1,19 @@
+## Copy this file to local.properties and complete the values for your machine.
+## Do not commit the real local.properties file.
+
+sdk.dir=C\:\\Android\\Sdk
+
+mapbox.accessToken=
+mapbox.username=
+mapbox.baseTileset=
+mapbox.elevationTileset=
+mapbox.trailsTileset=
+mapbox.trailsSourceLayer=
+mapbox.wildlifeTileset=
+mapbox.wildlifeSourceLayer=
+mapbox.attractionsTileset=
+mapbox.attractionsSourceLayer=
+mapbox.waterTileset=
+mapbox.waterSourceLayer=
+
+meteoblue.apiKey=
