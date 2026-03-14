@@ -23,8 +23,15 @@
     <string name="overlay_places">Localități</string>
     <string name="overlay_water_points">Apă și râuri</string>
     <string name="overlay_attractions">Atracții</string>
-    <string name="map_missing_config_title">Configurarea hărții este incompletă</string>
-    <string name="map_missing_config_body">Adaugă tokenul și tileset-urile Mapbox în local.properties înainte să deschizi harta.</string>
+    <string name="map_missing_pack_title">Lipsește pachetul local de hartă</string>
+    <string name="map_missing_pack_body">Scouty încarcă acum harta de bază dintr-un pack PMTiles local în storage-ul aplicației. Importă pachetul România pentru a folosi harta offline.</string>
+    <string name="map_pack_target_path">Fișier așteptat: %1$s în %2$s</string>
+    <string name="map_import_base_pack">Importă pack România</string>
+    <string name="map_import_demo_pack">Importă pack Bucegi</string>
+    <string name="map_pack_importing">Se importă…</string>
+    <string name="map_demo_pack_title">Detaliul Bucegi este opțional</string>
+    <string name="map_demo_pack_body">Importă pack-ul Bucegi ca să obții zoom mai clar în zona principală de demo.</string>
+    <string name="map_runtime_error_title">Eroare pack hartă</string>
     <string name="map_search_placeholder">Caută vârfuri, refugii, trasee...</string>
 
     <string name="assistant_section_title">Asistent medical și supraviețuire</string>

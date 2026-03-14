@@ -9,9 +9,13 @@ plugins {
 }
 
 val localProperties = Properties().apply {
-    val file = rootProject.file("local.properties")
-    if (file.exists()) {
-        file.inputStream().use(::load)
+    listOf(
+        rootProject.file("../local.properties"),
+        rootProject.file("local.properties")
+    ).forEach { file ->
+        if (file.exists()) {
+            file.inputStream().use(::load)
+        }
     }
 }
 
@@ -36,18 +40,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "MAPBOX_ACCESS_TOKEN", "\"${escapedBuildConfigString("mapbox.accessToken")}\"")
-        buildConfigField("String", "MAPBOX_USERNAME", "\"${escapedBuildConfigString("mapbox.username", "negoitaalexandru")}\"")
-        buildConfigField("String", "MAPBOX_BASE_TILESET_ID", "\"${escapedBuildConfigString("mapbox.baseTileset", "negoitaalexandru.romania-z13")}\"")
-        buildConfigField("String", "MAPBOX_ELEVATION_TILESET_ID", "\"${escapedBuildConfigString("mapbox.elevationTileset", "negoitaalexandru.romania-elevation")}\"")
-        buildConfigField("String", "MAPBOX_TRAILS_TILESET_ID", "\"${escapedBuildConfigString("mapbox.trailsTileset")}\"")
-        buildConfigField("String", "MAPBOX_TRAILS_SOURCE_LAYER", "\"${escapedBuildConfigString("mapbox.trailsSourceLayer")}\"")
-        buildConfigField("String", "MAPBOX_WILDLIFE_TILESET_ID", "\"${escapedBuildConfigString("mapbox.wildlifeTileset")}\"")
-        buildConfigField("String", "MAPBOX_WILDLIFE_SOURCE_LAYER", "\"${escapedBuildConfigString("mapbox.wildlifeSourceLayer")}\"")
-        buildConfigField("String", "MAPBOX_ATTRACTIONS_TILESET_ID", "\"${escapedBuildConfigString("mapbox.attractionsTileset")}\"")
-        buildConfigField("String", "MAPBOX_ATTRACTIONS_SOURCE_LAYER", "\"${escapedBuildConfigString("mapbox.attractionsSourceLayer")}\"")
-        buildConfigField("String", "MAPBOX_WATER_TILESET_ID", "\"${escapedBuildConfigString("mapbox.waterTileset")}\"")
-        buildConfigField("String", "MAPBOX_WATER_SOURCE_LAYER", "\"${escapedBuildConfigString("mapbox.waterSourceLayer")}\"")
         buildConfigField("String", "METEOBLUE_API_KEY", "\"${escapedBuildConfigString("meteoblue.apiKey")}\"")
     }
 
@@ -83,7 +75,12 @@ android {
 
     sourceSets {
         getByName("main") {
-            assets.setSrcDirs(listOf("src/main/scouty_assets"))
+            assets.setSrcDirs(
+                listOf(
+                    "src/main/scouty_assets",
+                    rootProject.file("../data/raw/geojson").path
+                )
+            )
         }
     }
 }

@@ -11,6 +11,7 @@ import org.maplibre.android.style.expressions.Expression.coalesce
 import org.maplibre.android.style.expressions.Expression.eq
 import org.maplibre.android.style.expressions.Expression.exponential
 import org.maplibre.android.style.expressions.Expression.get
+import org.maplibre.android.style.expressions.Expression.has
 import org.maplibre.android.style.expressions.Expression.heatmapDensity
 import org.maplibre.android.style.expressions.Expression.interpolate
 import org.maplibre.android.style.expressions.Expression.literal
@@ -41,6 +42,7 @@ import org.maplibre.android.style.layers.PropertyFactory.lineColor
 import org.maplibre.android.style.layers.PropertyFactory.lineJoin
 import org.maplibre.android.style.layers.PropertyFactory.lineOpacity
 import org.maplibre.android.style.layers.PropertyFactory.lineWidth
+import org.maplibre.android.style.layers.PropertyFactory.symbolPlacement
 import org.maplibre.android.style.layers.PropertyFactory.textAllowOverlap
 import org.maplibre.android.style.layers.PropertyFactory.textColor
 import org.maplibre.android.style.layers.PropertyFactory.textField
@@ -53,7 +55,9 @@ import org.maplibre.android.style.layers.PropertyFactory.textOffset
 import org.maplibre.android.style.layers.PropertyFactory.textSize
 import org.maplibre.android.style.layers.PropertyFactory.visibility
 import org.maplibre.android.style.layers.SymbolLayer
+import org.maplibre.android.style.sources.GeoJsonSource
 import org.maplibre.android.style.sources.VectorSource
+import java.net.URI
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -68,12 +72,25 @@ data class MapOverlayState(
 )
 
 object MapStyleConfig {
+    const val BASE_SOURCE_ID = "romania-base-source"
+    const val BUCEGI_DEMO_SOURCE_ID = "bucegi-demo-source"
+    const val REMOTE_TRAILS_SOURCE_ID = "remote-trails-source"
+    const val REMOTE_WILDLIFE_SOURCE_ID = "remote-wildlife-source"
+    const val REMOTE_ATTRACTIONS_SOURCE_ID = "remote-attractions-source"
+    const val REMOTE_WATER_SOURCE_ID = "remote-water-source"
     const val LANDUSE_LAYER_ID = "landuse-layer"
     const val PARK_LAYER_ID = "park-layer"
     const val WATER_FILL_LAYER_ID = "water-fill-layer"
     const val WATERWAY_LAYER_ID = "waterway-layer"
+    const val BUCEGI_WATERWAY_LAYER_ID = "waterway-layer-bucegi"
+    const val WATER_LABELS_LAYER_ID = "water-labels-layer"
+    const val WATER_LABELS_LINE_LAYER_ID = "water-labels-line-layer"
+    const val BUCEGI_WATER_LABELS_LAYER_ID = "water-labels-layer-bucegi"
+    const val BUCEGI_WATER_LABELS_LINE_LAYER_ID = "water-labels-line-layer-bucegi"
     const val ROAD_LAYER_ID = "road-layer"
+    const val BUCEGI_ROAD_LAYER_ID = "road-layer-bucegi"
     const val HIKING_PATHS_LAYER_ID = "hiking-paths-layer"
+    const val BUCEGI_HIKING_PATHS_LAYER_ID = "hiking-paths-layer-bucegi"
     const val CUSTOM_TRAILS_LAYER_ID = "custom-trails-layer"
     const val WILDLIFE_LAYER_ID = "wildlife-heatmap"
     const val WILDLIFE_SYMBOL_LAYER_ID = "wildlife-symbol-layer"
@@ -81,10 +98,19 @@ object MapStyleConfig {
     const val WATER_POINT_SYMBOL_LAYER_ID = "water-point-symbol-layer"
     const val WATER_POINT_LABELS_LAYER_ID = "water-points-labels-layer"
     const val PEAK_SYMBOL_LAYER_ID = "peak-symbol-layer"
+    const val BUCEGI_PEAK_SYMBOL_LAYER_ID = "peak-symbol-layer-bucegi"
     const val PEAK_LABELS_LAYER_ID = "peak-labels-layer"
+    const val BUCEGI_PEAK_LABELS_LAYER_ID = "peak-labels-layer-bucegi"
     const val PLACE_LABELS_LAYER_ID = "place-labels-layer"
+    const val BUCEGI_PLACE_LABELS_LAYER_ID = "place-labels-layer-bucegi"
     const val BOUNDARY_LAYER_ID = "boundary-layer"
     const val ATTRACTIONS_SYMBOL_LAYER_ID = "attractions-symbol-layer"
+
+    private const val DemoMinZoom = 13.4f
+    private const val OfflineTrailsAsset = "Trasee_Varfuri.geojson"
+    private const val OfflineWildlifeAsset = "Pradatori.geojson"
+    private const val OfflineAttractionsAsset = "Atractii.geojson"
+    private const val OfflineWaterPointsAsset = "Izvoare_Adapost.geojson"
 
     private const val PeakIconId = "scouty-peak-icon"
     private const val WaterIconId = "scouty-water-icon"
@@ -92,9 +118,14 @@ object MapStyleConfig {
     private const val WildlifeIconId = "scouty-wildlife-icon"
 
     private val toggleGroups = mapOf(
-        "trails" to listOf(HIKING_PATHS_LAYER_ID, CUSTOM_TRAILS_LAYER_ID),
-        "peaks" to listOf(PEAK_SYMBOL_LAYER_ID, PEAK_LABELS_LAYER_ID),
-        "places" to listOf(PLACE_LABELS_LAYER_ID),
+        "trails" to listOf(CUSTOM_TRAILS_LAYER_ID),
+        "peaks" to listOf(
+            PEAK_SYMBOL_LAYER_ID,
+            BUCEGI_PEAK_SYMBOL_LAYER_ID,
+            PEAK_LABELS_LAYER_ID,
+            BUCEGI_PEAK_LABELS_LAYER_ID
+        ),
+        "places" to listOf(PLACE_LABELS_LAYER_ID, BUCEGI_PLACE_LABELS_LAYER_ID),
         "wildlife" to listOf(WILDLIFE_LAYER_ID, WILDLIFE_SYMBOL_LAYER_ID),
         "attractions" to listOf(
             ATTRACTIONS_SYMBOL_LAYER_ID,
@@ -103,17 +134,23 @@ object MapStyleConfig {
         "water" to listOf(
             WATER_FILL_LAYER_ID,
             WATERWAY_LAYER_ID,
+            BUCEGI_WATERWAY_LAYER_ID,
+            WATER_LABELS_LAYER_ID,
+            WATER_LABELS_LINE_LAYER_ID,
+            BUCEGI_WATER_LABELS_LAYER_ID,
+            BUCEGI_WATER_LABELS_LINE_LAYER_ID,
             WATER_POINT_SYMBOL_LAYER_ID,
             WATER_POINT_LABELS_LAYER_ID
         )
     )
 
-    fun createStyleBuilder(): Style.Builder {
+    fun createStyleBuilder(mapDataConfig: MapDataConfig): Style.Builder {
+        val glyphsSnippet = mapDataConfig.glyphsUri()?.let { "\"glyphs\": \"$it\"," } ?: ""
         val styleJson = """
             {
               "version": 8,
-              "name": "Scouty Remote",
-              "glyphs": "${MapboxConfig.glyphsUrl()}",
+              "name": "Scouty Offline",
+              $glyphsSnippet
               "sources": {},
               "layers": [
                 {
@@ -129,12 +166,13 @@ object MapStyleConfig {
         return Style.Builder().fromJson(styleJson)
     }
 
-    fun installStyle(style: Style) {
-        addBaseSources(style)
-        addOptionalSources(style)
+    fun installStyle(style: Style, mapDataConfig: MapDataConfig) {
+        addBaseSources(style, mapDataConfig)
+        addRemoteOverlaySources(style)
         ensurePointSymbolImages(style)
-        addBaseLayers(style)
-        addOptionalLayers(style)
+        addBaseLayers(style, mapDataConfig)
+        addDemoHighDetailLayers(style, mapDataConfig)
+        addRemoteOverlayLayers(style, mapDataConfig)
     }
 
     fun applyOverlayVisibility(style: Style, overlayState: MapOverlayState) {
@@ -146,47 +184,45 @@ object MapStyleConfig {
         setGroupVisibility(style, "water", overlayState.water)
     }
 
-    fun trailQueryLayerIds(): Array<String> {
-        val ids = mutableListOf(CUSTOM_TRAILS_LAYER_ID, HIKING_PATHS_LAYER_ID)
-        return ids.toTypedArray()
+    fun trailQueryLayerIds(mapDataConfig: MapDataConfig): Array<String> {
+        return arrayOf(CUSTOM_TRAILS_LAYER_ID)
     }
 
-    fun hasWildlifeLayer(): Boolean = MapboxConfig.customWildlife() != null
+    fun hasWildlifeLayer(mapDataConfig: MapDataConfig): Boolean = true
 
-    fun hasAttractionsLayer(): Boolean = MapboxConfig.customAttractions() != null
+    fun hasAttractionsLayer(mapDataConfig: MapDataConfig): Boolean = true
 
-    fun hasWaterPointsLayer(): Boolean = MapboxConfig.customWater() != null
+    fun hasWaterPointsLayer(mapDataConfig: MapDataConfig): Boolean = true
 
-    private fun addBaseSources(style: Style) {
-        if (style.getSource(MapboxConfig.BASE_SOURCE_ID) == null) {
-            style.addSource(VectorSource(MapboxConfig.BASE_SOURCE_ID, MapboxConfig.baseTilesetUrl()))
-        }
-    }
-
-    private fun addOptionalSources(style: Style) {
-        MapboxConfig.customTrails()?.let { config ->
-            if (style.getSource(MapboxConfig.CUSTOM_TRAILS_SOURCE_ID) == null) {
-                style.addSource(VectorSource(MapboxConfig.CUSTOM_TRAILS_SOURCE_ID, MapboxConfig.tileJsonUrl(config.tilesetId)))
+    private fun addBaseSources(style: Style, mapDataConfig: MapDataConfig) {
+        mapDataConfig.baseSourceUri()?.let { sourceUri ->
+            if (style.getSource(BASE_SOURCE_ID) == null) {
+                style.addSource(VectorSource(BASE_SOURCE_ID, sourceUri))
             }
         }
-        MapboxConfig.customWildlife()?.let { config ->
-            if (style.getSource(MapboxConfig.CUSTOM_WILDLIFE_SOURCE_ID) == null) {
-                style.addSource(VectorSource(MapboxConfig.CUSTOM_WILDLIFE_SOURCE_ID, MapboxConfig.tileJsonUrl(config.tilesetId)))
-            }
-        }
-        MapboxConfig.customAttractions()?.let { config ->
-            if (style.getSource(MapboxConfig.CUSTOM_ATTRACTIONS_SOURCE_ID) == null) {
-                style.addSource(VectorSource(MapboxConfig.CUSTOM_ATTRACTIONS_SOURCE_ID, MapboxConfig.tileJsonUrl(config.tilesetId)))
-            }
-        }
-        MapboxConfig.customWater()?.let { config ->
-            if (style.getSource(MapboxConfig.CUSTOM_WATER_SOURCE_ID) == null) {
-                style.addSource(VectorSource(MapboxConfig.CUSTOM_WATER_SOURCE_ID, MapboxConfig.tileJsonUrl(config.tilesetId)))
+        mapDataConfig.demoSourceUri()?.let { sourceUri ->
+            if (style.getSource(BUCEGI_DEMO_SOURCE_ID) == null) {
+                style.addSource(VectorSource(BUCEGI_DEMO_SOURCE_ID, sourceUri))
             }
         }
     }
 
-    private fun addBaseLayers(style: Style) {
+    private fun addRemoteOverlaySources(style: Style) {
+        if (style.getSource(REMOTE_TRAILS_SOURCE_ID) == null) {
+            style.addSource(GeoJsonSource(REMOTE_TRAILS_SOURCE_ID, URI("asset://$OfflineTrailsAsset")))
+        }
+        if (style.getSource(REMOTE_WILDLIFE_SOURCE_ID) == null) {
+            style.addSource(GeoJsonSource(REMOTE_WILDLIFE_SOURCE_ID, URI("asset://$OfflineWildlifeAsset")))
+        }
+        if (style.getSource(REMOTE_ATTRACTIONS_SOURCE_ID) == null) {
+            style.addSource(GeoJsonSource(REMOTE_ATTRACTIONS_SOURCE_ID, URI("asset://$OfflineAttractionsAsset")))
+        }
+        if (style.getSource(REMOTE_WATER_SOURCE_ID) == null) {
+            style.addSource(GeoJsonSource(REMOTE_WATER_SOURCE_ID, URI("asset://$OfflineWaterPointsAsset")))
+        }
+    }
+
+    private fun addBaseLayers(style: Style, mapDataConfig: MapDataConfig) {
         addIfMissing(
             style,
             BackgroundLayer("scouty-background").withProperties(
@@ -196,7 +232,7 @@ object MapStyleConfig {
 
         addIfMissing(
             style,
-            FillLayer(LANDUSE_LAYER_ID, MapboxConfig.BASE_SOURCE_ID).apply {
+            FillLayer(LANDUSE_LAYER_ID, BASE_SOURCE_ID).apply {
                 sourceLayer = "landcover"
                 setFilter(
                     any(
@@ -215,7 +251,7 @@ object MapStyleConfig {
 
         addIfMissing(
             style,
-            FillLayer(PARK_LAYER_ID, MapboxConfig.BASE_SOURCE_ID).apply {
+            FillLayer(PARK_LAYER_ID, BASE_SOURCE_ID).apply {
                 sourceLayer = "park"
                 setProperties(
                     fillColor(Color.parseColor("#cfe4b6")),
@@ -227,7 +263,7 @@ object MapStyleConfig {
 
         addIfMissing(
             style,
-            FillLayer(WATER_FILL_LAYER_ID, MapboxConfig.BASE_SOURCE_ID).apply {
+            FillLayer(WATER_FILL_LAYER_ID, BASE_SOURCE_ID).apply {
                 sourceLayer = "water"
                 setProperties(
                     fillColor(Color.parseColor("#7db7d8")),
@@ -238,7 +274,7 @@ object MapStyleConfig {
 
         addIfMissing(
             style,
-            LineLayer(WATERWAY_LAYER_ID, MapboxConfig.BASE_SOURCE_ID).apply {
+            LineLayer(WATERWAY_LAYER_ID, BASE_SOURCE_ID).apply {
                 sourceLayer = "waterway"
                 setProperties(
                     lineColor(Color.parseColor("#4d93c2")),
@@ -249,9 +285,59 @@ object MapStyleConfig {
             }
         )
 
+        if (mapDataConfig.hasLocalGlyphs) {
+            addIfMissing(
+                style,
+                SymbolLayer(WATER_LABELS_LAYER_ID, BASE_SOURCE_ID).apply {
+                    sourceLayer = "water_name"
+                    setProperties(
+                        textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
+                        textFont(arrayOf("Open Sans Regular")),
+                        textSize(
+                            interpolate(
+                                exponential(1.08f),
+                                zoom(),
+                                stop(7, 9.0f),
+                                stop(10, 10.2f),
+                                stop(13, 11.3f)
+                            )
+                        ),
+                        textColor(Color.parseColor("#1d4f73")),
+                        textHaloColor(Color.parseColor("#eef7fd")),
+                        textHaloWidth(1f)
+                    )
+                    setMinZoom(7f)
+                }
+            )
+            addIfMissing(
+                style,
+                SymbolLayer(WATER_LABELS_LINE_LAYER_ID, BASE_SOURCE_ID).apply {
+                    sourceLayer = "water_name"
+                    setProperties(
+                        textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
+                        textFont(arrayOf("Open Sans Regular")),
+                        textSize(
+                            interpolate(
+                                exponential(1.08f),
+                                zoom(),
+                                stop(8, 9.0f),
+                                stop(11, 10.0f),
+                                stop(13, 11.0f)
+                            )
+                        ),
+                        textColor(Color.parseColor("#25638d")),
+                        textHaloColor(Color.parseColor("#eef7fd")),
+                        textHaloWidth(1f),
+                        symbolPlacement(Property.SYMBOL_PLACEMENT_LINE)
+                    )
+                    setMinZoom(8f)
+                }
+            )
+        }
+
         addIfMissing(
             style,
-            LineLayer(BOUNDARY_LAYER_ID, MapboxConfig.BASE_SOURCE_ID).apply {
+            LineLayer(BOUNDARY_LAYER_ID, BASE_SOURCE_ID).apply {
                 sourceLayer = "boundary"
                 setProperties(
                     lineColor(Color.parseColor("#7d8474")),
@@ -264,7 +350,7 @@ object MapStyleConfig {
 
         addIfMissing(
             style,
-            LineLayer(ROAD_LAYER_ID, MapboxConfig.BASE_SOURCE_ID).apply {
+            LineLayer(ROAD_LAYER_ID, BASE_SOURCE_ID).apply {
                 sourceLayer = "transportation"
                 setFilter(
                     any(
@@ -288,38 +374,7 @@ object MapStyleConfig {
 
         addIfMissing(
             style,
-            LineLayer(HIKING_PATHS_LAYER_ID, MapboxConfig.BASE_SOURCE_ID).apply {
-                sourceLayer = "transportation"
-                setFilter(
-                    any(
-                        eq(get("class"), literal("path")),
-                        eq(get("class"), literal("track")),
-                        eq(get("subclass"), literal("path")),
-                        eq(get("subclass"), literal("track"))
-                    )
-                )
-                setProperties(
-                    lineCap(Property.LINE_CAP_ROUND),
-                    lineJoin(Property.LINE_JOIN_ROUND),
-                    lineColor(
-                        match(
-                            get("surface"),
-                            rgb(53.0, 77.0, 42.0),
-                            stop("gravel", rgb(119.0, 92.0, 67.0)),
-                            stop("ground", rgb(89.0, 70.0, 52.0)),
-                            stop("dirt", rgb(124.0, 87.0, 56.0))
-                        )
-                    ),
-                    lineOpacity(0.95f),
-                    lineWidth(2.0f)
-                )
-                setMinZoom(9f)
-            }
-        )
-
-        addIfMissing(
-            style,
-            SymbolLayer(PEAK_SYMBOL_LAYER_ID, MapboxConfig.BASE_SOURCE_ID).apply {
+            SymbolLayer(PEAK_SYMBOL_LAYER_ID, BASE_SOURCE_ID).apply {
                 sourceLayer = "mountain_peak"
                 setProperties(
                     iconImage(PeakIconId),
@@ -327,9 +382,9 @@ object MapStyleConfig {
                         interpolate(
                             exponential(1.18f),
                             zoom(),
-                            stop(9.7, 0.52f),
-                            stop(12, 0.62f),
-                            stop(14, 0.74f)
+                            stop(9.7, 0.7f),
+                            stop(12, 0.9f),
+                            stop(14, 1.06f)
                         )
                     ),
                     iconAllowOverlap(true),
@@ -339,269 +394,408 @@ object MapStyleConfig {
             }
         )
 
-        addIfMissing(
-            style,
-            SymbolLayer(PEAK_LABELS_LAYER_ID, MapboxConfig.BASE_SOURCE_ID).apply {
-                sourceLayer = "mountain_peak"
-                setProperties(
-                    textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
-                    textFont(arrayOf("Open Sans Semibold")),
-                    textSize(
-                        interpolate(
-                            exponential(1.15f),
-                            zoom(),
-                            stop(10.7, 9.3f),
-                            stop(13, 10.7f),
-                            stop(15, 11.9f)
-                        )
-                    ),
-                    textColor(Color.parseColor("#2d2b27")),
-                    textHaloColor(Color.parseColor("#f4f0e8")),
-                    textHaloWidth(1f),
-                    textHaloBlur(0.5f),
-                    textOffset(arrayOf(0f, 1.0f)),
-                    textAllowOverlap(true),
-                    textIgnorePlacement(true)
-                )
-                setMinZoom(10.7f)
-            }
-        )
-
-        addIfMissing(
-            style,
-            SymbolLayer(PLACE_LABELS_LAYER_ID, MapboxConfig.BASE_SOURCE_ID).apply {
-                sourceLayer = "place"
-                setProperties(
-                    textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
-                    textFont(arrayOf("Open Sans Regular")),
-                    textSize(
-                        interpolate(
-                            exponential(1.1f),
-                            zoom(),
-                            stop(7, 9.2f),
-                            stop(10, 10.6f),
-                            stop(13, 12f)
-                        )
-                    ),
-                    textColor(Color.parseColor("#40503d")),
-                    textHaloColor(Color.parseColor("#eef1e6")),
-                    textHaloWidth(1f)
-                )
-                setMinZoom(6.7f)
-            }
-        )
-    }
-
-    private fun addOptionalLayers(style: Style) {
-        MapboxConfig.customTrails()?.let { config ->
+        if (mapDataConfig.hasLocalGlyphs) {
             addIfMissing(
                 style,
-                LineLayer(CUSTOM_TRAILS_LAYER_ID, MapboxConfig.CUSTOM_TRAILS_SOURCE_ID).apply {
-                    sourceLayer = config.sourceLayer
+                SymbolLayer(PEAK_LABELS_LAYER_ID, BASE_SOURCE_ID).apply {
+                    sourceLayer = "mountain_peak"
                     setProperties(
-                        lineCap(Property.LINE_CAP_ROUND),
-                        lineJoin(Property.LINE_JOIN_ROUND),
-                        lineColor(
-                            match(
-                                get("difficulty"),
-                                rgb(42.0, 63.0, 28.0),
-                                stop("EASY", rgb(33.0, 150.0, 83.0)),
-                                stop("MEDIUM", rgb(251.0, 191.0, 36.0)),
-                                stop("HARD", rgb(249.0, 115.0, 22.0)),
-                                stop("EXPERT", rgb(220.0, 38.0, 38.0))
+                        textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
+                        textFont(arrayOf("Open Sans Semibold")),
+                        textSize(
+                            interpolate(
+                                exponential(1.15f),
+                                zoom(),
+                                stop(10.7, 9.3f),
+                                stop(13, 10.7f),
+                                stop(15, 11.9f)
                             )
                         ),
-                        lineWidth(2.8f),
-                        lineOpacity(0.95f)
+                        textColor(Color.parseColor("#2d2b27")),
+                        textHaloColor(Color.parseColor("#f4f0e8")),
+                        textHaloWidth(1f),
+                        textHaloBlur(0.5f),
+                        textOffset(arrayOf(0f, 1.0f)),
+                        textAllowOverlap(true),
+                        textIgnorePlacement(true)
                     )
-                    setMinZoom(8f)
+                    setMinZoom(10.7f)
+                }
+            )
+
+            addIfMissing(
+                style,
+                SymbolLayer(PLACE_LABELS_LAYER_ID, BASE_SOURCE_ID).apply {
+                    sourceLayer = "place"
+                    setProperties(
+                        textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
+                        textFont(arrayOf("Open Sans Regular")),
+                        textSize(
+                            interpolate(
+                                exponential(1.1f),
+                                zoom(),
+                                stop(7, 9.2f),
+                                stop(10, 10.6f),
+                                stop(13, 12f)
+                            )
+                        ),
+                        textColor(Color.parseColor("#40503d")),
+                        textHaloColor(Color.parseColor("#eef1e6")),
+                        textHaloWidth(1f)
+                    )
+                    setMinZoom(6.7f)
                 }
             )
         }
+    }
 
-        MapboxConfig.customWildlife()?.let { config ->
+    private fun addDemoHighDetailLayers(style: Style, mapDataConfig: MapDataConfig) {
+        if (!mapDataConfig.hasDemoPack) {
+            return
+        }
+
+        addIfMissing(
+            style,
+            LineLayer(BUCEGI_WATERWAY_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
+                sourceLayer = "waterway"
+                setProperties(
+                    lineColor(Color.parseColor("#4d93c2")),
+                    lineOpacity(0.9f),
+                    lineWidth(1.6f)
+                )
+                setMinZoom(DemoMinZoom)
+            }
+        )
+
+        if (mapDataConfig.hasLocalGlyphs) {
             addIfMissing(
                 style,
-                HeatmapLayer(WILDLIFE_LAYER_ID, MapboxConfig.CUSTOM_WILDLIFE_SOURCE_ID).apply {
-                    sourceLayer = config.sourceLayer
+                SymbolLayer(BUCEGI_WATER_LABELS_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
+                    sourceLayer = "water_name"
                     setProperties(
-                        heatmapWeight(
-                            interpolate(
-                                exponential(1.14f),
-                                coalesce(get("year"), literal(2021)),
-                                stop(2018, 0.14f),
-                                stop(2021, 0.32f),
-                                stop(2024, 0.68f),
-                                stop(2026, 1.0f)
-                            )
-                        ),
-                        heatmapIntensity(
-                            interpolate(
-                                exponential(1.12f),
-                                zoom(),
-                                stop(6, 0.7f),
-                                stop(9, 1.0f),
-                                stop(11.5, 1.22f)
-                            )
-                        ),
-                        heatmapRadius(
-                            interpolate(
-                                exponential(1.16f),
-                                zoom(),
-                                stop(6, 16f),
-                                stop(8, 26f),
-                                stop(10, 38f),
-                                stop(12, 52f)
-                            )
-                        ),
-                        heatmapColor(
-                            interpolate(
-                                exponential(1f),
-                                heatmapDensity(),
-                                stop(0, rgba(0, 0, 0, 0f)),
-                                stop(0.18, rgba(250, 204, 21, 0.28f)),
-                                stop(0.38, rgba(249, 115, 22, 0.52f)),
-                                stop(0.62, rgba(239, 68, 68, 0.74f)),
-                                stop(1, rgba(127, 29, 29, 0.92f))
-                            )
-                        ),
-                        heatmapOpacity(
+                        textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
+                        textFont(arrayOf("Open Sans Regular")),
+                        textSize(
                             interpolate(
                                 exponential(1.08f),
                                 zoom(),
-                                stop(6, 0.84f),
-                                stop(10.5, 0.72f),
-                                stop(12.2, 0.18f),
-                                stop(13, 0f)
+                                stop(13.5, 10.2f),
+                                stop(15, 11.1f),
+                                stop(16, 12.0f)
                             )
+                        ),
+                        textColor(Color.parseColor("#1d4f73")),
+                        textHaloColor(Color.parseColor("#eef7fd")),
+                        textHaloWidth(1f)
+                    )
+                    setMinZoom(DemoMinZoom)
+                }
+            )
+            addIfMissing(
+                style,
+                SymbolLayer(BUCEGI_WATER_LABELS_LINE_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
+                    sourceLayer = "water_name"
+                    setProperties(
+                        textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
+                        textFont(arrayOf("Open Sans Regular")),
+                        textSize(
+                            interpolate(
+                                exponential(1.08f),
+                                zoom(),
+                                stop(13.5, 10.0f),
+                                stop(15, 10.8f),
+                                stop(16, 11.6f)
+                            )
+                        ),
+                        textColor(Color.parseColor("#25638d")),
+                        textHaloColor(Color.parseColor("#eef7fd")),
+                        textHaloWidth(1f),
+                        symbolPlacement(Property.SYMBOL_PLACEMENT_LINE)
+                    )
+                    setMinZoom(DemoMinZoom)
+                }
+            )
+        }
+
+        addIfMissing(
+            style,
+            LineLayer(BUCEGI_ROAD_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
+                sourceLayer = "transportation"
+                setFilter(
+                    any(
+                        eq(get("class"), literal("motorway")),
+                        eq(get("class"), literal("trunk")),
+                        eq(get("class"), literal("primary")),
+                        eq(get("class"), literal("secondary")),
+                        eq(get("class"), literal("tertiary"))
+                    )
+                )
+                setProperties(
+                    lineCap(Property.LINE_CAP_ROUND),
+                    lineJoin(Property.LINE_JOIN_ROUND),
+                    lineColor(Color.parseColor("#ffffff")),
+                    lineOpacity(0.62f),
+                    lineWidth(1.5f)
+                )
+                setMinZoom(DemoMinZoom)
+            }
+        )
+
+        addIfMissing(
+            style,
+            SymbolLayer(BUCEGI_PEAK_SYMBOL_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
+                sourceLayer = "mountain_peak"
+                setProperties(
+                    iconImage(PeakIconId),
+                    iconSize(
+                        interpolate(
+                            exponential(1.18f),
+                            zoom(),
+                            stop(13.5, 0.9f),
+                            stop(15, 1.04f),
+                            stop(16, 1.16f)
+                        )
+                    ),
+                    iconAllowOverlap(true),
+                    iconIgnorePlacement(true)
+                )
+                setMinZoom(DemoMinZoom)
+            }
+        )
+
+        if (mapDataConfig.hasLocalGlyphs) {
+            addIfMissing(
+                style,
+                SymbolLayer(BUCEGI_PEAK_LABELS_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
+                    sourceLayer = "mountain_peak"
+                    setProperties(
+                        textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
+                        textFont(arrayOf("Open Sans Semibold")),
+                        textSize(
+                            interpolate(
+                                exponential(1.15f),
+                                zoom(),
+                                stop(13.5, 10.7f),
+                                stop(15, 11.6f),
+                                stop(16, 12.1f)
+                            )
+                        ),
+                        textColor(Color.parseColor("#2d2b27")),
+                        textHaloColor(Color.parseColor("#f4f0e8")),
+                        textHaloWidth(1f),
+                        textHaloBlur(0.5f),
+                        textOffset(arrayOf(0f, 1.0f)),
+                        textAllowOverlap(true),
+                        textIgnorePlacement(true)
+                    )
+                    setMinZoom(DemoMinZoom)
+                }
+            )
+
+            addIfMissing(
+                style,
+                SymbolLayer(BUCEGI_PLACE_LABELS_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
+                    sourceLayer = "place"
+                    setProperties(
+                        textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
+                        textFont(arrayOf("Open Sans Regular")),
+                        textSize(
+                            interpolate(
+                                exponential(1.1f),
+                                zoom(),
+                                stop(13.5, 10.4f),
+                                stop(15, 11.2f),
+                                stop(16, 12f)
+                            )
+                        ),
+                        textColor(Color.parseColor("#40503d")),
+                        textHaloColor(Color.parseColor("#eef1e6")),
+                        textHaloWidth(1f)
+                    )
+                    setMinZoom(DemoMinZoom)
+                }
+            )
+        }
+    }
+
+    private fun addRemoteOverlayLayers(style: Style, mapDataConfig: MapDataConfig) {
+        addIfMissing(
+            style,
+            LineLayer(CUSTOM_TRAILS_LAYER_ID, REMOTE_TRAILS_SOURCE_ID).apply {
+                setFilter(mnTrailFilter())
+                setProperties(
+                    lineCap(Property.LINE_CAP_ROUND),
+                    lineJoin(Property.LINE_JOIN_ROUND),
+                    lineColor(Color.parseColor("#141712")),
+                    lineOpacity(0.88f),
+                    lineWidth(
+                        interpolate(
+                            exponential(1.15f),
+                            zoom(),
+                            stop(7, 1.1f),
+                            stop(10, 2.1f),
+                            stop(13, 3.1f),
+                            stop(15, 4.2f)
                         )
                     )
-                    setMinZoom(6.5f)
-                }
-            )
-            addIfMissing(
-                style,
-                SymbolLayer(WILDLIFE_SYMBOL_LAYER_ID, MapboxConfig.CUSTOM_WILDLIFE_SOURCE_ID).apply {
-                    sourceLayer = config.sourceLayer
-                    setProperties(
-                        iconImage(WildlifeIconId),
-                        iconSize(
-                            interpolate(
-                                exponential(1.18f),
-                                zoom(),
-                                stop(11.4, 0.5f),
-                                stop(13, 0.62f),
-                                stop(15, 0.74f)
-                            )
-                        ),
-                        iconAllowOverlap(true),
-                        iconIgnorePlacement(true)
-                    )
-                    setMinZoom(11.2f)
-                }
-            )
-        }
+                )
+                setMinZoom(7f)
+            }
+        )
 
-        MapboxConfig.customAttractions()?.let { config ->
-            addIfMissing(
-                style,
-                SymbolLayer(ATTRACTIONS_SYMBOL_LAYER_ID, MapboxConfig.CUSTOM_ATTRACTIONS_SOURCE_ID).apply {
-                    sourceLayer = config.sourceLayer
-                    setFilter(nonPeakAttractionFilter())
-                    setProperties(
-                        iconImage(AttractionIconId),
-                        iconSize(
-                            interpolate(
-                                exponential(1.18f),
-                                zoom(),
-                                stop(10.6, 0.5f),
-                                stop(12.8, 0.6f),
-                                stop(15, 0.72f)
-                            )
-                        ),
-                        iconAllowOverlap(true),
-                        iconIgnorePlacement(true)
+        addIfMissing(
+            style,
+            HeatmapLayer(WILDLIFE_LAYER_ID, REMOTE_WILDLIFE_SOURCE_ID).apply {
+                setProperties(
+                    heatmapIntensity(
+                        interpolate(
+                            exponential(1.15f),
+                            zoom(),
+                            stop(5, 0.6f),
+                            stop(8, 0.9f),
+                            stop(11, 1.3f),
+                            stop(14, 1.7f)
+                        )
+                    ),
+                    heatmapRadius(
+                        interpolate(
+                            exponential(1.2f),
+                            zoom(),
+                            stop(5, 10f),
+                            stop(8, 16f),
+                            stop(11, 22f),
+                            stop(14, 28f)
+                        )
+                    ),
+                    heatmapOpacity(
+                        interpolate(
+                            exponential(1.0f),
+                            zoom(),
+                            stop(5, 0.6f),
+                            stop(10, 0.78f),
+                            stop(14, 0.5f)
+                        )
+                    ),
+                    heatmapColor(
+                        interpolate(
+                            exponential(1.0f),
+                            heatmapDensity(),
+                            stop(0, rgba(0.0, 0.0, 0.0, 0.0)),
+                            stop(0.2, rgba(249.0, 115.0, 22.0, 0.25)),
+                            stop(0.45, rgba(239.0, 68.0, 68.0, 0.4)),
+                            stop(0.7, rgba(220.0, 38.0, 38.0, 0.65)),
+                            stop(1.0, rgba(127.0, 29.0, 29.0, 0.82))
+                        )
                     )
-                    setMinZoom(10.3f)
-                }
-            )
+                )
+                setMinZoom(4f)
+            }
+        )
+        addIfMissing(
+            style,
+            SymbolLayer(WILDLIFE_SYMBOL_LAYER_ID, REMOTE_WILDLIFE_SOURCE_ID).apply {
+                setProperties(
+                    iconImage(WildlifeIconId),
+                    iconSize(
+                        interpolate(
+                            exponential(1.12f),
+                            zoom(),
+                            stop(11, 0.88f),
+                            stop(13, 1.04f),
+                            stop(15, 1.2f)
+                        )
+                    ),
+                    iconAllowOverlap(true),
+                    iconIgnorePlacement(true)
+                )
+                setMinZoom(12f)
+            }
+        )
+
+        addIfMissing(
+            style,
+            SymbolLayer(ATTRACTIONS_SYMBOL_LAYER_ID, REMOTE_ATTRACTIONS_SOURCE_ID).apply {
+                setFilter(offlineAttractionFilter())
+                setProperties(
+                    iconImage(AttractionIconId),
+                    iconSize(
+                        interpolate(
+                            exponential(1.1f),
+                            zoom(),
+                            stop(9, 0.84f),
+                            stop(12, 0.98f),
+                            stop(15, 1.14f)
+                        )
+                    ),
+                    iconAllowOverlap(true),
+                    iconIgnorePlacement(true)
+                )
+                setMinZoom(8.5f)
+            }
+        )
+        if (mapDataConfig.hasLocalGlyphs) {
             addIfMissing(
                 style,
-                SymbolLayer(ATTRACTIONS_LABELS_LAYER_ID, MapboxConfig.CUSTOM_ATTRACTIONS_SOURCE_ID).apply {
-                    sourceLayer = config.sourceLayer
-                    setFilter(nonPeakAttractionFilter())
+                SymbolLayer(ATTRACTIONS_LABELS_LAYER_ID, REMOTE_ATTRACTIONS_SOURCE_ID).apply {
+                    setFilter(offlineAttractionFilter())
                     setProperties(
                         textField(namedPointLabelExpression()),
                         textFont(arrayOf("Open Sans Regular")),
                         textSize(
                             interpolate(
-                                exponential(1.15f),
+                                exponential(1.08f),
                                 zoom(),
-                                stop(12.0, 8.8f),
-                                stop(14, 10.0f),
-                                stop(15.5, 11.2f)
+                                stop(9, 9.6f),
+                                stop(12, 10.6f),
+                                stop(15, 11.4f)
                             )
                         ),
-                        textColor(Color.parseColor("#14532d")),
-                        textHaloColor(Color.parseColor("#f4fbf6")),
-                        textHaloWidth(1.1f),
-                        textHaloBlur(0.4f),
-                        textOffset(arrayOf(0f, 1.05f)),
-                        textAllowOverlap(true),
-                        textIgnorePlacement(true)
+                        textColor(Color.parseColor("#134e4a")),
+                        textHaloColor(Color.parseColor("#f0fdf4")),
+                        textHaloWidth(1f),
+                        textOffset(arrayOf(0f, 1.0f))
                     )
-                    setMinZoom(11.9f)
+                    setMinZoom(10f)
                 }
             )
         }
 
-        MapboxConfig.customWater()?.let { config ->
+        addIfMissing(
+            style,
+            SymbolLayer(WATER_POINT_SYMBOL_LAYER_ID, REMOTE_WATER_SOURCE_ID).apply {
+                setFilter(offlineWaterPointFilter())
+                setProperties(
+                    iconImage(WaterIconId),
+                    iconSize(
+                        interpolate(
+                            exponential(1.1f),
+                            zoom(),
+                            stop(9, 0.82f),
+                            stop(12, 0.96f),
+                            stop(15, 1.12f)
+                        )
+                    ),
+                    iconAllowOverlap(true),
+                    iconIgnorePlacement(true)
+                )
+                setMinZoom(9f)
+            }
+        )
+        if (mapDataConfig.hasLocalGlyphs) {
             addIfMissing(
                 style,
-                SymbolLayer(WATER_POINT_SYMBOL_LAYER_ID, MapboxConfig.CUSTOM_WATER_SOURCE_ID).apply {
-                    sourceLayer = config.sourceLayer
-                    setProperties(
-                        iconImage(WaterIconId),
-                        iconSize(
-                            interpolate(
-                                exponential(1.18f),
-                                zoom(),
-                                stop(10.8, 0.47f),
-                                stop(13, 0.56f),
-                                stop(15, 0.66f)
-                            )
-                        ),
-                        iconAllowOverlap(true),
-                        iconIgnorePlacement(true)
-                    )
-                    setMinZoom(10.4f)
-                }
-            )
-            addIfMissing(
-                style,
-                SymbolLayer(WATER_POINT_LABELS_LAYER_ID, MapboxConfig.CUSTOM_WATER_SOURCE_ID).apply {
-                    sourceLayer = config.sourceLayer
+                SymbolLayer(WATER_POINT_LABELS_LAYER_ID, REMOTE_WATER_SOURCE_ID).apply {
+                    setFilter(offlineWaterPointFilter())
                     setProperties(
                         textField(namedPointLabelExpression()),
                         textFont(arrayOf("Open Sans Regular")),
-                        textSize(
-                            interpolate(
-                                exponential(1.15f),
-                                zoom(),
-                                stop(12.2, 8.6f),
-                                stop(14, 9.8f),
-                                stop(15.5, 10.9f)
-                            )
-                        ),
-                        textColor(Color.parseColor("#0c4a6e")),
-                        textHaloColor(Color.parseColor("#f0f9ff")),
-                        textHaloWidth(1.1f),
-                        textHaloBlur(0.4f),
-                        textOffset(arrayOf(0f, 1.05f)),
-                        textAllowOverlap(true),
-                        textIgnorePlacement(true)
+                        textSize(10.2f),
+                        textColor(Color.parseColor("#0f3d54")),
+                        textHaloColor(Color.parseColor("#eff6ff")),
+                        textHaloWidth(1f),
+                        textOffset(arrayOf(0f, 1.0f))
                     )
-                    setMinZoom(12.1f)
+                    setMinZoom(10f)
                 }
             )
         }
@@ -619,11 +813,33 @@ object MapStyleConfig {
     private fun namedPointLabelExpression() =
         coalesce(get("name:ro"), get("name"), get("description"))
 
-    private fun nonPeakAttractionFilter() =
-        match(
-            get("natural"),
-            literal(true),
-            stop("peak", literal(false))
+    private fun mnTrailFilter() =
+        any(
+            has("ref:MN"),
+            has("ref_mn"),
+            has("mn_code")
+        )
+
+    private fun offlineAttractionFilter() =
+        any(
+            eq(get("tourism"), literal("attraction")),
+            eq(get("tourism"), literal("viewpoint")),
+            eq(get("tourism"), literal("museum")),
+            eq(get("tourism"), literal("gallery")),
+            eq(get("historic"), literal("monument")),
+            eq(get("historic"), literal("memorial")),
+            eq(get("historic"), literal("ruins")),
+            eq(get("historic"), literal("castle")),
+            eq(get("amenity"), literal("monastery")),
+            eq(get("amenity"), literal("place_of_worship")),
+            eq(get("leisure"), literal("park"))
+        )
+
+    private fun offlineWaterPointFilter() =
+        any(
+            eq(get("amenity"), literal("drinking_water")),
+            eq(get("drinking_water"), literal("yes")),
+            eq(get("natural"), literal("spring"))
         )
 
     private fun ensurePointSymbolImages(style: Style) {
@@ -749,7 +965,7 @@ object MapStyleConfig {
         badgeStroke: Int,
         contentDrawer: (Canvas, Float) -> Unit
     ): Bitmap {
-        val size = 48f
+        val size = 64f
         val bitmap = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -759,7 +975,7 @@ object MapStyleConfig {
         val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.STROKE
             color = badgeStroke
-            strokeWidth = 2.2f
+            strokeWidth = 2.6f
         }
         canvas.drawCircle(size * 0.5f, size * 0.5f, size * 0.34f, fillPaint)
         canvas.drawCircle(size * 0.5f, size * 0.5f, size * 0.34f, strokePaint)

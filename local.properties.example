@@ -3,17 +3,8 @@
 
 sdk.dir=C\:\\Android\\Sdk
 
-mapbox.accessToken=
-mapbox.username=
-mapbox.baseTileset=
-mapbox.elevationTileset=
-mapbox.trailsTileset=
-mapbox.trailsSourceLayer=
-mapbox.wildlifeTileset=
-mapbox.wildlifeSourceLayer=
-mapbox.attractionsTileset=
-mapbox.attractionsSourceLayer=
-mapbox.waterTileset=
-mapbox.waterSourceLayer=
-
 meteoblue.apiKey=
+
+## Offline map packs are imported at runtime from the map screen:
+## - romania-base.pmtiles (required)
+## - bucegi-high.pmtiles (optional)

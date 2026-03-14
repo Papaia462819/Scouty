@@ -4,8 +4,13 @@ build/
 
 .idea/
 *.iml
+.kotlin/
+tools/__pycache__/
 
 local.properties
+tools/bin/
+tools/generated-map-packs/
+tools/.tmp/
 
 Thumbs.db
 .DS_Store

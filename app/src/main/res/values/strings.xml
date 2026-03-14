@@ -29,8 +29,15 @@
 
     <string name="map_section_title">Navigation and Terrain</string>
     <string name="map_placeholder">MapLibre map placeholder</string>
-    <string name="map_missing_config_title">Map configuration is incomplete</string>
-    <string name="map_missing_config_body">Add your Mapbox token and tileset ids in local.properties before opening the map.</string>
+    <string name="map_missing_pack_title">Offline map pack is missing</string>
+    <string name="map_missing_pack_body">Scouty now loads the basemap from a local PMTiles pack stored in app storage. Import the Romania base pack to use the map offline.</string>
+    <string name="map_pack_target_path">Expected file: %1$s in %2$s</string>
+    <string name="map_import_base_pack">Import Romania pack</string>
+    <string name="map_import_demo_pack">Import Bucegi pack</string>
+    <string name="map_pack_importing">Importing…</string>
+    <string name="map_demo_pack_title">Bucegi high detail is optional</string>
+    <string name="map_demo_pack_body">Import the Bucegi demo pack to unlock sharper zoom in the core demo area.</string>
+    <string name="map_runtime_error_title">Map pack error</string>
     <string name="map_search_placeholder">Search peaks, huts, trails...</string>
     <string name="map_topo">Topo</string>
     <string name="map_satellite">Satellite</string>

@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -60,6 +62,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -92,10 +95,13 @@ import com.scouty.app.data.RouteSearchSuggestion
 import com.scouty.app.ui.components.RouteRemoteImage
 import com.scouty.app.ui.MainViewModel
 import com.scouty.app.ui.models.HomeStatus
+import com.scouty.app.utils.MapDataConfig
 import com.scouty.app.utils.MapLifecycleManager
 import com.scouty.app.utils.MapOverlayState
+import com.scouty.app.utils.MapPackId
+import com.scouty.app.utils.MapPackRegistry
+import com.scouty.app.utils.MapPackRegistryManager
 import com.scouty.app.utils.MapStyleConfig
-import com.scouty.app.utils.MapboxConfig
 import com.scouty.app.utils.TrailDifficulty
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraUpdateFactory
@@ -133,6 +139,7 @@ import kotlin.math.sqrt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 private val RomaniaCenter = LatLng(45.9432, 24.9668)
@@ -196,6 +203,7 @@ fun MapScreen(
     openActiveTrailToken: Long? = null
 ) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     val sheetState = rememberStandardBottomSheetState(skipHiddenState = true)
     val sheetScaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
     val routeCatalog by produceState(initialValue = RouteEnrichmentCatalog(), context) {
@@ -204,6 +212,15 @@ fun MapScreen(
     val routeGeometryIndex by produceState(initialValue = RouteGeometryIndex(), context) {
         value = RouteGeometryRepository.load(context)
     }
+    var mapPackRefreshToken by remember { mutableStateOf(0) }
+    val mapPackRegistry by produceState(
+        initialValue = MapPackRegistryManager.load(context),
+        context,
+        mapPackRefreshToken
+    ) {
+        value = MapPackRegistryManager.load(context)
+    }
+    val mapDataConfig = remember(mapPackRegistry) { MapDataConfig.fromRegistry(mapPackRegistry) }
     val defaultSelection = remember {
         SelectedTrailDetails(
             name = "Mountain Trail",
@@ -227,6 +244,40 @@ fun MapScreen(
         mutableStateListOf("Vârful Caraiman", "Cabana Omu", "Cascada Urlătoarea", "Creasta Cocoșului")
     }
     var liveSuggestions by remember { mutableStateOf<List<RouteSearchSuggestion>>(emptyList()) }
+    var pendingImportPackId by remember { mutableStateOf<MapPackId?>(null) }
+    var importInProgressPackId by remember { mutableStateOf<MapPackId?>(null) }
+    var importErrorMessage by remember { mutableStateOf<String?>(null) }
+    var mapRuntimeError by remember { mutableStateOf<String?>(null) }
+
+    val importLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { selectedUri ->
+        val requestedPackId = pendingImportPackId
+        pendingImportPackId = null
+        if (requestedPackId == null || selectedUri == null) {
+            return@rememberLauncherForActivityResult
+        }
+
+        coroutineScope.launch {
+            importInProgressPackId = requestedPackId
+            importErrorMessage = null
+            runCatching {
+                withContext(Dispatchers.IO) {
+                    MapPackRegistryManager.copyImportedPack(context, requestedPackId, selectedUri)
+                }
+            }.onSuccess {
+                mapPackRefreshToken += 1
+            }.onFailure { error ->
+                importErrorMessage = error.message ?: "Nu am putut importa pack-ul selectat."
+            }
+            importInProgressPackId = null
+        }
+    }
+
+    fun requestMapPackImport(packId: MapPackId) {
+        pendingImportPackId = packId
+        importLauncher.launch(arrayOf("*/*"))
+    }
 
     LaunchedEffect(searchText, routeCatalog) {
         val query = searchText.trim()
@@ -269,6 +320,7 @@ fun MapScreen(
     }
 
     val toggleItems = remember(
+        mapDataConfig,
         showTrails,
         showPeaks,
         showPlaces,
@@ -279,12 +331,14 @@ fun MapScreen(
         buildList {
             add(LayerToggleSpec(context.getString(R.string.overlay_trails), showTrails) { showTrails = it })
             add(LayerToggleSpec(context.getString(R.string.overlay_peaks), showPeaks) { showPeaks = it })
-            add(LayerToggleSpec(context.getString(R.string.overlay_places), showPlaces) { showPlaces = it })
+            if (mapDataConfig.hasLocalGlyphs) {
+                add(LayerToggleSpec(context.getString(R.string.overlay_places), showPlaces) { showPlaces = it })
+            }
             add(LayerToggleSpec(context.getString(R.string.overlay_water_points), showWater) { showWater = it })
-            if (MapStyleConfig.hasWildlifeLayer()) {
+            if (MapStyleConfig.hasWildlifeLayer(mapDataConfig)) {
                 add(LayerToggleSpec(context.getString(R.string.overlay_wildlife_risk), showWildlife) { showWildlife = it })
             }
-            if (MapStyleConfig.hasAttractionsLayer()) {
+            if (MapStyleConfig.hasAttractionsLayer(mapDataConfig)) {
                 add(LayerToggleSpec(context.getString(R.string.overlay_attractions), showAttractions) { showAttractions = it })
             }
         }
@@ -327,7 +381,7 @@ fun MapScreen(
         consumedActiveTrailOpenToken = openActiveTrailToken
     }
 
-    if (!MapboxConfig.isConfigured) {
+    if (!mapDataConfig.isBasePackReady) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -335,22 +389,12 @@ fun MapScreen(
                 .padding(24.dp),
             contentAlignment = Alignment.Center
         ) {
-            Card(
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                shape = RoundedCornerShape(24.dp)
-            ) {
-                Column(modifier = Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        text = stringResource(R.string.map_missing_config_title),
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = stringResource(R.string.map_missing_config_body),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
+            MissingBaseMapPackCard(
+                registry = mapPackRegistry,
+                importInProgressPackId = importInProgressPackId,
+                importErrorMessage = importErrorMessage,
+                onImportBasePack = { requestMapPackImport(MapPackId.ROMANIA_BASE) }
+            )
         }
         return
     }
@@ -402,133 +446,283 @@ fun MapScreen(
             }
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
-            MapLibreView(
-                status = status,
-                routeCatalog = routeCatalog,
-                routeGeometryIndex = routeGeometryIndex,
-                selectedRouteCode = selectedTrail.localCode,
-                selectedRouteSegments = selectedTrail.highlightSegments,
-                selectedRouteBounds = selectedTrail.highlightBounds,
-                selectedRouteCenter = LatLng(selectedTrail.latitude, selectedTrail.longitude),
-                selectedRouteToken = selectedTrail.selectionToken,
-                overlayState = overlayState,
-                onTrailClick = { selection ->
-                    selectedTrail = selection
-                    showBottomSheet = true
-                },
-                modifier = Modifier.fillMaxSize()
-            )
-
-            SearchBar(
-                inputField = {
-                    SearchBarDefaults.InputField(
-                        query = searchText,
-                        onQueryChange = { searchText = it },
-                        onSearch = { query ->
-                            liveSuggestions.firstOrNull()?.let(::selectSuggestion)
-                                ?: run {
-                                    if (query.isNotBlank() && !searchHistory.contains(query)) {
-                                        searchHistory.add(0, query)
-                                    }
-                                    isSearchExpanded = false
-                                }
-                        },
-                        expanded = isSearchExpanded,
-                        onExpandedChange = { isSearchExpanded = it },
-                        placeholder = { Text(stringResource(R.string.map_search_placeholder)) },
-                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                        trailingIcon = {
-                            if (isSearchExpanded) {
-                                IconButton(onClick = {
-                                    if (searchText.isNotEmpty()) searchText = "" else isSearchExpanded = false
-                                }) {
-                                    Icon(Icons.Default.Close, contentDescription = null)
-                                }
-                            } else {
-                                IconButton(onClick = { showLayerMenu = !showLayerMenu }) {
-                                    Icon(
-                                        Icons.Default.Layers,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
-                                }
-                            }
-                        }
-                    )
-                },
-                expanded = isSearchExpanded,
-                onExpandedChange = { isSearchExpanded = it },
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = if (isSearchExpanded) 0.dp else 16.dp)
-                    .fillMaxWidth(if (isSearchExpanded) 1f else 0.92f),
-                colors = SearchBarDefaults.colors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.96f)
+                MapLibreView(
+                    status = status,
+                    routeCatalog = routeCatalog,
+                    routeGeometryIndex = routeGeometryIndex,
+                    mapDataConfig = mapDataConfig,
+                    selectedRouteCode = selectedTrail.localCode,
+                    selectedRouteSegments = selectedTrail.highlightSegments,
+                    selectedRouteBounds = selectedTrail.highlightBounds,
+                    selectedRouteCenter = LatLng(selectedTrail.latitude, selectedTrail.longitude),
+                    selectedRouteToken = selectedTrail.selectionToken,
+                    overlayState = overlayState,
+                    onTrailClick = { selection ->
+                        selectedTrail = selection
+                        showBottomSheet = true
+                    },
+                    onMapErrorChanged = { mapRuntimeError = it },
+                    modifier = Modifier.fillMaxSize()
                 )
-            ) {
-                LazyColumn(
+
+                SearchBar(
+                    inputField = {
+                        SearchBarDefaults.InputField(
+                            query = searchText,
+                            onQueryChange = { searchText = it },
+                            onSearch = { query ->
+                                liveSuggestions.firstOrNull()?.let(::selectSuggestion)
+                                    ?: run {
+                                        if (query.isNotBlank() && !searchHistory.contains(query)) {
+                                            searchHistory.add(0, query)
+                                        }
+                                        isSearchExpanded = false
+                                    }
+                            },
+                            expanded = isSearchExpanded,
+                            onExpandedChange = { isSearchExpanded = it },
+                            placeholder = { Text(stringResource(R.string.map_search_placeholder)) },
+                            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                            trailingIcon = {
+                                if (isSearchExpanded) {
+                                    IconButton(onClick = {
+                                        if (searchText.isNotEmpty()) searchText = "" else isSearchExpanded = false
+                                    }) {
+                                        Icon(Icons.Default.Close, contentDescription = null)
+                                    }
+                                } else {
+                                    IconButton(onClick = { showLayerMenu = !showLayerMenu }) {
+                                        Icon(
+                                            Icons.Default.Layers,
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                }
+                            }
+                        )
+                    },
+                    expanded = isSearchExpanded,
+                    onExpandedChange = { isSearchExpanded = it },
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                        .align(Alignment.TopCenter)
+                        .padding(top = if (isSearchExpanded) 0.dp else 16.dp)
+                        .fillMaxWidth(if (isSearchExpanded) 1f else 0.92f),
+                    colors = SearchBarDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.96f)
+                    )
                 ) {
-                    if (searchText.length >= 2) {
-                        items(liveSuggestions) { suggestion ->
-                            RouteSuggestionItem(
-                                suggestion = suggestion,
-                                onClick = { selectSuggestion(suggestion) },
-                                showPreviewImage = false
-                            )
-                        }
-                    } else {
-                        items(searchHistory) { historyItem ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        searchText = historyItem
-                                    },
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    Icons.Default.History,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        if (searchText.length >= 2) {
+                            items(liveSuggestions) { suggestion ->
+                                RouteSuggestionItem(
+                                    suggestion = suggestion,
+                                    onClick = { selectSuggestion(suggestion) },
+                                    showPreviewImage = false
                                 )
-                                Spacer(modifier = Modifier.width(16.dp))
-                                Text(text = historyItem)
+                            }
+                        } else {
+                            items(searchHistory) { historyItem ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            searchText = historyItem
+                                        },
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        Icons.Default.History,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                    Spacer(modifier = Modifier.width(16.dp))
+                                    Text(text = historyItem)
+                                }
                             }
                         }
-                    }
 
-                    if (searchText.length >= 2 && liveSuggestions.isEmpty()) {
-                        item {
-                            Text(
-                                text = "Nu am gasit trasee pentru \"$searchText\".",
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                        if (searchText.length >= 2 && liveSuggestions.isEmpty()) {
+                            item {
+                                Text(
+                                    text = "Nu am gasit trasee pentru \"$searchText\".",
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         }
                     }
                 }
-            }
 
-            if (showLayerMenu && !isSearchExpanded) {
-                Card(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(top = 80.dp, end = 16.dp)
-                        .width(220.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-                ) {
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        toggleItems.forEach { toggle ->
-                            LayerToggleRow(toggle.label, toggle.checked, toggle.onCheckedChange)
+                if (showLayerMenu && !isSearchExpanded) {
+                    Card(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(top = 80.dp, end = 16.dp)
+                            .width(220.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                    ) {
+                        Column(modifier = Modifier.padding(8.dp)) {
+                            toggleItems.forEach { toggle ->
+                                LayerToggleRow(toggle.label, toggle.checked, toggle.onCheckedChange)
+                            }
                         }
                     }
+                }
+
+                if (!mapDataConfig.hasDemoPack && !isSearchExpanded) {
+                    OptionalDemoPackBanner(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(horizontal = 16.dp, vertical = 20.dp),
+                        importInProgressPackId = importInProgressPackId,
+                        onImportDemoPack = { requestMapPackImport(MapPackId.BUCEGI_HIGH) }
+                    )
+                }
+
+                mapRuntimeError?.let { errorMessage ->
+                    MapRuntimeErrorCard(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(horizontal = 16.dp, vertical = if (mapDataConfig.hasDemoPack) 20.dp else 110.dp),
+                        message = errorMessage
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun MissingBaseMapPackCard(
+    registry: MapPackRegistry,
+    importInProgressPackId: MapPackId?,
+    importErrorMessage: String?,
+    onImportBasePack: () -> Unit
+) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        shape = RoundedCornerShape(24.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.map_missing_pack_title),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = stringResource(R.string.map_missing_pack_body),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = stringResource(
+                    R.string.map_pack_target_path,
+                    registry.basePack().file.name,
+                    registry.mapsDirectory.absolutePath
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            importErrorMessage?.let { errorMessage ->
+                Text(
+                    text = errorMessage,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+            Button(
+                onClick = onImportBasePack,
+                enabled = importInProgressPackId != MapPackId.ROMANIA_BASE
+            ) {
+                Text(
+                    text = if (importInProgressPackId == MapPackId.ROMANIA_BASE) {
+                        stringResource(R.string.map_pack_importing)
+                    } else {
+                        stringResource(R.string.map_import_base_pack)
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun OptionalDemoPackBanner(
+    modifier: Modifier = Modifier,
+    importInProgressPackId: MapPackId?,
+    onImportDemoPack: () -> Unit
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
+        tonalElevation = 8.dp
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.map_demo_pack_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Text(
+                    text = stringResource(R.string.map_demo_pack_body),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Button(
+                onClick = onImportDemoPack,
+                enabled = importInProgressPackId != MapPackId.BUCEGI_HIGH
+            ) {
+                Text(
+                    text = if (importInProgressPackId == MapPackId.BUCEGI_HIGH) {
+                        stringResource(R.string.map_pack_importing)
+                    } else {
+                        stringResource(R.string.map_import_demo_pack)
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MapRuntimeErrorCard(
+    modifier: Modifier = Modifier,
+    message: String
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.96f),
+        tonalElevation = 6.dp
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
+            Text(
+                text = stringResource(R.string.map_runtime_error_title),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onErrorContainer
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onErrorContainer
+            )
         }
     }
 }
@@ -915,6 +1109,7 @@ private fun MapLibreView(
     status: HomeStatus,
     routeCatalog: RouteEnrichmentCatalog,
     routeGeometryIndex: RouteGeometryIndex,
+    mapDataConfig: MapDataConfig,
     selectedRouteCode: String?,
     selectedRouteSegments: List<List<RouteCoordinate>>,
     selectedRouteBounds: RouteBounds?,
@@ -922,13 +1117,16 @@ private fun MapLibreView(
     selectedRouteToken: Long?,
     overlayState: MapOverlayState,
     onTrailClick: (SelectedTrailDetails) -> Unit,
+    onMapErrorChanged: (String?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val currentOverlayState by rememberUpdatedState(overlayState)
     val currentOnTrailClick by rememberUpdatedState(onTrailClick)
+    val currentOnMapErrorChanged by rememberUpdatedState(onMapErrorChanged)
     val currentRouteCatalog by rememberUpdatedState(routeCatalog)
     val currentRouteGeometryIndex by rememberUpdatedState(routeGeometryIndex)
+    val currentMapDataConfig by rememberUpdatedState(mapDataConfig)
     val currentSelectedRouteCode by rememberUpdatedState(selectedRouteCode)
     val currentSelectedRouteSegments by rememberUpdatedState(selectedRouteSegments)
     val currentSelectedRouteBounds by rememberUpdatedState(selectedRouteBounds)
@@ -939,39 +1137,60 @@ private fun MapLibreView(
     val lifecycleManager = remember { MapLifecycleManager(mapView) }
     var mapLibreMap by remember { mutableStateOf<MapLibreMap?>(null) }
     var lastFocusedTrail by remember { mutableStateOf<String?>(null) }
+    var appliedStyleKey by remember { mutableStateOf<String?>(null) }
+    var mapClickListenerBound by remember { mutableStateOf(false) }
 
     DisposableEffect(lifecycle) {
         lifecycle.addObserver(lifecycleManager)
         onDispose { lifecycle.removeObserver(lifecycleManager) }
     }
 
+    fun applyOfflineStyle(map: MapLibreMap) {
+        if (!currentMapDataConfig.isBasePackReady) {
+            return
+        }
+
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(RomaniaCenter, DefaultRomaniaZoom))
+        map.setStyle(MapStyleConfig.createStyleBuilder(currentMapDataConfig)) { style ->
+            appliedStyleKey = currentMapDataConfig.styleKey
+            MapStyleConfig.installStyle(style, currentMapDataConfig)
+            ensureSelectedRouteLayers(style)
+            MapStyleConfig.applyOverlayVisibility(style, currentOverlayState)
+            logBaseSourceDiagnostics(style)
+            enableLocationComponent(map, style, context)
+            currentOnMapErrorChanged(null)
+        }
+    }
+
     AndroidView(
         factory = {
             mapView.apply {
+                addOnDidFailLoadingMapListener { errorMessage ->
+                    Log.e("ScoutyMap", "MapLibre failed to load: $errorMessage")
+                    currentOnMapErrorChanged(errorMessage)
+                }
                 getMapAsync { map ->
                     mapLibreMap = map
                     map.setLatLngBoundsForCameraTarget(RomaniaCameraBounds)
                     map.setMinZoomPreference(DefaultRomaniaZoom)
-                    map.setMaxZoomPreference(15.5)
-                    if (map.style == null) {
-                        mapView.addOnDidFailLoadingMapListener { errorMessage ->
-                            Log.e("ScoutyMap", "MapLibre failed to load: $errorMessage")
+                    map.setMaxZoomPreference(16.4)
+                    if (!mapClickListenerBound) {
+                        map.addOnMapClickListener { tappedPoint ->
+                            handleMapTap(
+                                map = map,
+                                tappedPoint = tappedPoint,
+                                routeCatalog = currentRouteCatalog,
+                                routeGeometryIndex = currentRouteGeometryIndex,
+                                mapDataConfig = currentMapDataConfig
+                            )?.let { selection ->
+                                currentOnTrailClick(selection)
+                                true
+                            } ?: false
                         }
-                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(RomaniaCenter, DefaultRomaniaZoom))
-                        map.setStyle(MapStyleConfig.createStyleBuilder()) { style ->
-                            MapStyleConfig.installStyle(style)
-                            ensureSelectedRouteLayers(style)
-                            MapStyleConfig.applyOverlayVisibility(style, currentOverlayState)
-                            logBaseSourceDiagnostics(style)
-                            enableLocationComponent(map, style, context)
-
-                            map.addOnMapClickListener { tappedPoint ->
-                                handleMapTap(map, tappedPoint, currentRouteCatalog)?.let { selection ->
-                                    currentOnTrailClick(selection)
-                                    true
-                                } ?: false
-                            }
-                        }
+                        mapClickListenerBound = true
+                    }
+                    if (map.style == null || appliedStyleKey != currentMapDataConfig.styleKey) {
+                        applyOfflineStyle(map)
                     }
                 }
             }
@@ -979,6 +1198,10 @@ private fun MapLibreView(
         modifier = modifier,
         update = {
             val map = mapLibreMap ?: return@AndroidView
+            if (appliedStyleKey != currentMapDataConfig.styleKey) {
+                applyOfflineStyle(map)
+                return@AndroidView
+            }
             map.style?.let { style ->
                 ensureSelectedRouteLayers(style)
                 MapStyleConfig.applyOverlayVisibility(style, currentOverlayState)
@@ -1082,7 +1305,7 @@ private fun isInsideRomaniaTileset(latitude: Double, longitude: Double): Boolean
         longitude in RomaniaBoundsMinLon..RomaniaBoundsMaxLon
 
 private fun logBaseSourceDiagnostics(style: Style) {
-    val baseSource = style.getSourceAs<VectorSource>(MapboxConfig.BASE_SOURCE_ID) ?: return
+    val baseSource = style.getSourceAs<VectorSource>(MapStyleConfig.BASE_SOURCE_ID) ?: return
     runCatching {
         val water = baseSource.querySourceFeatures(arrayOf("water"), null).size
         val place = baseSource.querySourceFeatures(arrayOf("place"), null).size
@@ -1099,24 +1322,34 @@ private fun logBaseSourceDiagnostics(style: Style) {
 private fun handleMapTap(
     map: MapLibreMap,
     tappedPoint: LatLng,
-    routeCatalog: RouteEnrichmentCatalog
+    routeCatalog: RouteEnrichmentCatalog,
+    routeGeometryIndex: RouteGeometryIndex,
+    mapDataConfig: MapDataConfig
 ): SelectedTrailDetails? {
     val screenPoint = map.projection.toScreenLocation(tappedPoint)
-    val features = map.queryRenderedFeatures(screenPoint, *MapStyleConfig.trailQueryLayerIds())
+    val features = map.queryRenderedFeatures(screenPoint, *MapStyleConfig.trailQueryLayerIds(mapDataConfig))
     val feature = features.firstOrNull { !featureRouteCode(it).isNullOrBlank() } ?: features.firstOrNull() ?: return null
-    val routeCode = featureRouteCode(feature)
+    val routeCode = resolveTappedRouteCode(feature, tappedPoint, routeGeometryIndex) ?: return null
     val enrichment = RouteEnrichmentRepository.findByLocalCode(routeCatalog, routeCode)
+    val matchedGeometry = RouteGeometryRepository.findByLocalCode(routeGeometryIndex, routeCode)
 
-    val coordinateSegments = extractCoordinateSegments(feature.geometry())
+    val coordinateSegments = matchedGeometry?.let(RouteGeometryRepository::decodeRenderableSegments)
+        ?: extractCoordinateSegments(feature.geometry())
+            .filter { it.size >= 2 }
+            .map { segment ->
+                segment.map { point -> RouteCoordinate(lat = point.latitude(), lon = point.longitude()) }
+            }
+    if (coordinateSegments.isEmpty()) {
+        return null
+    }
     val coordinates = coordinateSegments.flatten()
     val highlightSegments = coordinateSegments
-        .filter { it.size >= 2 }
-        .map { segment ->
-            segment.map { point -> RouteCoordinate(lat = point.latitude(), lon = point.longitude()) }
-        }
-    val fallbackPoint = coordinates.getOrNull(coordinates.size / 2) ?: Point.fromLngLat(tappedPoint.longitude, tappedPoint.latitude)
+    val highlightBounds = routeBoundsForSegments(highlightSegments) ?: matchedGeometry?.bbox
+    val fallbackPoint = matchedGeometry?.center?.let { Point.fromLngLat(it.lon, it.lat) }
+        ?: coordinates.getOrNull(coordinates.size / 2)?.let { Point.fromLngLat(it.lon, it.lat) }
+        ?: Point.fromLngLat(tappedPoint.longitude, tappedPoint.latitude)
     val enrichedDistanceKm = enrichment?.mnData?.distanceKm
-    val lengthKm = enrichedDistanceKm ?: calculatePathDistanceKm(coordinateSegments)
+    val lengthKm = enrichedDistanceKm ?: matchedGeometry?.let(::estimateRouteLengthKm) ?: calculateRenderableDistanceKm(coordinateSegments)
     val enrichedGain = enrichment?.mnData?.ascentM
     val elevationGain = enrichedGain ?: estimateElevationGain(feature)
     val difficulty = resolveDifficulty(
@@ -1149,12 +1382,25 @@ private fun handleMapTap(
         imageSourcePageUrl = enrichment?.image?.sourcePageUrl,
         imageScope = enrichment?.image?.scope,
         highlightSegments = highlightSegments,
-        highlightBounds = routeBoundsForSegments(highlightSegments)
+        highlightBounds = highlightBounds
     )
 }
 
 private fun featureRouteCode(feature: Feature): String? =
-    featureString(feature, "ref:MN", "ref_mn", "mn_code")
+    featureString(feature, "ref:MN", "ref_mn", "mn_code", "local_code", "canonical_local_code")
+
+private fun resolveTappedRouteCode(
+    feature: Feature,
+    tappedPoint: LatLng,
+    routeGeometryIndex: RouteGeometryIndex
+): String? {
+    val directCode = RouteEnrichmentRepository.normalizeLocalCode(featureRouteCode(feature))
+    if (directCode != null && RouteGeometryRepository.findByLocalCode(routeGeometryIndex, directCode) != null) {
+        return directCode
+    }
+
+    return findNearestRouteGeometry(routeGeometryIndex, tappedPoint)?.localCode
+}
 
 private fun extractCoordinateSegments(geometry: Geometry?): List<List<Point>> =
     when (geometry) {
@@ -1226,6 +1472,100 @@ private fun calculatePathDistanceKm(coordinateSegments: List<List<Point>>): Doub
             }.sum()
         }
     }
+
+private fun calculateRenderableDistanceKm(coordinateSegments: List<List<RouteCoordinate>>): Double =
+    coordinateSegments.sumOf { segment ->
+        if (segment.size < 2) {
+            0.0
+        } else {
+            segment.zipWithNext { start, end ->
+                haversineKm(start.lat, start.lon, end.lat, end.lon)
+            }.sum()
+        }
+    }
+
+private fun findNearestRouteGeometry(
+    routeGeometryIndex: RouteGeometryIndex,
+    tappedPoint: LatLng
+): RouteGeometryEntry? {
+    val tappedCoordinate = RouteCoordinate(lat = tappedPoint.latitude, lon = tappedPoint.longitude)
+    val bboxThresholdKm = 2.2
+    val routeThresholdKm = 0.55
+
+    return routeGeometryIndex.routesByLocalCode.values
+        .asSequence()
+        .filter { routeBoundsDistanceKm(tappedCoordinate, it.bbox) <= bboxThresholdKm }
+        .mapNotNull { entry ->
+            val renderableSegments = RouteGeometryRepository.decodeRenderableSegments(entry)
+            if (renderableSegments.isEmpty()) {
+                return@mapNotNull null
+            }
+            val distanceKm = routeDistanceKm(tappedCoordinate, renderableSegments)
+            if (distanceKm > routeThresholdKm) {
+                return@mapNotNull null
+            }
+            MatchedRouteGeometry(entry, distanceKm)
+        }
+        .minByOrNull { it.distanceKm }
+        ?.entry
+}
+
+private data class MatchedRouteGeometry(
+    val entry: RouteGeometryEntry,
+    val distanceKm: Double
+)
+
+private fun routeBoundsDistanceKm(point: RouteCoordinate, bounds: RouteBounds): Double {
+    val clampedLat = point.lat.coerceIn(bounds.minLat, bounds.maxLat)
+    val clampedLon = point.lon.coerceIn(bounds.minLon, bounds.maxLon)
+    return haversineKm(point.lat, point.lon, clampedLat, clampedLon)
+}
+
+private fun routeDistanceKm(
+    point: RouteCoordinate,
+    segments: List<List<RouteCoordinate>>
+): Double =
+    segments.minOfOrNull { segment -> segmentDistanceKm(point, segment) } ?: Double.MAX_VALUE
+
+private fun segmentDistanceKm(
+    point: RouteCoordinate,
+    segment: List<RouteCoordinate>
+): Double {
+    if (segment.size < 2) {
+        return Double.MAX_VALUE
+    }
+
+    return segment.zipWithNext { start, end ->
+        pointToSegmentDistanceKm(point, start, end)
+    }.minOrNull() ?: Double.MAX_VALUE
+}
+
+private fun pointToSegmentDistanceKm(
+    point: RouteCoordinate,
+    start: RouteCoordinate,
+    end: RouteCoordinate
+): Double {
+    val originLatRad = Math.toRadians((point.lat + start.lat + end.lat) / 3.0)
+    val pointX = point.lon * 111.320 * cos(originLatRad)
+    val pointY = point.lat * 110.574
+    val startX = start.lon * 111.320 * cos(originLatRad)
+    val startY = start.lat * 110.574
+    val endX = end.lon * 111.320 * cos(originLatRad)
+    val endY = end.lat * 110.574
+    val dx = endX - startX
+    val dy = endY - startY
+    if (dx == 0.0 && dy == 0.0) {
+        return hypotKm(pointX - startX, pointY - startY)
+    }
+
+    val projection = (((pointX - startX) * dx) + ((pointY - startY) * dy)) / ((dx * dx) + (dy * dy))
+    val clampedProjection = projection.coerceIn(0.0, 1.0)
+    val nearestX = startX + (clampedProjection * dx)
+    val nearestY = startY + (clampedProjection * dy)
+    return hypotKm(pointX - nearestX, pointY - nearestY)
+}
+
+private fun hypotKm(dx: Double, dy: Double): Double = sqrt((dx * dx) + (dy * dy))
 
 private fun estimateElevationGain(feature: Feature): Int {
     val keys = listOf("elevation_gain", "elevationGain", "gain", "ascent", "climb", "uphill")
