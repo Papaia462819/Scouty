@@ -37,6 +37,44 @@ class PromptBuilderTest {
 
         assertTrue(prompt.contextSummary.contains("Bucegi Demo"))
         assertTrue(prompt.contextSummary.contains("Baterie 14%"))
+        assertTrue(prompt.contextSummary.contains("Battery Safe"))
+        assertTrue(prompt.contextSummary.contains("18:42"))
         assertTrue(prompt.citationsSummary.contains("Purificarea apei"))
+    }
+
+    @Test
+    fun build_withoutTrail_showsNoActiveTrail() {
+        val prompt = builder.build(
+            query = "test",
+            context = DeviceContextSnapshot(batteryPercent = 80),
+            retrievedChunks = emptyList()
+        )
+        assertTrue(prompt.contextSummary.contains("Fără traseu activ"))
+    }
+
+    @Test
+    fun build_withoutGpsFix_showsNoFix() {
+        val prompt = builder.build(
+            query = "test",
+            context = DeviceContextSnapshot(gpsFixed = false, batteryPercent = 50),
+            retrievedChunks = emptyList()
+        )
+        assertTrue(prompt.contextSummary.contains("GPS fără fix stabil"))
+    }
+
+    @Test
+    fun build_withGpsFix_showsCoordinates() {
+        val prompt = builder.build(
+            query = "test",
+            context = DeviceContextSnapshot(
+                gpsFixed = true,
+                latitude = 45.0,
+                longitude = 25.0,
+                batteryPercent = 50
+            ),
+            retrievedChunks = emptyList()
+        )
+        assertTrue(prompt.contextSummary.contains("GPS fix"))
+        assertTrue(prompt.contextSummary.contains("45.0000"))
     }
 }

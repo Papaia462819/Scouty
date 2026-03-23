@@ -13,6 +13,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
 @Entity(tableName = "knowledge_chunks")
 data class KnowledgeChunkEntity(
@@ -51,13 +53,19 @@ interface AssistantKnowledgeDao {
     @Query("SELECT * FROM knowledge_chunks WHERE id IN (:ids)")
     suspend fun getChunksByIds(ids: List<String>): List<KnowledgeChunkEntity>
 
+    @Query("SELECT * FROM knowledge_chunks WHERE id IN (:ids) AND language = :language")
+    suspend fun getChunksByIdsAndLanguage(ids: List<String>, language: String): List<KnowledgeChunkEntity>
+
     @Query("SELECT * FROM knowledge_chunks")
     suspend fun getAllChunks(): List<KnowledgeChunkEntity>
+
+    @Query("SELECT * FROM knowledge_chunks WHERE language = :language")
+    suspend fun getAllChunksByLanguage(language: String): List<KnowledgeChunkEntity>
 }
 
 @Database(
     entities = [KnowledgeChunkEntity::class, KnowledgeChunkFtsEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AssistantKnowledgeDatabase : RoomDatabase() {
@@ -73,19 +81,31 @@ abstract class AssistantKnowledgeDatabase : RoomDatabase() {
                     context.applicationContext,
                     AssistantKnowledgeDatabase::class.java,
                     "assistant_knowledge.db"
-                ).build().also { instance = it }
+                ).fallbackToDestructiveMigration().build().also { instance = it }
             }
     }
 }
 
-class AssistantKnowledgeRepository(context: Context) {
+@Serializable
+private data class CorpusChunkDto(
+    val id: String,
+    val topic: String,
+    val sourceTitle: String,
+    val sectionTitle: String,
+    val body: String,
+    val language: String
+)
+
+private val corpusJson = Json { ignoreUnknownKeys = true }
+
+class AssistantKnowledgeRepository(private val context: Context) {
     private val dao = AssistantKnowledgeDatabase.getInstance(context).knowledgeDao()
 
     suspend fun ensureSeeded() = withContext(Dispatchers.IO) {
         if (dao.countChunks() > 0) {
             return@withContext
         }
-        val chunks = seedKnowledgeChunks()
+        val chunks = loadCorpusFromAssets()
         dao.insertChunks(chunks)
         dao.insertFtsChunks(
             chunks.map { chunk ->
@@ -113,8 +133,51 @@ class AssistantKnowledgeRepository(context: Context) {
         ids.mapNotNull(chunksById::get)
     }
 
+    suspend fun searchByLanguage(query: String, limit: Int, language: String): List<KnowledgeChunkEntity> =
+        withContext(Dispatchers.IO) {
+            val ftsQuery = buildFtsQuery(query)
+            if (ftsQuery.isBlank()) {
+                return@withContext emptyList()
+            }
+            val ids = dao.searchChunkIds(ftsQuery, limit * 3)
+            if (ids.isEmpty()) {
+                return@withContext emptyList()
+            }
+            val preferred = dao.getChunksByIdsAndLanguage(ids, language)
+            if (preferred.size >= limit) {
+                val idOrder = ids.withIndex().associate { (i, id) -> id to i }
+                return@withContext preferred.sortedBy { idOrder[it.id] ?: Int.MAX_VALUE }.take(limit)
+            }
+            val allMatches = dao.getChunksByIds(ids)
+            val idOrder = ids.withIndex().associate { (i, id) -> id to i }
+            val sorted = allMatches.sortedWith(
+                compareBy<KnowledgeChunkEntity> { if (it.language == language) 0 else 1 }
+                    .thenBy { idOrder[it.id] ?: Int.MAX_VALUE }
+            )
+            sorted.take(limit)
+        }
+
     suspend fun allChunks(): List<KnowledgeChunkEntity> = withContext(Dispatchers.IO) {
         dao.getAllChunks()
+    }
+
+    suspend fun allChunksByLanguage(language: String): List<KnowledgeChunkEntity> = withContext(Dispatchers.IO) {
+        dao.getAllChunksByLanguage(language)
+    }
+
+    private fun loadCorpusFromAssets(): List<KnowledgeChunkEntity> {
+        val jsonText = context.assets.open("knowledge_corpus.json").bufferedReader().use { it.readText() }
+        val dtos = corpusJson.decodeFromString<List<CorpusChunkDto>>(jsonText)
+        return dtos.map { dto ->
+            KnowledgeChunkEntity(
+                id = dto.id,
+                topic = dto.topic,
+                sourceTitle = dto.sourceTitle,
+                sectionTitle = dto.sectionTitle,
+                body = dto.body,
+                language = dto.language
+            )
+        }
     }
 
     private fun buildFtsQuery(rawQuery: String): String =
@@ -125,54 +188,3 @@ class AssistantKnowledgeRepository(context: Context) {
             .filter { it.length >= 2 }
             .joinToString(" OR ") { "$it*" }
 }
-
-private fun seedKnowledgeChunks(): List<KnowledgeChunkEntity> = listOf(
-    KnowledgeChunkEntity(
-        id = "ankle-basic",
-        topic = "ankle",
-        sourceTitle = "Scouty First Aid Field Notes",
-        sectionTitle = "Entorsă / gleznă",
-        body = "Dacă ți-ai sucit glezna, oprește mersul, redu sprijinul pe picior, protejează articulația și aplică răcire locală dacă poți. Dacă durerea, umflătura sau instabilitatea cresc rapid, nu continua traseul.",
-        language = "ro"
-    ),
-    KnowledgeChunkEntity(
-        id = "ankle-red-flags",
-        topic = "ankle",
-        sourceTitle = "Scouty First Aid Field Notes",
-        sectionTitle = "Red flags după traumatism",
-        body = "Durere severă, deformare, imposibilitate de a călca, amorțeală, sângerare sau pierderea sensibilității sunt semne de alarmă. În astfel de cazuri prioritizează 112 sau un mesaj SOS și evită deplasarea inutilă.",
-        language = "ro"
-    ),
-    KnowledgeChunkEntity(
-        id = "water-purification",
-        topic = "water",
-        sourceTitle = "Scouty Survival Notes",
-        sectionTitle = "Purificarea apei",
-        body = "Cea mai sigură variantă în teren este filtrare urmată de fierbere. Dacă nu poți fierbe apa, folosește tablete dedicate conform instrucțiunilor și evită sursele aflate aproape de animale sau de apă stagnantă.",
-        language = "ro"
-    ),
-    KnowledgeChunkEntity(
-        id = "bear-signs",
-        topic = "wildlife",
-        sourceTitle = "Scouty Wildlife Notes",
-        sectionTitle = "Urme de urs",
-        body = "Dacă observi urme proaspete de urs, oprește-te, fă zgomot controlat, nu te apropia de zona cu urme și retrage-te calm pe traseu. Nu alerga și nu lăsa mâncare expusă.",
-        language = "ro"
-    ),
-    KnowledgeChunkEntity(
-        id = "hypothermia",
-        topic = "cold",
-        sourceTitle = "Scouty First Aid Field Notes",
-        sectionTitle = "Hipotermie",
-        body = "Frison puternic, confuzie, vorbire lentă și coordonare slabă pot indica hipotermie. Oprește expunerea, izolează persoana de sol, adaugă straturi uscate și cere ajutor dacă starea se agravează.",
-        language = "ro"
-    ),
-    KnowledgeChunkEntity(
-        id = "bleeding",
-        topic = "bleeding",
-        sourceTitle = "Scouty First Aid Field Notes",
-        sectionTitle = "Sângerare",
-        body = "Pentru sângerare externă aplică presiune directă și folosește pansament curat. Dacă sângerarea este masivă sau nu se oprește, activează imediat 112 și prioritizează controlul hemoragiei.",
-        language = "ro"
-    )
-)

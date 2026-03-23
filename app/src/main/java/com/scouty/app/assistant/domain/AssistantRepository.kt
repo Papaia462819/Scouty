@@ -7,6 +7,7 @@ import com.scouty.app.assistant.model.AssistantResponse
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.SafetyOutcome
 import java.text.Normalizer
+import kotlin.math.min
 
 data class RetrievedChunk(
     val topic: String,
@@ -33,10 +34,12 @@ data class GenerationInput(
 class RetrievalEngine(
     private val knowledgeRepository: AssistantKnowledgeRepository
 ) {
-    suspend fun retrieve(query: String, limit: Int = 3): List<RetrievedChunk> {
+    suspend fun retrieve(query: String, language: String, limit: Int = 3): List<RetrievedChunk> {
         knowledgeRepository.ensureSeeded()
-        val candidates = knowledgeRepository.search(query, limit * 3).ifEmpty {
-            knowledgeRepository.allChunks()
+        val candidates = knowledgeRepository.searchByLanguage(query, limit * 3, language).ifEmpty {
+            knowledgeRepository.allChunksByLanguage(language).ifEmpty {
+                knowledgeRepository.allChunks()
+            }
         }
 
         return candidates
@@ -60,14 +63,40 @@ class RetrievalEngine(
         val normalizedBody = normalize(body)
         val normalizedTopic = normalize(topic)
 
-        return tokens.fold(0) { total, token ->
-            total + when {
+        var totalScore = 0
+        var matchedTokens = 0
+
+        for (token in tokens) {
+            val tokenScore = when {
                 token in normalizedSection -> 12
                 token in normalizedTopic -> 10
-                token in normalizedBody -> 4
-                else -> 0
+                else -> {
+                    val count = countOccurrences(normalizedBody, token)
+                    if (count > 0) 4 * min(count, 3) else 0
+                }
             }
+            if (tokenScore > 0) matchedTokens++
+            totalScore += tokenScore
         }
+
+        // Query coverage bonus: reward chunks matching multiple query tokens
+        if (matchedTokens > 1) {
+            totalScore += (matchedTokens - 1) * 8
+        }
+
+        return totalScore
+    }
+
+    private fun countOccurrences(text: String, token: String): Int {
+        var count = 0
+        var startIndex = 0
+        while (true) {
+            val index = text.indexOf(token, startIndex)
+            if (index < 0) break
+            count++
+            startIndex = index + token.length
+        }
+        return count
     }
 
     private fun normalize(value: String): String =
@@ -113,45 +142,112 @@ class PromptBuilder {
 class MedicalSafetyPolicy {
     fun evaluate(query: String, retrievedChunks: List<RetrievedChunk>): SafetyOutcome {
         val haystack = buildString {
-            append(query.lowercase())
+            append(normalize(query))
             append(' ')
-            append(retrievedChunks.joinToString(" ") { it.body.lowercase() })
+            append(retrievedChunks.joinToString(" ") { normalize(it.body) })
         }
 
-        val emergencyMarkers = listOf(
-            "nu pot sa calc",
-            "nu pot să calc",
-            "deformare",
-            "hemorag",
-            "sangerare masiva",
-            "sângerare masivă",
-            "inconstient",
-            "inconștient",
-            "pierderea sensibilitatii",
-            "pierderea sensibilității"
-        )
         if (emergencyMarkers.any { it in haystack }) {
             return SafetyOutcome.EMERGENCY_ESCALATION
         }
 
-        val cautionMarkers = listOf(
-            "urs",
-            "bear",
-            "fractur",
-            "hipoterm",
-            "sangerare",
-            "sângerare",
-            "entorsa",
-            "entorsă",
-            "glezna",
-            "gleznă",
-            "sucit"
-        )
         return if (cautionMarkers.any { it in haystack }) {
             SafetyOutcome.CAUTION
         } else {
             SafetyOutcome.NORMAL
         }
+    }
+
+    private fun normalize(text: String): String =
+        Normalizer.normalize(text.lowercase(), Normalizer.Form.NFD)
+            .replace("\\p{Mn}+".toRegex(), "")
+
+    companion object {
+        private val emergencyMarkers = listOf(
+            // Romanian
+            "nu pot sa calc",
+            "nu pot calca",
+            "deformare",
+            "hemorag",
+            "sangerare masiva",
+            "inconstient",
+            "pierderea sensibilitatii",
+            "nu respira",
+            "durere in piept",
+            "convulsii",
+            "lesin",
+            "stop cardiac",
+            "nu mai respira",
+            "pierderea cunostintei",
+            // English
+            "can't walk",
+            "cannot walk",
+            "deformity",
+            "deformed",
+            "hemorrhag",
+            "massive bleeding",
+            "unconscious",
+            "loss of sensation",
+            "not breathing",
+            "chest pain",
+            "seizure",
+            "cardiac arrest",
+            "stopped breathing",
+            "loss of consciousness",
+            "collapsed"
+        )
+
+        private val cautionMarkers = listOf(
+            // Romanian
+            "urs",
+            "fractur",
+            "hipoterm",
+            "sangerare",
+            "entorsa",
+            "glezna",
+            "sucit",
+            "sarpe",
+            "muscatura",
+            "fulger",
+            "pierdut",
+            "ratacit",
+            "ameteli",
+            "ameteala",
+            "deshidratare",
+            "arsura",
+            "inec",
+            "rana",
+            "taietura",
+            "altitudine",
+            "bataturi",
+            "tremur",
+            "frison",
+            "confuzie",
+            // English
+            "bear",
+            "fractur",
+            "hypotherm",
+            "bleeding",
+            "sprain",
+            "ankle",
+            "twisted",
+            "snake",
+            "bite",
+            "bitten",
+            "lightning",
+            "lost",
+            "dizzy",
+            "dizziness",
+            "dehydrat",
+            "burn",
+            "wound",
+            "cut",
+            "altitude sick",
+            "blister",
+            "heat exhaust",
+            "heat stroke",
+            "heatstroke"
+        )
     }
 }
 
@@ -161,47 +257,99 @@ interface GenerationEngine {
 
 class TemplateGenerationEngine : GenerationEngine {
     override suspend fun generate(input: GenerationInput): String {
-        val answerSteps = input.retrievedChunks
-            .flatMap { chunk -> splitIntoSteps(chunk.body) }
-            .distinct()
-            .take(3)
-
-        val intro = when (input.safetyOutcome) {
-            SafetyOutcome.EMERGENCY_ESCALATION ->
-                "Situația descrisă are semne de alarmă. Prioritatea este 112 / SOS, apoi măsurile de bază de mai jos."
-            SafetyOutcome.CAUTION ->
-                "Ai nevoie de un răspuns prudent, orientat pe siguranță și pe pași simpli de teren."
-            SafetyOutcome.NORMAL ->
-                "Pe baza ghidurilor offline disponibile, urmează pașii de mai jos."
-        }
-
-        val contextNotes = mutableListOf<String>()
-        if (input.context.batterySafe) {
-            contextNotes += "Telefonul este în Battery Safe, deci păstrează energia pentru navigație și apel de urgență."
-        }
-        input.context.trail?.sunsetTime?.takeIf { it.isNotBlank() }?.let { sunset ->
-            contextNotes += "Ține cont de apusul estimat la $sunset când decizi dacă mai continui traseul."
-        }
+        val isRomanian = input.context.localeTag.startsWith("ro")
+        val chunks = input.retrievedChunks
 
         return buildString {
-            appendLine(intro)
-            answerSteps.forEachIndexed { index, step ->
-                appendLine("${index + 1}. $step")
+            // Safety intro
+            appendLine(safetyIntro(input.safetyOutcome, isRomanian))
+            appendLine()
+
+            // Primary chunk as coherent paragraph
+            if (chunks.isNotEmpty()) {
+                appendLine(chunks[0].body)
             }
-            if (contextNotes.isNotEmpty()) {
+
+            // Secondary chunk if available
+            if (chunks.size >= 2) {
                 appendLine()
-                appendLine(contextNotes.joinToString(" "))
+                val prefix = if (isRomanian) "De asemenea:" else "Additionally:"
+                appendLine(prefix)
+                appendLine(truncateBody(chunks[1].body, 300))
+            }
+
+            // Tertiary chunk as brief note
+            if (chunks.size >= 3) {
+                appendLine()
+                val prefix = if (isRomanian) "Notă:" else "Note:"
+                appendLine("$prefix ${truncateBody(chunks[2].body, 150)}")
+            }
+
+            // Device context notes
+            val contextNotes = buildContextNotes(input.context, isRomanian)
+            if (contextNotes.isNotBlank()) {
+                appendLine()
+                appendLine(contextNotes)
+            }
+
+            // Emergency CTA as last line
+            if (input.safetyOutcome == SafetyOutcome.EMERGENCY_ESCALATION) {
+                appendLine()
+                appendLine(if (isRomanian) "Sună 112 imediat." else "Call 112 immediately.")
             }
         }.trim()
     }
 
-    private fun splitIntoSteps(body: String): List<String> =
-        body.split('.', '!', '?')
-            .map { it.trim() }
-            .filter { it.isNotBlank() }
+    private fun safetyIntro(outcome: SafetyOutcome, isRomanian: Boolean): String = when (outcome) {
+        SafetyOutcome.EMERGENCY_ESCALATION -> if (isRomanian) {
+            "Situația descrisă are semne de alarmă. Prioritatea este 112 / SOS, apoi măsurile de bază de mai jos."
+        } else {
+            "The situation described shows warning signs. Priority is 112 / SOS, then the basic measures below."
+        }
+        SafetyOutcome.CAUTION -> if (isRomanian) {
+            "Ai nevoie de un răspuns prudent, orientat pe siguranță și pe pași simpli de teren."
+        } else {
+            "You need a cautious response focused on safety and simple field steps."
+        }
+        SafetyOutcome.NORMAL -> if (isRomanian) {
+            "Pe baza ghidurilor offline disponibile:"
+        } else {
+            "Based on available offline guidelines:"
+        }
+    }
+
+    private fun buildContextNotes(context: DeviceContextSnapshot, isRomanian: Boolean): String {
+        val notes = mutableListOf<String>()
+        if (context.batterySafe) {
+            notes += if (isRomanian) {
+                "Telefonul este în Battery Safe — păstrează energia pentru navigație și apel de urgență."
+            } else {
+                "Phone is in Battery Safe — conserve energy for navigation and emergency calls."
+            }
+        }
+        context.trail?.sunsetTime?.takeIf { it.isNotBlank() }?.let { sunset ->
+            notes += if (isRomanian) {
+                "Ține cont de apusul estimat la $sunset când decizi dacă mai continui traseul."
+            } else {
+                "Consider the estimated sunset at $sunset when deciding whether to continue the trail."
+            }
+        }
+        return notes.joinToString(" ")
+    }
+
+    private fun truncateBody(body: String, maxChars: Int): String {
+        if (body.length <= maxChars) return body
+        val truncated = body.take(maxChars)
+        val lastSentenceEnd = truncated.lastIndexOfAny(charArrayOf('.', '!', '?'))
+        return if (lastSentenceEnd > maxChars / 2) {
+            truncated.substring(0, lastSentenceEnd + 1)
+        } else {
+            "$truncated..."
+        }
+    }
 }
 
-class AssistantRepository(
+class  AssistantRepository(
     context: Context,
     private val retrievalEngine: RetrievalEngine = RetrievalEngine(AssistantKnowledgeRepository(context)),
     private val promptBuilder: PromptBuilder = PromptBuilder(),
@@ -209,7 +357,8 @@ class AssistantRepository(
     private val medicalSafetyPolicy: MedicalSafetyPolicy = MedicalSafetyPolicy()
 ) {
     suspend fun answer(query: String, context: DeviceContextSnapshot): AssistantResponse {
-        val retrieved = retrievalEngine.retrieve(query)
+        val language = if (context.localeTag.startsWith("ro")) "ro" else "en"
+        val retrieved = retrievalEngine.retrieve(query, language)
         val prompt = promptBuilder.build(query, context, retrieved)
         val safetyOutcome = medicalSafetyPolicy.evaluate(query, retrieved)
         val answerText = generationEngine.generate(

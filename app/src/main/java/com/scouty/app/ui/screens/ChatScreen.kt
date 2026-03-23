@@ -68,10 +68,15 @@ fun ChatScreen(
             }
             if (uiState.isResponding) {
                 item {
+                    val loadingText = if (java.util.Locale.getDefault().language == "ro") {
+                        "Scouty AI procesează răspunsul offline..."
+                    } else {
+                        "Scouty AI is processing your offline response..."
+                    }
                     ChatBubble(
                         AssistantMessageUiModel(
                             id = "loading",
-                            text = "Scouty AI procesează răspunsul offline...",
+                            text = loadingText,
                             isUser = false
                         )
                     )
@@ -187,10 +192,11 @@ fun ChatBubble(message: AssistantMessageUiModel) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )
             if (message.safetyOutcome != SafetyOutcome.NORMAL) {
+                val isRo = java.util.Locale.getDefault().language == "ro"
                 val safetyLabel = if (message.safetyOutcome == SafetyOutcome.EMERGENCY_ESCALATION) {
-                    "Escalation: prioritize SOS / 112"
+                    if (isRo) "Escalare: prioritizează SOS / 112" else "Escalation: prioritize SOS / 112"
                 } else {
-                    "Caution: verify condition before continuing"
+                    if (isRo) "Atenție: verifică starea înainte de a continua" else "Caution: verify condition before continuing"
                 }
                 AssistChip(
                     onClick = { },

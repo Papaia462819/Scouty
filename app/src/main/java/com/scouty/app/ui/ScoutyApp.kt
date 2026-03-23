@@ -151,7 +151,7 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                     contentPadding = innerPadding,
                     onInputChange = assistantViewModel::updateDraft,
                     onSend = assistantViewModel::sendCurrentDraft,
-                    onPromptSelected = assistantViewModel::updateDraft
+                    onPromptSelected = assistantViewModel::sendPrompt
                 )
                 TopDestination.SOS -> SosScreen(contentPadding = innerPadding)
                 TopDestination.GEAR -> GearScreen(
