@@ -1,6 +1,7 @@
 package com.scouty.app.ui
 
 import androidx.annotation.StringRes
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,11 +42,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.scouty.app.assistant.ui.AssistantViewModel
 import com.scouty.app.R
 import com.scouty.app.ui.screens.ChatScreen
 import com.scouty.app.ui.screens.GearScreen
@@ -68,9 +71,19 @@ private enum class TopDestination(
 
 @Composable
 fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
+    val application = LocalContext.current.applicationContext as Application
+    val assistantViewModel: AssistantViewModel = viewModel(
+        factory = remember(mainViewModel, application) {
+            AssistantViewModel.Factory(
+                application = application,
+                deviceContextProvider = mainViewModel
+            )
+        }
+    )
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
     var openActiveTrailOnMapToken by remember { mutableStateOf<Long?>(null) }
     val uiState by mainViewModel.uiState.collectAsState()
+    val assistantUiState by assistantViewModel.uiState.collectAsState()
     val destination = TopDestination.entries[selectedIndex]
 
     Scaffold(
@@ -133,7 +146,13 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                     viewModel = mainViewModel,
                     openActiveTrailToken = openActiveTrailOnMapToken
                 )
-                TopDestination.CHAT -> ChatScreen(contentPadding = innerPadding)
+                TopDestination.CHAT -> ChatScreen(
+                    uiState = assistantUiState,
+                    contentPadding = innerPadding,
+                    onInputChange = assistantViewModel::updateDraft,
+                    onSend = assistantViewModel::sendCurrentDraft,
+                    onPromptSelected = assistantViewModel::updateDraft
+                )
                 TopDestination.SOS -> SosScreen(contentPadding = innerPadding)
                 TopDestination.GEAR -> GearScreen(
                     status = uiState, 

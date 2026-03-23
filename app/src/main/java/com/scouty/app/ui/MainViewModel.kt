@@ -15,6 +15,8 @@ import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.scouty.app.assistant.data.DeviceContextProvider
+import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.BuildConfig
 import com.google.android.gms.location.*
 import com.scouty.app.api.MeteoblueLocationResult
@@ -24,6 +26,7 @@ import com.scouty.app.api.MeteoblueService
 import com.scouty.app.ui.models.ActiveTrail
 import com.scouty.app.ui.models.GearRecommendationEngine
 import com.scouty.app.ui.models.HomeStatus
+import com.scouty.app.ui.models.toDeviceContextSnapshot
 import com.scouty.app.utils.SolarCalculator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,7 +40,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.*
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(application: Application) : AndroidViewModel(application), DeviceContextProvider {
 
     private data class WeatherLookupResult(
         val response: MeteoblueResponse? = null,
@@ -49,6 +52,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(HomeStatus())
     val uiState: StateFlow<HomeStatus> = _uiState.asStateFlow()
+    private val _deviceContext = MutableStateFlow(_uiState.value.toDeviceContextSnapshot())
+    override val deviceContext: StateFlow<DeviceContextSnapshot> = _deviceContext.asStateFlow()
 
     private val json = Json { ignoreUnknownKeys = true }
     private val retrofit = Retrofit.Builder()
@@ -74,10 +79,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val scale = intent?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
             if (level != -1 && scale != -1) {
                 val pct = (level * 100 / scale.toFloat()).toInt()
-                _uiState.update { it.copy(
-                    batteryPercent = pct,
-                    batterySafe = pct < 15
-                ) }
+                updateUiState {
+                    it.copy(
+                        batteryPercent = pct,
+                        batterySafe = pct < 15
+                    )
+                }
             }
         }
     }
@@ -96,11 +103,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun loadDefaultGear() {
         val defaultGear = GearRecommendationEngine.build(trail = null)
-        _uiState.update { it.copy(gearList = defaultGear) }
+        updateUiState { it.copy(gearList = defaultGear) }
     }
 
     fun toggleGearItem(itemId: String) {
-        _uiState.update { currentState ->
+        updateUiState { currentState ->
             val newList = currentState.gearList.map { 
                 if (it.id == itemId) it.copy(isPacked = !it.isPacked) else it
             }
@@ -127,7 +134,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun updateLocationData(location: Location) {
         val isOnline = isInternetAvailable()
-        _uiState.update { 
+        updateUiState {
             it.copy(
                 isOnline = isOnline,
                 gpsFixed = true,
@@ -466,7 +473,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 imageScope = imageScope
             )
             
-            _uiState.update { currentState ->
+            updateUiState { currentState ->
                 val updatedGear = GearRecommendationEngine.build(
                     trail = trail,
                     previousItems = currentState.gearList
@@ -511,7 +518,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun refreshOnlineState() {
         val online = isInternetAvailable()
-        _uiState.update { it.copy(isOnline = online) }
+        updateUiState { it.copy(isOnline = online) }
+    }
+
+    private fun updateUiState(transform: (HomeStatus) -> HomeStatus) {
+        _uiState.update { currentState ->
+            transform(currentState).also { updated ->
+                _deviceContext.value = updated.toDeviceContextSnapshot()
+            }
+        }
     }
 
     override fun onCleared() {

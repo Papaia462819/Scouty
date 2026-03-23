@@ -2,7 +2,17 @@ package com.scouty.app.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -10,32 +20,41 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.CameraAlt
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.scouty.app.R
-import com.scouty.app.ui.components.PromptChip
-
-data class Message(val text: String, val isUser: Boolean)
+import com.scouty.app.assistant.model.AssistantMessageUiModel
+import com.scouty.app.assistant.model.AssistantUiState
+import com.scouty.app.assistant.model.SafetyOutcome
 
 @Composable
-fun ChatScreen(contentPadding: PaddingValues) {
-    var inputText by remember { mutableStateOf("") }
-    val messages = remember { mutableStateListOf(
-        Message("Hello! I'm your Scouty AI assistant. How can I help you today?", false)
-    ) }
-
+fun ChatScreen(
+    uiState: AssistantUiState,
+    contentPadding: PaddingValues,
+    onInputChange: (String) -> Unit,
+    onSend: () -> Unit,
+    onPromptSelected: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(contentPadding)
     ) {
-        // Chat History
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
@@ -44,13 +63,23 @@ fun ChatScreen(contentPadding: PaddingValues) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(vertical = 16.dp)
         ) {
-            items(messages) { message ->
+            items(uiState.messages, key = { it.id }) { message ->
                 ChatBubble(message)
+            }
+            if (uiState.isResponding) {
+                item {
+                    ChatBubble(
+                        AssistantMessageUiModel(
+                            id = "loading",
+                            text = "Scouty AI procesează răspunsul offline...",
+                            isUser = false
+                        )
+                    )
+                }
             }
         }
 
-        // Starter prompts for the first message
-        if (messages.size == 1 && inputText.isEmpty()) {
+        if (uiState.messages.size == 1 && uiState.draft.isEmpty()) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -58,21 +87,15 @@ fun ChatScreen(contentPadding: PaddingValues) {
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                val prompts = listOf(
-                    stringResource(R.string.assistant_prompt_ankle),
-                    stringResource(R.string.assistant_prompt_water),
-                    stringResource(R.string.assistant_prompt_bear)
-                )
-                prompts.forEach { prompt ->
+                uiState.starterPrompts.forEach { prompt ->
                     SuggestionChip(
-                        onClick = { inputText = prompt },
+                        onClick = { onPromptSelected(prompt) },
                         label = { Text(prompt) }
                     )
                 }
             }
         }
 
-        // Input Area
         Surface(
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.surface,
@@ -85,19 +108,19 @@ fun ChatScreen(contentPadding: PaddingValues) {
                     .imePadding(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { /* Open Camera for Vision */ }) {
+                IconButton(onClick = { }) {
                     Icon(
                         Icons.Default.CameraAlt,
                         contentDescription = "Vision",
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
-                
+
                 OutlinedTextField(
-                    value = inputText,
-                    onValueChange = { inputText = it },
+                    value = uiState.draft,
+                    onValueChange = onInputChange,
                     modifier = Modifier.weight(1f),
-                    placeholder = { Text("Ask anything...") },
+                    placeholder = { Text(stringResource(R.string.chat_hint)) },
                     shape = RoundedCornerShape(24.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -111,13 +134,8 @@ fun ChatScreen(contentPadding: PaddingValues) {
                 Spacer(modifier = Modifier.width(8.dp))
 
                 IconButton(
-                    onClick = {
-                        if (inputText.isNotBlank()) {
-                            messages.add(Message(inputText, true))
-                            inputText = ""
-                        }
-                    },
-                    enabled = inputText.isNotBlank(),
+                    onClick = onSend,
+                    enabled = uiState.draft.isNotBlank() && !uiState.isResponding,
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = Color.Black
@@ -131,10 +149,18 @@ fun ChatScreen(contentPadding: PaddingValues) {
 }
 
 @Composable
-fun ChatBubble(message: Message) {
+fun ChatBubble(message: AssistantMessageUiModel) {
     val alignment = if (message.isUser) Alignment.End else Alignment.Start
-    val containerColor = if (message.isUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
-    val contentColor = if (message.isUser) Color.Black else MaterialTheme.colorScheme.onSurfaceVariant
+    val containerColor = if (message.isUser) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.surfaceVariant
+    }
+    val contentColor = if (message.isUser) {
+        Color.Black
+    } else {
+        MaterialTheme.colorScheme.onSurfaceVariant
+    }
     val shape = if (message.isUser) {
         RoundedCornerShape(20.dp, 20.dp, 4.dp, 20.dp)
     } else {
@@ -160,6 +186,45 @@ fun ChatBubble(message: Message) {
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )
+            if (message.safetyOutcome != SafetyOutcome.NORMAL) {
+                val safetyLabel = if (message.safetyOutcome == SafetyOutcome.EMERGENCY_ESCALATION) {
+                    "Escalation: prioritize SOS / 112"
+                } else {
+                    "Caution: verify condition before continuing"
+                }
+                AssistChip(
+                    onClick = { },
+                    enabled = false,
+                    label = { Text(safetyLabel) },
+                    modifier = Modifier.padding(top = 6.dp)
+                )
+            }
+            if (message.citations.isNotEmpty()) {
+                Column(
+                    modifier = Modifier.padding(top = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    message.citations.forEach { citation ->
+                        Surface(
+                            color = MaterialTheme.colorScheme.surface,
+                            shape = RoundedCornerShape(14.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+                                Text(
+                                    text = "${citation.sourceTitle} · ${citation.sectionTitle}",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    text = citation.snippet,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

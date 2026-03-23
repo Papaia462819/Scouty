@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs ls:*)",
+      "Bash(find /c/Scouty/Scouty_app -name CLAUDE.md -o -name claude.md -o -name *.md)"
+    ]
+  }
+}

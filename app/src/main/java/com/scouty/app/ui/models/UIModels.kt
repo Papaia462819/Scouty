@@ -1,5 +1,8 @@
 package com.scouty.app.ui.models
 
+import com.scouty.app.assistant.model.DeviceContextSnapshot
+import com.scouty.app.assistant.model.TrailContextSnapshot
+
 import java.util.Calendar
 
 enum class GearNecessity {
@@ -59,3 +62,25 @@ data class HomeStatus(
     val activeTrail: ActiveTrail? = null,
     val gearList: List<GearItem> = emptyList()
 )
+
+fun HomeStatus.toDeviceContextSnapshot(): DeviceContextSnapshot =
+    DeviceContextSnapshot(
+        latitude = latitude,
+        longitude = longitude,
+        altitude = altitude,
+        accuracyMeters = accuracy,
+        batteryPercent = batteryPercent,
+        batterySafe = batterySafe,
+        isOnline = isOnline,
+        gpsFixed = gpsFixed,
+        trail = activeTrail?.let { trail ->
+            TrailContextSnapshot(
+                name = trail.name,
+                region = trail.region,
+                sunsetTime = trail.sunsetTime,
+                weatherForecast = trail.weatherForecast,
+                difficulty = trail.difficulty,
+                estimatedDuration = trail.estimatedDuration
+            )
+        }
+    )
