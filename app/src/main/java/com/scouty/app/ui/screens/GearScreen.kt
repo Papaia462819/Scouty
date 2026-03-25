@@ -117,6 +117,12 @@ fun GearScreen(
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = status.userProfile.shortSummaryRo,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
             StatusChip(
                 text = difficultyLabel.uppercase(Locale.getDefault()),
@@ -239,9 +245,9 @@ private fun GearSummaryCard(
 
         Text(
             text = if (hasActiveTrail) {
-                "Checklist-ul este adaptat la traseul selectat si starea curenta a echiparii."
+                "Checklist-ul este calculat din traseu, profil si conditiile estimate pentru tura."
             } else {
-                "Lista generala; se rafineaza automat cand alegi un traseu."
+                "Lista de baza; devine mai precisa imediat ce alegi un traseu."
             },
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -484,21 +490,20 @@ private fun GearItemRow(
 
 private fun categoryIcon(category: String): ImageVector =
     when (category) {
-        "Navigatie & energie" -> Icons.Default.Explore
-        "Siguranta & urgenta" -> Icons.Default.HealthAndSafety
-        "Imbracaminte & vreme" -> Icons.Default.Cloud
+        "Planificare & navigatie" -> Icons.Default.Explore
+        "Siguranta" -> Icons.Default.HealthAndSafety
+        "Vreme & confort" -> Icons.Default.Cloud
         "Apa & hrana" -> Icons.Default.Restaurant
-        "Echipament tehnic" -> Icons.Default.Bolt
+        "Apa & energie" -> Icons.Default.Restaurant
         else -> Icons.Default.Inventory2
     }
 
 private fun categoryAccentColor(category: String): Color =
     when (category) {
-        "Navigatie & energie" -> Color(0xFF67A6FF)
-        "Siguranta & urgenta" -> Color(0xFFFF7A59)
-        "Imbracaminte & vreme" -> Color(0xFFFFC05A)
-        "Apa & hrana" -> Color(0xFF7BE5A3)
-        "Echipament tehnic" -> Color(0xFF8FE08B)
+        "Planificare & navigatie" -> Color(0xFF67A6FF)
+        "Siguranta" -> Color(0xFFFF7A59)
+        "Vreme & confort" -> Color(0xFFFFC05A)
+        "Apa & energie" -> Color(0xFF7BE5A3)
         else -> Color(0xFF9CAAA0)
     }
 

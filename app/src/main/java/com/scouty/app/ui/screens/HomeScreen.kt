@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.scouty.app.R
@@ -59,6 +60,8 @@ import com.scouty.app.ui.components.SectionHeader
 import com.scouty.app.ui.components.StatusChip
 import com.scouty.app.ui.models.ActiveTrail
 import com.scouty.app.ui.models.HomeStatus
+import com.scouty.app.ui.models.RouteRecommendation
+import com.scouty.app.ui.models.TrailMetadataFormatter
 import java.util.Locale
 import kotlin.math.abs
 
@@ -146,20 +149,17 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        SectionHeader(title = stringResource(R.string.home_nearby_trails))
+        SectionHeader(title = "Recomandate pentru tine")
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        NearbyTrailCard(
-            name = "Vârful Caraiman",
-            info = "1.2 km away \u00B7 3h 30m",
-            difficulty = "MEDIUM"
-        )
-        NearbyTrailCard(
-            name = "Lacul Bolboci",
-            info = "4.5 km away \u00B7 2h",
-            difficulty = "EASY"
-        )
+        if (status.routeRecommendations.isEmpty()) {
+            EmptyTrailCard(message = "Alege cateva preferinte in profil sau asteapta un GPS fix pentru recomandari.")
+        } else {
+            status.routeRecommendations.forEach { recommendation ->
+                RecommendedTrailCard(recommendation = recommendation)
+            }
+        }
 
         Spacer(modifier = Modifier.height(32.dp))
     }
@@ -417,6 +417,7 @@ private fun ActiveTrailCard(
 ) {
     val remainingDistanceKm = (trail.distanceKm * (1f - trail.progress.coerceIn(0f, 1f))).coerceAtLeast(0.0)
     val completionPercent = (trail.progress.coerceIn(0f, 1f) * 100).toInt()
+    val markerLabel = TrailMetadataFormatter.formatTrailMarkers(trail.markingSymbols)
 
     Surface(
         modifier = Modifier
@@ -489,11 +490,29 @@ private fun ActiveTrailCard(
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White.copy(alpha = 0.76f)
                 )
+                trail.routeSummary?.takeIf { it.isNotBlank() }?.let { summary ->
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = summary,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.White.copy(alpha = 0.84f),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                     TrailMetric(icon = Icons.Default.Route, text = formatDistance(trail.distanceKm))
                     TrailMetric(icon = Icons.Default.NorthEast, text = "+${trail.elevationGain} m")
                     TrailMetric(icon = Icons.Default.Schedule, text = trail.estimatedDuration)
+                }
+                markerLabel?.let {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "Marcaj: $it",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Color.White.copy(alpha = 0.86f)
+                    )
                 }
                 Spacer(modifier = Modifier.height(14.dp))
                 LinearProgressIndicator(
@@ -538,7 +557,7 @@ private fun TrailMetric(
 }
 
 @Composable
-private fun EmptyTrailCard() {
+private fun EmptyTrailCard(message: String = "No active trail. Search and set one!") {
     ScoutyPanel(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(26.dp),
@@ -552,7 +571,7 @@ private fun EmptyTrailCard() {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "No active trail. Search and set one!",
+                text = message,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -561,11 +580,18 @@ private fun EmptyTrailCard() {
 }
 
 @Composable
-private fun NearbyTrailCard(
-    name: String,
-    info: String,
-    difficulty: String
+private fun RecommendedTrailCard(
+    recommendation: RouteRecommendation
 ) {
+    val difficulty = recommendation.difficulty.name
+    val info = buildString {
+        append(recommendation.secondarySummary)
+        recommendation.proximityKm?.let {
+            if (length > 0) append(" · ")
+            append(String.format(Locale.US, "%.0f km distanta", it))
+        }
+    }
+
     ScoutyPanel(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
@@ -589,7 +615,7 @@ private fun NearbyTrailCard(
             Spacer(modifier = Modifier.width(14.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = name,
+                    text = recommendation.title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -598,6 +624,16 @@ private fun NearbyTrailCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                if (recommendation.whyItFits.isNotBlank()) {
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = recommendation.whyItFits,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
             StatusChip(
                 text = difficulty,

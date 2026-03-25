@@ -1,7 +1,8 @@
 param(
     [string]$PackageName = "com.scouty.app",
     [string]$PacksDir = (Join-Path $PSScriptRoot "generated-map-packs"),
-    [string]$Serial
+    [string]$Serial,
+    [switch]$SkipDemoPack
 )
 
 $ErrorActionPreference = "Stop"
@@ -66,9 +67,9 @@ Invoke-Adb -CommandArgs @("get-state")
 Invoke-Adb -CommandArgs @("shell", "pm", "list", "packages", $PackageName)
 Push-Pack -LocalPath $basePack -PackFileName "romania-base.pmtiles"
 
-if (Test-Path $demoPack) {
+if (-not $SkipDemoPack -and (Test-Path $demoPack)) {
     Push-Pack -LocalPath $demoPack -PackFileName "bucegi-high.pmtiles"
-} else {
+} elseif (-not $SkipDemoPack) {
     Write-Warning "Optional pack not found: $demoPack"
 }
 

@@ -1,12 +1,27 @@
 package com.scouty.app.assistant.domain
 
 import android.content.Context
-import com.scouty.app.assistant.data.AssistantKnowledgeRepository
+import com.scouty.app.assistant.data.KnowledgeChunkStore
+import com.scouty.app.assistant.data.KnowledgePackManager
+import com.scouty.app.assistant.data.KnowledgePackStatusProvider
+import com.scouty.app.assistant.data.SqliteKnowledgeChunkStore
+import com.scouty.app.assistant.data.buildSearchTokens
 import com.scouty.app.assistant.model.AssistantCitation
 import com.scouty.app.assistant.model.AssistantResponse
 import com.scouty.app.assistant.model.DeviceContextSnapshot
+import com.scouty.app.assistant.model.DomainHint
+import com.scouty.app.assistant.model.GenerationMode
+import com.scouty.app.assistant.model.KnowledgeChunkRecord
+import com.scouty.app.assistant.model.KnowledgePackStatus
+import com.scouty.app.assistant.model.ModelStatus
+import com.scouty.app.assistant.model.QueryAnalysis
+import com.scouty.app.assistant.model.ReasoningType
+import com.scouty.app.assistant.model.ResponseSectionStyle
 import com.scouty.app.assistant.model.SafetyOutcome
+import com.scouty.app.assistant.model.StructuredAssistantOutput
+import com.scouty.app.assistant.model.StructuredResponseSection
 import java.text.Normalizer
+import java.time.Year
 import kotlin.math.min
 
 data class RetrievedChunk(
@@ -14,77 +29,294 @@ data class RetrievedChunk(
     val sourceTitle: String,
     val sectionTitle: String,
     val body: String,
-    val score: Int
+    val score: Int,
+    val chunkId: String = "",
+    val domain: String = "",
+    val sourceUrl: String? = null,
+    val publisher: String? = null,
+    val language: String = "ro",
+    val sourceTrust: Int = 0,
+    val publishOrReviewDate: String? = null,
+    val safetyTags: List<String> = emptyList(),
+    val packVersion: String? = null
 )
 
 data class AssistantPrompt(
     val query: String,
     val contextSummary: String,
-    val citationsSummary: String
+    val citationsSummary: String,
+    val reasoningSummary: String = ""
 )
 
 data class GenerationInput(
     val query: String,
     val prompt: AssistantPrompt,
+    val queryAnalysis: QueryAnalysis,
     val retrievedChunks: List<RetrievedChunk>,
     val context: DeviceContextSnapshot,
-    val safetyOutcome: SafetyOutcome
+    val safetyOutcome: SafetyOutcome,
+    val generationMode: GenerationMode,
+    val modelStatus: ModelStatus,
+    val knowledgePackStatus: KnowledgePackStatus
 )
 
-class RetrievalEngine(
-    private val knowledgeRepository: AssistantKnowledgeRepository
-) {
-    suspend fun retrieve(query: String, language: String, limit: Int = 3): List<RetrievedChunk> {
-        knowledgeRepository.ensureSeeded()
-        val candidates = knowledgeRepository.searchByLanguage(query, limit * 3, language).ifEmpty {
-            knowledgeRepository.allChunksByLanguage(language).ifEmpty {
-                knowledgeRepository.allChunks()
+class QueryAnalyzer {
+    fun analyze(query: String, context: DeviceContextSnapshot): QueryAnalysis {
+        val tokens = buildSearchTokens(query)
+        val preferredLanguage = detectLanguage(query, tokens, context.localeTag)
+        val routeContextQuery = tokens.any { it in RouteTokens } ||
+            (context.trail != null && tokens.any { it in RouteContextTokens })
+        val gearQuery = tokens.any { it in GearTokens }
+
+        val domainHints = DomainKeywordMap.mapNotNull { (domain, keywords) ->
+            val matches = tokens.count { token -> keywords.any { keyword -> keyword.startsWith(token) || token.startsWith(keyword) || token in keyword } }
+            val weight = matches.toDouble() + when {
+                routeContextQuery && domain == RouteDomain -> 3.0
+                gearQuery && domain == GearDomain -> 3.0
+                else -> 0.0
             }
-        }
-
-        return candidates
-            .map { chunk ->
-                RetrievedChunk(
-                    topic = chunk.topic,
-                    sourceTitle = chunk.sourceTitle,
-                    sectionTitle = chunk.sectionTitle,
-                    body = chunk.body,
-                    score = scoreChunk(query, chunk.sectionTitle, chunk.body, chunk.topic)
-                )
-            }
-            .sortedByDescending { it.score }
-            .take(limit)
-    }
-
-    private fun scoreChunk(query: String, sectionTitle: String, body: String, topic: String): Int {
-        val normalizedQuery = normalize(query)
-        val tokens = normalizedQuery.split(" ").filter { it.isNotBlank() }
-        val normalizedSection = normalize(sectionTitle)
-        val normalizedBody = normalize(body)
-        val normalizedTopic = normalize(topic)
-
-        var totalScore = 0
-        var matchedTokens = 0
-
-        for (token in tokens) {
-            val tokenScore = when {
-                token in normalizedSection -> 12
-                token in normalizedTopic -> 10
-                else -> {
-                    val count = countOccurrences(normalizedBody, token)
-                    if (count > 0) 4 * min(count, 3) else 0
+            weight.takeIf { it > 0.0 }?.let { DomainHint(domain, it) }
+        }.sortedByDescending { it.weight }
+            .take(3)
+            .ifEmpty {
+                when {
+                    routeContextQuery -> listOf(DomainHint(RouteDomain, 2.0))
+                    gearQuery -> listOf(DomainHint(GearDomain, 2.0))
+                    else -> listOf(DomainHint("mountain_safety", 1.0))
                 }
             }
-            if (tokenScore > 0) matchedTokens++
-            totalScore += tokenScore
+
+        val reasoningType = when {
+            routeContextQuery -> ReasoningType.ROUTE_CONTEXT
+            gearQuery -> ReasoningType.GEAR_ADVICE
+            domainHints.firstOrNull()?.domain == "weather_and_season" -> ReasoningType.WEATHER_CONTEXT
+            domainHints.firstOrNull()?.domain in SafetyDomains -> ReasoningType.SAFETY_GUIDANCE
+            else -> ReasoningType.GENERAL_RETRIEVAL
         }
 
-        // Query coverage bonus: reward chunks matching multiple query tokens
+        return QueryAnalysis(
+            preferredLanguage = preferredLanguage,
+            tokens = tokens,
+            domainHints = domainHints,
+            reasoningType = reasoningType,
+            routeContextQuery = routeContextQuery,
+            gearQuery = gearQuery,
+            safetyTags = detectSafetyTags(tokens)
+        )
+    }
+
+    private fun detectLanguage(query: String, tokens: List<String>, localeTag: String): String {
+        val raw = query.lowercase()
+        if (raw.any { it in "ăâîșşțţ" }) {
+            return "ro"
+        }
+        val romanianHits = tokens.count { it in RomanianMarkers }
+        val englishHits = tokens.count { it in EnglishMarkers }
+        return when {
+            romanianHits > englishHits -> "ro"
+            englishHits > romanianHits -> "en"
+            localeTag.startsWith("ro") -> "ro"
+            else -> "en"
+        }
+    }
+
+    private fun detectSafetyTags(tokens: List<String>): Set<String> {
+        val tags = mutableSetOf<String>()
+        tokens.forEach { token ->
+            when {
+                token in setOf("sangerare", "bleeding", "hemoragie") -> tags += "bleeding"
+                token in setOf("sarpe", "snake", "muscatura", "bite", "bitten") -> tags += "snakebite"
+                token in setOf("urs", "bear") -> tags += "bear"
+                token in setOf("fulger", "lightning", "furtuna", "storm", "thunder") -> tags += "lightning"
+                token in setOf("altitudine", "altitude", "hace", "hape") -> tags += "altitude"
+                token in setOf("caldura", "heat", "deshidratare", "dehydration", "insolatie") -> tags += "heat"
+                token in setOf("avalansa", "avalanche") -> tags += "avalanche"
+                token in setOf("pierdut", "ratacit", "lost") -> tags += "lost"
+            }
+        }
+        return tags
+    }
+
+    private companion object {
+        private const val RouteDomain = "route_intelligence_romania"
+        private const val GearDomain = "gear_and_preparation"
+        private val SafetyDomains = setOf(
+            "medical_emergency",
+            "mountain_safety",
+            "weather_and_season",
+            "wildlife_romania"
+        )
+        private val RouteTokens = setOf(
+            "traseu", "route", "marcaj", "marker", "durata", "distance", "distanta",
+            "plecare", "sosire", "porneste", "regiune", "provenienta", "source"
+        )
+        private val RouteContextTokens = setOf("cat", "care", "ce", "unde", "from", "to", "trail")
+        private val GearTokens = setOf(
+            "echipament", "gear", "rucsac", "backpack", "apa", "water", "jacheta",
+            "geaca", "frontala", "headlamp", "kit", "iau"
+        )
+        private val RomanianMarkers = setOf(
+            "si", "traseu", "glezna", "urs", "sarpe", "marcaj", "cum", "care", "cand", "unde", "munte"
+        )
+        private val EnglishMarkers = setOf(
+            "the", "trail", "ankle", "bear", "snake", "marker", "how", "what", "when", "where", "mountain"
+        )
+        private val DomainKeywordMap = mapOf(
+            "medical_emergency" to setOf("glezna", "fractura", "bleeding", "sangerare", "altitude", "heat", "trauma", "accident"),
+            "mountain_safety" to setOf("salvamont", "112", "lost", "ratacit", "plan", "rescue"),
+            "survival_basics" to setOf("apa", "water", "purifica", "purify", "campfire", "foc"),
+            "wildlife_romania" to setOf("urs", "bear", "snake", "sarpe"),
+            "weather_and_season" to setOf("weather", "vreme", "fulger", "lightning", "avalansa", "avalanche"),
+            "route_intelligence_romania" to setOf("traseu", "route", "marcaj", "marker", "durata", "distance", "distanta"),
+            "gear_and_preparation" to setOf("gear", "echipament", "headlamp", "frontala", "water", "apa", "kit")
+        )
+    }
+}
+
+class RetrievalEngine(
+    private val knowledgeStore: KnowledgeChunkStore,
+    private val queryAnalyzer: QueryAnalyzer = QueryAnalyzer()
+) {
+    fun analyze(query: String, context: DeviceContextSnapshot): QueryAnalysis =
+        queryAnalyzer.analyze(query, context)
+
+    suspend fun retrieve(
+        query: String,
+        context: DeviceContextSnapshot,
+        queryAnalysis: QueryAnalysis,
+        limit: Int = 4
+    ): List<RetrievedChunk> {
+        val candidates = knowledgeStore.searchCandidates(
+            query = query,
+            preferredLanguages = listOf(queryAnalysis.preferredLanguage),
+            domainHints = queryAnalysis.domainHints.map { it.domain },
+            limit = limit * 6
+        )
+
+        val scoredCandidates = candidates.map { candidate ->
+            RetrievedChunk(
+                topic = candidate.topic,
+                sourceTitle = candidate.sourceTitle,
+                sectionTitle = candidate.title,
+                body = candidate.body,
+                score = rerankScore(queryAnalysis, candidate, context),
+                chunkId = candidate.chunkId,
+                domain = candidate.domain,
+                sourceUrl = candidate.sourceUrl,
+                publisher = candidate.publisher,
+                language = candidate.language,
+                sourceTrust = candidate.sourceTrust,
+                publishOrReviewDate = candidate.publishOrReviewDate,
+                safetyTags = candidate.safetyTags,
+                packVersion = candidate.packVersion
+            )
+        }.sortedByDescending { it.score }
+
+        return selectWithRedundancyPenalty(scoredCandidates, limit)
+    }
+
+    private fun rerankScore(
+        queryAnalysis: QueryAnalysis,
+        candidate: KnowledgeChunkRecord,
+        context: DeviceContextSnapshot
+    ): Int {
+        val normalizedTitle = normalize(candidate.title)
+        val normalizedBody = normalize(candidate.body)
+        val normalizedTopic = normalize(candidate.topic)
+        val normalizedKeywords = normalize(candidate.keywords)
+        val normalizedSource = normalize(candidate.sourceTitle)
+
+        var lexicalScore = 0.0
+        var matchedTokens = 0
+        queryAnalysis.tokens.forEach { token ->
+            val tokenScore = when {
+                normalizedTitle.contains(token) -> 16.0
+                normalizedTopic.contains(token) -> 14.0
+                normalizedKeywords.contains(token) -> 11.0
+                normalizedBody.contains(token) -> min(8.0, countOccurrences(normalizedBody, token) * 2.5)
+                normalizedSource.contains(token) -> 4.0
+                else -> 0.0
+            }
+            if (tokenScore > 0) {
+                matchedTokens += 1
+            }
+            lexicalScore += tokenScore
+        }
         if (matchedTokens > 1) {
-            totalScore += (matchedTokens - 1) * 8
+            lexicalScore += matchedTokens * 4.0
         }
 
-        return totalScore
+        val domainScore = queryAnalysis.domainHints.firstOrNull { it.domain == candidate.domain }?.let { it.weight * 12.0 } ?: 0.0
+        val languageScore = when (candidate.language) {
+            queryAnalysis.preferredLanguage -> 12.0
+            else -> 2.0
+        }
+        val trustScore = candidate.sourceTrust * 3.0
+        val freshnessScore = freshnessScore(candidate.publishOrReviewDate)
+        val safetyScore = queryAnalysis.safetyTags.intersect(candidate.safetyTags.toSet()).size * 5.0
+
+        val trail = context.trail
+        val routeBoost = when {
+            trail?.localCode != null && candidate.topic.equals(trail.localCode, ignoreCase = true) -> 24.0
+            queryAnalysis.routeContextQuery && candidate.domain == "route_intelligence_romania" -> 10.0
+            trail?.name != null && normalize(trail.name) in normalize(candidate.title) -> 6.0
+            else -> 0.0
+        }
+
+        return (lexicalScore + domainScore + languageScore + trustScore + freshnessScore + safetyScore + routeBoost).toInt()
+    }
+
+    private fun selectWithRedundancyPenalty(
+        candidates: List<RetrievedChunk>,
+        limit: Int
+    ): List<RetrievedChunk> {
+        val selected = mutableListOf<RetrievedChunk>()
+        val remaining = candidates.toMutableList()
+
+        while (selected.size < limit && remaining.isNotEmpty()) {
+            val next = remaining.maxByOrNull { candidate ->
+                candidate.score - redundancyPenalty(candidate, selected)
+            } ?: break
+            selected += next.copy(score = next.score - redundancyPenalty(next, selected))
+            remaining.remove(next)
+        }
+        return selected
+    }
+
+    private fun redundancyPenalty(candidate: RetrievedChunk, selected: List<RetrievedChunk>): Int {
+        var penalty = 0.0
+        selected.forEach { existing ->
+            if (existing.topic == candidate.topic) {
+                penalty += 18.0
+            }
+            if (existing.sourceTitle == candidate.sourceTitle) {
+                penalty += 6.0
+            }
+            penalty += tokenOverlap(existing.body, candidate.body) * 10.0
+        }
+        return penalty.toInt()
+    }
+
+    private fun tokenOverlap(left: String, right: String): Double {
+        val leftTokens = buildSearchTokens(left).toSet()
+        val rightTokens = buildSearchTokens(right).toSet()
+        if (leftTokens.isEmpty() || rightTokens.isEmpty()) {
+            return 0.0
+        }
+        val intersection = leftTokens.intersect(rightTokens).size.toDouble()
+        val union = leftTokens.union(rightTokens).size.toDouble()
+        return intersection / union
+    }
+
+    private fun freshnessScore(rawDate: String?): Double {
+        val year = rawDate?.take(4)?.toIntOrNull() ?: return 0.0
+        val age = Year.now().value - year
+        return when {
+            age <= 1 -> 6.0
+            age <= 3 -> 4.0
+            age <= 6 -> 2.0
+            else -> 1.0
+        }
     }
 
     private fun countOccurrences(text: String, token: String): Int {
@@ -93,7 +325,7 @@ class RetrievalEngine(
         while (true) {
             val index = text.indexOf(token, startIndex)
             if (index < 0) break
-            count++
+            count += 1
             startIndex = index + token.length
         }
         return count
@@ -110,17 +342,20 @@ class PromptBuilder {
     fun build(
         query: String,
         context: DeviceContextSnapshot,
-        retrievedChunks: List<RetrievedChunk>
+        retrievedChunks: List<RetrievedChunk>,
+        queryAnalysis: QueryAnalysis? = null
     ): AssistantPrompt {
         val trailSummary = context.trail?.let { trail ->
             buildString {
                 append("Traseu activ: ${trail.name}")
-                if (!trail.region.isNullOrBlank()) {
-                    append(" (${trail.region})")
+                trail.region?.takeIf { it.isNotBlank() }?.let { append(" ($it)") }
+                if (!trail.fromName.isNullOrBlank() || !trail.toName.isNullOrBlank()) {
+                    append(", ${trail.fromName ?: "?"} -> ${trail.toName ?: "?"}")
                 }
-                if (!trail.sunsetTime.isNullOrBlank()) {
-                    append(", apus la ${trail.sunsetTime}")
-                }
+                trail.markingLabel?.takeIf { it.isNotBlank() }?.let { append(", marcaj $it") }
+                trail.routeSummary?.takeIf { it.isNotBlank() }?.let { append(", $it") }
+                trail.sunsetTime?.takeIf { it.isNotBlank() }?.let { append(", apus $it") }
+                trail.weatherForecast?.takeIf { it.isNotBlank() }?.let { append(", vreme $it") }
             }
         } ?: "Fără traseu activ"
 
@@ -130,258 +365,413 @@ class PromptBuilder {
         } else {
             "GPS fără fix stabil"
         }
+        val gearSummary = context.recommendedGear.takeIf { it.isNotEmpty() }?.joinToString(", ")?.let {
+            "Gear shortlist: $it"
+        } ?: "Gear shortlist indisponibil"
 
         return AssistantPrompt(
             query = query,
-            contextSummary = listOf(trailSummary, batterySummary, gpsSummary).joinToString(" | "),
-            citationsSummary = retrievedChunks.joinToString(" | ") { "${it.sourceTitle} -> ${it.sectionTitle}" }
+            contextSummary = listOf(trailSummary, batterySummary, gpsSummary, gearSummary).joinToString(" | "),
+            citationsSummary = retrievedChunks.joinToString(" | ") { "${it.sourceTitle} -> ${it.sectionTitle}" },
+            reasoningSummary = queryAnalysis?.let {
+                listOfNotNull(
+                    it.reasoningType.label,
+                    it.domainHints.firstOrNull()?.domain,
+                    it.preferredLanguage
+                ).joinToString(" | ")
+            }.orEmpty()
         )
     }
 }
 
-class MedicalSafetyPolicy {
-    fun evaluate(query: String, retrievedChunks: List<RetrievedChunk>): SafetyOutcome {
+open class MedicalSafetyPolicy {
+    open fun evaluate(
+        query: String,
+        retrievedChunks: List<RetrievedChunk>,
+        context: DeviceContextSnapshot? = null
+    ): SafetyOutcome {
         val haystack = buildString {
             append(normalize(query))
             append(' ')
             append(retrievedChunks.joinToString(" ") { normalize(it.body) })
+            context?.trail?.routeSummary?.let { append(' '); append(normalize(it)) }
         }
 
-        if (emergencyMarkers.any { it in haystack }) {
+        if (EmergencyMarkers.any { it in haystack }) {
             return SafetyOutcome.EMERGENCY_ESCALATION
         }
 
-        return if (cautionMarkers.any { it in haystack }) {
+        return if (CautionMarkers.any { it in haystack }) {
             SafetyOutcome.CAUTION
         } else {
             SafetyOutcome.NORMAL
         }
     }
 
+    fun applyFinalGuardrails(
+        output: StructuredAssistantOutput,
+        safetyOutcome: SafetyOutcome,
+        isRomanian: Boolean
+    ): StructuredAssistantOutput {
+        if (safetyOutcome == SafetyOutcome.NORMAL) {
+            return output
+        }
+
+        val leadingSection = when (safetyOutcome) {
+            SafetyOutcome.EMERGENCY_ESCALATION -> StructuredResponseSection(
+                title = if (isRomanian) "Prioritate maxima" else "Top priority",
+                body = if (isRomanian) {
+                    "Semnele descrise cer prioritizarea 112 / SOS si limitarea deplasarilor inutile pana cand situatia este stabilizata."
+                } else {
+                    "The described warning signs require prioritizing 112 / SOS and limiting unnecessary movement until the situation is stabilized."
+                },
+                style = ResponseSectionStyle.IMPORTANT
+            )
+            SafetyOutcome.CAUTION -> StructuredResponseSection(
+                title = if (isRomanian) "Atentie" else "Caution",
+                body = if (isRomanian) {
+                    "Continua prudent, reevalueaza starea periodic si escaladeaza daca apar semne noi sau agravare."
+                } else {
+                    "Proceed cautiously, reassess regularly, and escalate if new warning signs or worsening appear."
+                },
+                style = ResponseSectionStyle.IMPORTANT
+            )
+            SafetyOutcome.NORMAL -> return output
+        }
+
+        val sections = if (output.sections.firstOrNull()?.style == ResponseSectionStyle.IMPORTANT) {
+            output.sections
+        } else {
+            listOf(leadingSection) + output.sections
+        }
+
+        val summary = when (safetyOutcome) {
+            SafetyOutcome.EMERGENCY_ESCALATION -> if (isRomanian) {
+                "Prioritatea este 112 / SOS, apoi masurile de baza din knowledge pack si contextul de traseu."
+            } else {
+                "Priority is 112 / SOS first, then the basic measures from the knowledge pack and trail context."
+            }
+            SafetyOutcome.CAUTION -> if (isRomanian) {
+                "Raspuns prudent bazat pe knowledge pack-ul offline si pe contextul traseului."
+            } else {
+                "Cautious answer based on the offline knowledge pack and active trail context."
+            }
+            SafetyOutcome.NORMAL -> output.summary
+        }
+        return output.copy(summary = summary, sections = sections)
+    }
+
     private fun normalize(text: String): String =
         Normalizer.normalize(text.lowercase(), Normalizer.Form.NFD)
             .replace("\\p{Mn}+".toRegex(), "")
 
-    companion object {
-        private val emergencyMarkers = listOf(
-            // Romanian
-            "nu pot sa calc",
-            "nu pot calca",
-            "deformare",
-            "hemorag",
-            "sangerare masiva",
-            "inconstient",
-            "pierderea sensibilitatii",
-            "nu respira",
-            "durere in piept",
-            "convulsii",
-            "lesin",
-            "stop cardiac",
-            "nu mai respira",
-            "pierderea cunostintei",
-            // English
-            "can't walk",
-            "cannot walk",
-            "deformity",
-            "deformed",
-            "hemorrhag",
-            "massive bleeding",
-            "unconscious",
-            "loss of sensation",
-            "not breathing",
-            "chest pain",
-            "seizure",
-            "cardiac arrest",
-            "stopped breathing",
-            "loss of consciousness",
-            "collapsed"
+    private companion object {
+        private val EmergencyMarkers = listOf(
+            "nu pot sa calc", "nu pot calca", "deformare", "hemorag", "sangerare masiva", "inconstient",
+            "nu respira", "durere in piept", "convulsii", "lesin", "stop cardiac", "pierderea cunostintei",
+            "can't walk", "cannot walk", "deformity", "massive bleeding", "unconscious", "not breathing",
+            "chest pain", "seizure", "cardiac arrest", "loss of consciousness", "collapsed"
         )
-
-        private val cautionMarkers = listOf(
-            // Romanian
-            "urs",
-            "fractur",
-            "hipoterm",
-            "sangerare",
-            "entorsa",
-            "glezna",
-            "sucit",
-            "sarpe",
-            "muscatura",
-            "fulger",
-            "pierdut",
-            "ratacit",
-            "ameteli",
-            "ameteala",
-            "deshidratare",
-            "arsura",
-            "inec",
-            "rana",
-            "taietura",
-            "altitudine",
-            "bataturi",
-            "tremur",
-            "frison",
-            "confuzie",
-            // English
-            "bear",
-            "fractur",
-            "hypotherm",
-            "bleeding",
-            "sprain",
-            "ankle",
-            "twisted",
-            "snake",
-            "bite",
-            "bitten",
-            "lightning",
-            "lost",
-            "dizzy",
-            "dizziness",
-            "dehydrat",
-            "burn",
-            "wound",
-            "cut",
-            "altitude sick",
-            "blister",
-            "heat exhaust",
-            "heat stroke",
-            "heatstroke"
+        private val CautionMarkers = listOf(
+            "urs", "fractur", "hipoterm", "sangerare", "entorsa", "glezna", "sarpe", "muscatura",
+            "fulger", "pierdut", "ratacit", "ameteli", "deshidratare", "rana", "taietura", "altitudine",
+            "confuzie", "heat stroke", "heatstroke", "bear", "fractur", "hypotherm", "bleeding", "sprain",
+            "ankle", "snake", "bite", "lightning", "lost", "dizziness", "dehydrat", "burn", "wound"
         )
     }
 }
 
 interface GenerationEngine {
-    suspend fun generate(input: GenerationInput): String
+    suspend fun generate(input: GenerationInput): StructuredAssistantOutput
 }
 
 class TemplateGenerationEngine : GenerationEngine {
-    override suspend fun generate(input: GenerationInput): String {
-        val isRomanian = input.context.localeTag.startsWith("ro")
-        val chunks = input.retrievedChunks
+    override suspend fun generate(input: GenerationInput): StructuredAssistantOutput {
+        val isRomanian = input.queryAnalysis.preferredLanguage == "ro"
+        val sections = mutableListOf<StructuredResponseSection>()
 
-        return buildString {
-            // Safety intro
-            appendLine(safetyIntro(input.safetyOutcome, isRomanian))
-            appendLine()
+        input.retrievedChunks.firstOrNull()?.let { chunk ->
+            sections += StructuredResponseSection(
+                title = if (isRomanian) "Baza offline" else "Offline guidance",
+                body = chunk.body,
+                style = ResponseSectionStyle.GUIDANCE
+            )
+        }
 
-            // Primary chunk as coherent paragraph
-            if (chunks.isNotEmpty()) {
-                appendLine(chunks[0].body)
-            }
+        input.retrievedChunks.drop(1).take(2).takeIf { it.isNotEmpty() }?.let { extras ->
+            sections += StructuredResponseSection(
+                title = if (isRomanian) "Detalii utile" else "Useful details",
+                body = extras.joinToString(" ") { it.body },
+                style = ResponseSectionStyle.GUIDANCE
+            )
+        }
 
-            // Secondary chunk if available
-            if (chunks.size >= 2) {
-                appendLine()
-                val prefix = if (isRomanian) "De asemenea:" else "Additionally:"
-                appendLine(prefix)
-                appendLine(truncateBody(chunks[1].body, 300))
-            }
+        buildMissingGroundingSection(input, isRomanian)?.let { sections += it }
+        buildTrailContextSection(input, isRomanian)?.let { sections += it }
+        buildActionSection(input, isRomanian)?.let { sections += it }
 
-            // Tertiary chunk as brief note
-            if (chunks.size >= 3) {
-                appendLine()
-                val prefix = if (isRomanian) "Notă:" else "Note:"
-                appendLine("$prefix ${truncateBody(chunks[2].body, 150)}")
-            }
+        val summary = when {
+            input.safetyOutcome == SafetyOutcome.EMERGENCY_ESCALATION && isRomanian ->
+                "Prioritatea este siguranta imediata, apoi pasii de baza verificati din knowledge pack."
+            input.safetyOutcome == SafetyOutcome.EMERGENCY_ESCALATION ->
+                "Immediate safety comes first, followed by the verified basic steps from the knowledge pack."
+            input.queryAnalysis.routeContextQuery && isRomanian ->
+                "Am combinat knowledge pack-ul offline cu contextul traseului activ."
+            input.queryAnalysis.routeContextQuery ->
+                "I combined the offline knowledge pack with the active trail context."
+            input.retrievedChunks.isEmpty() && isRomanian ->
+                "Nu am gasit inca un chunk suficient de apropiat in pack, asa ca raspund prudent si iti spun cum sa reformulezi pentru grounding mai bun."
+            input.retrievedChunks.isEmpty() ->
+                "I did not find a close enough knowledge chunk yet, so I am answering conservatively and showing how to rephrase for better grounding."
+            isRomanian ->
+                "Am selectat cele mai relevante chunk-uri offline pentru intrebarea ta."
+            else ->
+                "I selected the most relevant offline chunks for your question."
+        }
 
-            // Device context notes
-            val contextNotes = buildContextNotes(input.context, isRomanian)
-            if (contextNotes.isNotBlank()) {
-                appendLine()
-                appendLine(contextNotes)
-            }
-
-            // Emergency CTA as last line
-            if (input.safetyOutcome == SafetyOutcome.EMERGENCY_ESCALATION) {
-                appendLine()
-                appendLine(if (isRomanian) "Sună 112 imediat." else "Call 112 immediately.")
-            }
-        }.trim()
+        return StructuredAssistantOutput(
+            summary = summary,
+            sections = sections,
+            generationMode = input.generationMode,
+            reasoningType = input.queryAnalysis.reasoningType,
+            modelVersion = input.modelStatus.modelVersion,
+            knowledgePackVersion = input.knowledgePackStatus.packVersion
+        )
     }
 
-    private fun safetyIntro(outcome: SafetyOutcome, isRomanian: Boolean): String = when (outcome) {
-        SafetyOutcome.EMERGENCY_ESCALATION -> if (isRomanian) {
-            "Situația descrisă are semne de alarmă. Prioritatea este 112 / SOS, apoi măsurile de bază de mai jos."
-        } else {
-            "The situation described shows warning signs. Priority is 112 / SOS, then the basic measures below."
+    private fun buildMissingGroundingSection(
+        input: GenerationInput,
+        isRomanian: Boolean
+    ): StructuredResponseSection? {
+        if (input.retrievedChunks.isNotEmpty()) {
+            return null
         }
-        SafetyOutcome.CAUTION -> if (isRomanian) {
-            "Ai nevoie de un răspuns prudent, orientat pe siguranță și pe pași simpli de teren."
-        } else {
-            "You need a cautious response focused on safety and simple field steps."
-        }
-        SafetyOutcome.NORMAL -> if (isRomanian) {
-            "Pe baza ghidurilor offline disponibile:"
-        } else {
-            "Based on available offline guidelines:"
-        }
-    }
 
-    private fun buildContextNotes(context: DeviceContextSnapshot, isRomanian: Boolean): String {
-        val notes = mutableListOf<String>()
-        if (context.batterySafe) {
-            notes += if (isRomanian) {
-                "Telefonul este în Battery Safe — păstrează energia pentru navigație și apel de urgență."
+        val examples = when (input.queryAnalysis.domainHints.firstOrNull()?.domain) {
+            "survival_basics" -> if (isRomanian) {
+                "Exemple bune: \"foc de tabara in siguranta\", \"cum purific apa\", \"adapost temporar\"."
             } else {
-                "Phone is in Battery Safe — conserve energy for navigation and emergency calls."
+                "Good examples: \"safe campfire basics\", \"how to purify water\", \"temporary shelter\"."
             }
-        }
-        context.trail?.sunsetTime?.takeIf { it.isNotBlank() }?.let { sunset ->
-            notes += if (isRomanian) {
-                "Ține cont de apusul estimat la $sunset când decizi dacă mai continui traseul."
+            "medical_emergency" -> if (isRomanian) {
+                "Exemple bune: \"mi-am sucit glezna\", \"sangerare puternica\", \"nu pot calca\"."
             } else {
-                "Consider the estimated sunset at $sunset when deciding whether to continue the trail."
+                "Good examples: \"I twisted my ankle\", \"heavy bleeding\", \"I cannot walk\"."
+            }
+            "wildlife_romania" -> if (isRomanian) {
+                "Exemple bune: \"urs aproape de cort\", \"muscatura de sarpe\", \"urme de urs\"."
+            } else {
+                "Good examples: \"bear near tent\", \"snakebite\", \"bear tracks\"."
+            }
+            else -> if (isRomanian) {
+                "Exemple bune: \"cum purific apa\", \"mi-am sucit glezna\", \"ce fac daca vad urs\"."
+            } else {
+                "Good examples: \"how do I purify water\", \"I twisted my ankle\", \"what do I do if I see a bear\"."
             }
         }
-        return notes.joinToString(" ")
+
+        val body = if (isRomanian) {
+            "Nu inventez pasi fara un chunk verificat din knowledge pack. Reformuleaza cu termeni concreti din problema ta ca sa pot ancora raspunsul mai bine. $examples"
+        } else {
+            "I do not invent steps without a verified knowledge chunk. Rephrase with concrete problem terms so I can ground the answer better. $examples"
+        }
+
+        return StructuredResponseSection(
+            title = if (isRomanian) "Grounding mai bun" else "Better grounding",
+            body = body,
+            style = ResponseSectionStyle.ACTIONS
+        )
     }
 
-    private fun truncateBody(body: String, maxChars: Int): String {
-        if (body.length <= maxChars) return body
-        val truncated = body.take(maxChars)
-        val lastSentenceEnd = truncated.lastIndexOfAny(charArrayOf('.', '!', '?'))
-        return if (lastSentenceEnd > maxChars / 2) {
-            truncated.substring(0, lastSentenceEnd + 1)
-        } else {
-            "$truncated..."
+    private fun buildTrailContextSection(
+        input: GenerationInput,
+        isRomanian: Boolean
+    ): StructuredResponseSection? {
+        val trail = input.context.trail ?: return null
+        val body = buildList {
+            add(if (isRomanian) "Traseu activ: ${trail.name}." else "Active trail: ${trail.name}.")
+            if (!trail.fromName.isNullOrBlank() || !trail.toName.isNullOrBlank()) {
+                add(if (isRomanian) {
+                    "Capete de traseu: ${trail.fromName ?: "?"} -> ${trail.toName ?: "?"}."
+                } else {
+                    "Route endpoints: ${trail.fromName ?: "?"} -> ${trail.toName ?: "?"}."
+                })
+            }
+            trail.markingLabel?.takeIf { it.isNotBlank() }?.let {
+                add(if (isRomanian) "Marcaj: $it." else "Trail marker: $it.")
+            }
+            trail.routeSummary?.takeIf { it.isNotBlank() }?.let {
+                add(if (isRomanian) "Rezumat metadata: $it." else "Metadata summary: $it.")
+            }
+            trail.weatherForecast?.takeIf { it.isNotBlank() }?.let {
+                add(if (isRomanian) "Vreme estimata: $it." else "Expected weather: $it.")
+            }
+            trail.sunsetTime?.takeIf { it.isNotBlank() }?.let {
+                add(if (isRomanian) "Apus estimat: $it." else "Estimated sunset: $it.")
+            }
+            add(if (isRomanian) {
+                "Baterie ${input.context.batteryPercent}%${if (input.context.batterySafe) " cu Battery Safe activ" else ""}; GPS ${if (input.context.gpsFixed) "disponibil" else "fara fix stabil"}."
+            } else {
+                "Battery ${input.context.batteryPercent}%${if (input.context.batterySafe) " with Battery Safe active" else ""}; GPS ${if (input.context.gpsFixed) "available" else "without a stable fix"}."
+            })
+            if (input.queryAnalysis.gearQuery && input.context.recommendedGear.isNotEmpty()) {
+                add(if (isRomanian) {
+                    "Shortlist gear curent: ${input.context.recommendedGear.joinToString(", ")}."
+                } else {
+                    "Current gear shortlist: ${input.context.recommendedGear.joinToString(", ")}."
+                })
+            }
+        }.joinToString(" ")
+
+        return StructuredResponseSection(
+            title = if (isRomanian) "Context de teren" else "Field context",
+            body = body,
+            style = ResponseSectionStyle.CONTEXT
+        )
+    }
+
+    private fun buildActionSection(
+        input: GenerationInput,
+        isRomanian: Boolean
+    ): StructuredResponseSection? {
+        val actions = mutableListOf<String>()
+        if (input.context.batterySafe) {
+            actions += if (isRomanian) {
+                "Battery Safe este activ; pastreaza bateria pentru navigatie si apel de urgenta."
+            } else {
+                "Battery Safe is active; preserve battery for navigation and emergency calling."
+            }
+        }
+        if (input.queryAnalysis.routeContextQuery && input.context.trail?.sourceUrls?.isNotEmpty() == true) {
+            actions += if (isRomanian) {
+                "Daca ai nevoie de confirmare, verifica si provenienta traseului din sursele atasate."
+            } else {
+                "If you need confirmation, also check the trail provenance from the attached sources."
+            }
+        }
+        if (input.queryAnalysis.gearQuery && input.context.recommendedGear.isNotEmpty()) {
+            actions += if (isRomanian) {
+                "Pastreaza la indemana in primul rand echipamentul critic, nu tot rucsacul."
+            } else {
+                "Keep the critical gear accessible first, not the entire pack."
+            }
+        }
+        return actions.takeIf { it.isNotEmpty() }?.let {
+            StructuredResponseSection(
+                title = if (isRomanian) "Actiuni imediate" else "Immediate actions",
+                body = it.joinToString(" "),
+                style = ResponseSectionStyle.ACTIONS
+            )
         }
     }
 }
 
-class  AssistantRepository(
-    context: Context,
-    private val retrievalEngine: RetrievalEngine = RetrievalEngine(AssistantKnowledgeRepository(context)),
+class AssistantRepository(
+    context: Context? = null,
+    private val knowledgePackManager: KnowledgePackStatusProvider = context?.let(::KnowledgePackManager)
+        ?: error("knowledgePackManager is required when context is null"),
+    private val knowledgeStore: KnowledgeChunkStore = createKnowledgeStore(context, knowledgePackManager),
+    private val queryAnalyzer: QueryAnalyzer = QueryAnalyzer(),
+    private val retrievalEngine: RetrievalEngine = RetrievalEngine(knowledgeStore, queryAnalyzer),
     private val promptBuilder: PromptBuilder = PromptBuilder(),
-    private val generationEngine: GenerationEngine = TemplateGenerationEngine(),
+    private val modelManager: ModelManager = context?.let(::ModelManager)
+        ?: error("modelManager is required when context is null"),
+    private val generationEngine: GenerationEngine = LocalLlmGenerationEngine(
+        modelManager = modelManager,
+        fallbackEngine = TemplateGenerationEngine()
+    ),
     private val medicalSafetyPolicy: MedicalSafetyPolicy = MedicalSafetyPolicy()
 ) {
     suspend fun answer(query: String, context: DeviceContextSnapshot): AssistantResponse {
-        val language = if (context.localeTag.startsWith("ro")) "ro" else "en"
-        val retrieved = retrievalEngine.retrieve(query, language)
-        val prompt = promptBuilder.build(query, context, retrieved)
-        val safetyOutcome = medicalSafetyPolicy.evaluate(query, retrieved)
-        val answerText = generationEngine.generate(
-            GenerationInput(
-                query = query,
-                prompt = prompt,
-                retrievedChunks = retrieved,
-                context = context,
-                safetyOutcome = safetyOutcome
-            )
+        val queryAnalysis = queryAnalyzer.analyze(query, context)
+        val packStatus = knowledgePackManager.ensureReady()
+        val modelStatus = modelManager.refreshStatus()
+        val generationMode = modelManager.currentGenerationMode()
+        val retrieved = retrievalEngine.retrieve(
+            query = query,
+            context = context,
+            queryAnalysis = queryAnalysis,
+            limit = 4
+        )
+        val prompt = promptBuilder.build(
+            query = query,
+            context = context,
+            retrievedChunks = retrieved,
+            queryAnalysis = queryAnalysis
+        )
+        val safetyOutcome = medicalSafetyPolicy.evaluate(query, retrieved, context)
+        val structuredOutput = medicalSafetyPolicy.applyFinalGuardrails(
+            output = generationEngine.generate(
+                GenerationInput(
+                    query = query,
+                    prompt = prompt,
+                    queryAnalysis = queryAnalysis,
+                    retrievedChunks = retrieved,
+                    context = context,
+                    safetyOutcome = safetyOutcome,
+                    generationMode = generationMode,
+                    modelStatus = modelStatus,
+                    knowledgePackStatus = packStatus
+                )
+            ),
+            safetyOutcome = safetyOutcome,
+            isRomanian = queryAnalysis.preferredLanguage == "ro"
         )
 
         return AssistantResponse(
-            answerText = answerText,
-            citations = retrieved.map {
-                AssistantCitation(
-                    sourceTitle = it.sourceTitle,
-                    sectionTitle = it.sectionTitle,
-                    snippet = it.body.take(140).trimEnd() + if (it.body.length > 140) "..." else ""
-                )
-            },
+            answerText = structuredOutput.renderText(),
+            structuredOutput = structuredOutput,
+            citations = buildCitations(queryAnalysis, context, retrieved),
             safetyOutcome = safetyOutcome,
-            usedFallback = retrieved.isEmpty()
+            generationMode = structuredOutput.generationMode,
+            reasoningType = structuredOutput.reasoningType,
+            modelVersion = structuredOutput.modelVersion,
+            knowledgePackVersion = structuredOutput.knowledgePackVersion,
+            usedFallback = structuredOutput.generationMode == GenerationMode.FALLBACK_STRUCTURED
         )
+    }
+
+    private fun buildCitations(
+        queryAnalysis: QueryAnalysis,
+        context: DeviceContextSnapshot,
+        retrieved: List<RetrievedChunk>
+    ): List<AssistantCitation> {
+        val citations = mutableListOf<AssistantCitation>()
+        if (queryAnalysis.routeContextQuery && context.trail != null && context.trail.sourceUrls.isNotEmpty()) {
+            citations += AssistantCitation(
+                sourceTitle = context.trail.name,
+                sectionTitle = "Active trail context",
+                snippet = listOfNotNull(
+                    context.trail.markingLabel?.let { "Marker: $it" },
+                    context.trail.routeSummary
+                ).joinToString(" | "),
+                sourceUrl = context.trail.sourceUrls.firstOrNull(),
+                publisher = "Scouty local route catalog"
+            )
+        }
+        citations += retrieved.map { chunk ->
+            AssistantCitation(
+                sourceTitle = chunk.sourceTitle,
+                sectionTitle = chunk.sectionTitle,
+                snippet = chunk.body.take(160).trimEnd() + if (chunk.body.length > 160) "..." else "",
+                sourceUrl = chunk.sourceUrl,
+                publisher = chunk.publisher
+            )
+        }
+        return citations.distinctBy { Triple(it.sourceTitle, it.sectionTitle, it.sourceUrl) }.take(4)
+    }
+
+    private companion object {
+        fun createKnowledgeStore(
+            context: Context?,
+            knowledgePackManager: KnowledgePackStatusProvider
+        ): KnowledgeChunkStore {
+            val concreteManager = knowledgePackManager as? KnowledgePackManager
+            return when {
+                concreteManager != null -> SqliteKnowledgeChunkStore(concreteManager)
+                context == null -> error("knowledgeStore is required when context is null and knowledgePackManager is custom")
+                else -> SqliteKnowledgeChunkStore(KnowledgePackManager(context))
+            }
+        }
     }
 }

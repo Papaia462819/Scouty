@@ -2,6 +2,7 @@ package com.scouty.app.ui.models
 
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.TrailContextSnapshot
+import com.scouty.app.assistant.model.AssistantRuntimeDebugInfo
 
 import java.util.Calendar
 
@@ -33,6 +34,12 @@ data class ActiveTrail(
     val localCode: String? = null,
     val region: String? = null,
     val descriptionRo: String? = null,
+    val localDescription: String? = null,
+    val routeSummary: String? = null,
+    val fromName: String? = null,
+    val toName: String? = null,
+    val markingSymbols: List<String> = emptyList(),
+    val sourceUrls: List<String> = emptyList(),
     val sunsetTime: String? = null,
     val weatherForecast: String? = null,
     val difficulty: String = "MEDIUM",
@@ -60,7 +67,10 @@ data class HomeStatus(
     val accuracy: Float? = null,
     val locationName: String = "Waiting for fix...",
     val activeTrail: ActiveTrail? = null,
-    val gearList: List<GearItem> = emptyList()
+    val gearList: List<GearItem> = emptyList(),
+    val userProfile: UserTrailProfile = UserTrailProfile(),
+    val routeRecommendations: List<RouteRecommendation> = emptyList(),
+    val assistantRuntime: AssistantRuntimeDebugInfo = AssistantRuntimeDebugInfo()
 )
 
 fun HomeStatus.toDeviceContextSnapshot(): DeviceContextSnapshot =
@@ -76,11 +86,21 @@ fun HomeStatus.toDeviceContextSnapshot(): DeviceContextSnapshot =
         trail = activeTrail?.let { trail ->
             TrailContextSnapshot(
                 name = trail.name,
+                localCode = trail.localCode,
                 region = trail.region,
+                fromName = trail.fromName,
+                toName = trail.toName,
+                markingLabel = TrailMetadataFormatter.formatTrailMarkers(trail.markingSymbols),
+                routeSummary = trail.routeSummary,
+                sourceUrls = trail.sourceUrls,
                 sunsetTime = trail.sunsetTime,
                 weatherForecast = trail.weatherForecast,
                 difficulty = trail.difficulty,
                 estimatedDuration = trail.estimatedDuration
             )
-        }
+        },
+        recommendedGear = gearList
+            .sortedBy { it.necessity.ordinal }
+            .take(6)
+            .map { it.name }
     )

@@ -6,6 +6,9 @@ build/
 *.iml
 .kotlin/
 tools/__pycache__/
+tools/knowledge_pipeline/cache/
+tools/knowledge_pipeline/build/
+scratch/
 
 local.properties
 tools/bin/

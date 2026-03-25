@@ -16,21 +16,36 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.scouty.app.assistant.data.DeviceContextProvider
+import com.scouty.app.assistant.data.KnowledgePackManager
+import com.scouty.app.assistant.domain.AssistantRuntimeGraph
 import com.scouty.app.assistant.model.DeviceContextSnapshot
+import com.scouty.app.assistant.model.AssistantRuntimeDebugInfo
+import com.scouty.app.assistant.domain.ModelManager
+import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.BuildConfig
 import com.google.android.gms.location.*
 import com.scouty.app.api.MeteoblueLocationResult
 import com.scouty.app.api.MeteoblueResponse
+import com.scouty.app.data.RouteEnrichmentRepository
+import com.scouty.app.data.RouteGeometryRepository
+import com.scouty.app.data.UserTrailProfileStore
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.scouty.app.api.MeteoblueService
 import com.scouty.app.ui.models.ActiveTrail
 import com.scouty.app.ui.models.GearRecommendationEngine
 import com.scouty.app.ui.models.HomeStatus
+import com.scouty.app.ui.models.RouteRecommendationEngine
+import com.scouty.app.ui.models.TrailMetadataFormatter
+import com.scouty.app.ui.models.UserTrailProfile
+import com.scouty.app.ui.models.adaptToTrail
 import com.scouty.app.ui.models.toDeviceContextSnapshot
+import com.scouty.app.utils.MapPackRegistryManager
 import com.scouty.app.utils.SolarCalculator
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -49,11 +64,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     )
 
     private val meteoblueApiKey = BuildConfig.METEOBLUE_API_KEY
+    private val userTrailProfileStore = UserTrailProfileStore(application)
+    private val assistantRuntimeGraph = AssistantRuntimeGraph.get(application)
+    private val knowledgePackManager: KnowledgePackManager = assistantRuntimeGraph.knowledgePackManager
+    private val modelManager: ModelManager = assistantRuntimeGraph.modelManager
 
-    private val _uiState = MutableStateFlow(HomeStatus())
+    private val _uiState = MutableStateFlow(HomeStatus(userProfile = userTrailProfileStore.load()))
     val uiState: StateFlow<HomeStatus> = _uiState.asStateFlow()
     private val _deviceContext = MutableStateFlow(_uiState.value.toDeviceContextSnapshot())
     override val deviceContext: StateFlow<DeviceContextSnapshot> = _deviceContext.asStateFlow()
+    private var lastRecommendationLocation: Pair<Double, Double>? = null
+    private var lastRecommendationRefreshMs: Long = 0L
 
     private val json = Json { ignoreUnknownKeys = true }
     private val retrofit = Retrofit.Builder()
@@ -99,10 +120,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         startLocationUpdates()
         loadDefaultGear()
         refreshOnlineState()
+        observeAssistantRuntime()
+        refreshAssistantRuntimeStatus()
+        warmMapRuntime()
+        maybeRefreshRouteRecommendations(force = true)
     }
 
     private fun loadDefaultGear() {
-        val defaultGear = GearRecommendationEngine.build(trail = null)
+        val defaultGear = GearRecommendationEngine.build(
+            trail = null,
+            profile = _uiState.value.userProfile
+        )
         updateUiState { it.copy(gearList = defaultGear) }
     }
 
@@ -113,6 +141,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             }
             currentState.copy(gearList = newList)
         }
+    }
+
+    fun updateUserProfile(profile: UserTrailProfile) {
+        userTrailProfileStore.save(profile)
+        updateUiState { currentState ->
+            currentState.copy(
+                userProfile = profile,
+                gearList = GearRecommendationEngine.build(
+                    trail = currentState.activeTrail,
+                    profile = profile,
+                    previousItems = currentState.gearList
+                )
+            )
+        }
+        maybeRefreshRouteRecommendations(force = true)
     }
 
     @SuppressLint("MissingPermission")
@@ -145,6 +188,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 locationName = "Current Location" 
             )
         }
+        maybeRefreshRouteRecommendations(latitude = location.latitude, longitude = location.longitude)
     }
 
     private fun checkSmartSync(currentLocation: Location) {
@@ -176,6 +220,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 trail.localCode,
                 trail.region,
                 trail.descriptionRo,
+                trail.localDescription,
+                trail.routeSummary,
+                trail.fromName,
+                trail.toName,
+                trail.markingSymbols,
+                trail.sourceUrls,
                 trail.difficulty,
                 trail.distanceKm,
                 trail.elevationGain,
@@ -356,7 +406,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             distanceKm = 12.4,
             elevationGain = 1234,
             estimatedDuration = "~6h",
-            imageUrl = null
+            imageUrl = null,
+            recordSelection = true
         )
     }
 
@@ -373,10 +424,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         localCode: String? = null,
         region: String? = null,
         descriptionRo: String? = null,
+        localDescription: String? = null,
+        routeSummary: String? = null,
+        fromName: String? = null,
+        toName: String? = null,
+        markingSymbols: List<String> = emptyList(),
+        sourceUrls: List<String> = emptyList(),
         imageAttribution: String? = null,
         imageLicense: String? = null,
         imageSourcePageUrl: String? = null,
-        imageScope: String? = null
+        imageScope: String? = null,
+        recordSelection: Boolean = true
     ) {
         fetchWeatherData(
             name = name,
@@ -386,6 +444,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             localCode = localCode,
             region = region,
             descriptionRo = descriptionRo,
+            localDescription = localDescription,
+            routeSummary = routeSummary,
+            fromName = fromName,
+            toName = toName,
+            markingSymbols = markingSymbols,
+            sourceUrls = sourceUrls,
             difficulty = difficulty,
             distanceKm = distanceKm,
             elevationGain = elevationGain,
@@ -394,7 +458,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             imageAttribution = imageAttribution,
             imageLicense = imageLicense,
             imageSourcePageUrl = imageSourcePageUrl,
-            imageScope = imageScope
+            imageScope = imageScope,
+            recordSelection = recordSelection
         )
     }
 
@@ -406,6 +471,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         localCode: String? = null,
         region: String? = null,
         descriptionRo: String? = null,
+        localDescription: String? = null,
+        routeSummary: String? = null,
+        fromName: String? = null,
+        toName: String? = null,
+        markingSymbols: List<String> = emptyList(),
+        sourceUrls: List<String> = emptyList(),
         difficulty: String,
         distanceKm: Double,
         elevationGain: Int,
@@ -414,7 +485,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         imageAttribution: String? = null,
         imageLicense: String? = null,
         imageSourcePageUrl: String? = null,
-        imageScope: String? = null
+        imageScope: String? = null,
+        recordSelection: Boolean = false
     ) {
         viewModelScope.launch {
             var sunsetStr = "N/A"
@@ -450,6 +522,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 } ?: "N/A"
             }
 
+            val markerLabel = TrailMetadataFormatter.formatTrailMarkers(markingSymbols)
+            val resolvedRouteSummary = routeSummary ?: TrailMetadataFormatter.buildRouteSummary(
+                durationText = estimatedDuration,
+                elevationGain = elevationGain,
+                difficulty = com.scouty.app.ui.models.TrailDifficultyRank.from(difficulty),
+                markerLabel = markerLabel,
+                fromName = fromName,
+                toName = toName
+            )
+
             val trail = ActiveTrail(
                 name = name,
                 date = date,
@@ -458,6 +540,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 localCode = localCode,
                 region = region,
                 descriptionRo = descriptionRo,
+                localDescription = localDescription,
+                routeSummary = resolvedRouteSummary,
+                fromName = fromName,
+                toName = toName,
+                markingSymbols = markingSymbols,
+                sourceUrls = sourceUrls,
                 sunsetTime = sunsetStr,
                 weatherForecast = weatherInfo,
                 lastSyncTimestamp = syncTime ?: _uiState.value.activeTrail?.lastSyncTimestamp,
@@ -472,14 +560,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 imageSourcePageUrl = imageSourcePageUrl,
                 imageScope = imageScope
             )
-            
+
+            val profileForTrail = if (recordSelection) {
+                _uiState.value.userProfile.adaptToTrail(trail).also { adaptedProfile ->
+                    userTrailProfileStore.save(adaptedProfile)
+                }
+            } else {
+                _uiState.value.userProfile
+            }
+
             updateUiState { currentState ->
                 val updatedGear = GearRecommendationEngine.build(
                     trail = trail,
+                    profile = profileForTrail,
                     previousItems = currentState.gearList
                 )
-                currentState.copy(activeTrail = trail, gearList = updatedGear)
+                currentState.copy(
+                    activeTrail = trail,
+                    gearList = updatedGear,
+                    userProfile = profileForTrail
+                )
             }
+            maybeRefreshRouteRecommendations(force = true, latitude = lat, longitude = lon)
         }
     }
 
@@ -519,6 +621,80 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private fun refreshOnlineState() {
         val online = isInternetAvailable()
         updateUiState { it.copy(isOnline = online) }
+    }
+
+    private fun refreshAssistantRuntimeStatus() {
+        viewModelScope.launch {
+            knowledgePackManager.ensureReady()
+            modelManager.refreshStatus()
+            modelManager.ensureLoaded()
+        }
+    }
+
+    private fun warmMapRuntime() {
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                MapPackRegistryManager.load(getApplication())
+            }.onFailure { error ->
+                Log.w("ScoutyMap", "Failed to warm bundled map packs", error)
+            }
+        }
+    }
+
+    private fun observeAssistantRuntime() {
+        viewModelScope.launch {
+            combine(knowledgePackManager.status, modelManager.status) { packStatus, modelStatus ->
+                AssistantRuntimeDebugInfo(
+                    knowledgePackStatus = packStatus,
+                    modelStatus = modelStatus,
+                    generationMode = if (modelStatus.canGenerateLocally) {
+                        GenerationMode.LOCAL_LLM
+                    } else {
+                        GenerationMode.FALLBACK_STRUCTURED
+                    }
+                )
+            }.collect { runtimeDebugInfo ->
+                updateUiState { it.copy(assistantRuntime = runtimeDebugInfo) }
+            }
+        }
+    }
+
+    private fun maybeRefreshRouteRecommendations(
+        force: Boolean = false,
+        latitude: Double? = _uiState.value.latitude,
+        longitude: Double? = _uiState.value.longitude
+    ) {
+        val now = System.currentTimeMillis()
+        if (!force && latitude != null && longitude != null) {
+            val previousLocation = lastRecommendationLocation
+            val recentlyUpdated = now - lastRecommendationRefreshMs < 45_000
+            val barelyMoved = previousLocation?.let { previous ->
+                calculateDistance(previous.first, previous.second, latitude, longitude) < 2.0
+            } ?: false
+            if (recentlyUpdated && barelyMoved) {
+                return
+            }
+        }
+
+        if (latitude != null && longitude != null) {
+            lastRecommendationLocation = latitude to longitude
+        }
+        lastRecommendationRefreshMs = now
+
+        viewModelScope.launch {
+            val catalog = RouteEnrichmentRepository.load(getApplication())
+            val geometryIndex = RouteGeometryRepository.load(getApplication())
+            val currentState = _uiState.value
+            val recommendations = RouteRecommendationEngine.recommend(
+                profile = currentState.userProfile,
+                catalog = catalog,
+                geometryIndex = geometryIndex,
+                latitude = currentState.latitude,
+                longitude = currentState.longitude,
+                activeTrail = currentState.activeTrail
+            )
+            updateUiState { it.copy(routeRecommendations = recommendations) }
+        }
     }
 
     private fun updateUiState(transform: (HomeStatus) -> HomeStatus) {

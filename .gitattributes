@@ -6,3 +6,5 @@
 *.jpeg binary
 *.tif binary
 *.mbtiles binary
+*.pmtiles binary
+*.sqlite binary

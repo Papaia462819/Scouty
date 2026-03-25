@@ -1,0 +1,264 @@
+{
+  "chunk_specs": [
+    {
+      "chunk_id": "ifrc_bleeding_control",
+      "domain": "medical_emergency",
+      "topic": "bleeding_control",
+      "source_id": "ifrc_first_aid_guidelines",
+      "publish_or_review_date": "2020-12-01",
+      "safety_tags": ["bleeding", "wound", "first_aid"],
+      "country_scope": "global",
+      "keywords": "sangerare hemoragie rana presiune directa pansament bleeding wound pressure dressing",
+      "languages": {
+        "ro": {
+          "title": "Controlul unei sangerari externe",
+          "body": "Aplica presiune directa pe rana cu un pansament curat sau cu cel mai curat material disponibil si mentine compresia continua. Daca materialul se imbiba, mai adauga deasupra, fara sa tot desfaci primul strat. Daca sangerarea este masiva, persoana devine foarte palida, confuza sau isi pierde cunostinta, trateaza cazul ca urgenta majora si escaladeaza rapid la 112."
+        },
+        "en": {
+          "title": "Control external bleeding",
+          "body": "Apply direct pressure over the wound with a clean dressing or the cleanest cloth available and keep steady compression in place. If the material soaks through, add more on top instead of repeatedly removing the first layer. If bleeding is heavy or the person becomes pale, confused, or loses consciousness, treat it as a major emergency and escalate to 112 immediately."
+        }
+      }
+    },
+    {
+      "chunk_id": "who_snakebite_response",
+      "domain": "wildlife_romania",
+      "topic": "snakebite_response",
+      "source_id": "who_snakebite_facts",
+      "publish_or_review_date": "2024-09-20",
+      "safety_tags": ["snakebite", "envenomation", "wildlife"],
+      "country_scope": "global",
+      "keywords": "sarpe muscatura venin imobilizare snake bite venom immobilize antivenom",
+      "languages": {
+        "ro": {
+          "title": "Ce faci dupa o muscatura de sarpe suspecta",
+          "body": "Indeparteaza persoana din zona, scoate obiectele stranse de pe membrul muscat si linisteste victima. Imobilizeaza complet persoana si transport-o cat mai repede la o unitate medicala; monitorizeaza respiratia si pregateste-te sa ceri ajutor de urgenta daca apar dificultati respiratorii, sangerari sau stare generala proasta. Evita taierea plagii, suctiunea, remediile traditionale si improvizatiile care intarzie accesul la ingrijire medicala."
+        },
+        "en": {
+          "title": "What to do after a suspected snakebite",
+          "body": "Move the person away from the snake, remove tight items from the bitten limb, and reassure the victim. Keep the person fully immobilized and transport them to medical care as soon as possible; monitor breathing and escalate urgently if breathing problems, bleeding, or worsening condition appear. Avoid cutting the wound, sucking venom, using herbal remedies, or delaying proper medical care."
+        }
+      }
+    },
+    {
+      "chunk_id": "cdc_lightning_shelter",
+      "domain": "weather_and_season",
+      "topic": "lightning_safety",
+      "source_id": "cdc_lightning_safety",
+      "publish_or_review_date": "2024-10-01",
+      "safety_tags": ["lightning", "storm", "weather"],
+      "country_scope": "global",
+      "keywords": "fulger furtuna adapost lightning thunder shelter ridge tree water",
+      "languages": {
+        "ro": {
+          "title": "Siguranta la fulgere",
+          "body": "Cand se apropie fulgerele, cauta imediat un adapost substantial, de preferat o cladire sau un vehicul inchis. Evita creasta, copacii izolati, apa, cablurile si obiectele metalice expuse. Nu relua deplasarea pe teren expus pana nu au trecut cel putin 30 de minute de la ultimul tunet."
+        },
+        "en": {
+          "title": "Lightning safety",
+          "body": "When lightning approaches, move immediately to a substantial shelter, ideally a building or a fully enclosed vehicle. Avoid ridgelines, isolated trees, water, exposed cables, and obvious metal exposure. Do not return to exposed terrain until at least 30 minutes have passed after the last thunder."
+        }
+      }
+    },
+    {
+      "chunk_id": "cdc_altitude_illness",
+      "domain": "medical_emergency",
+      "topic": "altitude_illness",
+      "source_id": "cdc_high_altitude",
+      "publish_or_review_date": "2022-08-16",
+      "safety_tags": ["altitude", "hace", "hape"],
+      "country_scope": "global",
+      "keywords": "altitudine rau de inaltime ameteala greata altitude headache nausea confusion breathless descend",
+      "languages": {
+        "ro": {
+          "title": "Rau de altitudine: cand te opresti si cand cobori",
+          "body": "Urca gradual cand poti, iar daca apar simptome precum durere de cap, greata, oboseala neobisnuita sau lipsa poftei de mancare, nu continua spre altitudine mai mare pana nu se remit. Daca simptomele se agraveaza in repaus sau apar confuzie, lipsa de coordonare ori dificultati de respiratie, coboara imediat si cauta ajutor medical. Pentru ture rapide la altitudine mare, planul conservator este mai sigur decat fortarea ritmului."
+        },
+        "en": {
+          "title": "Altitude illness: when to stop and when to descend",
+          "body": "Ascend gradually when possible, and if headache, nausea, unusual fatigue, or loss of appetite appear, do not continue higher until symptoms resolve. If symptoms worsen while resting or if confusion, loss of coordination, or breathing difficulty appear, descend immediately and seek medical care. On fast high-altitude trips, a conservative plan is safer than forcing the pace."
+        }
+      }
+    },
+    {
+      "chunk_id": "cdc_heat_illness",
+      "domain": "medical_emergency",
+      "topic": "heat_illness",
+      "source_id": "cdc_heat_illnesses",
+      "publish_or_review_date": "2024-05-01",
+      "safety_tags": ["heat", "dehydration", "weather"],
+      "country_scope": "global",
+      "keywords": "caldura deshidratare insolatie heat exhaustion heat stroke shade cool water confusion",
+      "languages": {
+        "ro": {
+          "title": "Semne de stres termic si insolatie",
+          "body": "Mutarea la umbra, racirea corpului si hidratarea prudenta sunt primii pasi pentru crampe, epuizare termica sau supraincalzire usoara. Daca persoana devine confuza, lesina, nu mai transpira normal sau are temperatura foarte mare, trateaza situatia ca urgenta medicala si cere ajutor imediat. Nu lasa persoana sa continue urcarea in acelasi ritm dupa un episod clar de supraincalzire."
+        },
+        "en": {
+          "title": "Heat stress and heat stroke warning signs",
+          "body": "Moving to shade, actively cooling the body, and cautious rehydration are first steps for cramps, heat exhaustion, or early overheating. If the person becomes confused, faints, stops sweating normally, or seems extremely hot, treat the situation as a medical emergency and get help immediately. Do not let the person continue climbing at the same pace after a clear overheating episode."
+        }
+      }
+    },
+    {
+      "chunk_id": "epa_water_disinfection",
+      "domain": "survival_basics",
+      "topic": "water_disinfection",
+      "source_id": "epa_water_disinfection",
+      "publish_or_review_date": "2024-10-17",
+      "safety_tags": ["water", "purification", "survival"],
+      "country_scope": "global",
+      "keywords": "apa purificare dezinfectare fierbere clor bleach water purification disinfection boil",
+      "languages": {
+        "ro": {
+          "title": "Dezinfectarea de urgenta a apei",
+          "body": "Daca ai combustibil si timp, fierberea ramane una dintre cele mai robuste optiuni pentru apa suspecta. Daca folosesti dezinfectare chimica, foloseste doar produse potrivite pentru apa potabila si urmeaza instructiunile oficiale; apa foarte tulbure trebuie lasata sa se limpezeasca sau filtrata inainte de tratament. Nu confunda dezinfectia de urgenta cu o sursa permanenta sigura de apa."
+        },
+        "en": {
+          "title": "Emergency water disinfection",
+          "body": "If you have fuel and time, boiling remains one of the most reliable options for suspect water. If you use chemical disinfection, use products appropriate for drinking water and follow official instructions; very cloudy water should be settled or filtered first. Emergency treatment does not turn an unsafe source into a permanently safe one."
+        }
+      }
+    },
+    {
+      "chunk_id": "salvamont_call_for_help",
+      "domain": "mountain_safety",
+      "topic": "mountain_emergency_call",
+      "source_id": "salvamont_turist_montan",
+      "publish_or_review_date": "2026-03-24",
+      "safety_tags": ["mountain_rescue", "112", "romania"],
+      "country_scope": "ro",
+      "keywords": "salvamont 112 accident montan ajutor rescue mountain emergency romania",
+      "languages": {
+        "ro": {
+          "title": "Cand si cum suni la Salvamont sau 112",
+          "body": "Pentru accident grav, pierdere a orientarii in conditii periculoase sau imposibilitate reala de deplasare, suna rapid la 0Salvamont ori 112. Spune clar cine esti, ce s-a intamplat, cate persoane au nevoie de ajutor si unde va aflati. Pana soseste echipa, protejeaza victima de frig, teren instabil sau alte riscuri evidente."
+        },
+        "en": {
+          "title": "When and how to call Salvamont or 112",
+          "body": "For major injury, dangerous loss of orientation, or a real inability to keep moving, call 0Salvamont or 112 quickly. State who you are, what happened, how many people need help, and where you are located. Until rescuers arrive, protect the injured person from cold, unstable terrain, and other immediate hazards."
+        }
+      }
+    },
+    {
+      "chunk_id": "salvamont_accident_witness",
+      "domain": "medical_emergency",
+      "topic": "accident_scene_management",
+      "source_id": "salvamont_martor_accident",
+      "publish_or_review_date": "2026-03-24",
+      "safety_tags": ["trauma", "spine", "rescue"],
+      "country_scope": "ro",
+      "keywords": "accident montan coloana victima nu misca breathing hemoragie trauma rescue",
+      "languages": {
+        "ro": {
+          "title": "Martor la accident montan",
+          "body": "Nu misca victima daca nu exista un pericol imediat care ii ameninta viata, mai ales dupa o cadere sau un traumatism cu dureri importante. Verifica daca respira, controleaza hemoragia prin compresie si foloseste telefonul pe speaker daca primesti instructiuni de la dispecerat. Imobilizarea prudenta si evitarea transportului improvizat reduc riscul de agravare."
+        },
+        "en": {
+          "title": "If you witness a mountain accident",
+          "body": "Do not move the victim unless an immediate danger is threatening life, especially after a fall or significant trauma. Check breathing, control bleeding with direct compression, and use speakerphone if dispatch gives you instructions. Careful immobilization and avoiding improvised transport reduce the risk of making injuries worse."
+        }
+      }
+    },
+    {
+      "chunk_id": "salvamont_hydration_fueling",
+      "domain": "gear_and_preparation",
+      "topic": "hydration_and_fueling",
+      "source_id": "salvamont_alimentatie_hidratare",
+      "publish_or_review_date": "2026-03-24",
+      "safety_tags": ["hydration", "nutrition", "romania"],
+      "country_scope": "ro",
+      "keywords": "hidratare alimentatie gustari sare apa nutrition hydration snacks mountain",
+      "languages": {
+        "ro": {
+          "title": "Hidratare si alimentatie pentru o tura de o zi",
+          "body": "Bea constant, nu doar cand apare senzatia puternica de sete, iar pe ture mai lungi imparte rezerva de apa in portii usor de urmarit. Mananca gustari simple inainte sa scada energia, mai ales pe urcari lungi, caldura sau ture cu multe ore in teren. Un ritm regulat de apa si aport caloric este mai realist decat recuperarea tarzie dupa epuizare."
+        },
+        "en": {
+          "title": "Hydration and fueling for a day hike",
+          "body": "Drink steadily instead of waiting for strong thirst, and on longer days break your water supply into portions that are easy to track. Eat simple snacks before energy drops, especially on long climbs, hot days, or long hours in the field. A steady rhythm of water and calories is more realistic than trying to recover late from exhaustion."
+        }
+      }
+    },
+    {
+      "chunk_id": "nps_trip_plan_and_essentials",
+      "domain": "gear_and_preparation",
+      "topic": "trip_plan_and_essentials",
+      "source_id": "nps_hiking_safety",
+      "publish_or_review_date": "2025-06-09",
+      "safety_tags": ["trip_plan", "gear", "battery"],
+      "country_scope": "global",
+      "keywords": "trip plan headlamp map first aid insulation battery offline gps essentials",
+      "languages": {
+        "ro": {
+          "title": "Plan de tura si echipament esential",
+          "body": "Alege un traseu potrivit grupului, lasa cuiva un plan clar cu ruta si ora estimata de intoarcere si porneste cu navigatie, strat de protectie, frontala, apa si prim ajutor. In zone cu semnal slab, economisirea bateriei si harta offline sunt mai utile decat presupunerea ca vei avea conectivitate. Daca vremea, inchiderile de traseu sau starea grupului se schimba, planul B trebuie activat devreme, nu tarziu."
+        },
+        "en": {
+          "title": "Trip plan and essential gear",
+          "body": "Choose a route that fits your group, leave a clear itinerary with route and return time, and start with navigation, insulation, headlamp, water, and first-aid basics. In weak-signal areas, battery conservation and offline maps are more useful than assuming connectivity will be available. If weather, closures, or group condition change, activate plan B early rather than late."
+        }
+      }
+    },
+    {
+      "chunk_id": "nps_bear_encounter",
+      "domain": "wildlife_romania",
+      "topic": "bear_encounter",
+      "source_id": "nps_bear_safety",
+      "publish_or_review_date": "2025-02-11",
+      "safety_tags": ["bear", "wildlife", "encounter"],
+      "country_scope": "global",
+      "keywords": "urs bear tracks encounter food run back away spray group",
+      "languages": {
+        "ro": {
+          "title": "Intalnire cu ursul",
+          "body": "Pastreaza distanta, vorbeste calm si retrage-te lent fara sa alergi. Nu lasa hrana sau resturi la indemana si nu incerca sa apropii animalul pentru poze sau verificari. Daca situatia devine tensionata, prioritatea este sa creezi spatiu si sa eviti surprinderea ursului pe traseu, mai ales in vegetatie deasa sau la curbe fara vizibilitate."
+        },
+        "en": {
+          "title": "Bear encounter basics",
+          "body": "Keep distance, speak calmly, and back away slowly without running. Do not leave food accessible and do not approach the bear for photos or a closer look. If the situation becomes tense, your priority is to create space and avoid surprising the animal, especially in dense vegetation or around blind corners."
+        }
+      }
+    },
+    {
+      "chunk_id": "anm_avalanche_scale",
+      "domain": "weather_and_season",
+      "topic": "avalanche_risk_scale",
+      "source_id": "anm_avalanche_scale",
+      "publish_or_review_date": "2026-03-24",
+      "safety_tags": ["avalanche", "snow", "winter"],
+      "country_scope": "ro",
+      "keywords": "avalanse iarna zapada risc 1 2 3 4 5 avalanche danger snow winter",
+      "languages": {
+        "ro": {
+          "title": "Cum citesti pe scurt scala riscului de avalansa",
+          "body": "Nivelurile 1 si 2 nu inseamna risc zero, ci doar un risc mai mic in terenul potrivit. Nivelul 3 cere deja decizii foarte prudente si evitarea pantelor expuse daca nu ai pregatire serioasa de iarna. Nivelurile 4 si 5 indica o situatie severa in care planurile obisnuite de tura trebuie, in practica, amanate sau schimbate radical."
+        },
+        "en": {
+          "title": "Reading the avalanche danger scale",
+          "body": "Levels 1 and 2 do not mean zero risk; they mean lower risk only in suitable terrain. Level 3 already requires very conservative decisions and avoiding exposed slopes unless you have strong winter competence. Levels 4 and 5 indicate severe conditions where normal tour plans should, in practice, be postponed or radically changed."
+        }
+      }
+    },
+    {
+      "chunk_id": "nps_campfire_guidance",
+      "domain": "survival_basics",
+      "topic": "campfire_safety",
+      "source_id": "nps_campfire_guidance",
+      "publish_or_review_date": "2025-08-01",
+      "safety_tags": ["campfire", "fire", "survival"],
+      "country_scope": "global",
+      "keywords": "foc tabara campfire fire extinguish restrictions wind",
+      "languages": {
+        "ro": {
+          "title": "Foc de tabara in siguranta",
+          "body": "Verifica intotdeauna daca focul este permis si pastreaza-l mic, controlabil si departe de vegetatie uscata sau vant puternic. Nu pleca de langa foc fara sa-l stingi complet, pana cand cenusa si resturile sunt reci la atingere. Daca nu poti controla focul rapid, tratamentul corect este stingerea lui imediata, nu alimentarea in continuare."
+        },
+        "en": {
+          "title": "Safe campfire basics",
+          "body": "Always confirm fires are allowed and keep the fire small, controllable, and away from dry vegetation or strong wind. Never leave a fire until it is fully out and the ashes are cold to the touch. If you cannot control it quickly, the correct move is to extinguish it immediately, not keep feeding it."
+        }
+      }
+    }
+  ]
+}

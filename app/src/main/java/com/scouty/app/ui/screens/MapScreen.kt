@@ -92,9 +92,11 @@ import com.scouty.app.data.RouteGeometryEntry
 import com.scouty.app.data.RouteGeometryIndex
 import com.scouty.app.data.RouteGeometryRepository
 import com.scouty.app.data.RouteSearchSuggestion
+import com.scouty.app.data.bestDescriptionRo
 import com.scouty.app.ui.components.RouteRemoteImage
 import com.scouty.app.ui.MainViewModel
 import com.scouty.app.ui.models.HomeStatus
+import com.scouty.app.ui.models.TrailMetadataFormatter
 import com.scouty.app.utils.MapDataConfig
 import com.scouty.app.utils.MapLifecycleManager
 import com.scouty.app.utils.MapOverlayState
@@ -173,6 +175,12 @@ private data class SelectedTrailDetails(
     val localCode: String? = null,
     val region: String? = null,
     val descriptionRo: String? = null,
+    val localDescription: String? = null,
+    val routeSummary: String? = null,
+    val fromName: String? = null,
+    val toName: String? = null,
+    val markingSymbols: List<String> = emptyList(),
+    val sourceUrls: List<String> = emptyList(),
     val imageUrl: String? = null,
     val imageAttribution: String? = null,
     val imageLicense: String? = null,
@@ -213,14 +221,16 @@ fun MapScreen(
         value = RouteGeometryRepository.load(context)
     }
     var mapPackRefreshToken by remember { mutableStateOf(0) }
-    val mapPackRegistry by produceState(
-        initialValue = MapPackRegistryManager.load(context),
+    val mapPackRegistry by produceState<MapPackRegistry?>(
+        initialValue = null,
         context,
         mapPackRefreshToken
     ) {
         value = MapPackRegistryManager.load(context)
     }
-    val mapDataConfig = remember(mapPackRegistry) { MapDataConfig.fromRegistry(mapPackRegistry) }
+    val mapDataConfig = remember(mapPackRegistry) {
+        mapPackRegistry?.let(MapDataConfig::fromRegistry)
+    }
     val defaultSelection = remember {
         SelectedTrailDetails(
             name = "Mountain Trail",
@@ -331,14 +341,14 @@ fun MapScreen(
         buildList {
             add(LayerToggleSpec(context.getString(R.string.overlay_trails), showTrails) { showTrails = it })
             add(LayerToggleSpec(context.getString(R.string.overlay_peaks), showPeaks) { showPeaks = it })
-            if (mapDataConfig.hasLocalGlyphs) {
+            if (mapDataConfig?.hasLocalGlyphs == true) {
                 add(LayerToggleSpec(context.getString(R.string.overlay_places), showPlaces) { showPlaces = it })
             }
             add(LayerToggleSpec(context.getString(R.string.overlay_water_points), showWater) { showWater = it })
-            if (MapStyleConfig.hasWildlifeLayer(mapDataConfig)) {
+            if (mapDataConfig != null && MapStyleConfig.hasWildlifeLayer(mapDataConfig)) {
                 add(LayerToggleSpec(context.getString(R.string.overlay_wildlife_risk), showWildlife) { showWildlife = it })
             }
-            if (MapStyleConfig.hasAttractionsLayer(mapDataConfig)) {
+            if (mapDataConfig != null && MapStyleConfig.hasAttractionsLayer(mapDataConfig)) {
                 add(LayerToggleSpec(context.getString(R.string.overlay_attractions), showAttractions) { showAttractions = it })
             }
         }
@@ -381,7 +391,42 @@ fun MapScreen(
         consumedActiveTrailOpenToken = openActiveTrailToken
     }
 
-    if (!mapDataConfig.isBasePackReady) {
+    if (mapPackRegistry == null || mapDataConfig == null) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+                .padding(24.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Surface(
+                shape = RoundedCornerShape(28.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.82f)
+            ) {
+                Column(
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 22.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        text = "Pregătesc pack-urile locale de hartă",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "Scouty verifică bundle-ul PMTiles din repo și îl copiază în storage-ul aplicației.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+        return
+    }
+
+    val readyMapPackRegistry = requireNotNull(mapPackRegistry)
+    val readyMapDataConfig = requireNotNull(mapDataConfig)
+
+    if (!readyMapDataConfig.isBasePackReady) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -390,7 +435,7 @@ fun MapScreen(
             contentAlignment = Alignment.Center
         ) {
             MissingBaseMapPackCard(
-                registry = mapPackRegistry,
+                registry = readyMapPackRegistry,
                 importInProgressPackId = importInProgressPackId,
                 importErrorMessage = importErrorMessage,
                 onImportBasePack = { requestMapPackImport(MapPackId.ROMANIA_BASE) }
@@ -434,6 +479,12 @@ fun MapScreen(
                             localCode = selectedTrail.localCode,
                             region = selectedTrail.region,
                             descriptionRo = selectedTrail.descriptionRo,
+                            localDescription = selectedTrail.localDescription,
+                            routeSummary = selectedTrail.routeSummary,
+                            fromName = selectedTrail.fromName,
+                            toName = selectedTrail.toName,
+                            markingSymbols = selectedTrail.markingSymbols,
+                            sourceUrls = selectedTrail.sourceUrls,
                             imageAttribution = selectedTrail.imageAttribution,
                             imageLicense = selectedTrail.imageLicense,
                             imageSourcePageUrl = selectedTrail.imageSourcePageUrl,
@@ -450,7 +501,7 @@ fun MapScreen(
                     status = status,
                     routeCatalog = routeCatalog,
                     routeGeometryIndex = routeGeometryIndex,
-                    mapDataConfig = mapDataConfig,
+                    mapDataConfig = readyMapDataConfig,
                     selectedRouteCode = selectedTrail.localCode,
                     selectedRouteSegments = selectedTrail.highlightSegments,
                     selectedRouteBounds = selectedTrail.highlightBounds,
@@ -734,6 +785,8 @@ private fun TrailDetailContent(trail: SelectedTrailDetails, onSetTrail: (Calenda
     var showDatePicker by rememberSaveable(trail.localCode) { mutableStateOf(false) }
     var descriptionExpanded by rememberSaveable(trail.localCode) { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
+    val markerLabel = TrailMetadataFormatter.formatTrailMarkers(trail.markingSymbols)
+    val detailDescription = trail.localDescription?.takeIf { it.isNotBlank() } ?: trail.descriptionRo
 
     Column(
         modifier = Modifier
@@ -820,7 +873,37 @@ private fun TrailDetailContent(trail: SelectedTrailDetails, onSetTrail: (Calenda
                 }
             }
 
-            trail.descriptionRo?.takeIf { it.isNotBlank() }?.let { description ->
+            trail.routeSummary?.takeIf { it.isNotBlank() }?.let { summary ->
+                item {
+                    Card(
+                        shape = RoundedCornerShape(22.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(18.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Text(
+                                text = "Rezumat rapid",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                text = summary,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                }
+            }
+
+            detailDescription?.takeIf { it.isNotBlank() }?.let { description ->
                 item {
                     Card(
                         shape = RoundedCornerShape(22.dp),
@@ -865,6 +948,22 @@ private fun TrailDetailContent(trail: SelectedTrailDetails, onSetTrail: (Calenda
                 Column(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    if (!trail.fromName.isNullOrBlank() || !trail.toName.isNullOrBlank()) {
+                        Text(
+                            text = listOfNotNull(trail.fromName, trail.toName).joinToString(" → "),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+
+                    markerLabel?.let { marker ->
+                        Text(
+                            text = "Marcaj: $marker",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -897,6 +996,29 @@ private fun TrailDetailContent(trail: SelectedTrailDetails, onSetTrail: (Calenda
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+
+                    if (trail.sourceUrls.isNotEmpty()) {
+                        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Text(
+                                text = "Surse traseu",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            trail.sourceUrls.take(2).forEach { sourceUrl ->
+                                TextButton(
+                                    onClick = {
+                                        runCatching { uriHandler.openUri(sourceUrl) }
+                                            .onFailure { error ->
+                                                Log.w("ScoutyMap", "Failed to open route source $sourceUrl", error)
+                                            }
+                                    },
+                                    contentPadding = PaddingValues(0.dp)
+                                ) {
+                                    Text(sourceUrl)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1127,6 +1249,7 @@ private fun MapLibreView(
     val currentRouteCatalog by rememberUpdatedState(routeCatalog)
     val currentRouteGeometryIndex by rememberUpdatedState(routeGeometryIndex)
     val currentMapDataConfig by rememberUpdatedState(mapDataConfig)
+    val currentStatus by rememberUpdatedState(status)
     val currentSelectedRouteCode by rememberUpdatedState(selectedRouteCode)
     val currentSelectedRouteSegments by rememberUpdatedState(selectedRouteSegments)
     val currentSelectedRouteBounds by rememberUpdatedState(selectedRouteBounds)
@@ -1150,6 +1273,10 @@ private fun MapLibreView(
             return
         }
 
+        val hasRouteLockedCamera =
+            currentSelectedRouteCode != null ||
+                currentSelectedRouteSegments.isNotEmpty() ||
+                currentStatus.activeTrail != null
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(RomaniaCenter, DefaultRomaniaZoom))
         map.setStyle(MapStyleConfig.createStyleBuilder(currentMapDataConfig)) { style ->
             appliedStyleKey = currentMapDataConfig.styleKey
@@ -1157,7 +1284,13 @@ private fun MapLibreView(
             ensureSelectedRouteLayers(style)
             MapStyleConfig.applyOverlayVisibility(style, currentOverlayState)
             logBaseSourceDiagnostics(style)
-            enableLocationComponent(map, style, context)
+            syncLocationComponent(
+                map = map,
+                loadedMapStyle = style,
+                context = context,
+                status = currentStatus,
+                shouldTrackCamera = shouldTrackUserLocation(currentStatus, hasRouteLockedCamera)
+            )
             currentOnMapErrorChanged(null)
         }
     }
@@ -1205,6 +1338,17 @@ private fun MapLibreView(
             map.style?.let { style ->
                 ensureSelectedRouteLayers(style)
                 MapStyleConfig.applyOverlayVisibility(style, currentOverlayState)
+                val hasRouteLockedCamera =
+                    currentSelectedRouteCode != null ||
+                        currentSelectedRouteSegments.isNotEmpty() ||
+                        currentStatus.activeTrail != null
+                syncLocationComponent(
+                    map = map,
+                    loadedMapStyle = style,
+                    context = context,
+                    status = currentStatus,
+                    shouldTrackCamera = shouldTrackUserLocation(currentStatus, hasRouteLockedCamera)
+                )
                 val selectedGeometry = RouteGeometryRepository.findByLocalCode(
                     currentRouteGeometryIndex,
                     currentSelectedRouteCode
@@ -1304,6 +1448,18 @@ private fun isInsideRomaniaTileset(latitude: Double, longitude: Double): Boolean
     latitude in RomaniaBoundsMinLat..RomaniaBoundsMaxLat &&
         longitude in RomaniaBoundsMinLon..RomaniaBoundsMaxLon
 
+private fun shouldTrackUserLocation(
+    status: HomeStatus,
+    hasRouteLockedCamera: Boolean
+): Boolean {
+    if (hasRouteLockedCamera || !status.gpsFixed) {
+        return false
+    }
+    val latitude = status.latitude ?: return false
+    val longitude = status.longitude ?: return false
+    return isInsideRomaniaTileset(latitude, longitude)
+}
+
 private fun logBaseSourceDiagnostics(style: Style) {
     val baseSource = style.getSourceAs<VectorSource>(MapStyleConfig.BASE_SOURCE_ID) ?: return
     runCatching {
@@ -1376,6 +1532,19 @@ private fun handleMapTap(
         localCode = routeCode,
         region = enrichment?.region,
         descriptionRo = enrichment?.description?.textRo,
+        localDescription = enrichment?.bestDescriptionRo(),
+        routeSummary = TrailMetadataFormatter.buildRouteSummary(
+            durationText = duration,
+            elevationGain = elevationGain,
+            difficulty = com.scouty.app.ui.models.TrailDifficultyRank.from(difficulty.name),
+            markerLabel = TrailMetadataFormatter.formatTrailMarkers(enrichment?.symbols.orEmpty()),
+            fromName = enrichment?.from,
+            toName = enrichment?.to
+        ),
+        fromName = enrichment?.from,
+        toName = enrichment?.to,
+        markingSymbols = enrichment?.symbols.orEmpty(),
+        sourceUrls = enrichment?.sourceUrls.orEmpty(),
         imageUrl = preferredDetailImageUrl(enrichment?.image),
         imageAttribution = enrichment?.image?.attributionText,
         imageLicense = enrichment?.image?.license,
@@ -1635,6 +1804,21 @@ private fun buildSelectedTrailFromSearch(
         localCode = suggestion.localCode,
         region = entry.region,
         descriptionRo = entry.description?.textRo,
+        localDescription = entry.bestDescriptionRo(),
+        routeSummary = TrailMetadataFormatter.buildRouteSummary(
+            durationText = duration,
+            elevationGain = elevationGain,
+            difficulty = com.scouty.app.ui.models.TrailDifficultyRank.from(entry.mnData?.difficultyLabel),
+            markerLabel = TrailMetadataFormatter.formatTrailMarkers(entry.symbols),
+            fromName = entry.from,
+            toName = entry.to
+        ),
+        fromName = entry.from,
+        toName = entry.to,
+        markingSymbols = entry.symbols,
+        sourceUrls = entry.sourceUrls.ifEmpty {
+            listOfNotNull(entry.mnData?.pageUrl, entry.image?.sourcePageUrl).distinct()
+        },
         imageUrl = preferredDetailImageUrl(entry.image),
         imageAttribution = entry.image?.attributionText,
         imageLicense = entry.image?.license,
@@ -1682,6 +1866,25 @@ private fun buildSelectedTrailFromActiveTrail(
         localCode = activeTrail.localCode,
         region = activeTrail.region ?: entry?.region,
         descriptionRo = activeTrail.descriptionRo ?: entry?.description?.textRo,
+        localDescription = activeTrail.localDescription ?: entry?.bestDescriptionRo(),
+        routeSummary = activeTrail.routeSummary ?: TrailMetadataFormatter.buildRouteSummary(
+            durationText = duration,
+            elevationGain = elevationGain,
+            difficulty = com.scouty.app.ui.models.TrailDifficultyRank.from(entry?.mnData?.difficultyLabel ?: activeTrail.difficulty),
+            markerLabel = TrailMetadataFormatter.formatTrailMarkers(
+                activeTrail.markingSymbols.ifEmpty { entry?.symbols.orEmpty() }
+            ),
+            fromName = activeTrail.fromName ?: entry?.from,
+            toName = activeTrail.toName ?: entry?.to
+        ),
+        fromName = activeTrail.fromName ?: entry?.from,
+        toName = activeTrail.toName ?: entry?.to,
+        markingSymbols = activeTrail.markingSymbols.ifEmpty { entry?.symbols.orEmpty() },
+        sourceUrls = activeTrail.sourceUrls.ifEmpty {
+            entry?.sourceUrls?.ifEmpty {
+                listOfNotNull(entry.mnData?.pageUrl, entry.image?.sourcePageUrl).distinct()
+            }.orEmpty()
+        },
         imageUrl = activeTrail.imageUrl ?: preferredDetailImageUrl(entry?.image),
         imageAttribution = activeTrail.imageAttribution ?: entry?.image?.attributionText,
         imageLicense = activeTrail.imageLicense ?: entry?.image?.license,
@@ -1829,7 +2032,13 @@ private fun preferredSuggestionImageUrl(image: RouteImage?): String? =
 private fun Double?.orEmptyDouble(): Double = this ?: 0.0
 
 @SuppressLint("MissingPermission")
-private fun enableLocationComponent(map: MapLibreMap, loadedMapStyle: Style, context: Context) {
+private fun syncLocationComponent(
+    map: MapLibreMap,
+    loadedMapStyle: Style,
+    context: Context,
+    status: HomeStatus,
+    shouldTrackCamera: Boolean
+) {
     val hasFineLocation = ContextCompat.checkSelfPermission(
         context,
         Manifest.permission.ACCESS_FINE_LOCATION
@@ -1845,12 +2054,28 @@ private fun enableLocationComponent(map: MapLibreMap, loadedMapStyle: Style, con
 
     runCatching {
         val locationComponent = map.locationComponent
-        val activationOptions = LocationComponentActivationOptions
-            .builder(context, loadedMapStyle)
-            .build()
-        locationComponent.activateLocationComponent(activationOptions)
+        if (!locationComponent.isLocationComponentActivated) {
+            val activationOptions = LocationComponentActivationOptions
+                .builder(context, loadedMapStyle)
+                .build()
+            locationComponent.activateLocationComponent(activationOptions)
+        }
         locationComponent.isLocationComponentEnabled = true
-        locationComponent.cameraMode = CameraMode.TRACKING
+        locationComponent.cameraMode = if (shouldTrackCamera) {
+            CameraMode.TRACKING
+        } else {
+            CameraMode.NONE
+        }
         locationComponent.renderMode = RenderMode.COMPASS
+        if (status.gpsFixed && !shouldTrackCamera) {
+            val latitude = status.latitude
+            val longitude = status.longitude
+            if (latitude != null && longitude != null && !isInsideRomaniaTileset(latitude, longitude)) {
+                Log.d(
+                    "ScoutyMap",
+                    "Location component left in non-tracking mode because GPS is outside Romania tileset bounds"
+                )
+            }
+        }
     }
 }

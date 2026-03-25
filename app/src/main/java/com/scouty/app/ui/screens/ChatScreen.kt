@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.scouty.app.R
 import com.scouty.app.assistant.model.AssistantMessageUiModel
 import com.scouty.app.assistant.model.AssistantUiState
+import com.scouty.app.assistant.model.ResponseSectionStyle
 import com.scouty.app.assistant.model.SafetyOutcome
 
 @Composable
@@ -230,6 +231,51 @@ fun ChatBubble(message: AssistantMessageUiModel) {
                         }
                     }
                 }
+            }
+            if (message.sections.isNotEmpty()) {
+                Column(
+                    modifier = Modifier.padding(top = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    message.sections.forEach { section ->
+                        val sectionColor = when (section.style) {
+                            ResponseSectionStyle.IMPORTANT -> MaterialTheme.colorScheme.errorContainer
+                            ResponseSectionStyle.CONTEXT -> MaterialTheme.colorScheme.secondaryContainer
+                            ResponseSectionStyle.ACTIONS -> MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                            ResponseSectionStyle.GUIDANCE -> MaterialTheme.colorScheme.surface
+                        }
+                        Surface(
+                            color = sectionColor,
+                            shape = RoundedCornerShape(14.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
+                                Text(
+                                    text = section.title,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    text = section.body,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            if (!message.generationMode?.label.isNullOrBlank() || !message.knowledgePackVersion.isNullOrBlank()) {
+                Text(
+                    text = listOfNotNull(
+                        message.generationMode?.label,
+                        message.reasoningType?.label,
+                        message.knowledgePackVersion?.let { "pack $it" },
+                        message.modelVersion
+                    ).joinToString(" • "),
+                    modifier = Modifier.padding(start = 4.dp, top = 6.dp),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
             }
         }
     }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.scouty.app.assistant.data.DeviceContextProvider
+import com.scouty.app.assistant.domain.AssistantRuntimeGraph
 import com.scouty.app.assistant.domain.AssistantRepository
 import com.scouty.app.assistant.model.AssistantMessageUiModel
 import com.scouty.app.assistant.model.AssistantUiState
@@ -58,10 +59,15 @@ class AssistantViewModel(
             }.onSuccess { response ->
                 val assistantMessage = AssistantMessageUiModel(
                     id = UUID.randomUUID().toString(),
-                    text = response.answerText,
+                    text = response.structuredOutput.summary,
                     isUser = false,
                     citations = response.citations,
-                    safetyOutcome = response.safetyOutcome
+                    safetyOutcome = response.safetyOutcome,
+                    sections = response.structuredOutput.sections,
+                    generationMode = response.generationMode,
+                    reasoningType = response.reasoningType,
+                    knowledgePackVersion = response.knowledgePackVersion,
+                    modelVersion = response.modelVersion
                 )
                 _uiState.update { state ->
                     state.copy(
@@ -93,8 +99,9 @@ class AssistantViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AssistantViewModel::class.java)) {
+                val runtimeGraph = AssistantRuntimeGraph.get(application)
                 return AssistantViewModel(
-                    repository = AssistantRepository(application),
+                    repository = runtimeGraph.repository,
                     deviceContextProvider = deviceContextProvider
                 ) as T
             }

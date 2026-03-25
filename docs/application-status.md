@@ -1,14 +1,14 @@
-# Starea aplicației în varianta publicată
+# Starea aplicației în repo-ul de producție
 
 ## Versiune
 
-Versiunea declarată este `1.0.0`.
+Versiunea declarată în aplicație rămâne `1.0.0`.
 
 ## Ce funcționează acum
 
 ### Shell și navigație
 
-Aplicația pornește în `MainActivity` și folosește Jetpack Compose pentru UI. Navigația principală are 6 secțiuni:
+Aplicația pornește în `MainActivity`, folosește Jetpack Compose și păstrează cele 6 secțiuni principale:
 
 - Home
 - Map
@@ -17,87 +17,169 @@ Aplicația pornește în `MainActivity` și folosește Jetpack Compose pentru UI
 - Gear
 - Profile
 
+### Date locale și reasoning offline
+
+La runtime, aplicația citește local:
+
+- `app/src/main/scouty_assets/local_route_enriched_catalog.json`
+- `app/src/main/scouty_assets/local_route_geometry_index.json`
+- `app/src/main/scouty_assets/Trasee_Varfuri.geojson`
+- `app/src/main/scouty_assets/Pradatori.geojson`
+- `app/src/main/scouty_assets/Atractii.geojson`
+- `app/src/main/scouty_assets/Izvoare_Adapost.geojson`
+- `app/src/main/scouty_assets/knowledge_pack.sqlite`
+- `app/src/main/scouty_assets/knowledge_pack_manifest.json`
+
+`KnowledgePackManager` verifică existența, versiunea, hash-ul și integritatea SQLite pentru knowledge pack-ul offline și îl copiază în storage-ul aplicației. Retrieval-ul assistant-ului nu mai depinde de un seed simplu din JSON.
+
+Pentru hartă, overlay-urile locale sunt acum în repo. Pack-urile PMTiles rămân în `tools/generated-map-packs/` și pot fi sincronizate în `files/maps` cu scripturile repo-ului (`tools/sync_map_packs.ps1`, respectiv `tools/smoke_map_runtime.ps1`) fără dependență de foldere sibling din afara `Scouty_app`.
+
 ### Home
 
-Ecranul `Home` afișează:
+`HomeScreen` afișează:
 
 - status GPS
 - coordonate și altitudine
-- status online/offline
+- baterie și Battery Safe
+- stare online/offline
 - sumar pentru traseul activ
-- acțiuni rapide
+- recomandări de trasee bazate pe profil
 
-### Hartă
+### Hartă și trasee
 
-`MapScreen` este nucleul funcțional actual.
+`MapScreen` rămâne nucleul de explorare și selecție de traseu.
 
-Ce face:
+Ce face acum:
 
 - randare hartă prin MapLibre
-- stil compus din tileset-uri Mapbox configurate local
-- search local de trasee din asset-uri incluse în aplicație
+- sincronizare predictibilă a pack-urilor `romania-base.pmtiles` și `bucegi-high.pmtiles` din repo către storage-ul aplicației pentru debug și smoke test
+- căutare locală de trasee din asset-uri
 - selectare traseu și highlight pe hartă
-- bottom sheet cu detalii și setare traseu activ
-- overlay toggles pentru trasee, vârfuri, localități, apă, faună și atracții
+- setare traseu activ
+- expunere clară a metadata-ului de traseu:
+  - regiune
+  - descriere locală / rezumat
+  - dificultate
+  - durată
+  - distanță
+  - diferență de nivel
+  - `from` / `to`
+  - marcaj citit din `symbols`
+  - provenance și surse locale
 
-### Date locale la runtime
+### Profil utilizator
 
-Aplicația citește local:
+`UserTrailProfileStore` persistă onboarding-ul scurt și preferințele principale folosite de recomandări:
 
-- `local_route_enriched_catalog.json`
-- `local_route_geometry_index.json`
+- nivel și ritm estimat
+- preferință pentru durată / efort
+- confort pentru diferență de nivel
+- preferință de siguranță și experiență
 
-Aceste fișiere sunt împachetate în APK și permit căutare și detalii locale fără să depindă de pipeline-ul original.
+### Recomandări de trasee
 
-### Meteo și apus
+`RouteRecommendationEngine` rulează peste catalogul local și profilul utilizatorului.
 
-`MainViewModel` gestionează:
+Scopul actual:
 
-- GPS
+- filtrează traseele incompatibile
+- calculează scoruri explicabile
+- produce recomandări coerente, nu doar listare brută
+- expune motive scurte și ușor de afișat în UI
+
+### Recomandări de gear
+
+`GearRecommendationEngine` este compact și determinist.
+
+Ce livrează:
+
+- categorii mici și utile
+- iteme obligatorii / recomandate / condiționale
+- motive clare pentru fiecare item
+- adaptare la traseu activ, vreme, apus și profil
+
+### Assistant local
+
+`ChatScreen` și `AssistantRepository` folosesc acum retrieval offline din knowledge pack versionat.
+
+Fluxul implementat:
+
+1. detectare limbă
+2. clasificare probabilă de domeniu
+3. candidate retrieval din `knowledge_pack.sqlite`
+4. rerank multi-factor
+5. selecție top 4 chunk-uri
+6. safety policy separat
+7. generare fallback structurată
+8. răspuns cu secțiuni și citări
+
+Rerank-ul combină:
+
+- relevanță lexicală
+- potrivire pe domeniu
+- limbă
+- source trust
+- freshness
+- safety tags
+- boost pentru contextul traseului activ
+- redundancy penalty
+
+Assistant-ul folosește și context local de teren:
+
+- nume traseu
+- regiune
+- marcaj
+- `from` / `to`
+- rezumat traseu
+- vreme
+- apus
 - baterie
-- traseul activ
-- sincronizarea prognozei Meteoblue
-- fallback local pentru ora apusului
+- GPS
+- shortlist de gear
 
-### Gear Checklist
+### Debug / settings
 
-`GearScreen` folosește un motor real de reguli pentru:
+`ProfileScreen` expune acum pentru debug:
 
-- listă de bază fără traseu selectat
-- adaptarea echipamentului în funcție de dificultate, durată, diferență de nivel și caracterul turei
-- păstrarea stării packed/not packed
+- versiunea knowledge pack-ului
+- versiunea și starea modelului
+- ultimul sync / generated-at
+- modul curent de generare
 
-## Ce este încă parțial sau placeholder
+## Ce este încă parțial
 
-### Chat
+### Runtime local LLM
 
-`ChatScreen` este un shell UI fără backend AI real.
+Arhitectura este pregătită pentru un engine local compatibil Google AI Edge, dar integrarea modelului 1B nu este încă finalizată. `ModelManager` expune explicit placeholder-ul și aplicația folosește momentan `FALLBACK_STRUCTURED`.
 
 ### SOS
 
-`SosScreen` este în prezent mai mult un demo de flux decât un mecanism operațional complet.
-
-### Profile
-
-`ProfileScreen` conține încă date și grafice placeholder.
+`SosScreen` rămâne separat de assistant și safety policy, dar fluxul operațional complet de escaladare 112/SOS nu este încă extins peste partea demo existentă.
 
 ## Dependențe externe la runtime
 
-Deși asset-urile de traseu sunt locale, aplicația depinde în continuare de servicii externe pentru:
+Produsul rămâne offline-first pentru reasoning și datele locale de trasee, dar există în continuare dependențe externe pentru:
 
-- tileset-urile Mapbox folosite de hartă
+- tileset-urile hărții
 - forecast-ul Meteoblue
-- imaginile traseelor încărcate prin URL
+- imagini externe de traseu, unde există
 
-## Testare existentă
+## Testare și validare
 
-Sunt incluse teste unitare pentru:
+Sunt acoperite teste unitare pentru:
 
-- repository-urile de trasee
-- motorul de recomandare a echipamentului
+- retrieval și rerank assistant
+- safety policy
+- structured assistant output
+- route recommendation
+- gear recommendation
 
-Comanda de verificare:
+Comenzile de validare folosite în repo:
 
 ```powershell
+.\gradlew.bat :app:assembleDebug
 .\gradlew.bat testDebugUnitTest
+.\gradlew.bat :app:installDebug
+adb shell am start -n com.scouty.app/.MainActivity
+adb logcat -d
 ```

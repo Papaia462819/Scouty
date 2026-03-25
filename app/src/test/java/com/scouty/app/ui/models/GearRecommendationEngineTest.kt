@@ -9,17 +9,18 @@ import java.util.Calendar
 
 class GearRecommendationEngineTest {
     @Test
-    fun build_defaultChecklistContainsCoreItemsOnly() {
+    fun build_defaultChecklistContainsLeanCoreItems() {
         val gear = GearRecommendationEngine.build(trail = null)
 
         assertTrue(gear.any { it.id == "offline_map" && it.necessity == GearNecessity.MANDATORY })
-        assertTrue(gear.any { it.id == "compass" && it.necessity == GearNecessity.MANDATORY })
+        assertTrue(gear.any { it.id == "water" && it.necessity == GearNecessity.MANDATORY })
         assertTrue(gear.any { it.id == "first_aid" && it.necessity == GearNecessity.MANDATORY })
+        assertFalse(gear.any { it.id == "paper_map" })
         assertFalse(gear.any { it.id == "via_ferrata" })
     }
 
     @Test
-    fun build_hardTrailPromotesWaterHelmetAndPaperMap() {
+    fun build_hardTrailPromotesWaterTreatmentBivyAndPoles() {
         val trail = buildTrail(
             difficulty = "HARD",
             distanceKm = 15.2,
@@ -29,25 +30,26 @@ class GearRecommendationEngineTest {
 
         val gear = GearRecommendationEngine.build(trail)
 
-        assertEquals("2.5 L min", gear.first { it.id == "water" }.weight)
-        assertEquals(GearNecessity.RECOMMENDED, gear.first { it.id == "helmet" }.necessity)
-        assertEquals(GearNecessity.MANDATORY, gear.first { it.id == "paper_map" }.necessity)
+        assertEquals("2.6 L min", gear.first { it.id == "water" }.weight)
+        assertEquals(GearNecessity.RECOMMENDED, gear.first { it.id == "trekking_poles" }.necessity)
+        assertEquals(GearNecessity.RECOMMENDED, gear.first { it.id == "water_treatment" }.necessity)
+        assertEquals(GearNecessity.MANDATORY, gear.first { it.id == "emergency_bivy" }.necessity)
     }
 
     @Test
-    fun build_expertTrailAddsTechnicalContingencyItems() {
+    fun build_easyShortTrailKeepsListCompact() {
         val trail = buildTrail(
-            difficulty = "EXPERT",
-            distanceKm = 18.5,
-            elevationGain = 1550,
-            estimatedDuration = "~9h"
+            difficulty = "EASY",
+            distanceKm = 4.4,
+            elevationGain = 220,
+            estimatedDuration = "~2h 30m"
         )
 
         val gear = GearRecommendationEngine.build(trail)
 
-        assertEquals(GearNecessity.MANDATORY, gear.first { it.id == "helmet" }.necessity)
-        assertEquals(GearNecessity.CONDITIONAL, gear.first { it.id == "via_ferrata" }.necessity)
-        assertEquals(GearNecessity.RECOMMENDED, gear.first { it.id == "satellite" }.necessity)
+        assertFalse(gear.any { it.id == "water_treatment" })
+        assertFalse(gear.any { it.id == "trekking_poles" })
+        assertEquals(GearNecessity.RECOMMENDED, gear.first { it.id == "headlamp" }.necessity)
     }
 
     @Test
@@ -55,16 +57,16 @@ class GearRecommendationEngineTest {
         val previous = listOf(
             GearItem(
                 id = "offline_map",
-                name = "Harta offline + GPX",
+                name = "Telefon + harta offline",
                 weight = "0 g",
-                category = "Navigatie & energie",
+                category = "Planificare & navigatie",
                 weightGrams = 0,
                 necessity = GearNecessity.MANDATORY,
                 isPacked = true
             )
         )
 
-        val gear = GearRecommendationEngine.build(buildTrail(), previous)
+        val gear = GearRecommendationEngine.build(buildTrail(), previousItems = previous)
 
         val offlineMap = gear.firstOrNull { it.id == "offline_map" }
         assertNotNull(offlineMap)

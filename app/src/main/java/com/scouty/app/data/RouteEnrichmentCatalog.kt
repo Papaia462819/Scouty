@@ -19,13 +19,27 @@ data class RouteEnrichmentCatalog(
 data class RouteEnrichmentEntry(
     @SerialName("local_code")
     val localCode: String? = null,
+    @SerialName("canonical_local_code")
+    val canonicalLocalCode: String? = null,
+    val title: String? = null,
     @SerialName("display_title")
     val displayTitle: String? = null,
     val region: String? = null,
+    val from: String? = null,
+    val to: String? = null,
     val description: RouteDescription? = null,
+    @SerialName("local_description")
+    val localDescription: String? = null,
     val image: RouteImage? = null,
     @SerialName("mn_data")
-    val mnData: RouteMnData? = null
+    val mnData: RouteMnData? = null,
+    val symbols: List<String> = emptyList(),
+    @SerialName("source_urls")
+    val sourceUrls: List<String> = emptyList(),
+    @SerialName("osm_relation_urls")
+    val osmRelationUrls: List<String> = emptyList(),
+    @SerialName("local_distance_km")
+    val localDistanceKm: Double? = null
 )
 
 @Serializable
@@ -62,7 +76,16 @@ data class RouteMnData(
     @SerialName("distance_km")
     val distanceKm: Double? = null,
     @SerialName("ascent_m")
-    val ascentM: Int? = null
+    val ascentM: Int? = null,
+    @SerialName("descent_m")
+    val descentM: Int? = null,
+    @SerialName("page_url")
+    val pageUrl: String? = null,
+    @SerialName("pdf_url")
+    val pdfUrl: String? = null,
+    @SerialName("route_type")
+    val routeType: String? = null,
+    val title: String? = null
 )
 
 data class RouteSearchSuggestion(
@@ -129,15 +152,18 @@ object RouteEnrichmentRepository {
             .mapNotNull { (code, entry) ->
                 val title = entry.displayTitle.orEmpty()
                 val region = entry.region.orEmpty()
-                val description = entry.description?.textRo.orEmpty()
+                val description = entry.bestDescriptionRo().orEmpty()
+                val endpoints = "${entry.from.orEmpty()} ${entry.to.orEmpty()}"
                 val normalizedCode = normalizeSearchText(code)
                 val normalizedTitle = normalizeSearchText(title)
                 val normalizedRegion = normalizeSearchText(region)
                 val normalizedDescription = normalizeSearchText(description)
-                val titleHaystack = normalizeSearchText("$code $title $region")
+                val normalizedEndpoints = normalizeSearchText(endpoints)
+                val titleHaystack = normalizeSearchText("$code $title $region $endpoints")
                 val titleMatches = matchesQuery(titleHaystack, normalizedQuery, queryTokens)
                 val descriptionMatches = matchesQuery(normalizedDescription, normalizedQuery, queryTokens)
-                if (!titleMatches && !descriptionMatches) {
+                val endpointMatches = matchesQuery(normalizedEndpoints, normalizedQuery, queryTokens)
+                if (!titleMatches && !descriptionMatches && !endpointMatches) {
                     return@mapNotNull null
                 }
                 if (!hasUsableImage(entry)) {
@@ -152,11 +178,13 @@ object RouteEnrichmentRepository {
                     normalizedQuery in normalizedTitle -> 170
                     normalizedQuery in normalizedRegion -> 125
                     titleMatches -> 120
+                    endpointMatches -> 100
                     else -> 60
                 } + queryTokens.fold(0) { total, token ->
                     total + when {
                         token in normalizedTitle -> 10
                         token in normalizedRegion -> 4
+                        token in normalizedEndpoints -> 4
                         token in normalizedDescription -> 1
                         else -> 0
                     }
@@ -239,3 +267,6 @@ object RouteEnrichmentRepository {
         return selected
     }
 }
+
+fun RouteEnrichmentEntry.bestDescriptionRo(): String? =
+    localDescription?.takeIf { it.isNotBlank() } ?: description?.textRo?.takeIf { it.isNotBlank() }

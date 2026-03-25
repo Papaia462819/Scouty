@@ -77,8 +77,7 @@ android {
         getByName("main") {
             assets.setSrcDirs(
                 listOf(
-                    "src/main/scouty_assets",
-                    rootProject.file("../data/raw/geojson").path
+                    "src/main/scouty_assets"
                 )
             )
         }
@@ -119,6 +118,7 @@ dependencies {
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("com.google.mediapipe:tasks-genai:0.10.27")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
