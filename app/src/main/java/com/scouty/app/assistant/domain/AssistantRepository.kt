@@ -1,6 +1,7 @@
 package com.scouty.app.assistant.domain
 
 import android.content.Context
+import com.scouty.app.assistant.diagnostics.AssistantDiagnostics
 import com.scouty.app.assistant.data.KnowledgeChunkStore
 import com.scouty.app.assistant.data.KnowledgePackManager
 import com.scouty.app.assistant.data.KnowledgePackStatusProvider
@@ -13,6 +14,7 @@ import com.scouty.app.assistant.model.DomainHint
 import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.assistant.model.KnowledgeChunkRecord
 import com.scouty.app.assistant.model.KnowledgePackStatus
+import com.scouty.app.assistant.model.ModelRuntimeState
 import com.scouty.app.assistant.model.ModelStatus
 import com.scouty.app.assistant.model.QueryAnalysis
 import com.scouty.app.assistant.model.ReasoningType
@@ -63,7 +65,8 @@ data class GenerationInput(
 class QueryAnalyzer {
     fun analyze(query: String, context: DeviceContextSnapshot): QueryAnalysis {
         val tokens = buildSearchTokens(query)
-        val preferredLanguage = detectLanguage(query, tokens, context.localeTag)
+        val rawTokens = buildLanguageTokens(query)
+        val preferredLanguage = detectLanguage(query, rawTokens, tokens, context.localeTag)
         val routeContextQuery = tokens.any { it in RouteTokens } ||
             (context.trail != null && tokens.any { it in RouteContextTokens })
         val gearQuery = tokens.any { it in GearTokens }
@@ -102,14 +105,22 @@ class QueryAnalyzer {
             routeContextQuery = routeContextQuery,
             gearQuery = gearQuery,
             safetyTags = detectSafetyTags(tokens)
-        )
+        ).also { analysis ->
+            AssistantDiagnostics.logQueryAnalysis(query, analysis)
+        }
     }
 
-    private fun detectLanguage(query: String, tokens: List<String>, localeTag: String): String {
+    private fun detectLanguage(
+        query: String,
+        rawTokens: List<String>,
+        searchTokens: List<String>,
+        localeTag: String
+    ): String {
         val raw = query.lowercase()
         if (raw.any { it in "ăâîșşțţ" }) {
             return "ro"
         }
+        val tokens = (rawTokens + searchTokens).distinct()
         val romanianHits = tokens.count { it in RomanianMarkers }
         val englishHits = tokens.count { it in EnglishMarkers }
         return when {
@@ -137,6 +148,34 @@ class QueryAnalyzer {
         return tags
     }
 
+    private fun buildLanguageTokens(query: String): List<String> =
+        Normalizer.normalize(query.lowercase(), Normalizer.Form.NFD)
+            .replace("\\p{Mn}+".toRegex(), "")
+            .replace("[^a-z0-9 ]".toRegex(), " ")
+            .split(Regex("\\s+"))
+            .mapNotNull { token ->
+                token.trim()
+                    .takeIf { it.length >= 2 }
+                    ?.let { rawToken ->
+                        listOfNotNull(rawToken, romanianBaseFormForLanguage(rawToken))
+                    }
+            }
+            .flatten()
+            .distinct()
+
+    private fun romanianBaseFormForLanguage(token: String): String? =
+        when {
+            token.length <= 4 -> null
+            token.endsWith("ului") && token.length > 6 -> token.dropLast(5)
+            token.endsWith("eul") && token.length > 5 -> token.dropLast(1)
+            token.endsWith("ul") && token.length > 4 -> token.dropLast(2)
+            token.endsWith("le") && token.length > 4 -> token.dropLast(2)
+            token.endsWith("ilor") && token.length > 6 -> token.dropLast(4)
+            token.endsWith("elor") && token.length > 6 -> token.dropLast(4)
+            token.endsWith("lor") && token.length > 5 -> token.dropLast(3)
+            else -> null
+        }?.takeIf { it.length >= 2 && it != token }
+
     private companion object {
         private const val RouteDomain = "route_intelligence_romania"
         private const val GearDomain = "gear_and_preparation"
@@ -156,7 +195,9 @@ class QueryAnalyzer {
             "geaca", "frontala", "headlamp", "kit", "iau"
         )
         private val RomanianMarkers = setOf(
-            "si", "traseu", "glezna", "urs", "sarpe", "marcaj", "cum", "care", "cand", "unde", "munte"
+            "am", "si", "sa", "traseu", "glezna", "entorsa", "durere", "rana", "arsura", "urs",
+            "sarpe", "marcaj", "cum", "ce", "care", "cand", "unde", "munte", "fac", "facut",
+            "procedez", "trebuie", "pot", "foc", "focul", "tabara", "siguranta"
         )
         private val EnglishMarkers = setOf(
             "the", "trail", "ankle", "bear", "snake", "marker", "how", "what", "when", "where", "mountain"
@@ -212,7 +253,13 @@ class RetrievalEngine(
             )
         }.sortedByDescending { it.score }
 
-        return selectWithRedundancyPenalty(scoredCandidates, limit)
+        return selectWithRedundancyPenalty(scoredCandidates, limit).also { selected ->
+            AssistantDiagnostics.logRetrieval(
+                query = query,
+                selected = selected,
+                scoredCandidates = scoredCandidates
+            )
+        }
     }
 
     private fun rerankScore(
@@ -298,8 +345,8 @@ class RetrievalEngine(
     }
 
     private fun tokenOverlap(left: String, right: String): Double {
-        val leftTokens = buildSearchTokens(left).toSet()
-        val rightTokens = buildSearchTokens(right).toSet()
+        val leftTokens = buildSearchTokens(left, shouldLog = false).toSet()
+        val rightTokens = buildSearchTokens(right, shouldLog = false).toSet()
         if (leftTokens.isEmpty() || rightTokens.isEmpty()) {
             return 0.0
         }
@@ -413,7 +460,7 @@ open class MedicalSafetyPolicy {
         safetyOutcome: SafetyOutcome,
         isRomanian: Boolean
     ): StructuredAssistantOutput {
-        if (safetyOutcome == SafetyOutcome.NORMAL) {
+        if (safetyOutcome == SafetyOutcome.NORMAL || safetyOutcome == SafetyOutcome.CAUTION) {
             return output
         }
 
@@ -427,16 +474,8 @@ open class MedicalSafetyPolicy {
                 },
                 style = ResponseSectionStyle.IMPORTANT
             )
-            SafetyOutcome.CAUTION -> StructuredResponseSection(
-                title = if (isRomanian) "Atentie" else "Caution",
-                body = if (isRomanian) {
-                    "Continua prudent, reevalueaza starea periodic si escaladeaza daca apar semne noi sau agravare."
-                } else {
-                    "Proceed cautiously, reassess regularly, and escalate if new warning signs or worsening appear."
-                },
-                style = ResponseSectionStyle.IMPORTANT
-            )
             SafetyOutcome.NORMAL -> return output
+            SafetyOutcome.CAUTION -> return output
         }
 
         val sections = if (output.sections.firstOrNull()?.style == ResponseSectionStyle.IMPORTANT) {
@@ -445,18 +484,12 @@ open class MedicalSafetyPolicy {
             listOf(leadingSection) + output.sections
         }
 
-        val summary = when (safetyOutcome) {
-            SafetyOutcome.EMERGENCY_ESCALATION -> if (isRomanian) {
-                "Prioritatea este 112 / SOS, apoi masurile de baza din knowledge pack si contextul de traseu."
-            } else {
-                "Priority is 112 / SOS first, then the basic measures from the knowledge pack and trail context."
-            }
-            SafetyOutcome.CAUTION -> if (isRomanian) {
-                "Raspuns prudent bazat pe knowledge pack-ul offline si pe contextul traseului."
-            } else {
-                "Cautious answer based on the offline knowledge pack and active trail context."
-            }
-            SafetyOutcome.NORMAL -> output.summary
+        val summary = if (output.summary.isNotBlank()) {
+            output.summary
+        } else if (isRomanian) {
+            "Prioritizeaza 112 / SOS si apoi urmeaza pasii de baza confirmati offline."
+        } else {
+            "Prioritize 112 / SOS first and then follow the confirmed offline basics."
         }
         return output.copy(summary = summary, sections = sections)
     }
@@ -686,7 +719,13 @@ class AssistantRepository(
         val queryAnalysis = queryAnalyzer.analyze(query, context)
         val packStatus = knowledgePackManager.ensureReady()
         val modelStatus = modelManager.refreshStatus()
-        val generationMode = modelManager.currentGenerationMode()
+        val generationMode = generationModeForAttempt(modelStatus)
+        AssistantDiagnostics.logAnswerStart(
+            query = query,
+            packStatus = packStatus,
+            modelStatus = modelStatus,
+            generationMode = generationMode
+        )
         val retrieved = retrievalEngine.retrieve(
             query = query,
             context = context,
@@ -717,15 +756,28 @@ class AssistantRepository(
             safetyOutcome = safetyOutcome,
             isRomanian = queryAnalysis.preferredLanguage == "ro"
         )
+        val finalModelStatus = modelManager.currentStatus()
+        AssistantDiagnostics.logAnswerEnd(
+            query = query,
+            packStatus = packStatus,
+            modelStatus = finalModelStatus,
+            generationMode = structuredOutput.generationMode,
+            safetyOutcome = safetyOutcome,
+            retrievedChunks = retrieved
+        )
 
         return AssistantResponse(
-            answerText = structuredOutput.renderText(),
+            answerText = buildDisplayText(structuredOutput, safetyOutcome),
             structuredOutput = structuredOutput,
             citations = buildCitations(queryAnalysis, context, retrieved),
             safetyOutcome = safetyOutcome,
             generationMode = structuredOutput.generationMode,
             reasoningType = structuredOutput.reasoningType,
-            modelVersion = structuredOutput.modelVersion,
+            modelVersion = finalModelStatus.modelVersion.takeIf {
+                finalModelStatus.availableOnDisk || finalModelStatus.state != com.scouty.app.assistant.model.ModelRuntimeState.MISSING
+            },
+            modelRuntimeState = finalModelStatus.state,
+            modelStatusDetails = finalModelStatus.details,
             knowledgePackVersion = structuredOutput.knowledgePackVersion,
             usedFallback = structuredOutput.generationMode == GenerationMode.FALLBACK_STRUCTURED
         )
@@ -749,7 +801,8 @@ class AssistantRepository(
                 publisher = "Scouty local route catalog"
             )
         }
-        citations += retrieved.map { chunk ->
+        val visibleRetrieved = selectVisibleCitations(queryAnalysis, retrieved)
+        citations += visibleRetrieved.map { chunk ->
             AssistantCitation(
                 sourceTitle = chunk.sourceTitle,
                 sectionTitle = chunk.sectionTitle,
@@ -760,6 +813,95 @@ class AssistantRepository(
         }
         return citations.distinctBy { Triple(it.sourceTitle, it.sectionTitle, it.sourceUrl) }.take(4)
     }
+
+    private fun selectVisibleCitations(
+        queryAnalysis: QueryAnalysis,
+        retrieved: List<RetrievedChunk>
+    ): List<RetrievedChunk> {
+        if (queryAnalysis.routeContextQuery) {
+            return retrieved.take(4)
+        }
+
+        val primary = retrieved.firstOrNull() ?: return emptyList()
+        val narrowed = retrieved.filter { chunk ->
+            chunk.language == queryAnalysis.preferredLanguage &&
+                chunk.domain == primary.domain &&
+                chunk.score >= primary.score - 18
+        }
+        val nonRoute = narrowed.ifEmpty {
+            retrieved.filter { it.domain != "route_intelligence_romania" }
+        }
+        return nonRoute.ifEmpty { listOf(primary) }.take(3)
+    }
+
+    private fun buildDisplayText(
+        output: StructuredAssistantOutput,
+        safetyOutcome: SafetyOutcome
+    ): String {
+        val summary = sanitizeDisplayText(output.summary)
+        val emergencyLead = if (safetyOutcome == SafetyOutcome.EMERGENCY_ESCALATION) {
+            output.sections.firstOrNull { it.style == ResponseSectionStyle.IMPORTANT }
+                ?.body
+                ?.let(::sanitizeDisplayText)
+                ?.takeIf { it.isNotBlank() }
+        } else {
+            null
+        }
+        val visibleBodies = output.sections.asSequence()
+            .filter { it.style == ResponseSectionStyle.GUIDANCE || it.style == ResponseSectionStyle.ACTIONS }
+            .map { sanitizeDisplayText(it.body) }
+            .filter { it.isNotBlank() }
+            .filter { normalizeForDisplay(it) != normalizeForDisplay(summary) }
+            .distinctBy(::normalizeForDisplay)
+            .take(2)
+            .toList()
+
+        val parts = mutableListOf<String>()
+        emergencyLead?.let { parts += it }
+        if (summary.isNotBlank() && !looksLikeMetaSummary(summary)) {
+            parts += summary
+        }
+        parts += visibleBodies
+        if (parts.isEmpty() && summary.isNotBlank()) {
+            parts += summary
+        }
+
+        return parts.joinToString("\n\n").trim()
+    }
+
+    private fun looksLikeMetaSummary(summary: String): Boolean {
+        val normalized = normalizeForDisplay(summary)
+        return normalized.startsWith("am selectat") ||
+            normalized.startsWith("i selected") ||
+            normalized.startsWith("am combinat") ||
+            normalized.startsWith("i combined") ||
+            normalized.startsWith("raspuns prudent") ||
+            normalized.startsWith("cautious answer") ||
+            normalized.contains("knowledge pack") ||
+            normalized.contains("chunk")
+    }
+
+    private fun sanitizeDisplayText(value: String): String =
+        value.replace('\n', ' ')
+            .replace("\\s+".toRegex(), " ")
+            .trim()
+
+    private fun normalizeForDisplay(value: String): String =
+        Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD)
+            .replace("\\p{Mn}+".toRegex(), "")
+            .replace("[^a-z0-9 ]".toRegex(), " ")
+            .replace("\\s+".toRegex(), " ")
+            .trim()
+
+    private fun generationModeForAttempt(modelStatus: ModelStatus): GenerationMode =
+        when {
+            modelStatus.state == ModelRuntimeState.LOADED -> GenerationMode.LOCAL_LLM
+            modelStatus.availableOnDisk && modelStatus.state in setOf(
+                ModelRuntimeState.UNLOADED,
+                ModelRuntimeState.PREPARING
+            ) -> GenerationMode.LOCAL_LLM
+            else -> GenerationMode.FALLBACK_STRUCTURED
+        }
 
     private companion object {
         fun createKnowledgeStore(

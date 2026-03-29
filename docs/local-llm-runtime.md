@@ -11,7 +11,8 @@ Scouty now ships with a production-shaped on-device LLM runtime path that keeps 
   - rerank and top chunk selection
 - `SafetyPolicy` remains authoritative before and after generation.
 - `LocalLlmGenerationEngine` is an optional generator stage on top of the grounded retrieval output.
-- If the local model is missing, fails to load, or returns invalid JSON, Scouty falls back to the existing structured template generator.
+- If the local model is missing or fails to load, Scouty falls back to the existing structured template generator.
+- When the local model returns incomplete or malformed structured JSON, Scouty now repairs the answer from the grounded local summary plus the already selected retrieval chunks instead of dropping straight to a generic fallback.
 
 ## Supported model bundle
 
@@ -32,18 +33,29 @@ Scouty scans these locations, in this order:
 2. External app storage:
    - `Context.getExternalFilesDir(null)/models/gemma-3-1b/`
 
-If the bundle is found only in external app storage, Scouty imports it into internal no-backup storage on first load and then initializes the runtime from there.
+In practice, the validated emulator flow pushes the bundle straight into internal no-backup storage, because the app process may not reliably enumerate the external app directory on the Android emulator.
 
 ## Recommended debug install flow
 
-Push the bundle into app external storage:
+When emulator storage is tight, use the reinstall helper. It rebuilds the debug APKs, uninstalls the previous app package, reinstalls with `adb install --streaming`, re-grants runtime permissions, reloads Gemma into internal storage, reloads map packs, and prints the exact on-device package size report:
 
 ```powershell
-adb shell mkdir -p /sdcard/Android/data/com.scouty.app/files/models/gemma-3-1b
-adb push gemma-3-1b-it-int4.task /sdcard/Android/data/com.scouty.app/files/models/gemma-3-1b/
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\reinstall_debug_with_assets.ps1
 ```
 
-Then start Scouty. `ModelManager` will detect the bundle, prepare it, and attempt to load it.
+If the app is already installed and you only need to refresh the model bundle, use the model push helper, which writes the bundle into internal app storage and updates the sidecar manifest:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\push_model_to_device.ps1
+```
+
+Optional end-to-end smoke path:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\smoke_ai_runtime.ps1
+```
+
+Then start Scouty. `ModelManager` will detect the bundle in `no_backup`, load Gemma through Google AI Edge MediaPipe, and chat requests will attempt `LOCAL_LLM` before any structured fallback.
 
 ## Optional sidecar manifest
 
@@ -58,14 +70,14 @@ Example:
 {
   "model_version": "gemma-3-1b-it-int4",
   "preferred_backend": "CPU",
-  "max_tokens": 32768
+  "max_tokens": 4096
 }
 ```
 
 If the manifest is absent, Scouty derives the model version from the filename and defaults to:
 
 - backend: `CPU`
-- max tokens: `32768`
+- max tokens: `4096`
 
 ## Activation behavior
 
@@ -100,23 +112,23 @@ Fallback still preserves:
 ## Current limitations
 
 - The model bundle is not stored in the repo and is not packaged in the APK.
-- Runtime validation on Android emulators is limited. Google’s AI Edge docs state that LLM Inference does not reliably support Android emulators.
 - The current adapter is built around Google AI Edge MediaPipe LLM Inference, but it is isolated behind `LocalLlmRuntimeAdapter` so it can be swapped later.
 - Generation is text-only for this integration slice. Retrieval and truth remain in the knowledge pack and trail context.
+- GPU backend is not viable on the current emulator image because the required OpenCL stack is missing; the validated runtime path is CPU.
 
 ## Validation checklist
 
-Use this sequence after placing a bundle on device:
+Validated emulator sequence:
 
 ```powershell
-./gradlew.bat :app:assembleDebug
 ./gradlew.bat testDebugUnitTest
-./gradlew.bat :app:installDebug
-adb shell am start -n com.scouty.app/.MainActivity
-adb logcat -d | Select-String -Pattern "Scouty|AndroidRuntime|com.scouty.app"
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\reinstall_debug_with_assets.ps1
+adb shell am instrument -w -e class com.scouty.app.assistant.AssistantRepositoryRuntimeTest com.scouty.app.test/androidx.test.runner.AndroidJUnitRunner
+adb shell am instrument -w -e class com.scouty.app.assistant.AssistantChatRuntimeTest com.scouty.app.test/androidx.test.runner.AndroidJUnitRunner
+adb logcat -d | Select-String -Pattern "ScoutyAssistant|ScoutyLocalLlm|AndroidRuntime|com.scouty.app"
 ```
 
-In the app, open Profile -> Debug & offline and verify:
+In the app or logs, verify:
 
 - knowledge pack version
 - model version

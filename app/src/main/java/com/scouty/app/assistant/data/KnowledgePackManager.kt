@@ -2,6 +2,7 @@ package com.scouty.app.assistant.data
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import com.scouty.app.assistant.diagnostics.AssistantDiagnostics
 import com.scouty.app.assistant.model.KnowledgeChunkRecord
 import com.scouty.app.assistant.model.KnowledgePackManifest
 import com.scouty.app.assistant.model.KnowledgePackStatus
@@ -115,11 +116,14 @@ class KnowledgePackManager(private val context: Context) : KnowledgePackStatusPr
     private fun runIntegrityCheck(file: File): Boolean {
         var database: SQLiteDatabase? = null
         return try {
-            database = SQLiteDatabase.openDatabase(file.absolutePath, null, SQLiteDatabase.OPEN_READONLY)
-            val cursor = database.rawQuery("PRAGMA integrity_check", emptyArray())
-            cursor.use {
-                it.moveToFirst()
-                it.getString(0).equals("ok", ignoreCase = true)
+            database = SQLiteDatabase.openDatabase(file.absolutePath, null, SQLiteDatabase.OPEN_READWRITE)
+            database.rawQuery("PRAGMA integrity_check", emptyArray()).use { cursor ->
+                val rows = buildList {
+                    while (cursor.moveToNext()) {
+                        add(cursor.getString(0))
+                    }
+                }
+                rows.size == 1 && rows.first().equals("ok", ignoreCase = true)
             }
         } catch (_: Exception) {
             false
@@ -164,12 +168,21 @@ class SqliteKnowledgeChunkStore(
         limit: Int
     ): List<KnowledgeChunkRecord> = withContext(Dispatchers.IO) {
         val status = manager.ensureReady()
+        val tokens = buildSearchTokens(query)
+        val ftsQuery = buildFtsQuery(tokens)
         if (!status.isReady || status.databasePath.isNullOrBlank()) {
+            AssistantDiagnostics.logSqliteSearch(
+                query = query,
+                preferredLanguages = preferredLanguages,
+                domainHints = domainHints,
+                tokens = tokens,
+                ftsQuery = ftsQuery,
+                packStatus = status,
+                candidates = emptyList()
+            )
             return@withContext emptyList()
         }
 
-        val tokens = buildSearchTokens(query)
-        val ftsQuery = buildFtsQuery(tokens)
         val domainWindow = domainHints.take(3)
         val results = LinkedHashMap<String, KnowledgeChunkRecord>()
         var database: SQLiteDatabase? = null
@@ -192,7 +205,17 @@ class SqliteKnowledgeChunkStore(
             database?.close()
         }
 
-        results.values.take(limit * 4).toList()
+        results.values.take(limit * 4).toList().also { candidates ->
+            AssistantDiagnostics.logSqliteSearch(
+                query = query,
+                preferredLanguages = preferredLanguages,
+                domainHints = domainHints,
+                tokens = tokens,
+                ftsQuery = ftsQuery,
+                packStatus = status,
+                candidates = candidates
+            )
+        }
     }
 
     private fun absorb(
@@ -306,7 +329,7 @@ class SqliteKnowledgeChunkStore(
     }
 }
 
-fun buildSearchTokens(rawQuery: String): List<String> =
+fun buildSearchTokens(rawQuery: String, shouldLog: Boolean = true): List<String> =
     normalizeSearchText(rawQuery)
         .split(Regex("\\s+"))
         .asSequence()
@@ -318,6 +341,11 @@ fun buildSearchTokens(rawQuery: String): List<String> =
         .filterNot { it in SearchStopWords }
         .distinct()
         .toList()
+        .also { tokens ->
+            if (shouldLog) {
+                AssistantDiagnostics.logBuildSearchTokens(rawQuery, tokens)
+            }
+        }
 
 private fun buildFtsQuery(tokens: List<String>): String? =
     tokens.takeIf { it.isNotEmpty() }?.joinToString(" OR ") { "$it*" }

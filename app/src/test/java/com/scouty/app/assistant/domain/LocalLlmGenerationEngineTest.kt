@@ -49,6 +49,29 @@ class LocalLlmGenerationEngineTest {
     }
 
     @Test
+    fun fencedJsonWithExtraText_stillParsesLocalOutput() = runBlocking {
+        val manager = readyModelManager(
+            response = """
+                Iată răspunsul.
+                ```json
+                {"summary":"Raspuns local grounded.","sections":[{"title":"Atentie","body":"Pasii raman in chunk-urile grounded.","style":"IMPORTANT"},{"title":"Context de teren","body":"Baterie 80%.","style":"CONTEXT"}]}
+                ```
+                Sfârșit.
+            """.trimIndent()
+        )
+        val engine = LocalLlmGenerationEngine(
+            modelManager = manager,
+            fallbackEngine = TemplateGenerationEngine()
+        )
+
+        val result = engine.generate(testInput())
+
+        assertEquals(GenerationMode.LOCAL_LLM, result.generationMode)
+        assertEquals("Raspuns local grounded.", result.summary)
+        assertTrue(result.sections.any { it.title == "Atentie" })
+    }
+
+    @Test
     fun missingModel_fallsBackWithoutBreakingStructuredOutput() = runBlocking {
         val manager = ModelManager(
             modelLocator = FakeLocalModelLocator(

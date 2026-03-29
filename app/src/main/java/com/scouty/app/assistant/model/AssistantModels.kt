@@ -2,6 +2,10 @@ package com.scouty.app.assistant.model
 
 import java.util.Locale
 
+    private val AssistantDefaultLocale: Locale = Locale.forLanguageTag("ro-RO")
+
+fun assistantDefaultLocale(): Locale = AssistantDefaultLocale
+
 enum class SafetyOutcome {
     NORMAL,
     CAUTION,
@@ -34,7 +38,7 @@ data class DeviceContextSnapshot(
     val gpsFixed: Boolean = false,
     val trail: TrailContextSnapshot? = null,
     val recommendedGear: List<String> = emptyList(),
-    val localeTag: String = Locale.getDefault().toLanguageTag()
+    val localeTag: String = assistantDefaultLocale().toLanguageTag()
 )
 
 data class AssistantCitation(
@@ -55,14 +59,16 @@ data class AssistantMessageUiModel(
     val generationMode: GenerationMode? = null,
     val reasoningType: ReasoningType? = null,
     val knowledgePackVersion: String? = null,
-    val modelVersion: String? = null
+    val modelVersion: String? = null,
+    val modelRuntimeState: ModelRuntimeState? = null,
+    val modelStatusDetails: String? = null
 )
 
 data class AssistantUiState(
     val draft: String = "",
     val isResponding: Boolean = false,
-    val messages: List<AssistantMessageUiModel> = listOf(buildWelcomeMessage()),
-    val starterPrompts: List<String> = starterPromptsForCurrentLocale()
+    val messages: List<AssistantMessageUiModel> = listOf(buildWelcomeMessage(assistantDefaultLocale())),
+    val starterPrompts: List<String> = starterPromptsForCurrentLocale(assistantDefaultLocale())
 )
 
 data class AssistantResponse(
@@ -73,11 +79,13 @@ data class AssistantResponse(
     val generationMode: GenerationMode,
     val reasoningType: ReasoningType,
     val modelVersion: String? = null,
+    val modelRuntimeState: ModelRuntimeState? = null,
+    val modelStatusDetails: String? = null,
     val knowledgePackVersion: String? = null,
     val usedFallback: Boolean = false
 )
 
-fun buildWelcomeMessage(locale: Locale = Locale.getDefault()): AssistantMessageUiModel =
+fun buildWelcomeMessage(locale: Locale = assistantDefaultLocale()): AssistantMessageUiModel =
     AssistantMessageUiModel(
         id = "welcome",
         text = if (locale.language == "ro") {
@@ -88,7 +96,7 @@ fun buildWelcomeMessage(locale: Locale = Locale.getDefault()): AssistantMessageU
         isUser = false
     )
 
-fun starterPromptsForCurrentLocale(locale: Locale = Locale.getDefault()): List<String> =
+fun starterPromptsForCurrentLocale(locale: Locale = assistantDefaultLocale()): List<String> =
     if (locale.language == "ro") {
         listOf(
             "Mi-am sucit glezna",

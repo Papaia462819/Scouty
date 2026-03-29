@@ -1,5 +1,6 @@
 package com.scouty.app.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +21,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.CameraAlt
-import androidx.compose.material3.AssistChip
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -30,7 +32,12 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,8 +46,6 @@ import androidx.compose.ui.unit.dp
 import com.scouty.app.R
 import com.scouty.app.assistant.model.AssistantMessageUiModel
 import com.scouty.app.assistant.model.AssistantUiState
-import com.scouty.app.assistant.model.ResponseSectionStyle
-import com.scouty.app.assistant.model.SafetyOutcome
 
 @Composable
 fun ChatScreen(
@@ -69,15 +74,10 @@ fun ChatScreen(
             }
             if (uiState.isResponding) {
                 item {
-                    val loadingText = if (java.util.Locale.getDefault().language == "ro") {
-                        "Scouty AI procesează răspunsul offline..."
-                    } else {
-                        "Scouty AI is processing your offline response..."
-                    }
                     ChatBubble(
                         AssistantMessageUiModel(
                             id = "loading",
-                            text = loadingText,
+                            text = "Scouty AI proceseaza raspunsul offline...",
                             isUser = false
                         )
                     )
@@ -156,6 +156,7 @@ fun ChatScreen(
 
 @Composable
 fun ChatBubble(message: AssistantMessageUiModel) {
+    var sourcesExpanded by rememberSaveable(message.id) { mutableStateOf(false) }
     val alignment = if (message.isUser) Alignment.End else Alignment.Start
     val containerColor = if (message.isUser) {
         MaterialTheme.colorScheme.primary
@@ -185,30 +186,25 @@ fun ChatBubble(message: AssistantMessageUiModel) {
                 style = MaterialTheme.typography.bodyMedium
             )
         }
-        if (!message.isUser) {
-            Text(
-                text = "Scouty AI",
-                modifier = Modifier.padding(start = 4.dp, top = 4.dp),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-            )
-            if (message.safetyOutcome != SafetyOutcome.NORMAL) {
-                val isRo = java.util.Locale.getDefault().language == "ro"
-                val safetyLabel = if (message.safetyOutcome == SafetyOutcome.EMERGENCY_ESCALATION) {
-                    if (isRo) "Escalare: prioritizează SOS / 112" else "Escalation: prioritize SOS / 112"
-                } else {
-                    if (isRo) "Atenție: verifică starea înainte de a continua" else "Caution: verify condition before continuing"
-                }
-                AssistChip(
-                    onClick = { },
-                    enabled = false,
-                    label = { Text(safetyLabel) },
-                    modifier = Modifier.padding(top = 6.dp)
+        if (!message.isUser && message.citations.isNotEmpty()) {
+            TextButton(
+                onClick = { sourcesExpanded = !sourcesExpanded },
+                modifier = Modifier.padding(top = 2.dp),
+                contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
+            ) {
+                Icon(
+                    imageVector = if (sourcesExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                    contentDescription = if (sourcesExpanded) "Ascunde sursele" else "Arata sursele"
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = if (sourcesExpanded) "Ascunde sursele" else "Surse",
+                    style = MaterialTheme.typography.labelMedium
                 )
             }
-            if (message.citations.isNotEmpty()) {
+            AnimatedVisibility(visible = sourcesExpanded) {
                 Column(
-                    modifier = Modifier.padding(top = 8.dp),
+                    modifier = Modifier.padding(top = 6.dp),
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     message.citations.forEach { citation ->
@@ -231,51 +227,6 @@ fun ChatBubble(message: AssistantMessageUiModel) {
                         }
                     }
                 }
-            }
-            if (message.sections.isNotEmpty()) {
-                Column(
-                    modifier = Modifier.padding(top = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    message.sections.forEach { section ->
-                        val sectionColor = when (section.style) {
-                            ResponseSectionStyle.IMPORTANT -> MaterialTheme.colorScheme.errorContainer
-                            ResponseSectionStyle.CONTEXT -> MaterialTheme.colorScheme.secondaryContainer
-                            ResponseSectionStyle.ACTIONS -> MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
-                            ResponseSectionStyle.GUIDANCE -> MaterialTheme.colorScheme.surface
-                        }
-                        Surface(
-                            color = sectionColor,
-                            shape = RoundedCornerShape(14.dp)
-                        ) {
-                            Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
-                                Text(
-                                    text = section.title,
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                                Text(
-                                    text = section.body,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            if (!message.generationMode?.label.isNullOrBlank() || !message.knowledgePackVersion.isNullOrBlank()) {
-                Text(
-                    text = listOfNotNull(
-                        message.generationMode?.label,
-                        message.reasoningType?.label,
-                        message.knowledgePackVersion?.let { "pack $it" },
-                        message.modelVersion
-                    ).joinToString(" • "),
-                    modifier = Modifier.padding(start = 4.dp, top = 6.dp),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                )
             }
         }
     }

@@ -59,7 +59,7 @@ class AssistantViewModel(
             }.onSuccess { response ->
                 val assistantMessage = AssistantMessageUiModel(
                     id = UUID.randomUUID().toString(),
-                    text = response.structuredOutput.summary,
+                    text = response.answerText,
                     isUser = false,
                     citations = response.citations,
                     safetyOutcome = response.safetyOutcome,
@@ -67,7 +67,9 @@ class AssistantViewModel(
                     generationMode = response.generationMode,
                     reasoningType = response.reasoningType,
                     knowledgePackVersion = response.knowledgePackVersion,
-                    modelVersion = response.modelVersion
+                    modelVersion = response.modelVersion,
+                    modelRuntimeState = response.modelRuntimeState,
+                    modelStatusDetails = response.modelStatusDetails
                 )
                 _uiState.update { state ->
                     state.copy(

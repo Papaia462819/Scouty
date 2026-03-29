@@ -1,10 +1,10 @@
 package com.scouty.app.assistant.domain
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
 import com.google.mediapipe.tasks.genai.llminference.LlmInference
 import com.google.mediapipe.tasks.genai.llminference.LlmInferenceSession
+import com.google.mediapipe.tasks.genai.llminference.PromptTemplates
 import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.assistant.model.ModelRuntimeState
 import com.scouty.app.assistant.model.ModelStatus
@@ -21,7 +21,7 @@ import kotlinx.serialization.json.Json
 import java.io.File
 
 private const val DefaultModelVersion = "gemma-3-1b-it-int4"
-private const val DefaultMaxTokens = 32_768
+private const val DefaultMaxTokens = 4_096
 
 data class LocalLlmGenerationResult(
     val text: String,
@@ -288,7 +288,6 @@ private class AndroidLocalModelLocator(
                 fileSizeBytes = internalCandidate.file.length(),
                 details = buildString {
                     append("Local model bundle found in app storage and ready to load.")
-                    append(environmentNote())
                 }
             )
         }
@@ -298,15 +297,14 @@ private class AndroidLocalModelLocator(
             return@withContext LocalModelDiscovery(
                 modelVersion = externalCandidate.modelVersion,
                 availableOnDisk = true,
-                needsPrepare = true,
+                needsPrepare = false,
                 sourceFile = externalCandidate.file,
-                preparedFile = File(internalDir, externalCandidate.file.name),
+                preparedFile = externalCandidate.file,
                 backend = externalCandidate.backend,
                 maxTokens = externalCandidate.maxTokens,
                 fileSizeBytes = externalCandidate.file.length(),
                 details = buildString {
-                    append("Local model bundle detected in external app storage and will be imported on first load.")
-                    append(environmentNote())
+                    append("Local model bundle detected in external app storage and ready to load in place.")
                 }
             )
         }
@@ -321,7 +319,6 @@ private class AndroidLocalModelLocator(
                     append(it.absolutePath)
                 }
                 append(". Structured fallback remains active.")
-                append(environmentNote())
             }
         )
     }
@@ -361,7 +358,7 @@ private class AndroidLocalModelLocator(
                     file = file,
                     modelVersion = manifest?.modelVersion?.takeIf { it.isNotBlank() } ?: file.nameWithoutExtension,
                     backend = manifest?.preferredBackend ?: LocalModelBackend.CPU,
-                    maxTokens = manifest?.maxTokens ?: 32_768
+                    maxTokens = manifest?.maxTokens ?: DefaultMaxTokens
                 )
             }
             .sortedWith(
@@ -398,22 +395,6 @@ private class AndroidLocalModelLocator(
         }
     }
 
-    private fun environmentNote(): String =
-        if (isProbablyEmulator()) {
-            " Google AI Edge notes that LLM Inference does not reliably support Android emulators."
-        } else {
-            ""
-        }
-
-    private fun isProbablyEmulator(): Boolean {
-        val fingerprint = Build.FINGERPRINT.lowercase()
-        val model = Build.MODEL.lowercase()
-        return fingerprint.contains("generic") ||
-            fingerprint.contains("emulator") ||
-            model.contains("emulator") ||
-            model.contains("sdk")
-    }
-
     @Serializable
     private data class LocalModelManifest(
         @SerialName("model_version")
@@ -441,11 +422,17 @@ private class AndroidLocalModelLocator(
         private val SupportedExtensions = setOf("task", "litertlm")
         private val PreferredModelNames = listOf(
             "gemma-3-1b-it-int4.task",
+            "gemma3-1b-it-int4.task",
             "gemma-3-1b-it.task",
+            "gemma3-1b-it.task",
             "gemma-3-1b.task",
+            "gemma3-1b.task",
             "gemma-3-1b-it-int4.litertlm",
+            "gemma3-1b-it-int4.litertlm",
             "gemma-3-1b-it.litertlm",
-            "gemma-3-1b.litertlm"
+            "gemma3-1b-it.litertlm",
+            "gemma-3-1b.litertlm",
+            "gemma3-1b.litertlm"
         )
     }
 }
@@ -476,10 +463,20 @@ private class MediaPipeLoadedModel(
     private val llmInference: LlmInference
 ) : LocalLlmLoadedModelHandle {
     override suspend fun generate(prompt: String): String = withContext(Dispatchers.Default) {
+        val promptTemplates = PromptTemplates.builder()
+            .setUserPrefix("<start_of_turn>user\n")
+            .setUserSuffix("\n<end_of_turn>\n")
+            .setModelPrefix("<start_of_turn>model\n")
+            .setModelSuffix("\n<end_of_turn>\n")
+            .setSystemPrefix("<start_of_turn>system\n")
+            .setSystemSuffix("\n<end_of_turn>\n")
+            .build()
         val sessionOptions = LlmInferenceSession.LlmInferenceSessionOptions.builder()
-            .setTopK(40)
-            .setTopP(0.9f)
-            .setTemperature(0.2f)
+            .setTopK(1)
+            .setTopP(0.2f)
+            .setTemperature(0.0f)
+            .setRandomSeed(7)
+            .setPromptTemplates(promptTemplates)
             .build()
 
         LlmInferenceSession.createFromOptions(llmInference, sessionOptions).use { session ->
