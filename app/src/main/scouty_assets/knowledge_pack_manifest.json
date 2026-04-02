@@ -1,10 +1,13 @@
 {
   "pack_version": "2026.03.24-v1",
-  "generated_at": "2026-03-24T19:19:03+00:00",
+  "generated_at": "2026-04-01T16:12:33+00:00",
   "db_file_name": "knowledge_pack.sqlite",
-  "db_sha256": "7c1787fa88bfc099cbd7c446fa9ff23023b2a674ed025b2c6b4397114b8a6f27",
-  "chunk_count": 1718,
+  "db_sha256": "669766ef0af3aacaabdf70cf8913b5e7ccc00c04df288c7b9d9fb7f93ad90cc3",
+  "chunk_count": 1748,
   "curated_chunk_count": 26,
+  "campfire_card_count": 30,
+  "campfire_card_embedding_count": 30,
+  "campfire_phrase_embedding_count": 2480,
   "route_chunk_count": 1692,
   "source_count": 19,
   "languages": [
@@ -12,6 +15,7 @@
     "ro"
   ],
   "domains": [
+    "field_know_how",
     "gear_and_preparation",
     "medical_emergency",
     "mountain_safety",
@@ -20,7 +24,13 @@
     "weather_and_season",
     "wildlife_romania"
   ],
+  "campfire_embeddings": {
+    "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+    "backend": "sentence_transformers",
+    "dimension": 384
+  },
   "domain_counts": {
+    "field_know_how": 30,
     "gear_and_preparation": 4,
     "medical_emergency": 8,
     "mountain_safety": 2,
@@ -30,6 +40,7 @@
     "wildlife_romania": 4
   },
   "required_domain_coverage": {
+    "field_know_how": true,
     "gear_and_preparation": true,
     "medical_emergency": true,
     "mountain_safety": true,
@@ -40,6 +51,7 @@
   },
   "source_registry_sha256": "149299a47e378c67582d430acd7528bdc089b6542a9de4335061c8954a021c19",
   "curated_chunk_sha256": "b818027012af47b0ba4de092801d237c7d457c50870ca2e76ac70aaac2371ac8",
+  "campfire_card_sha256": "feec56d489ec834c69076be306713423809bb283f1a3b2b315c0567d421ffa15",
   "route_catalog": {
     "path": "src\\main\\scouty_assets\\local_route_enriched_catalog.json",
     "generated_at": "2026-03-10T20:31:25+00:00",

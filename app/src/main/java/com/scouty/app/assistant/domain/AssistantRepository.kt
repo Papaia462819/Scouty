@@ -7,8 +7,11 @@ import com.scouty.app.assistant.data.KnowledgePackManager
 import com.scouty.app.assistant.data.KnowledgePackStatusProvider
 import com.scouty.app.assistant.data.SqliteKnowledgeChunkStore
 import com.scouty.app.assistant.data.buildSearchTokens
+import com.scouty.app.assistant.model.AssistantConversationState
 import com.scouty.app.assistant.model.AssistantCitation
 import com.scouty.app.assistant.model.AssistantResponse
+import com.scouty.app.assistant.model.CardFamily
+import com.scouty.app.assistant.model.ConversationLane
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.DomainHint
 import com.scouty.app.assistant.model.GenerationMode
@@ -63,17 +66,41 @@ data class GenerationInput(
 )
 
 class QueryAnalyzer {
-    fun analyze(query: String, context: DeviceContextSnapshot): QueryAnalysis {
+    fun analyze(
+        query: String,
+        context: DeviceContextSnapshot,
+        conversationState: AssistantConversationState = AssistantConversationState()
+    ): QueryAnalysis {
         val tokens = buildSearchTokens(query)
         val rawTokens = buildLanguageTokens(query)
         val preferredLanguage = detectLanguage(query, rawTokens, tokens, context.localeTag)
+        val normalizedQuery = normalizeTokenString(query)
         val routeContextQuery = tokens.any { it in RouteTokens } ||
             (context.trail != null && tokens.any { it in RouteContextTokens })
         val gearQuery = tokens.any { it in GearTokens }
+        val campfireDefinitionQuery = isCampfireDefinitionQuery(normalizedQuery)
+        val campfireConstraintQuery = isCampfireConstraintQuery(normalizedQuery)
+        val campfireTopicQuery = tokens.any { it in CampfireTokens } ||
+            containsAny(normalizedQuery, "foc", "campfire", "iasca", "amnar", "bricheta", "chibrit")
+        val wildlifeBreakout = tokens.any { it in WildlifeBreakoutTokens }
+        val campfireFollowUp = conversationState.activeTopic == "campfire" && !wildlifeBreakout && (
+            tokens.size <= 4 ||
+                conversationState.openQuestion != null ||
+                campfireDefinitionQuery ||
+                campfireConstraintQuery ||
+                normalizedQuery.startsWith("cum") ||
+                normalizedQuery.startsWith("si daca") ||
+                normalizedQuery.startsWith("dar") ||
+                normalizedQuery.startsWith("iar") ||
+                normalizedQuery.startsWith("ce e") ||
+                normalizedQuery.startsWith("ce inseamna")
+            )
+        val campfireLane = campfireTopicQuery || campfireFollowUp
 
         val domainHints = DomainKeywordMap.mapNotNull { (domain, keywords) ->
             val matches = tokens.count { token -> keywords.any { keyword -> keyword.startsWith(token) || token.startsWith(keyword) || token in keyword } }
             val weight = matches.toDouble() + when {
+                campfireLane && domain == CampfireDomain -> 4.0
                 routeContextQuery && domain == RouteDomain -> 3.0
                 gearQuery && domain == GearDomain -> 3.0
                 else -> 0.0
@@ -83,6 +110,7 @@ class QueryAnalyzer {
             .take(3)
             .ifEmpty {
                 when {
+                    campfireLane -> listOf(DomainHint(CampfireDomain, 3.0))
                     routeContextQuery -> listOf(DomainHint(RouteDomain, 2.0))
                     gearQuery -> listOf(DomainHint(GearDomain, 2.0))
                     else -> listOf(DomainHint("mountain_safety", 1.0))
@@ -90,6 +118,7 @@ class QueryAnalyzer {
             }
 
         val reasoningType = when {
+            campfireLane -> ReasoningType.KNOW_HOW
             routeContextQuery -> ReasoningType.ROUTE_CONTEXT
             gearQuery -> ReasoningType.GEAR_ADVICE
             domainHints.firstOrNull()?.domain == "weather_and_season" -> ReasoningType.WEATHER_CONTEXT
@@ -102,6 +131,15 @@ class QueryAnalyzer {
             tokens = tokens,
             domainHints = domainHints,
             reasoningType = reasoningType,
+            knowledgeLane = if (campfireLane) ConversationLane.FIELD_KNOW_HOW else ConversationLane.STANDARD,
+            resolvedTopic = if (campfireLane) "campfire" else null,
+            targetFamily = when {
+                !campfireLane -> null
+                campfireDefinitionQuery -> CardFamily.DEFINITION
+                campfireConstraintQuery -> CardFamily.CONSTRAINT
+                else -> CardFamily.SCENARIO
+            },
+            isFollowUp = campfireFollowUp,
             routeContextQuery = routeContextQuery,
             gearQuery = gearQuery,
             safetyTags = detectSafetyTags(tokens)
@@ -176,7 +214,46 @@ class QueryAnalyzer {
             else -> null
         }?.takeIf { it.length >= 2 && it != token }
 
+    private fun isCampfireDefinitionQuery(normalizedQuery: String): Boolean =
+        (normalizedQuery.startsWith("ce e") ||
+            normalizedQuery.startsWith("ce inseamna") ||
+            normalizedQuery.startsWith("ce este") ||
+            normalizedQuery.startsWith("adica")) &&
+            containsAny(normalizedQuery, "iasca", "kindling", "amnar", "triunghiul focului", "vatra")
+
+    private fun isCampfireConstraintQuery(normalizedQuery: String): Boolean =
+        containsAny(
+            normalizedQuery,
+            "totul e ud",
+            "bate vantul",
+            "vant puternic",
+            "nu gasesc",
+            "nu am",
+            "nu merge",
+            "nu se aprinde",
+            "am voie",
+            "interzis",
+            "radacini",
+            "iarba uscata",
+            "in cort",
+            "se intuneca",
+            "sunt obosit",
+            "merita sa mai incerc",
+            "mai bine fac altceva"
+        )
+
+    private fun containsAny(normalized: String, vararg terms: String): Boolean =
+        terms.any { normalizeTokenString(it) in normalized }
+
+    private fun normalizeTokenString(value: String): String =
+        Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD)
+            .replace("\\p{Mn}+".toRegex(), "")
+            .replace("[^a-z0-9 ]".toRegex(), " ")
+            .replace("\\s+".toRegex(), " ")
+            .trim()
+
     private companion object {
+        private const val CampfireDomain = "field_know_how"
         private const val RouteDomain = "route_intelligence_romania"
         private const val GearDomain = "gear_and_preparation"
         private val SafetyDomains = setOf(
@@ -194,6 +271,13 @@ class QueryAnalyzer {
             "echipament", "gear", "rucsac", "backpack", "apa", "water", "jacheta",
             "geaca", "frontala", "headlamp", "kit", "iau"
         )
+        private val WildlifeBreakoutTokens = setOf(
+            "urs", "ursi", "bear", "bears", "sarpe", "snake", "lup", "wolf"
+        )
+        private val CampfireTokens = setOf(
+            "foc", "focul", "campfire", "iasca", "amnar", "ferro", "bricheta",
+            "brichete", "chibrit", "chibrite", "surcele", "vreascuri", "jar", "vatr"
+        )
         private val RomanianMarkers = setOf(
             "am", "si", "sa", "traseu", "glezna", "entorsa", "durere", "rana", "arsura", "urs",
             "sarpe", "marcaj", "cum", "ce", "care", "cand", "unde", "munte", "fac", "facut",
@@ -203,6 +287,7 @@ class QueryAnalyzer {
             "the", "trail", "ankle", "bear", "snake", "marker", "how", "what", "when", "where", "mountain"
         )
         private val DomainKeywordMap = mapOf(
+            "field_know_how" to setOf("foc", "focul", "campfire", "iasca", "amnar", "bricheta", "chibrit"),
             "medical_emergency" to setOf("glezna", "fractura", "bleeding", "sangerare", "altitude", "heat", "trauma", "accident"),
             "mountain_safety" to setOf("salvamont", "112", "lost", "ratacit", "plan", "rescue"),
             "survival_basics" to setOf("apa", "water", "purifica", "purify", "campfire", "foc"),
@@ -706,18 +791,165 @@ class AssistantRepository(
     private val knowledgeStore: KnowledgeChunkStore = createKnowledgeStore(context, knowledgePackManager),
     private val queryAnalyzer: QueryAnalyzer = QueryAnalyzer(),
     private val retrievalEngine: RetrievalEngine = RetrievalEngine(knowledgeStore, queryAnalyzer),
+    private val deterministicPreprocessor: DeterministicAssistantPreprocessor = DeterministicAssistantPreprocessor(),
+    private val retrievalConfidencePolicy: RetrievalConfidencePolicy = RetrievalConfidencePolicy(),
+    private val interpreterGate: InterpreterGate = InterpreterGate(retrievalConfidencePolicy),
+    private val translationEngine: OnDeviceTranslationEngine = OnDeviceTranslationEngine(),
+    private val interpreterPromptBuilder: InterpreterPromptBuilder = InterpreterPromptBuilder(translationEngine),
+    private val campfireConversationEngine: CampfireConversationEngine = CampfireConversationEngine(
+        knowledgeStore = knowledgeStore,
+        confidencePolicy = retrievalConfidencePolicy
+    ),
     private val promptBuilder: PromptBuilder = PromptBuilder(),
     private val modelManager: ModelManager = context?.let(::ModelManager)
         ?: error("modelManager is required when context is null"),
+    private val slmInterpreterEngine: SlmInterpreterEngine = OnDeviceSlmInterpreterEngine(
+        modelManager = modelManager,
+        promptBuilder = interpreterPromptBuilder
+    ),
+    private val interpreterOutputValidator: InterpreterOutputValidator = InterpreterOutputValidator(),
+    private val groundedQueryBuilder: GroundedQueryBuilder = GroundedQueryBuilder(),
+    private val groundedWordingEngine: GroundedWordingEngine = OnDeviceGroundedWordingEngine(modelManager),
     private val generationEngine: GenerationEngine = LocalLlmGenerationEngine(
         modelManager = modelManager,
         fallbackEngine = TemplateGenerationEngine()
     ),
     private val medicalSafetyPolicy: MedicalSafetyPolicy = MedicalSafetyPolicy()
 ) {
-    suspend fun answer(query: String, context: DeviceContextSnapshot): AssistantResponse {
-        val queryAnalysis = queryAnalyzer.analyze(query, context)
+    suspend fun answer(
+        query: String,
+        context: DeviceContextSnapshot,
+        conversationState: AssistantConversationState = AssistantConversationState()
+    ): AssistantResponse {
+        val queryAnalysis = queryAnalyzer.analyze(query, context, conversationState)
+        val preprocessing = deterministicPreprocessor.preprocess(query, conversationState, queryAnalysis)
         val packStatus = knowledgePackManager.ensureReady()
+        if (queryAnalysis.knowledgeLane == ConversationLane.FIELD_KNOW_HOW && queryAnalysis.resolvedTopic == "campfire") {
+            return answerCampfire(
+                query = query,
+                context = context,
+                conversationState = conversationState,
+                queryAnalysis = queryAnalysis,
+                packStatus = packStatus,
+                preprocessing = preprocessing
+            )
+        }
+        return answerStandard(
+            query = query,
+            context = context,
+            conversationState = conversationState,
+            initialAnalysis = queryAnalysis,
+            preprocessing = preprocessing,
+            packStatus = packStatus
+        )
+    }
+
+    private suspend fun answerCampfire(
+        query: String,
+        context: DeviceContextSnapshot,
+        conversationState: AssistantConversationState,
+        queryAnalysis: QueryAnalysis,
+        packStatus: KnowledgePackStatus,
+        preprocessing: DeterministicPreprocessingResult
+    ): AssistantResponse {
+        val initial = campfireConversationEngine.answer(
+            query = query,
+            context = context,
+            queryAnalysis = queryAnalysis,
+            knowledgePackStatus = packStatus,
+            conversationState = conversationState,
+            retrievalQuery = query,
+            validatedSlotUpdates = preprocessing.obviousSlotUpdates,
+            preprocessing = preprocessing
+        )
+        val gateDecision = interpreterGate.decide(
+            assessment = initial.retrievalConfidence,
+            preprocessing = preprocessing,
+            conversationState = conversationState
+        )
+        val interpretation = if (gateDecision.shouldInvoke) {
+            attemptValidatedInterpretation(
+                query = query,
+                context = context,
+                conversationState = conversationState,
+                queryAnalysis = queryAnalysis,
+                assessment = initial.retrievalConfidence,
+                preprocessing = preprocessing
+            )
+        } else {
+            null
+        }
+        val finalCampfire = if (
+            interpretation != null &&
+            (interpretation.standaloneQuery != null || interpretation.slotUpdates.isNotEmpty())
+        ) {
+            val plan = groundedQueryBuilder.build(query, interpretation, preprocessing)
+            val interpretedAnalysis = queryAnalyzer.analyze(plan.retrievalQuery, context, conversationState)
+            val campfireAnalysis = if (
+                interpretedAnalysis.knowledgeLane == ConversationLane.FIELD_KNOW_HOW &&
+                interpretedAnalysis.resolvedTopic == "campfire"
+            ) {
+                interpretedAnalysis
+            } else {
+                queryAnalysis
+            }
+            val rerun = campfireConversationEngine.answer(
+                query = query,
+                context = context,
+                queryAnalysis = campfireAnalysis,
+                knowledgePackStatus = packStatus,
+                conversationState = conversationState,
+                retrievalQuery = plan.retrievalQuery,
+                validatedSlotUpdates = plan.slotUpdates,
+                preprocessing = preprocessing
+            )
+            if (retrievalConfidencePolicy.shouldAcceptRewrite(initial.retrievalConfidence, rerun.retrievalConfidence, interpretation)) {
+                rerun
+            } else {
+                initial
+            }
+        } else {
+            initial
+        }
+
+        val safetyOutcome = medicalSafetyPolicy.evaluate(query, finalCampfire.retrievedChunks, context)
+        val wordedOutput = applyCampfireWordingIfSafe(
+            query = query,
+            preferredLanguage = queryAnalysis.preferredLanguage,
+            structuredOutput = finalCampfire.structuredOutput,
+            retrievedChunks = finalCampfire.retrievedChunks,
+            confidence = finalCampfire.retrievalConfidence
+        )
+        val structuredOutput = medicalSafetyPolicy.applyFinalGuardrails(
+            output = wordedOutput,
+            safetyOutcome = safetyOutcome,
+            isRomanian = queryAnalysis.preferredLanguage == "ro"
+        )
+        val modelStatus = modelManager.currentStatus()
+        return AssistantResponse(
+            answerText = buildDisplayText(structuredOutput, safetyOutcome),
+            structuredOutput = structuredOutput,
+            citations = buildCitations(queryAnalysis, context, finalCampfire.retrievedChunks),
+            safetyOutcome = safetyOutcome,
+            generationMode = structuredOutput.generationMode,
+            reasoningType = structuredOutput.reasoningType,
+            conversationState = finalCampfire.conversationState,
+            modelVersion = modelStatus.modelVersion.takeIf { modelStatus.availableOnDisk },
+            modelRuntimeState = modelStatus.state,
+            modelStatusDetails = modelStatus.details,
+            knowledgePackVersion = structuredOutput.knowledgePackVersion,
+            usedFallback = false
+        )
+    }
+
+    private suspend fun answerStandard(
+        query: String,
+        context: DeviceContextSnapshot,
+        conversationState: AssistantConversationState,
+        initialAnalysis: QueryAnalysis,
+        preprocessing: DeterministicPreprocessingResult,
+        packStatus: KnowledgePackStatus
+    ): AssistantResponse {
         val modelStatus = modelManager.refreshStatus()
         val generationMode = generationModeForAttempt(modelStatus)
         AssistantDiagnostics.logAnswerStart(
@@ -726,26 +958,83 @@ class AssistantRepository(
             modelStatus = modelStatus,
             generationMode = generationMode
         )
-        val retrieved = retrievalEngine.retrieve(
+
+        val initialRetrieved = retrievalEngine.retrieve(
             query = query,
             context = context,
-            queryAnalysis = queryAnalysis,
+            queryAnalysis = initialAnalysis,
             limit = 4
         )
+        val initialAssessment = retrievalConfidencePolicy.assessStandard(
+            query = query,
+            queryAnalysis = initialAnalysis,
+            conversationState = conversationState,
+            retrieved = initialRetrieved,
+            preprocessing = preprocessing
+        )
+        val gateDecision = interpreterGate.decide(
+            assessment = initialAssessment,
+            preprocessing = preprocessing,
+            conversationState = conversationState
+        )
+
+        var finalAnalysis = initialAnalysis
+        var finalRetrieved = initialRetrieved
+        var acceptedInterpretation: ValidatedInterpretation? = null
+        if (gateDecision.shouldInvoke) {
+            val interpretation = attemptValidatedInterpretation(
+                query = query,
+                context = context,
+                conversationState = conversationState,
+                queryAnalysis = initialAnalysis,
+                assessment = initialAssessment,
+                preprocessing = preprocessing
+            )
+            if (interpretation != null) {
+                val plan = groundedQueryBuilder.build(query, interpretation, preprocessing)
+                val candidateAnalysis = queryAnalyzer.analyze(plan.retrievalQuery, context, conversationState)
+                val candidateRetrieved = retrievalEngine.retrieve(
+                    query = plan.retrievalQuery,
+                    context = context,
+                    queryAnalysis = candidateAnalysis,
+                    limit = 4
+                )
+                val candidateAssessment = retrievalConfidencePolicy.assessStandard(
+                    query = plan.retrievalQuery,
+                    queryAnalysis = candidateAnalysis,
+                    conversationState = conversationState,
+                    retrieved = candidateRetrieved,
+                    preprocessing = preprocessing
+                )
+                val acceptForResolvedAnaphora =
+                    preprocessing.hasPronounReference &&
+                        candidateRetrieved.firstOrNull()?.chunkId != initialRetrieved.firstOrNull()?.chunkId &&
+                        candidateAssessment.score >= initialAssessment.score
+                if (
+                    retrievalConfidencePolicy.shouldAcceptRewrite(initialAssessment, candidateAssessment, interpretation) ||
+                    acceptForResolvedAnaphora
+                ) {
+                    finalAnalysis = candidateAnalysis
+                    finalRetrieved = candidateRetrieved
+                    acceptedInterpretation = interpretation
+                }
+            }
+        }
+
         val prompt = promptBuilder.build(
             query = query,
             context = context,
-            retrievedChunks = retrieved,
-            queryAnalysis = queryAnalysis
+            retrievedChunks = finalRetrieved,
+            queryAnalysis = finalAnalysis
         )
-        val safetyOutcome = medicalSafetyPolicy.evaluate(query, retrieved, context)
+        val safetyOutcome = medicalSafetyPolicy.evaluate(query, finalRetrieved, context)
         val structuredOutput = medicalSafetyPolicy.applyFinalGuardrails(
             output = generationEngine.generate(
                 GenerationInput(
                     query = query,
                     prompt = prompt,
-                    queryAnalysis = queryAnalysis,
-                    retrievedChunks = retrieved,
+                    queryAnalysis = finalAnalysis,
+                    retrievedChunks = finalRetrieved,
                     context = context,
                     safetyOutcome = safetyOutcome,
                     generationMode = generationMode,
@@ -754,7 +1043,7 @@ class AssistantRepository(
                 )
             ),
             safetyOutcome = safetyOutcome,
-            isRomanian = queryAnalysis.preferredLanguage == "ro"
+            isRomanian = finalAnalysis.preferredLanguage == "ro"
         )
         val finalModelStatus = modelManager.currentStatus()
         AssistantDiagnostics.logAnswerEnd(
@@ -763,23 +1052,93 @@ class AssistantRepository(
             modelStatus = finalModelStatus,
             generationMode = structuredOutput.generationMode,
             safetyOutcome = safetyOutcome,
-            retrievedChunks = retrieved
+            retrievedChunks = finalRetrieved
         )
 
         return AssistantResponse(
             answerText = buildDisplayText(structuredOutput, safetyOutcome),
             structuredOutput = structuredOutput,
-            citations = buildCitations(queryAnalysis, context, retrieved),
+            citations = buildCitations(finalAnalysis, context, finalRetrieved),
             safetyOutcome = safetyOutcome,
             generationMode = structuredOutput.generationMode,
             reasoningType = structuredOutput.reasoningType,
+            conversationState = buildStandardConversationState(
+                previousState = conversationState,
+                originalQuery = query,
+                analysis = finalAnalysis,
+                retrieved = finalRetrieved,
+                acceptedInterpretation = acceptedInterpretation
+            ),
             modelVersion = finalModelStatus.modelVersion.takeIf {
-                finalModelStatus.availableOnDisk || finalModelStatus.state != com.scouty.app.assistant.model.ModelRuntimeState.MISSING
+                finalModelStatus.availableOnDisk || finalModelStatus.state != ModelRuntimeState.MISSING
             },
             modelRuntimeState = finalModelStatus.state,
             modelStatusDetails = finalModelStatus.details,
             knowledgePackVersion = structuredOutput.knowledgePackVersion,
             usedFallback = structuredOutput.generationMode == GenerationMode.FALLBACK_STRUCTURED
+        )
+    }
+
+    private suspend fun attemptValidatedInterpretation(
+        query: String,
+        context: DeviceContextSnapshot,
+        conversationState: AssistantConversationState,
+        queryAnalysis: QueryAnalysis,
+        assessment: RetrievalConfidenceAssessment,
+        preprocessing: DeterministicPreprocessingResult
+    ): ValidatedInterpretation? {
+        val request = InterpreterRequest(
+            query = query,
+            preferredLanguage = queryAnalysis.preferredLanguage,
+            queryAnalysis = queryAnalysis,
+            conversationState = conversationState,
+            retrievalConfidence = assessment,
+            preprocessing = preprocessing,
+            activeTrailLabel = context.trail?.name ?: conversationState.lastRetrievedTitle
+        )
+        val execution = slmInterpreterEngine.interpret(request)
+        return interpreterOutputValidator.validate(request, execution)
+    }
+
+    private suspend fun applyCampfireWordingIfSafe(
+        query: String,
+        preferredLanguage: String,
+        structuredOutput: StructuredAssistantOutput,
+        retrievedChunks: List<RetrievedChunk>,
+        confidence: RetrievalConfidenceAssessment
+    ): StructuredAssistantOutput {
+        if (confidence.tier == RetrievalConfidenceTier.LOW || retrievedChunks.isEmpty()) {
+            return structuredOutput
+        }
+        val wording = groundedWordingEngine.rephrase(
+            GroundedWordingRequest(
+                query = query,
+                preferredLanguage = preferredLanguage,
+                deterministicOutput = structuredOutput,
+                retrievedChunks = retrievedChunks
+            )
+        ) ?: return structuredOutput
+        return structuredOutput.copy(summary = wording.summary)
+    }
+
+    private fun buildStandardConversationState(
+        previousState: AssistantConversationState,
+        originalQuery: String,
+        analysis: QueryAnalysis,
+        retrieved: List<RetrievedChunk>,
+        acceptedInterpretation: ValidatedInterpretation?
+    ): AssistantConversationState {
+        val primary = retrieved.firstOrNull()
+        return AssistantConversationState(
+            activeTopic = null,
+            lastUserMessage = originalQuery,
+            lastStandaloneQuery = acceptedInterpretation?.standaloneQuery ?: originalQuery,
+            lastRetrievedChunkId = primary?.chunkId,
+            lastRetrievedTopic = primary?.topic ?: previousState.lastRetrievedTopic,
+            lastRetrievedTitle = primary?.sectionTitle ?: previousState.lastRetrievedTitle,
+            lastResolvedSlot = acceptedInterpretation?.slotUpdates?.keys?.firstOrNull(),
+            lastInterpretationConfidence = acceptedInterpretation?.confidence,
+            openQuestion = null
         )
     }
 
@@ -849,7 +1208,14 @@ class AssistantRepository(
         }
         val visibleBodies = output.sections.asSequence()
             .filter { it.style == ResponseSectionStyle.GUIDANCE || it.style == ResponseSectionStyle.ACTIONS }
-            .map { sanitizeDisplayText(it.body) }
+            .map { section ->
+                val body = sanitizeDisplayText(section.body)
+                if (output.generationMode == GenerationMode.CARD_DIRECT) {
+                    "${sanitizeDisplayText(section.title)}: $body"
+                } else {
+                    body
+                }
+            }
             .filter { it.isNotBlank() }
             .filter { normalizeForDisplay(it) != normalizeForDisplay(summary) }
             .distinctBy(::normalizeForDisplay)
@@ -868,7 +1234,6 @@ class AssistantRepository(
 
         return parts.joinToString("\n\n").trim()
     }
-
     private fun looksLikeMetaSummary(summary: String): Boolean {
         val normalized = normalizeForDisplay(summary)
         return normalized.startsWith("am selectat") ||

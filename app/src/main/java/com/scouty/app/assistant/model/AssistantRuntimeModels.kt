@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 
 enum class GenerationMode(val label: String) {
     FALLBACK_STRUCTURED("Fallback structured"),
-    LOCAL_LLM("Local LLM")
+    LOCAL_LLM("Local LLM"),
+    CARD_DIRECT("Structured card")
 }
 
 enum class ReasoningType(val label: String) {
@@ -13,7 +14,19 @@ enum class ReasoningType(val label: String) {
     ROUTE_CONTEXT("Route context"),
     GEAR_ADVICE("Gear advice"),
     WEATHER_CONTEXT("Weather context"),
+    KNOW_HOW("Know-how guidance"),
     GENERAL_RETRIEVAL("General retrieval")
+}
+
+enum class ConversationLane {
+    STANDARD,
+    FIELD_KNOW_HOW
+}
+
+enum class CardFamily {
+    SCENARIO,
+    DEFINITION,
+    CONSTRAINT
 }
 
 enum class ResponseSectionStyle {
@@ -34,6 +47,9 @@ data class StructuredAssistantOutput(
     val sections: List<StructuredResponseSection>,
     val generationMode: GenerationMode,
     val reasoningType: ReasoningType,
+    val followUpQuestions: List<String> = emptyList(),
+    val resolvedTopic: String? = null,
+    val resolvedFamily: CardFamily? = null,
     val modelVersion: String? = null,
     val knowledgePackVersion: String? = null
 ) {
@@ -136,7 +152,10 @@ data class KnowledgeChunkRecord(
     val safetyTags: List<String> = emptyList(),
     val countryScope: String = "global",
     val packVersion: String,
-    val keywords: String = ""
+    val keywords: String = "",
+    val cardFamily: CardFamily? = null,
+    val priority: Int = 0,
+    val metadataJson: String? = null
 )
 
 data class DomainHint(
@@ -149,6 +168,10 @@ data class QueryAnalysis(
     val tokens: List<String>,
     val domainHints: List<DomainHint>,
     val reasoningType: ReasoningType,
+    val knowledgeLane: ConversationLane = ConversationLane.STANDARD,
+    val resolvedTopic: String? = null,
+    val targetFamily: CardFamily? = null,
+    val isFollowUp: Boolean = false,
     val routeContextQuery: Boolean = false,
     val gearQuery: Boolean = false,
     val safetyTags: Set<String> = emptySet()

@@ -7,14 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.scouty.app.assistant.data.DeviceContextProvider
 import com.scouty.app.assistant.domain.AssistantRuntimeGraph
 import com.scouty.app.assistant.domain.AssistantRepository
+import com.scouty.app.assistant.model.AssistantConversationState
 import com.scouty.app.assistant.model.AssistantMessageUiModel
 import com.scouty.app.assistant.model.AssistantUiState
 import com.scouty.app.assistant.model.SafetyOutcome
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 class AssistantViewModel(
@@ -24,6 +27,7 @@ class AssistantViewModel(
 
     private val _uiState = MutableStateFlow(AssistantUiState())
     val uiState: StateFlow<AssistantUiState> = _uiState.asStateFlow()
+    private var conversationState = AssistantConversationState()
 
     fun updateDraft(value: String) {
         _uiState.update { it.copy(draft = value) }
@@ -37,6 +41,11 @@ class AssistantViewModel(
     fun sendCurrentDraft() {
         val query = _uiState.value.draft.trim()
         if (query.isBlank() || _uiState.value.isResponding) {
+            return
+        }
+
+        if (isEchoedAssistantFollowUp(query)) {
+            appendAssistantClarificationForEchoedFollowUp(query)
             return
         }
 
@@ -55,8 +64,15 @@ class AssistantViewModel(
 
         viewModelScope.launch {
             runCatching {
-                repository.answer(query, deviceContextProvider.deviceContext.value)
+                withContext(Dispatchers.Default) {
+                    repository.answer(
+                        query = query,
+                        context = deviceContextProvider.deviceContext.value,
+                        conversationState = conversationState
+                    )
+                }
             }.onSuccess { response ->
+                conversationState = response.conversationState
                 val assistantMessage = AssistantMessageUiModel(
                     id = UUID.randomUUID().toString(),
                     text = response.answerText,
@@ -64,6 +80,8 @@ class AssistantViewModel(
                     citations = response.citations,
                     safetyOutcome = response.safetyOutcome,
                     sections = response.structuredOutput.sections,
+                    resolvedTopic = response.structuredOutput.resolvedTopic,
+                    resolvedFamily = response.structuredOutput.resolvedFamily,
                     generationMode = response.generationMode,
                     reasoningType = response.reasoningType,
                     knowledgePackVersion = response.knowledgePackVersion,
@@ -71,16 +89,30 @@ class AssistantViewModel(
                     modelRuntimeState = response.modelRuntimeState,
                     modelStatusDetails = response.modelStatusDetails
                 )
+                val followUpMessage = buildSequentialFollowUpPrompt(response.structuredOutput.followUpQuestions)
+                    ?.let { prompt ->
+                        AssistantMessageUiModel(
+                            id = UUID.randomUUID().toString(),
+                            text = prompt.question,
+                            isUser = false,
+                            followUpReplies = prompt.suggestedReplies,
+                            resolvedTopic = response.structuredOutput.resolvedTopic,
+                            resolvedFamily = response.structuredOutput.resolvedFamily,
+                            generationMode = response.generationMode,
+                            reasoningType = response.reasoningType,
+                            knowledgePackVersion = response.knowledgePackVersion
+                        )
+                    }
                 _uiState.update { state ->
                     state.copy(
                         isResponding = false,
-                        messages = state.messages + assistantMessage
+                        messages = state.messages + listOfNotNull(assistantMessage, followUpMessage)
                     )
                 }
             }.onFailure {
                 val fallbackMessage = AssistantMessageUiModel(
                     id = UUID.randomUUID().toString(),
-                    text = "Assistant-ul local nu a putut răspunde acum. Verifică semnalul GPS, bateria și încearcă din nou.",
+                    text = "Nu am putut procesa mesajul acesta. Scrie-mi mai simplu ce vrei sau răspunde pe scurt cu situația ta, de exemplu: Căldură, Gătit, Am amnar, Totul e ud.",
                     isUser = false,
                     safetyOutcome = SafetyOutcome.CAUTION
                 )
@@ -93,6 +125,38 @@ class AssistantViewModel(
             }
         }
     }
+
+    private fun isEchoedAssistantFollowUp(query: String): Boolean =
+        conversationState.askedFollowUps.any { normalizePrompt(it) == normalizePrompt(query) }
+
+    private fun appendAssistantClarificationForEchoedFollowUp(query: String) {
+        val prompt = buildSequentialFollowUpPrompt(listOf(query))
+        val userMessage = AssistantMessageUiModel(
+            id = UUID.randomUUID().toString(),
+            text = query,
+            isUser = true
+        )
+        val clarification = AssistantMessageUiModel(
+            id = UUID.randomUUID().toString(),
+            text = "Asta era întrebarea mea pentru tine. Răspunde-mi cu varianta care se potrivește sau scrie pe scurt situația ta.",
+            isUser = false,
+            followUpReplies = prompt?.suggestedReplies.orEmpty(),
+            safetyOutcome = SafetyOutcome.NORMAL
+        )
+        _uiState.update { state ->
+            state.copy(
+                draft = "",
+                isResponding = false,
+                messages = state.messages + userMessage + clarification
+            )
+        }
+    }
+
+    private fun normalizePrompt(value: String): String =
+        value.lowercase()
+            .replace("[^\\p{L}0-9 ]".toRegex(), " ")
+            .replace("\\s+".toRegex(), " ")
+            .trim()
 
     class Factory(
         private val application: Application,

@@ -70,16 +70,25 @@ fun ChatScreen(
             contentPadding = PaddingValues(vertical = 16.dp)
         ) {
             items(uiState.messages, key = { it.id }) { message ->
-                ChatBubble(message)
+                ChatBubble(
+                    message = message,
+                    onPromptSelected = onPromptSelected
+                )
             }
             if (uiState.isResponding) {
                 item {
                     ChatBubble(
                         AssistantMessageUiModel(
                             id = "loading",
-                            text = "Scouty AI proceseaza raspunsul offline...",
+                            text = listOf(
+                                "Hmmm...",
+                                "Stai sa ma gandesc.",
+                                "Imediat!",
+                                "Stai putin."
+                            ).random(),
                             isUser = false
-                        )
+                        ),
+                        onPromptSelected = onPromptSelected
                     )
                 }
             }
@@ -155,7 +164,10 @@ fun ChatScreen(
 }
 
 @Composable
-fun ChatBubble(message: AssistantMessageUiModel) {
+fun ChatBubble(
+    message: AssistantMessageUiModel,
+    onPromptSelected: (String) -> Unit
+) {
     var sourcesExpanded by rememberSaveable(message.id) { mutableStateOf(false) }
     val alignment = if (message.isUser) Alignment.End else Alignment.Start
     val containerColor = if (message.isUser) {
@@ -185,6 +197,21 @@ fun ChatBubble(message: AssistantMessageUiModel) {
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
                 style = MaterialTheme.typography.bodyMedium
             )
+        }
+        if (!message.isUser && message.followUpReplies.isNotEmpty()) {
+            Row(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                message.followUpReplies.forEach { followUp ->
+                    SuggestionChip(
+                        onClick = { onPromptSelected(followUp.query) },
+                        label = { Text(followUp.label) }
+                    )
+                }
+            }
         }
         if (!message.isUser && message.citations.isNotEmpty()) {
             TextButton(

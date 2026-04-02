@@ -49,6 +49,35 @@ data class AssistantCitation(
     val publisher: String? = null
 )
 
+data class AssistantOpenQuestion(
+    val text: String,
+    val targetSlot: String,
+    val allowedValues: List<String>,
+    val allowedAdditionalSlots: List<String> = emptyList()
+)
+
+data class AssistantConversationState(
+    val activeTopic: String? = null,
+    val lastCardId: String? = null,
+    val pendingScenarioCardId: String? = null,
+    val facts: Map<String, String> = emptyMap(),
+    val askedFollowUps: List<String> = emptyList(),
+    val resolvedTerms: List<String> = emptyList(),
+    val openQuestion: AssistantOpenQuestion? = null,
+    val lastResolvedSlot: String? = null,
+    val lastUserMessage: String? = null,
+    val lastStandaloneQuery: String? = null,
+    val lastRetrievedChunkId: String? = null,
+    val lastRetrievedTopic: String? = null,
+    val lastRetrievedTitle: String? = null,
+    val lastInterpretationConfidence: Double? = null
+)
+
+data class AssistantQuickReplyUiModel(
+    val label: String,
+    val query: String
+)
+
 data class AssistantMessageUiModel(
     val id: String,
     val text: String,
@@ -56,6 +85,9 @@ data class AssistantMessageUiModel(
     val citations: List<AssistantCitation> = emptyList(),
     val safetyOutcome: SafetyOutcome = SafetyOutcome.NORMAL,
     val sections: List<StructuredResponseSection> = emptyList(),
+    val followUpReplies: List<AssistantQuickReplyUiModel> = emptyList(),
+    val resolvedTopic: String? = null,
+    val resolvedFamily: CardFamily? = null,
     val generationMode: GenerationMode? = null,
     val reasoningType: ReasoningType? = null,
     val knowledgePackVersion: String? = null,
@@ -78,6 +110,7 @@ data class AssistantResponse(
     val safetyOutcome: SafetyOutcome,
     val generationMode: GenerationMode,
     val reasoningType: ReasoningType,
+    val conversationState: AssistantConversationState = AssistantConversationState(),
     val modelVersion: String? = null,
     val modelRuntimeState: ModelRuntimeState? = null,
     val modelStatusDetails: String? = null,
@@ -101,12 +134,14 @@ fun starterPromptsForCurrentLocale(locale: Locale = assistantDefaultLocale()): L
         listOf(
             "Mi-am sucit glezna",
             "Care e marcajul traseului activ?",
-            "Ce echipament sa tin la indemana acum?"
+            "Ce echipament sa tin la indemana acum?",
+            "Cum fac focul?"
         )
     } else {
         listOf(
             "I twisted my ankle",
             "What is the marker for my active trail?",
-            "What gear should I keep ready now?"
+            "What gear should I keep ready now?",
+            "How do I make a fire?"
         )
     }

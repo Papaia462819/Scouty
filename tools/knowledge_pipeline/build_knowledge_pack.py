@@ -12,20 +12,28 @@ from common import (
     ASSETS_DIR,
     BUILD_DIR,
     CURATED_CHUNKS_PATH,
+    DEFAULT_EMBEDDING_MODEL,
+    EMBEDDING_DIMENSION,
     FETCH_MANIFEST_PATH,
+    KNOW_HOW_CAMPFIRE_PATH,
     ROOT_DIR,
     ROUTE_CATALOG_PATH,
     ROUTE_GEOMETRY_PATH,
     SOURCE_REGISTRY_PATH,
     LocalSourceInfo,
+    build_text_embedder,
     clip_text,
     ensure_directory,
+    generate_typo_variants,
+    load_campfire_cards,
     load_curated_chunk_specs,
     load_json,
     load_pack_version,
     load_source_registry,
     marker_label,
+    normalize_embedding_text,
     normalize_whitespace,
+    pack_float32_vector,
     safe_slug,
     sha256_file,
     utc_now_iso,
@@ -34,6 +42,7 @@ from common import (
 
 
 REQUIRED_DOMAINS = {
+    "field_know_how",
     "medical_emergency",
     "mountain_safety",
     "survival_basics",
@@ -78,9 +87,193 @@ def expand_curated_chunks(
                     "country_scope": spec["country_scope"],
                     "pack_version": pack_version,
                     "keywords": normalize_whitespace(spec["keywords"]),
+                    "card_family": None,
+                    "priority": 0,
+                    "metadata_json": None,
                 }
             )
     return rows
+
+
+def build_card_body(card: dict[str, Any]) -> str:
+    parts: list[str] = [card["title"], card["lead"]]
+    parts.extend(card.get("actions_now") or [])
+    parts.extend(card.get("avoid") or [])
+    parts.extend(card.get("watch_for") or [])
+    plain_language_definition = card.get("plain_language_definition")
+    if plain_language_definition:
+        parts.append(plain_language_definition)
+    for follow_up in card.get("follow_up_questions") or []:
+        question = follow_up.get("question")
+        if question:
+            parts.append(question)
+    return normalize_whitespace(" ".join(filter(None, parts)))
+
+
+def build_card_query_text(card: dict[str, Any]) -> str:
+    parts: list[str] = [card["title"]]
+    user_phrasings = list(card.get("user_phrasings") or [])
+    keywords = list(card.get("keywords") or [])
+    if user_phrasings:
+        parts.append(" | ".join(user_phrasings))
+    if keywords:
+        parts.append(" ".join(keywords))
+    term = card.get("term")
+    if term:
+        parts.append(term)
+    if card.get("family") == "definition":
+        plain_language_definition = card.get("plain_language_definition") or ""
+        first_sentence = plain_language_definition.split(".", 1)[0].strip()
+        if first_sentence:
+            parts.append(first_sentence)
+    return normalize_whitespace(" ".join(filter(None, parts)))
+
+
+def expand_campfire_cards(
+    sources_by_id: dict[str, dict[str, Any]],
+    pack_version: str,
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for card in load_campfire_cards():
+        source = sources_by_id[card["source_id"]]
+        metadata_json = json.dumps(
+            {
+                "family": card["family"],
+                "intent_group": list(card.get("intent_group") or []),
+                "user_phrasings": list(card.get("user_phrasings") or []),
+                "slot_constraints": dict(card.get("slot_constraints") or {}),
+                "lead": card["lead"],
+                "actions_now": list(card.get("actions_now") or []),
+                "avoid": list(card.get("avoid") or []),
+                "watch_for": list(card.get("watch_for") or []),
+                "follow_up_questions": list(card.get("follow_up_questions") or []),
+                "related_cards": list(card.get("related_cards") or []),
+                "constraint_mode": card.get("constraint_mode", "support"),
+                "term": card.get("term"),
+                "plain_language_definition": card.get("plain_language_definition"),
+            },
+            ensure_ascii=False,
+            sort_keys=False,
+        )
+        rows.append(
+            {
+                "chunk_id": card["card_id"],
+                "domain": card["domain"],
+                "topic": card["topic"],
+                "language": card.get("language", "ro"),
+                "title": normalize_whitespace(card["title"]),
+                "body": build_card_body(card),
+                "source_title": source["title"],
+                "source_url": source.get("url"),
+                "publisher": source["publisher"],
+                "source_language": source["source_language"],
+                "adapted_language": card.get("language", "ro"),
+                "publish_or_review_date": card.get("publish_or_review_date") or utc_now_iso().split("T", 1)[0],
+                "source_trust": int(source["source_trust"]),
+                "safety_tags": list(card.get("safety_tags") or []),
+                "country_scope": card.get("country_scope", source.get("country_scope", "ro")),
+                "pack_version": pack_version,
+                "keywords": normalize_whitespace(" ".join(card.get("keywords") or [])),
+                "card_family": card["family"],
+                "priority": int(card.get("priority", 0)),
+                "metadata_json": metadata_json,
+            }
+        )
+    return rows
+
+
+def build_campfire_phrase_specs(cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    phrase_specs: list[dict[str, Any]] = []
+    seen_keys: set[tuple[str, str, str]] = set()
+
+    def register(card: dict[str, Any], phrase_text: str, phrase_kind: str) -> None:
+        normalized_phrase = normalize_embedding_text(phrase_text)
+        if not normalized_phrase:
+            return
+        key = (card["card_id"], phrase_kind, normalized_phrase)
+        if key in seen_keys:
+            return
+        seen_keys.add(key)
+        phrase_specs.append(
+            {
+                "card_id": card["card_id"],
+                "topic": card["topic"],
+                "language": card.get("language", "ro"),
+                "phrase_text": normalize_whitespace(phrase_text),
+                "normalized_phrase": normalized_phrase,
+                "phrase_kind": phrase_kind,
+            }
+        )
+
+    for card in cards:
+        register(card, card["title"], "title")
+        for keyword in card.get("keywords") or []:
+            register(card, keyword, "keyword")
+        for user_phrasing in card.get("user_phrasings") or []:
+            register(card, user_phrasing, "user_phrasing")
+            for typo_variant in generate_typo_variants(user_phrasing):
+                register(card, typo_variant, "typo_variant")
+        term = card.get("term")
+        if term:
+            register(card, term, "term")
+            for typo_variant in generate_typo_variants(term):
+                register(card, typo_variant, "term_typo_variant")
+        if card.get("family") == "definition":
+            definition = card.get("plain_language_definition") or ""
+            first_sentence = definition.split(".", 1)[0].strip()
+            if first_sentence:
+                register(card, first_sentence, "definition_hint")
+
+    return phrase_specs
+
+
+def build_campfire_embeddings(cards: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+    if not cards:
+        return [], [], {
+            "model_name": DEFAULT_EMBEDDING_MODEL,
+            "backend": "disabled",
+            "dimension": EMBEDDING_DIMENSION,
+        }
+
+    embedder = build_text_embedder(DEFAULT_EMBEDDING_MODEL, EMBEDDING_DIMENSION)
+    query_embeddings = embedder.encode([build_card_query_text(card) for card in cards])
+    content_embeddings = embedder.encode([build_card_body(card) for card in cards])
+
+    card_rows: list[dict[str, Any]] = []
+    for card, query_embedding, content_embedding in zip(cards, query_embeddings, content_embeddings):
+        card_rows.append(
+            {
+                "card_id": card["card_id"],
+                "topic": card["topic"],
+                "language": card.get("language", "ro"),
+                "query_embedding": pack_float32_vector(query_embedding),
+                "content_embedding": pack_float32_vector(content_embedding),
+                "embedding_model": embedder.model_name,
+                "embedding_backend": embedder.backend_label,
+                "embedding_dimension": embedder.dimension,
+            }
+        )
+
+    phrase_specs = build_campfire_phrase_specs(cards)
+    phrase_embeddings = embedder.encode([spec["phrase_text"] for spec in phrase_specs])
+    phrasing_rows: list[dict[str, Any]] = []
+    for spec, embedding in zip(phrase_specs, phrase_embeddings):
+        phrasing_rows.append(
+            {
+                **spec,
+                "embedding": pack_float32_vector(embedding),
+                "embedding_model": embedder.model_name,
+                "embedding_backend": embedder.backend_label,
+                "embedding_dimension": embedder.dimension,
+            }
+        )
+
+    embedding_info = {
+        "model_name": embedder.model_name,
+        "backend": embedder.backend_label,
+        "dimension": embedder.dimension,
+    }
+    return card_rows, phrasing_rows, embedding_info
 
 
 def route_source_info(entry: dict[str, Any]) -> LocalSourceInfo:
@@ -236,6 +429,9 @@ def expand_route_chunks(pack_version: str) -> tuple[list[dict[str, Any]], str]:
                     "country_scope": "ro",
                     "pack_version": pack_version,
                     "keywords": keywords,
+                    "card_family": None,
+                    "priority": 0,
+                    "metadata_json": None,
                 }
             )
 
@@ -276,7 +472,10 @@ def initialize_database(path: Path) -> sqlite3.Connection:
             safety_tags TEXT NOT NULL,
             country_scope TEXT NOT NULL,
             pack_version TEXT NOT NULL,
-            keywords TEXT NOT NULL
+            keywords TEXT NOT NULL,
+            card_family TEXT,
+            priority INTEGER NOT NULL DEFAULT 0,
+            metadata_json TEXT
         )
         """
     )
@@ -290,6 +489,42 @@ def initialize_database(path: Path) -> sqlite3.Connection:
             publisher
         )
         """
+    )
+    connection.execute(
+        """
+        CREATE TABLE card_embeddings (
+            card_id TEXT PRIMARY KEY,
+            topic TEXT NOT NULL,
+            language TEXT NOT NULL,
+            query_embedding BLOB NOT NULL,
+            content_embedding BLOB NOT NULL,
+            embedding_model TEXT NOT NULL,
+            embedding_backend TEXT NOT NULL,
+            embedding_dimension INTEGER NOT NULL
+        )
+        """
+    )
+    connection.execute(
+        """
+        CREATE TABLE phrasing_embeddings (
+            row_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            card_id TEXT NOT NULL,
+            topic TEXT NOT NULL,
+            language TEXT NOT NULL,
+            phrase_text TEXT NOT NULL,
+            normalized_phrase TEXT NOT NULL,
+            phrase_kind TEXT NOT NULL,
+            embedding BLOB NOT NULL,
+            embedding_model TEXT NOT NULL,
+            embedding_backend TEXT NOT NULL,
+            embedding_dimension INTEGER NOT NULL
+        )
+        """
+    )
+    connection.execute("CREATE INDEX idx_card_embeddings_topic_language ON card_embeddings(topic, language)")
+    connection.execute("CREATE INDEX idx_phrasing_embeddings_topic_language ON phrasing_embeddings(topic, language)")
+    connection.execute(
+        "CREATE INDEX idx_phrasing_embeddings_lookup ON phrasing_embeddings(topic, language, normalized_phrase)"
     )
     return connection
 
@@ -316,8 +551,11 @@ def insert_rows(connection: sqlite3.Connection, rows: list[dict[str, Any]]) -> N
                 safety_tags,
                 country_scope,
                 pack_version,
-                keywords
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                keywords,
+                card_family,
+                priority,
+                metadata_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 row["chunk_id"],
@@ -337,6 +575,9 @@ def insert_rows(connection: sqlite3.Connection, rows: list[dict[str, Any]]) -> N
                 row["country_scope"],
                 row["pack_version"],
                 row["keywords"],
+                row["card_family"],
+                row["priority"],
+                row["metadata_json"],
             ),
         )
         row_id = cursor.lastrowid
@@ -353,6 +594,74 @@ def insert_rows(connection: sqlite3.Connection, rows: list[dict[str, Any]]) -> N
                 row["keywords"],
                 row["publisher"],
             ),
+        )
+    connection.commit()
+
+
+def insert_campfire_embeddings(
+    connection: sqlite3.Connection,
+    card_rows: list[dict[str, Any]],
+    phrasing_rows: list[dict[str, Any]],
+) -> None:
+    if card_rows:
+        connection.executemany(
+            """
+            INSERT INTO card_embeddings (
+                card_id,
+                topic,
+                language,
+                query_embedding,
+                content_embedding,
+                embedding_model,
+                embedding_backend,
+                embedding_dimension
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            [
+                (
+                    row["card_id"],
+                    row["topic"],
+                    row["language"],
+                    row["query_embedding"],
+                    row["content_embedding"],
+                    row["embedding_model"],
+                    row["embedding_backend"],
+                    row["embedding_dimension"],
+                )
+                for row in card_rows
+            ],
+        )
+    if phrasing_rows:
+        connection.executemany(
+            """
+            INSERT INTO phrasing_embeddings (
+                card_id,
+                topic,
+                language,
+                phrase_text,
+                normalized_phrase,
+                phrase_kind,
+                embedding,
+                embedding_model,
+                embedding_backend,
+                embedding_dimension
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            [
+                (
+                    row["card_id"],
+                    row["topic"],
+                    row["language"],
+                    row["phrase_text"],
+                    row["normalized_phrase"],
+                    row["phrase_kind"],
+                    row["embedding"],
+                    row["embedding_model"],
+                    row["embedding_backend"],
+                    row["embedding_dimension"],
+                )
+                for row in phrasing_rows
+            ],
         )
     connection.commit()
 
@@ -392,8 +701,11 @@ def main(argv: list[str] | None = None) -> int:
     fetch_manifest = load_fetch_manifest()
 
     curated_rows = expand_curated_chunks(sources_by_id, pack_version)
+    campfire_cards = load_campfire_cards()
+    campfire_rows = expand_campfire_cards(sources_by_id, pack_version)
+    card_embedding_rows, phrasing_embedding_rows, embedding_info = build_campfire_embeddings(campfire_cards)
     route_rows, route_catalog_generated_at = expand_route_chunks(pack_version)
-    all_rows = curated_rows + route_rows
+    all_rows = curated_rows + campfire_rows + route_rows
 
     covered_domains = {row["domain"] for row in all_rows}
     missing_domains = sorted(REQUIRED_DOMAINS - covered_domains)
@@ -402,14 +714,19 @@ def main(argv: list[str] | None = None) -> int:
 
     connection = initialize_database(db_path)
     insert_rows(connection, all_rows)
+    insert_campfire_embeddings(connection, card_embedding_rows, phrasing_embedding_rows)
     metadata = {
         "pack_version": pack_version,
         "generated_at": utc_now_iso(),
         "chunk_count": len(all_rows),
         "curated_chunk_count": len(curated_rows),
+        "campfire_card_count": len(campfire_rows),
+        "campfire_card_embedding_count": len(card_embedding_rows),
+        "campfire_phrase_embedding_count": len(phrasing_embedding_rows),
         "route_chunk_count": len(route_rows),
         "domains": sorted(covered_domains),
         "languages": sorted({row["language"] for row in all_rows}),
+        "campfire_embeddings": embedding_info,
     }
     write_metadata(connection, metadata)
     integrity = connection.execute("PRAGMA integrity_check").fetchone()[0]
@@ -435,14 +752,19 @@ def main(argv: list[str] | None = None) -> int:
         "db_sha256": db_sha256,
         "chunk_count": len(all_rows),
         "curated_chunk_count": len(curated_rows),
+        "campfire_card_count": len(campfire_rows),
+        "campfire_card_embedding_count": len(card_embedding_rows),
+        "campfire_phrase_embedding_count": len(phrasing_embedding_rows),
         "route_chunk_count": len(route_rows),
         "source_count": len(manifest_sources),
         "languages": metadata["languages"],
         "domains": metadata["domains"],
+        "campfire_embeddings": embedding_info,
         "domain_counts": dict(sorted(domain_counts.items())),
         "required_domain_coverage": {domain: domain in covered_domains for domain in sorted(REQUIRED_DOMAINS)},
         "source_registry_sha256": sha256_file(SOURCE_REGISTRY_PATH),
         "curated_chunk_sha256": sha256_file(CURATED_CHUNKS_PATH),
+        "campfire_card_sha256": sha256_file(KNOW_HOW_CAMPFIRE_PATH),
         "route_catalog": {
             "path": str(ROUTE_CATALOG_PATH.relative_to(ASSETS_DIR.parent.parent.parent)),
             "generated_at": route_catalog_generated_at,

@@ -1,0 +1,1033 @@
+{
+  "cards": [
+    {
+      "card_id": "campfire_general_entry",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "general_entry",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 20,
+      "intent_group": ["start"],
+      "keywords": ["cum fac focul", "cum fac foc", "foc", "campfire", "pornesc focul"],
+      "user_phrasings": ["cum fac focul", "cum fac un foc", "vreau sa fac foc", "cum pornesc focul"],
+      "slot_constraints": {},
+      "title": "Pornire simplă și sigură a focului",
+      "lead": "Îți spun varianta simplă și sigură: pregătești mai întâi locul și materialul fin, apoi aprinzi un foc mic, nu o grămadă de lemne.",
+      "actions_now": [
+        "verifică dacă focul este permis și alege un loc sigur, pe sol mineral sau într-o vatră deja folosită",
+        "pregătește dinainte trei grămezi: iască fină, surcele subțiri și bețe puțin mai groase",
+        "pornește cu flacără mică și hrănește focul treptat, fără să-l sufoci"
+      ],
+      "avoid": [
+        "nu aprinde lângă rădăcini, iarbă uscată sau cort",
+        "nu pune lemn gros din primul minut"
+      ],
+      "watch_for": [
+        "dacă bate vântul tare sau totul e ud, soluția se schimbă"
+      ],
+      "follow_up_questions": [
+        { "question": "Pentru ce îți trebuie: căldură, gătit sau fiert apă?" },
+        { "question": "Ai brichetă, chibrite sau amnar?" }
+      ],
+      "related_cards": ["campfire_site_selection_safe", "campfire_prepare_tinder_kindling_fuel"]
+    },
+    {
+      "card_id": "campfire_for_warmth",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "warmth",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 90,
+      "intent_group": ["warmth"],
+      "keywords": ["caldura", "incalzire", "mi e frig", "foc pentru caldura"],
+      "user_phrasings": ["vreau foc pentru caldura", "mi e frig si vreau foc", "foc pentru incalzire"],
+      "slot_constraints": {
+        "goal": "warmth"
+      },
+      "title": "Foc pentru căldură",
+      "lead": "Dacă vrei foc pentru căldură, ținta este unul mic și stabil, care pornește repede și nu-ți consumă inutil energia.",
+      "actions_now": [
+        "alege o vatră ferită de vânt înainte să aprinzi ceva",
+        "pregătește suficient material fin ca focul să prindă din prima sau din a doua încercare, nu din a zecea",
+        "menține focul compact și aproape de tine, fără să-l transformi într-o vatră mare"
+      ],
+      "avoid": [
+        "nu investi minute lungi într-un foc mare dacă ești ud sau deja îți este foarte frig",
+        "nu te baza pe foc ca singura metodă de încălzire"
+      ],
+      "watch_for": [
+        "dacă focul nu prinde repede, treci devreme la alternative de conservare termică"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai brichetă, chibrite sau amnar?" },
+        { "question": "Totul e uscat sau e ud în jur?" }
+      ],
+      "related_cards": [
+        "campfire_light_with_lighter",
+        "campfire_light_with_matches",
+        "campfire_light_with_ferro",
+        "campfire_alternative_to_fire_for_warmth"
+      ]
+    },
+    {
+      "card_id": "campfire_for_cooking",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "cooking",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 82,
+      "intent_group": ["cooking"],
+      "keywords": ["gatit", "mancare", "foc pentru gatit", "cook"],
+      "user_phrasings": ["vreau foc pentru gatit", "cum fac foc pentru mancare", "foc pentru gătit"],
+      "slot_constraints": {
+        "goal": "cooking"
+      },
+      "title": "Foc pentru gătit",
+      "lead": "Pentru gătit îți trebuie un foc controlabil și predictibil, nu unul spectaculos.",
+      "actions_now": [
+        "fă o vatră mică și clar delimitată, cu loc de acces la jar",
+        "lasă focul să treacă din flacără haotică în jar stabil înainte să gătești",
+        "păstrează lângă tine doar combustibilul de care ai nevoie imediat"
+      ],
+      "avoid": [
+        "nu găti direct peste flacără mare dacă nu poți controla intensitatea",
+        "nu aglomera vatra cu lemn gros când vrei doar gătit simplu"
+      ],
+      "watch_for": [
+        "dacă bate vântul sau combustibilul e ud, timpul până la jar crește"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai brichetă, chibrite sau amnar?" },
+        { "question": "Vrei doar să încălzești ceva rapid sau să menții jar mai mult timp?" }
+      ],
+      "related_cards": ["campfire_site_selection_safe", "campfire_extinguish_completely"]
+    },
+    {
+      "card_id": "campfire_for_boil_water",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "boil_water",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 80,
+      "intent_group": ["boil_water"],
+      "keywords": ["fiert apa", "fierb apa", "boil water", "apa de baut"],
+      "user_phrasings": ["vreau sa fierb apa", "cum fac foc sa fierb apa", "foc pentru fiert apa"],
+      "slot_constraints": {
+        "goal": "boil_water"
+      },
+      "title": "Foc pentru fiert apă",
+      "lead": "Dacă scopul este să fierbi apă, mergi pe un foc mic și constant, care îți dă căldură stabilă, nu flacără mare de scurtă durată.",
+      "actions_now": [
+        "pregătește destulă iască și surcele ca să ajungi rapid la un foc stabil",
+        "treci spre bețe medii doar după ce focul ține singur",
+        "ține vasul gata de folosit, ca să nu pierzi timp când focul e bun"
+      ],
+      "avoid": [
+        "nu consuma tot materialul fin înainte să ai foc stabil",
+        "nu ridica un foc mare dacă ai nevoie doar de apă fiartă"
+      ],
+      "watch_for": [
+        "dacă totul e ud, ia în calcul că fierberea va costa mai mult timp și combustibil"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai brichetă, chibrite sau amnar?" },
+        { "question": "Ai lemn destul de uscat sau totul e umed?" }
+      ],
+      "related_cards": ["campfire_light_with_lighter", "campfire_light_with_matches", "campfire_light_with_ferro"]
+    },
+    {
+      "card_id": "campfire_site_selection_safe",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "site_selection",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 72,
+      "intent_group": ["site_selection"],
+      "keywords": ["unde fac focul", "loc sigur", "vatra", "site selection"],
+      "user_phrasings": ["unde fac focul", "ce loc aleg pentru foc", "cum aleg vatra"],
+      "slot_constraints": {},
+      "title": "Alegerea locului sigur pentru foc",
+      "lead": "Locul contează la fel de mult ca aprinderea: un foc mic în loc prost este mai riscant decât unul făcut corect.",
+      "actions_now": [
+        "alege teren mineral, pietros sau o vatră deja folosită, nu vegetație sau litieră groasă",
+        "lasă spațiu în jurul focului și mută materialele inflamabile evidente",
+        "ține apa sau pământul la îndemână pentru stingere"
+      ],
+      "avoid": [
+        "nu aprinde direct peste rădăcini, turbă, iarbă uscată sau sub adăpost textil",
+        "nu porni focul unde scânteile pot pleca direct în vânt"
+      ],
+      "watch_for": [
+        "dacă locul nu este clar sigur, mai bine schimbi locul decât să improvizezi acolo"
+      ],
+      "follow_up_questions": [
+        { "question": "E vânt puternic sau e relativ adăpostit locul?" },
+        { "question": "Ai iarbă uscată, rădăcini sau cort foarte aproape?" }
+      ],
+      "related_cards": ["campfire_extinguish_completely", "campfire_general_entry"]
+    },
+    {
+      "card_id": "campfire_prepare_tinder_kindling_fuel",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "material_prep",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 68,
+      "intent_group": ["material_prep"],
+      "keywords": ["iasca", "surcele", "cum pregatesc materialul"],
+      "user_phrasings": ["cum pregatesc materialul", "cum aranjez iasca si lemnul", "ce pun prima data pe foc"],
+      "slot_constraints": {},
+      "title": "Pregătirea materialului înainte de aprindere",
+      "lead": "Focul reușește mai ales din pregătire: întâi strângi și ordonezi materialul, abia apoi aprinzi.",
+      "actions_now": [
+        "separă materialul foarte fin de surcele și de lemnul mai gros",
+        "fă un cuib mic de iască și ține surcelele cele mai subțiri imediat lângă el",
+        "pregătește dinainte suficient material pentru primele minute, nu căuta lemn cu flacăra deja aprinsă"
+      ],
+      "avoid": [
+        "nu amesteca tot combustibilul într-o singură grămadă",
+        "nu aprinde dacă încă nu ai pregătite surcelele pentru pasul următor"
+      ],
+      "watch_for": [
+        "dacă materialul fin se termină imediat, focul moare chiar dacă ai flacără la start"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai deja iască sau trebuie să improvizăm?" },
+        { "question": "Materialul e uscat sau e ud?" }
+      ],
+      "related_cards": [
+        "campfire_tinder_definition",
+        "campfire_kindling_definition",
+        "campfire_improvise_tinder_from_available_materials"
+      ]
+    },
+    {
+      "card_id": "campfire_improvise_tinder_from_available_materials",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "improvise_tinder",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 86,
+      "intent_group": ["material_prep", "improvise"],
+      "keywords": [
+        "improvizez iasca",
+        "improvizam din ce am la mine",
+        "nu am iasca",
+        "ce pot folosi ca iasca",
+        "materiale disponibile",
+        "servetele",
+        "hartie",
+        "vata",
+        "scame"
+      ],
+      "user_phrasings": [
+        "improvizam din ce am la mine",
+        "nu am iasca",
+        "n am iasca",
+        "cum improvizez iasca",
+        "ce pot folosi ca iasca",
+        "ce material fin pot folosi",
+        "am servetele",
+        "am hartie",
+        "am vata",
+        "am scame"
+      ],
+      "slot_constraints": {
+        "tinder_strategy": "improvise"
+      },
+      "title": "Improvizează iasca din ce ai la tine sau din jur",
+      "lead": "Dacă nu ai iască dedicată, improvizează cu material foarte fin, uscat și aerat, mai întâi din ce ai la tine, apoi din locuri protejate din jur.",
+      "actions_now": [
+        "verifică întâi ce ai la tine: șervețele, hârtie, vată, scame, tifon, bandă textilă sau alte fibre uscate",
+        "dacă nu ai nimic bun la tine, caută în locuri protejate: sub scoarță, în interiorul lemnului rupt, sub crengi dese sau în buzunare uscate de vegetație fină",
+        "mărunțește materialul ca să obții fibre fine și păstrează-l separat de surcele până prinde clar"
+      ],
+      "avoid": [
+        "nu încerca să aprinzi direct frunze ude sau bucăți groase de coajă",
+        "nu consuma sursa de aprindere până nu ai un pumn mic de material care chiar poate prinde"
+      ],
+      "watch_for": [
+        "dacă materialul se înnegrește sau fumegă fără flacără, încă nu este destul de fin sau de uscat"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai deja ceva uscat la tine care poate funcționa ca iască?" },
+        { "question": "Totul în jur e ud sau găsești zone protejate și mai uscate?" }
+      ],
+      "related_cards": [
+        "campfire_prepare_tinder_kindling_fuel",
+        "campfire_tinder_definition",
+        "campfire_wet_fuel"
+      ]
+    },
+    {
+      "card_id": "campfire_light_with_lighter",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "lighter",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 64,
+      "intent_group": ["ignition"],
+      "keywords": ["bricheta", "lighter", "aprind cu bricheta"],
+      "user_phrasings": ["am bricheta", "aprind cu bricheta", "cum fac foc cu bricheta"],
+      "slot_constraints": {
+        "ignition_source": "lighter"
+      },
+      "title": "Aprindere cu brichetă",
+      "lead": "Cu brichetă, cheia este să aprinzi iasca bine pregătită, nu să ții flacăra mult timp sub lemn gros.",
+      "actions_now": [
+        "adu flacăra în baza cuibului de iască, în zona cea mai aerisită",
+        "când iasca prinde, adaugă imediat surcele foarte subțiri, apoi unele puțin mai groase",
+        "ține lemnul mare deoparte până când focul respiră singur"
+      ],
+      "avoid": [
+        "nu consuma gazul ținând flacăra sub lemn ud și gros",
+        "nu stinge aerul din jurul iescii apăsând materialul peste el"
+      ],
+      "watch_for": [
+        "dacă iasca arde și tot nu prinde lemnul, problema este combustibilul, nu bricheta"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai iască sau improvizăm din ce ai la tine?" },
+        { "question": "Totul e uscat sau e ud?" }
+      ],
+      "related_cards": [
+        "campfire_prepare_tinder_kindling_fuel",
+        "campfire_improvise_tinder_from_available_materials",
+        "campfire_wet_fuel"
+      ]
+    },
+    {
+      "card_id": "campfire_light_with_matches",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "matches",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 62,
+      "intent_group": ["ignition"],
+      "keywords": ["chibrit", "chibrite", "aprind cu chibrit"],
+      "user_phrasings": ["am chibrite", "aprind cu chibrite", "cum fac foc cu chibrit"],
+      "slot_constraints": {
+        "ignition_source": "matches"
+      },
+      "title": "Aprindere cu chibrite",
+      "lead": "Cu chibrite trebuie să fii și mai pregătit: aprinderea trebuie să prindă rapid, fără să irosești bețe.",
+      "actions_now": [
+        "aranjează iasca și primele surcele înainte să aprinzi chibritul",
+        "protejează flacăra de vânt cu corpul sau cu o barieră simplă",
+        "folosește fiecare chibrit doar când materialul este deja gata să preia focul"
+      ],
+      "avoid": [
+        "nu aprinde chibritul înainte să ai totul pregătit",
+        "nu încerca direct pe lemn gros sau ud"
+      ],
+      "watch_for": [
+        "dacă ai puține chibrite, tratează fiecare încercare ca pe una finală"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai material fin bun sau improvizăm iasca?" },
+        { "question": "Bate vântul tare sau poți proteja flacăra?" }
+      ],
+      "related_cards": [
+        "campfire_prepare_tinder_kindling_fuel",
+        "campfire_improvise_tinder_from_available_materials",
+        "campfire_high_wind"
+      ]
+    },
+    {
+      "card_id": "campfire_light_with_ferro",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "ferro",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 60,
+      "intent_group": ["ignition"],
+      "keywords": ["amnar", "ferro", "aprind cu amnar"],
+      "user_phrasings": ["am amnar", "cum aprind cu amnar", "fac foc cu ferro"],
+      "slot_constraints": {
+        "ignition_source": "ferro"
+      },
+      "title": "Aprindere cu amnar",
+      "lead": "Cu amnarul, succesul vine din iască bună și scântei direcționate precis, nu din forță brută.",
+      "actions_now": [
+        "fixează tija aproape de iască și trage percutorul, ca să nu împrăștii cuibul",
+        "folosește iască foarte ușoară de aprins, nu surcele ca prim contact",
+        "după ce iasca prinde, adaugă surcele fine exact ca la brichetă"
+      ],
+      "avoid": [
+        "nu lovi haotic tija dacă astfel împrăștii iasca",
+        "nu încerca direct pe lemn subțire fără material fin între ele"
+      ],
+      "watch_for": [
+        "dacă ai scântei dar nimic nu prinde, problema este aproape sigur iasca"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai iască bună sau improvizăm din materialele disponibile?" },
+        { "question": "Totul e ud sau găsești ceva uscat la interior?" }
+      ],
+      "related_cards": [
+        "campfire_tinder_definition",
+        "campfire_prepare_tinder_kindling_fuel",
+        "campfire_improvise_tinder_from_available_materials"
+      ]
+    },
+    {
+      "card_id": "campfire_light_with_recognized_spark",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "recognized_spark",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 58,
+      "intent_group": ["ignition"],
+      "keywords": ["scanteie", "spark", "pot produce scanteie"],
+      "user_phrasings": ["pot produce scanteie", "am o sursa de scanteie", "nu am bricheta dar pot face scantei"],
+      "slot_constraints": {
+        "ignition_source": "recognized_spark"
+      },
+      "title": "Aprindere cu o sursă recunoscută de scânteie",
+      "lead": "Dacă poți produce scânteie în mod controlat, tratează procedura ca pe una cu amnar: iască foarte bună, scânteie precisă, apoi surcele fine.",
+      "actions_now": [
+        "nu trece la lemn până când iasca nu arde clar și constant",
+        "pregătește dinainte materialul fin, pentru că scânteia singură nu compensează iasca slabă",
+        "menține focul mic până devine stabil"
+      ],
+      "avoid": [
+        "nu presupune că orice scânteie poate aprinde direct lemn subțire sau umed"
+      ],
+      "watch_for": [
+        "dacă sursa de scânteie este inconsistentă, merită mai mult să optimizezi iasca decât să repeți la nesfârșit aprinderea"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai iască bună sau trebuie să o improvizăm?" },
+        { "question": "Materialul e uscat sau umed?" }
+      ],
+      "related_cards": [
+        "campfire_tinder_definition",
+        "campfire_prepare_tinder_kindling_fuel",
+        "campfire_improvise_tinder_from_available_materials"
+      ]
+    },
+    {
+      "card_id": "campfire_extinguish_completely",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "extinguish",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 74,
+      "intent_group": ["extinguish"],
+      "keywords": ["sting focul", "cum il sting", "sting complet", "cenusa rece"],
+      "user_phrasings": ["cum il sting complet", "cum sting focul", "cand stiu ca e stins"],
+      "slot_constraints": {},
+      "title": "Stingere completă",
+      "lead": "Focul este stins doar când cenușa și resturile sunt reci la atingere, nu când flacăra a dispărut.",
+      "actions_now": [
+        "împrăștie ușor resturile și stropește-le sau acoperă-le treptat până scade căldura",
+        "amestecă din nou și verifică dacă mai există puncte fierbinți",
+        "nu pleca până când totul este rece la atingere"
+      ],
+      "avoid": [
+        "nu considera focul stins doar pentru că nu mai vezi flacără",
+        "nu lăsa jar ascuns sub cenușă sau sub lemn gros"
+      ],
+      "watch_for": [
+        "dacă încă simți căldură, focul nu este terminat"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai apă la îndemână sau trebuie să stingi mai mult mecanic?" }
+      ],
+      "related_cards": ["campfire_cold_to_touch_definition"]
+    },
+    {
+      "card_id": "campfire_alternative_to_fire_for_warmth",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "alternatives",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_hiking_safety",
+      "priority": 56,
+      "intent_group": ["alternatives"],
+      "keywords": ["mai bine fac altceva", "alternativa la foc", "nu merita focul"],
+      "user_phrasings": ["mai bine fac altceva", "nu merita sa insist cu focul", "cum ma incalzesc fara foc"],
+      "slot_constraints": {
+        "goal": "warmth",
+        "ignition_source": "none"
+      },
+      "title": "Alternative când focul nu merită",
+      "lead": "Dacă nu ai aprindere realistă, câștigi mai mult din conservarea căldurii decât din încercări repetate de foc.",
+      "actions_now": [
+        "redu pierderea de căldură: straturi, adăpost față de vânt, haine cât mai uscate",
+        "mișcă-te controlat dacă situația o permite, fără să transpiri excesiv",
+        "schimbă planul devreme în loc să consumi energie pe un foc improbabil"
+      ],
+      "avoid": [
+        "nu sta pe loc în frig doar ca să continui încercări slabe de aprindere",
+        "nu consuma toată energia pe un foc cu șanse mici"
+      ],
+      "watch_for": [
+        "dacă frigul se agravează, soluția nu mai este focul improvizat, ci ieșirea conservatoare din situație"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai măcar un loc adăpostit de vânt?" },
+        { "question": "Mai ai lumină și energie să continui, sau e mai bine să schimbi planul?" }
+      ],
+      "related_cards": []
+    },
+    {
+      "card_id": "campfire_tinder_definition",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "tinder_definition",
+      "family": "definition",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 95,
+      "intent_group": ["definition"],
+      "keywords": ["iasca", "ce e iasca", "ce inseamna iasca"],
+      "user_phrasings": ["ce e iasca", "ce inseamna iasca"],
+      "slot_constraints": {},
+      "title": "Definiție: iască",
+      "lead": "Iasca înseamnă materialul cel mai ușor de aprins, cel care preia primul scânteia sau flacăra.",
+      "plain_language_definition": "Iasca este stratul cel mai fin din sistemul focului: hârtie uscată, șervețel uscat, puf sau alte materiale care se aprind repede și aprind apoi surcelele.",
+      "actions_now": [
+        "dacă nu ai iască dedicată, caută mai întâi material foarte fin și uscat",
+        "păstrează iasca separat de surcele, ca să o poți aprinde fără să o sufoci"
+      ],
+      "avoid": [
+        "nu confunda iasca cu lemnul subțire: iasca trebuie să prindă prima"
+      ],
+      "watch_for": [],
+      "follow_up_questions": [
+        { "question": "Ai deja ceva care poate funcționa ca iască?" },
+        { "question": "Vrei să continuăm cu varianta pentru brichetă, chibrite sau amnar?" }
+      ],
+      "related_cards": [
+        "campfire_prepare_tinder_kindling_fuel",
+        "campfire_improvise_tinder_from_available_materials",
+        "campfire_light_with_ferro"
+      ],
+      "term": "iasca"
+    },
+    {
+      "card_id": "campfire_kindling_definition",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "kindling_definition",
+      "family": "definition",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 84,
+      "intent_group": ["definition"],
+      "keywords": ["kindling", "surcele", "ce sunt surcelele"],
+      "user_phrasings": ["ce e kindling", "ce sunt surcelele", "ce pun dupa iasca"],
+      "slot_constraints": {},
+      "title": "Definiție: kindling / surcele",
+      "lead": "Kindling înseamnă materialul subțire care preia focul de la iască și îl duce spre lemn mai gros.",
+      "plain_language_definition": "Surcelele sunt bețișoarele și crenguțele subțiri care vin imediat după iască. Ele fac trecerea dintre materialul foarte fin și combustibilul mai solid.",
+      "actions_now": [
+        "după iască, adaugă întâi cele mai subțiri surcele, apoi unele puțin mai groase",
+        "ține-le uscate și la îndemână înainte de aprindere"
+      ],
+      "avoid": [
+        "nu sari direct de la iască la lemn gros"
+      ],
+      "watch_for": [],
+      "follow_up_questions": [
+        { "question": "Ai surcele pregătite sau doar lemn mai gros?" }
+      ],
+      "related_cards": ["campfire_prepare_tinder_kindling_fuel"],
+      "term": "kindling"
+    },
+    {
+      "card_id": "campfire_fuel_stages_definition",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "fuel_stages_definition",
+      "family": "definition",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 76,
+      "intent_group": ["definition"],
+      "keywords": ["ordine materiale", "ce pun pe rand", "etapele combustibilului"],
+      "user_phrasings": ["ce pun pe rand", "care e ordinea materialelor", "cum fac trecerea de la iasca la lemn"],
+      "slot_constraints": {},
+      "title": "Definiție: ordinea materialelor",
+      "lead": "Ordinea simplă este: iască, apoi surcele foarte fine, apoi lemn puțin mai gros.",
+      "plain_language_definition": "Un foc mic reușește când urci în trepte: material foarte fin, material subțire, apoi combustibil mai serios. Dacă sari o treaptă, flacăra moare sau se sufocă.",
+      "actions_now": [
+        "aranjează fiecare treaptă separat înainte de aprindere",
+        "treci la treapta următoare doar când cea anterioară arde clar"
+      ],
+      "avoid": [
+        "nu amesteca toate tipurile de material din prima"
+      ],
+      "watch_for": [],
+      "follow_up_questions": [
+        { "question": "Ai deja materialul ordonat pe mărimi sau trebuie să-l sortăm?" }
+      ],
+      "related_cards": ["campfire_prepare_tinder_kindling_fuel"],
+      "term": "ordine materiale"
+    },
+    {
+      "card_id": "campfire_fire_triangle_definition",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "fire_triangle_definition",
+      "family": "definition",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 70,
+      "intent_group": ["definition"],
+      "keywords": ["triunghiul focului", "de ce nu merge focul"],
+      "user_phrasings": ["ce e triunghiul focului", "de ce nu merge focul meu"],
+      "slot_constraints": {},
+      "title": "Definiție: triunghiul focului",
+      "lead": "Focul are nevoie de trei lucruri în același timp: combustibil bun, căldură suficientă și aer.",
+      "plain_language_definition": "Dacă unul dintre cele trei lipsește, focul nu ține: materialul e prea ud, căldura nu ajunge unde trebuie sau ai sufocat flacăra fără aer.",
+      "actions_now": [
+        "când focul nu merge, verifică pe rând: material prea ud, iasca prea slabă sau lipsă de aer"
+      ],
+      "avoid": [
+        "nu presupune automat că problema este doar sursa de aprindere"
+      ],
+      "watch_for": [],
+      "follow_up_questions": [
+        { "question": "Iasca se aprinde și moare sau nici nu prinde?" }
+      ],
+      "related_cards": ["campfire_prepare_tinder_kindling_fuel", "campfire_wet_fuel"],
+      "term": "triunghiul focului"
+    },
+    {
+      "card_id": "campfire_safe_fire_bed_definition",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "safe_fire_bed_definition",
+      "family": "definition",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 68,
+      "intent_group": ["definition"],
+      "keywords": ["vatra", "fire bed", "loc sigur pentru foc"],
+      "user_phrasings": ["ce inseamna vatra sigura", "ce e fire bed", "cum arata un loc bun pentru foc"],
+      "slot_constraints": {},
+      "title": "Definiție: vatră sigură",
+      "lead": "O vatră sigură este o zonă în care focul stă controlat și nu poate pleca ușor în jur.",
+      "plain_language_definition": "În practică, asta înseamnă sol mineral sau pietros, fără rădăcini expuse, iarbă uscată, turbă ori material textil aproape.",
+      "actions_now": [
+        "verifică terenul înainte de aprindere, nu după ce ai deja flacără",
+        "curăță imediat din jur ce poate lua foc ușor"
+      ],
+      "avoid": [
+        "nu trata orice petic gol ca vatră sigură fără să verifici ce are dedesubt"
+      ],
+      "watch_for": [],
+      "follow_up_questions": [
+        { "question": "Ai rădăcini, iarbă uscată sau cort aproape de locul ales?" }
+      ],
+      "related_cards": ["campfire_site_selection_safe"],
+      "term": "vatra"
+    },
+    {
+      "card_id": "campfire_cold_to_touch_definition",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "cold_to_touch_definition",
+      "family": "definition",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 66,
+      "intent_group": ["definition"],
+      "keywords": ["rece la atingere", "cold to touch", "cand e focul stins"],
+      "user_phrasings": ["ce inseamna rece la atingere", "cand stiu ca e stins", "cold to touch ce inseamna"],
+      "slot_constraints": {},
+      "title": "Definiție: rece la atingere",
+      "lead": "Rece la atingere înseamnă că nu mai simți deloc căldură în cenușă, jar sau lemn rămas.",
+      "plain_language_definition": "Nu este suficient să nu mai vezi flacără. Dacă mai simți căldură în cenușă sau în resturi, focul nu este terminat.",
+      "actions_now": [
+        "amestecă cenușa și verifică din nou, pentru că jarul poate rămâne ascuns dedesubt"
+      ],
+      "avoid": [
+        "nu pleca doar pentru că partea de sus pare stinsă"
+      ],
+      "watch_for": [],
+      "follow_up_questions": [
+        { "question": "Vrei să-ți spun pașii simpli pentru stingere completă?" }
+      ],
+      "related_cards": ["campfire_extinguish_completely"],
+      "term": "rece la atingere"
+    },
+    {
+      "card_id": "campfire_permission_unknown_or_forbidden",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "permission",
+      "family": "constraint",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 130,
+      "intent_group": ["constraint"],
+      "keywords": ["am voie", "este permis", "interzis", "forbidden", "pot face foc aici"],
+      "user_phrasings": ["am voie sa fac foc", "e permis sa fac foc", "cred ca e interzis", "pot face foc aici"],
+      "slot_constraints": {},
+      "title": "Permisiunea pentru foc este neclară sau negativă",
+      "lead": "Dacă nu e clar că focul este permis, planul sigur este să nu construiești foc până nu lămurești asta.",
+      "actions_now": [
+        "tratează lipsa de claritate ca pe un semn de stop, nu ca pe un «probabil merge»",
+        "dacă scopul era doar căldura, treci temporar pe variante fără foc"
+      ],
+      "avoid": [
+        "nu porni focul doar fiindcă ai materiale bune la îndemână"
+      ],
+      "watch_for": [
+        "când permisiunea e neclară, riscul operațional și legal nu merită"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai nevoie de foc neapărat sau poți rezolva acum fără el?" }
+      ],
+      "related_cards": ["campfire_alternative_to_fire_for_warmth"],
+      "constraint_mode": "override"
+    },
+    {
+      "card_id": "campfire_high_wind",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "high_wind",
+      "family": "constraint",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 126,
+      "intent_group": ["constraint"],
+      "keywords": ["bate vantul", "vant puternic", "vijelie", "wind"],
+      "user_phrasings": ["bate vantul tare", "e vant puternic", "cum fac foc pe vant"],
+      "slot_constraints": {
+        "wind": "high"
+      },
+      "title": "Vânt puternic",
+      "lead": "Pe vânt puternic, focul deschis trece ușor din util în risc, mai ales dacă locul nu e foarte bine protejat.",
+      "actions_now": [
+        "dacă nu ai loc clar adăpostit și control bun al scânteilor, mai bine nu pornești focul",
+        "dacă insiști, micșorează ambiția: foc foarte mic, bine ecranat, doar cât să vezi dacă merită"
+      ],
+      "avoid": [
+        "nu aprinde în bătaia directă a vântului",
+        "nu lăsa scântei să plece spre vegetație"
+      ],
+      "watch_for": [
+        "dacă scânteile pleacă sau flacăra devine instabilă, oprești imediat încercarea"
+      ],
+      "follow_up_questions": [
+        { "question": "Ai un loc clar ferit de vânt sau totul e expus?" }
+      ],
+      "related_cards": ["campfire_site_selection_safe", "campfire_alternative_to_fire_for_warmth"],
+      "constraint_mode": "override"
+    },
+    {
+      "card_id": "campfire_rained_recently",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "rained_recently",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 90,
+      "intent_group": ["constraint"],
+      "keywords": ["a plouat", "a plouat recent", "ploua", "dupa ploaie", "ploaie"],
+      "user_phrasings": ["a plouat recent", "a plouat azi", "a plouat ieri", "tocmai a plouat", "a fost ploaie"],
+      "slot_constraints": {
+        "fuel_condition": "wet"
+      },
+      "title": "Foc după ploaie",
+      "lead": "După ploaie, suprafețele sunt ude, dar interiorul lemnului și locurile adăpostite rămân adesea uscate. Focul e posibil, doar că pornește altfel.",
+      "actions_now": [
+        "sparge sau rupe lemnul — la interior e aproape sigur uscat",
+        "caută sub copaci deși, sub bușteni căzuți sau sub stânci: acolo ploaia nu a ajuns",
+        "strânge mai mult material decât ai crede că-ți trebuie, pentru că primele minute vor fi lente"
+      ],
+      "avoid": [
+        "nu folosi scoarța de pe afară ca iască — e prima care absoarbe apa"
+      ],
+      "watch_for": [],
+      "follow_up_questions": [],
+      "related_cards": ["campfire_wet_fuel", "campfire_improvise_tinder_from_available_materials"]
+    },
+    {
+      "card_id": "campfire_dry_conditions",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "dry_conditions",
+      "family": "scenario",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 88,
+      "intent_group": ["scenario"],
+      "keywords": ["uscat", "e uscat", "destul de uscat", "totul e uscat", "lemn uscat"],
+      "user_phrasings": ["e destul de uscat", "totul e uscat", "nu a plouat", "e uscat in jur", "am lemn uscat"],
+      "slot_constraints": {
+        "fuel_condition": "dry"
+      },
+      "title": "Condiții uscate — avantaj, dar și grijă",
+      "lead": "Dacă totul e uscat, focul pornește ușor. Singura grijă reală e să nu scape — iarbă, frunze și rădăcini prind repede.",
+      "actions_now": [
+        "curăță un cerc de cel puțin un metru în jurul vetrei, fără frunze sau iarbă",
+        "ține lângă tine apă sau pământ cu care să stingi rapid dacă scapă",
+        "focul mic e suficient — într-un mediu uscat nu ai nevoie de flacără mare ca să obții ce vrei"
+      ],
+      "avoid": [
+        "nu lăsa focul nesupravegheat nici măcar un minut când e uscat în jur"
+      ],
+      "watch_for": [],
+      "follow_up_questions": [],
+      "related_cards": ["campfire_site_selection_safe", "campfire_extinguish_completely"]
+    },
+    {
+      "card_id": "campfire_wet_fuel",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "wet_fuel",
+      "family": "constraint",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 124,
+      "intent_group": ["constraint"],
+      "keywords": ["totul e ud", "lemn ud", "a plouat", "material ud"],
+      "user_phrasings": ["totul e ud", "nu gasesc lemn uscat", "a plouat si materialul e ud"],
+      "slot_constraints": {
+        "fuel_condition": "wet"
+      },
+      "title": "Combustibil umed",
+      "lead": "Dacă totul este ud, nu încerca foc mare. Caută întâi material mai uscat la interior sau material fin protejat, altfel doar consumi timp.",
+      "actions_now": [
+        "caută material fin protejat sau rupe lemnul ca să ajungi la interior mai uscat",
+        "pornește cu obiectiv mic: iască bună și primele surcele care chiar pot prinde",
+        "dacă nu găsești nimic rezonabil, schimbă planul din timp"
+      ],
+      "avoid": [
+        "nu pune direct lemn ud gros peste o flacără mică",
+        "nu confunda «arde puțin» cu foc stabil"
+      ],
+      "watch_for": [
+        "dacă iasca arde și lemnul nu preia deloc focul, problema rămâne combustibilul"
+      ],
+      "follow_up_questions": [
+        { "question": "Poți găsi ceva mai uscat la interior sau sub zone protejate?" }
+      ],
+      "related_cards": ["campfire_prepare_tinder_kindling_fuel", "campfire_alternative_to_fire_for_warmth"],
+      "constraint_mode": "override"
+    },
+    {
+      "card_id": "campfire_scarce_material",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "scarce_material",
+      "family": "constraint",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 118,
+      "intent_group": ["constraint"],
+      "keywords": ["nu gasesc material", "putin material", "nu am lemne", "nu gasesc surcele"],
+      "user_phrasings": ["nu gasesc material bun", "nu am lemne destule", "nu gasesc surcele"],
+      "slot_constraints": {
+        "fuel_condition": "scarce"
+      },
+      "title": "Material puțin sau prost",
+      "lead": "Dacă ai foarte puțin material bun, focul trebuie judecat pragmatic: ori îl pornești repede și controlat, ori nu mai merită efortul.",
+      "actions_now": [
+        "folosește întâi ce ai mai fin și mai sigur, nu risipi materialul pe încercări lungi",
+        "decide repede dacă poți susține focul măcar câteva minute după aprindere"
+      ],
+      "avoid": [
+        "nu consuma singurul material bun într-o aprindere nepregătită"
+      ],
+      "watch_for": [
+        "dacă nu poți alimenta focul după prima flacără, el nu te ajută cu adevărat"
+      ],
+      "follow_up_questions": [
+        { "question": "Mai ai material fin bun sau doar lemn gros și prost?" }
+      ],
+      "related_cards": ["campfire_alternative_to_fire_for_warmth"],
+      "constraint_mode": "support"
+    },
+    {
+      "card_id": "campfire_unsafe_ground",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "unsafe_ground",
+      "family": "constraint",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 128,
+      "intent_group": ["constraint"],
+      "keywords": ["radacini", "iarba uscata", "turba", "in cort", "langa cort", "vegetatie uscata"],
+      "user_phrasings": ["am radacini sub mine", "e iarba uscata aici", "pot sa fac foc langa cort", "e sol turbos"],
+      "slot_constraints": {},
+      "title": "Loc nesigur pentru foc",
+      "lead": "Dacă ai rădăcini, vegetație uscată, turbă sau material textil aproape, problema principală nu mai este aprinderea, ci faptul că locul nu e bun.",
+      "actions_now": [
+        "mută focul într-un loc sigur sau renunță la el acolo",
+        "preferă sol mineral, pietros sau o vatră clar sigură"
+      ],
+      "avoid": [
+        "nu încerca să «compensezi» locul prost prin grijă sporită după aprindere"
+      ],
+      "watch_for": [
+        "locul greșit bate orice tehnică bună de aprindere"
+      ],
+      "follow_up_questions": [
+        { "question": "Poți muta focul pe sol mineral sau într-o vatră deja folosită?" }
+      ],
+      "related_cards": ["campfire_site_selection_safe"],
+      "constraint_mode": "override"
+    },
+    {
+      "card_id": "campfire_no_direct_ignition",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "no_direct_ignition",
+      "family": "constraint",
+      "language": "ro",
+      "source_id": "nps_hiking_safety",
+      "priority": 122,
+      "intent_group": ["constraint"],
+      "keywords": ["nu am bricheta", "nu am chibrit", "nu am nimic de aprindere", "fara aprindere"],
+      "user_phrasings": ["n am nimic de aprindere", "nu am bricheta si nici chibrite", "fara aprindere directa"],
+      "slot_constraints": {
+        "ignition_source": "none"
+      },
+      "title": "Fără aprindere directă",
+      "lead": "Dacă nu ai o metodă realistă de aprindere, nu transforma focul într-un obiectiv principal doar din ambiție.",
+      "actions_now": [
+        "verifică întâi dacă poți produce totuși scânteie printr-un mijloc recunoscut și controlabil",
+        "dacă nu, mută efortul spre conservarea căldurii și schimbarea planului"
+      ],
+      "avoid": [
+        "nu bloca timp și energie în încercări improbabile"
+      ],
+      "watch_for": [
+        "uneori cea mai bună decizie este să nu insiști cu focul"
+      ],
+      "follow_up_questions": [
+        { "question": "Poți produce măcar scânteie în mod controlat?" }
+      ],
+      "related_cards": ["campfire_light_with_recognized_spark", "campfire_alternative_to_fire_for_warmth"],
+      "constraint_mode": "override"
+    },
+    {
+      "card_id": "campfire_repeated_failed_lighting",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "failed_lighting",
+      "family": "constraint",
+      "language": "ro",
+      "source_id": "nps_campfire_guidance",
+      "priority": 116,
+      "intent_group": ["constraint"],
+      "keywords": ["nu merge", "nu se aprinde", "am incercat de mai multe ori", "tot moare"],
+      "user_phrasings": ["nu merge", "nu se aprinde", "tot moare focul", "am incercat de multe ori"],
+      "slot_constraints": {},
+      "title": "Încercări repetate fără progres",
+      "lead": "Dacă ai încercat de mai multe ori și nu obții măcar un început stabil, nu continua mecanic aceeași schemă.",
+      "actions_now": [
+        "oprește-te și verifică ce lipsește: iască bună, material uscat sau aer",
+        "refă materialul și strategia înainte de următoarea încercare"
+      ],
+      "avoid": [
+        "nu repeta identic o aprindere care deja a eșuat"
+      ],
+      "watch_for": [
+        "șirul de încercări ratate consumă energie și scade calitatea deciziei"
+      ],
+      "follow_up_questions": [
+        { "question": "Iasca prinde și moare sau nici măcar nu ia foc?" }
+      ],
+      "related_cards": ["campfire_fire_triangle_definition", "campfire_alternative_to_fire_for_warmth"],
+      "constraint_mode": "support"
+    },
+    {
+      "card_id": "campfire_too_tired_or_low_daylight",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "fatigue_or_daylight",
+      "family": "constraint",
+      "language": "ro",
+      "source_id": "nps_hiking_safety",
+      "priority": 120,
+      "intent_group": ["constraint"],
+      "keywords": ["sunt obosit", "suntem obositi", "se intuneca", "e noapte", "mai e putina lumina"],
+      "user_phrasings": ["sunt prea obosit", "se intuneca", "e aproape noapte", "mai bine insist sau schimb planul"],
+      "slot_constraints": {},
+      "title": "Oboseală mare sau lumină puțină",
+      "lead": "Când ești foarte obosit sau se termină lumina, un foc improvizat devine ușor un consum greșit de timp și atenție.",
+      "actions_now": [
+        "judecă dacă focul îți rezolvă acum problema sau doar îți amână o decizie mai bună",
+        "dacă nu ai condiții clare, mută energia spre adăpost, organizare și plan conservator"
+      ],
+      "avoid": [
+        "nu lăsa focul să-ți mănânce ultimele minute utile de lumină"
+      ],
+      "watch_for": [
+        "noaptea și oboseala reduc calitatea execuției și a supravegherii"
+      ],
+      "follow_up_questions": [
+        { "question": "Mai ai lumină și energie să supraveghezi focul corect?" }
+      ],
+      "related_cards": ["campfire_alternative_to_fire_for_warmth"],
+      "constraint_mode": "override"
+    },
+    {
+      "card_id": "campfire_not_worth_it_for_goal",
+      "domain": "field_know_how",
+      "topic": "campfire",
+      "subtopic": "not_worth_it",
+      "family": "constraint",
+      "language": "ro",
+      "source_id": "nps_hiking_safety",
+      "priority": 114,
+      "intent_group": ["constraint"],
+      "keywords": ["merita sa mai incerc", "mai bine fac altceva", "nu merita focul"],
+      "user_phrasings": ["merita sa mai incerc", "mai bine fac altceva", "nu cred ca merita focul"],
+      "slot_constraints": {
+        "need_level": "optional"
+      },
+      "title": "Focul nu mai merită pentru scopul actual",
+      "lead": "Dacă focul nu este necesar acum și condițiile sunt slabe, de multe ori decizia bună este să nu mai insiști.",
+      "actions_now": [
+        "închide încercarea devreme și folosește energia pentru ce te ajută imediat",
+        "păstrează resursele și atenția pentru deplasare, adăpost sau organizare"
+      ],
+      "avoid": [
+        "nu continua doar ca să demonstrezi că poate ieși"
+      ],
+      "watch_for": [
+        "un foc inutil poate costa mai mult decât oferă"
+      ],
+      "follow_up_questions": [
+        { "question": "Scopul este încă important sau putem schimba planul fără pierdere reală?" }
+      ],
+      "related_cards": ["campfire_alternative_to_fire_for_warmth"],
+      "constraint_mode": "override"
+    }
+  ]
+}

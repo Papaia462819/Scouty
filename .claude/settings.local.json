@@ -6,7 +6,9 @@
       "Bash(mkdir -p /c/Scouty/data/reference/knowledge)",
       "Bash(mkdir -p /c/Scouty/data/generated/knowledge)",
       "Bash(./gradlew testDebugUnitTest --tests \"com.scouty.app.assistant.domain.*\")",
-      "Bash(./gradlew testDebugUnitTest)"
+      "Bash(./gradlew testDebugUnitTest)",
+      "Bash(./gradlew compileDebugKotlin)",
+      "Bash(python:*)"
     ]
   }
 }
