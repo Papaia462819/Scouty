@@ -15,9 +15,11 @@ import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.scouty.app.assistant.data.ChatActionHandler
 import com.scouty.app.assistant.data.DeviceContextProvider
 import com.scouty.app.assistant.data.KnowledgePackManager
 import com.scouty.app.assistant.domain.AssistantRuntimeGraph
+import com.scouty.app.assistant.model.DailyForecastEntry
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.AssistantRuntimeDebugInfo
 import com.scouty.app.assistant.domain.ModelManager
@@ -55,7 +57,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.*
 
-class MainViewModel(application: Application) : AndroidViewModel(application), DeviceContextProvider {
+class MainViewModel(application: Application) : AndroidViewModel(application), DeviceContextProvider, ChatActionHandler {
 
     private data class WeatherLookupResult(
         val response: MeteoblueResponse? = null,
@@ -136,8 +138,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
 
     fun toggleGearItem(itemId: String) {
         updateUiState { currentState ->
-            val newList = currentState.gearList.map { 
+            val newList = currentState.gearList.map {
                 if (it.id == itemId) it.copy(isPacked = !it.isPacked) else it
+            }
+            currentState.copy(gearList = newList)
+        }
+    }
+
+    override fun toggleGearPacked(itemIds: List<String>, packed: Boolean) {
+        updateUiState { currentState ->
+            val idSet = itemIds.toSet()
+            val newList = currentState.gearList.map { item ->
+                if (item.id in idSet) item.copy(isPacked = packed) else item
             }
             currentState.copy(gearList = newList)
         }
@@ -492,9 +504,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             var sunsetStr = "N/A"
             var weatherInfo = "Unknown (Offline)"
             var syncTime: Long? = null
+            var weatherResponse: com.scouty.app.api.MeteoblueResponse? = null
             refreshOnlineState()
             weatherInfo = if (isInternetAvailable()) "Forecast unavailable" else "Unknown (Offline)"
-            
+
             if (isInternetAvailable() && meteoblueApiKey.isNotBlank()) {
                 try {
                     val weatherLookup = loadForecastWithFallbacks(
@@ -503,6 +516,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                         asl = _uiState.value.altitude?.toInt()
                     )
                     val data = weatherLookup.response
+                    weatherResponse = data
                     weatherInfo = buildWeatherSummary(weatherLookup)
 
                     if (data.hasForecastData()) {
@@ -517,7 +531,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
 
             if (sunsetStr == "N/A") {
                 val sunset = SolarCalculator.getSunsetTime(lat, lon, date)
-                sunsetStr = sunset?.let { 
+                sunsetStr = sunset?.let {
                     SimpleDateFormat("HH:mm", Locale.getDefault()).format(it.time)
                 } ?: "N/A"
             }
@@ -531,6 +545,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 fromName = fromName,
                 toName = toName
             )
+
+            val dailyForecast = if (weatherResponse != null) {
+                buildDailyForecast(weatherResponse)
+            } else {
+                _uiState.value.activeTrail?.dailyForecast.orEmpty()
+            }
 
             val trail = ActiveTrail(
                 name = name,
@@ -558,7 +578,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 imageAttribution = imageAttribution,
                 imageLicense = imageLicense,
                 imageSourcePageUrl = imageSourcePageUrl,
-                imageScope = imageScope
+                imageScope = imageScope,
+                dailyForecast = dailyForecast
             )
 
             val profileForTrail = if (recordSelection) {
@@ -596,6 +617,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             11 -> "Rain"
             14 -> "Thunderstorm"
             else -> "Cloudy"
+        }
+    }
+
+    private fun buildDailyForecast(response: com.scouty.app.api.MeteoblueResponse?): List<DailyForecastEntry> {
+        val dayData = response?.dataDay ?: return emptyList()
+        val times = dayData.time
+        return times.mapIndexedNotNull { index, dateStr ->
+            val pictocode = dayData.precipitationProbability?.getOrNull(index)
+            DailyForecastEntry(
+                date = dateStr,
+                temperatureMax = dayData.temperatureMax?.getOrNull(index),
+                temperatureMin = dayData.temperatureMin?.getOrNull(index),
+                precipitationProbability = dayData.precipitationProbability?.getOrNull(index),
+                description = response.data1h?.pictocode?.let { hourly ->
+                    val dayStartIndex = index * 24
+                    val midDayCode = hourly.getOrNull(dayStartIndex + 12)
+                        ?: hourly.getOrNull(dayStartIndex + 6)
+                        ?: hourly.getOrNull(dayStartIndex)
+                    midDayCode?.let(::getPictocodeDescription)
+                } ?: getPictocodeDescription(null),
+                sunrise = dayData.sunrise?.getOrNull(index),
+                sunset = dayData.sunset?.getOrNull(index)
+            )
         }
     }
 

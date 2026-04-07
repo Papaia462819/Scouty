@@ -23,6 +23,17 @@ enum class ConversationLane {
     FIELD_KNOW_HOW
 }
 
+enum class TrailContextIntent {
+    TRAIL_INFO,
+    WEATHER_FORECAST,
+    CAPABILITY_CHECK,
+    NEEDS_CHECK,
+    DURATION_ESTIMATE,
+    GEAR_REVIEW,
+    GEAR_UPDATE_CONFIRM,
+    NONE
+}
+
 enum class CardFamily {
     SCENARIO,
     DEFINITION,
@@ -174,5 +185,7 @@ data class QueryAnalysis(
     val isFollowUp: Boolean = false,
     val routeContextQuery: Boolean = false,
     val gearQuery: Boolean = false,
-    val safetyTags: Set<String> = emptySet()
+    val safetyTags: Set<String> = emptySet(),
+    val trailContextIntent: TrailContextIntent = TrailContextIntent.NONE,
+    val weatherQueryDate: String? = null
 )

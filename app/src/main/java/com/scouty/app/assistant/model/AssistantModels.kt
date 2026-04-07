@@ -24,7 +24,30 @@ data class TrailContextSnapshot(
     val sunsetTime: String? = null,
     val weatherForecast: String? = null,
     val difficulty: String? = null,
-    val estimatedDuration: String? = null
+    val estimatedDuration: String? = null,
+    val distanceKm: Double? = null,
+    val elevationGain: Int? = null,
+    val averageInclinePercent: Double? = null,
+    val descriptionRo: String? = null,
+    val dailyForecast: List<DailyForecastEntry> = emptyList()
+)
+
+data class DailyForecastEntry(
+    val date: String,
+    val temperatureMax: Double?,
+    val temperatureMin: Double?,
+    val precipitationProbability: Int?,
+    val description: String,
+    val sunrise: String?,
+    val sunset: String?
+)
+
+data class GearContextItem(
+    val id: String,
+    val name: String,
+    val necessity: String,
+    val isPacked: Boolean,
+    val note: String = ""
 )
 
 data class DeviceContextSnapshot(
@@ -38,6 +61,7 @@ data class DeviceContextSnapshot(
     val gpsFixed: Boolean = false,
     val trail: TrailContextSnapshot? = null,
     val recommendedGear: List<String> = emptyList(),
+    val gearItems: List<GearContextItem> = emptyList(),
     val localeTag: String = assistantDefaultLocale().toLanguageTag()
 )
 
@@ -56,6 +80,11 @@ data class AssistantOpenQuestion(
     val allowedAdditionalSlots: List<String> = emptyList()
 )
 
+data class PendingGearAction(
+    val packItemIds: List<String> = emptyList(),
+    val unpackItemIds: List<String> = emptyList()
+)
+
 data class AssistantConversationState(
     val activeTopic: String? = null,
     val lastCardId: String? = null,
@@ -70,7 +99,9 @@ data class AssistantConversationState(
     val lastRetrievedChunkId: String? = null,
     val lastRetrievedTopic: String? = null,
     val lastRetrievedTitle: String? = null,
-    val lastInterpretationConfidence: Double? = null
+    val lastInterpretationConfidence: Double? = null,
+    val pendingGearAction: PendingGearAction? = null,
+    val lastTrailContextIntent: String? = null
 )
 
 data class AssistantQuickReplyUiModel(
@@ -103,6 +134,13 @@ data class AssistantUiState(
     val starterPrompts: List<String> = starterPromptsForCurrentLocale(assistantDefaultLocale())
 )
 
+sealed class AssistantAction {
+    data class ToggleGearPacked(
+        val itemIds: List<String>,
+        val packed: Boolean
+    ) : AssistantAction()
+}
+
 data class AssistantResponse(
     val answerText: String,
     val structuredOutput: StructuredAssistantOutput,
@@ -115,7 +153,8 @@ data class AssistantResponse(
     val modelRuntimeState: ModelRuntimeState? = null,
     val modelStatusDetails: String? = null,
     val knowledgePackVersion: String? = null,
-    val usedFallback: Boolean = false
+    val usedFallback: Boolean = false,
+    val actions: List<AssistantAction> = emptyList()
 )
 
 fun buildWelcomeMessage(locale: Locale = assistantDefaultLocale()): AssistantMessageUiModel =
@@ -129,19 +168,40 @@ fun buildWelcomeMessage(locale: Locale = assistantDefaultLocale()): AssistantMes
         isUser = false
     )
 
-fun starterPromptsForCurrentLocale(locale: Locale = assistantDefaultLocale()): List<String> =
+fun starterPromptsForCurrentLocale(
+    locale: Locale = assistantDefaultLocale(),
+    hasActiveTrail: Boolean = false
+): List<String> =
     if (locale.language == "ro") {
-        listOf(
-            "Mi-am sucit glezna",
-            "Care e marcajul traseului activ?",
-            "Ce echipament sa tin la indemana acum?",
-            "Cum fac focul?"
-        )
+        if (hasActiveTrail) {
+            listOf(
+                "Spune-mi despre traseul activ",
+                "Care e dificultatea traseului?",
+                "Ce echipament am nevoie?",
+                "Cum va fi vremea?"
+            )
+        } else {
+            listOf(
+                "Mi-am sucit glezna",
+                "Care e marcajul traseului activ?",
+                "Ce echipament sa tin la indemana acum?",
+                "Cum fac focul?"
+            )
+        }
     } else {
-        listOf(
-            "I twisted my ankle",
-            "What is the marker for my active trail?",
-            "What gear should I keep ready now?",
-            "How do I make a fire?"
-        )
+        if (hasActiveTrail) {
+            listOf(
+                "Tell me about the active trail",
+                "What is the trail difficulty?",
+                "What gear do I need?",
+                "What will the weather be like?"
+            )
+        } else {
+            listOf(
+                "I twisted my ankle",
+                "What is the marker for my active trail?",
+                "What gear should I keep ready now?",
+                "How do I make a fire?"
+            )
+        }
     }

@@ -76,7 +76,8 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
         factory = remember(mainViewModel, application) {
             AssistantViewModel.Factory(
                 application = application,
-                deviceContextProvider = mainViewModel
+                deviceContextProvider = mainViewModel,
+                chatActionHandler = mainViewModel
             )
         }
     )

@@ -20,6 +20,7 @@ class AssistantRuntimeGraph private constructor(
         modelManager = modelManager,
         fallbackEngine = fallbackEngine
     )
+    private val trailContextEngine = TrailContextEngine()
 
     val repository = AssistantRepository(
         knowledgePackManager = knowledgePackManager,
@@ -29,7 +30,8 @@ class AssistantRuntimeGraph private constructor(
         promptBuilder = promptBuilder,
         modelManager = modelManager,
         generationEngine = generationEngine,
-        medicalSafetyPolicy = safetyPolicy
+        medicalSafetyPolicy = safetyPolicy,
+        trailContextEngine = trailContextEngine
     )
 
     companion object {

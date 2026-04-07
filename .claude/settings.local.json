@@ -8,7 +8,20 @@
       "Bash(./gradlew testDebugUnitTest --tests \"com.scouty.app.assistant.domain.*\")",
       "Bash(./gradlew testDebugUnitTest)",
       "Bash(./gradlew compileDebugKotlin)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(grep -n \"class RetrievalEngine\\\\|fun.*retrieve\\\\|fun.*search\" /c/Scouty/Scouty_app/app/src/main/java/com/scouty/app/assistant/domain/*.kt)",
+      "Bash(git stash:*)",
+      "Bash(./gradlew assembleDebug)",
+      "Bash(adb devices:*)",
+      "Bash(adb install:*)",
+      "Bash(adb shell:*)",
+      "Bash(ls -la app/src/main/assets/*.pmtiles)",
+      "Bash(ls -la tools/generated-map-packs/*.pmtiles)",
+      "Bash(ls -lh app/src/main/assets/*.pmtiles)",
+      "Bash(./gradlew mergeDebugAssets packageDebug --rerun-tasks)",
+      "Bash(adb push:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(MSYS_NO_PATHCONV=1 adb push:*)"
     ]
   }
 }

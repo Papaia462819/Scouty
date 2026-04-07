@@ -1,6 +1,8 @@
 package com.scouty.app.ui.models
 
+import com.scouty.app.assistant.model.DailyForecastEntry
 import com.scouty.app.assistant.model.DeviceContextSnapshot
+import com.scouty.app.assistant.model.GearContextItem
 import com.scouty.app.assistant.model.TrailContextSnapshot
 import com.scouty.app.assistant.model.AssistantRuntimeDebugInfo
 
@@ -53,7 +55,8 @@ data class ActiveTrail(
     val imageSourcePageUrl: String? = null,
     val imageScope: String? = null,
     val progress: Float = 0f,
-    val lastSyncTimestamp: Long? = null
+    val lastSyncTimestamp: Long? = null,
+    val dailyForecast: List<DailyForecastEntry> = emptyList()
 )
 
 data class HomeStatus(
@@ -96,11 +99,25 @@ fun HomeStatus.toDeviceContextSnapshot(): DeviceContextSnapshot =
                 sunsetTime = trail.sunsetTime,
                 weatherForecast = trail.weatherForecast,
                 difficulty = trail.difficulty,
-                estimatedDuration = trail.estimatedDuration
+                estimatedDuration = trail.estimatedDuration,
+                distanceKm = trail.distanceKm,
+                elevationGain = trail.elevationGain,
+                averageInclinePercent = trail.averageInclinePercent,
+                descriptionRo = trail.descriptionRo,
+                dailyForecast = trail.dailyForecast
             )
         },
         recommendedGear = gearList
             .sortedBy { it.necessity.ordinal }
             .take(6)
-            .map { it.name }
+            .map { it.name },
+        gearItems = gearList.map { item ->
+            GearContextItem(
+                id = item.id,
+                name = item.name,
+                necessity = item.necessity.name,
+                isPacked = item.isPacked,
+                note = item.note
+            )
+        }
     )

@@ -25,8 +25,11 @@ import com.scouty.app.assistant.model.ResponseSectionStyle
 import com.scouty.app.assistant.model.SafetyOutcome
 import com.scouty.app.assistant.model.StructuredAssistantOutput
 import com.scouty.app.assistant.model.StructuredResponseSection
+import com.scouty.app.assistant.model.TrailContextIntent
 import java.text.Normalizer
+import java.time.LocalDate
 import java.time.Year
+import java.time.format.DateTimeFormatter
 import kotlin.math.min
 
 data class RetrievedChunk(
@@ -126,6 +129,12 @@ class QueryAnalyzer {
             else -> ReasoningType.GENERAL_RETRIEVAL
         }
 
+        val trailContextResult = if (!campfireLane) {
+            detectTrailContextIntent(normalizedQuery, tokens, context, conversationState)
+        } else {
+            TrailContextDetection()
+        }
+
         return QueryAnalysis(
             preferredLanguage = preferredLanguage,
             tokens = tokens,
@@ -142,7 +151,9 @@ class QueryAnalyzer {
             isFollowUp = campfireFollowUp,
             routeContextQuery = routeContextQuery,
             gearQuery = gearQuery,
-            safetyTags = detectSafetyTags(tokens)
+            safetyTags = detectSafetyTags(tokens),
+            trailContextIntent = trailContextResult.intent,
+            weatherQueryDate = trailContextResult.weatherDate
         ).also { analysis ->
             AssistantDiagnostics.logQueryAnalysis(query, analysis)
         }
@@ -252,6 +263,210 @@ class QueryAnalyzer {
             .replace("\\s+".toRegex(), " ")
             .trim()
 
+    private data class TrailContextDetection(
+        val intent: TrailContextIntent = TrailContextIntent.NONE,
+        val weatherDate: String? = null
+    )
+
+    private fun detectTrailContextIntent(
+        normalizedQuery: String,
+        tokens: List<String>,
+        context: DeviceContextSnapshot,
+        conversationState: AssistantConversationState
+    ): TrailContextDetection {
+        if (context.trail == null) return TrailContextDetection()
+
+        if (conversationState.pendingGearAction != null) {
+            if (isGearConfirmation(normalizedQuery)) {
+                return TrailContextDetection(intent = TrailContextIntent.GEAR_UPDATE_CONFIRM)
+            }
+        }
+
+        if (hasWeatherTokens(tokens, normalizedQuery)) {
+            val date = extractWeatherDate(normalizedQuery)
+            return TrailContextDetection(
+                intent = TrailContextIntent.WEATHER_FORECAST,
+                weatherDate = date
+            )
+        }
+
+        if (hasCapabilityTokens(normalizedQuery)) {
+            return TrailContextDetection(intent = TrailContextIntent.CAPABILITY_CHECK)
+        }
+
+        if (hasDurationEstimateTokens(normalizedQuery)) {
+            return TrailContextDetection(intent = TrailContextIntent.DURATION_ESTIMATE)
+        }
+
+        if (hasNeedsTokens(normalizedQuery)) {
+            return TrailContextDetection(intent = TrailContextIntent.NEEDS_CHECK)
+        }
+
+        if (hasGearReviewTokens(normalizedQuery, tokens)) {
+            return TrailContextDetection(intent = TrailContextIntent.GEAR_REVIEW)
+        }
+
+        if (hasTrailInfoTokens(normalizedQuery, tokens)) {
+            return TrailContextDetection(intent = TrailContextIntent.TRAIL_INFO)
+        }
+
+        return TrailContextDetection()
+    }
+
+    private fun hasWeatherTokens(tokens: List<String>, normalizedQuery: String): Boolean =
+        tokens.any { it in WeatherIntentTokens } ||
+            containsAny(normalizedQuery, "cum va fi vremea", "prognoza meteo", "forecast",
+                "ce vreme", "weather", "meteo", "precipitatii", "ploua", "ninge")
+
+    private fun hasCapabilityTokens(normalizedQuery: String): Boolean =
+        (containsAny(normalizedQuery, "pot face", "pot sa fac", "pot merge", "pot urca",
+            "reusesc", "fac fata", "can i do", "can i make", "am i able", "is it possible") ||
+            (normalizedQuery.startsWith("pot ") && containsAny(normalizedQuery, "daca", "if")) ||
+            containsAny(normalizedQuery, "potrivit pentru", "suitable for", "recomandat pentru",
+                "bun pentru", "good for", "ok pentru"))
+
+    private fun hasDurationEstimateTokens(normalizedQuery: String): Boolean =
+        containsAny(normalizedQuery, "cat ar dura", "cat dureaza daca", "how long would",
+            "how long if", "cat timp daca", "cat de repede")
+
+    private fun hasNeedsTokens(normalizedQuery: String): Boolean =
+        containsAny(normalizedQuery, "am nevoie", "trebuie sa iau", "trebuie sa am",
+            "do i need", "should i bring", "should i take", "what do i need",
+            "ce am nevoie", "ce imi trebuie", "ce sa iau", "necesar")
+
+    private fun hasGearReviewTokens(normalizedQuery: String, tokens: List<String>): Boolean =
+        containsAny(normalizedQuery, "lista echipament", "arata lista", "gear list",
+            "show list", "ce echipament", "what gear", "echipament complet", "full gear",
+            "rucsac complet", "arata echipament", "bifez", "impachetat", "pack list",
+            "lista de impachetat", "verifica echipament", "check gear",
+            "vrei sa actualizez lista", "actualizez lista") ||
+            (tokens.any { it in setOf("echipament", "gear", "rucsac") } &&
+                tokens.any { it in setOf("lista", "list", "complet", "full", "arata", "show", "tot", "all") })
+
+    private fun hasTrailInfoTokens(normalizedQuery: String, tokens: List<String>): Boolean =
+        containsAny(normalizedQuery, "spune mi despre traseu", "tell me about the trail",
+            "despre traseu", "about the trail", "detalii traseu", "trail details",
+            "info traseu", "trail info") ||
+            (tokens.any { it in setOf("traseu", "trail", "ruta", "route") } &&
+                tokens.any { it in setOf("dificultate", "difficulty", "marcaj", "marker",
+                    "durata", "duration", "distanta", "distance", "porneste", "start",
+                    "termina", "end", "apus", "sunset", "descriere", "describe",
+                    "informatii", "info", "detalii", "details") }) ||
+            containsAny(normalizedQuery, "care e dificultatea", "what is the difficulty",
+                "ce marcaj", "what marker", "cat dureaza", "how long is",
+                "de unde porneste", "where does it start", "unde ajunge", "where does it end",
+                "cat de lung", "how far", "ce distanta", "diferenta de nivel",
+                "la ce ora apune", "what time sunset")
+
+    private fun isGearConfirmation(normalizedQuery: String): Boolean =
+        normalizedQuery.trim() in setOf("da", "yes", "ok", "sigur", "sure", "bine", "hai",
+            "fa o", "go ahead", "confirm", "nu", "no", "nope", "las", "lasa", "renunt",
+            "cancel", "stop") ||
+            containsAny(normalizedQuery, "bifez", "impachetat", "packed", "mark",
+                "actualizeaza", "update", "tot ca impachetat", "all packed",
+                "obligatoriu", "mandatory")
+
+    private fun extractWeatherDate(normalizedQuery: String): String? {
+        val today = LocalDate.now()
+        val formatter = DateTimeFormatter.ISO_LOCAL_DATE
+
+        if (containsAny(normalizedQuery, "azi", "today", "acum", "now")) {
+            return today.format(formatter)
+        }
+        if (containsAny(normalizedQuery, "maine", "tomorrow", "miine")) {
+            return today.plusDays(1).format(formatter)
+        }
+        if (containsAny(normalizedQuery, "poimaine", "day after tomorrow")) {
+            return today.plusDays(2).format(formatter)
+        }
+
+        val dayNames = mapOf(
+            "luni" to java.time.DayOfWeek.MONDAY,
+            "marti" to java.time.DayOfWeek.TUESDAY,
+            "miercuri" to java.time.DayOfWeek.WEDNESDAY,
+            "joi" to java.time.DayOfWeek.THURSDAY,
+            "vineri" to java.time.DayOfWeek.FRIDAY,
+            "sambata" to java.time.DayOfWeek.SATURDAY,
+            "duminica" to java.time.DayOfWeek.SUNDAY,
+            "monday" to java.time.DayOfWeek.MONDAY,
+            "tuesday" to java.time.DayOfWeek.TUESDAY,
+            "wednesday" to java.time.DayOfWeek.WEDNESDAY,
+            "thursday" to java.time.DayOfWeek.THURSDAY,
+            "friday" to java.time.DayOfWeek.FRIDAY,
+            "saturday" to java.time.DayOfWeek.SATURDAY,
+            "sunday" to java.time.DayOfWeek.SUNDAY
+        )
+        dayNames.forEach { (name, dayOfWeek) ->
+            if (name in normalizedQuery) {
+                var target = today
+                while (target.dayOfWeek != dayOfWeek || target == today) {
+                    target = target.plusDays(1)
+                }
+                return target.format(formatter)
+            }
+        }
+
+        val monthNames = mapOf(
+            "ianuarie" to 1, "january" to 1, "ian" to 1, "jan" to 1,
+            "februarie" to 2, "february" to 2, "feb" to 2,
+            "martie" to 3, "march" to 3, "mar" to 3,
+            "aprilie" to 4, "april" to 4, "apr" to 4,
+            "mai" to 5, "may" to 5,
+            "iunie" to 6, "june" to 6, "iun" to 6, "jun" to 6,
+            "iulie" to 7, "july" to 7, "iul" to 7, "jul" to 7,
+            "august" to 8, "aug" to 8,
+            "septembrie" to 9, "september" to 9, "sep" to 9, "sept" to 9,
+            "octombrie" to 10, "october" to 10, "oct" to 10,
+            "noiembrie" to 11, "november" to 11, "nov" to 11,
+            "decembrie" to 12, "december" to 12, "dec" to 12
+        )
+
+        for ((monthName, monthNum) in monthNames) {
+            val pattern = "(\\d{1,2})\\s+$monthName".toRegex()
+            val match = pattern.find(normalizedQuery)
+            if (match != null) {
+                val day = match.groupValues[1].toIntOrNull() ?: continue
+                return try {
+                    LocalDate.of(today.year, monthNum, day).let { date ->
+                        if (date.isBefore(today)) date.plusYears(1) else date
+                    }.format(formatter)
+                } catch (_: Exception) { null }
+            }
+            val patternReverse = "$monthName\\s+(\\d{1,2})".toRegex()
+            val matchReverse = patternReverse.find(normalizedQuery)
+            if (matchReverse != null) {
+                val day = matchReverse.groupValues[1].toIntOrNull() ?: continue
+                return try {
+                    LocalDate.of(today.year, monthNum, day).let { date ->
+                        if (date.isBefore(today)) date.plusYears(1) else date
+                    }.format(formatter)
+                } catch (_: Exception) { null }
+            }
+        }
+
+        val datePattern = "(\\d{1,2})\\s*[./]\\s*(\\d{1,2})".toRegex()
+        datePattern.find(normalizedQuery)?.let { match ->
+            val first = match.groupValues[1].toIntOrNull() ?: return null
+            val second = match.groupValues[2].toIntOrNull() ?: return null
+            val (day, month) = if (first <= 12 && second > 12) second to first else first to second
+            return try {
+                LocalDate.of(today.year, month, day).let { date ->
+                    if (date.isBefore(today)) date.plusYears(1) else date
+                }.format(formatter)
+            } catch (_: Exception) { null }
+        }
+
+        if (containsAny(normalizedQuery, "weekend", "sfarsit de saptamana")) {
+            var target = today
+            while (target.dayOfWeek != java.time.DayOfWeek.SATURDAY) {
+                target = target.plusDays(1)
+            }
+            return target.format(formatter)
+        }
+
+        return null
+    }
+
     private companion object {
         private const val CampfireDomain = "field_know_how"
         private const val RouteDomain = "route_intelligence_romania"
@@ -285,6 +500,10 @@ class QueryAnalyzer {
         )
         private val EnglishMarkers = setOf(
             "the", "trail", "ankle", "bear", "snake", "marker", "how", "what", "when", "where", "mountain"
+        )
+        private val WeatherIntentTokens = setOf(
+            "vreme", "meteo", "weather", "forecast", "prognoza", "temperatura",
+            "ploaie", "rain", "ninge", "snow", "precipitat", "furtuna", "storm"
         )
         private val DomainKeywordMap = mapOf(
             "field_know_how" to setOf("foc", "focul", "campfire", "iasca", "amnar", "bricheta", "chibrit"),
@@ -814,7 +1033,8 @@ class AssistantRepository(
         modelManager = modelManager,
         fallbackEngine = TemplateGenerationEngine()
     ),
-    private val medicalSafetyPolicy: MedicalSafetyPolicy = MedicalSafetyPolicy()
+    private val medicalSafetyPolicy: MedicalSafetyPolicy = MedicalSafetyPolicy(),
+    private val trailContextEngine: TrailContextEngine = TrailContextEngine()
 ) {
     suspend fun answer(
         query: String,
@@ -824,6 +1044,19 @@ class AssistantRepository(
         val queryAnalysis = queryAnalyzer.analyze(query, context, conversationState)
         val preprocessing = deterministicPreprocessor.preprocess(query, conversationState, queryAnalysis)
         val packStatus = knowledgePackManager.ensureReady()
+
+        if (queryAnalysis.trailContextIntent != TrailContextIntent.NONE && context.trail != null) {
+            val trailResult = trailContextEngine.answer(
+                query = query,
+                context = context,
+                queryAnalysis = queryAnalysis,
+                conversationState = conversationState
+            )
+            if (trailResult != null) {
+                return answerFromTrailContext(trailResult, queryAnalysis)
+            }
+        }
+
         if (queryAnalysis.knowledgeLane == ConversationLane.FIELD_KNOW_HOW && queryAnalysis.resolvedTopic == "campfire") {
             return answerCampfire(
                 query = query,
@@ -841,6 +1074,23 @@ class AssistantRepository(
             initialAnalysis = queryAnalysis,
             preprocessing = preprocessing,
             packStatus = packStatus
+        )
+    }
+
+    private fun answerFromTrailContext(
+        result: TrailContextResult,
+        queryAnalysis: QueryAnalysis
+    ): AssistantResponse {
+        val structuredOutput = result.structuredOutput
+        return AssistantResponse(
+            answerText = buildDisplayText(structuredOutput, result.safetyOutcome),
+            structuredOutput = structuredOutput,
+            citations = emptyList(),
+            safetyOutcome = result.safetyOutcome,
+            generationMode = structuredOutput.generationMode,
+            reasoningType = structuredOutput.reasoningType,
+            conversationState = result.conversationState,
+            actions = result.actions
         )
     }
 
