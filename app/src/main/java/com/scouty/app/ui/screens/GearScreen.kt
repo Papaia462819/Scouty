@@ -5,6 +5,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,17 +30,20 @@ import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.HealthAndSafety
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,13 +72,13 @@ fun GearScreen(
     contentPadding: PaddingValues
 ) {
     val gearList = status.gearList
+    val hasActiveTrail = status.activeTrail != null
     val packedCount = gearList.count { it.isPacked }
     val totalCount = gearList.size
     val totalWeightGrams = gearList.sumOf { it.weightGrams ?: 0 }
     val missingMandatoryCount = gearList.count {
         it.necessity == GearNecessity.MANDATORY && !it.isPacked
     }
-    val difficultyLabel = status.activeTrail?.difficulty ?: "GENERAL"
     val categories = gearList.map { it.category }.distinct()
     val listKey = gearList.joinToString("|") { "${it.id}:${it.isPacked}" }
     val expandedState = remember(status.activeTrail?.name, status.activeTrail?.difficulty, listKey) {
@@ -102,7 +106,6 @@ fun GearScreen(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top
         ) {
             Column(modifier = Modifier.weight(1f)) {
@@ -113,82 +116,120 @@ fun GearScreen(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = status.activeTrail?.name ?: "Kit de baza pentru drumetie",
+                    text = status.activeTrail?.name ?: "Selecteaza un traseu",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = status.userProfile.shortSummaryRo,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-            StatusChip(
-                text = difficultyLabel.uppercase(Locale.getDefault()),
-                containerColor = difficultyBadgeColor(difficultyLabel).copy(alpha = 0.18f),
-                contentColor = difficultyBadgeColor(difficultyLabel)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(18.dp))
-
-        GearSummaryCard(
-            packedCount = packedCount,
-            totalCount = totalCount,
-            totalWeightGrams = totalWeightGrams,
-            missingMandatoryCount = missingMandatoryCount,
-            hasActiveTrail = status.activeTrail != null
-        )
-
-        Spacer(modifier = Modifier.height(18.dp))
-
-        categories.forEach { category ->
-            val itemsInCategory = gearList.filter { it.category == category }
-            val packedInCategory = itemsInCategory.count { it.isPacked }
-            val totalInCategory = itemsInCategory.size
-            val missingMandatoryInCategory = itemsInCategory.count {
-                it.necessity == GearNecessity.MANDATORY && !it.isPacked
-            }
-            val isExpanded = expandedState[category] == true
-
-            GearCategoryCard(
-                title = category,
-                icon = categoryIcon(category),
-                accentColor = categoryAccentColor(category),
-                status = "$packedInCategory/$totalInCategory packed",
-                summary = when {
-                    missingMandatoryInCategory > 0 -> "$missingMandatoryInCategory left"
-                    totalInCategory - packedInCategory > 0 -> "${totalInCategory - packedInCategory} left"
-                    else -> "ready"
-                },
-                summaryContainer = when {
-                    missingMandatoryInCategory > 0 -> Color(0xFF3A2A12)
-                    totalInCategory - packedInCategory > 0 -> Color.White.copy(alpha = 0.08f)
-                    else -> Color(0xFF173A24)
-                },
-                summaryContent = when {
-                    missingMandatoryInCategory > 0 -> Color(0xFFFFB020)
-                    totalInCategory - packedInCategory > 0 -> MaterialTheme.colorScheme.onSurface
-                    else -> Color(0xFF7BE5A3)
-                },
-                expanded = isExpanded,
-                completed = packedInCategory == totalInCategory,
-                onToggle = { expandedState[category] = !isExpanded }
-            ) {
-                itemsInCategory.forEachIndexed { index, item ->
-                    if (index > 0) {
-                        HorizontalDivider(color = Color.White.copy(alpha = 0.06f))
-                    }
-                    GearItemRow(
-                        item = item,
-                        onToggle = { onToggleItem(item.id) }
+                status.activeTrail?.let { trail ->
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = trail.partyComposition.summaryRo,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
         }
 
+        Spacer(modifier = Modifier.height(18.dp))
+
+        if (!hasActiveTrail) {
+            EmptyGearState()
+        } else {
+            GearSummaryCard(
+                packedCount = packedCount,
+                totalCount = totalCount,
+                totalWeightGrams = totalWeightGrams,
+                missingMandatoryCount = missingMandatoryCount,
+                hasActiveTrail = true
+            )
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            categories.forEach { category ->
+                val itemsInCategory = gearList.filter { it.category == category }
+                val packedInCategory = itemsInCategory.count { it.isPacked }
+                val totalInCategory = itemsInCategory.size
+                val missingMandatoryInCategory = itemsInCategory.count {
+                    it.necessity == GearNecessity.MANDATORY && !it.isPacked
+                }
+                val isExpanded = expandedState[category] == true
+
+                GearCategoryCard(
+                    title = category,
+                    icon = categoryIcon(category),
+                    accentColor = categoryAccentColor(category),
+                    status = "$packedInCategory/$totalInCategory packed",
+                    summary = when {
+                        missingMandatoryInCategory > 0 -> "$missingMandatoryInCategory left"
+                        totalInCategory - packedInCategory > 0 -> "${totalInCategory - packedInCategory} left"
+                        else -> "ready"
+                    },
+                    summaryContainer = when {
+                        missingMandatoryInCategory > 0 -> Color(0xFF3A2A12)
+                        totalInCategory - packedInCategory > 0 -> Color.White.copy(alpha = 0.08f)
+                        else -> Color(0xFF173A24)
+                    },
+                    summaryContent = when {
+                        missingMandatoryInCategory > 0 -> Color(0xFFFFB020)
+                        totalInCategory - packedInCategory > 0 -> MaterialTheme.colorScheme.onSurface
+                        else -> Color(0xFF7BE5A3)
+                    },
+                    expanded = isExpanded,
+                    completed = packedInCategory == totalInCategory,
+                    onToggle = { expandedState[category] = !isExpanded }
+                ) {
+                    itemsInCategory.forEachIndexed { index, item ->
+                        if (index > 0) {
+                            HorizontalDivider(color = Color.White.copy(alpha = 0.06f))
+                        }
+                        GearItemRow(
+                            item = item,
+                            onToggle = { onToggleItem(item.id) }
+                        )
+                    }
+                }
+            }
+        }
+
         Spacer(modifier = Modifier.height(28.dp))
+    }
+}
+
+@Composable
+private fun EmptyGearState() {
+    ScoutyPanel(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(28.dp),
+        startColor = MaterialTheme.colorScheme.surface,
+        endColor = MaterialTheme.colorScheme.surfaceVariant
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Surface(
+                modifier = Modifier.size(46.dp),
+                shape = RoundedCornerShape(16.dp),
+                color = Color(0xFF55A8FF).copy(alpha = 0.14f),
+                contentColor = Color(0xFF55A8FF)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Default.Inventory2,
+                        contentDescription = null,
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
+            }
+            Text(
+                text = "Gear apare doar dupa ce setezi un traseu.",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Data, vremea si grupul vor genera automat lista potrivita.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
 
@@ -245,7 +286,7 @@ private fun GearSummaryCard(
 
         Text(
             text = if (hasActiveTrail) {
-                "Checklist-ul este calculat din traseu, profil si conditiile estimate pentru tura."
+                "Lista este calculata din traseu, data aleasa si compozitia grupului."
             } else {
                 "Lista de baza; devine mai precisa imediat ce alegi un traseu."
             },
@@ -389,6 +430,7 @@ private fun GearItemRow(
 ) {
     val necessityColors = necessityColors(item.necessity)
     val showBadge = !item.isPacked || item.necessity != GearNecessity.RECOMMENDED
+    val detailsExpanded = remember(item.id) { mutableStateOf(false) }
 
     Row(
         modifier = Modifier
@@ -463,18 +505,32 @@ private fun GearItemRow(
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                if (item.note.isNotBlank()) {
+                    IconButton(
+                        onClick = { detailsExpanded.value = !detailsExpanded.value },
+                        modifier = Modifier
+                            .padding(start = 4.dp)
+                            .size(28.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f)
+                        )
+                    }
+                }
             }
 
             if (showBadge) {
                 Spacer(modifier = Modifier.height(8.dp))
-                StatusChip(
+                NecessityBadge(
                     text = necessityColors.label,
-                    containerColor = necessityColors.container,
-                    contentColor = necessityColors.content
+                    accentColor = necessityColors.accent
                 )
             }
 
-            if (item.note.isNotBlank()) {
+            if (item.note.isNotBlank() && detailsExpanded.value) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = item.note,
@@ -490,56 +546,64 @@ private fun GearItemRow(
 
 private fun categoryIcon(category: String): ImageVector =
     when (category) {
-        "Planificare & navigatie" -> Icons.Default.Explore
-        "Siguranta" -> Icons.Default.HealthAndSafety
-        "Vreme & confort" -> Icons.Default.Cloud
+        "Baza traseu" -> Icons.Default.Inventory2
+        "Siguranta & navigatie" -> Icons.Default.HealthAndSafety
+        "Straturi & vreme" -> Icons.Default.Cloud
         "Apa & hrana" -> Icons.Default.Restaurant
-        "Apa & energie" -> Icons.Default.Restaurant
+        "Copii" -> Icons.Default.Explore
         else -> Icons.Default.Inventory2
     }
 
 private fun categoryAccentColor(category: String): Color =
     when (category) {
-        "Planificare & navigatie" -> Color(0xFF67A6FF)
-        "Siguranta" -> Color(0xFFFF7A59)
-        "Vreme & confort" -> Color(0xFFFFC05A)
-        "Apa & energie" -> Color(0xFF7BE5A3)
+        "Baza traseu" -> Color(0xFF67A6FF)
+        "Siguranta & navigatie" -> Color(0xFFFF7A59)
+        "Straturi & vreme" -> Color(0xFFFFC05A)
+        "Apa & hrana" -> Color(0xFF7BE5A3)
+        "Copii" -> Color(0xFF9B8CFF)
         else -> Color(0xFF9CAAA0)
     }
 
 private data class NecessityColors(
     val label: String,
-    val container: Color,
-    val content: Color
+    val accent: Color
 )
 
 private fun necessityColors(necessity: GearNecessity): NecessityColors =
     when (necessity) {
         GearNecessity.MANDATORY -> NecessityColors(
             label = "Obligatoriu",
-            container = Color(0xFFFDE2E1),
-            content = Color(0xFFB42318)
+            accent = Color(0xFFFF7A59)
         )
         GearNecessity.RECOMMENDED -> NecessityColors(
             label = "Recomandat",
-            container = Color(0xFFDFF4E8),
-            content = Color(0xFF166534)
+            accent = Color(0xFF2ED3A6)
         )
         GearNecessity.CONDITIONAL -> NecessityColors(
-            label = "Conditional",
-            container = Color(0xFFFDEFD8),
-            content = Color(0xFFB45309)
+            label = "Optional",
+            accent = Color(0xFFFFB020)
         )
     }
 
-private fun difficultyBadgeColor(difficulty: String): Color =
-    when (difficulty.uppercase(Locale.ROOT)) {
-        "EXPERT" -> Color(0xFFB42318)
-        "HARD" -> Color(0xFFD97706)
-        "MEDIUM" -> Color(0xFF1D4ED8)
-        "EASY" -> Color(0xFF15803D)
-        else -> Color(0xFF0F766E)
+@Composable
+private fun NecessityBadge(
+    text: String,
+    accentColor: Color
+) {
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        color = accentColor.copy(alpha = 0.14f),
+        contentColor = accentColor,
+        border = BorderStroke(1.dp, accentColor.copy(alpha = 0.28f))
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
+            fontWeight = FontWeight.Medium
+        )
     }
+}
 
 private fun formatWeight(totalWeightGrams: Int): String =
     if (totalWeightGrams >= 1000) {

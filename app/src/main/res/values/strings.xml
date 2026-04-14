@@ -73,12 +73,6 @@
     <string name="gear_critical">CRITICAL</string>
 
     <string name="profile_title">Profile</string>
-    <string name="profile_level">Level %1$d \u00B7 %2$s</string>
-    <string name="profile_member_since">Member since %1$s</string>
-    <string name="profile_stats_trails">Trails</string>
-    <string name="profile_stats_km">km</string>
-    <string name="profile_stats_gain">m gained</string>
-    <string name="profile_offline_storage">OFFLINE STORAGE</string>
 
     <!-- Legacy strings for compatibility during cleanup -->
     <string name="assistant_prompt_ankle">I twisted my ankle</string>

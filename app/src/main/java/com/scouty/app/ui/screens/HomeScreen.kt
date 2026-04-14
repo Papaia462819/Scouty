@@ -59,6 +59,7 @@ import com.scouty.app.ui.components.ScoutyPanel
 import com.scouty.app.ui.components.SectionHeader
 import com.scouty.app.ui.components.StatusChip
 import com.scouty.app.ui.models.ActiveTrail
+import com.scouty.app.ui.models.ActiveTrailState
 import com.scouty.app.ui.models.HomeStatus
 import com.scouty.app.ui.models.RouteRecommendation
 import com.scouty.app.ui.models.TrailMetadataFormatter
@@ -417,6 +418,7 @@ private fun ActiveTrailCard(
 ) {
     val remainingDistanceKm = (trail.distanceKm * (1f - trail.progress.coerceIn(0f, 1f))).coerceAtLeast(0.0)
     val completionPercent = (trail.progress.coerceIn(0f, 1f) * 100).toInt()
+    val isStarted = trail.trackingState == ActiveTrailState.ACTIVE
     val markerLabel = TrailMetadataFormatter.formatTrailMarkers(trail.markingSymbols)
 
     Surface(
@@ -486,7 +488,11 @@ private fun ActiveTrailCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "${formatDistance(remainingDistanceKm)} remaining \u00B7 ${trail.estimatedDuration}",
+                    text = if (isStarted) {
+                        "${formatDistance(remainingDistanceKm)} remaining \u00B7 ${trail.estimatedDuration}"
+                    } else {
+                        "Ready to start \u00B7 ${trail.estimatedDuration}"
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White.copy(alpha = 0.76f)
                 )
@@ -526,7 +532,7 @@ private fun ActiveTrailCard(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "$completionPercent% completed",
+                    text = if (isStarted) "$completionPercent% completed" else "Planned trail",
                     style = MaterialTheme.typography.labelMedium,
                     color = Color.White.copy(alpha = 0.76f)
                 )

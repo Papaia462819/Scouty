@@ -6,6 +6,21 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 @Serializable
+data class TrailPartyComposition(
+    val adults: Int = 1,
+    val children: Int = 0
+) {
+    val totalPeople: Int
+        get() = adults + children
+
+    val summaryRo: String
+        get() = buildList {
+            if (adults > 0) add("$adults ${if (adults == 1) "adult" else "adulti"}")
+            if (children > 0) add("$children ${if (children == 1) "copil" else "copii"}")
+        }.ifEmpty { listOf("1 adult") }.joinToString(" • ")
+}
+
+@Serializable
 enum class ExperienceLevel(
     val labelRo: String,
     val summaryRo: String

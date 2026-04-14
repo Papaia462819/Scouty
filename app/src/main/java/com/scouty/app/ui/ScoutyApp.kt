@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -48,12 +49,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.scouty.app.profile.OnboardingDraft
+import com.scouty.app.profile.ProfileViewModel
+import com.scouty.app.profile.SessionStage
+import com.scouty.app.profile.toOnboardingDraft
 import com.scouty.app.assistant.ui.AssistantViewModel
 import com.scouty.app.R
+import com.scouty.app.ui.screens.AuthScreen
 import com.scouty.app.ui.screens.ChatScreen
 import com.scouty.app.ui.screens.GearScreen
 import com.scouty.app.ui.screens.HomeScreen
 import com.scouty.app.ui.screens.MapScreen
+import com.scouty.app.ui.screens.ProfileFlowMode
+import com.scouty.app.ui.screens.ProfileOnboardingScreen
 import com.scouty.app.ui.screens.ProfileScreen
 import com.scouty.app.ui.screens.SosScreen
 
@@ -71,6 +79,51 @@ private enum class TopDestination(
 
 @Composable
 fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
+    val profileViewModel: ProfileViewModel = viewModel()
+    val profileUiState by profileViewModel.uiState.collectAsState()
+    var editingProfile by rememberSaveable { mutableStateOf(false) }
+
+    when (profileUiState.stage) {
+        SessionStage.AUTH -> {
+            AuthScreen(
+                accountExists = profileUiState.accountExists,
+                authMessage = profileUiState.authMessage,
+                onClearMessage = profileViewModel::clearAuthMessage,
+                onLogin = profileViewModel::login,
+                onRegister = profileViewModel::startRegistration
+            )
+            return
+        }
+
+        SessionStage.ONBOARDING -> {
+            ProfileOnboardingScreen(
+                mode = ProfileFlowMode.CREATE,
+                email = profileUiState.pendingRegistrationEmail.orEmpty(),
+                initialDraft = profileUiState.profile?.toOnboardingDraft() ?: OnboardingDraft(),
+                onBack = profileViewModel::cancelRegistration,
+                onComplete = profileViewModel::completeRegistration
+            )
+            return
+        }
+
+        SessionStage.APP -> Unit
+    }
+
+    val currentProfile = profileUiState.profile ?: return
+    if (editingProfile) {
+        ProfileOnboardingScreen(
+            mode = ProfileFlowMode.EDIT,
+            email = currentProfile.email,
+            initialDraft = currentProfile.toOnboardingDraft(),
+            onBack = { editingProfile = false },
+            onComplete = {
+                profileViewModel.updateProfile(it)
+                editingProfile = false
+            }
+        )
+        return
+    }
+
     val application = LocalContext.current.applicationContext as Application
     val assistantViewModel: AssistantViewModel = viewModel(
         factory = remember(mainViewModel, application) {
@@ -82,10 +135,17 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
         }
     )
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
-    var openActiveTrailOnMapToken by remember { mutableStateOf<Long?>(null) }
     val uiState by mainViewModel.uiState.collectAsState()
+    val mapSessionState by mainViewModel.mapSessionState.collectAsState()
     val assistantUiState by assistantViewModel.uiState.collectAsState()
     val destination = TopDestination.entries[selectedIndex]
+
+    LaunchedEffect(mapSessionState.lastCompletedTrail?.id) {
+        mapSessionState.lastCompletedTrail?.let { completedTrail ->
+            profileViewModel.recordTrailCompletion(completedTrail)
+            mainViewModel.consumeLastCompletedTrail()
+        }
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -136,7 +196,7 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                     contentPadding = innerPadding,
                     onActiveTrailClick = {
                         if (uiState.activeTrail != null) {
-                            openActiveTrailOnMapToken = System.currentTimeMillis()
+                            mainViewModel.focusActiveTrailOnMap()
                             selectedIndex = TopDestination.MAP.ordinal
                         }
                     }
@@ -144,8 +204,7 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                 TopDestination.MAP -> MapScreen(
                     status = uiState,
                     contentPadding = innerPadding,
-                    viewModel = mainViewModel,
-                    openActiveTrailToken = openActiveTrailOnMapToken
+                    viewModel = mainViewModel
                 )
                 TopDestination.CHAT -> ChatScreen(
                     uiState = assistantUiState,
@@ -160,7 +219,16 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                     onToggleItem = { mainViewModel.toggleGearItem(it) }, 
                     contentPadding = innerPadding
                 )
-                TopDestination.PROFILE -> ProfileScreen(contentPadding = innerPadding)
+                TopDestination.PROFILE -> ProfileScreen(
+                    contentPadding = innerPadding,
+                    profile = currentProfile,
+                    status = uiState,
+                    onEditProfile = { editingProfile = true },
+                    onSignOut = {
+                        editingProfile = false
+                        profileViewModel.signOut()
+                    }
+                )
             }
         }
     }

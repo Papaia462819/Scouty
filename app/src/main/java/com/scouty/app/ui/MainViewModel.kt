@@ -29,14 +29,25 @@ import com.google.android.gms.location.*
 import com.scouty.app.api.MeteoblueLocationResult
 import com.scouty.app.api.MeteoblueResponse
 import com.scouty.app.data.RouteEnrichmentRepository
+import com.scouty.app.data.RouteBounds
+import com.scouty.app.data.RouteCoordinate
 import com.scouty.app.data.RouteGeometryRepository
 import com.scouty.app.data.UserTrailProfileStore
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.scouty.app.api.MeteoblueService
 import com.scouty.app.ui.models.ActiveTrail
+import com.scouty.app.ui.models.ActiveTrailState
+import com.scouty.app.ui.models.CompletedTrailSnapshot
+import com.scouty.app.ui.models.GearNecessity
 import com.scouty.app.ui.models.GearRecommendationEngine
 import com.scouty.app.ui.models.HomeStatus
+import com.scouty.app.ui.models.MapCameraSnapshot
+import com.scouty.app.ui.models.MapSessionState
+import com.scouty.app.ui.models.MapTrailMode
 import com.scouty.app.ui.models.RouteRecommendationEngine
+import com.scouty.app.ui.models.TrailPartyComposition
+import com.scouty.app.ui.models.TrailCompletionStatus
+import com.scouty.app.ui.models.TrailSelectionSnapshot
 import com.scouty.app.ui.models.TrailMetadataFormatter
 import com.scouty.app.ui.models.UserTrailProfile
 import com.scouty.app.ui.models.adaptToTrail
@@ -59,10 +70,25 @@ import kotlin.math.*
 
 class MainViewModel(application: Application) : AndroidViewModel(application), DeviceContextProvider, ChatActionHandler {
 
+    private companion object {
+        const val TrailStartDepartureKm = 0.12
+        const val TrailAutoCompleteMinElapsedMs = 90_000L
+    }
+
     private data class WeatherLookupResult(
         val response: MeteoblueResponse? = null,
         val fallbackLocation: MeteoblueLocationResult? = null,
         val usedFallbackLocation: Boolean = false
+    )
+
+    private data class TrailProgressComputation(
+        val progressFraction: Float,
+        val distanceCompletedKm: Double,
+        val remainingDistanceKm: Double,
+        val distanceToTrailKm: Double,
+        val distanceToStartKm: Double,
+        val distanceToEndKm: Double,
+        val remainingSegments: List<List<RouteCoordinate>>
     )
 
     private val meteoblueApiKey = BuildConfig.METEOBLUE_API_KEY
@@ -73,6 +99,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
 
     private val _uiState = MutableStateFlow(HomeStatus(userProfile = userTrailProfileStore.load()))
     val uiState: StateFlow<HomeStatus> = _uiState.asStateFlow()
+    private val _mapSessionState = MutableStateFlow(MapSessionState())
+    val mapSessionState: StateFlow<MapSessionState> = _mapSessionState.asStateFlow()
     private val _deviceContext = MutableStateFlow(_uiState.value.toDeviceContextSnapshot())
     override val deviceContext: StateFlow<DeviceContextSnapshot> = _deviceContext.asStateFlow()
     private var lastRecommendationLocation: Pair<Double, Double>? = null
@@ -129,12 +157,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     }
 
     private fun loadDefaultGear() {
-        val defaultGear = GearRecommendationEngine.build(
-            trail = null,
-            profile = _uiState.value.userProfile
-        )
-        updateUiState { it.copy(gearList = defaultGear) }
+        updateUiState { it.copy(gearList = emptyList()) }
     }
+
+    private fun buildGearList(
+        trail: ActiveTrail?,
+        profile: UserTrailProfile,
+        previousItems: List<com.scouty.app.ui.models.GearItem> = emptyList()
+    ): List<com.scouty.app.ui.models.GearItem> =
+        if (trail == null) {
+            emptyList()
+        } else {
+            GearRecommendationEngine.build(
+                trail = trail,
+                profile = profile,
+                previousItems = previousItems
+            )
+        }
 
     fun toggleGearItem(itemId: String) {
         updateUiState { currentState ->
@@ -160,7 +199,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         updateUiState { currentState ->
             currentState.copy(
                 userProfile = profile,
-                gearList = GearRecommendationEngine.build(
+                gearList = buildGearList(
                     trail = currentState.activeTrail,
                     profile = profile,
                     previousItems = currentState.gearList
@@ -168,6 +207,121 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             )
         }
         maybeRefreshRouteRecommendations(force = true)
+    }
+
+    fun selectMapTrail(selection: TrailSelectionSnapshot, showBottomSheet: Boolean = true) {
+        _mapSessionState.update { currentState ->
+            currentState.copy(
+                selectedTrail = selection,
+                isBottomSheetVisible = showBottomSheet,
+                mode = if (currentState.mode == MapTrailMode.ACTIVE) {
+                    MapTrailMode.ACTIVE
+                } else {
+                    MapTrailMode.BROWSING
+                }
+            )
+        }
+    }
+
+    fun showTrailDetails(visible: Boolean) {
+        _mapSessionState.update { it.copy(isBottomSheetVisible = visible) }
+    }
+
+    fun persistMapCamera(snapshot: MapCameraSnapshot) {
+        _mapSessionState.update { it.copy(cameraSnapshot = snapshot) }
+    }
+
+    fun orientToTrail(selection: TrailSelectionSnapshot? = _mapSessionState.value.selectedTrail) {
+        if (selection == null) return
+        _mapSessionState.update { currentState ->
+            currentState.copy(
+                selectedTrail = selection,
+                isBottomSheetVisible = false,
+                mode = MapTrailMode.ORIENTED,
+                focusRequestToken = System.currentTimeMillis()
+            )
+        }
+    }
+
+    fun focusActiveTrailOnMap() {
+        val activeTrail = _uiState.value.activeTrail ?: return
+        val selection = activeTrail.toTrailSelectionSnapshot()
+        _mapSessionState.update { currentState ->
+            currentState.copy(
+                selectedTrail = selection,
+                isBottomSheetVisible = false,
+                mode = if (activeTrail.trackingState == ActiveTrailState.ACTIVE) {
+                    MapTrailMode.ACTIVE
+                } else {
+                    MapTrailMode.ORIENTED
+                },
+                focusRequestToken = System.currentTimeMillis()
+            )
+        }
+    }
+
+    fun startActiveTrail() {
+        val activeTrail = _uiState.value.activeTrail ?: return
+        if (activeTrail.trackingState == ActiveTrailState.ACTIVE) {
+            _mapSessionState.update {
+                it.copy(
+                    mode = MapTrailMode.ACTIVE,
+                    isBottomSheetVisible = false,
+                    focusRequestToken = System.currentTimeMillis()
+                )
+            }
+            return
+        }
+
+        updateUiState { currentState ->
+            val trail = currentState.activeTrail ?: return@updateUiState currentState
+            currentState.copy(
+                activeTrail = trail.copy(
+                    trackingState = ActiveTrailState.ACTIVE,
+                    startedAtEpochMillis = System.currentTimeMillis(),
+                    progress = 0f,
+                    distanceCompletedKm = 0.0,
+                    remainingDistanceKm = trail.distanceKm,
+                    hasLeftStartZone = false,
+                    remainingRouteSegments = trail.routeSegments
+                )
+            )
+        }
+        _mapSessionState.update {
+            it.copy(
+                mode = MapTrailMode.ACTIVE,
+                isBottomSheetVisible = false,
+                focusRequestToken = System.currentTimeMillis()
+            )
+        }
+    }
+
+    fun endActiveTrail() {
+        completeActiveTrail(manual = true)
+    }
+
+    fun recenterActiveTrailOnUser() {
+        val activeTrail = _uiState.value.activeTrail ?: return
+        if (activeTrail.trackingState != ActiveTrailState.ACTIVE) {
+            return
+        }
+        _mapSessionState.update {
+            it.copy(
+                mode = MapTrailMode.ACTIVE,
+                isBottomSheetVisible = false,
+                focusRequestToken = System.currentTimeMillis()
+            )
+        }
+    }
+
+    fun consumeLastCompletedTrail() {
+        _mapSessionState.update { currentState ->
+            if (currentState.lastCompletedTrail == null) {
+                currentState
+            } else {
+                currentState.copy(lastCompletedTrail = null)
+            }
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -200,6 +354,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 locationName = "Current Location" 
             )
         }
+        updateActiveTrailProgress(location)
         maybeRefreshRouteRecommendations(latitude = location.latitude, longitude = location.longitude)
     }
 
@@ -225,28 +380,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
 
         if (now - lastSync > syncIntervalMs) {
             fetchWeatherData(
-                trail.name,
-                trail.date,
-                trail.latitude,
-                trail.longitude,
-                trail.localCode,
-                trail.region,
-                trail.descriptionRo,
-                trail.localDescription,
-                trail.routeSummary,
-                trail.fromName,
-                trail.toName,
-                trail.markingSymbols,
-                trail.sourceUrls,
-                trail.difficulty,
-                trail.distanceKm,
-                trail.elevationGain,
-                trail.estimatedDuration,
-                trail.imageUrl,
-                trail.imageAttribution,
-                trail.imageLicense,
-                trail.imageSourcePageUrl,
-                trail.imageScope
+                name = trail.name,
+                date = trail.date,
+                lat = trail.latitude,
+                lon = trail.longitude,
+                localCode = trail.localCode,
+                region = trail.region,
+                descriptionRo = trail.descriptionRo,
+                localDescription = trail.localDescription,
+                routeSummary = trail.routeSummary,
+                fromName = trail.fromName,
+                toName = trail.toName,
+                markingSymbols = trail.markingSymbols,
+                sourceUrls = trail.sourceUrls,
+                difficulty = trail.difficulty,
+                distanceKm = trail.distanceKm,
+                elevationGain = trail.elevationGain,
+                estimatedDuration = trail.estimatedDuration,
+                imageUrl = trail.imageUrl,
+                routeSegments = trail.routeSegments,
+                routeBounds = trail.routeBounds,
+                imageAttribution = trail.imageAttribution,
+                imageLicense = trail.imageLicense,
+                imageSourcePageUrl = trail.imageSourcePageUrl,
+                imageScope = trail.imageScope
             )
         }
     }
@@ -261,6 +418,296 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
         return r * c
     }
+
+    private fun updateActiveTrailProgress(location: Location) {
+        val activeTrail = _uiState.value.activeTrail ?: return
+        if (activeTrail.trackingState != ActiveTrailState.ACTIVE) {
+            return
+        }
+        if (activeTrail.routeSegments.isEmpty()) {
+            return
+        }
+
+        val progress = computeTrailProgress(
+            routeSegments = activeTrail.routeSegments,
+            latitude = location.latitude,
+            longitude = location.longitude,
+            totalDistanceKm = activeTrail.distanceKm
+        ) ?: return
+
+        val hasLeftStartZone = activeTrail.hasLeftStartZone || progress.distanceToStartKm >= TrailStartDepartureKm
+        val stabilizedProgressFraction = if (hasLeftStartZone) {
+            max(activeTrail.progress, progress.progressFraction)
+        } else {
+            0f
+        }
+        val stabilizedCompletedKm = if (hasLeftStartZone) {
+            max(activeTrail.distanceCompletedKm, progress.distanceCompletedKm)
+        } else {
+            0.0
+        }
+        val stabilizedRemainingKm = (activeTrail.distanceKm - stabilizedCompletedKm).coerceAtLeast(0.0)
+        val stabilizedRemainingSegments = if (hasLeftStartZone) {
+            trimRouteSegments(
+                originalSegments = activeTrail.routeSegments,
+                routeDistanceKm = stabilizedCompletedKm
+            )
+        } else {
+            activeTrail.routeSegments
+        }
+
+        updateUiState { currentState ->
+            val trail = currentState.activeTrail ?: return@updateUiState currentState
+            currentState.copy(
+                activeTrail = trail.copy(
+                    progress = stabilizedProgressFraction,
+                    distanceCompletedKm = stabilizedCompletedKm,
+                    remainingDistanceKm = stabilizedRemainingKm,
+                    offTrailDistanceKm = progress.distanceToTrailKm,
+                    hasLeftStartZone = hasLeftStartZone,
+                    remainingRouteSegments = stabilizedRemainingSegments
+                )
+            )
+        }
+
+        if (shouldAutoCompleteTrail(
+                trail = activeTrail,
+                hasLeftStartZone = hasLeftStartZone,
+                progressFraction = stabilizedProgressFraction,
+                distanceCompletedKm = stabilizedCompletedKm,
+                distanceToEndKm = progress.distanceToEndKm
+            )
+        ) {
+            completeActiveTrail(manual = false)
+        }
+    }
+
+    private fun shouldAutoCompleteTrail(
+        trail: ActiveTrail,
+        hasLeftStartZone: Boolean,
+        progressFraction: Float,
+        distanceCompletedKm: Double,
+        distanceToEndKm: Double
+    ): Boolean {
+        if (!hasLeftStartZone) return false
+
+        val elapsedMs = trail.startedAtEpochMillis?.let { System.currentTimeMillis() - it } ?: 0L
+        if (elapsedMs < TrailAutoCompleteMinElapsedMs) return false
+
+        val minimumDistanceForCompletion = max(0.45, trail.distanceKm * 0.25)
+        if (distanceCompletedKm < minimumDistanceForCompletion) return false
+
+        return progressFraction >= 0.985f ||
+            (distanceToEndKm <= 0.12 && progressFraction >= 0.94f)
+    }
+
+    private fun completeActiveTrail(manual: Boolean) {
+        val activeTrail = _uiState.value.activeTrail ?: return
+        val completedAtEpochMillis = System.currentTimeMillis()
+        val completionSnapshot = activeTrail.toCompletedTrailSnapshot(
+            completedAtEpochMillis = completedAtEpochMillis,
+            endedEarly = manual,
+            gearReady = isTrailGearReady(_uiState.value.gearList)
+        )
+        updateUiState { currentState ->
+            currentState.copy(
+                activeTrail = null,
+                gearList = emptyList()
+            )
+        }
+        _mapSessionState.update { currentState ->
+            currentState.copy(
+                selectedTrail = null,
+                isBottomSheetVisible = false,
+                mode = MapTrailMode.BROWSING,
+                lastCompletedTrail = completionSnapshot
+            )
+        }
+        maybeRefreshRouteRecommendations(force = true)
+    }
+
+    private fun computeTrailProgress(
+        routeSegments: List<List<RouteCoordinate>>,
+        latitude: Double,
+        longitude: Double,
+        totalDistanceKm: Double
+    ): TrailProgressComputation? {
+        val flattened = flattenRouteSegments(routeSegments)
+        if (flattened.size < 2) {
+            return null
+        }
+
+        var traversedKm = 0.0
+        var bestProjection: ProjectedPoint? = null
+        var bestDistanceKm = Double.MAX_VALUE
+
+        flattened.zipWithNext().forEach { (start, end) ->
+            val segmentLengthKm = calculateDistance(start.lat, start.lon, end.lat, end.lon)
+            if (segmentLengthKm <= 0.0) {
+                return@forEach
+            }
+
+            val projection = projectPointOntoSegment(
+                point = RouteCoordinate(latitude, longitude),
+                start = start,
+                end = end
+            )
+            if (projection.distanceKm < bestDistanceKm) {
+                bestDistanceKm = projection.distanceKm
+                bestProjection = projection.copy(distanceAlongRouteKm = traversedKm + (segmentLengthKm * projection.segmentFraction))
+            }
+            traversedKm += segmentLengthKm
+        }
+
+        val resolvedProjection = bestProjection ?: return null
+        val resolvedTotalDistanceKm = totalDistanceKm.takeIf { it > 0.0 } ?: traversedKm
+        val completedKm = resolvedProjection.distanceAlongRouteKm.coerceIn(0.0, resolvedTotalDistanceKm)
+        val remainingKm = (resolvedTotalDistanceKm - completedKm).coerceAtLeast(0.0)
+        val progressFraction = if (resolvedTotalDistanceKm > 0.0) {
+            (completedKm / resolvedTotalDistanceKm).toFloat().coerceIn(0f, 1f)
+        } else {
+            0f
+        }
+
+        return TrailProgressComputation(
+            progressFraction = progressFraction,
+            distanceCompletedKm = completedKm,
+            remainingDistanceKm = remainingKm,
+            distanceToTrailKm = resolvedProjection.distanceKm,
+            distanceToStartKm = calculateDistance(
+                latitude,
+                longitude,
+                flattened.first().lat,
+                flattened.first().lon
+            ),
+            distanceToEndKm = calculateDistance(
+                latitude,
+                longitude,
+                flattened.last().lat,
+                flattened.last().lon
+            ),
+            remainingSegments = trimRouteSegments(
+                originalSegments = routeSegments,
+                routeDistanceKm = completedKm
+            )
+        )
+    }
+
+    private fun flattenRouteSegments(routeSegments: List<List<RouteCoordinate>>): List<RouteCoordinate> =
+        buildList {
+            routeSegments.forEach { segment ->
+                if (segment.isEmpty()) return@forEach
+                if (isEmpty()) {
+                    addAll(segment)
+                } else {
+                    addAll(segment.drop(1))
+                }
+            }
+        }
+
+    private fun trimRouteSegments(
+        originalSegments: List<List<RouteCoordinate>>,
+        routeDistanceKm: Double
+    ): List<List<RouteCoordinate>> {
+        var remainingDistanceToTrim = routeDistanceKm.coerceAtLeast(0.0)
+        val remainingSegments = mutableListOf<List<RouteCoordinate>>()
+
+        originalSegments.forEach { segment ->
+            if (segment.size < 2) {
+                return@forEach
+            }
+            if (remainingDistanceToTrim <= 0.0) {
+                remainingSegments += segment
+                return@forEach
+            }
+
+            val trimmed = mutableListOf<RouteCoordinate>()
+            var carryTrim = remainingDistanceToTrim
+            var segmentConsumed = false
+
+            segment.zipWithNext().forEachIndexed { index, (start, end) ->
+                val sectionKm = calculateDistance(start.lat, start.lon, end.lat, end.lon)
+                if (segmentConsumed) {
+                    if (trimmed.isEmpty()) {
+                        trimmed += start
+                    }
+                    trimmed += end
+                    return@forEachIndexed
+                }
+
+                if (carryTrim >= sectionKm) {
+                    carryTrim -= sectionKm
+                    if (index == segment.lastIndex - 1) {
+                        remainingDistanceToTrim = carryTrim
+                    }
+                    return@forEachIndexed
+                }
+
+                val fraction = if (sectionKm == 0.0) 0.0 else carryTrim / sectionKm
+                val newStart = interpolateCoordinate(start, end, fraction)
+                trimmed += newStart
+                trimmed += end
+                segmentConsumed = true
+                remainingDistanceToTrim = 0.0
+            }
+
+            if (trimmed.size >= 2) {
+                remainingSegments += trimmed
+            }
+        }
+
+        return remainingSegments
+    }
+
+    private fun interpolateCoordinate(
+        start: RouteCoordinate,
+        end: RouteCoordinate,
+        fraction: Double
+    ): RouteCoordinate =
+        RouteCoordinate(
+            lat = start.lat + ((end.lat - start.lat) * fraction.coerceIn(0.0, 1.0)),
+            lon = start.lon + ((end.lon - start.lon) * fraction.coerceIn(0.0, 1.0))
+        )
+
+    private fun projectPointOntoSegment(
+        point: RouteCoordinate,
+        start: RouteCoordinate,
+        end: RouteCoordinate
+    ): ProjectedPoint {
+        val originLatRad = Math.toRadians((point.lat + start.lat + end.lat) / 3.0)
+        val pointX = point.lon * 111.320 * cos(originLatRad)
+        val pointY = point.lat * 110.574
+        val startX = start.lon * 111.320 * cos(originLatRad)
+        val startY = start.lat * 110.574
+        val endX = end.lon * 111.320 * cos(originLatRad)
+        val endY = end.lat * 110.574
+        val dx = endX - startX
+        val dy = endY - startY
+        if (dx == 0.0 && dy == 0.0) {
+            return ProjectedPoint(
+                segmentFraction = 0.0,
+                distanceKm = sqrt(((pointX - startX) * (pointX - startX)) + ((pointY - startY) * (pointY - startY))),
+                distanceAlongRouteKm = 0.0
+            )
+        }
+
+        val rawFraction = (((pointX - startX) * dx) + ((pointY - startY) * dy)) / ((dx * dx) + (dy * dy))
+        val fraction = rawFraction.coerceIn(0.0, 1.0)
+        val nearestX = startX + (fraction * dx)
+        val nearestY = startY + (fraction * dy)
+        val distanceKm = sqrt(((pointX - nearestX) * (pointX - nearestX)) + ((pointY - nearestY) * (pointY - nearestY)))
+        return ProjectedPoint(
+            segmentFraction = fraction,
+            distanceKm = distanceKm,
+            distanceAlongRouteKm = 0.0
+        )
+    }
+
+    private data class ProjectedPoint(
+        val segmentFraction: Double,
+        val distanceKm: Double,
+        val distanceAlongRouteKm: Double
+    )
 
     private suspend fun loadForecastWithFallbacks(lat: Double, lon: Double, asl: Int?): WeatherLookupResult {
         val directResponse = requestForecast(lat = lat, lon = lon, asl = asl)
@@ -408,10 +855,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private fun formatForecastTemperature(temperature: Double): String =
         String.format(Locale.getDefault(), "%.1f°C", temperature)
 
-    fun setActiveTrail(name: String, date: Calendar, lat: Double, lon: Double) {
+    fun setActiveTrail(
+        name: String,
+        date: Calendar,
+        partyComposition: TrailPartyComposition,
+        lat: Double,
+        lon: Double
+    ) {
         setActiveTrail(
             name = name,
             date = date,
+            partyComposition = partyComposition,
             lat = lat,
             lon = lon,
             difficulty = "MEDIUM",
@@ -419,6 +873,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             elevationGain = 1234,
             estimatedDuration = "~6h",
             imageUrl = null,
+            routeSegments = emptyList(),
+            routeBounds = null,
             recordSelection = true
         )
     }
@@ -426,6 +882,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     fun setActiveTrail(
         name: String,
         date: Calendar,
+        partyComposition: TrailPartyComposition = TrailPartyComposition(),
         lat: Double,
         lon: Double,
         difficulty: String,
@@ -433,6 +890,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         elevationGain: Int,
         estimatedDuration: String,
         imageUrl: String?,
+        routeSegments: List<List<com.scouty.app.data.RouteCoordinate>> = emptyList(),
+        routeBounds: com.scouty.app.data.RouteBounds? = null,
         localCode: String? = null,
         region: String? = null,
         descriptionRo: String? = null,
@@ -451,6 +910,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         fetchWeatherData(
             name = name,
             date = date,
+            partyComposition = partyComposition,
             lat = lat,
             lon = lon,
             localCode = localCode,
@@ -467,6 +927,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             elevationGain = elevationGain,
             estimatedDuration = estimatedDuration,
             imageUrl = imageUrl,
+            routeSegments = routeSegments,
+            routeBounds = routeBounds,
             imageAttribution = imageAttribution,
             imageLicense = imageLicense,
             imageSourcePageUrl = imageSourcePageUrl,
@@ -478,6 +940,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private fun fetchWeatherData(
         name: String,
         date: Calendar,
+        partyComposition: TrailPartyComposition = TrailPartyComposition(),
         lat: Double,
         lon: Double,
         localCode: String? = null,
@@ -494,6 +957,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         elevationGain: Int,
         estimatedDuration: String,
         imageUrl: String?,
+        routeSegments: List<List<com.scouty.app.data.RouteCoordinate>> = emptyList(),
+        routeBounds: com.scouty.app.data.RouteBounds? = null,
         imageAttribution: String? = null,
         imageLicense: String? = null,
         imageSourcePageUrl: String? = null,
@@ -555,6 +1020,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             val trail = ActiveTrail(
                 name = name,
                 date = date,
+                partyComposition = partyComposition,
                 latitude = lat,
                 longitude = lon,
                 localCode = localCode,
@@ -575,6 +1041,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 averageInclinePercent = calculateAverageInclinePercent(distanceKm, elevationGain),
                 estimatedDuration = estimatedDuration,
                 imageUrl = imageUrl,
+                routeSegments = routeSegments,
+                remainingRouteSegments = routeSegments,
+                routeBounds = routeBounds,
                 imageAttribution = imageAttribution,
                 imageLicense = imageLicense,
                 imageSourcePageUrl = imageSourcePageUrl,
@@ -591,7 +1060,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             }
 
             updateUiState { currentState ->
-                val updatedGear = GearRecommendationEngine.build(
+                val updatedGear = buildGearList(
                     trail = trail,
                     profile = profileForTrail,
                     previousItems = currentState.gearList
@@ -600,6 +1069,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                     activeTrail = trail,
                     gearList = updatedGear,
                     userProfile = profileForTrail
+                )
+            }
+            _mapSessionState.update { currentState ->
+                currentState.copy(
+                    selectedTrail = trail.toTrailSelectionSnapshot(),
+                    isBottomSheetVisible = false,
+                    mode = MapTrailMode.ORIENTED,
+                    focusRequestToken = System.currentTimeMillis()
                 )
             }
             maybeRefreshRouteRecommendations(force = true, latitude = lat, longitude = lon)
@@ -617,6 +1094,61 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             11 -> "Rain"
             14 -> "Thunderstorm"
             else -> "Cloudy"
+        }
+    }
+
+    private fun isTrailGearReady(items: List<com.scouty.app.ui.models.GearItem>): Boolean {
+        val mandatoryItems = items.filter { it.necessity == GearNecessity.MANDATORY }
+        return mandatoryItems.isNotEmpty() && mandatoryItems.all { it.isPacked }
+    }
+
+    private fun ActiveTrail.toCompletedTrailSnapshot(
+        completedAtEpochMillis: Long,
+        endedEarly: Boolean,
+        gearReady: Boolean
+    ): CompletedTrailSnapshot {
+        val progressFraction = progress.coerceIn(0f, 1f)
+        val recordedDistanceKm = when {
+            endedEarly && distanceCompletedKm > 0.0 -> distanceCompletedKm
+            !endedEarly && distanceKm > 0.0 -> distanceKm
+            distanceCompletedKm > 0.0 -> distanceCompletedKm
+            else -> distanceKm
+        }
+        val recordedElevationGainM = when {
+            endedEarly -> (elevationGain * progressFraction).roundToInt().coerceAtLeast(0)
+            else -> elevationGain.coerceAtLeast(0)
+        }
+        val durationText = startedAtEpochMillis?.let { startedAt ->
+            formatElapsedDuration(completedAtEpochMillis - startedAt)
+        } ?: estimatedDuration
+        return CompletedTrailSnapshot(
+            id = listOfNotNull(localCode, completedAtEpochMillis.toString()).joinToString(":"),
+            name = name,
+            region = region?.takeIf { it.isNotBlank() } ?: "Unknown region",
+            localCode = localCode,
+            completedAtEpochMillis = completedAtEpochMillis,
+            distanceKm = recordedDistanceKm.coerceAtLeast(0.0),
+            elevationGainM = recordedElevationGainM,
+            durationText = durationText,
+            difficulty = difficulty,
+            imageUrl = imageUrl,
+            gearReady = gearReady,
+            status = if (endedEarly) {
+                TrailCompletionStatus.ENDED_EARLY
+            } else {
+                TrailCompletionStatus.COMPLETED
+            }
+        )
+    }
+
+    private fun formatElapsedDuration(elapsedMillis: Long): String {
+        val totalMinutes = (elapsedMillis / 60_000L).coerceAtLeast(1L)
+        val hours = totalMinutes / 60
+        val minutes = totalMinutes % 60
+        return when {
+            hours <= 0L -> "${minutes}m"
+            minutes == 0L -> "${hours}h"
+            else -> "${hours}h ${minutes}m"
         }
     }
 
@@ -748,6 +1280,38 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             }
         }
     }
+
+    private fun ActiveTrail.toTrailSelectionSnapshot(
+        selectionToken: Long = System.currentTimeMillis()
+    ): TrailSelectionSnapshot =
+        TrailSelectionSnapshot(
+            name = name,
+            difficulty = runCatching {
+                com.scouty.app.utils.TrailDifficulty.valueOf(difficulty)
+            }.getOrDefault(com.scouty.app.utils.TrailDifficulty.MEDIUM),
+            latitude = latitude,
+            longitude = longitude,
+            distanceKm = distanceKm,
+            elevationGain = elevationGain,
+            estimatedDuration = estimatedDuration,
+            selectionToken = selectionToken,
+            localCode = localCode,
+            region = region,
+            descriptionRo = descriptionRo,
+            localDescription = localDescription,
+            routeSummary = routeSummary,
+            fromName = fromName,
+            toName = toName,
+            markingSymbols = markingSymbols,
+            sourceUrls = sourceUrls,
+            imageUrl = imageUrl,
+            imageAttribution = imageAttribution,
+            imageLicense = imageLicense,
+            imageSourcePageUrl = imageSourcePageUrl,
+            imageScope = imageScope,
+            highlightSegments = routeSegments,
+            highlightBounds = routeBounds
+        )
 
     override fun onCleared() {
         super.onCleared()

@@ -22,15 +22,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.GpsFixed
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Layers
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Timer
@@ -45,6 +50,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
@@ -66,11 +72,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
@@ -79,10 +87,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.scouty.app.R
 import com.scouty.app.ui.models.ActiveTrail
+import com.scouty.app.ui.models.ActiveTrailState
 import com.scouty.app.data.RouteEnrichmentCatalog
 import com.scouty.app.data.RouteImage
 import com.scouty.app.data.RouteEnrichmentRepository
@@ -94,8 +104,13 @@ import com.scouty.app.data.RouteGeometryRepository
 import com.scouty.app.data.RouteSearchSuggestion
 import com.scouty.app.data.bestDescriptionRo
 import com.scouty.app.ui.components.RouteRemoteImage
+import com.scouty.app.ui.components.StatusChip
 import com.scouty.app.ui.MainViewModel
 import com.scouty.app.ui.models.HomeStatus
+import com.scouty.app.ui.models.MapCameraSnapshot
+import com.scouty.app.ui.models.MapTrailMode
+import com.scouty.app.ui.models.TrailPartyComposition
+import com.scouty.app.ui.models.TrailSelectionSnapshot
 import com.scouty.app.ui.models.TrailMetadataFormatter
 import com.scouty.app.utils.MapDataConfig
 import com.scouty.app.utils.MapLifecycleManager
@@ -107,6 +122,7 @@ import com.scouty.app.utils.MapStyleConfig
 import com.scouty.app.utils.TrailDifficulty
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraUpdateFactory
+import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.geometry.LatLngBounds
 import org.maplibre.android.location.LocationComponentActivationOptions
@@ -130,7 +146,11 @@ import org.maplibre.geojson.Geometry
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.MultiLineString
 import org.maplibre.geojson.Point
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.ceil
 import kotlin.math.cos
@@ -163,32 +183,7 @@ private const val RomaniaFallbackFocusKey = "fallback:romania"
 private const val SelectedRouteSourceId = "selected-route-source"
 private const val SelectedRouteLayerId = "selected-route-layer"
 
-private data class SelectedTrailDetails(
-    val name: String,
-    val difficulty: TrailDifficulty,
-    val latitude: Double,
-    val longitude: Double,
-    val distanceKm: Double,
-    val elevationGain: Int,
-    val estimatedDuration: String,
-    val selectionToken: Long = System.currentTimeMillis(),
-    val localCode: String? = null,
-    val region: String? = null,
-    val descriptionRo: String? = null,
-    val localDescription: String? = null,
-    val routeSummary: String? = null,
-    val fromName: String? = null,
-    val toName: String? = null,
-    val markingSymbols: List<String> = emptyList(),
-    val sourceUrls: List<String> = emptyList(),
-    val imageUrl: String? = null,
-    val imageAttribution: String? = null,
-    val imageLicense: String? = null,
-    val imageSourcePageUrl: String? = null,
-    val imageScope: String? = null,
-    val highlightSegments: List<List<RouteCoordinate>> = emptyList(),
-    val highlightBounds: RouteBounds? = null
-)
+private typealias SelectedTrailDetails = TrailSelectionSnapshot
 
 private data class LayerToggleSpec(
     val label: String,
@@ -207,8 +202,7 @@ private data class CameraFocusTarget(
 fun MapScreen(
     status: HomeStatus,
     contentPadding: PaddingValues,
-    viewModel: MainViewModel? = null,
-    openActiveTrailToken: Long? = null
+    viewModel: MainViewModel
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -231,20 +225,13 @@ fun MapScreen(
     val mapDataConfig = remember(mapPackRegistry) {
         mapPackRegistry?.let(MapDataConfig::fromRegistry)
     }
-    val defaultSelection = remember {
-        SelectedTrailDetails(
-            name = "Mountain Trail",
-            difficulty = TrailDifficulty.MEDIUM,
-            latitude = RomaniaCenter.latitude,
-            longitude = RomaniaCenter.longitude,
-            distanceKm = 0.0,
-            elevationGain = 0,
-            estimatedDuration = "--"
-        )
-    }
-    var selectedTrail by remember { mutableStateOf(defaultSelection) }
-    var showBottomSheet by remember { mutableStateOf(false) }
-    var consumedActiveTrailOpenToken by remember { mutableStateOf<Long?>(null) }
+    val mapSession by viewModel.mapSessionState.collectAsState()
+    val selectedTrail = mapSession.selectedTrail
+    val showBottomSheet = mapSession.isBottomSheetVisible && selectedTrail != null
+    val activeTrail = status.activeTrail
+    val hasPlannedTrail = activeTrail?.trackingState == ActiveTrailState.PLANNED
+    val isActiveTrailMode = mapSession.mode == MapTrailMode.ACTIVE &&
+        activeTrail?.trackingState == ActiveTrailState.ACTIVE
 
     remember { MapLibre.getInstance(context) }
 
@@ -356,19 +343,19 @@ fun MapScreen(
 
     fun selectSuggestion(suggestion: RouteSearchSuggestion) {
         val geometry = RouteGeometryRepository.findByLocalCode(routeGeometryIndex, suggestion.localCode)
-        selectedTrail = buildSelectedTrailFromSearch(suggestion, geometry)
+        val selection = buildSelectedTrailFromSearch(suggestion, geometry)
         suggestion.entry.displayTitle?.let { title ->
             searchText = title
             if (!searchHistory.contains(title)) {
                 searchHistory.add(0, title)
             }
         }
-        showBottomSheet = true
+        viewModel.selectMapTrail(selection, showBottomSheet = true)
         isSearchExpanded = false
         showLayerMenu = false
     }
 
-    LaunchedEffect(showBottomSheet, selectedTrail.selectionToken) {
+    LaunchedEffect(showBottomSheet, selectedTrail?.selectionToken) {
         if (showBottomSheet) {
             try {
                 snapshotFlow { sheetState.hasExpandedState }.first { it }
@@ -377,18 +364,6 @@ fun MapScreen(
                 Log.w("ScoutyMap", "Failed to expand route sheet", error)
             }
         }
-    }
-
-    LaunchedEffect(openActiveTrailToken, status.activeTrail) {
-        val activeTrail = status.activeTrail ?: return@LaunchedEffect
-        if (openActiveTrailToken == null) return@LaunchedEffect
-        if (openActiveTrailToken == consumedActiveTrailOpenToken) return@LaunchedEffect
-
-        selectedTrail = buildSelectedTrailFromActiveTrail(activeTrail, routeCatalog, routeGeometryIndex)
-        showBottomSheet = true
-        isSearchExpanded = false
-        showLayerMenu = false
-        consumedActiveTrailOpenToken = openActiveTrailToken
     }
 
     if (mapPackRegistry == null || mapDataConfig == null) {
@@ -462,154 +437,161 @@ fun MapScreen(
             },
             containerColor = Color.Transparent,
             sheetContent = {
-                if (showBottomSheet) {
+                selectedTrail?.let { sheetTrail ->
+                    if (showBottomSheet) {
                     TrailDetailContent(
-                        trail = selectedTrail,
-                        onSetTrail = { date ->
-                        viewModel?.setActiveTrail(
-                            name = selectedTrail.name,
-                            date = date,
-                            lat = selectedTrail.latitude,
-                            lon = selectedTrail.longitude,
-                            difficulty = selectedTrail.difficulty.name,
-                            distanceKm = selectedTrail.distanceKm,
-                            elevationGain = selectedTrail.elevationGain,
-                            estimatedDuration = selectedTrail.estimatedDuration,
-                            imageUrl = selectedTrail.imageUrl,
-                            localCode = selectedTrail.localCode,
-                            region = selectedTrail.region,
-                            descriptionRo = selectedTrail.descriptionRo,
-                            localDescription = selectedTrail.localDescription,
-                            routeSummary = selectedTrail.routeSummary,
-                            fromName = selectedTrail.fromName,
-                            toName = selectedTrail.toName,
-                            markingSymbols = selectedTrail.markingSymbols,
-                            sourceUrls = selectedTrail.sourceUrls,
-                            imageAttribution = selectedTrail.imageAttribution,
-                            imageLicense = selectedTrail.imageLicense,
-                            imageSourcePageUrl = selectedTrail.imageSourcePageUrl,
-                            imageScope = selectedTrail.imageScope
-                        )
-                        showBottomSheet = false
+                        trail = sheetTrail,
+                        onSetTrail = { date, partyComposition ->
+                            viewModel.setActiveTrail(
+                                name = sheetTrail.name,
+                                date = date,
+                                partyComposition = partyComposition,
+                                lat = sheetTrail.latitude,
+                                lon = sheetTrail.longitude,
+                                difficulty = sheetTrail.difficulty.name,
+                                distanceKm = sheetTrail.distanceKm,
+                                elevationGain = sheetTrail.elevationGain,
+                                estimatedDuration = sheetTrail.estimatedDuration,
+                                imageUrl = sheetTrail.imageUrl,
+                                routeSegments = sheetTrail.highlightSegments,
+                                routeBounds = sheetTrail.highlightBounds,
+                                localCode = sheetTrail.localCode,
+                                region = sheetTrail.region,
+                                descriptionRo = sheetTrail.descriptionRo,
+                                localDescription = sheetTrail.localDescription,
+                                routeSummary = sheetTrail.routeSummary,
+                                fromName = sheetTrail.fromName,
+                                toName = sheetTrail.toName,
+                                markingSymbols = sheetTrail.markingSymbols,
+                                sourceUrls = sheetTrail.sourceUrls,
+                                imageAttribution = sheetTrail.imageAttribution,
+                                imageLicense = sheetTrail.imageLicense,
+                                imageSourcePageUrl = sheetTrail.imageSourcePageUrl,
+                                imageScope = sheetTrail.imageScope
+                            )
+                            viewModel.showTrailDetails(false)
+                        }
+                    )
                     }
-                )
                 }
             }
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 MapLibreView(
                     status = status,
+                    activeTrail = status.activeTrail,
                     routeCatalog = routeCatalog,
                     routeGeometryIndex = routeGeometryIndex,
                     mapDataConfig = readyMapDataConfig,
-                    selectedRouteCode = selectedTrail.localCode,
-                    selectedRouteSegments = selectedTrail.highlightSegments,
-                    selectedRouteBounds = selectedTrail.highlightBounds,
-                    selectedRouteCenter = LatLng(selectedTrail.latitude, selectedTrail.longitude),
-                    selectedRouteToken = selectedTrail.selectionToken,
+                    selectedTrail = selectedTrail,
+                    mapMode = mapSession.mode,
+                    focusRequestToken = mapSession.focusRequestToken,
+                    cameraSnapshot = mapSession.cameraSnapshot,
                     overlayState = overlayState,
                     onTrailClick = { selection ->
-                        selectedTrail = selection
-                        showBottomSheet = true
+                        viewModel.selectMapTrail(selection, showBottomSheet = true)
                     },
+                    onCameraSnapshotChanged = viewModel::persistMapCamera,
                     onMapErrorChanged = { mapRuntimeError = it },
                     modifier = Modifier.fillMaxSize()
                 )
 
-                SearchBar(
-                    inputField = {
-                        SearchBarDefaults.InputField(
-                            query = searchText,
-                            onQueryChange = { searchText = it },
-                            onSearch = { query ->
-                                liveSuggestions.firstOrNull()?.let(::selectSuggestion)
-                                    ?: run {
-                                        if (query.isNotBlank() && !searchHistory.contains(query)) {
-                                            searchHistory.add(0, query)
+                if (!isActiveTrailMode) {
+                    SearchBar(
+                        inputField = {
+                            SearchBarDefaults.InputField(
+                                query = searchText,
+                                onQueryChange = { searchText = it },
+                                onSearch = { query ->
+                                    liveSuggestions.firstOrNull()?.let(::selectSuggestion)
+                                        ?: run {
+                                            if (query.isNotBlank() && !searchHistory.contains(query)) {
+                                                searchHistory.add(0, query)
+                                            }
+                                            isSearchExpanded = false
                                         }
-                                        isSearchExpanded = false
-                                    }
-                            },
-                            expanded = isSearchExpanded,
-                            onExpandedChange = { isSearchExpanded = it },
-                            placeholder = { Text(stringResource(R.string.map_search_placeholder)) },
-                            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                            trailingIcon = {
-                                if (isSearchExpanded) {
-                                    IconButton(onClick = {
-                                        if (searchText.isNotEmpty()) searchText = "" else isSearchExpanded = false
-                                    }) {
-                                        Icon(Icons.Default.Close, contentDescription = null)
-                                    }
-                                } else {
-                                    IconButton(onClick = { showLayerMenu = !showLayerMenu }) {
-                                        Icon(
-                                            Icons.Default.Layers,
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.primary
-                                        )
+                                },
+                                expanded = isSearchExpanded,
+                                onExpandedChange = { isSearchExpanded = it },
+                                placeholder = { Text(stringResource(R.string.map_search_placeholder)) },
+                                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                                trailingIcon = {
+                                    if (isSearchExpanded) {
+                                        IconButton(onClick = {
+                                            if (searchText.isNotEmpty()) searchText = "" else isSearchExpanded = false
+                                        }) {
+                                            Icon(Icons.Default.Close, contentDescription = null)
+                                        }
+                                    } else {
+                                        IconButton(onClick = { showLayerMenu = !showLayerMenu }) {
+                                            Icon(
+                                                Icons.Default.Layers,
+                                                contentDescription = null,
+                                                tint = MaterialTheme.colorScheme.primary
+                                            )
+                                        }
                                     }
                                 }
-                            }
-                        )
-                    },
-                    expanded = isSearchExpanded,
-                    onExpandedChange = { isSearchExpanded = it },
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = if (isSearchExpanded) 0.dp else 16.dp)
-                        .fillMaxWidth(if (isSearchExpanded) 1f else 0.92f),
-                    colors = SearchBarDefaults.colors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.96f)
-                    )
-                ) {
-                    LazyColumn(
+                            )
+                        },
+                        expanded = isSearchExpanded,
+                        onExpandedChange = { isSearchExpanded = it },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                            .align(Alignment.TopCenter)
+                            .padding(top = if (isSearchExpanded) 0.dp else 16.dp)
+                            .fillMaxWidth(if (isSearchExpanded) 1f else 0.92f),
+                        colors = SearchBarDefaults.colors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.96f)
+                        )
                     ) {
-                        if (searchText.length >= 2) {
-                            items(liveSuggestions) { suggestion ->
-                                RouteSuggestionItem(
-                                    suggestion = suggestion,
-                                    onClick = { selectSuggestion(suggestion) },
-                                    showPreviewImage = false
-                                )
-                            }
-                        } else {
-                            items(searchHistory) { historyItem ->
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable {
-                                            searchText = historyItem
-                                        },
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Icon(
-                                        Icons.Default.History,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            if (searchText.length >= 2) {
+                                items(liveSuggestions) { suggestion ->
+                                    RouteSuggestionItem(
+                                        suggestion = suggestion,
+                                        onClick = { selectSuggestion(suggestion) },
+                                        showPreviewImage = false
                                     )
-                                    Spacer(modifier = Modifier.width(16.dp))
-                                    Text(text = historyItem)
+                                }
+                            } else {
+                                items(searchHistory) { historyItem ->
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                searchText = historyItem
+                                            },
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            Icons.Default.History,
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                        Spacer(modifier = Modifier.width(16.dp))
+                                        Text(text = historyItem)
+                                    }
                                 }
                             }
-                        }
 
-                        if (searchText.length >= 2 && liveSuggestions.isEmpty()) {
-                            item {
-                                Text(
-                                    text = "Nu am gasit trasee pentru \"$searchText\".",
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
+                            if (searchText.length >= 2 && liveSuggestions.isEmpty()) {
+                                item {
+                                    Text(
+                                        text = "Nu am gasit trasee pentru \"$searchText\".",
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
                             }
                         }
                     }
                 }
 
-                if (showLayerMenu && !isSearchExpanded) {
+                if (showLayerMenu && !isSearchExpanded && !isActiveTrailMode) {
                     Card(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
@@ -626,7 +608,47 @@ fun MapScreen(
                     }
                 }
 
-                if (!mapDataConfig.hasDemoPack && !isSearchExpanded) {
+                activeTrail?.takeIf { hasPlannedTrail }?.let { plannedTrail ->
+                    SubtleMapRecenterButton(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 18.dp, bottom = if (mapDataConfig.hasDemoPack) 112.dp else 148.dp),
+                        onClick = { viewModel.orientToTrail(plannedTrail.toSelectionSnapshot()) }
+                    )
+                    PlannedTrailActions(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(horizontal = 16.dp, vertical = if (mapDataConfig.hasDemoPack) 24.dp else 114.dp),
+                        onStartTrail = viewModel::startActiveTrail
+                    )
+                }
+
+                activeTrail?.takeIf { isActiveTrailMode }?.let { activeModeTrail ->
+                    ActiveTrailHud(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+                        trail = activeModeTrail
+                    )
+                    SubtleMapRecenterButton(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 18.dp, bottom = if (mapDataConfig.hasDemoPack) 112.dp else 148.dp),
+                        onClick = viewModel::recenterActiveTrailOnUser
+                    )
+                    Button(
+                        onClick = viewModel::endActiveTrail,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(horizontal = 16.dp, vertical = if (mapDataConfig.hasDemoPack) 24.dp else 114.dp)
+                            .fillMaxWidth(0.9f),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Text("End Trail")
+                    }
+                }
+
+                if (!mapDataConfig.hasDemoPack && !isSearchExpanded && !isActiveTrailMode) {
                     OptionalDemoPackBanner(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
@@ -778,13 +800,160 @@ private fun MapRuntimeErrorCard(
     }
 }
 
+@Composable
+private fun PlannedTrailActions(
+    modifier: Modifier = Modifier,
+    onStartTrail: () -> Unit
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
+        tonalElevation = 10.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp, vertical = 14.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(
+                onClick = onStartTrail,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text("Start Trail")
+            }
+        }
+    }
+}
+
+@Composable
+private fun SubtleMapRecenterButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(18.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.84f),
+        tonalElevation = 8.dp,
+        shadowElevation = 6.dp
+    ) {
+        IconButton(
+            onClick = onClick,
+            modifier = Modifier.size(44.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.GpsFixed,
+                contentDescription = "Recenter",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun ActiveTrailHud(
+    modifier: Modifier = Modifier,
+    trail: ActiveTrail
+) {
+    val completionPercent = (trail.progress.coerceIn(0f, 1f) * 100).roundToInt()
+    val markerLabel = TrailMetadataFormatter.formatTrailMarkers(trail.markingSymbols)
+
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
+        tonalElevation = 10.dp
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = trail.name,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = "${trail.remainingDistanceKm.formatDistanceLabel()} left · $completionPercent% completed",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                StatusChip(
+                    text = trail.difficulty.uppercase(Locale.getDefault()),
+                    containerColor = trailDifficultyChipColors(trail.difficulty).first,
+                    contentColor = trailDifficultyChipColors(trail.difficulty).second
+                )
+            }
+            LinearProgressIndicator(
+                progress = { trail.progress.coerceIn(0f, 1f) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .clip(RoundedCornerShape(999.dp)),
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.24f)
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "${trail.distanceCompletedKm.formatDistanceLabel()} done",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = if (trail.offTrailDistanceKm <= 0.08) {
+                        "On trail"
+                    } else {
+                        "${(trail.offTrailDistanceKm * 1000).roundToInt()} m off trail"
+                    },
+                    style = MaterialTheme.typography.labelMedium,
+                    color = if (trail.offTrailDistanceKm <= 0.08) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        Color(0xFFFFB020)
+                    }
+                )
+            }
+            markerLabel?.let {
+                Text(
+                    text = "Marker: $it",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TrailDetailContent(trail: SelectedTrailDetails, onSetTrail: (Calendar) -> Unit) {
+private fun TrailDetailContent(
+    trail: SelectedTrailDetails,
+    onSetTrail: (Calendar, TrailPartyComposition) -> Unit
+) {
     val uriHandler = LocalUriHandler.current
-    var showDatePicker by rememberSaveable(trail.localCode) { mutableStateOf(false) }
-    var descriptionExpanded by rememberSaveable(trail.localCode) { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState()
+    var showDatePicker by rememberSaveable(trail.selectionToken) { mutableStateOf(false) }
+    var descriptionExpanded by rememberSaveable(trail.selectionToken) { mutableStateOf(false) }
+    var showTrailSetup by remember(trail.selectionToken) { mutableStateOf(false) }
+    var selectedDateMillis by rememberSaveable(trail.selectionToken) { mutableStateOf(System.currentTimeMillis()) }
+    var adultCount by rememberSaveable(trail.selectionToken) { mutableStateOf(1) }
+    var childCount by rememberSaveable(trail.selectionToken) { mutableStateOf(0) }
     val markerLabel = TrailMetadataFormatter.formatTrailMarkers(trail.markingSymbols)
     val detailDescription = trail.localDescription?.takeIf { it.isNotBlank() } ?: trail.descriptionRo
 
@@ -1021,10 +1190,13 @@ private fun TrailDetailContent(trail: SelectedTrailDetails, onSetTrail: (Calenda
                     }
                 }
             }
+
         }
 
         Button(
-            onClick = { showDatePicker = true },
+            onClick = {
+                showTrailSetup = true
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .navigationBarsPadding()
@@ -1035,15 +1207,13 @@ private fun TrailDetailContent(trail: SelectedTrailDetails, onSetTrail: (Calenda
         }
 
         if (showDatePicker) {
+            val datePickerState = rememberDatePickerState(initialSelectedDateMillis = selectedDateMillis)
             DatePickerDialog(
                 onDismissRequest = { showDatePicker = false },
                 confirmButton = {
                     TextButton(
                         onClick = {
-                            val cal = Calendar.getInstance().apply {
-                                timeInMillis = datePickerState.selectedDateMillis ?: System.currentTimeMillis()
-                            }
-                            onSetTrail(cal)
+                            selectedDateMillis = datePickerState.selectedDateMillis ?: selectedDateMillis
                             showDatePicker = false
                         }
                     ) {
@@ -1054,8 +1224,233 @@ private fun TrailDetailContent(trail: SelectedTrailDetails, onSetTrail: (Calenda
                 DatePicker(state = datePickerState)
             }
         }
+
+        if (showTrailSetup) {
+            TrailSetupDialog(
+                selectedDateMillis = selectedDateMillis,
+                adultCount = adultCount,
+                childCount = childCount,
+                onDismiss = { showTrailSetup = false },
+                onDateClick = { showDatePicker = true },
+                onAdultCountChange = { adultCount = it },
+                onChildCountChange = { childCount = it },
+                onConfirm = {
+                    showTrailSetup = false
+                    val cal = Calendar.getInstance().apply {
+                        timeInMillis = selectedDateMillis
+                    }
+                    onSetTrail(
+                        cal,
+                        TrailPartyComposition(adults = adultCount, children = childCount)
+                    )
+                }
+            )
+        }
     }
 }
+
+@Composable
+private fun TrailSetupDialog(
+    selectedDateMillis: Long,
+    adultCount: Int,
+    childCount: Int,
+    onDismiss: () -> Unit,
+    onDateClick: () -> Unit,
+    onAdultCountChange: (Int) -> Unit,
+    onChildCountChange: (Int) -> Unit,
+    onConfirm: () -> Unit
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(28.dp),
+            color = MaterialTheme.colorScheme.surface,
+            border = androidx.compose.foundation.BorderStroke(
+                1.dp,
+                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.42f)
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = "Plan traseu",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                CompactTrailSettingRow(
+                    label = "Plecare",
+                    value = formatTrailSetupDate(selectedDateMillis),
+                    onClick = onDateClick
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    CompactCounterCard(
+                        modifier = Modifier.weight(1f),
+                        label = "Adulti",
+                        value = adultCount,
+                        onDecrement = { onAdultCountChange((adultCount - 1).coerceAtLeast(1)) },
+                        onIncrement = { onAdultCountChange((adultCount + 1).coerceAtMost(12)) },
+                        canDecrement = adultCount > 1
+                    )
+                    CompactCounterCard(
+                        modifier = Modifier.weight(1f),
+                        label = "Copii",
+                        value = childCount,
+                        onDecrement = { onChildCountChange((childCount - 1).coerceAtLeast(0)) },
+                        onIncrement = { onChildCountChange((childCount + 1).coerceAtMost(10)) },
+                        canDecrement = childCount > 0
+                    )
+                }
+                Text(
+                    text = TrailPartyComposition(adults = adultCount, children = childCount).summaryRo,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    TextButton(
+                        onClick = onDismiss,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Cancel")
+                    }
+                    Button(
+                        onClick = onConfirm,
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Text("Confirm")
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CompactTrailSettingRow(
+    label: String,
+    value: String,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(18.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.78f),
+        border = androidx.compose.foundation.BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.36f)
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp, vertical = 14.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
+@Composable
+private fun CompactCounterCard(
+    modifier: Modifier = Modifier,
+    label: String,
+    value: Int,
+    onDecrement: () -> Unit,
+    onIncrement: () -> Unit,
+    canDecrement: Boolean
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(18.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.78f),
+        border = androidx.compose.foundation.BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.36f)
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                StepperIconButton(
+                    icon = Icons.Default.Remove,
+                    enabled = canDecrement,
+                    onClick = onDecrement
+                )
+                Text(
+                    text = value.toString(),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                StepperIconButton(
+                    icon = Icons.Default.Add,
+                    enabled = true,
+                    onClick = onIncrement
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun StepperIconButton(
+    icon: ImageVector,
+    enabled: Boolean,
+    onClick: () -> Unit
+) {
+    Surface(
+        shape = CircleShape,
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = if (enabled) 0.9f else 0.55f)
+    ) {
+        IconButton(
+            onClick = onClick,
+            enabled = enabled,
+            modifier = Modifier.size(32.dp)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = if (enabled) 0.84f else 0.34f)
+            )
+        }
+    }
+}
+
+private fun formatTrailSetupDate(epochMillis: Long): String =
+    SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date(epochMillis))
 
 @Composable
 private fun RouteSuggestionItem(
@@ -1229,16 +1624,17 @@ private fun LayerToggleRow(label: String, checked: Boolean, onCheckedChange: (Bo
 @Composable
 private fun MapLibreView(
     status: HomeStatus,
+    activeTrail: ActiveTrail?,
     routeCatalog: RouteEnrichmentCatalog,
     routeGeometryIndex: RouteGeometryIndex,
     mapDataConfig: MapDataConfig,
-    selectedRouteCode: String?,
-    selectedRouteSegments: List<List<RouteCoordinate>>,
-    selectedRouteBounds: RouteBounds?,
-    selectedRouteCenter: LatLng,
-    selectedRouteToken: Long?,
+    selectedTrail: TrailSelectionSnapshot?,
+    mapMode: MapTrailMode,
+    focusRequestToken: Long,
+    cameraSnapshot: MapCameraSnapshot?,
     overlayState: MapOverlayState,
     onTrailClick: (SelectedTrailDetails) -> Unit,
+    onCameraSnapshotChanged: (MapCameraSnapshot) -> Unit,
     onMapErrorChanged: (String?) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -1250,18 +1646,20 @@ private fun MapLibreView(
     val currentRouteGeometryIndex by rememberUpdatedState(routeGeometryIndex)
     val currentMapDataConfig by rememberUpdatedState(mapDataConfig)
     val currentStatus by rememberUpdatedState(status)
-    val currentSelectedRouteCode by rememberUpdatedState(selectedRouteCode)
-    val currentSelectedRouteSegments by rememberUpdatedState(selectedRouteSegments)
-    val currentSelectedRouteBounds by rememberUpdatedState(selectedRouteBounds)
-    val currentSelectedRouteCenter by rememberUpdatedState(selectedRouteCenter)
-    val currentSelectedRouteToken by rememberUpdatedState(selectedRouteToken)
+    val currentActiveTrail by rememberUpdatedState(activeTrail)
+    val currentSelectedTrail by rememberUpdatedState(selectedTrail)
+    val currentMapMode by rememberUpdatedState(mapMode)
+    val currentFocusRequestToken by rememberUpdatedState(focusRequestToken)
+    val currentCameraSnapshot by rememberUpdatedState(cameraSnapshot)
+    val currentOnCameraSnapshotChanged by rememberUpdatedState(onCameraSnapshotChanged)
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val mapView = remember { MapView(context).apply { onCreate(null) } }
     val lifecycleManager = remember { MapLifecycleManager(mapView) }
     var mapLibreMap by remember { mutableStateOf<MapLibreMap?>(null) }
-    var lastFocusedTrail by remember { mutableStateOf<String?>(null) }
     var appliedStyleKey by remember { mutableStateOf<String?>(null) }
     var mapClickListenerBound by remember { mutableStateOf(false) }
+    var cameraIdleListenerBound by remember { mutableStateOf(false) }
+    var lastConsumedFocusRequestToken by remember { mutableStateOf(0L) }
 
     DisposableEffect(lifecycle) {
         lifecycle.addObserver(lifecycleManager)
@@ -1273,11 +1671,20 @@ private fun MapLibreView(
             return
         }
 
-        val hasRouteLockedCamera =
-            currentSelectedRouteCode != null ||
-                currentSelectedRouteSegments.isNotEmpty() ||
-                currentStatus.activeTrail != null
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(RomaniaCenter, DefaultRomaniaZoom))
+        val initialCamera = currentCameraSnapshot
+        if (initialCamera != null) {
+            map.moveCamera(
+                CameraUpdateFactory.newCameraPosition(
+                    CameraPosition.Builder()
+                        .target(clampToRomaniaBounds(LatLng(initialCamera.latitude, initialCamera.longitude)))
+                        .zoom(initialCamera.zoom.coerceIn(DefaultRomaniaZoom, 16.4))
+                        .bearing(initialCamera.bearing)
+                        .build()
+                )
+            )
+        } else {
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(RomaniaCenter, DefaultRomaniaZoom))
+        }
         map.setStyle(MapStyleConfig.createStyleBuilder(currentMapDataConfig)) { style ->
             appliedStyleKey = currentMapDataConfig.styleKey
             MapStyleConfig.installStyle(style, currentMapDataConfig)
@@ -1289,7 +1696,7 @@ private fun MapLibreView(
                 loadedMapStyle = style,
                 context = context,
                 status = currentStatus,
-                shouldTrackCamera = shouldTrackUserLocation(currentStatus, hasRouteLockedCamera)
+                shouldTrackCamera = false
             )
             currentOnMapErrorChanged(null)
         }
@@ -1309,6 +1716,9 @@ private fun MapLibreView(
                     map.setMaxZoomPreference(16.4)
                     if (!mapClickListenerBound) {
                         map.addOnMapClickListener { tappedPoint ->
+                            if (currentMapMode == MapTrailMode.ACTIVE) {
+                                return@addOnMapClickListener false
+                            }
                             handleMapTap(
                                 map = map,
                                 tappedPoint = tappedPoint,
@@ -1316,11 +1726,26 @@ private fun MapLibreView(
                                 routeGeometryIndex = currentRouteGeometryIndex,
                                 mapDataConfig = currentMapDataConfig
                             )?.let { selection ->
-                                currentOnTrailClick(selection)
+                    currentOnTrailClick(selection)
                                 true
                             } ?: false
                         }
                         mapClickListenerBound = true
+                    }
+                    if (!cameraIdleListenerBound) {
+                        map.addOnCameraIdleListener {
+                            val cameraPosition = map.cameraPosition
+                            val target = cameraPosition.target ?: return@addOnCameraIdleListener
+                            currentOnCameraSnapshotChanged(
+                                MapCameraSnapshot(
+                                    latitude = target.latitude,
+                                    longitude = target.longitude,
+                                    zoom = cameraPosition.zoom,
+                                    bearing = cameraPosition.bearing
+                                )
+                            )
+                        }
+                        cameraIdleListenerBound = true
                     }
                     if (map.style == null || appliedStyleKey != currentMapDataConfig.styleKey) {
                         applyOfflineStyle(map)
@@ -1336,83 +1761,61 @@ private fun MapLibreView(
                 return@AndroidView
             }
             map.style?.let { style ->
+                val activeTrailState = currentActiveTrail
+                val selectedTrailState = currentSelectedTrail
                 ensureSelectedRouteLayers(style)
                 MapStyleConfig.applyOverlayVisibility(style, currentOverlayState)
-                val hasRouteLockedCamera =
-                    currentSelectedRouteCode != null ||
-                        currentSelectedRouteSegments.isNotEmpty() ||
-                        currentStatus.activeTrail != null
                 syncLocationComponent(
                     map = map,
                     loadedMapStyle = style,
                     context = context,
                     status = currentStatus,
-                    shouldTrackCamera = shouldTrackUserLocation(currentStatus, hasRouteLockedCamera)
+                    shouldTrackCamera = false
                 )
-                val selectedGeometry = RouteGeometryRepository.findByLocalCode(
-                    currentRouteGeometryIndex,
-                    currentSelectedRouteCode
-                )
-                val selectedSegments = currentSelectedRouteSegments.ifEmpty {
-                    selectedGeometry?.let(RouteGeometryRepository::decodeRenderableSegments).orEmpty()
-                }
-                val selectedBounds = currentSelectedRouteBounds ?: selectedGeometry?.bbox
-                updateSelectedRouteHighlight(style, selectedSegments)
+                val highlightedSegments = when {
+                    currentMapMode == MapTrailMode.ACTIVE && activeTrailState != null ->
+                        activeTrailState.remainingRouteSegments.ifEmpty { activeTrailState.routeSegments }
 
-                val hasSelectedRoute = currentSelectedRouteCode != null || selectedSegments.isNotEmpty()
-                val selectedRouteFocus = if (hasSelectedRoute) {
-                    CameraFocusTarget(
-                        key = "selected:${currentSelectedRouteCode ?: "custom"}:${currentSelectedRouteToken ?: 0L}",
-                        center = clampToRomaniaBounds(currentSelectedRouteCenter),
-                        zoom = selectedBounds?.let(::zoomForRouteBounds) ?: ActiveTrailZoom
-                    )
-                } else {
-                    null
+                    selectedTrailState != null -> selectedTrailState.highlightSegments
+                    activeTrailState != null -> activeTrailState.routeSegments
+                    else -> emptyList()
                 }
-                if (!hasSelectedRoute && lastFocusedTrail?.startsWith("selected:") == true) {
-                    lastFocusedTrail = null
-                }
+                updateSelectedRouteHighlight(style, highlightedSegments)
 
-                if (selectedRouteFocus != null && selectedRouteFocus.key != lastFocusedTrail) {
-                    focusRoute(map, selectedBounds, currentSelectedRouteCenter)
-                    lastFocusedTrail = selectedRouteFocus.key
-                    return@AndroidView
-                }
-                if (selectedRouteFocus != null) {
-                    return@AndroidView
-                }
-            }
+                if (currentFocusRequestToken > lastConsumedFocusRequestToken) {
+                    when {
+                        currentMapMode == MapTrailMode.ACTIVE && activeTrailState != null -> {
+                            focusActiveTrailNavigation(map, activeTrailState, currentStatus)
+                        }
 
-            val activeTrailFocus = status.activeTrail?.let {
-                CameraFocusTarget(
-                    key = "${it.name}:${it.latitude}:${it.longitude}",
-                    center = clampToRomaniaBounds(LatLng(it.latitude, it.longitude)),
-                    zoom = ActiveTrailZoom
-                )
-            }
-            if (activeTrailFocus != null && activeTrailFocus.key != lastFocusedTrail) {
-                map.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        activeTrailFocus.center,
-                        activeTrailFocus.zoom
-                    )
-                )
-                lastFocusedTrail = activeTrailFocus.key
-            } else if (status.activeTrail == null) {
-                resolveGpsFocusTarget(status)?.let { focusTarget ->
-                    val shouldMoveCamera =
-                        lastFocusedTrail == null ||
-                            (lastFocusedTrail == RomaniaFallbackFocusKey &&
-                                focusTarget.key != RomaniaFallbackFocusKey)
-                    if (shouldMoveCamera) {
-                        map.animateCamera(
-                            CameraUpdateFactory.newLatLngZoom(
-                                focusTarget.center,
-                                focusTarget.zoom
+                        selectedTrailState != null -> {
+                            focusTrailOverview(
+                                map = map,
+                                trail = selectedTrailState
                             )
-                        )
-                        lastFocusedTrail = focusTarget.key
+                        }
+
+                        activeTrailState != null -> {
+                            focusTrailOverview(
+                                map = map,
+                                trail = activeTrailState.toSelectionSnapshot()
+                            )
+                        }
                     }
+                    lastConsumedFocusRequestToken = currentFocusRequestToken
+                    return@AndroidView
+                }
+
+            }
+
+            if (currentSelectedTrail == null && currentActiveTrail == null && currentCameraSnapshot == null) {
+                resolveGpsFocusTarget(status)?.let { focusTarget ->
+                    map.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            focusTarget.center,
+                            focusTarget.zoom
+                        )
+                    )
                 }
             }
         }
@@ -1762,8 +2165,19 @@ private fun estimateDuration(lengthKm: Double, elevationGain: Int): String {
 private fun formatDistance(distanceKm: Double): String =
     if (distanceKm <= 0.0) "--" else String.format("%.1f km", distanceKm)
 
+private fun Double.formatDistanceLabel(): String =
+    if (this <= 0.0) "0.0 km" else String.format(Locale.getDefault(), "%.1f km", this)
+
 private fun formatElevation(elevationGain: Int): String =
     if (elevationGain <= 0) "--" else "+${elevationGain} m"
+
+private fun trailDifficultyChipColors(difficulty: String): Pair<Color, Color> =
+    when (difficulty.uppercase(Locale.getDefault())) {
+        "EXPERT" -> Color(0xFF8E1C2B).copy(alpha = 0.88f) to Color(0xFFFFD5D5)
+        "HARD" -> Color(0xFF3E6B2D).copy(alpha = 0.9f) to Color.White
+        "MEDIUM" -> Color(0xFF7D4C12).copy(alpha = 0.88f) to Color(0xFFFFCC80)
+        else -> Color(0xFF195B3B).copy(alpha = 0.9f) to Color(0xFFCFF7DE)
+    }
 
 private fun haversineKm(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
     val earthRadiusKm = 6371.0
@@ -1890,10 +2304,37 @@ private fun buildSelectedTrailFromActiveTrail(
         imageLicense = activeTrail.imageLicense ?: entry?.image?.license,
         imageSourcePageUrl = activeTrail.imageSourcePageUrl ?: entry?.image?.sourcePageUrl,
         imageScope = activeTrail.imageScope ?: entry?.image?.scope,
-        highlightSegments = highlightSegments,
-        highlightBounds = highlightBounds
+        highlightSegments = activeTrail.routeSegments.ifEmpty { highlightSegments },
+        highlightBounds = activeTrail.routeBounds ?: highlightBounds
     )
 }
+
+private fun ActiveTrail.toSelectionSnapshot(): TrailSelectionSnapshot =
+    TrailSelectionSnapshot(
+        name = name,
+        difficulty = runCatching { TrailDifficulty.valueOf(difficulty) }.getOrDefault(TrailDifficulty.MEDIUM),
+        latitude = latitude,
+        longitude = longitude,
+        distanceKm = distanceKm,
+        elevationGain = elevationGain,
+        estimatedDuration = estimatedDuration,
+        localCode = localCode,
+        region = region,
+        descriptionRo = descriptionRo,
+        localDescription = localDescription,
+        routeSummary = routeSummary,
+        fromName = fromName,
+        toName = toName,
+        markingSymbols = markingSymbols,
+        sourceUrls = sourceUrls,
+        imageUrl = imageUrl,
+        imageAttribution = imageAttribution,
+        imageLicense = imageLicense,
+        imageSourcePageUrl = imageSourcePageUrl,
+        imageScope = imageScope,
+        highlightSegments = routeSegments,
+        highlightBounds = routeBounds
+    )
 
 private fun estimateRouteLengthKm(entry: RouteGeometryEntry): Double =
     RouteGeometryRepository.decodeRenderableSegments(entry).sumOf { segment ->
@@ -1963,33 +2404,120 @@ private fun buildSelectedRouteGeoJson(decodedSegments: List<List<RouteCoordinate
 private fun emptySelectedRouteGeoJson(): FeatureCollection =
     FeatureCollection.fromFeatures(emptyList())
 
-private fun focusRoute(map: MapLibreMap, bounds: RouteBounds?, fallbackCenter: LatLng) {
-    if (bounds == null) {
-        map.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                clampToRomaniaBounds(fallbackCenter),
-                ActiveTrailZoom
-            ),
-            850
-        )
-        return
+private fun focusTrailOverview(
+    map: MapLibreMap,
+    trail: TrailSelectionSnapshot
+) {
+    val routeSegments = trail.highlightSegments
+    val routeBounds = trail.highlightBounds ?: routeBoundsForSegments(routeSegments)
+    val routeBearing = routeBearing(routeSegments)
+    val fallbackCenter = LatLng(trail.latitude, trail.longitude)
+    val target = routeCenterForOverview(
+        routeSegments = routeSegments,
+        fallbackCenter = fallbackCenter,
+        bearingDegrees = routeBearing
+    )
+    val zoom = routeBounds?.let(::zoomForRouteBounds)?.coerceAtLeast(11.6) ?: ActiveTrailZoom
+
+    map.animateCamera(
+        CameraUpdateFactory.newCameraPosition(
+            CameraPosition.Builder()
+                .target(clampToRomaniaBounds(target))
+                .zoom(zoom)
+                .bearing(routeBearing)
+                .tilt(18.0)
+                .build()
+        ),
+        900
+    )
+}
+
+private fun focusActiveTrailNavigation(
+    map: MapLibreMap,
+    activeTrail: ActiveTrail,
+    status: HomeStatus
+) {
+    val latitude = status.latitude ?: activeTrail.latitude
+    val longitude = status.longitude ?: activeTrail.longitude
+    val remainingSegments = activeTrail.remainingRouteSegments.ifEmpty { activeTrail.routeSegments }
+    val bearing = routeBearing(remainingSegments).takeIf { it != 0.0 } ?: routeBearing(activeTrail.routeSegments)
+    val currentLocation = RouteCoordinate(latitude, longitude)
+    val target = offsetCoordinate(
+        origin = currentLocation,
+        bearingDegrees = bearing,
+        distanceKm = 0.18
+    )
+
+    map.animateCamera(
+        CameraUpdateFactory.newCameraPosition(
+            CameraPosition.Builder()
+                .target(clampToRomaniaBounds(LatLng(target.lat, target.lon)))
+                .zoom(15.2)
+                .bearing(bearing)
+                .tilt(38.0)
+                .build()
+        ),
+        700
+    )
+}
+
+private fun routeCenterForOverview(
+    routeSegments: List<List<RouteCoordinate>>,
+    fallbackCenter: LatLng,
+    bearingDegrees: Double
+): LatLng {
+    val flattened = routeSegments.flatten()
+    if (flattened.size < 2) {
+        return fallbackCenter
     }
 
-    val clampedBounds = clampToRomaniaBounds(bounds)
-    runCatching {
-        map.animateCamera(
-            CameraUpdateFactory.newLatLngBounds(clampedBounds, 96),
-            850
-        )
-    }.getOrElse {
-        map.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                clampToRomaniaBounds(fallbackCenter),
-                zoomForRouteBounds(bounds)
-            ),
-            850
-        )
+    val midpoint = flattened[flattened.size / 2]
+    val shifted = offsetCoordinate(
+        origin = midpoint,
+        bearingDegrees = bearingDegrees,
+        distanceKm = 0.22
+    )
+    return LatLng(shifted.lat, shifted.lon)
+}
+
+private fun routeBearing(routeSegments: List<List<RouteCoordinate>>): Double {
+    val flattened = routeSegments.flatten()
+    if (flattened.size < 2) {
+        return 0.0
     }
+    val start = flattened.first()
+    val end = flattened.last()
+    val deltaLon = Math.toRadians(end.lon - start.lon)
+    val startLatRad = Math.toRadians(start.lat)
+    val endLatRad = Math.toRadians(end.lat)
+    val y = sin(deltaLon) * cos(endLatRad)
+    val x = cos(startLatRad) * sin(endLatRad) -
+        sin(startLatRad) * cos(endLatRad) * cos(deltaLon)
+    return ((Math.toDegrees(atan2(y, x)) + 360.0) % 360.0)
+}
+
+private fun offsetCoordinate(
+    origin: RouteCoordinate,
+    bearingDegrees: Double,
+    distanceKm: Double
+): RouteCoordinate {
+    val earthRadiusKm = 6371.0
+    val angularDistance = distanceKm / earthRadiusKm
+    val bearingRad = Math.toRadians(bearingDegrees)
+    val latRad = Math.toRadians(origin.lat)
+    val lonRad = Math.toRadians(origin.lon)
+    val newLat = asin(
+        sin(latRad) * cos(angularDistance) +
+            cos(latRad) * sin(angularDistance) * cos(bearingRad)
+    )
+    val newLon = lonRad + atan2(
+        sin(bearingRad) * sin(angularDistance) * cos(latRad),
+        cos(angularDistance) - sin(latRad) * sin(newLat)
+    )
+    return RouteCoordinate(
+        lat = Math.toDegrees(newLat),
+        lon = Math.toDegrees(newLon)
+    )
 }
 
 private fun clampToRomaniaBounds(point: LatLng): LatLng =
