@@ -4,6 +4,10 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -34,11 +38,14 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.GpsFixed
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.House
 import androidx.compose.material.icons.filled.Layers
+import androidx.compose.material.icons.filled.NorthEast
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
@@ -77,6 +84,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -109,6 +117,9 @@ import com.scouty.app.ui.MainViewModel
 import com.scouty.app.ui.models.HomeStatus
 import com.scouty.app.ui.models.MapCameraSnapshot
 import com.scouty.app.ui.models.MapTrailMode
+import com.scouty.app.ui.models.NearbyGuideRequest
+import com.scouty.app.ui.models.NearbyGuideTarget
+import com.scouty.app.ui.models.NearbyGuideType
 import com.scouty.app.ui.models.TrailPartyComposition
 import com.scouty.app.ui.models.TrailSelectionSnapshot
 import com.scouty.app.ui.models.TrailMetadataFormatter
@@ -131,8 +142,14 @@ import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.MapView
 import org.maplibre.android.maps.Style
+import org.maplibre.android.style.layers.CircleLayer
 import org.maplibre.android.style.layers.Property
 import org.maplibre.android.style.layers.LineLayer
+import org.maplibre.android.style.layers.PropertyFactory.circleColor
+import org.maplibre.android.style.layers.PropertyFactory.circleOpacity
+import org.maplibre.android.style.layers.PropertyFactory.circleRadius
+import org.maplibre.android.style.layers.PropertyFactory.circleStrokeColor
+import org.maplibre.android.style.layers.PropertyFactory.circleStrokeWidth
 import org.maplibre.android.style.layers.PropertyFactory.lineCap
 import org.maplibre.android.style.layers.PropertyFactory.lineColor
 import org.maplibre.android.style.layers.PropertyFactory.lineJoin
@@ -182,6 +199,9 @@ private val RouteSheetPeekHeight = 56.dp
 private const val RomaniaFallbackFocusKey = "fallback:romania"
 private const val SelectedRouteSourceId = "selected-route-source"
 private const val SelectedRouteLayerId = "selected-route-layer"
+private const val NearbyGuideSourceId = "nearby-guide-source"
+private const val NearbyGuideHaloLayerId = "nearby-guide-halo-layer"
+private const val NearbyGuideDotLayerId = "nearby-guide-dot-layer"
 
 private typealias SelectedTrailDetails = TrailSelectionSnapshot
 
@@ -195,6 +215,16 @@ private data class CameraFocusTarget(
     val key: String,
     val center: LatLng,
     val zoom: Double
+)
+
+private data class NearbyGuideCandidate(
+    val sourceId: String,
+    val title: String,
+    val subtitle: String,
+    val latitude: Double,
+    val longitude: Double,
+    val priority: Int,
+    val distanceKm: Double
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -228,6 +258,10 @@ fun MapScreen(
     val mapSession by viewModel.mapSessionState.collectAsState()
     val selectedTrail = mapSession.selectedTrail
     val showBottomSheet = mapSession.isBottomSheetVisible && selectedTrail != null
+    val nearbyGuideRequest = mapSession.nearbyGuideRequest
+    val nearbyGuide = mapSession.nearbyGuide
+    val hasNearbyGuideOverlay = nearbyGuide != null || nearbyGuideRequest != null
+    val deviceHeadingDegrees = rememberDeviceHeadingDegrees(enabled = hasNearbyGuideOverlay)
     val activeTrail = status.activeTrail
     val hasPlannedTrail = activeTrail?.trackingState == ActiveTrailState.PLANNED
     val isActiveTrailMode = mapSession.mode == MapTrailMode.ACTIVE &&
@@ -484,6 +518,8 @@ fun MapScreen(
                     routeGeometryIndex = routeGeometryIndex,
                     mapDataConfig = readyMapDataConfig,
                     selectedTrail = selectedTrail,
+                    nearbyGuide = nearbyGuide,
+                    nearbyGuideRequest = nearbyGuideRequest,
                     mapMode = mapSession.mode,
                     focusRequestToken = mapSession.focusRequestToken,
                     cameraSnapshot = mapSession.cameraSnapshot,
@@ -491,12 +527,13 @@ fun MapScreen(
                     onTrailClick = { selection ->
                         viewModel.selectMapTrail(selection, showBottomSheet = true)
                     },
+                    onNearbyGuideResolved = viewModel::resolveNearbyGuideTarget,
                     onCameraSnapshotChanged = viewModel::persistMapCamera,
                     onMapErrorChanged = { mapRuntimeError = it },
                     modifier = Modifier.fillMaxSize()
                 )
 
-                if (!isActiveTrailMode) {
+                if (!isActiveTrailMode && !hasNearbyGuideOverlay) {
                     SearchBar(
                         inputField = {
                             SearchBarDefaults.InputField(
@@ -591,7 +628,7 @@ fun MapScreen(
                     }
                 }
 
-                if (showLayerMenu && !isSearchExpanded && !isActiveTrailMode) {
+                if (showLayerMenu && !isSearchExpanded && !isActiveTrailMode && !hasNearbyGuideOverlay) {
                     Card(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
@@ -608,7 +645,7 @@ fun MapScreen(
                     }
                 }
 
-                activeTrail?.takeIf { hasPlannedTrail }?.let { plannedTrail ->
+                activeTrail?.takeIf { hasPlannedTrail && !hasNearbyGuideOverlay }?.let { plannedTrail ->
                     SubtleMapRecenterButton(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
@@ -648,7 +685,44 @@ fun MapScreen(
                     }
                 }
 
-                if (!mapDataConfig.hasDemoPack && !isSearchExpanded && !isActiveTrailMode) {
+                nearbyGuide?.let { guide ->
+                    NearbyGuideCard(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(
+                                top = if (isActiveTrailMode) 132.dp else 20.dp,
+                                start = 16.dp,
+                                end = 16.dp
+                            ),
+                        guide = guide,
+                        deviceHeadingDegrees = deviceHeadingDegrees,
+                        onDismiss = viewModel::clearNearbyGuide
+                    )
+                } ?: nearbyGuideRequest?.let { request ->
+                    NearbyGuidePendingCard(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(
+                                top = if (isActiveTrailMode) 132.dp else 20.dp,
+                                start = 16.dp,
+                                end = 16.dp
+                            ),
+                        type = request.type,
+                        gpsReady = status.gpsFixed,
+                        onDismiss = viewModel::clearNearbyGuide
+                    )
+                }
+
+                if (!isActiveTrailMode && nearbyGuide != null) {
+                    SubtleMapRecenterButton(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 18.dp, bottom = if (mapDataConfig.hasDemoPack) 112.dp else 148.dp),
+                        onClick = viewModel::focusNearbyGuideOnMap
+                    )
+                }
+
+                if (!mapDataConfig.hasDemoPack && !isSearchExpanded && !isActiveTrailMode && !hasNearbyGuideOverlay) {
                     OptionalDemoPackBanner(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
@@ -669,6 +743,103 @@ fun MapScreen(
             }
         }
     }
+}
+
+@Composable
+private fun rememberDeviceHeadingDegrees(enabled: Boolean): Float? {
+    val context = LocalContext.current
+    var headingDegrees by remember { mutableStateOf<Float?>(null) }
+
+    DisposableEffect(context, enabled) {
+        if (!enabled) {
+            headingDegrees = null
+            onDispose { }
+        } else {
+            val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
+            if (sensorManager == null) {
+                headingDegrees = null
+                onDispose { }
+            } else {
+                val rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+                val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+                val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+                val rotationMatrix = FloatArray(9)
+                val orientationAngles = FloatArray(3)
+                val gravity = FloatArray(3)
+                val geomagnetic = FloatArray(3)
+                var hasGravity = false
+                var hasGeomagnetic = false
+
+                fun publishHeading(rawHeadingDegrees: Float) {
+                    val normalizedHeading = normalizeDegrees(rawHeadingDegrees)
+                    headingDegrees = headingDegrees?.let { previousHeading ->
+                        smoothHeadingDegrees(previousHeading, normalizedHeading)
+                    } ?: normalizedHeading
+                }
+
+                fun publishHeadingFromGravityAndMagnetic() {
+                    if (!hasGravity || !hasGeomagnetic) {
+                        return
+                    }
+                    if (SensorManager.getRotationMatrix(rotationMatrix, null, gravity, geomagnetic)) {
+                        SensorManager.getOrientation(rotationMatrix, orientationAngles)
+                        publishHeading(Math.toDegrees(orientationAngles[0].toDouble()).toFloat())
+                    }
+                }
+
+                val listener = object : SensorEventListener {
+                    override fun onSensorChanged(event: SensorEvent) {
+                        when (event.sensor.type) {
+                            Sensor.TYPE_ROTATION_VECTOR -> {
+                                SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values)
+                                SensorManager.getOrientation(rotationMatrix, orientationAngles)
+                                publishHeading(Math.toDegrees(orientationAngles[0].toDouble()).toFloat())
+                            }
+
+                            Sensor.TYPE_ACCELEROMETER -> {
+                                if (hasGravity) {
+                                    smoothSensorVector(event.values, gravity)
+                                } else {
+                                    copySensorVector(event.values, gravity)
+                                    hasGravity = true
+                                }
+                                publishHeadingFromGravityAndMagnetic()
+                            }
+
+                            Sensor.TYPE_MAGNETIC_FIELD -> {
+                                if (hasGeomagnetic) {
+                                    smoothSensorVector(event.values, geomagnetic)
+                                } else {
+                                    copySensorVector(event.values, geomagnetic)
+                                    hasGeomagnetic = true
+                                }
+                                publishHeadingFromGravityAndMagnetic()
+                            }
+                        }
+                    }
+
+                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
+                }
+
+                if (rotationVectorSensor != null) {
+                    sensorManager.registerListener(listener, rotationVectorSensor, SensorManager.SENSOR_DELAY_GAME)
+                } else {
+                    accelerometer?.let {
+                        sensorManager.registerListener(listener, it, SensorManager.SENSOR_DELAY_UI)
+                    }
+                    magnetometer?.let {
+                        sensorManager.registerListener(listener, it, SensorManager.SENSOR_DELAY_UI)
+                    }
+                }
+
+                onDispose {
+                    sensorManager.unregisterListener(listener)
+                }
+            }
+        }
+    }
+
+    return headingDegrees
 }
 
 @Composable
@@ -848,6 +1019,165 @@ private fun SubtleMapRecenterButton(
                 imageVector = Icons.Default.GpsFixed,
                 contentDescription = "Recenter",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun NearbyGuidePendingCard(
+    modifier: Modifier = Modifier,
+    type: NearbyGuideType,
+    gpsReady: Boolean,
+    onDismiss: () -> Unit
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(26.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
+        tonalElevation = 10.dp,
+        shadowElevation = 8.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            GuideTypeOrb(type = type, rotationDegrees = 0f)
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = if (gpsReady) {
+                        "Finding nearest ${type.label()}"
+                    } else {
+                        "Waiting for GPS"
+                    },
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = if (gpsReady) {
+                        "Looking through the points already loaded on the map."
+                    } else {
+                        "Scouty needs a location fix before it can point you to the closest ${type.label()}."
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            IconButton(onClick = onDismiss) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Close guide",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun NearbyGuideCard(
+    modifier: Modifier = Modifier,
+    guide: NearbyGuideTarget,
+    deviceHeadingDegrees: Float?,
+    onDismiss: () -> Unit
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(26.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
+        tonalElevation = 10.dp,
+        shadowElevation = 8.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                StatusChip(
+                    text = guide.type.chipLabel(),
+                    containerColor = guide.type.accentColor().copy(alpha = 0.14f),
+                    contentColor = guide.type.accentColor()
+                )
+                Text(
+                    text = guide.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = guide.subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = formatNearbyGuideDistance(guide.distanceKm),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = guide.type.accentColor()
+                )
+            }
+            GuideTypeOrb(
+                type = guide.type,
+                rotationDegrees = guide.relativeArrowRotationDegrees(deviceHeadingDegrees)
+            )
+            IconButton(onClick = onDismiss) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Close guide",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun GuideTypeOrb(
+    type: NearbyGuideType,
+    rotationDegrees: Float
+) {
+    Surface(
+        modifier = Modifier.size(72.dp),
+        shape = CircleShape,
+        color = type.accentColor().copy(alpha = 0.14f),
+        border = androidx.compose.foundation.BorderStroke(
+            1.dp,
+            type.accentColor().copy(alpha = 0.26f)
+        )
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            Icon(
+                imageVector = when (type) {
+                    NearbyGuideType.WATER -> Icons.Default.WaterDrop
+                    NearbyGuideType.SHELTER -> Icons.Default.House
+                },
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(start = 14.dp, top = 14.dp)
+                    .size(16.dp),
+                tint = type.accentColor().copy(alpha = 0.88f)
+            )
+            Icon(
+                imageVector = Icons.Default.NorthEast,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(30.dp)
+                    .rotate(rotationDegrees),
+                tint = type.accentColor()
             )
         }
     }
@@ -1629,11 +1959,14 @@ private fun MapLibreView(
     routeGeometryIndex: RouteGeometryIndex,
     mapDataConfig: MapDataConfig,
     selectedTrail: TrailSelectionSnapshot?,
+    nearbyGuide: NearbyGuideTarget?,
+    nearbyGuideRequest: NearbyGuideRequest?,
     mapMode: MapTrailMode,
     focusRequestToken: Long,
     cameraSnapshot: MapCameraSnapshot?,
     overlayState: MapOverlayState,
     onTrailClick: (SelectedTrailDetails) -> Unit,
+    onNearbyGuideResolved: (NearbyGuideType, String, String, String, Double, Double) -> Unit,
     onCameraSnapshotChanged: (MapCameraSnapshot) -> Unit,
     onMapErrorChanged: (String?) -> Unit,
     modifier: Modifier = Modifier
@@ -1648,9 +1981,12 @@ private fun MapLibreView(
     val currentStatus by rememberUpdatedState(status)
     val currentActiveTrail by rememberUpdatedState(activeTrail)
     val currentSelectedTrail by rememberUpdatedState(selectedTrail)
+    val currentNearbyGuide by rememberUpdatedState(nearbyGuide)
+    val currentNearbyGuideRequest by rememberUpdatedState(nearbyGuideRequest)
     val currentMapMode by rememberUpdatedState(mapMode)
     val currentFocusRequestToken by rememberUpdatedState(focusRequestToken)
     val currentCameraSnapshot by rememberUpdatedState(cameraSnapshot)
+    val currentOnNearbyGuideResolved by rememberUpdatedState(onNearbyGuideResolved)
     val currentOnCameraSnapshotChanged by rememberUpdatedState(onCameraSnapshotChanged)
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val mapView = remember { MapView(context).apply { onCreate(null) } }
@@ -1689,6 +2025,7 @@ private fun MapLibreView(
             appliedStyleKey = currentMapDataConfig.styleKey
             MapStyleConfig.installStyle(style, currentMapDataConfig)
             ensureSelectedRouteLayers(style)
+            ensureNearbyGuideLayers(style)
             MapStyleConfig.applyOverlayVisibility(style, currentOverlayState)
             logBaseSourceDiagnostics(style)
             syncLocationComponent(
@@ -1763,7 +2100,9 @@ private fun MapLibreView(
             map.style?.let { style ->
                 val activeTrailState = currentActiveTrail
                 val selectedTrailState = currentSelectedTrail
+                val nearbyGuideState = currentNearbyGuide
                 ensureSelectedRouteLayers(style)
+                ensureNearbyGuideLayers(style)
                 MapStyleConfig.applyOverlayVisibility(style, currentOverlayState)
                 syncLocationComponent(
                     map = map,
@@ -1781,9 +2120,38 @@ private fun MapLibreView(
                     else -> emptyList()
                 }
                 updateSelectedRouteHighlight(style, highlightedSegments)
+                updateNearbyGuideHighlight(style, nearbyGuideState)
+
+                val pendingNearbyGuideRequest = currentNearbyGuideRequest
+                if (pendingNearbyGuideRequest != null && currentStatus.gpsFixed) {
+                    val latitude = currentStatus.latitude
+                    val longitude = currentStatus.longitude
+                    if (latitude != null && longitude != null) {
+                        findNearestNearbyGuide(
+                            style = style,
+                            type = pendingNearbyGuideRequest.type,
+                            latitude = latitude,
+                            longitude = longitude
+                        )?.let { candidate ->
+                            currentOnNearbyGuideResolved(
+                                pendingNearbyGuideRequest.type,
+                                candidate.sourceId,
+                                candidate.title,
+                                candidate.subtitle,
+                                candidate.latitude,
+                                candidate.longitude
+                            )
+                            return@AndroidView
+                        }
+                    }
+                }
 
                 if (currentFocusRequestToken > lastConsumedFocusRequestToken) {
                     when {
+                        nearbyGuideState != null -> {
+                            focusNearbyGuide(map, nearbyGuideState, currentStatus)
+                        }
+
                         currentMapMode == MapTrailMode.ACTIVE && activeTrailState != null -> {
                             focusActiveTrailNavigation(map, activeTrailState, currentStatus)
                         }
@@ -1808,7 +2176,7 @@ private fun MapLibreView(
 
             }
 
-            if (currentSelectedTrail == null && currentActiveTrail == null && currentCameraSnapshot == null) {
+            if (currentSelectedTrail == null && currentActiveTrail == null && currentNearbyGuide == null && currentCameraSnapshot == null) {
                 resolveGpsFocusTarget(status)?.let { focusTarget ->
                     map.animateCamera(
                         CameraUpdateFactory.newLatLngZoom(
@@ -2165,8 +2533,59 @@ private fun estimateDuration(lengthKm: Double, elevationGain: Int): String {
 private fun formatDistance(distanceKm: Double): String =
     if (distanceKm <= 0.0) "--" else String.format("%.1f km", distanceKm)
 
+private fun formatNearbyGuideDistance(distanceKm: Double): String =
+    when {
+        distanceKm < 0.1 -> "${(distanceKm * 1000).roundToInt().coerceAtLeast(1)} m away"
+        else -> String.format(Locale.getDefault(), "%.1f km away", distanceKm)
+    }
+
 private fun Double.formatDistanceLabel(): String =
     if (this <= 0.0) "0.0 km" else String.format(Locale.getDefault(), "%.1f km", this)
+
+private fun NearbyGuideType.label(): String =
+    when (this) {
+        NearbyGuideType.WATER -> "water"
+        NearbyGuideType.SHELTER -> "shelter"
+    }
+
+private fun NearbyGuideType.chipLabel(): String =
+    when (this) {
+        NearbyGuideType.WATER -> "Closest water"
+        NearbyGuideType.SHELTER -> "Closest shelter"
+    }
+
+private fun NearbyGuideType.accentColor(): Color =
+    when (this) {
+        NearbyGuideType.WATER -> Color(0xFF2ED3A6)
+        NearbyGuideType.SHELTER -> Color(0xFFFFB020)
+    }
+
+private fun NearbyGuideTarget.relativeArrowRotationDegrees(deviceHeadingDegrees: Float?): Float {
+    val relativeBearing = deviceHeadingDegrees?.let { heading ->
+        normalizeDegrees(bearingDegrees.toFloat() - heading)
+    } ?: bearingDegrees.toFloat()
+    return relativeBearing - 45f
+}
+
+private fun normalizeDegrees(degrees: Float): Float =
+    ((degrees % 360f) + 360f) % 360f
+
+private fun smoothHeadingDegrees(previous: Float, next: Float, alpha: Float = 0.16f): Float {
+    val delta = ((next - previous + 540f) % 360f) - 180f
+    return normalizeDegrees(previous + delta * alpha)
+}
+
+private fun copySensorVector(source: FloatArray, target: FloatArray) {
+    for (index in 0 until minOf(source.size, target.size, 3)) {
+        target[index] = source[index]
+    }
+}
+
+private fun smoothSensorVector(source: FloatArray, target: FloatArray, alpha: Float = 0.18f) {
+    for (index in 0 until minOf(source.size, target.size, 3)) {
+        target[index] += (source[index] - target[index]) * alpha
+    }
+}
 
 private fun formatElevation(elevationGain: Int): String =
     if (elevationGain <= 0) "--" else "+${elevationGain} m"
@@ -2386,6 +2805,65 @@ private fun updateSelectedRouteHighlight(style: Style, decodedSegments: List<Lis
     routeSource.setGeoJson(buildSelectedRouteGeoJson(decodedSegments))
 }
 
+private fun ensureNearbyGuideLayers(style: Style) {
+    if (style.getSource(NearbyGuideSourceId) == null) {
+        style.addSource(GeoJsonSource(NearbyGuideSourceId, emptySelectedRouteGeoJson()))
+    }
+
+    if (style.getLayer(NearbyGuideHaloLayerId) == null) {
+        style.addLayer(
+            CircleLayer(NearbyGuideHaloLayerId, NearbyGuideSourceId).withProperties(
+                circleRadius(18f),
+                circleColor("#38bdf8"),
+                circleOpacity(0.16f),
+                circleStrokeColor("#f8fafc"),
+                circleStrokeWidth(1.2f)
+            )
+        )
+    }
+
+    if (style.getLayer(NearbyGuideDotLayerId) == null) {
+        style.addLayer(
+            CircleLayer(NearbyGuideDotLayerId, NearbyGuideSourceId).withProperties(
+                circleRadius(6f),
+                circleColor("#0ea5e9"),
+                circleOpacity(0.96f),
+                circleStrokeColor("#ffffff"),
+                circleStrokeWidth(2f)
+            )
+        )
+    }
+}
+
+private fun updateNearbyGuideHighlight(style: Style, guide: NearbyGuideTarget?) {
+    val source = style.getSourceAs<GeoJsonSource>(NearbyGuideSourceId) ?: return
+    if (guide == null) {
+        source.setGeoJson(emptySelectedRouteGeoJson())
+        return
+    }
+
+    val feature = Feature.fromGeometry(Point.fromLngLat(guide.longitude, guide.latitude))
+    source.setGeoJson(FeatureCollection.fromFeatures(listOf(feature)))
+
+    val haloColor = when (guide.type) {
+        NearbyGuideType.WATER -> "#38bdf8"
+        NearbyGuideType.SHELTER -> "#fbbf24"
+    }
+    val dotColor = when (guide.type) {
+        NearbyGuideType.WATER -> "#0ea5e9"
+        NearbyGuideType.SHELTER -> "#f59e0b"
+    }
+
+    style.getLayerAs<CircleLayer>(NearbyGuideHaloLayerId)?.setProperties(
+        circleColor(haloColor),
+        circleOpacity(0.16f)
+    )
+    style.getLayerAs<CircleLayer>(NearbyGuideDotLayerId)?.setProperties(
+        circleColor(dotColor),
+        circleOpacity(0.96f)
+    )
+}
+
 private fun buildSelectedRouteGeoJson(decodedSegments: List<List<RouteCoordinate>>): FeatureCollection {
     val features = decodedSegments.mapNotNull { segment ->
             if (segment.size < 2) {
@@ -2403,6 +2881,177 @@ private fun buildSelectedRouteGeoJson(decodedSegments: List<List<RouteCoordinate
 
 private fun emptySelectedRouteGeoJson(): FeatureCollection =
     FeatureCollection.fromFeatures(emptyList())
+
+private fun findNearestNearbyGuide(
+    style: Style,
+    type: NearbyGuideType,
+    latitude: Double,
+    longitude: Double
+): NearbyGuideCandidate? {
+    val source = style.getSourceAs<GeoJsonSource>(MapStyleConfig.REMOTE_WATER_SOURCE_ID) ?: return null
+    val features = runCatching { source.querySourceFeatures(null) }.getOrNull().orEmpty()
+    if (features.isEmpty()) {
+        return null
+    }
+
+    return features
+        .mapNotNull { feature ->
+            buildNearbyGuideCandidate(
+                feature = feature,
+                type = type,
+                userLatitude = latitude,
+                userLongitude = longitude
+            )
+        }
+        .sortedWith(
+            compareBy<NearbyGuideCandidate> { it.distanceKm }
+                .thenByDescending { it.priority }
+        )
+        .firstOrNull()
+}
+
+private fun buildNearbyGuideCandidate(
+    feature: Feature,
+    type: NearbyGuideType,
+    userLatitude: Double,
+    userLongitude: Double
+): NearbyGuideCandidate? {
+    val point = geometryCenter(feature.geometry()) ?: return null
+    val amenity = featureString(feature, "amenity")?.lowercase(Locale.getDefault())
+    val tourism = featureString(feature, "tourism")?.lowercase(Locale.getDefault())
+    val natural = featureString(feature, "natural")?.lowercase(Locale.getDefault())
+    val shelter = featureString(feature, "shelter")?.lowercase(Locale.getDefault())
+    val drinkingWater = featureString(feature, "drinking_water")?.lowercase(Locale.getDefault())
+    val description = featureString(feature, "description")
+    val name = featureString(feature, "name:ro", "name", "name:en")
+
+    val matches = when (type) {
+        NearbyGuideType.WATER ->
+            amenity == "drinking_water" ||
+                drinkingWater == "yes" ||
+                natural == "spring"
+
+        NearbyGuideType.SHELTER ->
+            amenity == "shelter" ||
+                tourism == "camp_site" ||
+                shelter == "yes"
+    }
+    if (!matches) {
+        return null
+    }
+
+    val priority = when (type) {
+        NearbyGuideType.WATER -> when {
+            amenity == "drinking_water" -> 3
+            drinkingWater == "yes" -> 2
+            natural == "spring" -> 1
+            else -> 0
+        }
+
+        NearbyGuideType.SHELTER -> when {
+            amenity == "shelter" -> 3
+            shelter == "yes" -> 2
+            tourism == "camp_site" -> 1
+            else -> 0
+        }
+    }
+
+    val defaultTitle = when (type) {
+        NearbyGuideType.WATER -> when {
+            natural == "spring" && shelter == "yes" -> "Sheltered spring"
+            natural == "spring" -> "Spring"
+            else -> "Water source"
+        }
+
+        NearbyGuideType.SHELTER -> when {
+            amenity == "shelter" -> "Shelter"
+            tourism == "camp_site" -> "Camp site"
+            natural == "spring" -> "Sheltered spring"
+            else -> "Shelter point"
+        }
+    }
+
+    val subtitle = when (type) {
+        NearbyGuideType.WATER -> listOfNotNull(
+            if (natural == "spring") "Spring" else null,
+            if (amenity == "drinking_water" || drinkingWater == "yes") "Drinkable" else null,
+            description?.takeIf { it.isNotBlank() }
+        )
+
+        NearbyGuideType.SHELTER -> listOfNotNull(
+            when {
+                amenity == "shelter" -> "Shelter"
+                tourism == "camp_site" -> "Camp site"
+                shelter == "yes" -> "Shelter nearby"
+                else -> null
+            },
+            if (natural == "spring") "Water nearby" else null,
+            description?.takeIf { it.isNotBlank() }
+        )
+    }.joinToString(" · ").ifBlank {
+        when (type) {
+            NearbyGuideType.WATER -> "Closest mapped water point"
+            NearbyGuideType.SHELTER -> "Closest mapped shelter point"
+        }
+    }
+
+    return NearbyGuideCandidate(
+        sourceId = featureString(feature, "@id") ?: "${type.name.lowercase(Locale.getDefault())}:${point.latitude()}:${point.longitude()}",
+        title = name ?: defaultTitle,
+        subtitle = subtitle,
+        latitude = point.latitude(),
+        longitude = point.longitude(),
+        priority = priority,
+        distanceKm = haversineKm(
+            userLatitude,
+            userLongitude,
+            point.latitude(),
+            point.longitude()
+        )
+    )
+}
+
+private fun geometryCenter(geometry: Geometry?): Point? =
+    when (geometry) {
+        is Point -> geometry
+        is LineString -> geometry.coordinates().getOrNull(geometry.coordinates().size / 2)
+        is MultiLineString -> geometry.lineStrings().firstOrNull()?.coordinates()?.firstOrNull()
+        else -> null
+    }
+
+private fun focusNearbyGuide(
+    map: MapLibreMap,
+    guide: NearbyGuideTarget,
+    status: HomeStatus
+) {
+    val targetPoint = clampToRomaniaBounds(LatLng(guide.latitude, guide.longitude))
+    val userLatitude = status.latitude
+    val userLongitude = status.longitude
+    if (status.gpsFixed && userLatitude != null && userLongitude != null && isInsideRomaniaTileset(userLatitude, userLongitude)) {
+        val userPoint = clampToRomaniaBounds(LatLng(userLatitude, userLongitude))
+        val bounds = LatLngBounds.from(
+            maxOf(targetPoint.latitude, userPoint.latitude),
+            maxOf(targetPoint.longitude, userPoint.longitude),
+            minOf(targetPoint.latitude, userPoint.latitude),
+            minOf(targetPoint.longitude, userPoint.longitude)
+        )
+        map.animateCamera(
+            CameraUpdateFactory.newLatLngBounds(bounds, 108, 164, 108, 232),
+            800
+        )
+    } else {
+        map.animateCamera(
+            CameraUpdateFactory.newCameraPosition(
+                CameraPosition.Builder()
+                    .target(targetPoint)
+                    .zoom(14.6)
+                    .tilt(20.0)
+                    .build()
+            ),
+            800
+        )
+    }
+}
 
 private fun focusTrailOverview(
     map: MapLibreMap,

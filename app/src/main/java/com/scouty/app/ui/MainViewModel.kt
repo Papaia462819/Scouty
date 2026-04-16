@@ -44,6 +44,9 @@ import com.scouty.app.ui.models.HomeStatus
 import com.scouty.app.ui.models.MapCameraSnapshot
 import com.scouty.app.ui.models.MapSessionState
 import com.scouty.app.ui.models.MapTrailMode
+import com.scouty.app.ui.models.NearbyGuideRequest
+import com.scouty.app.ui.models.NearbyGuideTarget
+import com.scouty.app.ui.models.NearbyGuideType
 import com.scouty.app.ui.models.RouteRecommendationEngine
 import com.scouty.app.ui.models.TrailPartyComposition
 import com.scouty.app.ui.models.TrailCompletionStatus
@@ -214,6 +217,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             currentState.copy(
                 selectedTrail = selection,
                 isBottomSheetVisible = showBottomSheet,
+                nearbyGuideRequest = null,
+                nearbyGuide = null,
                 mode = if (currentState.mode == MapTrailMode.ACTIVE) {
                     MapTrailMode.ACTIVE
                 } else {
@@ -237,6 +242,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             currentState.copy(
                 selectedTrail = selection,
                 isBottomSheetVisible = false,
+                nearbyGuideRequest = null,
+                nearbyGuide = null,
                 mode = MapTrailMode.ORIENTED,
                 focusRequestToken = System.currentTimeMillis()
             )
@@ -250,6 +257,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             currentState.copy(
                 selectedTrail = selection,
                 isBottomSheetVisible = false,
+                nearbyGuideRequest = null,
+                nearbyGuide = null,
                 mode = if (activeTrail.trackingState == ActiveTrailState.ACTIVE) {
                     MapTrailMode.ACTIVE
                 } else {
@@ -324,6 +333,71 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         }
     }
 
+    fun requestNearbyGuide(type: NearbyGuideType) {
+        _mapSessionState.update { currentState ->
+            currentState.copy(
+                isBottomSheetVisible = false,
+                selectedTrail = _uiState.value.activeTrail?.let { currentState.selectedTrail } ?: null,
+                nearbyGuideRequest = NearbyGuideRequest(type = type),
+                nearbyGuide = null,
+                mode = if (_uiState.value.activeTrail?.trackingState == ActiveTrailState.ACTIVE) {
+                    MapTrailMode.ACTIVE
+                } else {
+                    MapTrailMode.BROWSING
+                },
+                focusRequestToken = System.currentTimeMillis()
+            )
+        }
+    }
+
+    fun resolveNearbyGuideTarget(
+        type: NearbyGuideType,
+        sourceId: String,
+        title: String,
+        subtitle: String,
+        latitude: Double,
+        longitude: Double
+    ) {
+        val currentLatitude = _uiState.value.latitude ?: return
+        val currentLongitude = _uiState.value.longitude ?: return
+        _mapSessionState.update { currentState ->
+            currentState.copy(
+                nearbyGuideRequest = null,
+                nearbyGuide = NearbyGuideTarget(
+                    sourceId = sourceId,
+                    type = type,
+                    title = title,
+                    subtitle = subtitle,
+                    latitude = latitude,
+                    longitude = longitude,
+                    distanceKm = calculateDistance(currentLatitude, currentLongitude, latitude, longitude),
+                    bearingDegrees = calculateBearingDegrees(currentLatitude, currentLongitude, latitude, longitude)
+                ),
+                isBottomSheetVisible = false,
+                focusRequestToken = System.currentTimeMillis()
+            )
+        }
+    }
+
+    fun clearNearbyGuide() {
+        _mapSessionState.update { currentState ->
+            currentState.copy(
+                nearbyGuideRequest = null,
+                nearbyGuide = null
+            )
+        }
+    }
+
+    fun focusNearbyGuideOnMap() {
+        if (_mapSessionState.value.nearbyGuide == null) return
+        _mapSessionState.update { currentState ->
+            currentState.copy(
+                isBottomSheetVisible = false,
+                focusRequestToken = System.currentTimeMillis()
+            )
+        }
+    }
+
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
         val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
@@ -354,8 +428,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 locationName = "Current Location" 
             )
         }
+        refreshNearbyGuideMetrics(location)
         updateActiveTrailProgress(location)
         maybeRefreshRouteRecommendations(latitude = location.latitude, longitude = location.longitude)
+    }
+
+    private fun refreshNearbyGuideMetrics(location: Location) {
+        _mapSessionState.value.nearbyGuide ?: return
+        _mapSessionState.update { currentState ->
+            val latestGuide = currentState.nearbyGuide ?: return@update currentState
+            currentState.copy(
+                nearbyGuide = latestGuide.copy(
+                    distanceKm = calculateDistance(
+                        location.latitude,
+                        location.longitude,
+                        latestGuide.latitude,
+                        latestGuide.longitude
+                    ),
+                    bearingDegrees = calculateBearingDegrees(
+                        location.latitude,
+                        location.longitude,
+                        latestGuide.latitude,
+                        latestGuide.longitude
+                    )
+                )
+            )
+        }
     }
 
     private fun checkSmartSync(currentLocation: Location) {
@@ -417,6 +515,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 sin(dLon / 2).pow(2)
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
         return r * c
+    }
+
+    private fun calculateBearingDegrees(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val startLatRad = Math.toRadians(lat1)
+        val endLatRad = Math.toRadians(lat2)
+        val deltaLon = Math.toRadians(lon2 - lon1)
+        val y = sin(deltaLon) * cos(endLatRad)
+        val x = cos(startLatRad) * sin(endLatRad) -
+            sin(startLatRad) * cos(endLatRad) * cos(deltaLon)
+        return (Math.toDegrees(atan2(y, x)) + 360.0) % 360.0
     }
 
     private fun updateActiveTrailProgress(location: Location) {

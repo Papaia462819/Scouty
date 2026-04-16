@@ -193,7 +193,17 @@ object MapPackRegistryManager {
 
     private fun hasGlyphAssets(context: Context): Boolean =
         runCatching {
-            context.assets.list("glyphs").orEmpty().isNotEmpty()
+            val requiredRanges = listOf(
+                "0-255.pbf",
+                "256-511.pbf",
+                "512-767.pbf",
+                "768-1023.pbf",
+                "1024-1279.pbf"
+            )
+            listOf("Open Sans Regular", "Open Sans Semibold").all { fontStack ->
+                val availableRanges = context.assets.list("glyphs/$fontStack").orEmpty().toSet()
+                requiredRanges.all(availableRanges::contains)
+            }
         }.getOrDefault(false)
 
     private fun resolveStorage(context: Context): MapPackStorage {

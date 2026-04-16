@@ -20,7 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Battery4Bar
 import androidx.compose.material.icons.filled.Cloud
-import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.GpsFixed
 import androidx.compose.material.icons.filled.GpsOff
 import androidx.compose.material.icons.filled.House
@@ -70,7 +69,9 @@ import kotlin.math.abs
 fun HomeScreen(
     status: HomeStatus,
     contentPadding: PaddingValues,
-    onActiveTrailClick: () -> Unit = {}
+    onActiveTrailClick: () -> Unit = {},
+    onShelterClick: () -> Unit = {},
+    onWaterClick: () -> Unit = {}
 ) {
     val weatherSnapshot = buildWeatherSnapshot(status)
 
@@ -127,24 +128,17 @@ fun HomeScreen(
             )
             QuickActionButton(
                 modifier = Modifier.weight(1f),
-                icon = Icons.Default.Explore,
-                label = "Compass",
-                containerColor = Color(0xFF55A8FF),
-                onClick = {}
-            )
-            QuickActionButton(
-                modifier = Modifier.weight(1f),
                 icon = Icons.Default.House,
                 label = "Shelter",
                 containerColor = Color(0xFFFFB020),
-                onClick = {}
+                onClick = onShelterClick
             )
             QuickActionButton(
                 modifier = Modifier.weight(1f),
                 icon = Icons.Default.WaterDrop,
                 label = "Water",
                 containerColor = Color(0xFF2ED3A6),
-                onClick = {}
+                onClick = onWaterClick
             )
         }
 

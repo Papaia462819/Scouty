@@ -64,6 +64,7 @@ import com.scouty.app.ui.screens.ProfileFlowMode
 import com.scouty.app.ui.screens.ProfileOnboardingScreen
 import com.scouty.app.ui.screens.ProfileScreen
 import com.scouty.app.ui.screens.SosScreen
+import com.scouty.app.ui.models.NearbyGuideType
 
 private enum class TopDestination(
     @StringRes val labelRes: Int,
@@ -199,6 +200,14 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                             mainViewModel.focusActiveTrailOnMap()
                             selectedIndex = TopDestination.MAP.ordinal
                         }
+                    },
+                    onShelterClick = {
+                        mainViewModel.requestNearbyGuide(NearbyGuideType.SHELTER)
+                        selectedIndex = TopDestination.MAP.ordinal
+                    },
+                    onWaterClick = {
+                        mainViewModel.requestNearbyGuide(NearbyGuideType.WATER)
+                        selectedIndex = TopDestination.MAP.ordinal
                     }
                 )
                 TopDestination.MAP -> MapScreen(

@@ -83,6 +83,27 @@ enum class MapTrailMode {
     ACTIVE
 }
 
+enum class NearbyGuideType {
+    WATER,
+    SHELTER
+}
+
+data class NearbyGuideRequest(
+    val type: NearbyGuideType,
+    val requestToken: Long = System.currentTimeMillis()
+)
+
+data class NearbyGuideTarget(
+    val sourceId: String,
+    val type: NearbyGuideType,
+    val title: String,
+    val subtitle: String,
+    val latitude: Double,
+    val longitude: Double,
+    val distanceKm: Double,
+    val bearingDegrees: Double
+)
+
 enum class TrailCompletionStatus {
     COMPLETED,
     ENDED_EARLY
@@ -143,7 +164,9 @@ data class MapSessionState(
     val mode: MapTrailMode = MapTrailMode.BROWSING,
     val focusRequestToken: Long = 0L,
     val cameraSnapshot: MapCameraSnapshot? = null,
-    val lastCompletedTrail: CompletedTrailSnapshot? = null
+    val lastCompletedTrail: CompletedTrailSnapshot? = null,
+    val nearbyGuideRequest: NearbyGuideRequest? = null,
+    val nearbyGuide: NearbyGuideTarget? = null
 )
 
 data class HomeStatus(
