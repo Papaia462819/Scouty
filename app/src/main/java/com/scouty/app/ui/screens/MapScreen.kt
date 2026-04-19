@@ -11,7 +11,12 @@ import android.hardware.SensorManager
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +44,8 @@ import androidx.compose.material.icons.filled.GpsFixed
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.House
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.NorthEast
 import androidx.compose.material.icons.filled.Remove
@@ -279,6 +286,7 @@ fun MapScreen(
     var importInProgressPackId by remember { mutableStateOf<MapPackId?>(null) }
     var importErrorMessage by remember { mutableStateOf<String?>(null) }
     var mapRuntimeError by remember { mutableStateOf<String?>(null) }
+    var activeTrailPanelExpanded by rememberSaveable { mutableStateOf(true) }
 
     val importLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
@@ -661,28 +669,26 @@ fun MapScreen(
                 }
 
                 activeTrail?.takeIf { isActiveTrailMode }?.let { activeModeTrail ->
-                    ActiveTrailHud(
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .padding(top = 20.dp, start = 16.dp, end = 16.dp),
-                        trail = activeModeTrail
-                    )
-                    SubtleMapRecenterButton(
+                    ActiveTrailMapActions(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .padding(end = 18.dp, bottom = if (mapDataConfig.hasDemoPack) 112.dp else 148.dp),
-                        onClick = viewModel::recenterActiveTrailOnUser
+                            .padding(
+                                end = 18.dp,
+                                bottom = if (activeTrailPanelExpanded) 384.dp else 244.dp
+                            ),
+                        onWaterClick = { viewModel.requestNearbyGuide(NearbyGuideType.WATER) },
+                        onShelterClick = { viewModel.requestNearbyGuide(NearbyGuideType.SHELTER) },
+                        onRecenterClick = viewModel::recenterActiveTrailOnUser
                     )
-                    Button(
-                        onClick = viewModel::endActiveTrail,
+                    ActiveTrailHud(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
-                            .padding(horizontal = 16.dp, vertical = if (mapDataConfig.hasDemoPack) 24.dp else 114.dp)
-                            .fillMaxWidth(0.9f),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Text("End Trail")
-                    }
+                            .padding(horizontal = 0.dp),
+                        trail = activeModeTrail,
+                        expanded = activeTrailPanelExpanded,
+                        onExpandedChange = { activeTrailPanelExpanded = it },
+                        onEndTrail = viewModel::endActiveTrail
+                    )
                 }
 
                 nearbyGuide?.let { guide ->
@@ -1004,6 +1010,22 @@ private fun SubtleMapRecenterButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
+    SubtleMapActionButton(
+        modifier = modifier,
+        icon = Icons.Default.GpsFixed,
+        contentDescription = "Recenter",
+        onClick = onClick
+    )
+}
+
+@Composable
+private fun SubtleMapActionButton(
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    contentDescription: String,
+    tint: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    onClick: () -> Unit
+) {
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
@@ -1016,11 +1038,39 @@ private fun SubtleMapRecenterButton(
             modifier = Modifier.size(44.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.GpsFixed,
-                contentDescription = "Recenter",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                imageVector = icon,
+                contentDescription = contentDescription,
+                tint = tint
             )
         }
+    }
+}
+
+@Composable
+private fun ActiveTrailMapActions(
+    modifier: Modifier = Modifier,
+    onWaterClick: () -> Unit,
+    onShelterClick: () -> Unit,
+    onRecenterClick: () -> Unit
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalAlignment = Alignment.End
+    ) {
+        SubtleMapActionButton(
+            icon = Icons.Default.WaterDrop,
+            contentDescription = "Find nearest water",
+            tint = NearbyGuideType.WATER.accentColor(),
+            onClick = onWaterClick
+        )
+        SubtleMapActionButton(
+            icon = Icons.Default.House,
+            contentDescription = "Find nearest shelter",
+            tint = NearbyGuideType.SHELTER.accentColor(),
+            onClick = onShelterClick
+        )
+        SubtleMapRecenterButton(onClick = onRecenterClick)
     }
 }
 
@@ -1186,89 +1236,206 @@ private fun GuideTypeOrb(
 @Composable
 private fun ActiveTrailHud(
     modifier: Modifier = Modifier,
-    trail: ActiveTrail
+    trail: ActiveTrail,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    onEndTrail: () -> Unit
 ) {
+    var visible by remember { mutableStateOf(false) }
+    val elapsedSeconds = rememberTrailElapsedSeconds(trail.startedAtEpochMillis)
     val completionPercent = (trail.progress.coerceIn(0f, 1f) * 100).roundToInt()
     val markerLabel = TrailMetadataFormatter.formatTrailMarkers(trail.markingSymbols)
+    val paceText = formatTrailPace(elapsedSeconds, trail.distanceCompletedKm)
+    val etaText = formatTrailEta(elapsedSeconds, trail.distanceCompletedKm, trail.remainingDistanceKm)
+    val offTrailText = if (trail.offTrailDistanceKm <= 0.08) {
+        "On trail"
+    } else {
+        "${(trail.offTrailDistanceKm * 1000).roundToInt()} m off"
+    }
 
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
-        tonalElevation = 10.dp
+    LaunchedEffect(Unit) {
+        visible = true
+    }
+
+    AnimatedVisibility(
+        visible = visible,
+        enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+        exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
+        modifier = modifier
     ) {
-        Column(
+        Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+                .animateContentSize(),
+            shape = RoundedCornerShape(topStart = 44.dp, topEnd = 44.dp),
+            color = Color(0xFF020805).copy(alpha = 0.98f),
+            tonalElevation = 14.dp,
+            shadowElevation = 18.dp
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 22.dp, vertical = 18.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Column(modifier = Modifier.weight(1f)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onExpandedChange(!expanded) },
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = trail.name,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Text(
+                            text = "${trail.remainingDistanceKm.formatDistanceLabel()} left · $completionPercent% completed",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Color.White.copy(alpha = 0.62f)
+                        )
+                    }
+                    Icon(
+                        imageVector = if (expanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
+                        contentDescription = if (expanded) "Collapse trail panel" else "Expand trail panel",
+                        tint = Color.White.copy(alpha = 0.72f)
+                    )
+                }
+
+                LinearProgressIndicator(
+                    progress = { trail.progress.coerceIn(0f, 1f) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .clip(RoundedCornerShape(999.dp)),
+                    color = Color(0xFF8CE65A),
+                    trackColor = Color.White.copy(alpha = 0.14f)
+                )
+
+                if (expanded) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        TrailMetricTile(
+                            modifier = Modifier.weight(1f),
+                            label = "Time",
+                            value = formatTrailElapsed(elapsedSeconds)
+                        )
+                        TrailMetricTile(
+                            modifier = Modifier.weight(1f),
+                            label = "Pace",
+                            value = paceText
+                        )
+                        TrailMetricTile(
+                            modifier = Modifier.weight(1f),
+                            label = "ETA",
+                            value = etaText
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        TrailMetricTile(
+                            modifier = Modifier.weight(1f),
+                            label = "Done",
+                            value = trail.distanceCompletedKm.formatDistanceLabel()
+                        )
+                        TrailMetricTile(
+                            modifier = Modifier.weight(1f),
+                            label = "Remaining",
+                            value = trail.remainingDistanceKm.formatDistanceLabel()
+                        )
+                        TrailMetricTile(
+                            modifier = Modifier.weight(1f),
+                            label = "Position",
+                            value = offTrailText,
+                            valueColor = if (trail.offTrailDistanceKm <= 0.08) {
+                                Color(0xFF8CE65A)
+                            } else {
+                                Color(0xFFFFB020)
+                            }
+                        )
+                    }
+                    markerLabel?.let {
+                        Text(
+                            text = "Marker $it",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Color.White.copy(alpha = 0.58f)
+                        )
+                    }
+                    Button(
+                        onClick = onEndTrail,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(18.dp)
+                    ) {
+                        Text("End Trail")
+                    }
+                } else {
                     Text(
-                        text = trail.name,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
+                        text = "${formatTrailElapsed(elapsedSeconds)} · $paceText · ${trail.distanceCompletedKm.formatDistanceLabel()} done",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Color.White.copy(alpha = 0.66f),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                    Text(
-                        text = "${trail.remainingDistanceKm.formatDistanceLabel()} left · $completionPercent% completed",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
                 }
-                StatusChip(
-                    text = trail.difficulty.uppercase(Locale.getDefault()),
-                    containerColor = trailDifficultyChipColors(trail.difficulty).first,
-                    contentColor = trailDifficultyChipColors(trail.difficulty).second
-                )
-            }
-            LinearProgressIndicator(
-                progress = { trail.progress.coerceIn(0f, 1f) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .clip(RoundedCornerShape(999.dp)),
-                color = MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.24f)
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "${trail.distanceCompletedKm.formatDistanceLabel()} done",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    text = if (trail.offTrailDistanceKm <= 0.08) {
-                        "On trail"
-                    } else {
-                        "${(trail.offTrailDistanceKm * 1000).roundToInt()} m off trail"
-                    },
-                    style = MaterialTheme.typography.labelMedium,
-                    color = if (trail.offTrailDistanceKm <= 0.08) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        Color(0xFFFFB020)
-                    }
-                )
-            }
-            markerLabel?.let {
-                Text(
-                    text = "Marker: $it",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
         }
     }
+}
+
+@Composable
+private fun TrailMetricTile(
+    modifier: Modifier = Modifier,
+    label: String,
+    value: String,
+    valueColor: Color = Color.White
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(20.dp),
+        color = Color.White.copy(alpha = 0.08f),
+        tonalElevation = 0.dp
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall,
+                color = Color.White.copy(alpha = 0.48f),
+                maxLines = 1
+            )
+            Text(
+                text = value,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = valueColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Composable
+private fun rememberTrailElapsedSeconds(startedAtEpochMillis: Long?): Long {
+    var now by remember { mutableStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(startedAtEpochMillis) {
+        while (startedAtEpochMillis != null) {
+            now = System.currentTimeMillis()
+            delay(1_000L)
+        }
+    }
+    return startedAtEpochMillis?.let { ((now - it) / 1_000L).coerceAtLeast(0L) } ?: 0L
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -2538,6 +2705,46 @@ private fun formatNearbyGuideDistance(distanceKm: Double): String =
         distanceKm < 0.1 -> "${(distanceKm * 1000).roundToInt().coerceAtLeast(1)} m away"
         else -> String.format(Locale.getDefault(), "%.1f km away", distanceKm)
     }
+
+private fun formatTrailElapsed(elapsedSeconds: Long): String {
+    val hours = elapsedSeconds / 3600L
+    val minutes = (elapsedSeconds % 3600L) / 60L
+    val seconds = elapsedSeconds % 60L
+    return if (hours > 0L) {
+        String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds)
+    } else {
+        String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
+    }
+}
+
+private fun formatTrailPace(elapsedSeconds: Long, distanceCompletedKm: Double): String {
+    if (elapsedSeconds <= 0L || distanceCompletedKm < 0.05) {
+        return "--"
+    }
+    val paceSecondsPerKm = (elapsedSeconds / distanceCompletedKm).roundToInt()
+    val minutes = paceSecondsPerKm / 60
+    val seconds = paceSecondsPerKm % 60
+    return String.format(Locale.getDefault(), "%d:%02d /km", minutes, seconds)
+}
+
+private fun formatTrailEta(
+    elapsedSeconds: Long,
+    distanceCompletedKm: Double,
+    remainingDistanceKm: Double
+): String {
+    if (elapsedSeconds <= 0L || distanceCompletedKm < 0.05 || remainingDistanceKm <= 0.0) {
+        return "--"
+    }
+    val paceSecondsPerKm = elapsedSeconds / distanceCompletedKm
+    val etaSeconds = (paceSecondsPerKm * remainingDistanceKm).roundToInt().coerceAtLeast(60)
+    val hours = etaSeconds / 3600
+    val minutes = (etaSeconds % 3600) / 60
+    return if (hours > 0) {
+        "${hours}h ${minutes}m"
+    } else {
+        "${minutes}m"
+    }
+}
 
 private fun Double.formatDistanceLabel(): String =
     if (this <= 0.0) "0.0 km" else String.format(Locale.getDefault(), "%.1f km", this)
