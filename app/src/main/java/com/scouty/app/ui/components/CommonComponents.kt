@@ -1,5 +1,6 @@
 package com.scouty.app.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,20 +16,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.SuggestionChipDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -36,16 +35,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.util.Locale
+import com.scouty.app.ui.theme.AccentGreen
+import com.scouty.app.ui.theme.BgSurface
+import com.scouty.app.ui.theme.BgSurfaceRaised
+import com.scouty.app.ui.theme.BorderDefault
+import com.scouty.app.ui.theme.BorderSubtle
+import com.scouty.app.ui.theme.TextPrimary
+import com.scouty.app.ui.theme.TextSecondary
 
+/**
+ * Legacy "panel" container, now aligned with the new ScoutyCard visual style:
+ * subtle translucent background, 0.5dp border, 14dp radius.
+ * Kept to avoid mass-migrating existing callers.
+ */
 @Composable
 fun ScoutyPanel(
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(26.dp),
-    startColor: Color = MaterialTheme.colorScheme.surface,
-    endColor: Color = MaterialTheme.colorScheme.surfaceVariant,
-    borderColor: Color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.72f),
-    contentPadding: PaddingValues = PaddingValues(horizontal = 18.dp, vertical = 18.dp),
+    shape: Shape = RoundedCornerShape(14.dp),
+    startColor: Color = BgSurface,
+    @Suppress("UNUSED_PARAMETER") endColor: Color = BgSurface,
+    borderColor: Color = BorderSubtle,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 14.dp, vertical = 14.dp),
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -55,46 +65,36 @@ fun ScoutyPanel(
         Modifier
     }
 
-    Surface(
-        modifier = modifier.then(clickableModifier),
-        shape = shape,
-        color = Color.Transparent,
-        border = androidx.compose.foundation.BorderStroke(1.dp, borderColor),
-        shadowElevation = 0.dp,
-    ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    brush = Brush.horizontalGradient(listOf(startColor, endColor))
-                )
-                .fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.padding(contentPadding),
-                content = content
-            )
-        }
-    }
+    Column(
+        modifier = modifier
+            .then(clickableModifier)
+            .clip(shape)
+            .background(startColor, shape)
+            .border(0.5.dp, borderColor, shape)
+            .padding(contentPadding),
+        content = content,
+    )
 }
 
 @Composable
 fun StatusChip(
     text: String,
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
-    contentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant
+    containerColor: Color = BgSurfaceRaised,
+    contentColor: Color = TextSecondary,
 ) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(18.dp),
-        color = containerColor,
-        contentColor = contentColor
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(10.dp))
+            .background(containerColor)
+            .padding(horizontal = 10.dp, vertical = 4.dp),
     ) {
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
             style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold
+            color = contentColor,
+            fontWeight = FontWeight.Medium,
+            fontSize = 11.sp,
         )
     }
 }
@@ -104,18 +104,18 @@ fun StatusChip(
 fun SuggestionChip(
     onClick: () -> Unit,
     label: @Composable () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     androidx.compose.material3.SuggestionChip(
         onClick = onClick,
         label = label,
         modifier = modifier,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(10.dp),
         colors = SuggestionChipDefaults.suggestionChipColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            labelColor = MaterialTheme.colorScheme.onSurfaceVariant
+            containerColor = BgSurfaceRaised,
+            labelColor = TextSecondary,
         ),
-        border = null
+        border = null,
     )
 }
 
@@ -130,21 +130,22 @@ fun OverlayToggle(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .background(BgSurfaceRaised)
+            .border(0.5.dp, BorderSubtle, RoundedCornerShape(14.dp))
+            .padding(horizontal = 14.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = label, style = MaterialTheme.typography.bodyMedium)
-            Switch(checked = checked, onCheckedChange = onCheckedChange)
-        }
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = TextPrimary,
+        )
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
 
@@ -155,67 +156,63 @@ fun QuickActionButton(
     containerColor: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    contentColor: Color = containerColor
+    contentColor: Color = containerColor,
 ) {
-    Surface(
+    Column(
         modifier = modifier
-            .height(64.dp)
-            .clip(RoundedCornerShape(18.dp))
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(18.dp),
-        color = containerColor.copy(alpha = 0.14f),
-        contentColor = contentColor,
-        border = androidx.compose.foundation.BorderStroke(1.dp, containerColor.copy(alpha = 0.28f))
+            .clip(RoundedCornerShape(14.dp))
+            .background(containerColor.copy(alpha = 0.08f))
+            .border(0.5.dp, containerColor.copy(alpha = 0.2f), RoundedCornerShape(14.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = label,
-                modifier = Modifier.size(18.dp)
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-                fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Center,
-                maxLines = 1
-            )
-        }
+        Icon(
+            imageVector = icon,
+            contentDescription = label,
+            tint = contentColor,
+            modifier = Modifier.size(20.dp),
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = contentColor,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+        )
     }
 }
 
 @Composable
 fun SectionHeader(
     title: String,
-    onViewAllClick: (() -> Unit)? = null
+    onViewAllClick: (() -> Unit)? = null,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 2.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = title.uppercase(Locale.getDefault()),
-            style = MaterialTheme.typography.titleSmall.copy(letterSpacing = 0.8.sp),
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            text = title.uppercase(),
+            style = MaterialTheme.typography.labelSmall,
+            color = TextSecondary,
         )
         if (onViewAllClick != null) {
             Text(
                 text = "View all \u2192",
                 modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(8.dp))
                     .clickable(onClick = onViewAllClick)
-                    .padding(horizontal = 6.dp, vertical = 4.dp),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary
+                    .padding(horizontal = 4.dp, vertical = 2.dp),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Medium,
+                color = AccentGreen,
             )
         }
     }

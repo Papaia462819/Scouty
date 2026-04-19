@@ -18,6 +18,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,22 +38,30 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.TrendingUp
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.GpsFixed
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.House
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Layers
-import androidx.compose.material.icons.filled.NorthEast
-import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material.icons.filled.Route
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Timer
-import androidx.compose.material.icons.filled.WaterDrop
+import com.composables.icons.lucide.ArrowUpRight
+import com.composables.icons.lucide.CalendarDays
+import com.composables.icons.lucide.Check
+import com.composables.icons.lucide.ChevronDown
+import com.composables.icons.lucide.ChevronRight
+import com.composables.icons.lucide.ChevronUp
+import com.composables.icons.lucide.Clock
+import com.composables.icons.lucide.Crosshair
+import com.composables.icons.lucide.Droplet
+import com.composables.icons.lucide.FileText
+import com.composables.icons.lucide.History
+import com.composables.icons.lucide.House
+import com.composables.icons.lucide.Info
+import com.composables.icons.lucide.Layers
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Minus
+import com.composables.icons.lucide.Plus
+import com.composables.icons.lucide.Route
+import com.composables.icons.lucide.Search
+import com.composables.icons.lucide.Smile
+import com.composables.icons.lucide.Square
+import com.composables.icons.lucide.TrendingUp
+import com.composables.icons.lucide.User
+import com.composables.icons.lucide.X
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
@@ -118,8 +127,33 @@ import com.scouty.app.data.RouteGeometryIndex
 import com.scouty.app.data.RouteGeometryRepository
 import com.scouty.app.data.RouteSearchSuggestion
 import com.scouty.app.data.bestDescriptionRo
+import com.scouty.app.ui.components.CategoryIconTile
+import com.scouty.app.ui.components.DangerButton
+import com.scouty.app.ui.components.PrimaryButton
+import com.scouty.app.ui.components.QuantityStepper
 import com.scouty.app.ui.components.RouteRemoteImage
+import com.scouty.app.ui.components.ScoutyCard
+import com.scouty.app.ui.components.ScoutySectionHeader
+import com.scouty.app.ui.components.SecondaryButton
+import com.scouty.app.ui.components.StatTile
 import com.scouty.app.ui.components.StatusChip
+import com.scouty.app.ui.components.StatusPill
+import com.scouty.app.ui.theme.AccentGreen
+import com.scouty.app.ui.theme.AccentGreenBg
+import com.scouty.app.ui.theme.AccentGreenOnSurface
+import com.scouty.app.ui.theme.BgPrimary
+import com.scouty.app.ui.theme.BgSurface
+import com.scouty.app.ui.theme.BgSurfaceRaised
+import com.scouty.app.ui.theme.BorderDefault
+import com.scouty.app.ui.theme.BorderSubtle
+import com.scouty.app.ui.theme.Danger
+import com.scouty.app.ui.theme.Info as InfoBlue
+import com.scouty.app.ui.theme.TextMuted
+import com.scouty.app.ui.theme.TextPrimary
+import com.scouty.app.ui.theme.TextSecondary
+import com.scouty.app.ui.theme.TextTertiary
+import com.scouty.app.ui.theme.Warning
+import com.scouty.app.ui.theme.Water
 import com.scouty.app.ui.MainViewModel
 import com.scouty.app.ui.models.HomeStatus
 import com.scouty.app.ui.models.MapCameraSnapshot
@@ -559,18 +593,18 @@ fun MapScreen(
                                 expanded = isSearchExpanded,
                                 onExpandedChange = { isSearchExpanded = it },
                                 placeholder = { Text(stringResource(R.string.map_search_placeholder)) },
-                                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                                leadingIcon = { Icon(Lucide.Search, contentDescription = null) },
                                 trailingIcon = {
                                     if (isSearchExpanded) {
                                         IconButton(onClick = {
                                             if (searchText.isNotEmpty()) searchText = "" else isSearchExpanded = false
                                         }) {
-                                            Icon(Icons.Default.Close, contentDescription = null)
+                                            Icon(Lucide.X, contentDescription = null)
                                         }
                                     } else {
                                         IconButton(onClick = { showLayerMenu = !showLayerMenu }) {
                                             Icon(
-                                                Icons.Default.Layers,
+                                                Lucide.Layers,
                                                 contentDescription = null,
                                                 tint = MaterialTheme.colorScheme.primary
                                             )
@@ -614,7 +648,7 @@ fun MapScreen(
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Icon(
-                                            Icons.Default.History,
+                                            Lucide.History,
                                             contentDescription = null,
                                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
@@ -866,7 +900,7 @@ private fun MissingBaseMapPackCard(
             Text(
                 text = stringResource(R.string.map_missing_pack_title),
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Medium
             )
             Text(
                 text = stringResource(R.string.map_missing_pack_body),
@@ -925,7 +959,7 @@ private fun OptionalDemoPackBanner(
                 Text(
                     text = stringResource(R.string.map_demo_pack_title),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.Medium
                 )
                 Text(
                     text = stringResource(R.string.map_demo_pack_body),
@@ -964,7 +998,7 @@ private fun MapRuntimeErrorCard(
             Text(
                 text = stringResource(R.string.map_runtime_error_title),
                 style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onErrorContainer
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -982,26 +1016,19 @@ private fun PlannedTrailActions(
     modifier: Modifier = Modifier,
     onStartTrail: () -> Unit
 ) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
-        tonalElevation = 10.dp
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(18.dp))
+            .background(BgSurface)
+            .border(0.5.dp, BorderSubtle, RoundedCornerShape(18.dp))
+            .padding(12.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 14.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = onStartTrail,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Text("Start Trail")
-            }
-        }
+        PrimaryButton(
+            text = "Start trail",
+            onClick = onStartTrail,
+            icon = Lucide.Route,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
@@ -1012,7 +1039,7 @@ private fun SubtleMapRecenterButton(
 ) {
     SubtleMapActionButton(
         modifier = modifier,
-        icon = Icons.Default.GpsFixed,
+        icon = Lucide.Crosshair,
         contentDescription = "Recenter",
         onClick = onClick
     )
@@ -1023,26 +1050,24 @@ private fun SubtleMapActionButton(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     contentDescription: String,
-    tint: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    tint: Color = TextSecondary,
     onClick: () -> Unit
 ) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(18.dp),
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.84f),
-        tonalElevation = 8.dp,
-        shadowElevation = 6.dp
+    Box(
+        modifier = modifier
+            .size(44.dp)
+            .clip(RoundedCornerShape(14.dp))
+            .background(BgSurface)
+            .border(0.5.dp, BorderSubtle, RoundedCornerShape(14.dp))
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
     ) {
-        IconButton(
-            onClick = onClick,
-            modifier = Modifier.size(44.dp)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = contentDescription,
-                tint = tint
-            )
-        }
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            tint = tint,
+            modifier = Modifier.size(18.dp)
+        )
     }
 }
 
@@ -1059,13 +1084,13 @@ private fun ActiveTrailMapActions(
         horizontalAlignment = Alignment.End
     ) {
         SubtleMapActionButton(
-            icon = Icons.Default.WaterDrop,
+            icon = Lucide.Droplet,
             contentDescription = "Find nearest water",
             tint = NearbyGuideType.WATER.accentColor(),
             onClick = onWaterClick
         )
         SubtleMapActionButton(
-            icon = Icons.Default.House,
+            icon = Lucide.House,
             contentDescription = "Find nearest shelter",
             tint = NearbyGuideType.SHELTER.accentColor(),
             onClick = onShelterClick
@@ -1104,7 +1129,7 @@ private fun NearbyGuidePendingCard(
                         "Waiting for GPS"
                     },
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
@@ -1119,7 +1144,7 @@ private fun NearbyGuidePendingCard(
             }
             IconButton(onClick = onDismiss) {
                 Icon(
-                    imageVector = Icons.Default.Close,
+                    imageVector = Lucide.X,
                     contentDescription = "Close guide",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1161,7 +1186,7 @@ private fun NearbyGuideCard(
                 Text(
                     text = guide.title,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -1175,7 +1200,7 @@ private fun NearbyGuideCard(
                 Text(
                     text = formatNearbyGuideDistance(guide.distanceKm),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                     color = guide.type.accentColor()
                 )
             }
@@ -1185,7 +1210,7 @@ private fun NearbyGuideCard(
             )
             IconButton(onClick = onDismiss) {
                 Icon(
-                    imageVector = Icons.Default.Close,
+                    imageVector = Lucide.X,
                     contentDescription = "Close guide",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1211,8 +1236,8 @@ private fun GuideTypeOrb(
         Box(contentAlignment = Alignment.Center) {
             Icon(
                 imageVector = when (type) {
-                    NearbyGuideType.WATER -> Icons.Default.WaterDrop
-                    NearbyGuideType.SHELTER -> Icons.Default.House
+                    NearbyGuideType.WATER -> Lucide.Droplet
+                    NearbyGuideType.SHELTER -> Lucide.House
                 },
                 contentDescription = null,
                 modifier = Modifier
@@ -1222,7 +1247,7 @@ private fun GuideTypeOrb(
                 tint = type.accentColor().copy(alpha = 0.88f)
             )
             Icon(
-                imageVector = Icons.Default.NorthEast,
+                imageVector = Lucide.ArrowUpRight,
                 contentDescription = null,
                 modifier = Modifier
                     .size(30.dp)
@@ -1263,165 +1288,151 @@ private fun ActiveTrailHud(
         exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
         modifier = modifier
     ) {
-        Surface(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .animateContentSize(),
-            shape = RoundedCornerShape(topStart = 44.dp, topEnd = 44.dp),
-            color = Color(0xFF020805).copy(alpha = 0.98f),
-            tonalElevation = 14.dp,
-            shadowElevation = 18.dp
+                .animateContentSize()
+                .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                .background(BgPrimary)
+                .border(
+                    0.5.dp,
+                    BorderSubtle,
+                    RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+                )
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Column(
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .width(36.dp)
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(BorderDefault)
+            )
+
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 22.dp, vertical = 18.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                    .clickable { onExpandedChange(!expanded) },
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onExpandedChange(!expanded) },
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = trail.name,
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        Text(
-                            text = "${trail.remainingDistanceKm.formatDistanceLabel()} left · $completionPercent% completed",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.White.copy(alpha = 0.62f)
-                        )
-                    }
-                    Icon(
-                        imageVector = if (expanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
-                        contentDescription = if (expanded) "Collapse trail panel" else "Expand trail panel",
-                        tint = Color.White.copy(alpha = 0.72f)
-                    )
-                }
-
-                LinearProgressIndicator(
-                    progress = { trail.progress.coerceIn(0f, 1f) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .clip(RoundedCornerShape(999.dp)),
-                    color = Color(0xFF8CE65A),
-                    trackColor = Color.White.copy(alpha = 0.14f)
-                )
-
-                if (expanded) {
+                Column(modifier = Modifier.weight(1f)) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        TrailMetricTile(
-                            modifier = Modifier.weight(1f),
-                            label = "Time",
-                            value = formatTrailElapsed(elapsedSeconds)
+                        StatusPill(
+                            text = "TRACKING",
+                            color = AccentGreen,
+                            pulsing = true
                         )
-                        TrailMetricTile(
-                            modifier = Modifier.weight(1f),
-                            label = "Pace",
-                            value = paceText
-                        )
-                        TrailMetricTile(
-                            modifier = Modifier.weight(1f),
-                            label = "ETA",
-                            value = etaText
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        TrailMetricTile(
-                            modifier = Modifier.weight(1f),
-                            label = "Done",
-                            value = trail.distanceCompletedKm.formatDistanceLabel()
-                        )
-                        TrailMetricTile(
-                            modifier = Modifier.weight(1f),
-                            label = "Remaining",
-                            value = trail.remainingDistanceKm.formatDistanceLabel()
-                        )
-                        TrailMetricTile(
-                            modifier = Modifier.weight(1f),
-                            label = "Position",
-                            value = offTrailText,
-                            valueColor = if (trail.offTrailDistanceKm <= 0.08) {
-                                Color(0xFF8CE65A)
-                            } else {
-                                Color(0xFFFFB020)
-                            }
-                        )
-                    }
-                    markerLabel?.let {
                         Text(
-                            text = "Marker $it",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.White.copy(alpha = 0.58f)
+                            text = "$completionPercent%",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = TextTertiary
                         )
                     }
-                    Button(
-                        onClick = onEndTrail,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(18.dp)
-                    ) {
-                        Text("End Trail")
-                    }
-                } else {
+                    Spacer(Modifier.height(6.dp))
                     Text(
-                        text = "${formatTrailElapsed(elapsedSeconds)} · $paceText · ${trail.distanceCompletedKm.formatDistanceLabel()} done",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = Color.White.copy(alpha = 0.66f),
+                        text = trail.name,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = TextPrimary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
+                    Text(
+                        text = "${trail.remainingDistanceKm.formatDistanceLabel()} ramasi",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary
+                    )
                 }
+                Icon(
+                    imageVector = if (expanded) Lucide.ChevronDown else Lucide.ChevronUp,
+                    contentDescription = if (expanded) "Collapse trail panel" else "Expand trail panel",
+                    tint = TextSecondary,
+                    modifier = Modifier.size(18.dp)
+                )
             }
-        }
-    }
-}
 
-@Composable
-private fun TrailMetricTile(
-    modifier: Modifier = Modifier,
-    label: String,
-    value: String,
-    valueColor: Color = Color.White
-) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(20.dp),
-        color = Color.White.copy(alpha = 0.08f),
-        tonalElevation = 0.dp
-    ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.White.copy(alpha = 0.48f),
-                maxLines = 1
+            LinearProgressIndicator(
+                progress = { trail.progress.coerceIn(0f, 1f) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(999.dp)),
+                color = AccentGreen,
+                trackColor = BorderSubtle
             )
-            Text(
-                text = value,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = valueColor,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+
+            if (expanded) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    StatTile(
+                        modifier = Modifier.weight(1f),
+                        label = "TIMP",
+                        value = formatTrailElapsed(elapsedSeconds),
+                        accent = AccentGreen
+                    )
+                    StatTile(
+                        modifier = Modifier.weight(1f),
+                        label = "RITM",
+                        value = paceText
+                    )
+                    StatTile(
+                        modifier = Modifier.weight(1f),
+                        label = "ETA",
+                        value = etaText
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    StatTile(
+                        modifier = Modifier.weight(1f),
+                        label = "PARCURS",
+                        value = trail.distanceCompletedKm.formatDistanceLabel()
+                    )
+                    StatTile(
+                        modifier = Modifier.weight(1f),
+                        label = "RAMAS",
+                        value = trail.remainingDistanceKm.formatDistanceLabel(),
+                        accent = InfoBlue
+                    )
+                    StatTile(
+                        modifier = Modifier.weight(1f),
+                        label = "POZITIE",
+                        value = offTrailText,
+                        accent = if (trail.offTrailDistanceKm <= 0.08) AccentGreen else Warning
+                    )
+                }
+                markerLabel?.let {
+                    Text(
+                        text = "Marcaj $it",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = TextTertiary
+                    )
+                }
+                DangerButton(
+                    text = "End trail",
+                    onClick = onEndTrail,
+                    icon = Lucide.Square,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            } else {
+                Text(
+                    text = "${formatTrailElapsed(elapsedSeconds)} · $paceText · ${trail.distanceCompletedKm.formatDistanceLabel()}",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = TextSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }
@@ -1458,80 +1469,120 @@ private fun TrailDetailContent(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.92f)
+            .background(BgPrimary)
     ) {
         LazyColumn(
             modifier = Modifier.weight(1f),
-            contentPadding = PaddingValues(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 12.dp),
+            contentPadding = PaddingValues(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 12.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = trail.name,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Medium,
+                            color = TextPrimary,
+                            modifier = Modifier.weight(1f)
+                        )
+                        DifficultyBadge(trail.difficulty)
+                    }
                     Text(
-                        text = trail.name,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(1f)
+                        text = trail.region ?: "Romania",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = TextSecondary
                     )
-                    DifficultyBadge(trail.difficulty)
                 }
             }
 
             item {
-                Text(
-                    text = trail.region ?: "Romania",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    TrailStatCard(
+                        modifier = Modifier.weight(1f),
+                        icon = Lucide.Route,
+                        tint = Water,
+                        label = "DISTANTA",
+                        value = formatDistance(trail.distanceKm)
+                    )
+                    TrailStatCard(
+                        modifier = Modifier.weight(1f),
+                        icon = Lucide.TrendingUp,
+                        tint = Warning,
+                        label = "DIFERENTA",
+                        value = formatElevation(trail.elevationGain)
+                    )
+                    TrailStatCard(
+                        modifier = Modifier.weight(1f),
+                        icon = Lucide.Clock,
+                        tint = InfoBlue,
+                        label = "DURATA",
+                        value = compactDurationChipLabel(trail.estimatedDuration)
+                    )
+                }
             }
 
             trail.imageUrl?.let { imageUrl ->
                 item {
-                    Card(
-                        shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(BgSurface)
                     ) {
-                        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                            RouteRemoteImage(
-                                imageUrl = imageUrl,
-                                contentDescription = trail.name,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(214.dp),
-                                contentScale = ContentScale.Crop
-                            )
+                        RouteRemoteImage(
+                            imageUrl = imageUrl,
+                            contentDescription = trail.name,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp),
+                            contentScale = ContentScale.Crop
+                        )
+                        val imageMeta = listOfNotNull(
+                            trail.imageScope?.let(::imageScopeLabel),
+                            trail.imageLicense
+                        ).joinToString(" · ")
+                        val attribution = trail.imageAttribution?.takeIf { it.isNotBlank() }
+                        if (imageMeta.isNotBlank() || attribution != null || trail.imageSourcePageUrl != null) {
                             Column(
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-                                verticalArrangement = Arrangement.spacedBy(6.dp)
+                                modifier = Modifier
+                                    .align(Alignment.BottomStart)
+                                    .fillMaxWidth()
+                                    .background(BgPrimary.copy(alpha = 0.72f))
+                                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                                verticalArrangement = Arrangement.spacedBy(2.dp)
                             ) {
-                                val imageMeta = listOfNotNull(
-                                    trail.imageScope?.let(::imageScopeLabel),
-                                    trail.imageLicense
-                                ).joinToString(" · ")
                                 if (imageMeta.isNotBlank()) {
                                     Text(
                                         text = imageMeta,
-                                        style = MaterialTheme.typography.labelMedium,
-                                        color = MaterialTheme.colorScheme.primary
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = AccentGreen
                                     )
                                 }
-                                trail.imageAttribution?.takeIf { it.isNotBlank() }?.let { attribution ->
+                                if (attribution != null) {
                                     Text(
                                         text = attribution,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = TextSecondary,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                 }
                                 trail.imageSourcePageUrl?.let { sourceUrl ->
-                                    TextButton(
-                                        onClick = {
+                                    Text(
+                                        text = "Vezi sursa si licenta foto",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = AccentGreen,
+                                        modifier = Modifier.clickable {
                                             runCatching { uriHandler.openUri(sourceUrl) }
                                                 .onFailure { error ->
                                                     Log.w("ScoutyMap", "Failed to open image source $sourceUrl", error)
                                                 }
-                                        },
-                                        contentPadding = PaddingValues(0.dp)
-                                    ) {
-                                        Text("Vezi sursa si licenta foto")
-                                    }
+                                        }
+                                    )
                                 }
                             }
                         }
@@ -1541,167 +1592,145 @@ private fun TrailDetailContent(
 
             trail.routeSummary?.takeIf { it.isNotBlank() }?.let { summary ->
                 item {
-                    Card(
-                        shape = RoundedCornerShape(22.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(18.dp),
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ScoutyCard {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            Text(
-                                text = "Rezumat rapid",
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.SemiBold
+                            CategoryIconTile(
+                                icon = Lucide.FileText,
+                                color = AccentGreen,
+                                size = 28.dp,
+                                iconSize = 14.dp
                             )
                             Text(
-                                text = summary,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface
+                                text = "REZUMAT RAPID",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = TextSecondary
                             )
                         }
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            text = summary,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = TextPrimary
+                        )
                     }
                 }
             }
 
             detailDescription?.takeIf { it.isNotBlank() }?.let { description ->
                 item {
-                    Card(
-                        shape = RoundedCornerShape(22.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.72f)
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(18.dp),
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ScoutyCard {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            Text(
-                                text = "Despre traseu",
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.SemiBold
+                            CategoryIconTile(
+                                icon = Lucide.Info,
+                                color = TextSecondary,
+                                size = 28.dp,
+                                iconSize = 14.dp
                             )
                             Text(
-                                text = description,
+                                text = "DESPRE TRASEU",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = TextSecondary
+                            )
+                        }
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            text = description,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = TextPrimary,
+                            maxLines = if (descriptionExpanded) Int.MAX_VALUE else 5,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.animateContentSize()
+                        )
+                        if (description.length > 220) {
+                            Spacer(Modifier.height(6.dp))
+                            Text(
+                                text = if (descriptionExpanded) "Restrange descrierea" else "Citeste mai mult",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = AccentGreen,
+                                modifier = Modifier.clickable { descriptionExpanded = !descriptionExpanded }
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (!trail.fromName.isNullOrBlank() || !trail.toName.isNullOrBlank() || markerLabel != null) {
+                item {
+                    ScoutyCard {
+                        if (!trail.fromName.isNullOrBlank() || !trail.toName.isNullOrBlank()) {
+                            Text(
+                                text = listOfNotNull(trail.fromName, trail.toName).joinToString(" → "),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                maxLines = if (descriptionExpanded) Int.MAX_VALUE else 5,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.animateContentSize()
+                                color = TextPrimary
                             )
-                            if (description.length > 220) {
-                                TextButton(
-                                    onClick = { descriptionExpanded = !descriptionExpanded },
-                                    contentPadding = PaddingValues(0.dp)
-                                ) {
-                                    Text(if (descriptionExpanded) "Restrange descrierea" else "Citeste mai mult")
-                                }
+                        }
+                        markerLabel?.let { marker ->
+                            if (!trail.fromName.isNullOrBlank() || !trail.toName.isNullOrBlank()) {
+                                Spacer(Modifier.height(6.dp))
                             }
+                            Text(
+                                text = "Marcaj: $marker",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = AccentGreen
+                            )
                         }
                     }
                 }
             }
 
             item {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    if (!trail.fromName.isNullOrBlank() || !trail.toName.isNullOrBlank()) {
-                        Text(
-                            text = listOfNotNull(trail.fromName, trail.toName).joinToString(" → "),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
+                Text(
+                    text = buildString {
+                        trail.localCode?.let {
+                            append(it)
+                            append(" · ")
+                        }
+                        append(String.format("Lat %.5f, Lon %.5f", trail.latitude, trail.longitude))
+                    },
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextTertiary
+                )
+            }
 
-                    markerLabel?.let { marker ->
-                        Text(
-                            text = "Marcaj: $marker",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        InfoChip(
-                            icon = Icons.Default.Route,
-                            label = formatDistance(trail.distanceKm),
-                            modifier = Modifier.weight(1f)
-                        )
-                        InfoChip(
-                            icon = Icons.AutoMirrored.Filled.TrendingUp,
-                            label = formatElevation(trail.elevationGain),
-                            modifier = Modifier.weight(1f)
-                        )
-                        InfoChip(
-                            icon = Icons.Default.Timer,
-                            label = compactDurationChipLabel(trail.estimatedDuration),
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-
-                    Text(
-                        text = buildString {
-                            trail.localCode?.let {
-                                append(it)
-                                append(" · ")
-                            }
-                            append(String.format("Lat %.5f, Lon %.5f", trail.latitude, trail.longitude))
-                        },
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    if (trail.sourceUrls.isNotEmpty()) {
-                        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            if (trail.sourceUrls.isNotEmpty()) {
+                item {
+                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        ScoutySectionHeader(title = "SURSE TRASEU")
+                        trail.sourceUrls.take(2).forEach { sourceUrl ->
                             Text(
-                                text = "Surse traseu",
+                                text = sourceUrl,
                                 style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            trail.sourceUrls.take(2).forEach { sourceUrl ->
-                                TextButton(
-                                    onClick = {
-                                        runCatching { uriHandler.openUri(sourceUrl) }
-                                            .onFailure { error ->
-                                                Log.w("ScoutyMap", "Failed to open route source $sourceUrl", error)
-                                            }
-                                    },
-                                    contentPadding = PaddingValues(0.dp)
-                                ) {
-                                    Text(sourceUrl)
+                                color = AccentGreen,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.clickable {
+                                    runCatching { uriHandler.openUri(sourceUrl) }
+                                        .onFailure { error ->
+                                            Log.w("ScoutyMap", "Failed to open route source $sourceUrl", error)
+                                        }
                                 }
-                            }
+                            )
                         }
                     }
                 }
             }
-
         }
 
-        Button(
-            onClick = {
-                showTrailSetup = true
-            },
+        PrimaryButton(
+            text = "Seteaza traseul",
+            onClick = { showTrailSetup = true },
+            icon = Lucide.Check,
             modifier = Modifier
                 .fillMaxWidth()
                 .navigationBarsPadding()
-                .padding(horizontal = 24.dp, vertical = 16.dp),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Text("Seteaza traseul")
-        }
+                .padding(horizontal = 20.dp, vertical = 16.dp)
+        )
 
         if (showDatePicker) {
             val datePickerState = rememberDatePickerState(initialSelectedDateMillis = selectedDateMillis)
@@ -1747,6 +1776,37 @@ private fun TrailDetailContent(
 }
 
 @Composable
+private fun TrailStatCard(
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    tint: Color,
+    label: String,
+    value: String
+) {
+    ScoutyCard(
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 12.dp)
+    ) {
+        CategoryIconTile(icon = icon, color = tint, size = 30.dp, iconSize = 15.dp)
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = TextTertiary
+        )
+        Spacer(Modifier.height(2.dp))
+        Text(
+            text = value,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Medium,
+            color = TextPrimary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
 private fun TrailSetupDialog(
     selectedDateMillis: Long,
     adultCount: Int,
@@ -1758,164 +1818,137 @@ private fun TrailSetupDialog(
     onConfirm: () -> Unit
 ) {
     Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = RoundedCornerShape(28.dp),
-            color = MaterialTheme.colorScheme.surface,
-            border = androidx.compose.foundation.BorderStroke(
-                1.dp,
-                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.42f)
-            )
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 20.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text(
-                    text = "Plan traseu",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                CompactTrailSettingRow(
-                    label = "Plecare",
-                    value = formatTrailSetupDate(selectedDateMillis),
-                    onClick = onDateClick
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    CompactCounterCard(
-                        modifier = Modifier.weight(1f),
-                        label = "Adulti",
-                        value = adultCount,
-                        onDecrement = { onAdultCountChange((adultCount - 1).coerceAtLeast(1)) },
-                        onIncrement = { onAdultCountChange((adultCount + 1).coerceAtMost(12)) },
-                        canDecrement = adultCount > 1
-                    )
-                    CompactCounterCard(
-                        modifier = Modifier.weight(1f),
-                        label = "Copii",
-                        value = childCount,
-                        onDecrement = { onChildCountChange((childCount - 1).coerceAtLeast(0)) },
-                        onIncrement = { onChildCountChange((childCount + 1).coerceAtMost(10)) },
-                        canDecrement = childCount > 0
-                    )
-                }
-                Text(
-                    text = TrailPartyComposition(adults = adultCount, children = childCount).summaryRo,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    TextButton(
-                        onClick = onDismiss,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text("Cancel")
-                    }
-                    Button(
-                        onClick = onConfirm,
-                        modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Text("Confirm")
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun CompactTrailSettingRow(
-    label: String,
-    value: String,
-    onClick: () -> Unit
-) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(18.dp),
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.78f),
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.36f)
-        )
-    ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 14.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .clip(RoundedCornerShape(20.dp))
+                .background(BgPrimary)
+                .border(0.5.dp, BorderSubtle, RoundedCornerShape(20.dp))
+                .padding(horizontal = 20.dp, vertical = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = value,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-    }
-}
-
-@Composable
-private fun CompactCounterCard(
-    modifier: Modifier = Modifier,
-    label: String,
-    value: Int,
-    onDecrement: () -> Unit,
-    onIncrement: () -> Unit,
-    canDecrement: Boolean
-) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(18.dp),
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.78f),
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.36f)
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Top
             ) {
-                StepperIconButton(
-                    icon = Icons.Default.Remove,
-                    enabled = canDecrement,
-                    onClick = onDecrement
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Plan traseu",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Medium,
+                        color = TextPrimary
+                    )
+                    Spacer(Modifier.height(2.dp))
+                    Text(
+                        text = "Data si compozitie echipa",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(BgSurface)
+                        .clickable(onClick = onDismiss),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Lucide.X,
+                        contentDescription = "Inchide",
+                        tint = TextSecondary,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                ScoutySectionHeader(title = "DATA PLECARE")
+                ScoutyCard(
+                    onClick = onDateClick,
+                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 12.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        CategoryIconTile(
+                            icon = Lucide.CalendarDays,
+                            color = AccentGreen,
+                            size = 34.dp,
+                            iconSize = 16.dp
+                        )
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = formatTrailSetupDate(selectedDateMillis),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Medium,
+                                color = TextPrimary
+                            )
+                            Text(
+                                text = formatTrailSetupWeekday(selectedDateMillis),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = TextSecondary
+                            )
+                        }
+                        Icon(
+                            imageVector = Lucide.ChevronRight,
+                            contentDescription = null,
+                            tint = TextTertiary,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
+            }
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                ScoutySectionHeader(title = "COMPOZITIE GRUP")
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    PartyCountCard(
+                        modifier = Modifier.weight(1f),
+                        icon = Lucide.User,
+                        label = "Adulti",
+                        value = adultCount,
+                        minValue = 1,
+                        onDecrement = { onAdultCountChange((adultCount - 1).coerceAtLeast(1)) },
+                        onIncrement = { onAdultCountChange((adultCount + 1).coerceAtMost(12)) }
+                    )
+                    PartyCountCard(
+                        modifier = Modifier.weight(1f),
+                        icon = Lucide.Smile,
+                        label = "Copii",
+                        value = childCount,
+                        minValue = 0,
+                        onDecrement = { onChildCountChange((childCount - 1).coerceAtLeast(0)) },
+                        onIncrement = { onChildCountChange((childCount + 1).coerceAtMost(10)) }
+                    )
+                }
+            }
+
+            StatusPill(
+                text = "${TrailPartyComposition(adults = adultCount, children = childCount).summaryRo} · Gear calculat automat",
+                color = AccentGreen
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                SecondaryButton(
+                    text = "Cancel",
+                    onClick = onDismiss,
+                    modifier = Modifier.weight(1f)
                 )
-                Text(
-                    text = value.toString(),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                StepperIconButton(
-                    icon = Icons.Default.Add,
-                    enabled = true,
-                    onClick = onIncrement
+                PrimaryButton(
+                    text = "Confirm plan",
+                    onClick = onConfirm,
+                    icon = Lucide.Check,
+                    modifier = Modifier.weight(1f)
                 )
             }
         }
@@ -1923,31 +1956,51 @@ private fun CompactCounterCard(
 }
 
 @Composable
-private fun StepperIconButton(
+private fun PartyCountCard(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
-    enabled: Boolean,
-    onClick: () -> Unit
+    label: String,
+    value: Int,
+    minValue: Int,
+    onDecrement: () -> Unit,
+    onIncrement: () -> Unit
 ) {
-    Surface(
-        shape = CircleShape,
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = if (enabled) 0.9f else 0.55f)
+    ScoutyCard(
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp)
     ) {
-        IconButton(
-            onClick = onClick,
-            enabled = enabled,
-            modifier = Modifier.size(32.dp)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = if (enabled) 0.84f else 0.34f)
+            CategoryIconTile(icon = icon, color = AccentGreen, size = 28.dp, iconSize = 14.dp)
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium,
+                color = TextSecondary
             )
         }
+        Spacer(Modifier.height(10.dp))
+        QuantityStepper(
+            value = value,
+            minValue = minValue,
+            maxValue = 12,
+            decrementIcon = Lucide.Minus,
+            incrementIcon = Lucide.Plus,
+            onDecrement = onDecrement,
+            onIncrement = onIncrement,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
 private fun formatTrailSetupDate(epochMillis: Long): String =
     SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date(epochMillis))
+
+private fun formatTrailSetupWeekday(epochMillis: Long): String =
+    SimpleDateFormat("EEEE", Locale.getDefault()).format(Date(epochMillis))
+        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+
 
 @Composable
 private fun RouteSuggestionItem(
@@ -2008,7 +2061,7 @@ private fun RouteSuggestionItem(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Route,
+                        imageVector = Lucide.Route,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary
                     )
@@ -2022,7 +2075,7 @@ private fun RouteSuggestionItem(
                 Text(
                     text = entry.displayTitle ?: suggestion.localCode,
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -2066,37 +2119,8 @@ private fun DifficultyBadge(difficulty: TrailDifficulty) {
             text = difficulty.name,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
             style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Medium
         )
-    }
-}
-
-@Composable
-private fun InfoChip(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    label: String,
-    modifier: Modifier = Modifier
-) {
-    Surface(
-        shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-        modifier = modifier.height(40.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(icon, contentDescription = null)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelLarge,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
     }
 }
 

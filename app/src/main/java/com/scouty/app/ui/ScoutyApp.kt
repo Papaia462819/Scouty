@@ -1,60 +1,38 @@
 package com.scouty.app.ui
 
-import androidx.annotation.StringRes
 import android.app.Application
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Chat
-import androidx.compose.material.icons.filled.Checklist
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.composables.icons.lucide.House
+import com.composables.icons.lucide.ListChecks
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Map
+import com.composables.icons.lucide.MessageSquare
+import com.composables.icons.lucide.TriangleAlert
+import com.composables.icons.lucide.User
+import com.scouty.app.R
+import com.scouty.app.assistant.ui.AssistantViewModel
 import com.scouty.app.profile.OnboardingDraft
 import com.scouty.app.profile.ProfileViewModel
 import com.scouty.app.profile.SessionStage
 import com.scouty.app.profile.toOnboardingDraft
-import com.scouty.app.assistant.ui.AssistantViewModel
-import com.scouty.app.R
+import com.scouty.app.ui.components.ScoutyBottomBar
+import com.scouty.app.ui.components.ScoutyNavItem
+import com.scouty.app.ui.models.NearbyGuideType
 import com.scouty.app.ui.screens.AuthScreen
 import com.scouty.app.ui.screens.ChatScreen
 import com.scouty.app.ui.screens.GearScreen
@@ -64,19 +42,13 @@ import com.scouty.app.ui.screens.ProfileFlowMode
 import com.scouty.app.ui.screens.ProfileOnboardingScreen
 import com.scouty.app.ui.screens.ProfileScreen
 import com.scouty.app.ui.screens.SosScreen
-import com.scouty.app.ui.models.NearbyGuideType
 
-private enum class TopDestination(
-    @StringRes val labelRes: Int,
-    val icon: ImageVector,
-) {
-    HOME(R.string.nav_home, Icons.Filled.Home),
-    MAP(R.string.nav_map, Icons.Filled.Map),
-    CHAT(R.string.nav_chat, Icons.AutoMirrored.Filled.Chat),
-    SOS(R.string.nav_sos, Icons.Filled.Warning),
-    GEAR(R.string.nav_gear, Icons.Filled.Checklist),
-    PROFILE(R.string.nav_profile, Icons.Filled.Person),
-}
+private const val ROUTE_HOME = "home"
+private const val ROUTE_MAP = "map"
+private const val ROUTE_CHAT = "chat"
+private const val ROUTE_SOS = "sos"
+private const val ROUTE_GEAR = "gear"
+private const val ROUTE_PROFILE = "profile"
 
 @Composable
 fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
@@ -135,11 +107,10 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
             )
         }
     )
-    var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
+    var selectedRoute by rememberSaveable { mutableStateOf(ROUTE_HOME) }
     val uiState by mainViewModel.uiState.collectAsState()
     val mapSessionState by mainViewModel.mapSessionState.collectAsState()
     val assistantUiState by assistantViewModel.uiState.collectAsState()
-    val destination = TopDestination.entries[selectedIndex]
 
     LaunchedEffect(mapSessionState.lastCompletedTrail?.id) {
         mapSessionState.lastCompletedTrail?.let { completedTrail ->
@@ -148,87 +119,64 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
         }
     }
 
+    val navItems = listOf(
+        ScoutyNavItem(ROUTE_HOME, stringResource(R.string.nav_home), Lucide.House),
+        ScoutyNavItem(ROUTE_MAP, stringResource(R.string.nav_map), Lucide.Map),
+        ScoutyNavItem(ROUTE_CHAT, stringResource(R.string.nav_chat), Lucide.MessageSquare),
+        ScoutyNavItem(ROUTE_SOS, stringResource(R.string.nav_sos), Lucide.TriangleAlert, isDanger = true),
+        ScoutyNavItem(ROUTE_GEAR, stringResource(R.string.nav_gear), Lucide.ListChecks),
+        ScoutyNavItem(ROUTE_PROFILE, stringResource(R.string.nav_profile), Lucide.User),
+    )
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
-            Surface(color = Color.Transparent) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.background)
-                ) {
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .navigationBarsPadding(),
-                        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
-                        color = MaterialTheme.colorScheme.surface,
-                        border = androidx.compose.foundation.BorderStroke(
-                            1.dp,
-                            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)
-                        ),
-                        shadowElevation = 18.dp
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 8.dp, vertical = 8.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            TopDestination.entries.forEachIndexed { index, item ->
-                                BottomBarItem(
-                                    modifier = Modifier.weight(1f),
-                                    selected = selectedIndex == index,
-                                    icon = item.icon,
-                                    label = stringResource(id = item.labelRes),
-                                    onClick = { selectedIndex = index }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            ScoutyBottomBar(
+                items = navItems,
+                selectedKey = selectedRoute,
+                onSelect = { selectedRoute = it },
+            )
         },
     ) { innerPadding ->
         Surface(modifier = Modifier.fillMaxSize()) {
-            when (destination) {
-                TopDestination.HOME -> HomeScreen(
+            when (selectedRoute) {
+                ROUTE_HOME -> HomeScreen(
                     status = uiState,
                     contentPadding = innerPadding,
                     onActiveTrailClick = {
                         if (uiState.activeTrail != null) {
                             mainViewModel.focusActiveTrailOnMap()
-                            selectedIndex = TopDestination.MAP.ordinal
+                            selectedRoute = ROUTE_MAP
                         }
                     },
                     onShelterClick = {
                         mainViewModel.requestNearbyGuide(NearbyGuideType.SHELTER)
-                        selectedIndex = TopDestination.MAP.ordinal
+                        selectedRoute = ROUTE_MAP
                     },
                     onWaterClick = {
                         mainViewModel.requestNearbyGuide(NearbyGuideType.WATER)
-                        selectedIndex = TopDestination.MAP.ordinal
+                        selectedRoute = ROUTE_MAP
                     }
                 )
-                TopDestination.MAP -> MapScreen(
+                ROUTE_MAP -> MapScreen(
                     status = uiState,
                     contentPadding = innerPadding,
                     viewModel = mainViewModel
                 )
-                TopDestination.CHAT -> ChatScreen(
+                ROUTE_CHAT -> ChatScreen(
                     uiState = assistantUiState,
                     contentPadding = innerPadding,
                     onInputChange = assistantViewModel::updateDraft,
                     onSend = assistantViewModel::sendCurrentDraft,
                     onPromptSelected = assistantViewModel::sendPrompt
                 )
-                TopDestination.SOS -> SosScreen(contentPadding = innerPadding)
-                TopDestination.GEAR -> GearScreen(
-                    status = uiState, 
-                    onToggleItem = { mainViewModel.toggleGearItem(it) }, 
+                ROUTE_SOS -> SosScreen(contentPadding = innerPadding)
+                ROUTE_GEAR -> GearScreen(
+                    status = uiState,
+                    onToggleItem = { mainViewModel.toggleGearItem(it) },
                     contentPadding = innerPadding
                 )
-                TopDestination.PROFILE -> ProfileScreen(
+                ROUTE_PROFILE -> ProfileScreen(
                     contentPadding = innerPadding,
                     profile = currentProfile,
                     status = uiState,
@@ -240,46 +188,5 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun BottomBarItem(
-    modifier: Modifier = Modifier,
-    selected: Boolean,
-    icon: ImageVector,
-    label: String,
-    onClick: () -> Unit,
-) {
-    val activeColor = MaterialTheme.colorScheme.primary
-    val inactiveColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.78f)
-
-    Column(
-        modifier = modifier
-            .clip(RoundedCornerShape(18.dp))
-            .clickable(onClick = onClick)
-            .padding(vertical = 4.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = label,
-            modifier = Modifier.size(20.dp),
-            tint = if (selected) activeColor else inactiveColor
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = label,
-            color = if (selected) activeColor else inactiveColor,
-            style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium
-        )
-        Spacer(modifier = Modifier.height(3.dp))
-        Box(
-            modifier = Modifier
-                .size(4.dp)
-                .clip(CircleShape)
-                .background(if (selected) activeColor else Color.Transparent)
-        )
     }
 }

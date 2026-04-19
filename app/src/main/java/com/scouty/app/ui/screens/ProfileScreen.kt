@@ -4,9 +4,10 @@ package com.scouty.app.ui.screens
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -27,33 +28,28 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Checklist
-import androidx.compose.material.icons.filled.Cloud
-import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.HealthAndSafety
-import androidx.compose.material.icons.filled.Route
-import androidx.compose.material.icons.filled.Terrain
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import com.composables.icons.lucide.ChevronLeft
+import com.composables.icons.lucide.ChevronRight
+import com.composables.icons.lucide.Cloud
+import com.composables.icons.lucide.Compass
+import com.composables.icons.lucide.ListChecks
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Mountain
+import com.composables.icons.lucide.Route
+import com.composables.icons.lucide.ShieldPlus
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,8 +66,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.scouty.app.profile.ProfileAssessmentEngine
@@ -80,20 +79,30 @@ import com.scouty.app.profile.ProfileTrailRecord
 import com.scouty.app.profile.ProfileTrailOutcome
 import com.scouty.app.profile.TrailStatsSummary
 import com.scouty.app.profile.UserProfile
+import com.scouty.app.ui.components.DangerButton
+import com.scouty.app.ui.components.PrimaryButton
 import com.scouty.app.ui.components.RouteRemoteImage
-import com.scouty.app.ui.components.ScoutyPanel
-import com.scouty.app.ui.components.SectionHeader
+import com.scouty.app.ui.components.ScoutyCard
+import com.scouty.app.ui.components.ScoutySectionHeader
 import com.scouty.app.ui.components.StatusChip
+import com.scouty.app.ui.components.StatusPill
 import com.scouty.app.ui.models.HomeStatus
-import com.scouty.app.ui.theme.PrimaryGreen
-import com.scouty.app.ui.theme.StatusAmber
-import com.scouty.app.ui.theme.StatusBlue
-import com.scouty.app.ui.theme.StatusOrange
+import com.scouty.app.ui.theme.AccentGreen
+import com.scouty.app.ui.theme.BgSurface
+import com.scouty.app.ui.theme.BgSurfaceRaised
+import com.scouty.app.ui.theme.BorderSubtle
+import com.scouty.app.ui.theme.Info
+import com.scouty.app.ui.theme.TextPrimary
+import com.scouty.app.ui.theme.TextSecondary
+import com.scouty.app.ui.theme.TextTertiary
+import com.scouty.app.ui.theme.Warning
+import androidx.compose.foundation.border
+import androidx.compose.foundation.BorderStroke
+import com.composables.icons.lucide.Lock
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 @Composable
@@ -144,77 +153,98 @@ fun ProfileScreen(
         ) {
             Text(
                 text = "Profile",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Medium,
+                color = TextPrimary
             )
-            TextButton(onClick = onEditProfile) {
-                Text(text = "Edit", color = MaterialTheme.colorScheme.primary)
-            }
+            Text(
+                text = "Edit",
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Medium,
+                color = AccentGreen,
+                modifier = Modifier
+                    .clickable(onClick = onEditProfile)
+                    .padding(8.dp)
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        ScoutyPanel(
+        ScoutyCard(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(28.dp),
-            startColor = MaterialTheme.colorScheme.surface,
-            endColor = MaterialTheme.colorScheme.surfaceVariant
+            shape = RoundedCornerShape(18.dp),
+            contentPadding = PaddingValues(16.dp),
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                AvatarBadge(avatarId = profile.avatarId, size = 72.dp)
-                Spacer(modifier = Modifier.width(16.dp))
-                Column(
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = profile.displayName,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = levelProgress.level.title,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        text = "${profile.homeRegion.ifBlank { "Home region not set" }} · Member since $memberSince",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    LinearProgressIndicator(
-                        progress = { levelProgress.progressFraction },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(8.dp)
-                            .clip(RoundedCornerShape(999.dp)),
-                        color = MaterialTheme.colorScheme.primary,
-                        trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.28f)
-                    )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    AvatarBadge(avatarId = profile.avatarId, size = 64.dp)
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Text(
-                            text = if (levelProgress.pointsRequired > 0) {
-                                "${levelProgress.currentPoints} / ${levelProgress.pointsRequired} pts"
-                            } else {
-                                "${levelProgress.totalPoints} pts"
-                            },
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            text = profile.displayName,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Medium,
+                            color = TextPrimary,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Text(
-                            text = levelProgress.nextLevel?.let { "${levelProgress.pointsRemaining} to ${it.title}" }
-                                ?: "Top tier reached",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.primary
+                            text = profile.homeRegion.ifBlank { "Home region not set" },
+                            style = MaterialTheme.typography.bodySmall,
+                            color = TextSecondary,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Text(
+                            text = "Member since $memberSince",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = TextTertiary
                         )
                     }
                 }
+                StatusPill(
+                    text = levelProgress.level.title.uppercase(Locale.ENGLISH),
+                    color = AccentGreen
+                )
+            }
+            Spacer(modifier = Modifier.height(14.dp))
+            LinearProgressIndicator(
+                progress = { levelProgress.progressFraction },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(999.dp)),
+                color = AccentGreen,
+                trackColor = BorderSubtle
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = if (levelProgress.pointsRequired > 0) {
+                        "${levelProgress.currentPoints} / ${levelProgress.pointsRequired} pts"
+                    } else {
+                        "${levelProgress.totalPoints} pts"
+                    },
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextSecondary
+                )
+                Text(
+                    text = levelProgress.nextLevel?.let { "${levelProgress.pointsRemaining} to ${it.title}" }
+                        ?: "Top tier reached",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = AccentGreen
+                )
             }
         }
 
@@ -228,25 +258,25 @@ fun ProfileScreen(
                 modifier = Modifier.weight(1f),
                 value = profileStats.completedHikes.toString(),
                 label = "Trails",
-                valueColor = PrimaryGreen
+                valueColor = AccentGreen
             )
             ProfileStatCard(
                 modifier = Modifier.weight(1f),
                 value = formatDistanceStat(profileStats.totalDistanceKm),
                 label = "km",
-                valueColor = StatusBlue
+                valueColor = Info
             )
             ProfileStatCard(
                 modifier = Modifier.weight(1f),
                 value = formatElevationStat(profileStats.totalElevationGainM),
                 label = "m gained",
-                valueColor = StatusOrange
+                valueColor = Warning
             )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        SectionHeader(title = "Performance")
+        ScoutySectionHeader(title = "PERFORMANCE")
         Spacer(modifier = Modifier.height(12.dp))
         PerformanceChartCard(
             modifier = Modifier.fillMaxWidth(),
@@ -268,7 +298,7 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        SectionHeader(title = "History")
+        ScoutySectionHeader(title = "HISTORY")
         Spacer(modifier = Modifier.height(12.dp))
         HistoryCard(
             modifier = Modifier.fillMaxWidth(),
@@ -280,7 +310,7 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        SectionHeader(title = "Achievements")
+        ScoutySectionHeader(title = "ACHIEVEMENTS")
         Spacer(modifier = Modifier.height(12.dp))
         MiniTileCarousel(
             modifier = Modifier.fillMaxWidth(),
@@ -291,23 +321,18 @@ fun ProfileScreen(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Button(
+            PrimaryButton(
+                text = "Edit profile",
                 onClick = onEditProfile,
                 modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(18.dp)
-            ) {
-                Text(text = "Edit Profile", fontWeight = FontWeight.Bold)
-            }
-            Button(
+            )
+            DangerButton(
+                text = "Sign out",
                 onClick = onSignOut,
                 modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(18.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2A1716))
-            ) {
-                Text(text = "Sign Out", fontWeight = FontWeight.Bold, color = Color(0xFFFFC8C0))
-            }
+            )
         }
 
         Spacer(modifier = Modifier.height(28.dp))
@@ -325,11 +350,20 @@ private fun PerformanceChartCard(
     onPreviousInterval: () -> Unit,
     onNextInterval: () -> Unit
 ) {
-    val series = snapshot.points
-    val maxValue = series.maxOfOrNull { it.value }?.takeIf { it > 0.0 } ?: 1.0
+    val chartFrame = remember(period, metric, snapshot) {
+        PerformanceChartFrame(
+            period = period,
+            metric = metric,
+            snapshot = snapshot
+        )
+    }
 
-    Surface(
+    Column(
         modifier = modifier
+            .clip(RoundedCornerShape(14.dp))
+            .background(BgSurface)
+            .border(0.5.dp, BorderSubtle, RoundedCornerShape(14.dp))
+            .padding(horizontal = 14.dp, vertical = 14.dp)
             .pointerInput(period, snapshot.intervalKey) {
                 var dragDelta = 0f
                 detectHorizontalDragGestures(
@@ -351,128 +385,204 @@ private fun PerformanceChartCard(
                     onDragCancel = { dragDelta = 0f }
                 )
             },
-        shape = RoundedCornerShape(30.dp),
-        color = MaterialTheme.colorScheme.surface,
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.28f)
-        )
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
-            ) {
-                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text(
-                        text = snapshot.summaryLabel,
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = snapshot.summaryValue,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = snapshot.summaryCaption,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+            Row(verticalAlignment = Alignment.Bottom) {
                 Text(
-                    text = snapshot.intervalLabel,
+                    text = snapshot.summaryValue,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = TextPrimary,
+                    letterSpacing = (-0.5).sp,
+                    lineHeight = 30.sp
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = snapshot.summaryCaption,
                     style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1
+                    color = TextSecondary,
+                    modifier = Modifier.padding(bottom = 4.dp)
                 )
             }
+            Text(
+                text = snapshot.intervalLabel,
+                style = MaterialTheme.typography.labelSmall,
+                color = TextTertiary,
+                maxLines = 1
+            )
+        }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                listOf(
-                    ProfileChartPeriod.DAY,
-                    ProfileChartPeriod.WEEK,
-                    ProfileChartPeriod.MONTH,
-                    ProfileChartPeriod.YEAR
-                ).forEach { option ->
-                    ProfileChartPill(
-                        modifier = Modifier.weight(1f),
-                        label = option.title,
-                        selected = option == period,
-                        accentColor = metric.accentColor,
-                        onClick = { onPeriodChange(option) }
-                    )
-                }
-            }
+        SegmentedRow(
+            options = listOf(
+                ProfileChartPeriod.DAY,
+                ProfileChartPeriod.WEEK,
+                ProfileChartPeriod.MONTH,
+                ProfileChartPeriod.YEAR
+            ),
+            selected = period,
+            accentColor = metric.accentColor,
+            onSelect = onPeriodChange,
+            labelFor = { it.title }
+        )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                listOf(
-                    ProfileChartMetric.KILOMETERS,
-                    ProfileChartMetric.TRAILS,
-                    ProfileChartMetric.ELEVATION
-                ).forEach { option ->
-                    ProfileChartPill(
-                        modifier = Modifier.weight(1f),
-                        label = option.title,
-                        selected = option == metric,
-                        accentColor = option.accentColor,
-                        onClick = { onMetricChange(option) }
-                    )
-                }
-            }
+        SegmentedRow(
+            options = listOf(
+                ProfileChartMetric.KILOMETERS,
+                ProfileChartMetric.TRAILS,
+                ProfileChartMetric.ELEVATION
+            ),
+            selected = metric,
+            accentColor = metric.accentColor,
+            onSelect = onMetricChange,
+            labelFor = { it.title }
+        )
 
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(230.dp),
-                shape = RoundedCornerShape(24.dp),
-                color = MaterialTheme.colorScheme.background.copy(alpha = 0.54f)
-            ) {
-                if (series.all { it.value <= 0.0 }) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(20.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "No activity in this interval.",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            lineHeight = 20.sp
-                        )
-                    }
-                } else {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 14.dp, vertical = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.Bottom
-                    ) {
-                        series.forEachIndexed { index, point ->
-                            AnimatedPerformanceBar(
-                                modifier = Modifier.weight(1f),
-                                point = point,
-                                metric = metric,
-                                maxValue = maxValue,
-                                animationKey = "${period.name}:${metric.name}:${snapshot.intervalKey}:${series.joinToString { it.value.toString() }}",
-                                index = index
-                            )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(BgSurfaceRaised)
+        ) {
+            AnimatedContent(
+                targetState = chartFrame,
+                modifier = Modifier.fillMaxSize(),
+                transitionSpec = {
+                    val sameChartMode = targetState.period == initialState.period &&
+                        targetState.metric == initialState.metric
+                    val targetStart = targetState.snapshot.intervalStartEpochMillis
+                    val initialStart = initialState.snapshot.intervalStartEpochMillis
+                    val isIntervalSwipe = sameChartMode && targetStart != initialStart
+
+                    if (isIntervalSwipe) {
+                        val slideDistance: (Int) -> Int = { fullWidth -> fullWidth / 3 }
+                        val incomingOffset = if (targetStart < initialStart) {
+                            { fullWidth: Int -> -slideDistance(fullWidth) }
+                        } else {
+                            { fullWidth: Int -> slideDistance(fullWidth) }
                         }
+                        val outgoingOffset = if (targetStart < initialStart) {
+                            { fullWidth: Int -> slideDistance(fullWidth) }
+                        } else {
+                            { fullWidth: Int -> -slideDistance(fullWidth) }
+                        }
+
+                        (
+                            slideInHorizontally(
+                                animationSpec = tween(
+                                    durationMillis = 340,
+                                    easing = FastOutSlowInEasing
+                                ),
+                                initialOffsetX = incomingOffset
+                            ) + fadeIn(animationSpec = tween(durationMillis = 160))
+                        ) togetherWith (
+                            slideOutHorizontally(
+                                animationSpec = tween(
+                                    durationMillis = 300,
+                                    easing = FastOutSlowInEasing
+                                ),
+                                targetOffsetX = outgoingOffset
+                            ) + fadeOut(animationSpec = tween(durationMillis = 140))
+                        ) using SizeTransform(clip = false)
+                    } else {
+                        fadeIn(animationSpec = tween(durationMillis = 140)) togetherWith
+                            fadeOut(animationSpec = tween(durationMillis = 90)) using SizeTransform(clip = false)
                     }
+                },
+                label = "performance_chart_transition"
+            ) { frame ->
+                PerformanceChartPlot(
+                    modifier = Modifier.fillMaxSize(),
+                    series = frame.snapshot.points,
+                    metric = frame.metric
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun <T> SegmentedRow(
+    options: List<T>,
+    selected: T,
+    accentColor: Color,
+    onSelect: (T) -> Unit,
+    labelFor: (T) -> String,
+    modifier: Modifier = Modifier
+) {
+    val itemSpacing = 3.dp
+    val optionCount = options.size.coerceAtLeast(1)
+    val selectedIndex = options.indexOf(selected).coerceAtLeast(0)
+    val density = LocalDensity.current
+    val itemSpacingPx = with(density) { itemSpacing.roundToPx() }
+    var contentWidthPx by remember { mutableIntStateOf(0) }
+    val segmentWidthPx = ((contentWidthPx - itemSpacingPx * (optionCount - 1)) / optionCount.toFloat())
+        .coerceAtLeast(0f)
+    val indicatorOffsetPx by animateFloatAsState(
+        targetValue = (segmentWidthPx + itemSpacingPx) * selectedIndex,
+        animationSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing),
+        label = "segmented_indicator_offset"
+    )
+    val indicatorColor by animateColorAsState(
+        targetValue = accentColor.copy(alpha = 0.14f),
+        animationSpec = tween(durationMillis = 180),
+        label = "segmented_indicator_color"
+    )
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(36.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(BgSurfaceRaised)
+            .padding(3.dp)
+            .onSizeChanged { contentWidthPx = it.width }
+    ) {
+        if (segmentWidthPx > 0f) {
+            Box(
+                modifier = Modifier
+                    .offset { IntOffset(indicatorOffsetPx.roundToInt(), 0) }
+                    .width(with(density) { segmentWidthPx.toDp() })
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(indicatorColor)
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.spacedBy(itemSpacing)
+        ) {
+            options.forEach { option ->
+                val isSelected = option == selected
+                val labelColor by animateColorAsState(
+                    targetValue = if (isSelected) accentColor else TextSecondary,
+                    animationSpec = tween(durationMillis = 180),
+                    label = "segmented_label_color"
+                )
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable {
+                            if (option != selected) {
+                                onSelect(option)
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = labelFor(option),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = labelColor,
+                        maxLines = 1
+                    )
                 }
             }
         }
@@ -480,32 +590,42 @@ private fun PerformanceChartCard(
 }
 
 @Composable
-private fun ProfileChartPill(
+private fun PerformanceChartPlot(
     modifier: Modifier = Modifier,
-    label: String,
-    selected: Boolean,
-    accentColor: Color,
-    onClick: () -> Unit
+    series: List<ProfilePerformancePoint>,
+    metric: ProfileChartMetric
 ) {
-    Surface(
-        modifier = modifier
-            .height(38.dp)
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(999.dp),
-        color = if (selected) accentColor.copy(alpha = 0.16f) else MaterialTheme.colorScheme.surface.copy(alpha = 0.62f),
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            if (selected) accentColor.copy(alpha = 0.42f) else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.28f)
-        )
-    ) {
-        Box(contentAlignment = Alignment.Center) {
+    val maxValue = series.maxOfOrNull { it.value }?.takeIf { it > 0.0 } ?: 1.0
+
+    if (series.all { it.value <= 0.0 }) {
+        Box(
+            modifier = modifier.padding(20.dp),
+            contentAlignment = Alignment.Center
+        ) {
             Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Bold,
-                color = if (selected) accentColor else MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1
+                text = "No activity in this interval.",
+                style = MaterialTheme.typography.bodySmall,
+                color = TextSecondary,
+                lineHeight = 18.sp
             )
+        }
+    } else {
+        Row(
+            modifier = modifier.padding(horizontal = 12.dp, vertical = 14.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            series.forEachIndexed { index, point ->
+                AnimatedPerformanceBar(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    point = point,
+                    metric = metric,
+                    maxValue = maxValue,
+                    index = index
+                )
+            }
         }
     }
 }
@@ -516,23 +636,18 @@ private fun AnimatedPerformanceBar(
     point: ProfilePerformancePoint,
     metric: ProfileChartMetric,
     maxValue: Double,
-    animationKey: String,
     index: Int
 ) {
-    val animatedFraction = remember(animationKey, point.label) { Animatable(0f) }
     val targetFraction = (point.value / maxValue).toFloat().coerceIn(0.04f, 1f)
-
-    LaunchedEffect(animationKey, point.value) {
-        animatedFraction.snapTo(0f)
-        delay(index * 42L)
-        animatedFraction.animateTo(
-            targetValue = if (point.value > 0.0) targetFraction else 0f,
-            animationSpec = tween(
-                durationMillis = 680,
-                easing = FastOutSlowInEasing
-            )
-        )
-    }
+    val animatedFraction by animateFloatAsState(
+        targetValue = if (point.value > 0.0) targetFraction else 0f,
+        animationSpec = tween(
+            durationMillis = 420,
+            delayMillis = index * 18,
+            easing = FastOutSlowInEasing
+        ),
+        label = "performance_bar_height"
+    )
 
     Column(
         modifier = modifier.fillMaxHeight(),
@@ -555,7 +670,7 @@ private fun AnimatedPerformanceBar(
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.72f)
-                    .fillMaxHeight(animatedFraction.value)
+                    .fillMaxHeight(animatedFraction)
                     .clip(RoundedCornerShape(topStart = 14.dp, topEnd = 14.dp, bottomStart = 6.dp, bottomEnd = 6.dp))
                     .background(
                         Brush.verticalGradient(
@@ -590,37 +705,13 @@ private fun HistoryCard(
     val canGoNext = selectedIndex < entries.lastIndex
 
     Column(modifier = modifier) {
-        if (selectedEntry != null) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "${selectedIndex + 1} / ${entries.size}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    SubtleArrowButton(
-                        icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                        enabled = canGoPrevious,
-                        onClick = onSelectPrevious
-                    )
-                    SubtleArrowButton(
-                        icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        enabled = canGoNext,
-                        onClick = onSelectNext
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-        }
-
-        Surface(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(248.dp)
+                .height(240.dp)
+                .clip(RoundedCornerShape(14.dp))
+                .background(BgSurface)
+                .border(0.5.dp, BorderSubtle, RoundedCornerShape(14.dp))
                 .pointerInput(entries.size, selectedIndex) {
                     if (entries.size <= 1) return@pointerInput
                     var dragDelta = 0f
@@ -643,13 +734,7 @@ private fun HistoryCard(
                         onDragCancel = { dragDelta = 0f }
                     )
                 }
-                .animateContentSize(),
-            shape = RoundedCornerShape(28.dp),
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            border = androidx.compose.foundation.BorderStroke(
-                1.dp,
-                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.72f)
-            )
+                .animateContentSize()
         ) {
             AnimatedContent(
                 targetState = selectedIndex,
@@ -669,26 +754,45 @@ private fun HistoryCard(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(
-                                Brush.linearGradient(
-                                    listOf(
-                                        MaterialTheme.colorScheme.surface,
-                                        MaterialTheme.colorScheme.surfaceVariant
-                                    )
-                                )
-                            )
                             .padding(20.dp),
                         contentAlignment = Alignment.BottomStart
                     ) {
                         Text(
                             text = "Trails finished from the map will land here.",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            lineHeight = 22.sp
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = TextSecondary,
+                            lineHeight = 20.sp
                         )
                     }
                 } else {
                     HistoryEntryContent(entry = entry)
+                }
+            }
+        }
+
+        if (selectedEntry != null && entries.size > 1) {
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "${selectedIndex + 1} / ${entries.size}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextTertiary
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    SubtleArrowButton(
+                        icon = Lucide.ChevronLeft,
+                        enabled = canGoPrevious,
+                        onClick = onSelectPrevious
+                    )
+                    SubtleArrowButton(
+                        icon = Lucide.ChevronRight,
+                        enabled = canGoNext,
+                        onClick = onSelectNext
+                    )
                 }
             }
         }
@@ -701,15 +805,20 @@ private fun SubtleArrowButton(
     enabled: Boolean,
     onClick: () -> Unit
 ) {
-    IconButton(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = Modifier.size(28.dp)
+    Box(
+        modifier = Modifier
+            .size(28.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(BgSurface)
+            .border(0.5.dp, BorderSubtle, RoundedCornerShape(8.dp))
+            .clickable(enabled = enabled, onClick = onClick),
+        contentAlignment = Alignment.Center
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = if (enabled) 0.72f else 0.24f)
+            tint = if (enabled) TextSecondary else TextTertiary.copy(alpha = 0.4f),
+            modifier = Modifier.size(14.dp)
         )
     }
 }
@@ -721,31 +830,27 @@ private fun ProfileStatCard(
     label: String,
     valueColor: Color
 ) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(18.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.42f)
-        )
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(14.dp))
+            .background(valueColor.copy(alpha = 0.08f))
+            .border(0.5.dp, valueColor.copy(alpha = 0.18f), RoundedCornerShape(14.dp))
+            .padding(horizontal = 12.dp, vertical = 14.dp),
+        horizontalAlignment = Alignment.Start
     ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = value,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = valueColor
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        Text(
+            text = value,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Medium,
+            color = valueColor,
+            letterSpacing = (-0.5).sp
+        )
+        Spacer(modifier = Modifier.height(2.dp))
+        Text(
+            text = label.uppercase(Locale.ENGLISH),
+            style = MaterialTheme.typography.labelSmall,
+            color = TextTertiary
+        )
     }
 }
 
@@ -777,7 +882,7 @@ private fun HistoryEntryContent(entry: ProfileTrailRecord) {
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.Route,
+                    imageVector = Lucide.Route,
                     contentDescription = null,
                     modifier = Modifier.size(34.dp),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
@@ -817,7 +922,7 @@ private fun HistoryEntryContent(entry: ProfileTrailRecord) {
                 StatusChip(
                     text = if (entry.outcome == ProfileTrailOutcome.COMPLETED) "Finished" else "Ended early",
                     containerColor = if (entry.outcome == ProfileTrailOutcome.COMPLETED) {
-                        PrimaryGreen.copy(alpha = 0.2f)
+                        AccentGreen.copy(alpha = 0.2f)
                     } else {
                         Color.White.copy(alpha = 0.14f)
                     },
@@ -828,7 +933,7 @@ private fun HistoryEntryContent(entry: ProfileTrailRecord) {
             Text(
                 text = entry.name,
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
                 color = Color.White,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
@@ -866,7 +971,7 @@ private fun HistoryEntryContent(entry: ProfileTrailRecord) {
             Text(
                 text = if (entry.earnedPoints > 0) "+${entry.earnedPoints} pts" else "No XP",
                 style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
                 color = if (entry.earnedPoints > 0) {
                     MaterialTheme.colorScheme.primary
                 } else {
@@ -884,67 +989,107 @@ private fun MiniTileCarousel(
 ) {
     LazyRow(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        contentPadding = PaddingValues(horizontal = 2.dp)
     ) {
         items(tiles) { tile ->
             CompactProfileTile(tile = tile)
+        }
+        item {
+            LockedAchievementTile()
         }
     }
 }
 
 @Composable
 private fun CompactProfileTile(tile: ProfileMiniTileUi) {
-    Surface(
+    val bg = if (tile.isHighlighted) tile.accentColor.copy(alpha = 0.08f) else BgSurface
+    val border = if (tile.isHighlighted) tile.accentColor.copy(alpha = 0.22f) else BorderSubtle
+    Column(
         modifier = Modifier
-            .width(108.dp)
-            .height(132.dp),
-        shape = RoundedCornerShape(22.dp),
-        color = if (tile.isHighlighted) {
-            tile.accentColor.copy(alpha = 0.12f)
-        } else {
-            MaterialTheme.colorScheme.surfaceVariant
-        },
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            if (tile.isHighlighted) {
-                tile.accentColor.copy(alpha = 0.26f)
-            } else {
-                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.42f)
-            }
-        )
+            .width(112.dp)
+            .height(128.dp)
+            .clip(RoundedCornerShape(14.dp))
+            .background(bg)
+            .border(0.5.dp, border, RoundedCornerShape(14.dp))
+            .padding(horizontal = 12.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 14.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+        Box(
+            modifier = Modifier
+                .size(34.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(tile.accentColor.copy(alpha = if (tile.isHighlighted) 0.18f else 0.08f)),
+            contentAlignment = Alignment.Center
         ) {
-            Surface(
-                modifier = Modifier.size(42.dp),
-                shape = RoundedCornerShape(14.dp),
-                color = tile.accentColor.copy(alpha = if (tile.isHighlighted) 0.18f else 0.1f)
-            ) {
-                Icon(
-                    imageVector = tile.icon,
-                    contentDescription = null,
-                    modifier = Modifier.padding(10.dp),
-                    tint = tile.accentColor
-                )
-            }
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    text = tile.title,
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = tile.subtitle,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = if (tile.isHighlighted) tile.accentColor else MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
+            Icon(
+                imageVector = tile.icon,
+                contentDescription = null,
+                tint = if (tile.isHighlighted) tile.accentColor else tile.accentColor.copy(alpha = 0.45f),
+                modifier = Modifier.size(16.dp)
+            )
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(
+                text = tile.title,
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Medium,
+                color = if (tile.isHighlighted) TextPrimary else TextSecondary,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = tile.subtitle.uppercase(Locale.ENGLISH),
+                style = MaterialTheme.typography.labelSmall,
+                color = if (tile.isHighlighted) tile.accentColor else TextTertiary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Composable
+private fun LockedAchievementTile() {
+    Column(
+        modifier = Modifier
+            .width(112.dp)
+            .height(128.dp)
+            .clip(RoundedCornerShape(14.dp))
+            .background(BgSurfaceRaised)
+            .border(
+                BorderStroke(0.5.dp, BorderSubtle),
+                RoundedCornerShape(14.dp)
+            )
+            .padding(horizontal = 12.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        Box(
+            modifier = Modifier
+                .size(34.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(TextTertiary.copy(alpha = 0.08f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Lucide.Lock,
+                contentDescription = null,
+                tint = TextTertiary,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(
+                text = "More soon",
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Medium,
+                color = TextSecondary
+            )
+            Text(
+                text = "LOCKED",
+                style = MaterialTheme.typography.labelSmall,
+                color = TextTertiary
+            )
         }
     }
 }
@@ -972,9 +1117,16 @@ private data class ProfilePerformancePoint(
     val value: Double
 )
 
+private data class PerformanceChartFrame(
+    val period: ProfileChartPeriod,
+    val metric: ProfileChartMetric,
+    val snapshot: ProfilePerformanceSnapshot
+)
+
 private data class ProfilePerformanceSnapshot(
     val points: List<ProfilePerformancePoint>,
     val intervalKey: String,
+    val intervalStartEpochMillis: Long,
     val intervalLabel: String,
     val summaryLabel: String,
     val summaryValue: String,
@@ -995,9 +1147,9 @@ private enum class ProfileChartMetric(
     val title: String,
     val accentColor: Color
 ) {
-    KILOMETERS("Km", StatusBlue),
-    TRAILS("Trails", PrimaryGreen),
-    ELEVATION("Elev", StatusOrange);
+    KILOMETERS("Km", Info),
+    TRAILS("Trails", AccentGreen),
+    ELEVATION("Elev", Warning);
 
     fun valueFor(entries: List<ProfileTrailRecord>): Double =
         when (this) {
@@ -1078,6 +1230,7 @@ private fun buildPerformanceSnapshot(
     return ProfilePerformanceSnapshot(
         points = points,
         intervalKey = "${period.name}:${interval.start.timeInMillis}:${interval.end.timeInMillis}",
+        intervalStartEpochMillis = interval.start.timeInMillis,
         intervalLabel = performanceIntervalLabel(interval.start, interval.end, period, intervalOffset),
         summaryLabel = if (isCurrentDay) "TOTAL" else "AVG",
         summaryValue = summaryValue,
@@ -1241,57 +1394,57 @@ private fun buildAchievements(
             title = "Route Brain",
             subtitle = "Unlocked",
             unlocked = navigationAnswer == "map_gps" || navigationAnswer == "independent",
-            icon = Icons.Default.Explore,
-            accentColor = StatusBlue
+            icon = Lucide.Compass,
+            accentColor = Info
         ),
         ProfileAchievementUi(
             title = "First Aid Ready",
             subtitle = "Unlocked",
             unlocked = firstAidAnswer == "common_issues" || firstAidAnswer == "confident",
-            icon = Icons.Default.HealthAndSafety,
-            accentColor = PrimaryGreen
+            icon = Lucide.ShieldPlus,
+            accentColor = AccentGreen
         ),
         ProfileAchievementUi(
             title = "Weatherproof",
             subtitle = "Unlocked",
             unlocked = conditionsAnswer == "three_season" || conditionsAnswer == "winter",
-            icon = Icons.Default.Cloud,
-            accentColor = StatusAmber
+            icon = Lucide.Cloud,
+            accentColor = Warning
         ),
         ProfileAchievementUi(
             title = "Gear Ritual",
             subtitle = "Unlocked",
             unlocked = gearAnswer == "checklist" || gearAnswer == "route_tuned" || gearAnswer == "locked_in",
-            icon = Icons.Default.Checklist,
-            accentColor = StatusOrange
+            icon = Lucide.ListChecks,
+            accentColor = Warning
         ),
         ProfileAchievementUi(
             title = "100 km Club",
             subtitle = if (stats.totalDistanceKm >= 100.0) "Unlocked" else "In progress",
             unlocked = stats.totalDistanceKm >= 100.0,
-            icon = Icons.Default.Route,
-            accentColor = StatusBlue
+            icon = Lucide.Route,
+            accentColor = Info
         ),
         ProfileAchievementUi(
             title = "5K Climber",
             subtitle = if (stats.totalElevationGainM >= 5_000) "Unlocked" else "In progress",
             unlocked = stats.totalElevationGainM >= 5_000,
-            icon = Icons.Default.Terrain,
-            accentColor = StatusOrange
+            icon = Lucide.Mountain,
+            accentColor = Warning
         ),
         ProfileAchievementUi(
             title = "Trail Ledger",
             subtitle = if (profile.trailHistory.isNotEmpty()) "Unlocked" else "Locked",
             unlocked = profile.trailHistory.isNotEmpty(),
-            icon = Icons.Default.Route,
-            accentColor = PrimaryGreen
+            icon = Lucide.Route,
+            accentColor = AccentGreen
         ),
         ProfileAchievementUi(
             title = "Ridge Taste",
             subtitle = if (terrainAnswer == "ridge") "Unlocked" else "Locked",
             unlocked = terrainAnswer == "ridge",
-            icon = Icons.Default.Terrain,
-            accentColor = StatusAmber
+            icon = Lucide.Mountain,
+            accentColor = Warning
         )
     )
 }
@@ -1323,10 +1476,10 @@ private fun formatHistoryDate(epochMillis: Long): String =
 
 private fun difficultyColor(difficulty: String): Color =
     when (difficulty.uppercase(Locale.getDefault())) {
-        "EASY" -> PrimaryGreen
-        "HARD" -> StatusAmber
-        "EXPERT" -> StatusOrange
-        else -> StatusBlue
+        "EASY" -> AccentGreen
+        "HARD" -> Warning
+        "EXPERT" -> Warning
+        else -> Info
     }
 
 private fun Double.formatOneDecimal(): String =

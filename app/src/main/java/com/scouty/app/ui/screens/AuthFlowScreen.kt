@@ -25,14 +25,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.Landscape
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Route
-import androidx.compose.material.icons.filled.Star
+import com.composables.icons.lucide.ArrowLeft
+import com.composables.icons.lucide.Compass
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Map
+import com.composables.icons.lucide.Mountain
+import com.composables.icons.lucide.Route
+import com.composables.icons.lucide.Sparkles
+import com.composables.icons.lucide.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -95,12 +95,12 @@ private data class AvatarOption(
 )
 
 private val profileAvatars = listOf(
-    AvatarOption("summit", "Summit", Icons.Default.Landscape, PrimaryGreen),
-    AvatarOption("compass", "Compass", Icons.Default.Explore, StatusBlue),
-    AvatarOption("route", "Route", Icons.Default.Route, StatusOrange),
-    AvatarOption("atlas", "Atlas", Icons.Default.Map, Color(0xFF7AD7C5)),
-    AvatarOption("spark", "Spark", Icons.Default.AutoAwesome, Color(0xFFFFC75A)),
-    AvatarOption("star", "Star", Icons.Default.Star, Color(0xFFFF8A65))
+    AvatarOption("summit", "Summit", Lucide.Mountain, PrimaryGreen),
+    AvatarOption("compass", "Compass", Lucide.Compass, StatusBlue),
+    AvatarOption("route", "Route", Lucide.Route, StatusOrange),
+    AvatarOption("atlas", "Atlas", Lucide.Map, Color(0xFF7AD7C5)),
+    AvatarOption("spark", "Spark", Lucide.Sparkles, Color(0xFFFFC75A)),
+    AvatarOption("star", "Star", Lucide.Star, Color(0xFFFF8A65))
 )
 
 @Composable
@@ -319,7 +319,7 @@ fun ProfileOnboardingScreen(
                     }
                 }) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        imageVector = Lucide.ArrowLeft,
                         contentDescription = "Back"
                     )
                 }

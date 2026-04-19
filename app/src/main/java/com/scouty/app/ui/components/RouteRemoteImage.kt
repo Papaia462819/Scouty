@@ -3,8 +3,6 @@ package com.scouty.app.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
+import com.composables.icons.lucide.Image
+import com.composables.icons.lucide.Lucide
 
 private const val RouteImageUserAgent = "Scouty/1.0.0 (Android image fetch; contact: Scouty app)"
 
@@ -29,7 +29,7 @@ fun RouteRemoteImage(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Crop,
-    errorIcon: ImageVector = Icons.Default.Image,
+    errorIcon: ImageVector = Lucide.Image,
     placeholderColor: Color = Color.Unspecified
 ) {
     val context = LocalContext.current

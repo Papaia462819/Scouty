@@ -1,6 +1,7 @@
 package com.scouty.app.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,26 +18,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Battery4Bar
-import androidx.compose.material.icons.filled.Cloud
-import androidx.compose.material.icons.filled.GpsFixed
-import androidx.compose.material.icons.filled.GpsOff
-import androidx.compose.material.icons.filled.House
-import androidx.compose.material.icons.filled.NorthEast
-import androidx.compose.material.icons.filled.Route
-import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.filled.Terrain
-import androidx.compose.material.icons.filled.Thunderstorm
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.filled.WaterDrop
-import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -51,17 +35,49 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.composables.icons.lucide.Bell
+import com.composables.icons.lucide.Clock
+import com.composables.icons.lucide.Cloud
+import com.composables.icons.lucide.CloudLightning
+import com.composables.icons.lucide.Crosshair
+import com.composables.icons.lucide.Droplet
+import com.composables.icons.lucide.House
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Mountain
+import com.composables.icons.lucide.Route
+import com.composables.icons.lucide.Settings
+import com.composables.icons.lucide.Sun
+import com.composables.icons.lucide.Sunset
+import com.composables.icons.lucide.TrendingUp
+import com.composables.icons.lucide.TriangleAlert
 import com.scouty.app.R
-import com.scouty.app.ui.components.QuickActionButton
+import com.scouty.app.ui.components.CategoryIconTile
+import com.scouty.app.ui.components.DifficultyBadge
+import com.scouty.app.ui.components.DifficultyLevel
 import com.scouty.app.ui.components.RouteRemoteImage
-import com.scouty.app.ui.components.ScoutyPanel
-import com.scouty.app.ui.components.SectionHeader
-import com.scouty.app.ui.components.StatusChip
+import com.scouty.app.ui.components.ScoutyCard
+import com.scouty.app.ui.components.ScoutySectionHeader
+import com.scouty.app.ui.components.StatusPill
 import com.scouty.app.ui.models.ActiveTrail
 import com.scouty.app.ui.models.ActiveTrailState
 import com.scouty.app.ui.models.HomeStatus
 import com.scouty.app.ui.models.RouteRecommendation
 import com.scouty.app.ui.models.TrailMetadataFormatter
+import com.scouty.app.ui.theme.AccentGreen
+import com.scouty.app.ui.theme.AccentGreenBg
+import com.scouty.app.ui.theme.BgSurface
+import com.scouty.app.ui.theme.BgSurfaceRaised
+import com.scouty.app.ui.theme.BorderDefault
+import com.scouty.app.ui.theme.BorderSubtle
+import com.scouty.app.ui.theme.Danger
+import com.scouty.app.ui.theme.Info
+import com.scouty.app.ui.theme.JetBrainsMonoFamily
+import com.scouty.app.ui.theme.TextMuted
+import com.scouty.app.ui.theme.TextPrimary
+import com.scouty.app.ui.theme.TextSecondary
+import com.scouty.app.ui.theme.TextTertiary
+import com.scouty.app.ui.theme.Warning
+import com.scouty.app.ui.theme.Water
 import java.util.Locale
 import kotlin.math.abs
 
@@ -71,7 +87,7 @@ fun HomeScreen(
     contentPadding: PaddingValues,
     onActiveTrailClick: () -> Unit = {},
     onShelterClick: () -> Unit = {},
-    onWaterClick: () -> Unit = {}
+    onWaterClick: () -> Unit = {},
 ) {
     val weatherSnapshot = buildWeatherSnapshot(status)
 
@@ -81,141 +97,110 @@ fun HomeScreen(
             .background(MaterialTheme.colorScheme.background)
             .padding(contentPadding)
             .padding(horizontal = 16.dp)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
     ) {
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(Modifier.height(14.dp))
         HomeHeader()
 
-        Spacer(modifier = Modifier.height(18.dp))
-
+        Spacer(Modifier.height(16.dp))
         LocationPanel(status = status)
 
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(Modifier.height(10.dp))
+        WeatherRow(status = status, snapshot = weatherSnapshot)
 
-        WeatherPanel(status = status, weatherSnapshot = weatherSnapshot)
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        SectionHeader(title = stringResource(R.string.home_active_trail), onViewAllClick = {})
-
-        Spacer(modifier = Modifier.height(12.dp))
-
+        Spacer(Modifier.height(20.dp))
+        ScoutySectionHeader(
+            title = stringResource(R.string.home_active_trail),
+            trailingText = stringResource(R.string.home_view_all),
+            trailingColor = AccentGreen,
+        )
+        Spacer(Modifier.height(10.dp))
         if (status.activeTrail != null) {
-            ActiveTrailCard(
-                trail = status.activeTrail,
-                onClick = onActiveTrailClick
-            )
+            ActiveTrailCard(trail = status.activeTrail, onClick = onActiveTrailClick)
         } else {
             EmptyTrailCard()
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(Modifier.height(20.dp))
+        ScoutySectionHeader(title = stringResource(R.string.home_quick_actions))
+        Spacer(Modifier.height(10.dp))
+        QuickActionsRow(onShelter = onShelterClick, onWater = onWaterClick)
 
-        SectionHeader(title = stringResource(R.string.home_quick_actions))
-
-        Spacer(modifier = Modifier.height(14.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            QuickActionButton(
-                modifier = Modifier.weight(1f),
-                icon = Icons.Default.Warning,
-                label = stringResource(R.string.nav_sos),
-                containerColor = Color(0xFFFF7A59),
-                onClick = {}
-            )
-            QuickActionButton(
-                modifier = Modifier.weight(1f),
-                icon = Icons.Default.House,
-                label = "Shelter",
-                containerColor = Color(0xFFFFB020),
-                onClick = onShelterClick
-            )
-            QuickActionButton(
-                modifier = Modifier.weight(1f),
-                icon = Icons.Default.WaterDrop,
-                label = "Water",
-                containerColor = Color(0xFF2ED3A6),
-                onClick = onWaterClick
-            )
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        SectionHeader(title = "Recomandate pentru tine")
-
-        Spacer(modifier = Modifier.height(12.dp))
-
+        Spacer(Modifier.height(20.dp))
+        ScoutySectionHeader(
+            title = "RECOMANDATE PENTRU TINE",
+            trailing = {
+                Text(
+                    text = if (status.routeRecommendations.isEmpty()) "—" else "${status.routeRecommendations.size} trasee",
+                    fontSize = 11.sp,
+                    color = TextTertiary,
+                )
+            },
+        )
+        Spacer(Modifier.height(10.dp))
         if (status.routeRecommendations.isEmpty()) {
             EmptyTrailCard(message = "Alege cateva preferinte in profil sau asteapta un GPS fix pentru recomandari.")
         } else {
-            status.routeRecommendations.forEach { recommendation ->
+            status.routeRecommendations.forEachIndexed { index, recommendation ->
                 RecommendedTrailCard(recommendation = recommendation)
+                if (index != status.routeRecommendations.lastIndex) {
+                    Spacer(Modifier.height(8.dp))
+                }
             }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(Modifier.height(24.dp))
     }
 }
 
 @Composable
 private fun HomeHeader() {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 2.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Surface(
-                modifier = Modifier.size(36.dp),
-                shape = RoundedCornerShape(10.dp),
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                border = androidx.compose.foundation.BorderStroke(
-                    1.dp,
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Terrain,
-                    contentDescription = null,
-                    modifier = Modifier.padding(8.dp),
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-            Spacer(modifier = Modifier.width(12.dp))
+            CategoryIconTile(icon = Lucide.Mountain, color = AccentGreen)
+            Spacer(Modifier.width(10.dp))
             Text(
                 text = "Scouty",
-                style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp),
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.headlineLarge,
+                color = TextPrimary,
             )
         }
-
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            HeaderActionButton(icon = Icons.Outlined.Notifications)
-            HeaderActionButton(icon = Icons.Outlined.Settings)
+            HeaderIconButton(icon = Lucide.Bell, showDot = false)
+            HeaderIconButton(icon = Lucide.Settings, showDot = false)
         }
     }
 }
 
 @Composable
-private fun HeaderActionButton(icon: ImageVector) {
-    Surface(
-        modifier = Modifier.size(34.dp),
-        shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surface,
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.72f)
-        )
+private fun HeaderIconButton(icon: ImageVector, showDot: Boolean) {
+    Box(
+        modifier = Modifier
+            .size(34.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(Color.Transparent)
+            .border(0.5.dp, BorderDefault, RoundedCornerShape(10.dp)),
+        contentAlignment = Alignment.Center,
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(18.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = TextSecondary,
+            modifier = Modifier.size(14.dp),
+        )
+        if (showDot) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(6.dp)
+                    .size(5.dp)
+                    .background(AccentGreen, RoundedCornerShape(50)),
             )
         }
     }
@@ -223,160 +208,106 @@ private fun HeaderActionButton(icon: ImageVector) {
 
 @Composable
 private fun LocationPanel(status: HomeStatus) {
-    val statusColors = when {
-        status.latitude == null -> Color(0xFF3A3F38) to Color(0xFFBBC3B6)
-        status.isOnline -> Color(0xFF1F5F37) to Color(0xFF51E58A)
-        else -> Color(0xFF3A2A12) to Color(0xFFFFB020)
+    val isOnline = status.isOnline && status.latitude != null
+    val statusText = when {
+        status.latitude == null -> "WAITING"
+        isOnline -> "ONLINE"
+        else -> stringResource(R.string.state_offline)
+    }
+    val statusColor = when {
+        status.latitude == null -> TextTertiary
+        isOnline -> AccentGreen
+        else -> Warning
     }
 
-    ScoutyPanel(
+    ScoutyCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
-        startColor = MaterialTheme.colorScheme.surface,
-        endColor = MaterialTheme.colorScheme.surfaceVariant
+        semantic = AccentGreen,
+        shape = RoundedCornerShape(18.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            StatusChip(
-                text = when {
-                    status.latitude == null -> "WAITING"
-                    status.isOnline -> "ONLINE"
-                    else -> stringResource(R.string.state_offline)
-                },
-                containerColor = statusColors.first,
-                contentColor = statusColors.second
-            )
+            StatusPill(text = statusText, color = statusColor, pulsing = isOnline)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    imageVector = if (status.gpsFixed) Icons.Default.GpsFixed else Icons.Default.GpsOff,
+                    imageVector = Lucide.Crosshair,
                     contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                    tint = if (status.gpsFixed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                    tint = AccentGreen,
+                    modifier = Modifier.size(11.dp),
                 )
-                Spacer(modifier = Modifier.width(6.dp))
+                Spacer(Modifier.width(5.dp))
                 Text(
-                    text = if (status.gpsFixed) stringResource(R.string.state_gps_lock) else "Searching GPS",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = if (status.gpsFixed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                    text = when {
+                        status.accuracy != null -> "GPS lock · ±${status.accuracy.toInt()}m"
+                        status.gpsFixed -> stringResource(R.string.state_gps_lock)
+                        else -> "Searching GPS"
+                    },
+                    fontSize = 11.sp,
+                    color = TextSecondary,
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(18.dp))
+        Spacer(Modifier.height(18.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.Bottom,
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = formatCoordinate(status.latitude, "N", "S"),
-                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp),
-                    fontWeight = FontWeight.Bold
+                    fontFamily = JetBrainsMonoFamily,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Medium,
+                    letterSpacing = (-0.5).sp,
+                    color = TextPrimary,
                 )
                 Text(
                     text = formatCoordinate(status.longitude, "E", "W"),
-                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp),
-                    fontWeight = FontWeight.Bold
+                    fontFamily = JetBrainsMonoFamily,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Medium,
+                    letterSpacing = (-0.5).sp,
+                    color = TextPrimary,
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(Modifier.height(6.dp))
                 Text(
-                    text = when {
-                        status.accuracy != null -> "${status.locationName} \u00B7 ±${status.accuracy.toInt()}m accuracy"
-                        else -> "Waiting for signal..."
+                    text = if (status.locationName.isNotBlank()) {
+                        "CURRENT LOCATION · ${status.locationName}"
+                    } else {
+                        "CURRENT LOCATION"
                     },
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextTertiary,
                 )
             }
 
             Column(horizontalAlignment = Alignment.End) {
-                Text(
-                    text = status.altitude?.let { String.format(Locale.US, "%,.0fm", it) } ?: "---",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    text = "altitude ASL",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun WeatherPanel(
-    status: HomeStatus,
-    weatherSnapshot: WeatherSnapshot
-) {
-    ScoutyPanel(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        startColor = MaterialTheme.colorScheme.surfaceVariant,
-        endColor = MaterialTheme.colorScheme.surface
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Surface(
-                modifier = Modifier.size(54.dp),
-                shape = RoundedCornerShape(16.dp),
-                color = Color.White.copy(alpha = 0.06f)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = weatherSnapshot.icon,
-                        contentDescription = null,
-                        modifier = Modifier.size(30.dp),
-                        tint = weatherSnapshot.iconTint
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.width(14.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = weatherSnapshot.temperature,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = weatherSnapshot.summary,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                status.activeTrail?.name?.let {
-                    Spacer(modifier = Modifier.height(2.dp))
+                Row(verticalAlignment = Alignment.Bottom) {
                     Text(
-                        text = it,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.82f)
+                        text = status.altitude?.let { String.format(Locale.US, "%,.0f", it) } ?: "---",
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Medium,
+                        letterSpacing = (-0.8).sp,
+                        color = AccentGreen,
+                    )
+                    Spacer(Modifier.width(2.dp))
+                    Text(
+                        text = "m",
+                        fontSize = 16.sp,
+                        color = AccentGreen,
+                        modifier = Modifier.padding(bottom = 2.dp),
                     )
                 }
-            }
-
-            Column(
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                WeatherMetaRow(
-                    icon = Icons.Default.Schedule,
-                    text = status.activeTrail?.sunsetTime?.let { "Sunset $it" } ?: "Forecast pending",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                WeatherMetaRow(
-                    icon = if (status.gpsFixed) Icons.Default.GpsFixed else Icons.Default.GpsOff,
-                    text = if (status.gpsFixed) "GPS ready" else "No fix yet",
-                    tint = if (status.gpsFixed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                Text(
+                    text = "ALTITUDE ASL",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextTertiary,
                 )
             }
         }
@@ -384,206 +315,298 @@ private fun WeatherPanel(
 }
 
 @Composable
-private fun WeatherMetaRow(
-    icon: ImageVector,
-    text: String,
-    tint: Color
-) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = Modifier.size(14.dp),
-            tint = tint
-        )
-        Spacer(modifier = Modifier.width(6.dp))
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelMedium,
-            color = tint
-        )
+private fun WeatherRow(status: HomeStatus, snapshot: WeatherSnapshot) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        ScoutyCard(
+            modifier = Modifier.weight(1f),
+            semantic = Info,
+            shape = RoundedCornerShape(14.dp),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = snapshot.icon,
+                    contentDescription = null,
+                    tint = Info,
+                    modifier = Modifier.size(18.dp),
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    text = snapshot.temperature,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = TextPrimary,
+                )
+            }
+            Spacer(Modifier.height(2.dp))
+            Text(
+                text = snapshot.summary,
+                style = MaterialTheme.typography.bodySmall,
+                color = TextSecondary,
+            )
+        }
+
+        ScoutyCard(
+            modifier = Modifier.weight(1f),
+            semantic = Warning,
+            shape = RoundedCornerShape(14.dp),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Lucide.Sunset,
+                    contentDescription = null,
+                    tint = Warning,
+                    modifier = Modifier.size(18.dp),
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    text = status.activeTrail?.sunsetTime ?: "—",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = TextPrimary,
+                )
+            }
+            Spacer(Modifier.height(2.dp))
+            Text(
+                text = "Sunset today",
+                style = MaterialTheme.typography.bodySmall,
+                color = TextSecondary,
+            )
+        }
     }
 }
 
 @Composable
-private fun ActiveTrailCard(
-    trail: ActiveTrail,
-    onClick: () -> Unit
-) {
+private fun ActiveTrailCard(trail: ActiveTrail, onClick: () -> Unit) {
     val remainingDistanceKm = (trail.distanceKm * (1f - trail.progress.coerceIn(0f, 1f))).coerceAtLeast(0.0)
     val completionPercent = (trail.progress.coerceIn(0f, 1f) * 100).toInt()
     val isStarted = trail.trackingState == ActiveTrailState.ACTIVE
     val markerLabel = TrailMetadataFormatter.formatTrailMarkers(trail.markingSymbols)
 
-    Surface(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(242.dp)
-            .clip(RoundedCornerShape(28.dp))
+            .height(200.dp)
+            .clip(RoundedCornerShape(16.dp))
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(28.dp),
-        color = Color.Transparent,
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.82f)
-        )
     ) {
-        Box {
-            if (!trail.imageUrl.isNullOrBlank()) {
-                RouteRemoteImage(
-                    imageUrl = trail.imageUrl,
-                    contentDescription = trail.name,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            Brush.linearGradient(
-                                listOf(Color(0xFF23361F), Color(0xFF162414), Color(0xFF1B2A1A))
-                            )
-                        )
-                )
-            }
-
+        if (!trail.imageUrl.isNullOrBlank()) {
+            RouteRemoteImage(
+                imageUrl = trail.imageUrl,
+                contentDescription = trail.name,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+            )
+        } else {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
                         Brush.verticalGradient(
-                            listOf(
-                                Color.Transparent,
-                                Color(0x33071008),
-                                Color(0xCC071008)
-                            )
-                        )
-                    )
+                            listOf(Color(0xFF4A6580), Color(0xFF2D3A4A)),
+                        ),
+                    ),
             )
+        }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Bottom
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        listOf(Color.Transparent, Color.Black.copy(alpha = 0.85f)),
+                    ),
+                ),
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(14.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                StatusChip(
-                    text = trail.difficulty.uppercase(Locale.getDefault()),
-                    containerColor = difficultyChipColors(trail.difficulty).first,
-                    contentColor = Color.White
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = trail.name,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = if (isStarted) {
-                        "${formatDistance(remainingDistanceKm)} remaining \u00B7 ${trail.estimatedDuration}"
-                    } else {
-                        "Ready to start \u00B7 ${trail.estimatedDuration}"
-                    },
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White.copy(alpha = 0.76f)
-                )
-                trail.routeSummary?.takeIf { it.isNotBlank() }?.let { summary ->
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = summary,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.White.copy(alpha = 0.84f),
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                Spacer(modifier = Modifier.height(12.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                    TrailMetric(icon = Icons.Default.Route, text = formatDistance(trail.distanceKm))
-                    TrailMetric(icon = Icons.Default.NorthEast, text = "+${trail.elevationGain} m")
-                    TrailMetric(icon = Icons.Default.Schedule, text = trail.estimatedDuration)
-                }
-                markerLabel?.let {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = "Marcaj: $it",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = Color.White.copy(alpha = 0.86f)
-                    )
-                }
-                Spacer(modifier = Modifier.height(14.dp))
-                LinearProgressIndicator(
-                    progress = { trail.progress.coerceIn(0f, 1f) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(6.dp)
-                        .clip(RoundedCornerShape(3.dp)),
-                    color = MaterialTheme.colorScheme.primary,
-                    trackColor = Color.White.copy(alpha = 0.18f)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = if (isStarted) "$completionPercent% completed" else "Planned trail",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Color.White.copy(alpha = 0.76f)
+                DifficultyBadge(level = difficultyLevel(trail.difficulty))
+                StatusPill(
+                    text = if (isStarted) "In progress" else "Planned",
+                    color = if (isStarted) AccentGreen else TextSecondary,
+                    pulsing = isStarted,
+                    backdrop = Color.Black.copy(alpha = 0.5f),
                 )
             }
+
+            Spacer(Modifier.weight(1f))
+
+            Text(
+                text = trail.name,
+                style = MaterialTheme.typography.headlineMedium,
+                color = Color.White,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(Modifier.height(2.dp))
+            Text(
+                text = if (isStarted) {
+                    "${formatDistance(remainingDistanceKm)} remaining · ${trail.estimatedDuration} · +${trail.elevationGain} m"
+                } else {
+                    "Ready to start · ${trail.estimatedDuration} · +${trail.elevationGain} m"
+                },
+                fontSize = 11.sp,
+                color = Color.White.copy(alpha = 0.7f),
+            )
+
+            Spacer(Modifier.height(10.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                TranslucentChip(icon = Lucide.Route, text = formatDistance(trail.distanceKm))
+                TranslucentChip(icon = Lucide.TrendingUp, text = "+${trail.elevationGain} m")
+                TranslucentChip(icon = Lucide.Clock, text = trail.estimatedDuration)
+            }
+
+            markerLabel?.let {
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = "Marcaj: $it",
+                    fontSize = 10.sp,
+                    color = Color.White.copy(alpha = 0.5f),
+                )
+            }
+
+            Spacer(Modifier.height(10.dp))
+            LinearProgressIndicator(
+                progress = { trail.progress.coerceIn(0f, 1f) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(3.dp)
+                    .clip(RoundedCornerShape(2.dp)),
+                color = AccentGreen,
+                trackColor = Color.White.copy(alpha = 0.15f),
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = if (isStarted) "$completionPercent% completed" else "Planned trail",
+                fontSize = 10.sp,
+                color = Color.White.copy(alpha = 0.7f),
+            )
         }
     }
 }
 
 @Composable
-private fun TrailMetric(
-    icon: ImageVector,
-    text: String
-) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+private fun TranslucentChip(icon: ImageVector, text: String) {
+    Row(
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(Color.White.copy(alpha = 0.12f))
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            modifier = Modifier.size(14.dp),
-            tint = Color.White.copy(alpha = 0.86f)
+            tint = Color.White,
+            modifier = Modifier.size(10.dp),
         )
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(Modifier.width(4.dp))
         Text(
             text = text,
-            style = MaterialTheme.typography.labelMedium,
-            color = Color.White.copy(alpha = 0.9f)
+            fontSize = 10.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Medium,
         )
     }
 }
 
 @Composable
 private fun EmptyTrailCard(message: String = "No active trail. Search and set one!") {
-    ScoutyPanel(
+    ScoutyCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(26.dp),
-        startColor = MaterialTheme.colorScheme.surface,
-        endColor = MaterialTheme.colorScheme.surfaceVariant
+        shape = RoundedCornerShape(14.dp),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(92.dp),
-            contentAlignment = Alignment.Center
+                .height(84.dp),
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = message,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style = MaterialTheme.typography.bodyMedium,
+                color = TextSecondary,
             )
         }
     }
 }
 
 @Composable
-private fun RecommendedTrailCard(
-    recommendation: RouteRecommendation
+private fun QuickActionsRow(onShelter: () -> Unit, onWater: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        QuickActionTile(
+            modifier = Modifier.weight(1f),
+            icon = Lucide.TriangleAlert,
+            label = "SOS",
+            color = Danger,
+            onClick = {},
+        )
+        QuickActionTile(
+            modifier = Modifier.weight(1f),
+            icon = Lucide.House,
+            label = "Shelter",
+            color = Warning,
+            onClick = onShelter,
+        )
+        QuickActionTile(
+            modifier = Modifier.weight(1f),
+            icon = Lucide.Droplet,
+            label = "Water",
+            color = Water,
+            onClick = onWater,
+        )
+    }
+}
+
+@Composable
+private fun QuickActionTile(
+    modifier: Modifier,
+    icon: ImageVector,
+    label: String,
+    color: Color,
+    onClick: () -> Unit,
 ) {
-    val difficulty = recommendation.difficulty.name
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(14.dp))
+            .background(color.copy(alpha = 0.06f))
+            .border(0.5.dp, color.copy(alpha = 0.15f), RoundedCornerShape(14.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = label,
+            tint = color,
+            modifier = Modifier.size(20.dp),
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = color,
+            fontWeight = FontWeight.Medium,
+        )
+    }
+}
+
+@Composable
+private fun RecommendedTrailCard(recommendation: RouteRecommendation) {
     val info = buildString {
         append(recommendation.secondarySummary)
         recommendation.proximityKm?.let {
@@ -592,65 +615,76 @@ private fun RecommendedTrailCard(
         }
     }
 
-    ScoutyPanel(
+    ScoutyCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
-        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 14.dp)
+        shape = RoundedCornerShape(14.dp),
+        contentPadding = PaddingValues(12.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Surface(
-                modifier = Modifier.size(42.dp),
-                shape = RoundedCornerShape(12.dp),
-                color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.16f)
+            Box(
+                modifier = Modifier
+                    .size(54.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(Color(0xFF2D3A4A), Color(0xFF4A6580)),
+                        ),
+                    ),
+                contentAlignment = Alignment.Center,
             ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = Icons.Default.Terrain,
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp),
-                        tint = MaterialTheme.colorScheme.secondary
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.width(14.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = recommendation.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                Icon(
+                    imageVector = Lucide.Mountain,
+                    contentDescription = null,
+                    tint = Color.White.copy(alpha = 0.7f),
+                    modifier = Modifier.size(20.dp),
                 )
+            }
+            Spacer(Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = recommendation.title,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = TextPrimary,
+                        modifier = Modifier.weight(1f),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    DifficultyBadge(level = difficultyLevel(recommendation.difficulty.name))
+                }
+                Spacer(Modifier.height(4.dp))
                 Text(
                     text = info,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    fontSize = 10.sp,
+                    color = TextTertiary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 if (recommendation.whyItFits.isNotBlank()) {
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(Modifier.height(2.dp))
                     Text(
                         text = recommendation.whyItFits,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 3,
-                        overflow = TextOverflow.Ellipsis
+                        fontSize = 10.sp,
+                        color = TextMuted,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
-            StatusChip(
-                text = difficulty,
-                containerColor = difficultyChipColors(difficulty).first,
-                contentColor = difficultyChipColors(difficulty).second
-            )
         }
     }
-
-    Spacer(modifier = Modifier.height(10.dp))
 }
 
 private data class WeatherSnapshot(
     val temperature: String,
     val summary: String,
     val icon: ImageVector,
-    val iconTint: Color
 )
 
 private fun buildWeatherSnapshot(status: HomeStatus): WeatherSnapshot {
@@ -660,22 +694,11 @@ private fun buildWeatherSnapshot(status: HomeStatus): WeatherSnapshot {
     val lowercaseSummary = summary.lowercase(Locale.getDefault())
 
     val icon = when {
-        "storm" in lowercaseSummary || "thunder" in lowercaseSummary -> Icons.Default.Thunderstorm
-        "clear" in lowercaseSummary || "sun" in lowercaseSummary -> Icons.Default.WbSunny
-        else -> Icons.Default.Cloud
+        "storm" in lowercaseSummary || "thunder" in lowercaseSummary -> Lucide.CloudLightning
+        "clear" in lowercaseSummary || "sun" in lowercaseSummary -> Lucide.Sun
+        else -> Lucide.Cloud
     }
-    val tint = when (icon) {
-        Icons.Default.Thunderstorm -> Color(0xFFFFB020)
-        Icons.Default.WbSunny -> Color(0xFFFFD166)
-        else -> Color(0xFFE7EAFF)
-    }
-
-    return WeatherSnapshot(
-        temperature = temperature,
-        summary = summary,
-        icon = icon,
-        iconTint = tint
-    )
+    return WeatherSnapshot(temperature = temperature, summary = summary, icon = icon)
 }
 
 private fun formatDistance(distanceKm: Double): String =
@@ -687,10 +710,9 @@ private fun formatCoordinate(value: Double?, positiveDirection: String, negative
         String.format(Locale.US, "%.4f° %s", abs(it), direction)
     } ?: "---"
 
-private fun difficultyChipColors(difficulty: String): Pair<Color, Color> =
+private fun difficultyLevel(difficulty: String): DifficultyLevel =
     when (difficulty.uppercase(Locale.ROOT)) {
-        "EXPERT" -> Color(0xFF8E1C2B).copy(alpha = 0.88f) to Color(0xFFFFD5D5)
-        "HARD" -> Color(0xFF3E6B2D).copy(alpha = 0.9f) to Color.White
-        "MEDIUM" -> Color(0xFF7D4C12).copy(alpha = 0.88f) to Color(0xFFFFCC80)
-        else -> Color(0xFF195B3B).copy(alpha = 0.9f) to Color(0xFFCFF7DE)
+        "HARD", "EXPERT" -> DifficultyLevel.HARD
+        "MEDIUM" -> DifficultyLevel.MEDIUM
+        else -> DifficultyLevel.EASY
     }

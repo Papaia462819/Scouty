@@ -4,8 +4,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,24 +23,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bed
-import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Cloud
-import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.HealthAndSafety
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Inventory2
-import androidx.compose.material.icons.filled.Restaurant
-import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateMapOf
@@ -51,25 +38,47 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.scouty.app.R
-import com.scouty.app.ui.components.ScoutyPanel
-import com.scouty.app.ui.components.StatusChip
+import com.composables.icons.lucide.Check
+import com.composables.icons.lucide.ChevronDown
+import com.composables.icons.lucide.Cloud
+import com.composables.icons.lucide.Compass
+import com.composables.icons.lucide.Info
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.EllipsisVertical
+import com.composables.icons.lucide.Package
+import com.composables.icons.lucide.ShieldPlus
+import com.composables.icons.lucide.Utensils
+import com.scouty.app.ui.components.CategoryIconTile
+import com.scouty.app.ui.components.ScoutyCard
 import com.scouty.app.ui.models.GearItem
 import com.scouty.app.ui.models.GearNecessity
 import com.scouty.app.ui.models.HomeStatus
+import com.scouty.app.ui.theme.AccentGreen
+import com.scouty.app.ui.theme.AccentGreenBg
+import com.scouty.app.ui.theme.AccentGreenOnSurface
+import com.scouty.app.ui.theme.BgPrimary
+import com.scouty.app.ui.theme.BgSurfaceRaised
+import com.scouty.app.ui.theme.BorderDefault
+import com.scouty.app.ui.theme.BorderSubtle
+import com.scouty.app.ui.theme.Danger
+import com.scouty.app.ui.theme.Info as InfoBlue
+import com.scouty.app.ui.theme.TextPrimary
+import com.scouty.app.ui.theme.TextSecondary
+import com.scouty.app.ui.theme.TextTertiary
+import com.scouty.app.ui.theme.Warning
+import com.scouty.app.ui.theme.Water
 import java.util.Locale
 
 @Composable
 fun GearScreen(
     status: HomeStatus,
     onToggleItem: (String) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val gearList = status.gearList
     val hasActiveTrail = status.activeTrail != null
@@ -93,45 +102,19 @@ fun GearScreen(
             }
         }
     }
+    val activeFilter = remember { mutableStateOf("Toate") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(BgPrimary)
             .padding(contentPadding)
-            .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        Spacer(modifier = Modifier.height(14.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Top
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(R.string.gear_title),
-                    style = MaterialTheme.typography.headlineMedium.copy(fontSize = 34.sp),
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = status.activeTrail?.name ?: "Selecteaza un traseu",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                status.activeTrail?.let { trail ->
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = trail.partyComposition.summaryRo,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(18.dp))
+        GearTopBar()
+        GearSubtitle(status)
 
         if (!hasActiveTrail) {
             EmptyGearState()
@@ -141,93 +124,107 @@ fun GearScreen(
                 totalCount = totalCount,
                 totalWeightGrams = totalWeightGrams,
                 missingMandatoryCount = missingMandatoryCount,
-                hasActiveTrail = true
             )
+            GearFilterChips(active = activeFilter.value, onSelect = { activeFilter.value = it })
 
-            Spacer(modifier = Modifier.height(18.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                categories.forEach { category ->
+                    val itemsInCategory = gearList.filter { it.category == category }
+                    val packedInCategory = itemsInCategory.count { it.isPacked }
+                    val totalInCategory = itemsInCategory.size
+                    val missingMandatoryInCategory = itemsInCategory.count {
+                        it.necessity == GearNecessity.MANDATORY && !it.isPacked
+                    }
+                    val isExpanded = expandedState[category] == true
 
-            categories.forEach { category ->
-                val itemsInCategory = gearList.filter { it.category == category }
-                val packedInCategory = itemsInCategory.count { it.isPacked }
-                val totalInCategory = itemsInCategory.size
-                val missingMandatoryInCategory = itemsInCategory.count {
-                    it.necessity == GearNecessity.MANDATORY && !it.isPacked
-                }
-                val isExpanded = expandedState[category] == true
-
-                GearCategoryCard(
-                    title = category,
-                    icon = categoryIcon(category),
-                    accentColor = categoryAccentColor(category),
-                    status = "$packedInCategory/$totalInCategory packed",
-                    summary = when {
-                        missingMandatoryInCategory > 0 -> "$missingMandatoryInCategory left"
-                        totalInCategory - packedInCategory > 0 -> "${totalInCategory - packedInCategory} left"
-                        else -> "ready"
-                    },
-                    summaryContainer = when {
-                        missingMandatoryInCategory > 0 -> Color(0xFF3A2A12)
-                        totalInCategory - packedInCategory > 0 -> Color.White.copy(alpha = 0.08f)
-                        else -> Color(0xFF173A24)
-                    },
-                    summaryContent = when {
-                        missingMandatoryInCategory > 0 -> Color(0xFFFFB020)
-                        totalInCategory - packedInCategory > 0 -> MaterialTheme.colorScheme.onSurface
-                        else -> Color(0xFF7BE5A3)
-                    },
-                    expanded = isExpanded,
-                    completed = packedInCategory == totalInCategory,
-                    onToggle = { expandedState[category] = !isExpanded }
-                ) {
-                    itemsInCategory.forEachIndexed { index, item ->
-                        if (index > 0) {
-                            HorizontalDivider(color = Color.White.copy(alpha = 0.06f))
+                    GearCategoryCard(
+                        title = category,
+                        icon = categoryIcon(category),
+                        accentColor = categoryAccentColor(category),
+                        status = "$packedInCategory / $totalInCategory packed",
+                        countLeft = totalInCategory - packedInCategory,
+                        hasMissingMandatory = missingMandatoryInCategory > 0,
+                        completed = packedInCategory == totalInCategory,
+                        expanded = isExpanded,
+                        onToggle = { expandedState[category] = !isExpanded },
+                    ) {
+                        itemsInCategory.forEach { item ->
+                            GearItemRow(item = item, onToggle = { onToggleItem(item.id) })
                         }
-                        GearItemRow(
-                            item = item,
-                            onToggle = { onToggleItem(item.id) }
-                        )
                     }
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(Modifier.height(20.dp))
+    }
+}
+
+@Composable
+private fun GearTopBar() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "Gear checklist",
+            style = MaterialTheme.typography.headlineLarge,
+            color = TextPrimary,
+            fontWeight = FontWeight.Medium,
+        )
+        Box(
+            modifier = Modifier
+                .size(32.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .border(0.5.dp, BorderDefault, RoundedCornerShape(10.dp))
+                .clickable { },
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                imageVector = Lucide.EllipsisVertical,
+                contentDescription = null,
+                tint = TextSecondary,
+                modifier = Modifier.size(14.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun GearSubtitle(status: HomeStatus) {
+    Column {
+        Text(
+            text = status.activeTrail?.name ?: "Selecteaza un traseu",
+            style = MaterialTheme.typography.bodyMedium,
+            color = TextSecondary,
+        )
+        status.activeTrail?.let { trail ->
+            Spacer(Modifier.height(2.dp))
+            Text(
+                text = trail.partyComposition.summaryRo,
+                style = MaterialTheme.typography.bodySmall,
+                color = AccentGreen,
+            )
+        }
     }
 }
 
 @Composable
 private fun EmptyGearState() {
-    ScoutyPanel(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
-        startColor = MaterialTheme.colorScheme.surface,
-        endColor = MaterialTheme.colorScheme.surfaceVariant
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Surface(
-                modifier = Modifier.size(46.dp),
-                shape = RoundedCornerShape(16.dp),
-                color = Color(0xFF55A8FF).copy(alpha = 0.14f),
-                contentColor = Color(0xFF55A8FF)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = Icons.Default.Inventory2,
-                        contentDescription = null,
-                        modifier = Modifier.size(22.dp)
-                    )
-                }
-            }
+    ScoutyCard(modifier = Modifier.fillMaxWidth(), semantic = InfoBlue) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            CategoryIconTile(icon = Lucide.Package, color = InfoBlue)
             Text(
                 text = "Gear apare doar dupa ce setezi un traseu.",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                color = TextPrimary,
+                fontWeight = FontWeight.Medium,
             )
             Text(
                 text = "Data, vremea si grupul vor genera automat lista potrivita.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = TextSecondary,
             )
         }
     }
@@ -239,95 +236,152 @@ private fun GearSummaryCard(
     totalCount: Int,
     totalWeightGrams: Int,
     missingMandatoryCount: Int,
-    hasActiveTrail: Boolean
 ) {
     val progress = if (totalCount > 0) packedCount.toFloat() / totalCount else 0f
+    val readyPct = (progress * 100).toInt()
 
-    ScoutyPanel(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
-        startColor = MaterialTheme.colorScheme.surface,
-        endColor = MaterialTheme.colorScheme.surfaceVariant
-    ) {
+    ScoutyCard(modifier = Modifier.fillMaxWidth(), semantic = Warning) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.Top,
         ) {
-            Row(verticalAlignment = Alignment.Bottom) {
+            Column {
+                Row(verticalAlignment = Alignment.Bottom) {
+                    Text(
+                        text = packedCount.toString(),
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = AccentGreen,
+                        letterSpacing = (-0.8).sp,
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        text = "/ $totalCount items",
+                        fontSize = 14.sp,
+                        color = TextSecondary,
+                        modifier = Modifier.padding(bottom = 4.dp),
+                    )
+                }
+                Spacer(Modifier.height(2.dp))
                 Text(
-                    text = packedCount.toString(),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    text = " / $totalCount items",
-                    modifier = Modifier.padding(start = 6.dp, bottom = 2.dp),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = "READY: $readyPct%",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextTertiary,
                 )
             }
             Column(horizontalAlignment = Alignment.End) {
+                Row(verticalAlignment = Alignment.Bottom) {
+                    Text(
+                        text = formatWeightValue(totalWeightGrams),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = TextPrimary,
+                        letterSpacing = (-0.3).sp,
+                    )
+                    Spacer(Modifier.width(3.dp))
+                    Text(
+                        text = "kg",
+                        fontSize = 12.sp,
+                        color = TextSecondary,
+                        modifier = Modifier.padding(bottom = 2.dp),
+                    )
+                }
+                Spacer(Modifier.height(2.dp))
                 Text(
-                    text = formatWeight(totalWeightGrams),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "total weight",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = "TOTAL WEIGHT",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextTertiary,
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Text(
-            text = if (hasActiveTrail) {
-                "Lista este calculata din traseu, data aleasa si compozitia grupului."
-            } else {
-                "Lista de baza; devine mai precisa imediat ce alegi un traseu."
-            },
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        Spacer(modifier = Modifier.height(18.dp))
+        Spacer(Modifier.height(14.dp))
 
         LinearProgressIndicator(
             progress = { progress },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(8.dp)
-                .clip(RoundedCornerShape(4.dp)),
-            color = if (missingMandatoryCount > 0) Color(0xFFFF7A59) else MaterialTheme.colorScheme.primary,
-            trackColor = Color.White.copy(alpha = 0.08f)
+                .height(4.dp)
+                .clip(RoundedCornerShape(2.dp)),
+            color = AccentGreen,
+            trackColor = BorderSubtle,
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(Modifier.height(12.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "Ready: ${(progress * 100).toInt()}%",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = "Calculat din traseu, data si grup",
+                fontSize = 10.sp,
+                color = TextTertiary,
             )
-            Text(
-                text = if (missingMandatoryCount > 0) {
-                    "$missingMandatoryCount items missing"
-                } else {
-                    "All mandatory items packed"
-                },
-                style = MaterialTheme.typography.labelMedium,
-                color = if (missingMandatoryCount > 0) Color(0xFFFFB020) else MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold
-            )
+            if (missingMandatoryCount > 0) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Warning.copy(alpha = 0.15f))
+                        .padding(horizontal = 8.dp, vertical = 3.dp),
+                ) {
+                    Text(
+                        text = "$missingMandatoryCount obligatorii lipsa",
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Warning,
+                    )
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(AccentGreenBg)
+                        .padding(horizontal = 8.dp, vertical = 3.dp),
+                ) {
+                    Text(
+                        text = "Ready",
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = AccentGreen,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun GearFilterChips(active: String, onSelect: (String) -> Unit) {
+    val filters = listOf("Toate", "Obligatorii", "Lipsa")
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        filters.forEach { label ->
+            val isActive = label == active
+            val bg = if (isActive) AccentGreenBg else BgSurfaceRaised
+            val fg = if (isActive) AccentGreen else TextSecondary
+            val border = if (isActive) Color.Transparent else BorderDefault
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(bg)
+                    .border(0.5.dp, border, RoundedCornerShape(20.dp))
+                    .clickable { onSelect(label) }
+                    .padding(horizontal = 12.dp, vertical = 6.dp),
+            ) {
+                Text(
+                    text = label,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = fg,
+                )
+            }
         }
     }
 }
@@ -338,84 +392,75 @@ private fun GearCategoryCard(
     icon: ImageVector,
     accentColor: Color,
     status: String,
-    summary: String,
-    summaryContainer: Color,
-    summaryContent: Color,
-    expanded: Boolean,
+    countLeft: Int,
+    hasMissingMandatory: Boolean,
     completed: Boolean,
+    expanded: Boolean,
     onToggle: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val rotation = animateFloatAsState(
         targetValue = if (expanded) 180f else 0f,
-        label = "gearCategoryRotation"
+        label = "gearCategoryRotation",
     )
 
-    ScoutyPanel(
+    ScoutyCard(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp)
             .animateContentSize(),
-        shape = RoundedCornerShape(24.dp),
-        contentPadding = PaddingValues(0.dp)
+        contentPadding = PaddingValues(0.dp),
     ) {
         Column {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(onClick = onToggle)
-                    .padding(horizontal = 16.dp, vertical = 14.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Surface(
-                    modifier = Modifier.size(42.dp),
-                    shape = RoundedCornerShape(14.dp),
-                    color = accentColor.copy(alpha = 0.14f)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(
-                            imageVector = icon,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
-                            tint = accentColor
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.width(14.dp))
-
+                CategoryIconTile(icon = icon, color = accentColor)
+                Spacer(Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.labelLarge,
+                        color = TextPrimary,
+                        fontWeight = FontWeight.Medium,
                     )
+                    Spacer(Modifier.height(2.dp))
                     Text(
                         text = status,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary,
                     )
                 }
-
-                StatusChip(
-                    text = summary,
-                    containerColor = summaryContainer,
-                    contentColor = summaryContent
+                CountPill(
+                    text = if (countLeft > 0) "$countLeft left" else "ready",
+                    color = when {
+                        hasMissingMandatory -> Warning
+                        countLeft > 0 -> TextSecondary
+                        else -> AccentGreen
+                    },
+                    background = when {
+                        hasMissingMandatory -> Warning.copy(alpha = 0.15f)
+                        countLeft > 0 -> BgSurfaceRaised
+                        else -> AccentGreenBg
+                    },
                 )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
+                Spacer(Modifier.width(8.dp))
                 Icon(
-                    imageVector = if (completed) Icons.Default.Check else Icons.Default.ExpandMore,
+                    imageVector = if (completed) Lucide.Check else Lucide.ChevronDown,
                     contentDescription = null,
-                    modifier = Modifier.rotate(if (completed) 0f else rotation.value),
-                    tint = if (completed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                    modifier = Modifier
+                        .size(14.dp)
+                        .rotate(if (completed) 0f else rotation.value),
+                    tint = if (completed) AccentGreen else TextTertiary,
                 )
             }
 
             AnimatedVisibility(visible = expanded) {
-                Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
-                    HorizontalDivider(color = Color.White.copy(alpha = 0.06f))
+                Column {
+                    HorizontalDivider(color = BorderSubtle, thickness = 0.5.dp)
                     content()
                 }
             }
@@ -424,190 +469,167 @@ private fun GearCategoryCard(
 }
 
 @Composable
-private fun GearItemRow(
-    item: GearItem,
-    onToggle: () -> Unit
-) {
-    val necessityColors = necessityColors(item.necessity)
-    val showBadge = !item.isPacked || item.necessity != GearNecessity.RECOMMENDED
+private fun GearItemRow(item: GearItem, onToggle: () -> Unit) {
     val detailsExpanded = remember(item.id) { mutableStateOf(false) }
+    val tagInfo = necessityTag(item.necessity)
 
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onToggle)
-            .padding(vertical = 14.dp),
-        verticalAlignment = Alignment.Top
+            .clickable(onClick = onToggle),
     ) {
-        Surface(
+        HorizontalDivider(color = BorderSubtle, thickness = 0.5.dp)
+        Row(
             modifier = Modifier
-                .padding(top = 2.dp)
-                .size(24.dp),
-            shape = CircleShape,
-            color = if (item.isPacked) {
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
-            } else {
-                Color.Transparent
-            },
-            border = androidx.compose.foundation.BorderStroke(
-                1.dp,
-                if (item.isPacked) {
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.28f)
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.28f)
-                }
-            )
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Box(contentAlignment = Alignment.Center) {
-                if (item.isPacked) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = null,
-                        modifier = Modifier.size(14.dp),
-                        tint = MaterialTheme.colorScheme.primary
+            ItemCheckbox(checked = item.isPacked)
+            Spacer(Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = item.name,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = if (item.isPacked) TextSecondary else TextPrimary,
+                        textDecoration = if (item.isPacked) TextDecoration.LineThrough else TextDecoration.None,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false),
                     )
-                } else {
-                    Icon(
-                        imageVector = Icons.Outlined.Circle,
-                        contentDescription = null,
-                        modifier = Modifier.size(12.dp),
-                        tint = Color.Transparent
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.width(14.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = item.name,
-                    modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = if (item.isCritical) FontWeight.SemiBold else FontWeight.Medium,
-                    color = if (item.isPacked) {
-                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f)
-                    } else {
-                        MaterialTheme.colorScheme.onSurface
-                    },
-                    textDecoration = if (item.isPacked) TextDecoration.LineThrough else TextDecoration.None,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = item.weight,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                if (item.note.isNotBlank()) {
-                    IconButton(
-                        onClick = { detailsExpanded.value = !detailsExpanded.value },
-                        modifier = Modifier
-                            .padding(start = 4.dp)
-                            .size(28.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Info,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f)
-                        )
+                    if (tagInfo != null) {
+                        Spacer(Modifier.width(8.dp))
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(6.dp))
+                                .background(tagInfo.bg)
+                                .padding(horizontal = 6.dp, vertical = 2.dp),
+                        ) {
+                            Text(
+                                text = tagInfo.label,
+                                fontSize = 9.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = tagInfo.fg,
+                                letterSpacing = 0.4.sp,
+                            )
+                        }
                     }
                 }
+                if (item.note.isNotBlank() && detailsExpanded.value) {
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        text = item.note,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
-
-            if (showBadge) {
-                Spacer(modifier = Modifier.height(8.dp))
-                NecessityBadge(
-                    text = necessityColors.label,
-                    accentColor = necessityColors.accent
-                )
-            }
-
-            if (item.note.isNotBlank() && detailsExpanded.value) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = item.note,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
-                )
+            Spacer(Modifier.width(8.dp))
+            Text(
+                text = item.weight,
+                fontSize = 10.sp,
+                color = TextTertiary,
+            )
+            if (item.note.isNotBlank()) {
+                Spacer(Modifier.width(8.dp))
+                Box(
+                    modifier = Modifier
+                        .size(28.dp)
+                        .clip(CircleShape)
+                        .clickable { detailsExpanded.value = !detailsExpanded.value },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = Lucide.Info,
+                        contentDescription = null,
+                        tint = TextTertiary,
+                        modifier = Modifier.size(13.dp),
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun ItemCheckbox(checked: Boolean) {
+    Box(
+        modifier = Modifier
+            .size(18.dp)
+            .clip(CircleShape)
+            .then(
+                if (checked) {
+                    Modifier.background(AccentGreen)
+                } else {
+                    Modifier.border(1.5.dp, TextTertiary, CircleShape)
+                },
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (checked) {
+            Icon(
+                imageVector = Lucide.Check,
+                contentDescription = null,
+                tint = AccentGreenOnSurface,
+                modifier = Modifier.size(12.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun CountPill(text: String, color: Color, background: Color) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(background)
+            .padding(horizontal = 8.dp, vertical = 3.dp),
+    ) {
+        Text(
+            text = text,
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Medium,
+            color = color,
+        )
     }
 }
 
 private fun categoryIcon(category: String): ImageVector =
     when (category) {
-        "Baza traseu" -> Icons.Default.Inventory2
-        "Siguranta & navigatie" -> Icons.Default.HealthAndSafety
-        "Straturi & vreme" -> Icons.Default.Cloud
-        "Apa & hrana" -> Icons.Default.Restaurant
-        "Copii" -> Icons.Default.Explore
-        else -> Icons.Default.Inventory2
+        "Baza traseu" -> Lucide.Package
+        "Siguranta & navigatie" -> Lucide.ShieldPlus
+        "Straturi & vreme" -> Lucide.Cloud
+        "Apa & hrana" -> Lucide.Utensils
+        "Copii" -> Lucide.Compass
+        else -> Lucide.Package
     }
 
 private fun categoryAccentColor(category: String): Color =
     when (category) {
-        "Baza traseu" -> Color(0xFF67A6FF)
-        "Siguranta & navigatie" -> Color(0xFFFF7A59)
-        "Straturi & vreme" -> Color(0xFFFFC05A)
-        "Apa & hrana" -> Color(0xFF7BE5A3)
-        "Copii" -> Color(0xFF9B8CFF)
-        else -> Color(0xFF9CAAA0)
+        "Baza traseu" -> InfoBlue
+        "Siguranta & navigatie" -> Danger
+        "Straturi & vreme" -> Warning
+        "Apa & hrana" -> Water
+        "Copii" -> AccentGreen
+        else -> TextSecondary
     }
 
-private data class NecessityColors(
-    val label: String,
-    val accent: Color
-)
+private data class TagInfo(val label: String, val bg: Color, val fg: Color)
 
-private fun necessityColors(necessity: GearNecessity): NecessityColors =
+private fun necessityTag(necessity: GearNecessity): TagInfo? =
     when (necessity) {
-        GearNecessity.MANDATORY -> NecessityColors(
-            label = "Obligatoriu",
-            accent = Color(0xFFFF7A59)
-        )
-        GearNecessity.RECOMMENDED -> NecessityColors(
-            label = "Recomandat",
-            accent = Color(0xFF2ED3A6)
-        )
-        GearNecessity.CONDITIONAL -> NecessityColors(
-            label = "Optional",
-            accent = Color(0xFFFFB020)
-        )
+        GearNecessity.MANDATORY -> TagInfo("OBLIGATORIU", Danger.copy(alpha = 0.15f), Danger)
+        GearNecessity.CONDITIONAL -> TagInfo("OPTIONAL", Warning.copy(alpha = 0.12f), Warning)
+        GearNecessity.RECOMMENDED -> null
     }
 
-@Composable
-private fun NecessityBadge(
-    text: String,
-    accentColor: Color
-) {
-    Surface(
-        shape = RoundedCornerShape(16.dp),
-        color = accentColor.copy(alpha = 0.14f),
-        contentColor = accentColor,
-        border = BorderStroke(1.dp, accentColor.copy(alpha = 0.28f))
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-            style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-            fontWeight = FontWeight.Medium
-        )
-    }
-}
-
-private fun formatWeight(totalWeightGrams: Int): String =
+private fun formatWeightValue(totalWeightGrams: Int): String =
     if (totalWeightGrams >= 1000) {
-        String.format(Locale.US, "%.1f kg", totalWeightGrams / 1000f)
+        String.format(Locale.US, "%.1f", totalWeightGrams / 1000f)
     } else {
-        "$totalWeightGrams g"
+        String.format(Locale.US, "%.2f", totalWeightGrams / 1000f)
     }
