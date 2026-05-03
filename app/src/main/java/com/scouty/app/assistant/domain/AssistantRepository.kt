@@ -7,6 +7,7 @@ import com.scouty.app.assistant.data.KnowledgePackManager
 import com.scouty.app.assistant.data.KnowledgePackStatusProvider
 import com.scouty.app.assistant.data.SqliteKnowledgeChunkStore
 import com.scouty.app.assistant.data.buildSearchTokens
+import com.scouty.app.assistant.domain.retrieval.CrossEncoderReranker
 import com.scouty.app.assistant.model.AssistantConversationState
 import com.scouty.app.assistant.model.AssistantCitation
 import com.scouty.app.assistant.model.AssistantResponse
@@ -230,7 +231,7 @@ class QueryAnalyzer {
             normalizedQuery.startsWith("ce inseamna") ||
             normalizedQuery.startsWith("ce este") ||
             normalizedQuery.startsWith("adica")) &&
-            containsAny(normalizedQuery, "iasca", "kindling", "amnar", "triunghiul focului", "vatra")
+            containsAny(normalizedQuery, "iasca", "tinder", "tindar", "kindling", "amnar", "triunghiul focului", "vatra")
 
     private fun isCampfireConstraintQuery(normalizedQuery: String): Boolean =
         containsAny(
@@ -1015,9 +1016,11 @@ class AssistantRepository(
     private val interpreterGate: InterpreterGate = InterpreterGate(retrievalConfidencePolicy),
     private val translationEngine: OnDeviceTranslationEngine = OnDeviceTranslationEngine(),
     private val interpreterPromptBuilder: InterpreterPromptBuilder = InterpreterPromptBuilder(translationEngine),
+    private val crossEncoderReranker: CrossEncoderReranker? = null,
     private val campfireConversationEngine: CampfireConversationEngine = CampfireConversationEngine(
         knowledgeStore = knowledgeStore,
-        confidencePolicy = retrievalConfidencePolicy
+        confidencePolicy = retrievalConfidencePolicy,
+        crossEncoderReranker = crossEncoderReranker
     ),
     private val promptBuilder: PromptBuilder = PromptBuilder(),
     private val modelManager: ModelManager = context?.let(::ModelManager)

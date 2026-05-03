@@ -2,6 +2,8 @@ package com.scouty.app.assistant.domain
 
 import com.scouty.app.assistant.data.CampfireEmbeddingStore
 import com.scouty.app.assistant.data.KnowledgeChunkStore
+import com.scouty.app.assistant.diagnostics.AssistantDiagnostics
+import com.scouty.app.assistant.domain.retrieval.CrossEncoderReranker
 import com.scouty.app.assistant.model.AssistantConversationState
 import com.scouty.app.assistant.model.AssistantOpenQuestion
 import com.scouty.app.assistant.model.CardFamily
@@ -30,6 +32,7 @@ data class CampfireConversationResult(
 class CampfireConversationEngine(
     private val knowledgeStore: KnowledgeChunkStore,
     private val confidencePolicy: RetrievalConfidencePolicy = RetrievalConfidencePolicy(),
+    private val crossEncoderReranker: CrossEncoderReranker? = null,
     private val json: Json = Json { ignoreUnknownKeys = true; explicitNulls = false }
 ) {
 
@@ -60,7 +63,7 @@ class CampfireConversationEngine(
             normalizedQuery = normalizedQuery,
             embeddingStore = embeddingStore
         )
-        val scoredCards = scoreAllCards(
+        val baselineScoredCards = scoreAllCards(
             cards = cards,
             normalizedQuery = normalizedQuery,
             facts = facts,
@@ -69,6 +72,10 @@ class CampfireConversationEngine(
             cardById = cardById,
             embeddingStore = embeddingStore,
             semanticQueryContext = semanticQueryContext
+        )
+        val scoredCards = applyCrossEncoderReranker(
+            query = retrievalQuery,
+            scoredCards = baselineScoredCards
         )
         val scoredById = scoredCards.associateBy { it.card.chunk.chunkId }
         val targetFamily = resolveTargetFamily(queryAnalysis, normalizedQuery, scoredCards)
@@ -89,6 +96,8 @@ class CampfireConversationEngine(
                 primaryCardId = selectedPrimaryId,
                 top1Score = scoredById[selectedPrimaryId]?.finalScore ?: 0.0,
                 top2Score = alternativeTop?.finalScore ?: 0.0,
+                rerankerTop1Score = scoredById[selectedPrimaryId]?.rerankerScore,
+                rerankerTop2Score = alternativeTop?.rerankerScore,
                 slotCompatibility = scoredById[selectedPrimaryId]?.slotCompatibility ?: 0.0,
                 conversationCarryOver = scoredById[selectedPrimaryId]?.conversationCarryOver ?: 0.0,
                 semanticSimilarity = scoredById[selectedPrimaryId]?.semanticSimilarity ?: 0.0,
@@ -143,6 +152,63 @@ class CampfireConversationEngine(
             conversationState = updatedState,
             retrievalConfidence = retrievalConfidence
         )
+    }
+
+    private suspend fun applyCrossEncoderReranker(
+        query: String,
+        scoredCards: List<ScoredCampfireCard>
+    ): List<ScoredCampfireCard> {
+        val reranker = crossEncoderReranker ?: return scoredCards
+        val candidates = scoredCards.take(RerankCandidateLimit)
+        if (candidates.size < 2) {
+            return scoredCards
+        }
+
+        val startedAtNanos = System.nanoTime()
+        return runCatching {
+            val byId = scoredCards.associateBy { it.card.chunk.chunkId }
+            val reranked = reranker.rerank(
+                query = query,
+                candidates = candidates.map { it.card.chunk },
+                topK = candidates.size
+            )
+            if (reranked.isEmpty()) {
+                return scoredCards
+            }
+
+            val elapsedMs = (System.nanoTime() - startedAtNanos) / 1_000_000
+            val rerankedIds = reranked.map { it.chunk.chunkId }.toSet()
+            val adjusted = reranked.mapNotNull { result ->
+                byId[result.chunk.chunkId]?.copy(
+                    rerankerScore = result.score,
+                    finalScore = result.score * 100.0
+                )
+            }
+            val top1 = reranked.firstOrNull()
+            val top1Delta = top1?.let { result ->
+                val baseline = byId[result.chunk.chunkId]?.finalScore ?: 0.0
+                result.score - (baseline / 100.0).coerceIn(0.0, 1.0)
+            } ?: 0.0
+
+            AssistantDiagnostics.logReranker(
+                query = query,
+                candidateCount = candidates.size,
+                elapsedMs = elapsedMs,
+                top1ScoreDeltaVsLexical = top1Delta,
+                error = null
+            )
+
+            adjusted + scoredCards.filterNot { it.card.chunk.chunkId in rerankedIds }
+        }.getOrElse { error ->
+            AssistantDiagnostics.logReranker(
+                query = query,
+                candidateCount = candidates.size,
+                elapsedMs = (System.nanoTime() - startedAtNanos) / 1_000_000,
+                top1ScoreDeltaVsLexical = 0.0,
+                error = error.message ?: error::class.java.simpleName
+            )
+            scoredCards
+        }
     }
 
     private suspend fun loadCards(language: String): List<CampfireCard> =
@@ -1472,6 +1538,9 @@ class CampfireConversationEngine(
         if (token.isBlank()) {
             return token
         }
+        if (token in setOf("tinder", "tindar", "tindr")) {
+            return "iasca"
+        }
 
         var normalized = token.replace("(.)\\1+".toRegex(), "$1")
         normalized = normalized.replace("([aeiou])x$".toRegex(), "$1s")
@@ -1526,6 +1595,7 @@ class CampfireConversationEngine(
         private const val GeneralScenarioId = "campfire_general_entry"
         private const val OverrideConstraintMode = "override"
         private const val MaxSemanticPhraseCandidates = 5
+        private const val RerankCandidateLimit = 10
         private const val SemanticLookupThreshold = 0.18
         private val IgnitionOptionOrder = listOf("lighter", "matches", "ferro")
         private val IgnitionOptionLabels = mapOf(
@@ -1555,7 +1625,8 @@ private data class ScoredCampfireCard(
     val priorityWeight: Double,
     val antiNegativeDefault: Double,
     val resolvedTermPenalty: Double,
-    val finalScore: Double
+    val finalScore: Double,
+    val rerankerScore: Double? = null
 ) {
     val constraintActivationConfidence: Double
         get() = slotCompatibility * lexicalHints

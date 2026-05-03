@@ -199,6 +199,8 @@ data class CampfireRetrievalSignals(
     val primaryCardId: String?,
     val top1Score: Double,
     val top2Score: Double,
+    val rerankerTop1Score: Double? = null,
+    val rerankerTop2Score: Double? = null,
     val slotCompatibility: Double,
     val conversationCarryOver: Double,
     val semanticSimilarity: Double,
@@ -280,8 +282,21 @@ class RetrievalConfidencePolicy {
         conversationState: AssistantConversationState,
         preprocessing: DeterministicPreprocessingResult
     ): RetrievalConfidenceAssessment {
-        val top1Strength = (signals.top1Score / 85.0).coerceIn(0.0, 1.0)
-        val margin = if (signals.top2Score <= 0.0) {
+        val rerankerTop1 = signals.rerankerTop1Score
+        val rerankerTop2 = signals.rerankerTop2Score
+        val top1Strength = if (rerankerTop1 != null) {
+            rerankerTop1.coerceIn(0.0, 1.0)
+        } else {
+            (signals.top1Score / 85.0).coerceIn(0.0, 1.0)
+        }
+        val margin = if (rerankerTop1 != null) {
+            val top2 = rerankerTop2 ?: 0.0
+            if (top2 <= 0.0) {
+                1.0
+            } else {
+                ((rerankerTop1 - top2) / 0.24).coerceIn(0.0, 1.0)
+            }
+        } else if (signals.top2Score <= 0.0) {
             1.0
         } else {
             ((signals.top1Score - signals.top2Score) / 24.0).coerceIn(0.0, 1.0)

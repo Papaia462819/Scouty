@@ -8,3 +8,4 @@
 *.mbtiles binary
 *.pmtiles binary
 *.sqlite binary
+app/src/main/scouty_assets/ml/jina-reranker-v2-base-multilingual-int8.onnx filter=lfs diff=lfs merge=lfs -text

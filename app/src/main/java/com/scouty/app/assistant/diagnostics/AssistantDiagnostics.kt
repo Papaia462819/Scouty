@@ -54,6 +54,21 @@ object AssistantDiagnostics {
         )
     }
 
+    fun logReranker(
+        query: String,
+        candidateCount: Int,
+        elapsedMs: Long,
+        top1ScoreDeltaVsLexical: Double,
+        error: String?
+    ) {
+        debug(
+            "CrossEncoderReranker.rerank query=\"$query\" candidateCount=$candidateCount " +
+                "rerank_latency_ms=$elapsedMs " +
+                "top1_score_delta_vs_lexical=${"%.4f".format(top1ScoreDeltaVsLexical)} " +
+                "status=${if (error == null) "ok" else "error"} error=$error"
+        )
+    }
+
     fun logAnswerStart(
         query: String,
         packStatus: KnowledgePackStatus,

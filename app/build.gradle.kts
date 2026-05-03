@@ -122,6 +122,8 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("com.google.mediapipe:tasks-genai:0.10.27")
+    implementation("ai.djl.huggingface:tokenizers:0.33.0")
+    runtimeOnly("ai.djl.android:tokenizer-native:0.33.0")
 
     // Camera and local track detection
     val cameraXVersion = "1.4.2"
