@@ -30,16 +30,16 @@
     "dimension": 384
   },
   "assistant_reranker": {
-    "model_name": "BAAI/bge-reranker-v2-m3",
+    "model_name": "jinaai/jina-reranker-v2-base-multilingual",
     "runtime": "onnxruntime_android",
     "quantization": "int8",
-    "model_asset_path": "ml/bge-reranker-v2-m3-int8.onnx",
-    "model_sha256": "58a25e9fe3b1b10356722c622469b20ca400d24cad0f4b573f1898e54d9d9af5",
-    "model_bytes": 569705899,
-    "tokenizer_asset_path": "ml/bge-reranker-v2-m3-tokenizer.json",
-    "tokenizer_sha256": "dc1d276a8940eeae7b509d43d26cdca9e02d550af445d42db1ec9ff79b2ce147",
-    "tokenizer_bytes": 17082900,
-    "source_url": "https://huggingface.co/tss-deposium/bge-reranker-v2-m3-onnx-int8"
+    "model_asset_path": "ml/jina-reranker-v2-base-multilingual-int8.onnx",
+    "model_sha256": "c5220cf8fe023f8aa0ed2a3eb787d4451a7f17cf53f6b787e35718dd4b8815c3",
+    "model_bytes": 279577152,
+    "tokenizer_asset_path": "ml/jina-reranker-v2-base-multilingual-tokenizer.json",
+    "tokenizer_sha256": "3a56def25aa40facc030ea8b0b87f3688e4b3c39eb8b45d5702b3a1300fe2a20",
+    "tokenizer_bytes": 17082734,
+    "source_url": "https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual"
   },
   "domain_counts": {
     "field_know_how": 30,

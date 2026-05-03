@@ -179,9 +179,11 @@ class CampfireConversationEngine(
             val elapsedMs = (System.nanoTime() - startedAtNanos) / 1_000_000
             val rerankedIds = reranked.map { it.chunk.chunkId }.toSet()
             val adjusted = reranked.mapNotNull { result ->
-                byId[result.chunk.chunkId]?.copy(
+                val baseline = byId[result.chunk.chunkId] ?: return@mapNotNull null
+                baseline.copy(
                     rerankerScore = result.score,
-                    finalScore = result.score * 100.0
+                    finalScore = (baseline.finalScore * DeterministicScoreBlendWeight) +
+                        (result.score * RerankerScoreBlendWeight)
                 )
             }
             val top1 = reranked.firstOrNull()
@@ -1595,7 +1597,9 @@ class CampfireConversationEngine(
         private const val GeneralScenarioId = "campfire_general_entry"
         private const val OverrideConstraintMode = "override"
         private const val MaxSemanticPhraseCandidates = 5
-        private const val RerankCandidateLimit = 10
+        private const val RerankCandidateLimit = 3
+        private const val DeterministicScoreBlendWeight = 0.8
+        private const val RerankerScoreBlendWeight = 20.0
         private const val SemanticLookupThreshold = 0.18
         private val IgnitionOptionOrder = listOf("lighter", "matches", "ferro")
         private val IgnitionOptionLabels = mapOf(

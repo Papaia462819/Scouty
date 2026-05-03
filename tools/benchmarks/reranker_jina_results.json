@@ -1,0 +1,286 @@
+{
+  "summary": {
+    "query_count": 30,
+    "baseline_top1_accuracy": 0.7,
+    "reranked_top1_accuracy": 0.7333333333333333,
+    "accuracy_delta": 0.03333333333333333,
+    "rerank_latency_p50_ms": 39.7610500222072,
+    "rerank_latency_p95_ms": 46.58460000064224,
+    "top_k": 3,
+    "max_length": 96,
+    "deterministic_weight": 0.8,
+    "reranker_weight": 20.0
+  },
+  "rows": [
+    {
+      "query": "Cum aprind un foc cu lemne ude?",
+      "expected_chunk_id": "campfire_wet_fuel",
+      "baseline_chunk_id": "campfire_rained_recently",
+      "reranked_chunk_id": "campfire_rained_recently",
+      "baseline_correct": false,
+      "reranked_correct": false,
+      "latency_ms": 50.720800063572824
+    },
+    {
+      "query": "A plouat recent si vreau totusi sa fac focul.",
+      "expected_chunk_id": "campfire_rained_recently",
+      "baseline_chunk_id": "campfire_rained_recently",
+      "reranked_chunk_id": "campfire_rained_recently",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 43.651599902659655
+    },
+    {
+      "query": "Am amnar, cum pornesc focul?",
+      "expected_chunk_id": "campfire_light_with_ferro",
+      "baseline_chunk_id": "campfire_light_with_ferro",
+      "reranked_chunk_id": "campfire_light_with_ferro",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 41.4520000340417
+    },
+    {
+      "query": "Am bricheta, dar nu prinde lemnul gros.",
+      "expected_chunk_id": "campfire_light_with_lighter",
+      "baseline_chunk_id": "campfire_light_with_lighter",
+      "reranked_chunk_id": "campfire_light_with_lighter",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 39.758300059475005
+    },
+    {
+      "query": "Am doar chibrituri, cum sa nu le irosesc?",
+      "expected_chunk_id": "campfire_light_with_matches",
+      "baseline_chunk_id": "campfire_light_with_matches",
+      "reranked_chunk_id": "campfire_light_with_matches",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 41.40149999875575
+    },
+    {
+      "query": "Pot face foc daca bate vantul tare?",
+      "expected_chunk_id": "campfire_high_wind",
+      "baseline_chunk_id": "campfire_high_wind",
+      "reranked_chunk_id": "campfire_high_wind",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 42.49389993492514
+    },
+    {
+      "query": "Ce este iasca?",
+      "expected_chunk_id": "campfire_tinder_definition",
+      "baseline_chunk_id": "campfire_tinder_definition",
+      "reranked_chunk_id": "campfire_tinder_definition",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 39.294200018048286
+    },
+    {
+      "query": "Ce inseamna kindling sau surcele?",
+      "expected_chunk_id": "campfire_kindling_definition",
+      "baseline_chunk_id": "campfire_kindling_definition",
+      "reranked_chunk_id": "campfire_kindling_definition",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 39.59169995505363
+    },
+    {
+      "query": "Care este ordinea materialelor pentru foc?",
+      "expected_chunk_id": "campfire_fuel_stages_definition",
+      "baseline_chunk_id": "campfire_general_entry",
+      "reranked_chunk_id": "campfire_general_entry",
+      "baseline_correct": false,
+      "reranked_correct": false,
+      "latency_ms": 41.217599995434284
+    },
+    {
+      "query": "Ce este triunghiul focului?",
+      "expected_chunk_id": "campfire_fire_triangle_definition",
+      "baseline_chunk_id": "campfire_fire_triangle_definition",
+      "reranked_chunk_id": "campfire_fire_triangle_definition",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 40.764300036244094
+    },
+    {
+      "query": "Cum aleg un loc sigur pentru vatra?",
+      "expected_chunk_id": "campfire_site_selection_safe",
+      "baseline_chunk_id": "campfire_site_selection_safe",
+      "reranked_chunk_id": "campfire_site_selection_safe",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 41.346299927681684
+    },
+    {
+      "query": "Pot aprinde focul langa radacini?",
+      "expected_chunk_id": "campfire_unsafe_ground",
+      "baseline_chunk_id": "campfire_general_entry",
+      "reranked_chunk_id": "campfire_general_entry",
+      "baseline_correct": false,
+      "reranked_correct": false,
+      "latency_ms": 43.93569997046143
+    },
+    {
+      "query": "Nu stiu daca am voie sa fac foc aici.",
+      "expected_chunk_id": "campfire_permission_unknown_or_forbidden",
+      "baseline_chunk_id": "campfire_site_selection_safe",
+      "reranked_chunk_id": "campfire_site_selection_safe",
+      "baseline_correct": false,
+      "reranked_correct": false,
+      "latency_ms": 40.8572000451386
+    },
+    {
+      "query": "Am nevoie de foc pentru caldura.",
+      "expected_chunk_id": "campfire_for_warmth",
+      "baseline_chunk_id": "campfire_for_warmth",
+      "reranked_chunk_id": "campfire_for_warmth",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 39.19410007074475
+    },
+    {
+      "query": "Vreau sa gatesc la foc.",
+      "expected_chunk_id": "campfire_for_cooking",
+      "baseline_chunk_id": "campfire_for_cooking",
+      "reranked_chunk_id": "campfire_for_cooking",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 37.54649998154491
+    },
+    {
+      "query": "Trebuie sa fierb apa de baut.",
+      "expected_chunk_id": "campfire_for_boil_water",
+      "baseline_chunk_id": "campfire_for_boil_water",
+      "reranked_chunk_id": "campfire_for_boil_water",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 38.965499959886074
+    },
+    {
+      "query": "Nu am iasca, improvizez din ce am in rucsac.",
+      "expected_chunk_id": "campfire_improvise_tinder_from_available_materials",
+      "baseline_chunk_id": "campfire_improvise_tinder_from_available_materials",
+      "reranked_chunk_id": "campfire_improvise_tinder_from_available_materials",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 46.58460000064224
+    },
+    {
+      "query": "Nu gasesc surcele si am putin material bun.",
+      "expected_chunk_id": "campfire_scarce_material",
+      "baseline_chunk_id": "campfire_general_entry",
+      "reranked_chunk_id": "campfire_general_entry",
+      "baseline_correct": false,
+      "reranked_correct": false,
+      "latency_ms": 44.75820006337017
+    },
+    {
+      "query": "Nu am nimic de aprindere.",
+      "expected_chunk_id": "campfire_no_direct_ignition",
+      "baseline_chunk_id": "campfire_no_direct_ignition",
+      "reranked_chunk_id": "campfire_no_direct_ignition",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 39.23969995230436
+    },
+    {
+      "query": "Sunt obosit si se intuneca, mai insist cu focul?",
+      "expected_chunk_id": "campfire_too_tired_or_low_daylight",
+      "baseline_chunk_id": "campfire_general_entry",
+      "reranked_chunk_id": "campfire_general_entry",
+      "baseline_correct": false,
+      "reranked_correct": false,
+      "latency_ms": 39.763799984939396
+    },
+    {
+      "query": "Am incercat de mai multe ori si focul tot nu se aprinde.",
+      "expected_chunk_id": "campfire_repeated_failed_lighting",
+      "baseline_chunk_id": "campfire_general_entry",
+      "reranked_chunk_id": "campfire_general_entry",
+      "baseline_correct": false,
+      "reranked_correct": false,
+      "latency_ms": 39.01700000278652
+    },
+    {
+      "query": "Focul nu e necesar, merita sa mai incerc?",
+      "expected_chunk_id": "campfire_not_worth_it_for_goal",
+      "baseline_chunk_id": "campfire_not_worth_it_for_goal",
+      "reranked_chunk_id": "campfire_not_worth_it_for_goal",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 41.91789997275919
+    },
+    {
+      "query": "Cum sting complet focul inainte sa plec?",
+      "expected_chunk_id": "campfire_extinguish_completely",
+      "baseline_chunk_id": "campfire_extinguish_completely",
+      "reranked_chunk_id": "campfire_extinguish_completely",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 37.706099916249514
+    },
+    {
+      "query": "Ce inseamna rece la atingere cand sting jarul?",
+      "expected_chunk_id": "campfire_cold_to_touch_definition",
+      "baseline_chunk_id": "campfire_cold_to_touch_definition",
+      "reranked_chunk_id": "campfire_cold_to_touch_definition",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 39.61720003280789
+    },
+    {
+      "query": "Ce este o vatra sigura?",
+      "expected_chunk_id": "campfire_safe_fire_bed_definition",
+      "baseline_chunk_id": "campfire_safe_fire_bed_definition",
+      "reranked_chunk_id": "campfire_safe_fire_bed_definition",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 39.255799958482385
+    },
+    {
+      "query": "Cum pregatesc iasca, surcelele si lemnul inainte?",
+      "expected_chunk_id": "campfire_prepare_tinder_kindling_fuel",
+      "baseline_chunk_id": "campfire_for_cooking",
+      "reranked_chunk_id": "campfire_prepare_tinder_kindling_fuel",
+      "baseline_correct": false,
+      "reranked_correct": true,
+      "latency_ms": 39.55879993736744
+    },
+    {
+      "query": "Am o sursa de scanteie, dar nu am amnar clasic.",
+      "expected_chunk_id": "campfire_light_with_recognized_spark",
+      "baseline_chunk_id": "campfire_light_with_recognized_spark",
+      "reranked_chunk_id": "campfire_light_with_recognized_spark",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 39.29360001347959
+    },
+    {
+      "query": "Daca focul nu merita, cum ma incalzesc altfel?",
+      "expected_chunk_id": "campfire_alternative_to_fire_for_warmth",
+      "baseline_chunk_id": "campfire_for_warmth",
+      "reranked_chunk_id": "campfire_for_warmth",
+      "baseline_correct": false,
+      "reranked_correct": false,
+      "latency_ms": 38.649900001473725
+    },
+    {
+      "query": "Totul este foarte uscat, ce griji am?",
+      "expected_chunk_id": "campfire_dry_conditions",
+      "baseline_chunk_id": "campfire_dry_conditions",
+      "reranked_chunk_id": "campfire_dry_conditions",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 39.30990002118051
+    },
+    {
+      "query": "Vreau varianta simpla si sigura pentru un foc mic.",
+      "expected_chunk_id": "campfire_general_entry",
+      "baseline_chunk_id": "campfire_general_entry",
+      "reranked_chunk_id": "campfire_general_entry",
+      "baseline_correct": true,
+      "reranked_correct": true,
+      "latency_ms": 40.8757000695914
+    }
+  ]
+}

@@ -47,14 +47,16 @@ class CrossEncoderReranker(
 
         candidates
             .take(topK)
-            .mapIndexed { index, chunk ->
-                val score = scorePair(query, chunk)
-                RerankedChunk(
-                    chunk = chunk,
-                    score = score,
-                    originalRank = index,
-                    originalScore = chunk.priority.toDouble()
-                )
+            .let { batch ->
+                val scores = scorePairs(query, batch)
+                batch.mapIndexed { index, chunk ->
+                    RerankedChunk(
+                        chunk = chunk,
+                        score = scores.getOrElse(index) { 0.0 },
+                        originalRank = index,
+                        originalScore = chunk.priority.toDouble()
+                    )
+                }
             }
             .sortedWith(
                 compareByDescending<RerankedChunk> { it.score }
@@ -62,27 +64,66 @@ class CrossEncoderReranker(
             )
     }
 
-    private fun scorePair(query: String, chunk: Chunk): Double {
-        val encoded = encode(query, chunk)
-        val feeds = buildMap<String, OnnxTensor> {
-            put("input_ids", tensor(encoded.inputIds))
-            put("attention_mask", tensor(encoded.attentionMask))
-            if ("token_type_ids" in session.inputNames) {
-                put("token_type_ids", tensor(encoded.tokenTypeIds))
-            }
+    private fun scorePairs(query: String, chunks: List<Chunk>): List<Double> {
+        if (chunks.isEmpty()) {
+            return emptyList()
         }
-
-        feeds.values.forEach { tensor ->
-            require(tensor.info.shape.contentEquals(longArrayOf(1, encoded.inputIds.size.toLong()))) {
-                "Unexpected reranker tensor shape for ${chunk.chunkId}"
+        val encoded = chunks.map { chunk -> encode(query, chunk) }
+        val batchSize = encoded.size
+        val sequenceLength = encoded.first().inputIds.size
+        val feeds = buildMap<String, OnnxTensor> {
+            put("input_ids", tensor(encoded.flatMapLongArray { it.inputIds }, batchSize, sequenceLength))
+            put("attention_mask", tensor(encoded.flatMapLongArray { it.attentionMask }, batchSize, sequenceLength))
+            if ("token_type_ids" in session.inputNames) {
+                put("token_type_ids", tensor(encoded.flatMapLongArray { it.tokenTypeIds }, batchSize, sequenceLength))
             }
         }
 
         return feeds.values.useAll {
             session.run(feeds).use { result ->
-                sigmoid(firstNumber(result[0].value) ?: 0.0)
+                extractScores(result[0].value, batchSize)
             }
         }
+    }
+
+    private fun tensor(values: LongArray, batchSize: Int, sequenceLength: Int): OnnxTensor =
+        OnnxTensor.createTensor(
+            environment,
+            LongBuffer.wrap(values),
+            longArrayOf(batchSize.toLong(), sequenceLength.toLong())
+        )
+
+    @Suppress("UNCHECKED_CAST")
+    private fun extractScores(value: Any?, batchSize: Int): List<Double> {
+        val rawScores = when (value) {
+            is FloatArray -> value.map { it.toDouble() }
+            is DoubleArray -> value.toList()
+            is Array<*> -> value.mapNotNull(::firstNumber)
+            else -> listOfNotNull(firstNumber(value))
+        }
+        return rawScores
+            .take(batchSize)
+            .map(::sigmoid)
+            .let { scores ->
+                if (scores.size == batchSize) scores else scores + List(batchSize - scores.size) { 0.0 }
+            }
+    }
+
+    private inline fun List<EncodedPair>.flatMapLongArray(
+        selector: (EncodedPair) -> LongArray
+    ): LongArray {
+        val sequenceLength = selector(first()).size
+        val flattened = LongArray(size * sequenceLength)
+        forEachIndexed { rowIndex, encoded ->
+            val row = selector(encoded)
+            row.copyInto(
+                destination = flattened,
+                destinationOffset = rowIndex * sequenceLength,
+                startIndex = 0,
+                endIndex = sequenceLength
+            )
+        }
+        return flattened
     }
 
     private fun encode(query: String, chunk: Chunk): EncodedPair {
@@ -102,13 +143,6 @@ class CrossEncoderReranker(
             tokenTypeIds = rawTypeIds.pad(maxSequenceLength, 0L)
         )
     }
-
-    private fun tensor(values: LongArray): OnnxTensor =
-        OnnxTensor.createTensor(
-            environment,
-            LongBuffer.wrap(values),
-            longArrayOf(1, values.size.toLong())
-        )
 
     private val session: OrtSession
         get() {
@@ -181,13 +215,13 @@ class CrossEncoderReranker(
     )
 
     private companion object {
-        private const val ModelFileName = "bge-reranker-v2-m3-int8.onnx"
-        private const val TokenizerFileName = "bge-reranker-v2-m3-tokenizer.json"
+        private const val ModelFileName = "jina-reranker-v2-base-multilingual-int8.onnx"
+        private const val TokenizerFileName = "jina-reranker-v2-base-multilingual-tokenizer.json"
         private const val ModelAssetPath = "ml/$ModelFileName"
         private const val TokenizerAssetPath = "ml/$TokenizerFileName"
-        private const val ModelSha256 = "58a25e9fe3b1b10356722c622469b20ca400d24cad0f4b573f1898e54d9d9af5"
-        private const val TokenizerSha256 = "dc1d276a8940eeae7b509d43d26cdca9e02d550af445d42db1ec9ff79b2ce147"
-        private const val MaxSequenceLength = 512
+        private const val ModelSha256 = "c5220cf8fe023f8aa0ed2a3eb787d4451a7f17cf53f6b787e35718dd4b8815c3"
+        private const val TokenizerSha256 = "3a56def25aa40facc030ea8b0b87f3688e4b3c39eb8b45d5702b3a1300fe2a20"
+        private const val MaxSequenceLength = 96
         private const val MaxQueryChars = 320
         private const val MaxPassageChars = 1800
     }
