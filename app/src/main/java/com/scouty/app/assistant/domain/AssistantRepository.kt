@@ -2,11 +2,16 @@ package com.scouty.app.assistant.domain
 
 import android.content.Context
 import com.scouty.app.assistant.diagnostics.AssistantDiagnostics
+import com.scouty.app.assistant.data.ConversationRole
+import com.scouty.app.assistant.data.ConversationStore
 import com.scouty.app.assistant.data.KnowledgeChunkStore
 import com.scouty.app.assistant.data.KnowledgePackManager
 import com.scouty.app.assistant.data.KnowledgePackStatusProvider
 import com.scouty.app.assistant.data.SqliteKnowledgeChunkStore
 import com.scouty.app.assistant.data.buildSearchTokens
+import com.scouty.app.assistant.domain.memory.ConversationContextAssembler
+import com.scouty.app.assistant.domain.memory.ConversationHistory
+import com.scouty.app.assistant.domain.memory.SummaryCompactor
 import com.scouty.app.assistant.domain.retrieval.CrossEncoderReranker
 import com.scouty.app.assistant.model.AssistantConversationState
 import com.scouty.app.assistant.model.AssistantCitation
@@ -31,6 +36,7 @@ import java.text.Normalizer
 import java.time.LocalDate
 import java.time.Year
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 import kotlin.math.min
 
 data class RetrievedChunk(
@@ -66,7 +72,13 @@ data class GenerationInput(
     val safetyOutcome: SafetyOutcome,
     val generationMode: GenerationMode,
     val modelStatus: ModelStatus,
-    val knowledgePackStatus: KnowledgePackStatus
+    val knowledgePackStatus: KnowledgePackStatus,
+    val conversationHistory: ConversationHistory? = null
+)
+
+private data class ConversationMemorySession(
+    val conversationId: String,
+    val history: ConversationHistory
 )
 
 class QueryAnalyzer {
@@ -1037,18 +1049,28 @@ class AssistantRepository(
         fallbackEngine = TemplateGenerationEngine()
     ),
     private val medicalSafetyPolicy: MedicalSafetyPolicy = MedicalSafetyPolicy(),
-    private val trailContextEngine: TrailContextEngine = TrailContextEngine()
+    private val trailContextEngine: TrailContextEngine = TrailContextEngine(),
+    private val conversationStore: ConversationStore? = null,
+    private val conversationContextAssembler: ConversationContextAssembler? = conversationStore?.let(::ConversationContextAssembler),
+    private val summaryCompactor: SummaryCompactor? = conversationStore?.let(::SummaryCompactor)
 ) {
+    private var sessionConversationId: String = "session:${UUID.randomUUID()}"
+
     suspend fun answer(
         query: String,
         context: DeviceContextSnapshot,
         conversationState: AssistantConversationState = AssistantConversationState()
     ): AssistantResponse {
+        val memorySession = prepareConversationMemory(
+            query = query,
+            context = context,
+            conversationState = conversationState
+        )
         val queryAnalysis = queryAnalyzer.analyze(query, context, conversationState)
         val preprocessing = deterministicPreprocessor.preprocess(query, conversationState, queryAnalysis)
         val packStatus = knowledgePackManager.ensureReady()
 
-        if (queryAnalysis.trailContextIntent != TrailContextIntent.NONE && context.trail != null) {
+        val response = if (queryAnalysis.trailContextIntent != TrailContextIntent.NONE && context.trail != null) {
             val trailResult = trailContextEngine.answer(
                 query = query,
                 context = context,
@@ -1056,29 +1078,122 @@ class AssistantRepository(
                 conversationState = conversationState
             )
             if (trailResult != null) {
-                return answerFromTrailContext(trailResult, queryAnalysis)
+                answerFromTrailContext(trailResult, queryAnalysis)
+            } else if (queryAnalysis.knowledgeLane == ConversationLane.FIELD_KNOW_HOW && queryAnalysis.resolvedTopic == "campfire") {
+                answerCampfire(
+                    query = query,
+                    context = context,
+                    conversationState = conversationState,
+                    queryAnalysis = queryAnalysis,
+                    packStatus = packStatus,
+                    preprocessing = preprocessing,
+                    conversationHistory = memorySession?.history
+                )
+            } else {
+                answerStandard(
+                    query = query,
+                    context = context,
+                    conversationState = conversationState,
+                    initialAnalysis = queryAnalysis,
+                    preprocessing = preprocessing,
+                    packStatus = packStatus,
+                    conversationHistory = memorySession?.history
+                )
             }
-        }
-
-        if (queryAnalysis.knowledgeLane == ConversationLane.FIELD_KNOW_HOW && queryAnalysis.resolvedTopic == "campfire") {
-            return answerCampfire(
+        } else if (queryAnalysis.knowledgeLane == ConversationLane.FIELD_KNOW_HOW && queryAnalysis.resolvedTopic == "campfire") {
+            answerCampfire(
                 query = query,
                 context = context,
                 conversationState = conversationState,
                 queryAnalysis = queryAnalysis,
                 packStatus = packStatus,
-                preprocessing = preprocessing
+                preprocessing = preprocessing,
+                conversationHistory = memorySession?.history
+            )
+        } else {
+            answerStandard(
+                query = query,
+                context = context,
+                conversationState = conversationState,
+                initialAnalysis = queryAnalysis,
+                preprocessing = preprocessing,
+                packStatus = packStatus,
+                conversationHistory = memorySession?.history
             )
         }
-        return answerStandard(
-            query = query,
-            context = context,
-            conversationState = conversationState,
-            initialAnalysis = queryAnalysis,
-            preprocessing = preprocessing,
-            packStatus = packStatus
-        )
+
+        return persistAssistantTurn(memorySession, response)
     }
+
+    suspend fun resetConversation(context: DeviceContextSnapshot) {
+        val store = conversationStore ?: return
+        val conversationId = resolveConversationId(context)
+        store.deleteConversation(conversationId)
+        if (context.trail == null) {
+            sessionConversationId = "session:${UUID.randomUUID()}"
+        }
+    }
+
+    private suspend fun prepareConversationMemory(
+        query: String,
+        context: DeviceContextSnapshot,
+        conversationState: AssistantConversationState
+    ): ConversationMemorySession? {
+        val store = conversationStore ?: return null
+        val assembler = conversationContextAssembler ?: return null
+        val conversationId = resolveConversationId(context)
+        val trailId = context.trail?.localCode ?: context.trail?.name
+
+        store.ensureConversation(conversationId, trailId)
+        store.appendTurn(
+            conversationId = conversationId,
+            role = ConversationRole.USER,
+            text = query,
+            chunkId = null
+        )
+        val compaction = summaryCompactor?.compactIfNeeded(conversationId)
+        val history = assembler.assemble(
+            conversationId = conversationId,
+            currentUserQuery = query,
+            conversationState = conversationState,
+            deviceContext = context
+        )
+        AssistantDiagnostics.logConversationMemory(
+            conversationId = conversationId,
+            historyTokensSent = history.historyTokenEstimate,
+            summaryCompactionCount = if (compaction?.compacted == true) 1 else 0,
+            cacheHitRate = history.cacheHitRate,
+            recentTurnCount = history.recentTurns.size
+        )
+        return ConversationMemorySession(conversationId, history)
+    }
+
+    private suspend fun persistAssistantTurn(
+        memorySession: ConversationMemorySession?,
+        response: AssistantResponse
+    ): AssistantResponse {
+        val store = conversationStore ?: return response
+        val session = memorySession ?: return response
+        store.appendTurn(
+            conversationId = session.conversationId,
+            role = ConversationRole.ASSISTANT,
+            text = response.answerText,
+            chunkId = response.conversationState.lastRetrievedChunkId
+        )
+        return response
+    }
+
+    private fun resolveConversationId(context: DeviceContextSnapshot): String =
+        context.trail?.let { trail ->
+            "trail:${trail.localCode?.takeIf { it.isNotBlank() } ?: stableConversationKey(trail.name)}"
+        } ?: sessionConversationId
+
+    private fun stableConversationKey(value: String): String =
+        Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD)
+            .replace("\\p{Mn}+".toRegex(), "")
+            .replace("[^a-z0-9]+".toRegex(), "-")
+            .trim('-')
+            .ifBlank { UUID.randomUUID().toString() }
 
     private fun answerFromTrailContext(
         result: TrailContextResult,
@@ -1103,7 +1218,8 @@ class AssistantRepository(
         conversationState: AssistantConversationState,
         queryAnalysis: QueryAnalysis,
         packStatus: KnowledgePackStatus,
-        preprocessing: DeterministicPreprocessingResult
+        preprocessing: DeterministicPreprocessingResult,
+        conversationHistory: ConversationHistory? = null
     ): AssistantResponse {
         val initial = campfireConversationEngine.answer(
             query = query,
@@ -1171,7 +1287,8 @@ class AssistantRepository(
             preferredLanguage = queryAnalysis.preferredLanguage,
             structuredOutput = finalCampfire.structuredOutput,
             retrievedChunks = finalCampfire.retrievedChunks,
-            confidence = finalCampfire.retrievalConfidence
+            confidence = finalCampfire.retrievalConfidence,
+            conversationHistory = conversationHistory
         )
         val structuredOutput = medicalSafetyPolicy.applyFinalGuardrails(
             output = wordedOutput,
@@ -1201,7 +1318,8 @@ class AssistantRepository(
         conversationState: AssistantConversationState,
         initialAnalysis: QueryAnalysis,
         preprocessing: DeterministicPreprocessingResult,
-        packStatus: KnowledgePackStatus
+        packStatus: KnowledgePackStatus,
+        conversationHistory: ConversationHistory? = null
     ): AssistantResponse {
         val modelStatus = modelManager.refreshStatus()
         val generationMode = generationModeForAttempt(modelStatus)
@@ -1292,7 +1410,8 @@ class AssistantRepository(
                     safetyOutcome = safetyOutcome,
                     generationMode = generationMode,
                     modelStatus = modelStatus,
-                    knowledgePackStatus = packStatus
+                    knowledgePackStatus = packStatus,
+                    conversationHistory = conversationHistory
                 )
             ),
             safetyOutcome = safetyOutcome,
@@ -1358,7 +1477,8 @@ class AssistantRepository(
         preferredLanguage: String,
         structuredOutput: StructuredAssistantOutput,
         retrievedChunks: List<RetrievedChunk>,
-        confidence: RetrievalConfidenceAssessment
+        confidence: RetrievalConfidenceAssessment,
+        conversationHistory: ConversationHistory? = null
     ): StructuredAssistantOutput {
         if (confidence.tier == RetrievalConfidenceTier.LOW || retrievedChunks.isEmpty()) {
             return structuredOutput
@@ -1368,7 +1488,8 @@ class AssistantRepository(
                 query = query,
                 preferredLanguage = preferredLanguage,
                 deterministicOutput = structuredOutput,
-                retrievedChunks = retrievedChunks
+                retrievedChunks = retrievedChunks,
+                conversationHistory = conversationHistory
             )
         ) ?: return structuredOutput
         return structuredOutput.copy(summary = wording.summary)

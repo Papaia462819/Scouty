@@ -726,7 +726,8 @@ data class GroundedWordingRequest(
     val query: String,
     val preferredLanguage: String,
     val deterministicOutput: StructuredAssistantOutput,
-    val retrievedChunks: List<RetrievedChunk>
+    val retrievedChunks: List<RetrievedChunk>,
+    val conversationHistory: com.scouty.app.assistant.domain.memory.ConversationHistory? = null
 )
 
 data class GroundedWordingResult(
@@ -754,7 +755,12 @@ class OnDeviceGroundedWordingEngine(
 
         val prompt = buildPrompt(request)
         return runCatching {
-            val raw = modelManager.generate(prompt)
+            val raw = modelManager.generate(
+                prompt = prompt,
+                options = request.conversationHistory?.let {
+                    LocalLlmGenerationOptions(promptCacheHint = it.promptCacheHint)
+                } ?: LocalLlmGenerationOptions()
+            )
             val payload = json.decodeFromString(
                 GroundedWordingPayload.serializer(),
                 extractFirstJsonObject(raw.text)
@@ -776,7 +782,10 @@ class OnDeviceGroundedWordingEngine(
             "- ${sanitizePromptLine(section.title, 60)}: ${sanitizePromptLine(section.body, 220)}"
         }
         return buildString {
-            appendLine("You are Scouty's wording layer.")
+            request.conversationHistory?.let { history ->
+                append(history.promptCacheHint.cacheablePrefix)
+                appendLine()
+            } ?: appendLine("You are Scouty's wording layer.")
             appendLine("Do not change retrieval, card selection, or follow-up planning.")
             appendLine("Use only the grounded content below.")
             appendLine("Return exactly one JSON object with schema:")
@@ -787,6 +796,10 @@ class OnDeviceGroundedWordingEngine(
             appendLine("- Keep the language exactly ${if (isRomanian) "Romanian" else "English"}.")
             appendLine("- summary must be one short sentence.")
             appendLine("- context is optional and must also stay grounded.")
+            request.conversationHistory?.nonCacheableContextBlock?.takeIf { it.isNotBlank() }?.let { historyBlock ->
+                appendLine("CONVERSATION_CONTEXT:")
+                appendLine(historyBlock)
+            }
             appendLine("QUESTION: ${sanitizePromptLine(request.query, 180)}")
             appendLine("GROUNDING:")
             appendLine(grounding)

@@ -93,3 +93,46 @@ Artifacts:
 Deviation:
 - The attached validation target was x86_64, so a temporary emulator ABI library was built, installed, tested, and removed before commit. The committed ABI set remains `arm64-v8a` and `armeabi-v7a`, per the migration brief.
 - Prompt-cache support is implemented as a single in-process prefix cache in the JNI context. Step 3 will provide stable system + summary cache keys so this can produce meaningful hits.
+
+## Step 3 - conversation memory store
+
+Status: complete behind `RuntimeFeatureFlags.useConversationMemory` (default off). `RuntimeFeatureFlags.useLlmSummarizer` remains default off; compaction is deterministic.
+
+Changed:
+- Added `ConversationStore` backed by `noBackupFilesDir/conversations.sqlite` with the required `conversations` and `turns` tables.
+- Added the required store API: `appendTurn`, `loadRecent`, `loadSummary`, and `updateSummary`.
+- Added repository-only helpers for conversation creation, full-turn loading, pruning, and reset.
+- Added `ConversationContextAssembler` to build a Romanian prompt context from static persona rules, summary, recent raw turns, structured `AssistantConversationState`, device/trail context, and the current query.
+- Added prompt-cache hints keyed by SHA-256 of the stable system + summary prefix.
+- Added `SummaryCompactor`; it triggers after more than 12 turns when summary + history exceed budget, writes deterministic Romanian bullets, and keeps the last 4 raw turns.
+- Wired `AssistantRepository` to append user turns before retrieval and assistant turns after response generation when memory is enabled.
+- Threaded conversation history into both `LocalLlmGenerationEngine` and the campfire `GroundedWordingEngine` so prompt-cache hints and prior turns are available to local generation.
+- Added `AssistantViewModel.resetConversation()` without changing layout.
+- Added diagnostics fields: `history_tokens_sent`, `summary_compaction_count`, `cache_hit_rate`, and `recent_turn_count`.
+
+Files touched:
+- `app/src/androidTest/java/com/scouty/app/assistant/ConversationStoreInstrumentedTest.kt`
+- `app/src/main/java/com/scouty/app/assistant/data/ConversationStore.kt`
+- `app/src/main/java/com/scouty/app/assistant/diagnostics/AssistantDiagnostics.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/AssistantRepository.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/AssistantRuntimeGraph.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/InterpretationPipeline.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/LocalLlmGenerationEngine.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/memory/ConversationContextAssembler.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/memory/SummaryCompactor.kt`
+- `app/src/main/java/com/scouty/app/assistant/ui/AssistantViewModel.kt`
+- `docs/migration-qwen.md`
+
+Validation:
+- `./gradlew.bat testDebugUnitTest` passes.
+- `./gradlew.bat :app:assembleDebug :app:assembleDebugAndroidTest` passes.
+- Emulator persistence/context validation used a temporary, uncommitted `x86_64` JNI build because the attached target was `sdk_gphone64_x86_64`.
+- `adb shell am instrument -w -e class com.scouty.app.assistant.ConversationStoreInstrumentedTest com.scouty.app.test/androidx.test.runner.AndroidJUnitRunner` passes: 2 tests.
+- Instrumentation coverage verifies:
+  - turns and summary survive `ConversationStore` recreation;
+  - deterministic compaction prunes to the last 4 raw turns;
+  - the compacted summary and assembled context keep the earlier "lemne ude" topic available for a later recall query.
+
+Deviation:
+- I did not mark this as a full qualitative 20-turn Qwen conversation bench. Step 3 now preserves and injects the required memory context; subjective answer quality depends on Step 4 Qwen defaulting and Step 5 expression-layer routing.
+- The schema remains the requested two-table shape. Structured state is not persisted as a third table or JSON column; it is injected from the existing `AssistantConversationState` and reinforced into deterministic summaries during compaction.

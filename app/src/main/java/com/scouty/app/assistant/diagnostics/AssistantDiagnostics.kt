@@ -69,6 +69,22 @@ object AssistantDiagnostics {
         )
     }
 
+    fun logConversationMemory(
+        conversationId: String,
+        historyTokensSent: Int,
+        summaryCompactionCount: Int,
+        cacheHitRate: Double,
+        recentTurnCount: Int
+    ) {
+        debug(
+            "ConversationMemory conversationId=$conversationId " +
+                "history_tokens_sent=$historyTokensSent " +
+                "summary_compaction_count=$summaryCompactionCount " +
+                "cache_hit_rate=${"%.4f".format(cacheHitRate)} " +
+                "recent_turn_count=$recentTurnCount"
+        )
+    }
+
     fun logAnswerStart(
         query: String,
         packStatus: KnowledgePackStatus,

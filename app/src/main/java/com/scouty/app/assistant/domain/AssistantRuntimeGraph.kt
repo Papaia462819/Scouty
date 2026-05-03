@@ -1,8 +1,11 @@
 package com.scouty.app.assistant.domain
 
 import android.content.Context
+import com.scouty.app.assistant.data.ConversationStore
 import com.scouty.app.assistant.data.KnowledgePackManager
 import com.scouty.app.assistant.data.SqliteKnowledgeChunkStore
+import com.scouty.app.assistant.domain.memory.ConversationContextAssembler
+import com.scouty.app.assistant.domain.memory.SummaryCompactor
 import com.scouty.app.assistant.domain.retrieval.CrossEncoderReranker
 
 data class RuntimeFeatureFlags(
@@ -30,6 +33,18 @@ class AssistantRuntimeGraph private constructor(
     } else {
         null
     }
+    private val conversationStore = if (featureFlags.useConversationMemory) {
+        ConversationStore(context)
+    } else {
+        null
+    }
+    private val conversationContextAssembler = conversationStore?.let(::ConversationContextAssembler)
+    private val summaryCompactor = conversationStore?.let {
+        SummaryCompactor(
+            store = it,
+            useLlmSummarizer = featureFlags.useLlmSummarizer
+        )
+    }
     private val retrievalEngine = RetrievalEngine(knowledgeStore, queryAnalyzer)
     private val promptBuilder = PromptBuilder()
     private val safetyPolicy = MedicalSafetyPolicy()
@@ -50,7 +65,10 @@ class AssistantRuntimeGraph private constructor(
         generationEngine = generationEngine,
         medicalSafetyPolicy = safetyPolicy,
         trailContextEngine = trailContextEngine,
-        crossEncoderReranker = crossEncoderReranker
+        crossEncoderReranker = crossEncoderReranker,
+        conversationStore = conversationStore,
+        conversationContextAssembler = conversationContextAssembler,
+        summaryCompactor = summaryCompactor
     )
 
     companion object {

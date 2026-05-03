@@ -14,6 +14,7 @@ import com.scouty.app.assistant.model.AssistantMessageUiModel
 import com.scouty.app.assistant.model.AssistantUiState
 import com.scouty.app.assistant.model.SafetyOutcome
 import com.scouty.app.assistant.model.assistantDefaultLocale
+import com.scouty.app.assistant.model.buildWelcomeMessage
 import com.scouty.app.assistant.model.starterPromptsForCurrentLocale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -62,6 +63,25 @@ class AssistantViewModel(
     fun sendPrompt(prompt: String) {
         updateDraft(prompt)
         sendCurrentDraft()
+    }
+
+    fun resetConversation() {
+        conversationState = AssistantConversationState()
+        val locale = assistantDefaultLocale()
+        _uiState.update {
+            it.copy(
+                draft = "",
+                isResponding = false,
+                messages = listOf(buildWelcomeMessage(locale)),
+                starterPrompts = starterPromptsForCurrentLocale(
+                    locale = locale,
+                    hasActiveTrail = lastTrailPresent
+                )
+            )
+        }
+        viewModelScope.launch {
+            repository.resetConversation(deviceContextProvider.deviceContext.value)
+        }
     }
 
     fun sendCurrentDraft() {

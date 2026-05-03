@@ -30,7 +30,12 @@ class LocalLlmGenerationEngine(
 
         return runCatching {
             val prompt = buildPrompt(input, loadStatus)
-            val rawResponse = modelManager.generate(prompt)
+            val rawResponse = modelManager.generate(
+                prompt = prompt,
+                options = input.conversationHistory?.let {
+                    LocalLlmGenerationOptions(promptCacheHint = it.promptCacheHint)
+                } ?: LocalLlmGenerationOptions()
+            )
             runCatching {
                 Log.d(
                     LogTag,
@@ -92,7 +97,10 @@ class LocalLlmGenerationEngine(
         }
 
         return buildString {
-            appendLine("You are Scouty's grounded offline assistant running locally on Android.")
+            input.conversationHistory?.let { history ->
+                append(history.promptCacheHint.cacheablePrefix)
+                appendLine()
+            } ?: appendLine("You are Scouty's grounded offline assistant running locally on Android.")
             appendLine("Answer exclusively in ${if (isRomanian) "Romanian" else "English"}.")
             appendLine(
                 if (isRomanian) {
@@ -119,6 +127,10 @@ class LocalLlmGenerationEngine(
             appendLine("QUESTION: ${sanitizeSingleLine(input.query, 160)}")
             appendLine("SAFETY: ${input.safetyOutcome.name}")
             appendLine("REASONING: ${input.queryAnalysis.reasoningType.label}")
+            input.conversationHistory?.nonCacheableContextBlock?.takeIf { it.isNotBlank() }?.let { historyBlock ->
+                appendLine("CONVERSATION_CONTEXT:")
+                appendLine(historyBlock)
+            }
             appendLine("FIELD_CONTEXT: $fieldContext")
             appendLine("RUNTIME: model=${sanitizeSingleLine(modelStatus.modelVersion, 80)} backend=${sanitizeSingleLine(modelStatus.backend, 32)} pack=${sanitizeSingleLine(input.knowledgePackStatus.packVersion ?: "unknown", 48)}")
             appendLine("FACTS:")
