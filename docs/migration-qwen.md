@@ -136,3 +136,38 @@ Validation:
 Deviation:
 - I did not mark this as a full qualitative 20-turn Qwen conversation bench. Step 3 now preserves and injects the required memory context; subjective answer quality depends on Step 4 Qwen defaulting and Step 5 expression-layer routing.
 - The schema remains the requested two-table shape. Structured state is not persisted as a third table or JSON column; it is injected from the existing `AssistantConversationState` and reinforced into deterministic summaries during compaction.
+
+## Step 4 - Qwen 2.5 1.5B-Instruct default for llama.cpp
+
+Status: complete for the gated llama.cpp path. When `RuntimeFeatureFlags.useLlamaCpp = true`, `ModelManager` prefers Qwen `.gguf` bundles from `models/qwen-2.5-1.5b/`.
+
+Changed:
+- Added adapter-side Qwen ChatML formatting in `LlamaCppRuntimeAdapter`.
+- Kept call sites prompt-template agnostic: normal generation paths pass plain prompt text, and the llama.cpp adapter wraps Qwen prompts.
+- Preserved debug compatibility for already formatted ChatML prompts by passing them through unchanged.
+- Transformed prompt-cache prefixes through the same ChatML wrapper so Step 3 system + summary cache hints still match the real llama.cpp token stream.
+- Updated `LlamaCppRuntimeDebugTest` to send a plain Romanian prompt instead of hand-written ChatML.
+- Updated `docs/local-llm-runtime.md` with the Qwen URL, SHA-256, size, and ChatML behavior.
+
+Files touched:
+- `app/src/androidTest/java/com/scouty/app/assistant/LlamaCppRuntimeDebugTest.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/runtime/LlamaCppRuntimeAdapter.kt`
+- `docs/local-llm-runtime.md`
+- `docs/migration-qwen.md`
+
+Validation:
+- `./gradlew.bat testDebugUnitTest` passes.
+- `./gradlew.bat :app:assembleDebug :app:assembleDebugAndroidTest` passes.
+- Emulator Qwen smoke validation used a temporary, uncommitted `x86_64` JNI build because the attached target was `sdk_gphone64_x86_64`.
+- `adb shell am instrument -w -e class com.scouty.app.assistant.LlamaCppRuntimeDebugTest com.scouty.app.test/androidx.test.runner.AndroidJUnitRunner` passes.
+- Smoke prompt: `Cum aprind un foc cu lemne ude?`
+- Result gate: Qwen Q4_K_M loads through `ModelManager`, transitions to `LOADED`, and returns non-empty Romanian fire-starting text from a plain prompt that the adapter wraps with ChatML.
+
+Artifacts:
+- Qwen GGUF source URL: `https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf`.
+- Qwen GGUF SHA-256: `6A1A2EB6D15622BF3C96857206351BA97E1AF16C30D7A74EE38970E434E9407E`.
+- Qwen GGUF size: `1117320736` bytes.
+
+Deviation:
+- The requested 20-prompt Qwen-vs-Gemma fluency bench was not a true side-by-side run because the local emulator has the Qwen GGUF installed but no Gemma MediaPipe bundle. Qwen generation was smoke-validated; Gemma comparison remains a bench task once a Gemma bundle is present on the same target.
+- Grammar-constrained JSON validity is supported by Step 2 GBNF pass-through, but the 20-prompt grammar bench belongs with Step 6 tool-calling grammar coverage.

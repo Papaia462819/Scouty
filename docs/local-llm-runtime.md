@@ -34,6 +34,19 @@ The flag defaults to `false` while the Qwen migration is staged.
 - Source URL: `https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf`.
 - SHA-256: `6A1A2EB6D15622BF3C96857206351BA97E1AF16C30D7A74EE38970E434E9407E`.
 - Size: `1117320736` bytes.
+- Prompt format: call sites pass plain prompt text; `LlamaCppRuntimeAdapter` wraps Qwen prompts with ChatML:
+
+```text
+<|im_start|>system
+...
+<|im_end|>
+<|im_start|>user
+...
+<|im_end|>
+<|im_start|>assistant
+```
+
+Already formatted ChatML prompts are passed through unchanged for debug compatibility.
 
 ### MediaPipe + Gemma legacy path
 
@@ -188,6 +201,8 @@ adb install --streaming -r -t app\build\outputs\apk\androidTest\debug\app-debug-
 powershell -NoProfile -ExecutionPolicy Bypass -File tools\push_qwen_to_device.ps1 -ModelPath D:\ScoutyScratch\models\qwen2.5-1.5b-instruct-q4_k_m.gguf
 adb shell am instrument -w -e class com.scouty.app.assistant.LlamaCppRuntimeDebugTest com.scouty.app.test/androidx.test.runner.AndroidJUnitRunner
 ```
+
+The smoke test sends a plain Romanian prompt. Passing it verifies that Qwen model discovery, `ModelManager` state transition, adapter-side ChatML wrapping, and Romanian generation all work together.
 
 Remove the temporary `app/src/main/jniLibs/x86_64/` directory before committing unless x86_64 support is explicitly part of the release.
 

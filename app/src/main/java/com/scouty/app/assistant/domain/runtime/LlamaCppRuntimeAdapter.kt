@@ -2,6 +2,7 @@ package com.scouty.app.assistant.domain.runtime
 
 import com.scouty.app.assistant.domain.LocalLlmGenerationOptions
 import com.scouty.app.assistant.domain.LocalLlmLoadedModelHandle
+import com.scouty.app.assistant.domain.LocalLlmPromptCacheHint
 import com.scouty.app.assistant.domain.LocalLlmRuntimeAdapter
 import com.scouty.app.assistant.domain.LocalLlmSamplerParams
 import com.scouty.app.assistant.domain.LocalModelArtifact
@@ -49,7 +50,11 @@ class LlamaCppRuntimeAdapter(
             useMmap = params.useMmap,
             useMlock = params.useMlock
         )
-        LlamaCppLoadedModel(handle, nativeBridge)
+        LlamaCppLoadedModel(
+            nativeHandle = handle,
+            nativeBridge = nativeBridge,
+            promptTemplate = LlamaCppPromptTemplate.forModelPath(path)
+        )
     }
 
 }
@@ -57,9 +62,10 @@ class LlamaCppRuntimeAdapter(
 private fun defaultLlamaThreadCount(): Int =
     min(4, max(2, Runtime.getRuntime().availableProcessors() - 1))
 
-class LlamaCppLoadedModel(
+class LlamaCppLoadedModel internal constructor(
     private var nativeHandle: Long,
-    private val nativeBridge: LlamaCppNativeBridge
+    private val nativeBridge: LlamaCppNativeBridge,
+    private val promptTemplate: LlamaCppPromptTemplate = LlamaCppPromptTemplate.Raw
 ) : LocalLlmLoadedModelHandle {
     override suspend fun generate(prompt: String): String =
         generate(prompt, grammar = null, sampler = LocalLlmSamplerParams())
@@ -85,17 +91,18 @@ class LlamaCppLoadedModel(
         options: LocalLlmGenerationOptions
     ): String = withContext(Dispatchers.Default) {
         val handle = requireLoaded()
+        val formatted = promptTemplate.format(prompt, options.promptCacheHint)
         nativeBridge.generate(
             handle = handle,
-            prompt = prompt,
+            prompt = formatted.prompt,
             grammar = grammar,
             maxTokens = sampler.maxTokens,
             temperature = sampler.temperature,
             topK = sampler.topK,
             topP = sampler.topP,
             randomSeed = sampler.randomSeed,
-            promptCacheKey = options.promptCacheHint?.key,
-            promptCachePrefix = options.promptCacheHint?.cacheablePrefix
+            promptCacheKey = formatted.promptCacheHint?.key,
+            promptCachePrefix = formatted.promptCacheHint?.cacheablePrefix
         )
     }
 
@@ -114,6 +121,63 @@ class LlamaCppLoadedModel(
     private fun requireLoaded(): Long =
         nativeHandle.takeIf { it != 0L } ?: error("llama.cpp model is not loaded")
 }
+
+internal data class FormattedPrompt(
+    val prompt: String,
+    val promptCacheHint: LocalLlmPromptCacheHint?
+)
+
+internal sealed class LlamaCppPromptTemplate {
+    internal abstract fun format(prompt: String, promptCacheHint: LocalLlmPromptCacheHint?): FormattedPrompt
+
+    data object Raw : LlamaCppPromptTemplate() {
+        override fun format(prompt: String, promptCacheHint: LocalLlmPromptCacheHint?): FormattedPrompt =
+            FormattedPrompt(prompt = prompt, promptCacheHint = promptCacheHint)
+    }
+
+    data object QwenChatMl : LlamaCppPromptTemplate() {
+        override fun format(prompt: String, promptCacheHint: LocalLlmPromptCacheHint?): FormattedPrompt {
+            if (prompt.trimStart().startsWith("<|im_start|>")) {
+                return FormattedPrompt(prompt = prompt, promptCacheHint = promptCacheHint)
+            }
+            val userPrompt = prompt.trim()
+            val prefix = buildString {
+                append("<|im_start|>system\n")
+                append(QwenSystemPrompt)
+                append("\n<|im_end|>\n")
+                append("<|im_start|>user\n")
+            }
+            val suffix = "\n<|im_end|>\n<|im_start|>assistant\n"
+            val formattedCacheHint = promptCacheHint?.let { hint ->
+                LocalLlmPromptCacheHint(
+                    key = hint.key,
+                    cacheablePrefix = prefix + hint.cacheablePrefix
+                )
+            }
+            return FormattedPrompt(
+                prompt = prefix + userPrompt + suffix,
+                promptCacheHint = formattedCacheHint
+            )
+        }
+    }
+
+    companion object {
+        fun forModelPath(path: String): LlamaCppPromptTemplate {
+            val fileName = File(path).name.lowercase()
+            return if (fileName.contains("qwen")) {
+                QwenChatMl
+            } else {
+                Raw
+            }
+        }
+    }
+}
+
+private val QwenSystemPrompt = """
+Esti Scouty, asistentul offline pentru drumetii in Romania.
+Raspunde in romana naturala si concisa, cu prudenta pentru siguranta pe munte.
+Foloseste doar informatiile primite in prompt si nu inventa fapte.
+""".trimIndent()
 
 class LlamaCppNativeBridge {
     init {

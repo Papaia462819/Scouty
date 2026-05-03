@@ -27,13 +27,8 @@ class LlamaCppRuntimeDebugTest {
         assertEquals(ModelRuntimeState.LOADED, loaded.state)
 
         val prompt = """
-            <|im_start|>system
             Raspunde doar in romana, in maximum doua propozitii.
-            <|im_end|>
-            <|im_start|>user
-            Cum aprind un foc cu lemne ude?
-            <|im_end|>
-            <|im_start|>assistant
+            Intrebare: Cum aprind un foc cu lemne ude?
         """.trimIndent()
 
         val response = manager.generate(
