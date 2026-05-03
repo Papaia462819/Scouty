@@ -171,3 +171,37 @@ Artifacts:
 Deviation:
 - The requested 20-prompt Qwen-vs-Gemma fluency bench was not a true side-by-side run because the local emulator has the Qwen GGUF installed but no Gemma MediaPipe bundle. Qwen generation was smoke-validated; Gemma comparison remains a bench task once a Gemma bundle is present on the same target.
 - Grammar-constrained JSON validity is supported by Step 2 GBNF pass-through, but the 20-prompt grammar bench belongs with Step 6 tool-calling grammar coverage.
+
+## Step 5 gate check - expression-layer inversion
+
+Status: blocked by knowledge-pack coverage. No Step 5 implementation was started.
+
+Gate command:
+
+```powershell
+@'
+import sqlite3
+conn = sqlite3.connect('app/src/main/scouty_assets/knowledge_pack.sqlite')
+cur = conn.cursor()
+for label, where in {
+    'campfire_basics': "domain='campfire_basics'",
+    'medical_emergency + mountain_safety': "domain in ('medical_emergency','mountain_safety')",
+    'wildlife_romania': "domain='wildlife_romania'",
+    'weather_and_season': "domain='weather_and_season'",
+}.items():
+    cur.execute(f"select count(*) from knowledge_chunks where {where}")
+    print(label, cur.fetchone()[0])
+conn.close()
+'@ | python -
+```
+
+Observed coverage:
+- `campfire_basics`: 0 cards. The current campfire content is `field_know_how/topic=campfire` with 30 cards, still below the requested 50-card campfire gate and under a different domain name.
+- `medical_emergency + mountain_safety`: 10 cards, below the requested 100 cards.
+- `wildlife_romania`: 4 cards, below the requested 80-card alternative.
+- `weather_and_season`: 4 cards, below the requested 80-card alternative.
+
+Decision:
+- Halted before Step 5 as required by the implementation brief.
+- Did not run the 60-query human-judged retrieval appropriateness gate because the domain-count gate already fails decisively.
+- Content generation/card authoring is out of scope for this migration pass and belongs to the separate content workstream.
