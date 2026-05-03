@@ -21,7 +21,7 @@ class AssistantRuntimeGraph private constructor(
     val featureFlags: RuntimeFeatureFlags = RuntimeFeatureFlags()
 ) {
     val knowledgePackManager = KnowledgePackManager(context)
-    val modelManager = ModelManager(context)
+    val modelManager = ModelManager(context, featureFlags)
 
     private val queryAnalyzer = QueryAnalyzer()
     private val knowledgeStore = SqliteKnowledgeChunkStore(knowledgePackManager)
