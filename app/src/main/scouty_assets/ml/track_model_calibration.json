@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "temperature": 1.0,
+  "bands": {
+    "probabil": 0.7,
+    "posibil": 0.4,
+    "ambiguous_margin": 0.08
+  },
+  "notes": "V1 uses uncalibrated YOLO class scores from the AnimalClue-tuned ONNX model. Real calibration still needs a reviewed field validation set."
+}

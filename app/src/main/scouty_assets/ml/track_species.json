@@ -1,0 +1,81 @@
+{
+  "species": [
+    {
+      "id": "bear_brown",
+      "ro": "Urs brun",
+      "scientific": "Ursus arctos",
+      "safety": "danger",
+      "features": [
+        "urma mare si lata",
+        "degete vizibile dispuse arcuit",
+        "gheare vizibile in substrat moale"
+      ]
+    },
+    {
+      "id": "wolf_gray",
+      "ro": "Lup cenusiu",
+      "scientific": "Canis lupus",
+      "safety": "danger",
+      "features": [
+        "urma ovala",
+        "degete stranse",
+        "gheare fine orientate inainte"
+      ]
+    },
+    {
+      "id": "lynx_eurasian",
+      "ro": "Ras eurasiatic",
+      "scientific": "Lynx lynx",
+      "safety": "danger",
+      "features": [
+        "urma rotunda",
+        "fara gheare de obicei",
+        "pernuta centrala lata"
+      ]
+    },
+    {
+      "id": "red_deer",
+      "ro": "Cerb carpatin",
+      "scientific": "Cervus elaphus",
+      "safety": "normal",
+      "features": [
+        "doua copite alungite",
+        "varfuri relativ ascutite",
+        "urma simetrica pe teren moale"
+      ]
+    },
+    {
+      "id": "wild_boar",
+      "ro": "Mistret",
+      "scientific": "Sus scrofa",
+      "safety": "caution",
+      "features": [
+        "copite mai rotunjite",
+        "pintenii pot aparea lateral",
+        "urma mai lata decat la cerb"
+      ]
+    },
+    {
+      "id": "red_fox",
+      "ro": "Vulpe roscata",
+      "scientific": "Vulpes vulpes",
+      "safety": "normal",
+      "features": [
+        "urma mica de canid",
+        "forma ovala ingusta",
+        "pas adesea aliniat"
+      ]
+    },
+    {
+      "id": "dog_domestic",
+      "ro": "Caine domestic",
+      "scientific": "Canis familiaris",
+      "safety": "normal",
+      "features": [
+        "forma variabila",
+        "degete mai rasfirate",
+        "se confunda frecvent cu lupul"
+      ]
+    }
+  ]
+}

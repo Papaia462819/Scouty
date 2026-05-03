@@ -1,0 +1,55 @@
+{
+  "model_id": "track_model_v1_animalclue_1280_yolo11n_tuned_20260502",
+  "asset_name": "track_model_v1.onnx",
+  "version": 2,
+  "sha256": "25cb2b16e07e21890447da99347240caad3f1b85790e2a902a6f8eae305e0cd8",
+  "format": "onnx",
+  "input": {
+    "name": "images",
+    "shape": [
+      1,
+      3,
+      640,
+      640
+    ],
+    "color": "RGB",
+    "normalization": "0_1"
+  },
+  "output": {
+    "shape": [
+      1,
+      11,
+      8400
+    ],
+    "layout": "xywh_plus_class_scores"
+  },
+  "classes": [
+    "bear_brown",
+    "wolf_gray",
+    "lynx_eurasian",
+    "red_deer",
+    "wild_boar",
+    "red_fox",
+    "dog_domestic"
+  ],
+  "training_dataset": "D:/ScoutyDatasets/scouty_tracks_dataset_generated/curated/v0_roboflow_baseline_1280",
+  "training_run": "D:/ScoutyDatasets/scouty_tracks_dataset_generated/runs/v1_animalclue_1280_yolo11n_tuned_20260502",
+  "training_summary": {
+    "model": "YOLO11n",
+    "imgsz": 640,
+    "epochs": 100,
+    "seed": 42,
+    "onnx_test": {
+      "precision": 0.401,
+      "recall": 0.316,
+      "map50": 0.287,
+      "map50_95": 0.180
+    }
+  },
+  "limitations": [
+    "wolf_gray remains non-operational in V1 because positive data is still very limited",
+    "bear_brown and red_deer recall are weak on the V1 test set",
+    "lynx_eurasian still has false positives",
+    "predictions are orientation aids only, not authoritative species identification"
+  ]
+}

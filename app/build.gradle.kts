@@ -93,6 +93,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation("androidx.activity:activity-compose:1.9.2")
+    implementation("androidx.exifinterface:exifinterface:1.3.7")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -121,6 +122,14 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("com.google.mediapipe:tasks-genai:0.10.27")
+
+    // Camera and local track detection
+    val cameraXVersion = "1.4.2"
+    implementation("androidx.camera:camera-core:$cameraXVersion")
+    implementation("androidx.camera:camera-camera2:$cameraXVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraXVersion")
+    implementation("androidx.camera:camera-view:$cameraXVersion")
+    implementation("com.microsoft.onnxruntime:onnxruntime-android:1.25.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")

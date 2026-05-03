@@ -758,7 +758,7 @@ private fun HistoryCard(
                         contentAlignment = Alignment.BottomStart
                     ) {
                         Text(
-                            text = "Trails finished from the map will land here.",
+                            text = "Trails finished from the map will land here."           ,
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextSecondary,
                             lineHeight = 20.sp

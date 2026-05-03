@@ -42,6 +42,7 @@ import com.scouty.app.ui.screens.ProfileFlowMode
 import com.scouty.app.ui.screens.ProfileOnboardingScreen
 import com.scouty.app.ui.screens.ProfileScreen
 import com.scouty.app.ui.screens.SosScreen
+import com.scouty.app.tracks.ui.TrackCameraScreen
 
 private const val ROUTE_HOME = "home"
 private const val ROUTE_MAP = "map"
@@ -49,6 +50,7 @@ private const val ROUTE_CHAT = "chat"
 private const val ROUTE_SOS = "sos"
 private const val ROUTE_GEAR = "gear"
 private const val ROUTE_PROFILE = "profile"
+private const val ROUTE_TRACKS = "tracks"
 
 @Composable
 fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
@@ -156,7 +158,8 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                     onWaterClick = {
                         mainViewModel.requestNearbyGuide(NearbyGuideType.WATER)
                         selectedRoute = ROUTE_MAP
-                    }
+                    },
+                    onTrackClick = { selectedRoute = ROUTE_TRACKS }
                 )
                 ROUTE_MAP -> MapScreen(
                     status = uiState,
@@ -185,6 +188,10 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                         editingProfile = false
                         profileViewModel.signOut()
                     }
+                )
+                ROUTE_TRACKS -> TrackCameraScreen(
+                    contentPadding = innerPadding,
+                    onBack = { selectedRoute = ROUTE_HOME },
                 )
             }
         }

@@ -88,6 +88,7 @@ fun HomeScreen(
     onActiveTrailClick: () -> Unit = {},
     onShelterClick: () -> Unit = {},
     onWaterClick: () -> Unit = {},
+    onTrackClick: () -> Unit = {},
 ) {
     val weatherSnapshot = buildWeatherSnapshot(status)
 
@@ -124,7 +125,7 @@ fun HomeScreen(
         Spacer(Modifier.height(20.dp))
         ScoutySectionHeader(title = stringResource(R.string.home_quick_actions))
         Spacer(Modifier.height(10.dp))
-        QuickActionsRow(onShelter = onShelterClick, onWater = onWaterClick)
+        QuickActionsRow(onShelter = onShelterClick, onWater = onWaterClick, onTrack = onTrackClick)
 
         Spacer(Modifier.height(20.dp))
         ScoutySectionHeader(
@@ -543,7 +544,7 @@ private fun EmptyTrailCard(message: String = "No active trail. Search and set on
 }
 
 @Composable
-private fun QuickActionsRow(onShelter: () -> Unit, onWater: () -> Unit) {
+private fun QuickActionsRow(onShelter: () -> Unit, onWater: () -> Unit, onTrack: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -568,6 +569,13 @@ private fun QuickActionsRow(onShelter: () -> Unit, onWater: () -> Unit) {
             label = "Water",
             color = Water,
             onClick = onWater,
+        )
+        QuickActionTile(
+            modifier = Modifier.weight(1f),
+            icon = Lucide.Crosshair,
+            label = "Urma",
+            color = AccentGreen,
+            onClick = onTrack,
         )
     }
 }
