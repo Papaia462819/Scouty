@@ -31,6 +31,13 @@ data class ConversationTurn(
 class ConversationStore(context: Context) {
     private val databaseFile = File(context.noBackupFilesDir, DatabaseName)
     private val mutex = Mutex()
+    private val database: SQLiteDatabase by lazy {
+        databaseFile.parentFile?.mkdirs()
+        SQLiteDatabase.openOrCreateDatabase(databaseFile, null).also { db ->
+            db.execSQL("PRAGMA foreign_keys=ON")
+            ensureSchema(db)
+        }
+    }
 
     suspend fun appendTurn(
         conversationId: String,
@@ -40,21 +47,19 @@ class ConversationStore(context: Context) {
     ) {
         mutex.withLock {
             withContext(Dispatchers.IO) {
-                openDatabase().use { database ->
-                    val now = System.currentTimeMillis()
-                    ensureConversation(database, conversationId, trailId = null, now = now)
-                    val turnIdx = nextTurnIndex(database, conversationId)
-                    val values = ContentValues().apply {
-                        put("conversation_id", conversationId)
-                        put("turn_idx", turnIdx)
-                        put("role", role.storageValue)
-                        put("text", text)
-                        put("timestamp", now)
-                        put("retrieved_chunk_id", chunkId)
-                    }
-                    database.insertOrThrow("turns", null, values)
-                    touchConversation(database, conversationId, now)
+                val now = System.currentTimeMillis()
+                ensureConversation(database, conversationId, trailId = null, now = now)
+                val turnIdx = nextTurnIndex(database, conversationId)
+                val values = ContentValues().apply {
+                    put("conversation_id", conversationId)
+                    put("turn_idx", turnIdx)
+                    put("role", role.storageValue)
+                    put("text", text)
+                    put("timestamp", now)
+                    put("retrieved_chunk_id", chunkId)
                 }
+                database.insertOrThrow("turns", null, values)
+                touchConversation(database, conversationId, now)
             }
         }
     }
@@ -62,23 +67,21 @@ class ConversationStore(context: Context) {
     suspend fun loadRecent(conversationId: String, maxTurns: Int): List<ConversationTurn> =
         mutex.withLock {
             withContext(Dispatchers.IO) {
-                openDatabase().use { database ->
-                    database.rawQuery(
-                        """
-                        SELECT conversation_id, turn_idx, role, text, timestamp, retrieved_chunk_id
-                        FROM turns
-                        WHERE conversation_id = ?
-                        ORDER BY turn_idx DESC
-                        LIMIT ?
-                        """.trimIndent(),
-                        arrayOf(conversationId, maxTurns.coerceAtLeast(0).toString())
-                    ).use { cursor ->
-                        val rows = mutableListOf<ConversationTurn>()
-                        while (cursor.moveToNext()) {
-                            rows += readTurn(cursor)
-                        }
-                        rows.asReversed()
+                database.rawQuery(
+                    """
+                    SELECT conversation_id, turn_idx, role, text, timestamp, retrieved_chunk_id
+                    FROM turns
+                    WHERE conversation_id = ?
+                    ORDER BY turn_idx DESC
+                    LIMIT ?
+                    """.trimIndent(),
+                    arrayOf(conversationId, maxTurns.coerceAtLeast(0).toString())
+                ).use { cursor ->
+                    val rows = mutableListOf<ConversationTurn>()
+                    while (cursor.moveToNext()) {
+                        rows += readTurn(cursor)
                     }
+                    rows.asReversed()
                 }
             }
         }
@@ -86,16 +89,14 @@ class ConversationStore(context: Context) {
     suspend fun loadSummary(conversationId: String): String? =
         mutex.withLock {
             withContext(Dispatchers.IO) {
-                openDatabase().use { database ->
-                    database.rawQuery(
-                        "SELECT summary FROM conversations WHERE conversation_id = ?",
-                        arrayOf(conversationId)
-                    ).use { cursor ->
-                        if (cursor.moveToFirst()) {
-                            cursor.getString(0)?.takeIf { it.isNotBlank() }
-                        } else {
-                            null
-                        }
+                database.rawQuery(
+                    "SELECT summary FROM conversations WHERE conversation_id = ?",
+                    arrayOf(conversationId)
+                ).use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        cursor.getString(0)?.takeIf { it.isNotBlank() }
+                    } else {
+                        null
                     }
                 }
             }
@@ -104,21 +105,19 @@ class ConversationStore(context: Context) {
     suspend fun updateSummary(conversationId: String, summary: String) {
         mutex.withLock {
             withContext(Dispatchers.IO) {
-                openDatabase().use { database ->
-                    val now = System.currentTimeMillis()
-                    ensureConversation(database, conversationId, trailId = null, now = now)
-                    val values = ContentValues().apply {
-                        put("summary", summary)
-                        put("summary_token_count", estimateTokens(summary))
-                        put("last_active_at", now)
-                    }
-                    database.update(
-                        "conversations",
-                        values,
-                        "conversation_id = ?",
-                        arrayOf(conversationId)
-                    )
+                val now = System.currentTimeMillis()
+                ensureConversation(database, conversationId, trailId = null, now = now)
+                val values = ContentValues().apply {
+                    put("summary", summary)
+                    put("summary_token_count", estimateTokens(summary))
+                    put("last_active_at", now)
                 }
+                database.update(
+                    "conversations",
+                    values,
+                    "conversation_id = ?",
+                    arrayOf(conversationId)
+                )
             }
         }
     }
@@ -126,14 +125,12 @@ class ConversationStore(context: Context) {
     suspend fun ensureConversation(conversationId: String, trailId: String?) {
         mutex.withLock {
             withContext(Dispatchers.IO) {
-                openDatabase().use { database ->
-                    ensureConversation(
-                        database = database,
-                        conversationId = conversationId,
-                        trailId = trailId,
-                        now = System.currentTimeMillis()
-                    )
-                }
+                ensureConversation(
+                    database = database,
+                    conversationId = conversationId,
+                    trailId = trailId,
+                    now = System.currentTimeMillis()
+                )
             }
         }
     }
@@ -141,22 +138,20 @@ class ConversationStore(context: Context) {
     suspend fun loadAllTurns(conversationId: String): List<ConversationTurn> =
         mutex.withLock {
             withContext(Dispatchers.IO) {
-                openDatabase().use { database ->
-                    database.rawQuery(
-                        """
-                        SELECT conversation_id, turn_idx, role, text, timestamp, retrieved_chunk_id
-                        FROM turns
-                        WHERE conversation_id = ?
-                        ORDER BY turn_idx ASC
-                        """.trimIndent(),
-                        arrayOf(conversationId)
-                    ).use { cursor ->
-                        val rows = mutableListOf<ConversationTurn>()
-                        while (cursor.moveToNext()) {
-                            rows += readTurn(cursor)
-                        }
-                        rows
+                database.rawQuery(
+                    """
+                    SELECT conversation_id, turn_idx, role, text, timestamp, retrieved_chunk_id
+                    FROM turns
+                    WHERE conversation_id = ?
+                    ORDER BY turn_idx ASC
+                    """.trimIndent(),
+                    arrayOf(conversationId)
+                ).use { cursor ->
+                    val rows = mutableListOf<ConversationTurn>()
+                    while (cursor.moveToNext()) {
+                        rows += readTurn(cursor)
                     }
+                    rows
                 }
             }
         }
@@ -164,13 +159,11 @@ class ConversationStore(context: Context) {
     suspend fun countTurns(conversationId: String): Int =
         mutex.withLock {
             withContext(Dispatchers.IO) {
-                openDatabase().use { database ->
-                    database.rawQuery(
-                        "SELECT COUNT(*) FROM turns WHERE conversation_id = ?",
-                        arrayOf(conversationId)
-                    ).use { cursor ->
-                        if (cursor.moveToFirst()) cursor.getInt(0) else 0
-                    }
+                database.rawQuery(
+                    "SELECT COUNT(*) FROM turns WHERE conversation_id = ?",
+                    arrayOf(conversationId)
+                ).use { cursor ->
+                    if (cursor.moveToFirst()) cursor.getInt(0) else 0
                 }
             }
         }
@@ -178,22 +171,20 @@ class ConversationStore(context: Context) {
     suspend fun pruneToRecent(conversationId: String, keepLastTurns: Int) {
         mutex.withLock {
             withContext(Dispatchers.IO) {
-                openDatabase().use { database ->
-                    database.execSQL(
-                        """
-                        DELETE FROM turns
+                database.execSQL(
+                    """
+                    DELETE FROM turns
+                    WHERE conversation_id = ?
+                      AND turn_idx NOT IN (
+                        SELECT turn_idx
+                        FROM turns
                         WHERE conversation_id = ?
-                          AND turn_idx NOT IN (
-                            SELECT turn_idx
-                            FROM turns
-                            WHERE conversation_id = ?
-                            ORDER BY turn_idx DESC
-                            LIMIT ?
-                          )
-                        """.trimIndent(),
-                        arrayOf(conversationId, conversationId, keepLastTurns.coerceAtLeast(0))
-                    )
-                }
+                        ORDER BY turn_idx DESC
+                        LIMIT ?
+                      )
+                    """.trimIndent(),
+                    arrayOf(conversationId, conversationId, keepLastTurns.coerceAtLeast(0))
+                )
             }
         }
     }
@@ -201,17 +192,10 @@ class ConversationStore(context: Context) {
     suspend fun deleteConversation(conversationId: String) {
         mutex.withLock {
             withContext(Dispatchers.IO) {
-                openDatabase().use { database ->
-                    database.delete("turns", "conversation_id = ?", arrayOf(conversationId))
-                    database.delete("conversations", "conversation_id = ?", arrayOf(conversationId))
-                }
+                database.delete("turns", "conversation_id = ?", arrayOf(conversationId))
+                database.delete("conversations", "conversation_id = ?", arrayOf(conversationId))
             }
         }
-    }
-
-    private fun openDatabase(): SQLiteDatabase {
-        databaseFile.parentFile?.mkdirs()
-        return SQLiteDatabase.openOrCreateDatabase(databaseFile, null).also(::ensureSchema)
     }
 
     private fun ensureSchema(database: SQLiteDatabase) {
@@ -236,7 +220,8 @@ class ConversationStore(context: Context) {
               text TEXT NOT NULL,
               timestamp INTEGER NOT NULL,
               retrieved_chunk_id TEXT,
-              PRIMARY KEY (conversation_id, turn_idx)
+              PRIMARY KEY (conversation_id, turn_idx),
+              FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id) ON DELETE CASCADE
             )
             """.trimIndent()
         )

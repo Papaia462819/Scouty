@@ -34,16 +34,19 @@ Files touched:
 Validation:
 - `./gradlew.bat testDebugUnitTest` passes: 134 tests.
 - `python tools/benchmarks/bench_jina_reranker.py --json-out tools/benchmarks/reranker_jina_results.json`
-- Fixed 30-query Romanian campfire bench:
+- Fixed 30-query Romanian campfire bench, now treated as preliminary smoke evidence rather than a statistical shipping gate:
   - baseline top-1 accuracy: 70.0%
   - Jina-reranked top-1 accuracy: 73.3%
   - delta: +3.3 percentage points
-  - rerank p50: 39.8 ms
-  - rerank p95: 46.6 ms
+  - paired bootstrap 95% CI for delta: [0.0, 10.0] percentage points
+  - statistically powered: false
+  - rerank p50: about 40-42 ms on the local CPU runs
+  - rerank p95: about 47-55 ms on the local CPU runs
 
 Deviation:
 - Jina's current official `model_int8.onnx` is 279,577,152 bytes, not ~130 MB. The tokenizer is 17,082,734 bytes. This still keeps the projected Qwen + reranker footprint inside the ~1.5 GB target.
 - The p50 gate is only met with top-3 candidates and a 96-token cross-encoder window. Top-10 at 512 tokens measured roughly 1.5 s p50 on this CPU and was not acceptable for mobile.
+- The 30-query reranker bench is statistically thin. The benchmark harness now reports paired bootstrap confidence intervals and supports `--require-statistical-gate`, but a real ship/no-ship decision still needs at least 100 labelled Romanian queries with CI lower bound above 0.
 
 References:
 - Jina reranker source model: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual
@@ -108,7 +111,7 @@ Changed:
 - Wired `AssistantRepository` to append user turns before retrieval and assistant turns after response generation when memory is enabled.
 - Threaded conversation history into both `LocalLlmGenerationEngine` and the campfire `GroundedWordingEngine` so prompt-cache hints and prior turns are available to local generation.
 - Added `AssistantViewModel.resetConversation()` without changing layout.
-- Added diagnostics fields: `history_tokens_sent`, `summary_compaction_count`, `cache_hit_rate`, and `recent_turn_count`.
+- Added diagnostics fields: `history_tokens_sent`, `summary_compaction_count`, `prefix_key_stability_rate`, and `recent_turn_count`.
 
 Files touched:
 - `app/src/androidTest/java/com/scouty/app/assistant/ConversationStoreInstrumentedTest.kt`

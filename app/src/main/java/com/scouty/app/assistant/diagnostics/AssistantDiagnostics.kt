@@ -73,14 +73,14 @@ object AssistantDiagnostics {
         conversationId: String,
         historyTokensSent: Int,
         summaryCompactionCount: Int,
-        cacheHitRate: Double,
+        prefixKeyStabilityRate: Double,
         recentTurnCount: Int
     ) {
         debug(
             "ConversationMemory conversationId=$conversationId " +
                 "history_tokens_sent=$historyTokensSent " +
                 "summary_compaction_count=$summaryCompactionCount " +
-                "cache_hit_rate=${"%.4f".format(cacheHitRate)} " +
+                "prefix_key_stability_rate=${"%.4f".format(prefixKeyStabilityRate)} " +
                 "recent_turn_count=$recentTurnCount"
         )
     }

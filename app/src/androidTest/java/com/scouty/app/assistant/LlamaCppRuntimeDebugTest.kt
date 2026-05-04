@@ -27,7 +27,7 @@ class LlamaCppRuntimeDebugTest {
         assertEquals(ModelRuntimeState.LOADED, loaded.state)
 
         val prompt = """
-            Raspunde doar in romana, in maximum doua propozitii.
+            Răspunde doar în română, în maximum două propoziții.
             Intrebare: Cum aprind un foc cu lemne ude?
         """.trimIndent()
 

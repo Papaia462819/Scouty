@@ -20,7 +20,7 @@ data class ConversationHistory(
     val contextBlock: String,
     val promptCacheHint: LocalLlmPromptCacheHint,
     val historyTokenEstimate: Int,
-    val cacheHitRate: Double
+    val prefixKeyStabilityRate: Double
 )
 
 class ConversationContextAssembler(
@@ -29,7 +29,7 @@ class ConversationContextAssembler(
     private val contextWindowTokens: Int = DefaultContextWindowTokens,
     private val generationReserveTokens: Int = DefaultGenerationReserveTokens
 ) {
-    private val cacheStats = PromptCacheStats()
+    private val prefixKeyStabilityStats = PrefixKeyStabilityStats()
 
     suspend fun assemble(
         conversationId: String,
@@ -50,7 +50,7 @@ class ConversationContextAssembler(
 
         val cacheablePrefix = buildCacheablePrefix(summary)
         val cacheKey = sha256(cacheablePrefix)
-        val cacheHitRate = cacheStats.record(conversationId, cacheKey)
+        val prefixKeyStabilityRate = prefixKeyStabilityStats.record(conversationId, cacheKey)
         val nonCacheableContextBlock = buildNonCacheableContextBlock(
             turns = recentTurns,
             structuredStateBlock = structuredStateBlock,
@@ -75,7 +75,7 @@ class ConversationContextAssembler(
                 cacheablePrefix = cacheablePrefix
             ),
             historyTokenEstimate = estimateTokens(contextBlock),
-            cacheHitRate = cacheHitRate
+            prefixKeyStabilityRate = prefixKeyStabilityRate
         )
     }
 
@@ -108,9 +108,9 @@ class ConversationContextAssembler(
 
     private fun buildCacheablePrefix(summary: String?): String =
         buildString {
-            appendLine(SystemPromptRo)
+                appendLine(SystemPromptRo)
             summary?.takeIf { it.isNotBlank() }?.let {
-                appendLine("REZUMAT CONVERSATIE:")
+                appendLine("REZUMAT CONVERSAȚIE:")
                 appendLine(it.trim())
             }
         }
@@ -127,11 +127,11 @@ class ConversationContextAssembler(
             }
             if (structuredStateBlock.isNotBlank()) {
                 appendLine()
-                appendLine("STARE STRUCTURATA:")
+                appendLine("STARE STRUCTURATĂ:")
                 appendLine(structuredStateBlock)
             }
             appendLine()
-            appendLine("INTREBAREA CURENTA:")
+            appendLine("ÎNTREBAREA CURENTĂ:")
             appendLine(currentUserQuery.trim())
         }.trim()
 
@@ -143,12 +143,12 @@ class ConversationContextAssembler(
         conversationState.activeTopic?.let { parts += "subiect_activ=$it" }
         conversationState.lastRetrievedChunkId?.let { parts += "ultimul_card=$it" }
         conversationState.lastRetrievedTitle?.let { parts += "ultimul_titlu=${sanitize(it, 120)}" }
-        conversationState.lastStandaloneQuery?.let { parts += "ultima_intrebare_rezolvata=${sanitize(it, 160)}" }
+        conversationState.lastStandaloneQuery?.let { parts += "ultima_întrebare_rezolvată=${sanitize(it, 160)}" }
         if (conversationState.facts.isNotEmpty()) {
             parts += "fapte=${conversationState.facts.entries.joinToString("; ") { "${it.key}=${sanitize(it.value, 80)}" }}"
         }
         conversationState.openQuestion?.let { question ->
-            parts += "intrebare_deschisa=${sanitize(question.text, 160)}"
+            parts += "întrebare_deschisă=${sanitize(question.text, 160)}"
             parts += "slot_deschis=${question.targetSlot}"
         }
         deviceContext.trail?.let { trail ->
@@ -178,18 +178,18 @@ class ConversationContextAssembler(
         return digest.joinToString("") { "%02x".format(it) }
     }
 
-    private class PromptCacheStats {
+    private class PrefixKeyStabilityStats {
         private val lastKeyByConversation = mutableMapOf<String, String>()
         private var attempts = 0
-        private var hits = 0
+        private var stableKeys = 0
 
         fun record(conversationId: String, key: String): Double {
             attempts += 1
             if (lastKeyByConversation[conversationId] == key) {
-                hits += 1
+                stableKeys += 1
             }
             lastKeyByConversation[conversationId] = key
-            return if (attempts == 0) 0.0 else hits.toDouble() / attempts.toDouble()
+            return if (attempts == 0) 0.0 else stableKeys.toDouble() / attempts.toDouble()
         }
     }
 
@@ -212,9 +212,9 @@ class ConversationContextAssembler(
 }
 
 private val SystemPromptRo = """
-Esti Scouty, asistentul offline pentru drumetii in Romania.
-Raspunzi natural, scurt si prudent, in romana. Daca utilizatorul scrie in engleza, poti raspunde in engleza, dar romana ramane limba principala.
-Foloseste istoricul doar pentru continuitate conversationala; faptele despre siguranta si traseu trebuie sa ramana ancorate in cardurile recuperate si in contextul dispozitivului.
-Nu inventa distante, durate, vreme, reguli legale sau recomandari medicale.
-Cand utilizatorul revine la un subiect discutat mai devreme, recunoaste legatura pe scurt si continua raspunsul.
+Ești Scouty, asistentul offline pentru drumeții în România.
+Răspunzi natural, scurt și prudent, în română. Dacă utilizatorul scrie în engleză, poți răspunde în engleză, dar româna rămâne limba principală.
+Folosește istoricul doar pentru continuitate conversațională; faptele despre siguranță și traseu trebuie să rămână ancorate în cardurile recuperate și în contextul dispozitivului.
+Nu inventa distanțe, durate, vreme, reguli legale sau recomandări medicale.
+Când utilizatorul revine la un subiect discutat mai devreme, recunoaște legătura pe scurt și continuă răspunsul.
 """.trimIndent()

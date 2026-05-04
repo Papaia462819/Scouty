@@ -26,7 +26,7 @@ class ConversationStoreInstrumentedTest {
         try {
             store.appendTurn(conversationId, ConversationRole.USER, "Cum aprind focul cu lemne ude?", null)
             store.appendTurn(conversationId, ConversationRole.ASSISTANT, "Cauta iasca uscata sub scoarta.", "campfire_001")
-            store.updateSummary(conversationId, "Utilizatorul a intrebat despre lemne ude.")
+            store.updateSummary(conversationId, "Utilizatorul a întrebat despre lemne ude.")
 
             val reopened = ConversationStore(context)
             val turns = reopened.loadRecent(conversationId, maxTurns = 6)
@@ -51,13 +51,13 @@ class ConversationStoreInstrumentedTest {
                 store.appendTurn(
                     conversationId,
                     ConversationRole.USER,
-                    "Intrebarea $index despre lemne ude si iasca uscata dupa ploaie pe traseu.",
+                    "Întrebarea $index despre lemne ude și iască uscată după ploaie pe traseu.",
                     null
                 )
                 store.appendTurn(
                     conversationId,
                     ConversationRole.ASSISTANT,
-                    "Am raspuns ca trebuie cautata iasca uscata sub scoarta si ca focul ramane mic.",
+                    "Am răspuns că trebuie căutată iască uscată sub scoarță și că focul rămâne mic.",
                     "campfire_wet_wood_$index"
                 )
             }

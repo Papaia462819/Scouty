@@ -474,6 +474,30 @@ def sigmoid(value: float) -> float:
     return 1.0 / (1.0 + math.exp(-bounded))
 
 
+def paired_bootstrap_delta_ci(
+    rows: list[dict],
+    samples: int,
+    seed: int,
+) -> list[float]:
+    if not rows:
+        return [0.0, 0.0]
+    rng = np.random.default_rng(seed)
+    deltas = np.array(
+        [
+            int(row["reranked_correct"]) - int(row["baseline_correct"])
+            for row in rows
+        ],
+        dtype=np.float64,
+    )
+    sample_count = max(1, samples)
+    boot = np.empty(sample_count, dtype=np.float64)
+    for index in range(sample_count):
+        sampled = rng.choice(deltas, size=len(deltas), replace=True)
+        boot[index] = float(np.mean(sampled))
+    low, high = np.quantile(boot, [0.025, 0.975])
+    return [float(low), float(high)]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--db", type=Path, default=DEFAULT_DB)
@@ -484,6 +508,9 @@ def main() -> None:
     parser.add_argument("--max-length", type=int, default=96)
     parser.add_argument("--deterministic-weight", type=float, default=0.8)
     parser.add_argument("--reranker-weight", type=float, default=20.0)
+    parser.add_argument("--bootstrap-samples", type=int, default=10_000)
+    parser.add_argument("--bootstrap-seed", type=int, default=7)
+    parser.add_argument("--require-statistical-gate", action="store_true")
     parser.add_argument("--json-out", type=Path)
     args = parser.parse_args()
 
@@ -523,11 +550,19 @@ def main() -> None:
 
     baseline_correct = sum(1 for row in rows if row["baseline_correct"])
     reranked_correct = sum(1 for row in rows if row["reranked_correct"])
+    delta_ci = paired_bootstrap_delta_ci(
+        rows=rows,
+        samples=args.bootstrap_samples,
+        seed=args.bootstrap_seed,
+    )
     summary = {
         "query_count": len(rows),
         "baseline_top1_accuracy": baseline_correct / len(rows),
         "reranked_top1_accuracy": reranked_correct / len(rows),
         "accuracy_delta": (reranked_correct - baseline_correct) / len(rows),
+        "accuracy_delta_ci95": delta_ci,
+        "statistically_powered": len(rows) >= 100,
+        "statistical_gate_passed": len(rows) >= 100 and delta_ci[0] > 0.0,
         "rerank_latency_p50_ms": statistics.median(latencies),
         "rerank_latency_p95_ms": sorted(latencies)[max(0, math.ceil(len(latencies) * 0.95) - 1)],
         "top_k": args.top_k,
@@ -553,6 +588,8 @@ def main() -> None:
         raise SystemExit("p50 latency gate failed")
     if summary["accuracy_delta"] <= 0.0:
         raise SystemExit("accuracy delta gate failed")
+    if args.require_statistical_gate and not summary["statistical_gate_passed"]:
+        raise SystemExit("statistical gate failed: need >=100 labelled queries and CI lower bound > 0")
 
 
 if __name__ == "__main__":

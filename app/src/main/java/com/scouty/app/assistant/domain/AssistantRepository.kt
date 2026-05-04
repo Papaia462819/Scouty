@@ -1162,7 +1162,7 @@ class AssistantRepository(
             conversationId = conversationId,
             historyTokensSent = history.historyTokenEstimate,
             summaryCompactionCount = if (compaction?.compacted == true) 1 else 0,
-            cacheHitRate = history.cacheHitRate,
+            prefixKeyStabilityRate = history.prefixKeyStabilityRate,
             recentTurnCount = history.recentTurns.size
         )
         return ConversationMemorySession(conversationId, history)

@@ -22,7 +22,7 @@ data class LlamaCppLoadParams(
 )
 
 class LlamaCppRuntimeAdapter(
-    private val nativeBridgeFactory: () -> LlamaCppNativeBridge = { LlamaCppNativeBridge() }
+    private val nativeBridgeFactory: () -> LlamaCppNativeBridge = { sharedNativeBridge }
 ) : LocalLlmRuntimeAdapter {
     override val runtimeLabel: String = "llama.cpp"
 
@@ -32,13 +32,15 @@ class LlamaCppRuntimeAdapter(
         }
         return loadModel(
             path = artifact.preparedFile.absolutePath,
-            params = LlamaCppLoadParams(contextTokens = artifact.maxTokens)
+            params = LlamaCppLoadParams(contextTokens = artifact.maxTokens),
+            modelVersion = artifact.modelVersion
         )
     }
 
     suspend fun loadModel(
         path: String,
-        params: LlamaCppLoadParams = LlamaCppLoadParams()
+        params: LlamaCppLoadParams = LlamaCppLoadParams(),
+        modelVersion: String? = null
     ): LlamaCppLoadedModel = withContext(Dispatchers.Default) {
         require(File(path).isFile) { "GGUF model does not exist: $path" }
         val nativeBridge = nativeBridgeFactory()
@@ -53,10 +55,18 @@ class LlamaCppRuntimeAdapter(
         LlamaCppLoadedModel(
             nativeHandle = handle,
             nativeBridge = nativeBridge,
-            promptTemplate = LlamaCppPromptTemplate.forModelPath(path)
+            promptTemplate = LlamaCppPromptTemplate.forModelIdentity(
+                path = path,
+                modelVersion = modelVersion
+            )
         )
     }
 
+    private companion object {
+        private val sharedNativeBridge: LlamaCppNativeBridge by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+            LlamaCppNativeBridge()
+        }
+    }
 }
 
 private fun defaultLlamaThreadCount(): Int =
@@ -162,21 +172,21 @@ internal sealed class LlamaCppPromptTemplate {
     }
 
     companion object {
-        fun forModelPath(path: String): LlamaCppPromptTemplate {
-            val fileName = File(path).name.lowercase()
-            return if (fileName.contains("qwen")) {
+        fun forModelIdentity(path: String, modelVersion: String?): LlamaCppPromptTemplate {
+            val identity = listOfNotNull(File(path).name, modelVersion).joinToString(" ").lowercase()
+            return if (identity.contains("qwen")) {
                 QwenChatMl
             } else {
-                Raw
+                error("No llama.cpp prompt template registered for model identity: ${File(path).name}")
             }
         }
     }
 }
 
 private val QwenSystemPrompt = """
-Esti Scouty, asistentul offline pentru drumetii in Romania.
-Raspunde in romana naturala si concisa, cu prudenta pentru siguranta pe munte.
-Foloseste doar informatiile primite in prompt si nu inventa fapte.
+Ești Scouty, asistentul offline pentru drumeții în România.
+Răspunde în română naturală și concisă, cu prudență pentru siguranța pe munte.
+Folosește doar informațiile primite în prompt și nu inventa fapte.
 """.trimIndent()
 
 class LlamaCppNativeBridge {

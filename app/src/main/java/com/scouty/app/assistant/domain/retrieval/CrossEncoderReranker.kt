@@ -20,7 +20,7 @@ data class RerankedChunk(
     val chunk: Chunk,
     val score: Double,
     val originalRank: Int,
-    val originalScore: Double
+    val sourcePriority: Double
 )
 
 class CrossEncoderReranker(
@@ -54,7 +54,7 @@ class CrossEncoderReranker(
                         chunk = chunk,
                         score = scores.getOrElse(index) { 0.0 },
                         originalRank = index,
-                        originalScore = chunk.priority.toDouble()
+                        sourcePriority = chunk.priority.toDouble()
                     )
                 }
             }

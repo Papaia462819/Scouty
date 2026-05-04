@@ -13,7 +13,7 @@ data class SummaryCompactionResult(
 
 class SummaryCompactor(
     private val store: ConversationStore,
-    private val useLlmSummarizer: Boolean = false,
+    useLlmSummarizer: Boolean = false,
     private val budgetTokens: Int = DefaultCompactionBudgetTokens,
     private val triggerTurnCount: Int = DefaultTriggerTurnCount,
     private val keepLastTurns: Int = DefaultKeepLastTurns
@@ -68,10 +68,10 @@ class SummaryCompactor(
             val assistantTurn = turns.dropWhile { it.turnIdx <= userTurn.turnIdx }
                 .firstOrNull { it.role == ConversationRole.ASSISTANT }
             bullets += buildString {
-                append("- Utilizatorul a intrebat: ")
+                append("- Utilizatorul a întrebat: ")
                 append(quote(userTurn.text, 180))
                 if (assistantTurn != null) {
-                    append("; asistentul a raspuns: ")
+                    append("; asistentul a răspuns: ")
                     append(quote(assistantTurn.text, 220))
                     assistantTurn.retrievedChunkId?.let { append(" [card=$it]") }
                 }
@@ -80,13 +80,8 @@ class SummaryCompactor(
             index = turns.indexOfFirst { it.turnIdx > (assistantTurn?.turnIdx ?: userTurn.turnIdx) }
                 .takeIf { it >= 0 } ?: turns.size
         }
-        val mode = if (useLlmSummarizer) {
-            "Rezumat determinist; sumarizarea LLM este dezactivata pana la validarea flagului."
-        } else {
-            "Rezumat determinist."
-        }
         return buildString {
-            appendLine(mode)
+            appendLine("Rezumat determinist.")
             bullets.take(MaxSummaryBullets).forEach { appendLine(it) }
         }.trim()
     }
