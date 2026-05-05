@@ -15,6 +15,10 @@ import com.scouty.app.assistant.domain.memory.SummaryCompactor
 import com.scouty.app.assistant.domain.expression.CardParaphraseEngine
 import com.scouty.app.assistant.domain.expression.CardParaphraseRequest
 import com.scouty.app.assistant.domain.retrieval.CrossEncoderReranker
+import com.scouty.app.assistant.domain.tools.GrammarToolCallPlanner
+import com.scouty.app.assistant.domain.tools.ToolDispatchRequest
+import com.scouty.app.assistant.domain.tools.ToolDispatchResult
+import com.scouty.app.assistant.domain.tools.ToolDispatcher
 import com.scouty.app.assistant.model.AssistantConversationState
 import com.scouty.app.assistant.model.AssistantCitation
 import com.scouty.app.assistant.model.AssistantResponse
@@ -1065,7 +1069,11 @@ class AssistantRepository(
     private val conversationContextAssembler: ConversationContextAssembler? = conversationStore?.let(::ConversationContextAssembler),
     private val summaryCompactor: SummaryCompactor? = conversationStore?.let(::SummaryCompactor),
     private val cardParaphraseEngine: CardParaphraseEngine? = null,
-    private val useCardParaphraseExpression: Boolean = false
+    private val useCardParaphraseExpression: Boolean = false,
+    private val toolCallPlanner: GrammarToolCallPlanner? = null,
+    private val toolDispatcher: ToolDispatcher? = null,
+    private val useGrammarToolCalling: Boolean = false,
+    private val useLegacyInterpreter: Boolean = true
 ) {
     private var sessionConversationId: String = "session:${UUID.randomUUID()}"
 
@@ -1244,12 +1252,45 @@ class AssistantRepository(
             validatedSlotUpdates = preprocessing.obviousSlotUpdates,
             preprocessing = preprocessing
         )
+        val toolResult = maybeDispatchToolCall(
+            query = query,
+            context = context,
+            analysis = queryAnalysis,
+            conversationState = conversationState,
+            preprocessing = preprocessing,
+            retrievedChunks = initial.retrievedChunks,
+            confidence = initial.retrievalConfidence,
+            packStatus = packStatus,
+            conversationHistory = conversationHistory
+        )
+        if (toolResult?.isTerminal == true) {
+            return buildToolTerminalResponse(
+                result = toolResult,
+                query = query,
+                context = context,
+                analysis = queryAnalysis,
+                packStatus = packStatus,
+                previousState = conversationState
+            )
+        }
+        if (toolResult?.retrievedChunks?.isNotEmpty() == true) {
+            return answerToolLookup(
+                query = query,
+                context = context,
+                analysis = toolResult.queryAnalysis ?: queryAnalysis,
+                retrievedChunks = toolResult.retrievedChunks,
+                confidence = toolResult.retrievalConfidence ?: initial.retrievalConfidence,
+                packStatus = packStatus,
+                conversationState = conversationState,
+                conversationHistory = conversationHistory
+            )
+        }
         val gateDecision = interpreterGate.decide(
             assessment = initial.retrievalConfidence,
             preprocessing = preprocessing,
             conversationState = conversationState
         )
-        val interpretation = if (gateDecision.shouldInvoke) {
+        val interpretation = if (toolResult == null && useLegacyInterpreter && gateDecision.shouldInvoke) {
             attemptValidatedInterpretation(
                 query = query,
                 context = context,
@@ -1386,17 +1427,38 @@ class AssistantRepository(
             retrieved = initialRetrieved,
             preprocessing = preprocessing
         )
+        val toolResult = maybeDispatchToolCall(
+            query = query,
+            context = context,
+            analysis = initialAnalysis,
+            conversationState = conversationState,
+            preprocessing = preprocessing,
+            retrievedChunks = initialRetrieved,
+            confidence = initialAssessment,
+            packStatus = packStatus,
+            conversationHistory = conversationHistory
+        )
+        if (toolResult?.isTerminal == true) {
+            return buildToolTerminalResponse(
+                result = toolResult,
+                query = query,
+                context = context,
+                analysis = initialAnalysis,
+                packStatus = packStatus,
+                previousState = conversationState
+            )
+        }
         val gateDecision = interpreterGate.decide(
             assessment = initialAssessment,
             preprocessing = preprocessing,
             conversationState = conversationState
         )
 
-        var finalAnalysis = initialAnalysis
-        var finalRetrieved = initialRetrieved
-        var finalAssessment = initialAssessment
+        var finalAnalysis = toolResult?.queryAnalysis ?: initialAnalysis
+        var finalRetrieved = toolResult?.retrievedChunks?.takeIf { it.isNotEmpty() } ?: initialRetrieved
+        var finalAssessment = toolResult?.retrievalConfidence ?: initialAssessment
         var acceptedInterpretation: ValidatedInterpretation? = null
-        if (gateDecision.shouldInvoke) {
+        if (toolResult == null && useLegacyInterpreter && gateDecision.shouldInvoke) {
             val interpretation = attemptValidatedInterpretation(
                 query = query,
                 context = context,
@@ -1593,6 +1655,215 @@ class AssistantRepository(
         )
     }
 
+    private suspend fun maybeDispatchToolCall(
+        query: String,
+        context: DeviceContextSnapshot,
+        analysis: QueryAnalysis,
+        conversationState: AssistantConversationState,
+        preprocessing: DeterministicPreprocessingResult,
+        retrievedChunks: List<RetrievedChunk>,
+        confidence: RetrievalConfidenceAssessment,
+        packStatus: KnowledgePackStatus,
+        conversationHistory: ConversationHistory?
+    ): ToolDispatchResult? {
+        if (!useGrammarToolCalling) {
+            return null
+        }
+        val planner = toolCallPlanner ?: return null
+        val dispatcher = toolDispatcher ?: return null
+        if (!shouldInvokeToolCalling(confidence, preprocessing, conversationState)) {
+            return null
+        }
+        val startedAt = System.nanoTime()
+        val call = runCatching {
+            planner.plan(
+                com.scouty.app.assistant.domain.tools.ToolPlanningRequest(
+                    query = query,
+                    queryAnalysis = analysis,
+                    conversationState = conversationState,
+                    retrievalConfidence = confidence,
+                    preprocessingSlots = preprocessing.obviousSlotUpdates,
+                    retrievedChunks = retrievedChunks,
+                    deviceContext = context,
+                    conversationHistory = conversationHistory
+                )
+            )
+        }.getOrElse { error ->
+            AssistantDiagnostics.logToolCalling(
+                query = query,
+                invoked = true,
+                toolName = null,
+                elapsedMs = elapsedMsSince(startedAt),
+                status = "planner_error",
+                error = error.message ?: error::class.java.simpleName
+            )
+            return null
+        } ?: run {
+            AssistantDiagnostics.logToolCalling(
+                query = query,
+                invoked = true,
+                toolName = null,
+                elapsedMs = elapsedMsSince(startedAt),
+                status = "no_valid_tool"
+            )
+            return null
+        }
+
+        val result = runCatching {
+            dispatcher.dispatch(
+                call = call,
+                request = ToolDispatchRequest(
+                    query = query,
+                    context = context,
+                    queryAnalysis = analysis,
+                    conversationState = conversationState,
+                    preprocessing = preprocessing,
+                    retrievedChunks = retrievedChunks,
+                    retrievalConfidence = confidence,
+                    knowledgePackStatus = packStatus,
+                    conversationHistory = conversationHistory
+                )
+            )
+        }.getOrElse { error ->
+            AssistantDiagnostics.logToolCalling(
+                query = query,
+                invoked = true,
+                toolName = call.tool.wireName,
+                elapsedMs = elapsedMsSince(startedAt),
+                status = "dispatcher_error",
+                error = error.message ?: error::class.java.simpleName
+            )
+            return null
+        }
+        AssistantDiagnostics.logToolCalling(
+            query = query,
+            invoked = true,
+            toolName = call.tool.wireName,
+            elapsedMs = elapsedMsSince(startedAt),
+            status = if (result.isTerminal) "terminal" else "continue"
+        )
+        return result
+    }
+
+    private fun shouldInvokeToolCalling(
+        confidence: RetrievalConfidenceAssessment,
+        preprocessing: DeterministicPreprocessingResult,
+        conversationState: AssistantConversationState
+    ): Boolean {
+        val unresolvedOpenQuestion = conversationState.openQuestion != null &&
+            conversationState.openQuestion.targetSlot !in preprocessing.obviousSlotUpdates
+        return confidence.score < ToolCallingConfidenceThreshold || unresolvedOpenQuestion
+    }
+
+    private fun buildToolTerminalResponse(
+        result: ToolDispatchResult,
+        query: String,
+        context: DeviceContextSnapshot,
+        analysis: QueryAnalysis,
+        packStatus: KnowledgePackStatus,
+        previousState: AssistantConversationState
+    ): AssistantResponse {
+        val output = result.output ?: error("Tool terminal response requires output")
+        val safetyOutcome = medicalSafetyPolicy.evaluate(query, result.retrievedChunks, context)
+        val guardedOutput = medicalSafetyPolicy.applyFinalGuardrails(
+            output = output,
+            safetyOutcome = safetyOutcome,
+            isRomanian = analysis.preferredLanguage == "ro"
+        )
+        val modelStatus = modelManager.currentStatus()
+        return AssistantResponse(
+            answerText = buildDisplayText(guardedOutput, safetyOutcome),
+            structuredOutput = guardedOutput,
+            citations = buildCitations(analysis, context, result.retrievedChunks),
+            safetyOutcome = safetyOutcome,
+            generationMode = guardedOutput.generationMode,
+            reasoningType = guardedOutput.reasoningType,
+            conversationState = result.conversationState ?: previousState,
+            modelVersion = modelStatus.modelVersion.takeIf {
+                modelStatus.availableOnDisk || modelStatus.state != ModelRuntimeState.MISSING
+            },
+            modelRuntimeState = modelStatus.state,
+            modelStatusDetails = modelStatus.details,
+            knowledgePackVersion = guardedOutput.knowledgePackVersion ?: packStatus.packVersion,
+            usedFallback = guardedOutput.generationMode == GenerationMode.FALLBACK_STRUCTURED,
+            actions = result.actions
+        )
+    }
+
+    private suspend fun answerToolLookup(
+        query: String,
+        context: DeviceContextSnapshot,
+        analysis: QueryAnalysis,
+        retrievedChunks: List<RetrievedChunk>,
+        confidence: RetrievalConfidenceAssessment,
+        packStatus: KnowledgePackStatus,
+        conversationState: AssistantConversationState,
+        conversationHistory: ConversationHistory?
+    ): AssistantResponse {
+        val modelStatus = modelManager.refreshStatus()
+        val generationMode = generationModeForAttempt(modelStatus)
+        val prompt = promptBuilder.build(
+            query = query,
+            context = context,
+            retrievedChunks = retrievedChunks,
+            queryAnalysis = analysis
+        )
+        val safetyOutcome = medicalSafetyPolicy.evaluate(query, retrievedChunks, context)
+        val expressionResult = maybeBuildExpressionResult(
+            query = query,
+            context = context,
+            analysis = analysis,
+            retrievedChunks = retrievedChunks,
+            confidence = confidence,
+            knowledgePackStatus = packStatus,
+            conversationHistory = conversationHistory
+        )
+        val output = medicalSafetyPolicy.applyFinalGuardrails(
+            output = expressionResult?.output ?: generationEngine.generate(
+                GenerationInput(
+                    query = query,
+                    prompt = prompt,
+                    queryAnalysis = analysis,
+                    retrievedChunks = retrievedChunks,
+                    context = context,
+                    safetyOutcome = safetyOutcome,
+                    generationMode = generationMode,
+                    modelStatus = modelStatus,
+                    knowledgePackStatus = packStatus,
+                    conversationHistory = conversationHistory
+                )
+            ),
+            safetyOutcome = safetyOutcome,
+            isRomanian = analysis.preferredLanguage == "ro"
+        )
+        val finalModelStatus = modelManager.currentStatus()
+        return AssistantResponse(
+            answerText = buildDisplayText(output, safetyOutcome),
+            structuredOutput = output,
+            citations = buildCitations(analysis, context, retrievedChunks),
+            safetyOutcome = safetyOutcome,
+            generationMode = output.generationMode,
+            reasoningType = output.reasoningType,
+            conversationState = buildStandardConversationState(
+                previousState = conversationState,
+                originalQuery = query,
+                analysis = analysis,
+                retrieved = retrievedChunks,
+                acceptedInterpretation = null
+            ),
+            modelVersion = finalModelStatus.modelVersion.takeIf {
+                finalModelStatus.availableOnDisk || finalModelStatus.state != ModelRuntimeState.MISSING
+            },
+            modelRuntimeState = finalModelStatus.state,
+            modelStatusDetails = finalModelStatus.details,
+            knowledgePackVersion = output.knowledgePackVersion,
+            usedFallback = output.generationMode == GenerationMode.FALLBACK_STRUCTURED
+        )
+    }
+
+    private fun elapsedMsSince(startedAtNanos: Long): Long =
+        (System.nanoTime() - startedAtNanos) / 1_000_000
+
     private suspend fun attemptValidatedInterpretation(
         query: String,
         context: DeviceContextSnapshot,
@@ -1785,6 +2056,8 @@ class AssistantRepository(
         }
 
     private companion object {
+        private const val ToolCallingConfidenceThreshold = 0.55
+
         fun createKnowledgeStore(
             context: Context?,
             knowledgePackManager: KnowledgePackStatusProvider

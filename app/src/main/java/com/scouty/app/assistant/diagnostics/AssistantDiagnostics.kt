@@ -103,6 +103,23 @@ object AssistantDiagnostics {
         )
     }
 
+    fun logToolCalling(
+        query: String,
+        invoked: Boolean,
+        toolName: String?,
+        elapsedMs: Long,
+        status: String,
+        error: String? = null
+    ) {
+        debug(
+            "AssistantToolCalling query=\"$query\" " +
+                "tool_call_invocation_count=${if (invoked) 1 else 0} " +
+                "tool_name=${toolName.orEmpty()} " +
+                "tool_call_latency_ms=$elapsedMs " +
+                "status=$status error=$error"
+        )
+    }
+
     fun logAnswerStart(
         query: String,
         packStatus: KnowledgePackStatus,

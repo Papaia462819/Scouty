@@ -4,11 +4,15 @@ import com.scouty.app.assistant.data.KnowledgeChunkStore
 import com.scouty.app.assistant.data.KnowledgePackStatusProvider
 import com.scouty.app.assistant.domain.expression.CardParaphraseEngine
 import com.scouty.app.assistant.domain.expression.CardParaphraseModel
+import com.scouty.app.assistant.domain.tools.GrammarToolCallPlanner
+import com.scouty.app.assistant.domain.tools.ToolCallModel
+import com.scouty.app.assistant.domain.tools.ToolDispatcher
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.assistant.model.KnowledgeChunkRecord
 import com.scouty.app.assistant.model.KnowledgePackStatus
 import com.scouty.app.assistant.model.ModelRuntimeState
+import com.scouty.app.assistant.model.QueryAnalysis
 import com.scouty.app.assistant.model.ResponseSectionStyle
 import com.scouty.app.assistant.model.SafetyOutcome
 import com.scouty.app.assistant.model.TrailContextSnapshot
@@ -142,6 +146,52 @@ class AssistantRepositoryIntegrationTest {
         assertTrue(response.answerText.contains("baterii", ignoreCase = true))
     }
 
+    @Test
+    fun grammarToolCalling_lowConfidenceCanAskClarification() = runBlocking {
+        val knowledgePackStatus = KnowledgePackStatus(
+            available = true,
+            packVersion = "pack-1",
+            hashValid = true,
+            integrityValid = true
+        )
+        val store = FakeSearchKnowledgeStore(emptyList(), knowledgePackStatus)
+        val queryAnalyzer = QueryAnalyzer()
+        val retrievalEngine = RetrievalEngine(store, queryAnalyzer)
+        val repository = AssistantRepository(
+            context = null,
+            knowledgePackManager = FakeKnowledgePackStatusProvider(knowledgePackStatus),
+            knowledgeStore = store,
+            queryAnalyzer = queryAnalyzer,
+            retrievalEngine = retrievalEngine,
+            promptBuilder = PromptBuilder(),
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            ),
+            generationEngine = TemplateGenerationEngine(),
+            medicalSafetyPolicy = MedicalSafetyPolicy(),
+            toolCallPlanner = GrammarToolCallPlanner(
+                FakeToolCallModel(
+                    """{"tool":"ask_clarification","slot":"ignition_source","options":["lighter","matches","ferro"]}"""
+                )
+            ),
+            toolDispatcher = ToolDispatcher(
+                retrievalEngine = retrievalEngine,
+                queryAnalyzer = queryAnalyzer
+            ),
+            useGrammarToolCalling = true,
+            useLegacyInterpreter = false
+        )
+
+        val response = repository.answer(
+            query = "Nu se aprinde focul",
+            context = DeviceContextSnapshot(localeTag = "ro")
+        )
+
+        assertTrue(response.answerText.contains("Cu ce încerci"))
+        assertEquals("ignition_source", response.conversationState.openQuestion?.targetSlot)
+    }
+
     private fun createRepository(modelManager: ModelManager): AssistantRepository {
         val knowledgePackStatus = KnowledgePackStatus(
             available = true,
@@ -250,4 +300,11 @@ private class FakeCardParaphraseModel(
     private val response: String
 ) : CardParaphraseModel {
     override suspend fun generate(prompt: String, options: LocalLlmGenerationOptions): String = response
+}
+
+private class FakeToolCallModel(
+    private val response: String
+) : ToolCallModel {
+    override suspend fun generate(prompt: String, grammar: String, promptCacheHint: LocalLlmPromptCacheHint?): String =
+        response
 }

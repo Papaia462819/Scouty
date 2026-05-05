@@ -9,6 +9,9 @@ import com.scouty.app.assistant.domain.expression.ModelManagerCardParaphraseMode
 import com.scouty.app.assistant.domain.memory.ConversationContextAssembler
 import com.scouty.app.assistant.domain.memory.SummaryCompactor
 import com.scouty.app.assistant.domain.retrieval.CrossEncoderReranker
+import com.scouty.app.assistant.domain.tools.GrammarToolCallPlanner
+import com.scouty.app.assistant.domain.tools.ModelManagerToolCallModel
+import com.scouty.app.assistant.domain.tools.ToolDispatcher
 
 data class RuntimeFeatureFlags(
     val useCrossEncoderReranker: Boolean = false,
@@ -60,6 +63,19 @@ class AssistantRuntimeGraph private constructor(
     } else {
         null
     }
+    private val toolCallPlanner = if (featureFlags.useGrammarToolCalling) {
+        GrammarToolCallPlanner(ModelManagerToolCallModel(modelManager))
+    } else {
+        null
+    }
+    private val toolDispatcher = if (featureFlags.useGrammarToolCalling) {
+        ToolDispatcher(
+            retrievalEngine = retrievalEngine,
+            queryAnalyzer = queryAnalyzer
+        )
+    } else {
+        null
+    }
     private val trailContextEngine = TrailContextEngine()
 
     val repository = AssistantRepository(
@@ -77,7 +93,11 @@ class AssistantRuntimeGraph private constructor(
         conversationContextAssembler = conversationContextAssembler,
         summaryCompactor = summaryCompactor,
         cardParaphraseEngine = cardParaphraseEngine,
-        useCardParaphraseExpression = featureFlags.useCardParaphraseExpression
+        useCardParaphraseExpression = featureFlags.useCardParaphraseExpression,
+        toolCallPlanner = toolCallPlanner,
+        toolDispatcher = toolDispatcher,
+        useGrammarToolCalling = featureFlags.useGrammarToolCalling,
+        useLegacyInterpreter = featureFlags.useLegacyInterpreter
     )
 
     companion object {

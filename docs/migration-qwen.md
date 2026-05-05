@@ -292,3 +292,64 @@ Deviation:
 Decision:
 - Do not flip `useCardParaphraseExpression` default yet.
 - The code path is ready for opt-in device validation with Qwen, but the Step 5 ship gate is not fully met until Qwen expression p95 and real generated faithfulness are measured on the dev target.
+
+## Step 6 - grammar-constrained tool calling
+
+Status: implemented behind `RuntimeFeatureFlags.useGrammarToolCalling = false`. The legacy interpreter remains available behind `useLegacyInterpreter = true`; when grammar tool-calling is enabled, it gets first chance on ambiguous/low-confidence requests.
+
+Changed:
+- Added `domain/tools/AssistantTools.kt`.
+  - Defines the closed tool catalog: `lookup_card`, `set_gear_packed`, `check_capability`, `ask_clarification`, `recall_previous`, and `respond_directly`.
+  - Adds `GrammarToolCallPlanner`, which calls the local model with a GBNF grammar and `temperature=0`.
+  - Adds `ToolCallParser`, which accepts only known tool names, known domains, known metrics, and known campfire slot keys/values.
+- Added `domain/tools/tool_call.gbnf` and mirrored the same grammar in `ToolCallGrammar.Text` for runtime use.
+- Added `domain/tools/ToolDispatcher.kt`.
+  - `lookup_card` reruns deterministic retrieval with a domain hint and optional slot filters, then returns chunks to the normal answer/paraphrase path.
+  - `ask_clarification` creates a Romanian clarification response and updates `AssistantConversationState.openQuestion`.
+  - `recall_previous` searches the assembled conversation history/summary and returns a deterministic Romanian recall response.
+  - `set_gear_packed` emits `AssistantAction.ToggleGearPacked`.
+  - `check_capability` answers duration/elevation/weather from active trail context.
+  - `respond_directly` lets the existing answer path continue.
+- Wired `AssistantRepository` so tool-calling triggers only when:
+  - retrieval confidence score is `< 0.55`, or
+  - there is an unresolved `openQuestion`.
+- Removed the regex-based partial JSON repair path from `LocalLlmGenerationEngine`. Invalid structured JSON now falls back to the template engine; ambiguous interpretation belongs to Step 6 tool-calling.
+- Added diagnostics via `AssistantDiagnostics.logToolCalling`: `tool_call_invocation_count`, `tool_name`, `tool_call_latency_ms`, status, and error.
+- Added a 50-query Romanian tool-call schema corpus and parser bench:
+  - `tools/benchmarks/tool_call_ro_queries.json`
+  - `tools/benchmarks/bench_tool_call_parser.py`
+  - `tools/benchmarks/tool_call_ro_results.json`
+
+Files touched:
+- `app/src/main/java/com/scouty/app/assistant/diagnostics/AssistantDiagnostics.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/AssistantRepository.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/AssistantRuntimeGraph.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/LocalLlmGenerationEngine.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/tools/AssistantTools.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/tools/ToolDispatcher.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/tools/tool_call.gbnf`
+- `app/src/test/java/com/scouty/app/assistant/domain/AssistantRepositoryIntegrationTest.kt`
+- `app/src/test/java/com/scouty/app/assistant/domain/tools/AssistantToolsTest.kt`
+- `tools/benchmarks/bench_tool_call_parser.py`
+- `tools/benchmarks/tool_call_ro_queries.json`
+- `tools/benchmarks/tool_call_ro_results.json`
+
+Validation:
+- `./gradlew.bat testDebugUnitTest` passes.
+- `./gradlew.bat :app:assembleDebug` passes.
+- `AssistantToolsTest` verifies all tool JSON shapes, rejects unknown tools/invalid slot values, and checks that the grammar lists the known campfire slot keys.
+- `AssistantRepositoryIntegrationTest.grammarToolCalling_lowConfidenceCanAskClarification` verifies that a low-confidence query can route through the grammar planner to `ask_clarification` and persist `openQuestion`.
+- `python tools\benchmarks\bench_tool_call_parser.py --json-out tools\benchmarks\tool_call_ro_results.json` passes:
+  - query count: 50
+  - valid JSON/catalog count: 50
+  - valid rate: 100%
+
+Deviation:
+- The 50-query Step 6 bench validates the schema/catalog/parser corpus, not actual Qwen generation on device. A real Qwen grammar run still needs to be executed on the Android target with `useLlamaCpp=true` and `useGrammarToolCalling=true`.
+- `tool_call.gbnf` is duplicated as `ToolCallGrammar.Text` because Android source packaging does not give this module a simple runtime classpath loader for a raw `.gbnf` file in `java/`. The file remains present for review and parity.
+- The legacy interpreter is not deleted; it is bypassed when grammar tool-calling succeeds and remains as a gated fallback during migration.
+
+Conversational readiness:
+- The app now has the intended conversational skeleton: deterministic retrieval/rerank, memory, Qwen expression layer for Tier B, and grammar-constrained tool routing for ambiguous turns.
+- It is not yet safe to call the full conversational model "production-ready" because the two Qwen-dependent gates remain unmeasured on device: Step 5 real paraphrase faithfulness/latency and Step 6 real 50-query GBNF validity.
+- Recommended flag state remains default off for `useCardParaphraseExpression` and `useGrammarToolCalling` until those device gates pass.

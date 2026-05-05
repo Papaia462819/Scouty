@@ -1,0 +1,501 @@
+{
+  "version": 1,
+  "queries": [
+    {
+      "query_id": "tool_ro_01",
+      "query": "Nu se aprinde focul",
+      "expected_call": {
+        "tool": "ask_clarification",
+        "slot": "ignition_source",
+        "options": [
+          "lighter",
+          "matches",
+          "ferro"
+        ]
+      }
+    },
+    {
+      "query_id": "tool_ro_02",
+      "query": "Lemnele sunt ude, ce card caut?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "fuel_condition": "wet"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_03",
+      "query": "Am amnar și nu prinde scânteia",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "ignition_source": "ferro"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_04",
+      "query": "Bate vântul și flacăra moare",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "wind": "high"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_05",
+      "query": "Nu am iască la mine",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "tinder_available": "no"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_06",
+      "query": "Ce am zis mai devreme despre lemne ude?",
+      "expected_call": {
+        "tool": "recall_previous",
+        "topic": "lemne ude"
+      }
+    },
+    {
+      "query_id": "tool_ro_07",
+      "query": "Îți amintești ce mi-ai spus despre amnar?",
+      "expected_call": {
+        "tool": "recall_previous",
+        "topic": "amnar"
+      }
+    },
+    {
+      "query_id": "tool_ro_08",
+      "query": "Am pus frontala în rucsac",
+      "expected_call": {
+        "tool": "set_gear_packed",
+        "item_id": "frontala",
+        "packed": true
+      }
+    },
+    {
+      "query_id": "tool_ro_09",
+      "query": "Scoate apa din lista împachetată",
+      "expected_call": {
+        "tool": "set_gear_packed",
+        "item_id": "apa",
+        "packed": false
+      }
+    },
+    {
+      "query_id": "tool_ro_10",
+      "query": "Cât durează traseul activ?",
+      "expected_call": {
+        "tool": "check_capability",
+        "metric": "duration"
+      }
+    },
+    {
+      "query_id": "tool_ro_11",
+      "query": "Ce diferență de nivel are traseul?",
+      "expected_call": {
+        "tool": "check_capability",
+        "metric": "elevation"
+      }
+    },
+    {
+      "query_id": "tool_ro_12",
+      "query": "Cum e vremea pe traseu?",
+      "expected_call": {
+        "tool": "check_capability",
+        "metric": "weather"
+      }
+    },
+    {
+      "query_id": "tool_ro_13",
+      "query": "Pot face foc pentru gătit?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "goal": "cooking"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_14",
+      "query": "Vreau foc doar pentru căldură",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "goal": "warmth"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_15",
+      "query": "E voie focul aici?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "permission": "unknown"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_16",
+      "query": "Nu găsesc surcele",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "kindling_available": "no"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_17",
+      "query": "Am hârtie și brichetă",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "tinder_material": "paper",
+          "ignition_source": "lighter"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_18",
+      "query": "Am șervețele uscate",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "tinder_material": "tissue",
+          "tinder_condition": "dry"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_19",
+      "query": "Sunt obosit, merită să mai încerc focul?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "fatigue": "high"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_20",
+      "query": "Se întunecă și nu merge focul",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "daylight": "low"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_21",
+      "query": "Ce fac cu mâncarea ca să nu vină ursul?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "wildlife_romania",
+        "slot_filters": {}
+      }
+    },
+    {
+      "query_id": "tool_ro_22",
+      "query": "Ce fac dacă văd urme de urs?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "wildlife_romania",
+        "slot_filters": {}
+      }
+    },
+    {
+      "query_id": "tool_ro_23",
+      "query": "Ce echipament îmi lipsește?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "gear_and_preparation",
+        "slot_filters": {}
+      }
+    },
+    {
+      "query_id": "tool_ro_24",
+      "query": "Ai un sfat pentru bocanci noi?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "gear_and_preparation",
+        "slot_filters": {}
+      }
+    },
+    {
+      "query_id": "tool_ro_25",
+      "query": "Am împachetat pelerina",
+      "expected_call": {
+        "tool": "set_gear_packed",
+        "item_id": "pelerina",
+        "packed": true
+      }
+    },
+    {
+      "query_id": "tool_ro_26",
+      "query": "Am uitat trusa medicală acasă",
+      "expected_call": {
+        "tool": "set_gear_packed",
+        "item_id": "trusa medicala",
+        "packed": false
+      }
+    },
+    {
+      "query_id": "tool_ro_27",
+      "query": "Ce am vorbit anterior despre frontala?",
+      "expected_call": {
+        "tool": "recall_previous",
+        "topic": "frontala"
+      }
+    },
+    {
+      "query_id": "tool_ro_28",
+      "query": "Mai spune o dată partea cu bățul cu pene",
+      "expected_call": {
+        "tool": "recall_previous",
+        "topic": "băț cu pene"
+      }
+    },
+    {
+      "query_id": "tool_ro_29",
+      "query": "Nu înțeleg dacă era despre foc sau aragaz",
+      "expected_call": {
+        "tool": "ask_clarification",
+        "slot": "problem_cause",
+        "options": [
+          "foc",
+          "aragaz",
+          "siguranță"
+        ]
+      }
+    },
+    {
+      "query_id": "tool_ro_30",
+      "query": "Te referi la traseu sau echipament?",
+      "expected_call": {
+        "tool": "ask_clarification",
+        "slot": "domain",
+        "options": [
+          "traseu",
+          "echipament",
+          "foc"
+        ]
+      }
+    },
+    {
+      "query_id": "tool_ro_31",
+      "query": "Mă dor picioarele de la bocanci",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "tips_and_tricks",
+        "slot_filters": {}
+      }
+    },
+    {
+      "query_id": "tool_ro_32",
+      "query": "Cum previn bășicile?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "tips_and_tricks",
+        "slot_filters": {}
+      }
+    },
+    {
+      "query_id": "tool_ro_33",
+      "query": "M-a prins noaptea singur",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "survival_basics",
+        "slot_filters": {}
+      }
+    },
+    {
+      "query_id": "tool_ro_34",
+      "query": "Cum păstrez calmul în întuneric?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "survival_basics",
+        "slot_filters": {}
+      }
+    },
+    {
+      "query_id": "tool_ro_35",
+      "query": "Am nevoie să fierb apă",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "goal": "boil_water"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_36",
+      "query": "Am pierdut chibriturile",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "compromised_item": "matches",
+          "compromised_reason": "lost"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_37",
+      "query": "Bricheta e stricată",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "compromised_item": "lighter",
+          "compromised_reason": "broken"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_38",
+      "query": "Focul e lângă rădăcini",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "ground_risk": "roots_or_peat"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_39",
+      "query": "Pot aprinde în cort?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "ground_risk": "indoor_or_tent"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_40",
+      "query": "Iarba e foarte uscată",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "ground_risk": "dry_vegetation"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_41",
+      "query": "Am nevoie de o decizie rapidă",
+      "expected_call": {
+        "tool": "respond_directly"
+      }
+    },
+    {
+      "query_id": "tool_ro_42",
+      "query": "Cardul găsit pare suficient",
+      "expected_call": {
+        "tool": "respond_directly"
+      }
+    },
+    {
+      "query_id": "tool_ro_43",
+      "query": "Îmi trebuie apă pe traseu?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "gear_and_preparation",
+        "slot_filters": {}
+      }
+    },
+    {
+      "query_id": "tool_ro_44",
+      "query": "Ce fac dacă plouă diseară?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "weather_and_season",
+        "slot_filters": {}
+      }
+    },
+    {
+      "query_id": "tool_ro_45",
+      "query": "Sunt aproape de apus?",
+      "expected_call": {
+        "tool": "check_capability",
+        "metric": "duration"
+      }
+    },
+    {
+      "query_id": "tool_ro_46",
+      "query": "Cât urcuș mai am?",
+      "expected_call": {
+        "tool": "check_capability",
+        "metric": "elevation"
+      }
+    },
+    {
+      "query_id": "tool_ro_47",
+      "query": "Amintește-mi ce am decis despre foc",
+      "expected_call": {
+        "tool": "recall_previous",
+        "topic": "foc"
+      }
+    },
+    {
+      "query_id": "tool_ro_48",
+      "query": "Nu am metodă de aprindere",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "ignition_source": "none"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_49",
+      "query": "Pot improviza iască?",
+      "expected_call": {
+        "tool": "lookup_card",
+        "domain": "campfire_basics",
+        "slot_filters": {
+          "tinder_strategy": "improvise"
+        }
+      }
+    },
+    {
+      "query_id": "tool_ro_50",
+      "query": "Întreabă-mă ce lipsește",
+      "expected_call": {
+        "tool": "ask_clarification",
+        "slot": "problem_cause",
+        "options": [
+          "lemne ude",
+          "iască lipsă",
+          "vânt puternic"
+        ]
+      }
+    }
+  ]
+}

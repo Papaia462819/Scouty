@@ -8,7 +8,6 @@ import com.scouty.app.assistant.model.ResponseSectionStyle
 import com.scouty.app.assistant.model.StructuredAssistantOutput
 import com.scouty.app.assistant.model.StructuredResponseSection
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 
 class LocalLlmGenerationEngine(
@@ -48,12 +47,6 @@ class LocalLlmGenerationEngine(
                     input = input,
                     modelStatus = rawResponse.modelStatus
                 )
-            }.recoverCatching { error ->
-                repairStructuredOutput(
-                    rawResponse = rawResponse.text,
-                    input = input,
-                    modelStatus = rawResponse.modelStatus
-                ) ?: throw error
             }.getOrThrow()
         }.getOrElse { error ->
             runCatching {
@@ -257,58 +250,8 @@ class LocalLlmGenerationEngine(
         error("Model response JSON object is incomplete")
     }
 
-    private fun repairStructuredOutput(
-        rawResponse: String,
-        input: GenerationInput,
-        modelStatus: ModelStatus
-    ): StructuredAssistantOutput? {
-        val summary = extractJsonStringField(rawResponse, "summary")
-            ?.let(::cleanGeneratedText)
-            ?.takeIf { it.isNotBlank() }
-            ?: return null
-        val isRomanian = input.queryAnalysis.preferredLanguage == "ro"
-        val warning = extractJsonStringField(rawResponse, "warning")
-            ?.let(::cleanGeneratedText)
-            .orEmpty()
-        val sections = mutableListOf<StructuredResponseSection>()
-        if (warning.isNotBlank()) {
-            sections += StructuredResponseSection(
-                title = if (isRomanian) "Atentie" else "Caution",
-                body = warning,
-                style = ResponseSectionStyle.IMPORTANT
-            )
-        }
-        sections += fallbackSectionsFromRetrievedChunks(input, isRomanian)
-        if (sections.isEmpty()) {
-            return null
-        }
-
-        runCatching {
-            Log.w(
-                LogTag,
-                "Recovered local response from partial JSON summary=\"${summary.take(160)}\" sections=${sections.map { "${it.style}:${it.title}" }}"
-            )
-        }
-
-        return StructuredAssistantOutput(
-            summary = summary,
-            sections = sections.take(4),
-            generationMode = GenerationMode.LOCAL_LLM,
-            reasoningType = input.queryAnalysis.reasoningType,
-            modelVersion = modelStatus.modelVersion,
-            knowledgePackVersion = input.knowledgePackStatus.packVersion
-        )
-    }
-
-    private fun extractJsonStringField(rawResponse: String, key: String): String? {
-        val pattern = Regex(
-            """\"$key\"\s*:\s*\"((?:\\.|[^\"\\])*)\"""",
-            setOf(RegexOption.DOT_MATCHES_ALL)
-        )
-        val match = pattern.find(rawResponse) ?: return null
-        val encoded = "\"${match.groupValues[1]}\""
-        return runCatching { json.decodeFromString(String.serializer(), encoded) }.getOrNull()
-    }
+    // Legacy regex JSON repair was removed in Step 6. Ambiguous-query interpretation now uses
+    // grammar-constrained tool calls instead of trying to recover malformed structured JSON.
 
     private fun buildFieldContext(input: GenerationInput): String {
         val parts = mutableListOf<String>()
@@ -425,38 +368,6 @@ class LocalLlmGenerationEngine(
             .replace("\\s+".toRegex(), " ")
             .trim()
             .take(maxLength)
-
-    private fun cleanGeneratedText(value: String): String {
-        val tokens = value
-            .replace('\n', ' ')
-            .replace("\\s+".toRegex(), " ")
-            .trim()
-            .split(' ')
-            .filter { it.isNotBlank() }
-
-        val cleanedTokens = mutableListOf<String>()
-        var previous = ""
-        var repetition = 0
-        for (token in tokens) {
-            val normalized = token.lowercase()
-            if (normalized == previous) {
-                repetition += 1
-                if (repetition >= 6) {
-                    break
-                }
-            } else {
-                previous = normalized
-                repetition = 0
-            }
-            cleanedTokens += token
-        }
-
-        return cleanedTokens
-            .joinToString(" ")
-            .replace("\\s+".toRegex(), " ")
-            .trim()
-            .take(220)
-    }
 
     private fun String?.toSectionStyle(): ResponseSectionStyle =
         when (this?.trim()?.uppercase()) {
