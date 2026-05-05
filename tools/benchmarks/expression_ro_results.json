@@ -1,0 +1,3137 @@
+{
+  "summary": {
+    "query_count": 60,
+    "retrieval_top1_accuracy": 1.0,
+    "faithfulness_pass_rate": 0.43333333333333335,
+    "diacritic_correctness": 1.0,
+    "reranker_latency_ms_p50": 1048.937699999442,
+    "reranker_latency_ms_p95": 1129.9877000001288,
+    "expression_latency_ms_p50": null,
+    "expression_latency_ms_p95": null,
+    "expression_mode": "ideal_answer_simulation",
+    "qwen_validated": false,
+    "notes": "This host benchmark validates retrieval and the deterministic faithfulness checker. Qwen expression latency and output quality require a device/llama.cpp run."
+  },
+  "rows": [
+    {
+      "query_id": "campfire_basics_01",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu secretul lemnului uscat pe vreme umeda?",
+      "golden_chunk_id": "cg_campfire_basics_fire_after_rain_dry_inne_59a14d7b870b",
+      "ideal_answer": "Când totul pare ud, amintește-ți că inima lemnului mort rămâne adesea uscată. Iată cum ajungi la ea cu un cuțit sau un toporaș.",
+      "top1_chunk_id": "cg_campfire_basics_fire_after_rain_dry_inne_59a14d7b870b",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_after_rain_dry_inne_59a14d7b870b",
+          "title": "Secretul lemnului uscat pe vreme umeda",
+          "domain": "campfire_basics",
+          "score": 182.496,
+          "reranker_score": 0.8287
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_tinder_storage_9bb7e10637f3",
+          "title": "Cum tii iasca uscata cand totul e ud",
+          "domain": "campfire_basics",
+          "score": 69.0419,
+          "reranker_score": 0.070524
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_wet_wood_50bc25f6b3d0",
+          "title": "Cum aprinzi focul când totul e ud în jur",
+          "domain": "campfire_basics",
+          "score": 60.9353,
+          "reranker_score": 0.324192
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_pinecone_ignite_84f0981f866a",
+          "title": "Conuri de brad uscate: secretele iascăi perfecte",
+          "domain": "campfire_basics",
+          "score": 57.7763,
+          "reranker_score": 0.214703
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_no_paper_aeb9512aaf5b",
+          "title": "Foc fara hartie: trucuri din natura",
+          "domain": "campfire_basics",
+          "score": 54.1246,
+          "reranker_score": 0.269058
+        }
+      ],
+      "rerank_latency_ms": 1148.6749999994572,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7647058823529411,
+      "key_fact_count": 17,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_02",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu aragaz vs. Foc de Tabara: Alegerea inteleapta in Alpin?",
+      "golden_chunk_id": "cg_campfire_basics_fire_alpine_stove_alt_952808bf3a33",
+      "ideal_answer": "În zona alpină, aragazul portabil este soluția ideală pentru gătit, fiind mai sigur și mai eficient decât focul de tabără.",
+      "top1_chunk_id": "cg_campfire_basics_fire_alpine_stove_alt_952808bf3a33",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_alpine_stove_alt_952808bf3a33",
+          "title": "Aragaz vs. Foc de Tabara: Alegerea inteleapta in Alpin",
+          "domain": "campfire_basics",
+          "score": 233.6502,
+          "reranker_score": 0.610627
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_alpine_zone_9e8aca37771f",
+          "title": "Cafea la 2000m? Uită de focul de tabără în golul alpin",
+          "domain": "campfire_basics",
+          "score": 140.5881,
+          "reranker_score": 0.357351
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+          "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+          "domain": "campfire_basics",
+          "score": 122.6613,
+          "reranker_score": 0.288267
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 119.6382,
+          "reranker_score": 0.230478
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spruce_pine_5a12d9685809",
+          "title": "Focul de tabără: Brad vs. Pin și scânteile buclucașe",
+          "domain": "campfire_basics",
+          "score": 107.7709,
+          "reranker_score": 0.257137
+        }
+      ],
+      "rerank_latency_ms": 1091.7517999996562,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6842105263157895,
+      "key_fact_count": 19,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_03",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu cafea la 2000m? Uită de focul de tabără în golul alpin?",
+      "golden_chunk_id": "cg_campfire_basics_fire_alpine_zone_9e8aca37771f",
+      "ideal_answer": "În golul alpin nu ai lemne, iar focul deschis e periculos și interzis, așa că hai să vedem ce alternative reale ai pentru o masă caldă.",
+      "top1_chunk_id": "cg_campfire_basics_fire_alpine_zone_9e8aca37771f",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_alpine_zone_9e8aca37771f",
+          "title": "Cafea la 2000m? Uită de focul de tabără în golul alpin",
+          "domain": "campfire_basics",
+          "score": 230.0181,
+          "reranker_score": 0.772727
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_alpine_stove_alt_952808bf3a33",
+          "title": "Aragaz vs. Foc de Tabara: Alegerea inteleapta in Alpin",
+          "domain": "campfire_basics",
+          "score": 118.1091,
+          "reranker_score": 0.248863
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spruce_pine_5a12d9685809",
+          "title": "Focul de tabără: Brad vs. Pin și scânteile buclucașe",
+          "domain": "campfire_basics",
+          "score": 98.7543,
+          "reranker_score": 0.121929
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 96.9721,
+          "reranker_score": 0.114651
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_extinguish_clean_69461c409c95",
+          "title": "Stingerea corecta a focului de tabara",
+          "domain": "campfire_basics",
+          "score": 89.5891,
+          "reranker_score": 0.227364
+        }
+      ],
+      "rerank_latency_ms": 1025.4635000001144,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.5714285714285714,
+      "key_fact_count": 21,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_04",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu cenușa de la focul de tabără: împrăștiere sau îngropare??",
+      "golden_chunk_id": "cg_campfire_basics_fire_ash_disposal_c419e055042c",
+      "ideal_answer": "Află cum să gestionezi corect cenușa focului de tabără pentru a proteja mediul și a preveni incendiile.",
+      "top1_chunk_id": "cg_campfire_basics_fire_ash_disposal_c419e055042c",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_ash_disposal_c419e055042c",
+          "title": "Cenușa de la focul de tabără: împrăștiere sau îngropare?",
+          "domain": "campfire_basics",
+          "score": 227.0058,
+          "reranker_score": 0.837573
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 132.8917,
+          "reranker_score": 0.516146
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spruce_pine_5a12d9685809",
+          "title": "Focul de tabără: Brad vs. Pin și scânteile buclucașe",
+          "domain": "campfire_basics",
+          "score": 107.1909,
+          "reranker_score": 0.204886
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+          "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+          "domain": "campfire_basics",
+          "score": 105.9855,
+          "reranker_score": 0.334819
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_extinguish_clean_69461c409c95",
+          "title": "Stingerea corecta a focului de tabara",
+          "domain": "campfire_basics",
+          "score": 97.522,
+          "reranker_score": 0.304025
+        }
+      ],
+      "rerank_latency_ms": 1041.946299999836,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6666666666666666,
+      "key_fact_count": 15,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_05",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu aprinderea focului cu baterie si sarma de otel?",
+      "golden_chunk_id": "cg_campfire_basics_fire_battery_steel_wool_33fde1116700",
+      "ideal_answer": "Află cum să aprinzi focul de tabără într-o situație de urgență folosind o baterie de 9V și o bucată de lână de oțel.",
+      "top1_chunk_id": "cg_campfire_basics_fire_battery_steel_wool_33fde1116700",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_battery_steel_wool_33fde1116700",
+          "title": "Aprinderea focului cu baterie si sarma de otel",
+          "domain": "campfire_basics",
+          "score": 207.8011,
+          "reranker_score": 0.805013
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_friction_ignition_r_efcd3da90400",
+          "title": "Aprinderea focului prin frecare: De ce e greu în realitate",
+          "domain": "campfire_basics",
+          "score": 66.7815,
+          "reranker_score": 0.167269
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_birch_bark_1af6578d2893",
+          "title": "Mesteacanul, bricheta padurii",
+          "domain": "campfire_basics",
+          "score": 40.9291,
+          "reranker_score": 0.089114
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_kettle_crane_cf83bce8e216",
+          "title": "Cum sa-ti faci ceaiul la foc de tabara",
+          "domain": "campfire_basics",
+          "score": 37.6422,
+          "reranker_score": 0.083027
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 37.6211,
+          "reranker_score": 0.082764
+        }
+      ],
+      "rerank_latency_ms": 1030.4753999998866,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.8461538461538461,
+      "key_fact_count": 13,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_06",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu mesteacanul, bricheta padurii?",
+      "golden_chunk_id": "cg_campfire_basics_fire_birch_bark_1af6578d2893",
+      "ideal_answer": "Învață cum să folosești coaja de mesteacăn, cea mai bună iască naturală, pentru a aprinde focul rapid, chiar și când totul în jur e ud.",
+      "top1_chunk_id": "cg_campfire_basics_fire_birch_bark_1af6578d2893",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_birch_bark_1af6578d2893",
+          "title": "Mesteacanul, bricheta padurii",
+          "domain": "campfire_basics",
+          "score": 120.4772,
+          "reranker_score": 0.763464
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_lighter_wet_7c5da1f6ff49",
+          "title": "Bricheta udă? Revino la foc!",
+          "domain": "campfire_basics",
+          "score": 76.4688,
+          "reranker_score": 0.35336
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 36.0376,
+          "reranker_score": 0.06797
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_kettle_crane_cf83bce8e216",
+          "title": "Cum sa-ti faci ceaiul la foc de tabara",
+          "domain": "campfire_basics",
+          "score": 33.25,
+          "reranker_score": null
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+          "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+          "domain": "campfire_basics",
+          "score": 33.25,
+          "reranker_score": null
+        }
+      ],
+      "rerank_latency_ms": 1129.9877000001288,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.8,
+      "key_fact_count": 15,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_07",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu economia mesteacanului: cat consumi pentru ce castigi?",
+      "golden_chunk_id": "cg_campfire_basics_fire_birchwood_economy_d72abf618923",
+      "ideal_answer": "Coaja de mesteacăn este excelentă pentru a porni un foc, dar trebuie folosită inteligent, ca o scânteie, nu ca principalul combustibil.",
+      "top1_chunk_id": "cg_campfire_basics_fire_birchwood_economy_d72abf618923",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_birchwood_economy_d72abf618923",
+          "title": "Economia mesteacanului: cat consumi pentru ce castigi",
+          "domain": "campfire_basics",
+          "score": 165.9071,
+          "reranker_score": 0.653839
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_tinder_storage_9bb7e10637f3",
+          "title": "Cum tii iasca uscata cand totul e ud",
+          "domain": "campfire_basics",
+          "score": 69.4639,
+          "reranker_score": 0.023298
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_resin_pickup_43050efd38de",
+          "title": "Rasina de brad: cum o recoltezi fara sa ranesti copacul",
+          "domain": "campfire_basics",
+          "score": 55.7438,
+          "reranker_score": 0.031798
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_gathered_wood_size__af6c6a3d349e",
+          "title": "Regula brațelor pentru foc de tabără",
+          "domain": "campfire_basics",
+          "score": 55.0726,
+          "reranker_score": 0.023408
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_pinecone_ignite_84f0981f866a",
+          "title": "Conuri de brad uscate: secretele iascăi perfecte",
+          "domain": "campfire_basics",
+          "score": 54.6651,
+          "reranker_score": 0.023314
+        }
+      ],
+      "rerank_latency_ms": 1103.0816999991657,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.625,
+      "key_fact_count": 16,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_08",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu lemne bune pentru foc de tabara?",
+      "golden_chunk_id": "cg_campfire_basics_fire_carpathian_wood_tab_4d7b67a417c4",
+      "ideal_answer": "Alege lemnele potrivite pentru focul de tabără: conifere pentru pornire rapidă, foioase tari pentru căldură constantă și jar durabil.",
+      "top1_chunk_id": "cg_campfire_basics_fire_carpathian_wood_tab_4d7b67a417c4",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_carpathian_wood_tab_4d7b67a417c4",
+          "title": "Lemne bune pentru foc de tabara",
+          "domain": "campfire_basics",
+          "score": 218.3353,
+          "reranker_score": 0.806692
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_wood_size_98999cba7cb6",
+          "title": "Lemnele pentru foc: mărimea contează!",
+          "domain": "campfire_basics",
+          "score": 151.8221,
+          "reranker_score": 0.610276
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_gathered_wood_size__af6c6a3d349e",
+          "title": "Regula brațelor pentru foc de tabără",
+          "domain": "campfire_basics",
+          "score": 146.0237,
+          "reranker_score": 0.467797
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 144.8047,
+          "reranker_score": 0.472559
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spruce_pine_5a12d9685809",
+          "title": "Focul de tabără: Brad vs. Pin și scânteile buclucașe",
+          "domain": "campfire_basics",
+          "score": 144.2128,
+          "reranker_score": 0.49516
+        }
+      ],
+      "rerank_latency_ms": 1079.292099999293,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6842105263157895,
+      "key_fact_count": 19,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_09",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu focul de tabara si cum lasi locul curat?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+      "ideal_answer": "Află cum să stingi focul de tabără și să lași locul curat în doar 5 minute, respectând principiile Leave No Trace.",
+      "top1_chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 259.8135,
+          "reranker_score": 0.815169
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+          "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+          "domain": "campfire_basics",
+          "score": 144.6253,
+          "reranker_score": 0.565316
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_safe_distance_437f37bec821",
+          "title": "Focul de tabara si siguranta cortului",
+          "domain": "campfire_basics",
+          "score": 125.7791,
+          "reranker_score": 0.434739
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_ash_disposal_c419e055042c",
+          "title": "Cenușa de la focul de tabără: împrăștiere sau îngropare?",
+          "domain": "campfire_basics",
+          "score": 121.748,
+          "reranker_score": 0.38935
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spruce_pine_5a12d9685809",
+          "title": "Focul de tabără: Brad vs. Pin și scânteile buclucașe",
+          "domain": "campfire_basics",
+          "score": 120.7481,
+          "reranker_score": 0.301852
+        }
+      ],
+      "rerank_latency_ms": 1269.7487999994337,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6842105263157895,
+      "key_fact_count": 19,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_10",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu grătar improvizat la munte?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cooking_grill_diy_cc4c496d947c",
+      "ideal_answer": "Nu improviza grătare din pietre sau crengi; folosește echipament sigur și responsabil pentru foc la munte.",
+      "top1_chunk_id": "cg_campfire_basics_fire_cooking_grill_diy_cc4c496d947c",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_grill_diy_cc4c496d947c",
+          "title": "Grătar improvizat la munte",
+          "domain": "campfire_basics",
+          "score": 141.0217,
+          "reranker_score": 0.680271
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_no_axe_a27523d156ca",
+          "title": "Fara Topor: Spargerea Lemnelor cu Tehnica Leverului",
+          "domain": "campfire_basics",
+          "score": 47.6868,
+          "reranker_score": 0.153584
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+          "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+          "domain": "campfire_basics",
+          "score": 46.5721,
+          "reranker_score": 0.199652
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 46.3841,
+          "reranker_score": 0.077301
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_drying_gear_8cb5c8caa87d",
+          "title": "Cum usuci echipamentul langa foc fara sa-l arzi",
+          "domain": "campfire_basics",
+          "score": 45.626,
+          "reranker_score": 0.092825
+        }
+      ],
+      "rerank_latency_ms": 1131.7626000000018,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6923076923076923,
+      "key_fact_count": 13,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_11",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu gatit pe jar: cand si cum?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cooking_on_coals_924fb31bef54",
+      "ideal_answer": "Află cum să gătești perfect pe jar, nu pe flacără, pentru o masă delicioasă în natură.",
+      "top1_chunk_id": "cg_campfire_basics_fire_cooking_on_coals_924fb31bef54",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_on_coals_924fb31bef54",
+          "title": "Gatit pe jar: cand si cum",
+          "domain": "campfire_basics",
+          "score": 194.0287,
+          "reranker_score": 0.807859
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_setup_3db08a957169",
+          "title": "Cum așezi focul pentru gătit la ceaun",
+          "domain": "campfire_basics",
+          "score": 112.5005,
+          "reranker_score": 0.293756
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_log_cabin_0c83c5345cb9",
+          "title": "Cum sa faci un foc 'log cabin' pentru jar de durata",
+          "domain": "campfire_basics",
+          "score": 101.6877,
+          "reranker_score": 0.283596
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_in_snow_c79c8d528419",
+          "title": "Foc pe zapada: cum sa nu-ti ineci jarul",
+          "domain": "campfire_basics",
+          "score": 84.3307,
+          "reranker_score": 0.111634
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_morning_after_e9e670920b1e",
+          "title": "Reaprinde focul dimineața din jarul nopții",
+          "domain": "campfire_basics",
+          "score": 74.1514,
+          "reranker_score": 0.174393
+        }
+      ],
+      "rerank_latency_ms": 1069.8490000004313,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.4375,
+      "key_fact_count": 16,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_12",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu cum așezi focul pentru gătit la ceaun?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cooking_setup_3db08a957169",
+      "ideal_answer": "Nu stinge focul cu oala! Învață să folosești jarul și să construiești o vatră stabilă pentru un gătit eficient și fără fum.",
+      "top1_chunk_id": "cg_campfire_basics_fire_cooking_setup_3db08a957169",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_setup_3db08a957169",
+          "title": "Cum așezi focul pentru gătit la ceaun",
+          "domain": "campfire_basics",
+          "score": 218.4286,
+          "reranker_score": 0.822857
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_kettle_crane_cf83bce8e216",
+          "title": "Cum sa-ti faci ceaiul la foc de tabara",
+          "domain": "campfire_basics",
+          "score": 109.546,
+          "reranker_score": 0.481825
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_tripod_6c789a99e41f",
+          "title": "Trepiedul pentru ceaun: noduri si echilibru",
+          "domain": "campfire_basics",
+          "score": 109.0559,
+          "reranker_score": 0.480699
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_log_cabin_0c83c5345cb9",
+          "title": "Cum sa faci un foc 'log cabin' pentru jar de durata",
+          "domain": "campfire_basics",
+          "score": 100.5382,
+          "reranker_score": 0.359227
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_on_coals_924fb31bef54",
+          "title": "Gatit pe jar: cand si cum",
+          "domain": "campfire_basics",
+          "score": 99.8103,
+          "reranker_score": 0.125129
+        }
+      ],
+      "rerank_latency_ms": 1032.9633000001195,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6470588235294118,
+      "key_fact_count": 17,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_13",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu gătit la foc de tabără fără fum în mâncare?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cooking_smoke_food_a4c7ab3c8708",
+      "ideal_answer": "Află cum să gătești la foc de tabără fără să-ți umpli mâncarea de fum și să-ți iriti ochii.",
+      "top1_chunk_id": "cg_campfire_basics_fire_cooking_smoke_food_a4c7ab3c8708",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_smoke_food_a4c7ab3c8708",
+          "title": "Gătit la foc de tabără fără fum în mâncare",
+          "domain": "campfire_basics",
+          "score": 267.3748,
+          "reranker_score": 0.797185
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_setup_3db08a957169",
+          "title": "Cum așezi focul pentru gătit la ceaun",
+          "domain": "campfire_basics",
+          "score": 147.2114,
+          "reranker_score": 0.300143
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+          "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+          "domain": "campfire_basics",
+          "score": 120.0732,
+          "reranker_score": 0.155916
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_kettle_crane_cf83bce8e216",
+          "title": "Cum sa-ti faci ceaiul la foc de tabara",
+          "domain": "campfire_basics",
+          "score": 119.1475,
+          "reranker_score": 0.129344
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 116.4102,
+          "reranker_score": 0.190128
+        }
+      ],
+      "rerank_latency_ms": 1055.2356000007421,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.5,
+      "key_fact_count": 14,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_14",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu trepiedul pentru ceaun: noduri si echilibru?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cooking_tripod_6c789a99e41f",
+      "ideal_answer": "Învață să construiești un trepied stabil din trei bețe și o sfoară pentru a-ți găti cina la foc de tabără fără surprize neplăcute.",
+      "top1_chunk_id": "cg_campfire_basics_fire_cooking_tripod_6c789a99e41f",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_tripod_6c789a99e41f",
+          "title": "Trepiedul pentru ceaun: noduri si echilibru",
+          "domain": "campfire_basics",
+          "score": 185.3403,
+          "reranker_score": 0.894254
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_setup_3db08a957169",
+          "title": "Cum așezi focul pentru gătit la ceaun",
+          "domain": "campfire_basics",
+          "score": 75.7023,
+          "reranker_score": 0.128779
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_log_cabin_0c83c5345cb9",
+          "title": "Cum sa faci un foc 'log cabin' pentru jar de durata",
+          "domain": "campfire_basics",
+          "score": 46.2851,
+          "reranker_score": 0.036064
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_on_coals_924fb31bef54",
+          "title": "Gatit pe jar: cand si cum",
+          "domain": "campfire_basics",
+          "score": 45.5437,
+          "reranker_score": 0.051797
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_tinder_storage_9bb7e10637f3",
+          "title": "Cum tii iasca uscata cand totul e ud",
+          "domain": "campfire_basics",
+          "score": 43.0471,
+          "reranker_score": 0.025589
+        }
+      ],
+      "rerank_latency_ms": 1042.9887999998755,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6,
+      "key_fact_count": 20,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_15",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu iasca DIY: Vată cu Vaselină?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cotton_vaseline_60c75d3d2e6c",
+      "ideal_answer": "Învață cum să-ți prepari acasă iască din vată și vaselină pentru a aprinde focul ușor în orice condiții.",
+      "top1_chunk_id": "cg_campfire_basics_fire_cotton_vaseline_60c75d3d2e6c",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_cotton_vaseline_60c75d3d2e6c",
+          "title": "Iasca DIY: Vată cu Vaselină",
+          "domain": "campfire_basics",
+          "score": 205.8886,
+          "reranker_score": 0.788608
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_ferro_rod_basics_a2949ab93863",
+          "title": "Amnarul: Cum sa faci scantei ca un profesionist",
+          "domain": "campfire_basics",
+          "score": 83.8517,
+          "reranker_score": 0.563146
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_kindling_layers_0d502a2d17bb",
+          "title": "Cum aprinzi focul din prima: Iasca, surcelele, lemnele",
+          "domain": "campfire_basics",
+          "score": 76.2574,
+          "reranker_score": 0.268217
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_tinder_storage_9bb7e10637f3",
+          "title": "Cum tii iasca uscata cand totul e ud",
+          "domain": "campfire_basics",
+          "score": 76.2367,
+          "reranker_score": 0.117959
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_no_lighter_8ff5b2e1fcbf",
+          "title": "Scantei, iasca si rabdare: focul fara chibrit",
+          "domain": "campfire_basics",
+          "score": 72.7816,
+          "reranker_score": 0.34977
+        }
+      ],
+      "rerank_latency_ms": 1067.479899999853,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6111111111111112,
+      "key_fact_count": 18,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_16",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu focul Dakota: cand sa-l sapi?",
+      "golden_chunk_id": "cg_campfire_basics_fire_dakota_pit_8c4cfa84ef41",
+      "ideal_answer": "Află când și cum să folosești un \"Dakota fire pit\" pentru un foc de tabără discret și eficient, mai ales pe vânt.",
+      "top1_chunk_id": "cg_campfire_basics_fire_dakota_pit_8c4cfa84ef41",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_dakota_pit_8c4cfa84ef41",
+          "title": "Focul Dakota: cand sa-l sapi",
+          "domain": "campfire_basics",
+          "score": 203.9543,
+          "reranker_score": 0.864428
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_wet_wood_50bc25f6b3d0",
+          "title": "Cum aprinzi focul când totul e ud în jur",
+          "domain": "campfire_basics",
+          "score": 72.6909,
+          "reranker_score": 0.188637
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 66.8859,
+          "reranker_score": 0.146074
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spruce_pine_5a12d9685809",
+          "title": "Focul de tabără: Brad vs. Pin și scânteile buclucașe",
+          "domain": "campfire_basics",
+          "score": 61.9886,
+          "reranker_score": 0.094857
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_when_forbidden_eb4773e40330",
+          "title": "Focul de tabara: cand e interzis in Romania?",
+          "domain": "campfire_basics",
+          "score": 58.6631,
+          "reranker_score": 0.093289
+        }
+      ],
+      "rerank_latency_ms": 1043.6484000001656,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6,
+      "key_fact_count": 15,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_17",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu cum usuci echipamentul langa foc fara sa-l arzi?",
+      "golden_chunk_id": "cg_campfire_basics_fire_drying_gear_8cb5c8caa87d",
+      "ideal_answer": "Află cum să-ți usuci hainele și încălțămintea lângă focul de tabără în siguranță, evitând distrugerea echipamentului.",
+      "top1_chunk_id": "cg_campfire_basics_fire_drying_gear_8cb5c8caa87d",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_drying_gear_8cb5c8caa87d",
+          "title": "Cum usuci echipamentul langa foc fara sa-l arzi",
+          "domain": "campfire_basics",
+          "score": 254.0572,
+          "reranker_score": 0.830715
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 109.2516,
+          "reranker_score": 0.170646
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_smoke_food_a4c7ab3c8708",
+          "title": "Gătit la foc de tabără fără fum în mâncare",
+          "domain": "campfire_basics",
+          "score": 108.9632,
+          "reranker_score": 0.152039
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+          "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+          "domain": "campfire_basics",
+          "score": 107.6762,
+          "reranker_score": 0.145953
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_in_snow_c79c8d528419",
+          "title": "Foc pe zapada: cum sa nu-ti ineci jarul",
+          "domain": "campfire_basics",
+          "score": 100.6652,
+          "reranker_score": 0.133315
+        }
+      ],
+      "rerank_latency_ms": 1033.4240000001955,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6875,
+      "key_fact_count": 16,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_18",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu stingerea corecta a focului de tabara?",
+      "golden_chunk_id": "cg_campfire_basics_fire_extinguish_clean_69461c409c95",
+      "ideal_answer": "Învață cum să stingi corect focul de tabără pentru a preveni incendiile și a proteja natura.",
+      "top1_chunk_id": "cg_campfire_basics_fire_extinguish_clean_69461c409c95",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_extinguish_clean_69461c409c95",
+          "title": "Stingerea corecta a focului de tabara",
+          "domain": "campfire_basics",
+          "score": 155.1072,
+          "reranker_score": 0.76884
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 99.0668,
+          "reranker_score": 0.453335
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+          "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+          "domain": "campfire_basics",
+          "score": 84.553,
+          "reranker_score": 0.296913
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_safety_kids_e5e2df77000c",
+          "title": "Foc de tabara cu copii: Siguranta pe primul loc!",
+          "domain": "campfire_basics",
+          "score": 81.9772,
+          "reranker_score": 0.419714
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spruce_pine_5a12d9685809",
+          "title": "Focul de tabără: Brad vs. Pin și scânteile buclucașe",
+          "domain": "campfire_basics",
+          "score": 80.4098,
+          "reranker_score": 0.280122
+        }
+      ],
+      "rerank_latency_ms": 1041.68750000008,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6923076923076923,
+      "key_fact_count": 13,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_19",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu lemnul rășinos (fatwood): Prietenul tău când totul e ud?",
+      "golden_chunk_id": "cg_campfire_basics_fire_fatwood_cab094b575ff",
+      "ideal_answer": "Când plouă și totul e ud, caută lemn rășinos la baza brazilor uscați; rășina din el îl face să ardă ca o torță, chiar și umed.",
+      "top1_chunk_id": "cg_campfire_basics_fire_fatwood_cab094b575ff",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_fatwood_cab094b575ff",
+          "title": "Lemnul rășinos (fatwood): Prietenul tău când totul e ud",
+          "domain": "campfire_basics",
+          "score": 249.7608,
+          "reranker_score": 0.91951
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_wet_wood_50bc25f6b3d0",
+          "title": "Cum aprinzi focul când totul e ud în jur",
+          "domain": "campfire_basics",
+          "score": 124.172,
+          "reranker_score": 0.57465
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_after_rain_dry_inne_59a14d7b870b",
+          "title": "Secretul lemnului uscat pe vreme umeda",
+          "domain": "campfire_basics",
+          "score": 85.5786,
+          "reranker_score": 0.352233
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_tinder_storage_9bb7e10637f3",
+          "title": "Cum tii iasca uscata cand totul e ud",
+          "domain": "campfire_basics",
+          "score": 74.5372,
+          "reranker_score": 0.179215
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_dakota_pit_8c4cfa84ef41",
+          "title": "Focul Dakota: cand sa-l sapi",
+          "domain": "campfire_basics",
+          "score": 49.1972,
+          "reranker_score": 0.067465
+        }
+      ],
+      "rerank_latency_ms": 1052.5912999992215,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7,
+      "key_fact_count": 20,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_20",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu amnarul: Cum sa faci scantei ca un profesionist?",
+      "golden_chunk_id": "cg_campfire_basics_fire_ferro_rod_basics_a2949ab93863",
+      "ideal_answer": "Uită de brichetele ude; amnarul e prietenul tău de nădejde pentru a aprinde focul în orice condiții, dacă știi să-l folosești corect.",
+      "top1_chunk_id": "cg_campfire_basics_fire_ferro_rod_basics_a2949ab93863",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_ferro_rod_basics_a2949ab93863",
+          "title": "Amnarul: Cum sa faci scantei ca un profesionist",
+          "domain": "campfire_basics",
+          "score": 181.8682,
+          "reranker_score": 0.913353
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+          "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+          "domain": "campfire_basics",
+          "score": 73.4486,
+          "reranker_score": 0.133108
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_kettle_crane_cf83bce8e216",
+          "title": "Cum sa-ti faci ceaiul la foc de tabara",
+          "domain": "campfire_basics",
+          "score": 67.5241,
+          "reranker_score": 0.049052
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spruce_pine_5a12d9685809",
+          "title": "Focul de tabără: Brad vs. Pin și scânteile buclucașe",
+          "domain": "campfire_basics",
+          "score": 62.6351,
+          "reranker_score": 0.052939
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_on_coals_924fb31bef54",
+          "title": "Gatit pe jar: cand si cum",
+          "domain": "campfire_basics",
+          "score": 61.5,
+          "reranker_score": null
+        }
+      ],
+      "rerank_latency_ms": 1039.4298000001072,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6666666666666666,
+      "key_fact_count": 18,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_21",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu aprinderea focului prin frecare: De ce e greu în realitate?",
+      "golden_chunk_id": "cg_campfire_basics_fire_friction_ignition_r_efcd3da90400",
+      "ideal_answer": "Aprinderea focului prin frecare e o tehnică dificilă, care necesită materiale specifice și mult efort, fiind mai degrabă o abilitate de supraviețuire decât o metodă practică pentru drumeții.",
+      "top1_chunk_id": "cg_campfire_basics_fire_friction_ignition_r_efcd3da90400",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_friction_ignition_r_efcd3da90400",
+          "title": "Aprinderea focului prin frecare: De ce e greu în realitate",
+          "domain": "campfire_basics",
+          "score": 229.0961,
+          "reranker_score": 0.883702
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_battery_steel_wool_33fde1116700",
+          "title": "Aprinderea focului cu baterie si sarma de otel",
+          "domain": "campfire_basics",
+          "score": 92.3684,
+          "reranker_score": 0.209605
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_kindling_layers_0d502a2d17bb",
+          "title": "Cum aprinzi focul din prima: Iasca, surcelele, lemnele",
+          "domain": "campfire_basics",
+          "score": 71.5848,
+          "reranker_score": 0.25481
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_birch_bark_1af6578d2893",
+          "title": "Mesteacanul, bricheta padurii",
+          "domain": "campfire_basics",
+          "score": 71.5681,
+          "reranker_score": 0.174601
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_birchwood_economy_d72abf618923",
+          "title": "Economia mesteacanului: cat consumi pentru ce castigi",
+          "domain": "campfire_basics",
+          "score": 58.2947,
+          "reranker_score": 0.108684
+        }
+      ],
+      "rerank_latency_ms": 1048.5079000000042,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.8571428571428571,
+      "key_fact_count": 21,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_22",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu regula brațelor pentru foc de tabără?",
+      "golden_chunk_id": "cg_campfire_basics_fire_gathered_wood_size__af6c6a3d349e",
+      "ideal_answer": "Află cât lemn să strângi pentru o seară la focul de tabără folosind \"regula brațelor\".",
+      "top1_chunk_id": "cg_campfire_basics_fire_gathered_wood_size__af6c6a3d349e",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_gathered_wood_size__af6c6a3d349e",
+          "title": "Regula brațelor pentru foc de tabără",
+          "domain": "campfire_basics",
+          "score": 222.3517,
+          "reranker_score": 0.716897
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+          "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+          "domain": "campfire_basics",
+          "score": 125.8284,
+          "reranker_score": 0.305355
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_extinguish_clean_69461c409c95",
+          "title": "Stingerea corecta a focului de tabara",
+          "domain": "campfire_basics",
+          "score": 125.7571,
+          "reranker_score": 0.389464
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 118.0624,
+          "reranker_score": 0.188279
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_kettle_crane_cf83bce8e216",
+          "title": "Cum sa-ti faci ceaiul la foc de tabara",
+          "domain": "campfire_basics",
+          "score": 116.2366,
+          "reranker_score": 0.240458
+        }
+      ],
+      "rerank_latency_ms": 1031.2856999998985,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.75,
+      "key_fact_count": 12,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_23",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu foc pe zapada: cum sa nu-ti ineci jarul?",
+      "golden_chunk_id": "cg_campfire_basics_fire_in_snow_c79c8d528419",
+      "ideal_answer": "Nu face focul direct pe zăpadă! Căldura topește tot și riști să-ți stingi jarul. Iată cum să construiești o platformă izolatoare.",
+      "top1_chunk_id": "cg_campfire_basics_fire_in_snow_c79c8d528419",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_in_snow_c79c8d528419",
+          "title": "Foc pe zapada: cum sa nu-ti ineci jarul",
+          "domain": "campfire_basics",
+          "score": 230.5874,
+          "reranker_score": 0.822343
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_morning_after_e9e670920b1e",
+          "title": "Reaprinde focul dimineața din jarul nopții",
+          "domain": "campfire_basics",
+          "score": 113.9642,
+          "reranker_score": 0.439552
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+          "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+          "domain": "campfire_basics",
+          "score": 107.9286,
+          "reranker_score": 0.254107
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 107.578,
+          "reranker_score": 0.154725
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cooking_setup_3db08a957169",
+          "title": "Cum așezi focul pentru gătit la ceaun",
+          "domain": "campfire_basics",
+          "score": 105.4987,
+          "reranker_score": 0.248734
+        }
+      ],
+      "rerank_latency_ms": 1057.4639000005845,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.75,
+      "key_fact_count": 16,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_24",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu cum sa-ti faci ceaiul la foc de tabara?",
+      "golden_chunk_id": "cg_campfire_basics_fire_kettle_crane_cf83bce8e216",
+      "ideal_answer": "Învață cum să-ți prepari ușor ceaiul sau cafeaua la focul de tabără, folosind o metodă simplă și eficientă.",
+      "top1_chunk_id": "cg_campfire_basics_fire_kettle_crane_cf83bce8e216",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_kettle_crane_cf83bce8e216",
+          "title": "Cum sa-ti faci ceaiul la foc de tabara",
+          "domain": "campfire_basics",
+          "score": 221.5387,
+          "reranker_score": 0.819234
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+          "title": "Focul de tabara si cum lasi locul curat",
+          "domain": "campfire_basics",
+          "score": 153.4891,
+          "reranker_score": 0.328614
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+          "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+          "domain": "campfire_basics",
+          "score": 144.5119,
+          "reranker_score": 0.286398
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_safety_kids_e5e2df77000c",
+          "title": "Foc de tabara cu copii: Siguranta pe primul loc!",
+          "domain": "campfire_basics",
+          "score": 128.6752,
+          "reranker_score": 0.32344
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_safe_distance_437f37bec821",
+          "title": "Focul de tabara si siguranta cortului",
+          "domain": "campfire_basics",
+          "score": 118.5,
+          "reranker_score": null
+        }
+      ],
+      "rerank_latency_ms": 1045.0517999997828,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7857142857142857,
+      "key_fact_count": 14,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "campfire_basics_25",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu cum aprinzi focul din prima: Iasca, surcelele, lemnele?",
+      "golden_chunk_id": "cg_campfire_basics_fire_kindling_layers_0d502a2d17bb",
+      "ideal_answer": "Construirea corectă a focului începe cu o fundație bună: iască uscată, apoi surcele subțiri și la final lemnele groase.",
+      "top1_chunk_id": "cg_campfire_basics_fire_kindling_layers_0d502a2d17bb",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_campfire_basics_fire_kindling_layers_0d502a2d17bb",
+          "title": "Cum aprinzi focul din prima: Iasca, surcelele, lemnele",
+          "domain": "campfire_basics",
+          "score": 253.9604,
+          "reranker_score": 0.922005
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_wet_wood_50bc25f6b3d0",
+          "title": "Cum aprinzi focul când totul e ud în jur",
+          "domain": "campfire_basics",
+          "score": 151.3449,
+          "reranker_score": 0.784311
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_no_lighter_8ff5b2e1fcbf",
+          "title": "Scantei, iasca si rabdare: focul fara chibrit",
+          "domain": "campfire_basics",
+          "score": 122.2119,
+          "reranker_score": 0.630149
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_cotton_vaseline_60c75d3d2e6c",
+          "title": "Iasca DIY: Vată cu Vaselină",
+          "domain": "campfire_basics",
+          "score": 116.6453,
+          "reranker_score": 0.470566
+        },
+        {
+          "chunk_id": "cg_campfire_basics_fire_morning_after_e9e670920b1e",
+          "title": "Reaprinde focul dimineața din jarul nopții",
+          "domain": "campfire_basics",
+          "score": 108.7528,
+          "reranker_score": 0.39191
+        }
+      ],
+      "rerank_latency_ms": 1059.513899999729,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6666666666666666,
+      "key_fact_count": 21,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_01",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre rutina de Seara pe Munte?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_alarm_routine_40233540a29a",
+      "ideal_answer": "Află ce trebuie să verifici seara pe munte pentru un somn liniștit și o dimineață fără griji.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_alarm_routine_40233540a29a",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_alarm_routine_40233540a29a",
+          "title": "Rutina de Seara pe Munte",
+          "domain": "gear_and_preparation",
+          "score": 150.8547,
+          "reranker_score": 0.725684
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_powerbank_choice_387aefe0f86f",
+          "title": "Câți mAh de powerbank îți trebuie pe munte?",
+          "domain": "gear_and_preparation",
+          "score": 66.3775,
+          "reranker_score": 0.069719
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_first_aid_minimal_fb0e768652cf",
+          "title": "Trusa minima de prim ajutor pentru o zi pe munte",
+          "domain": "gear_and_preparation",
+          "score": 60.2727,
+          "reranker_score": 0.173408
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_food_calories_c30012efaada",
+          "title": "Calorii pe munte: Câte îți trebuie, simplu și rapid",
+          "domain": "gear_and_preparation",
+          "score": 58.7682,
+          "reranker_score": 0.074603
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_pack_organization_35c33e7b3901",
+          "title": "Cum îți aranjezi rucsacul pentru o zi pe munte",
+          "domain": "gear_and_preparation",
+          "score": 51.4171,
+          "reranker_score": 0.137714
+        }
+      ],
+      "rerank_latency_ms": 1061.5516999996544,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7272727272727273,
+      "key_fact_count": 11,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_02",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre cum 'rupi' bocancii noi inainte de tura?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_boots_break_in_547bd4ee897e",
+      "ideal_answer": "Află cum să-ți pregătești bocancii noi pentru o tură lungă, evitând bășicile și disconfortul.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_boots_break_in_547bd4ee897e",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_boots_break_in_547bd4ee897e",
+          "title": "Cum 'rupi' bocancii noi inainte de tura",
+          "domain": "gear_and_preparation",
+          "score": 209.7325,
+          "reranker_score": 0.784156
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_one_test_hike_3f84f05cb96b",
+          "title": "Nu sari peste tura de test cu echipamentul nou!",
+          "domain": "gear_and_preparation",
+          "score": 105.5221,
+          "reranker_score": 0.581526
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_used_gear_check_5bafe29ddf2a",
+          "title": "Echipament second-hand: ce verifici inainte sa cumperi",
+          "domain": "gear_and_preparation",
+          "score": 85.1504,
+          "reranker_score": 0.271879
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_packing_test_run_cf837c1a5d34",
+          "title": "Testează rucsacul plin înainte de tura mare",
+          "domain": "gear_and_preparation",
+          "score": 81.8659,
+          "reranker_score": 0.180824
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_emergency_blanket_r_5c7b7b5a64e7",
+          "title": "Pătura de supraviețuire: cum o folosești eficient",
+          "domain": "gear_and_preparation",
+          "score": 68.7837,
+          "reranker_score": 0.042296
+        }
+      ],
+      "rerank_latency_ms": 1046.465299999909,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.5333333333333333,
+      "key_fact_count": 15,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_03",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre uscarea bocancilor pe traseu: sfaturi de la un veteran?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_boots_drying_field_6de94f248355",
+      "ideal_answer": "Învață cum să-ți usuci eficient bocancii pe traseu, fără să-i deteriorezi, folosind metode simple și testate.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_boots_drying_field_6de94f248355",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_boots_drying_field_6de94f248355",
+          "title": "Uscarea bocancilor pe traseu: sfaturi de la un veteran",
+          "domain": "gear_and_preparation",
+          "score": 174.0073,
+          "reranker_score": 0.825092
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_emergency_contacts_c627035f03dd",
+          "title": "Cui și cum anunți traseul montan",
+          "domain": "gear_and_preparation",
+          "score": 54.3402,
+          "reranker_score": 0.069253
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_route_card_c903ad7f268c",
+          "title": "Cardul de traseu: esențial înainte de plecare",
+          "domain": "gear_and_preparation",
+          "score": 51.0003,
+          "reranker_score": 0.127504
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_snowshoes_vs_micro_94ec6825b45f",
+          "title": "Rachete de zapada sau coltari mici? Alegerea corecta pentru traseu",
+          "domain": "gear_and_preparation",
+          "score": 47.4479,
+          "reranker_score": 0.108099
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_food_pacing_7d1bc0f18734",
+          "title": "Mâncare pe traseu: gustări dese, nu mese mari",
+          "domain": "gear_and_preparation",
+          "score": 39.9029,
+          "reranker_score": 0.138786
+        }
+      ],
+      "rerank_latency_ms": 1078.6830000006375,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7142857142857143,
+      "key_fact_count": 14,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_04",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre protecția împotriva insectelor pe traseu?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_bug_protection_d6e85aa6abac",
+      "ideal_answer": "Află cum să te protejezi eficient de țânțari, căpușe și viespi în timpul drumețiilor lungi pe munte.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_bug_protection_d6e85aa6abac",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_bug_protection_d6e85aa6abac",
+          "title": "Protecția împotriva insectelor pe traseu",
+          "domain": "gear_and_preparation",
+          "score": 120.565,
+          "reranker_score": 0.729563
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_emergency_contacts_c627035f03dd",
+          "title": "Cui și cum anunți traseul montan",
+          "domain": "gear_and_preparation",
+          "score": 58.6245,
+          "reranker_score": 0.125306
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_boots_drying_field_6de94f248355",
+          "title": "Uscarea bocancilor pe traseu: sfaturi de la un veteran",
+          "domain": "gear_and_preparation",
+          "score": 56.8416,
+          "reranker_score": 0.22802
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_route_card_c903ad7f268c",
+          "title": "Cardul de traseu: esențial înainte de plecare",
+          "domain": "gear_and_preparation",
+          "score": 52.0956,
+          "reranker_score": 0.143695
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_snowshoes_vs_micro_94ec6825b45f",
+          "title": "Rachete de zapada sau coltari mici? Alegerea corecta pentru traseu",
+          "domain": "gear_and_preparation",
+          "score": 46.535,
+          "reranker_score": 0.099188
+        }
+      ],
+      "rerank_latency_ms": 1071.0925000003044,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.5882352941176471,
+      "key_fact_count": 17,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_05",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre echipament esential cu buget redus?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_buying_priority_13bc29bb7e6c",
+      "ideal_answer": "Află cum să-ți cumperi echipamentul de munte esențial, chiar și cu un buget limitat, prioritizând siguranța și confortul.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_buying_priority_13bc29bb7e6c",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_buying_priority_13bc29bb7e6c",
+          "title": "Echipament esential cu buget redus",
+          "domain": "gear_and_preparation",
+          "score": 171.841,
+          "reranker_score": 0.780513
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_summer_minimal_51d563100da8",
+          "title": "Echipament esențial pentru o tură de vară la cabană (6h)",
+          "domain": "gear_and_preparation",
+          "score": 85.1793,
+          "reranker_score": 0.227241
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_winter_pack_extras_7b2c8e201be7",
+          "title": "Echipament esential de iarna in rucsac",
+          "domain": "gear_and_preparation",
+          "score": 83.5276,
+          "reranker_score": 0.206595
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_winter_basics_48ffd8d9c9a1",
+          "title": "Echipament minim pentru iarnă pe creastă",
+          "domain": "gear_and_preparation",
+          "score": 65.3898,
+          "reranker_score": 0.234872
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_pack_overnight_99ffe4835960",
+          "title": "Rucsacul de 2-3 zile vara: esențialul pentru Carpați",
+          "domain": "gear_and_preparation",
+          "score": 64.8302,
+          "reranker_score": 0.127877
+        }
+      ],
+      "rerank_latency_ms": 1058.0266999995729,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6111111111111112,
+      "key_fact_count": 18,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_06",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre puf vs. Sintetic: Alegerea corectă pentru Carpați?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_down_vs_synth_c3ecb30facd9",
+      "ideal_answer": "Află de ce izolația sintetică este adesea mai practică decât puful în condițiile umede din Carpați.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_down_vs_synth_c3ecb30facd9",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_down_vs_synth_c3ecb30facd9",
+          "title": "Puf vs. Sintetic: Alegerea corectă pentru Carpați",
+          "domain": "gear_and_preparation",
+          "score": 228.8569,
+          "reranker_score": 0.768211
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_pack_overnight_99ffe4835960",
+          "title": "Rucsacul de 2-3 zile vara: esențialul pentru Carpați",
+          "domain": "gear_and_preparation",
+          "score": 89.2613,
+          "reranker_score": 0.173266
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_tent_vs_bivy_b1fb74ad7656",
+          "title": "Cort, tarp sau sac de bivuac? Alegerea potrivită în Carpați",
+          "domain": "gear_and_preparation",
+          "score": 69.6083,
+          "reranker_score": 0.142604
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_snowshoes_vs_micro_94ec6825b45f",
+          "title": "Rachete de zapada sau coltari mici? Alegerea corecta pentru traseu",
+          "domain": "gear_and_preparation",
+          "score": 59.426,
+          "reranker_score": 0.065325
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_helmet_when_97f567db4971",
+          "title": "Cand chiar ai nevoie de casca pe Carpati",
+          "domain": "gear_and_preparation",
+          "score": 46.1623,
+          "reranker_score": 0.064529
+        }
+      ],
+      "rerank_latency_ms": 1035.726600000089,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6875,
+      "key_fact_count": 16,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_07",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre saci impermeabili: Strategia celor 3 culori?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_dry_bag_strategy_e55b55f946ba",
+      "ideal_answer": "Învață cum să-ți organizezi rucsacul cu saci impermeabili de culori diferite pentru a găsi rapid ce ai nevoie, chiar și pe ploaie.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_dry_bag_strategy_e55b55f946ba",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_dry_bag_strategy_e55b55f946ba",
+          "title": "Saci impermeabili: Strategia celor 3 culori",
+          "domain": "gear_and_preparation",
+          "score": 205.9342,
+          "reranker_score": 0.854177
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_powerbank_choice_387aefe0f86f",
+          "title": "Câți mAh de powerbank îți trebuie pe munte?",
+          "domain": "gear_and_preparation",
+          "score": 29.0634,
+          "reranker_score": 0.023292
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_rain_jacket_pants_7350eb4461da",
+          "title": "Geaca, Poncho sau Costum Impermeabil?",
+          "domain": "gear_and_preparation",
+          "score": 21.9764,
+          "reranker_score": 0.069705
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_food_calories_c30012efaada",
+          "title": "Calorii pe munte: Câte îți trebuie, simplu și rapid",
+          "domain": "gear_and_preparation",
+          "score": 21.0629,
+          "reranker_score": 0.023287
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_pack_size_day_0a02bcd01903",
+          "title": "Rucsacul de o zi: volum și esențialul",
+          "domain": "gear_and_preparation",
+          "score": 19.5136,
+          "reranker_score": 0.05892
+        }
+      ],
+      "rerank_latency_ms": 1048.784099999466,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.8,
+      "key_fact_count": 15,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_08",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre pătura de supraviețuire: cum o folosești eficient?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_emergency_blanket_r_5c7b7b5a64e7",
+      "ideal_answer": "Află cum să folosești corect pătura de supraviețuire pentru a te proteja de frig și intemperii în munți.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_emergency_blanket_r_5c7b7b5a64e7",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_emergency_blanket_r_5c7b7b5a64e7",
+          "title": "Pătura de supraviețuire: cum o folosești eficient",
+          "domain": "gear_and_preparation",
+          "score": 198.683,
+          "reranker_score": 0.783537
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_used_gear_check_5bafe29ddf2a",
+          "title": "Echipament second-hand: ce verifici inainte sa cumperi",
+          "domain": "gear_and_preparation",
+          "score": 44.9693,
+          "reranker_score": 0.077116
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_water_collection_ra_b0cdb0491073",
+          "title": "Colectarea apei de ploaie cu poncho-ul",
+          "domain": "gear_and_preparation",
+          "score": 44.098,
+          "reranker_score": 0.046225
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_pack_organization_35c33e7b3901",
+          "title": "Cum îți aranjezi rucsacul pentru o zi pe munte",
+          "domain": "gear_and_preparation",
+          "score": 44.0234,
+          "reranker_score": 0.035292
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_ration_water_low_ee98256fdb02",
+          "title": "Apa putina in drumetie? Iata cum o gestionezi!",
+          "domain": "gear_and_preparation",
+          "score": 40.3806,
+          "reranker_score": 0.064757
+        }
+      ],
+      "rerank_latency_ms": 1057.89569999979,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6,
+      "key_fact_count": 15,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_09",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre cui și cum anunți traseul montan?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_emergency_contacts_c627035f03dd",
+      "ideal_answer": "Anunță întotdeauna o persoană de încredere despre traseul tău detaliat și ora estimată de întoarcere.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_emergency_contacts_c627035f03dd",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_emergency_contacts_c627035f03dd",
+          "title": "Cui și cum anunți traseul montan",
+          "domain": "gear_and_preparation",
+          "score": 168.5802,
+          "reranker_score": 0.752253
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_used_gear_check_5bafe29ddf2a",
+          "title": "Echipament second-hand: ce verifici inainte sa cumperi",
+          "domain": "gear_and_preparation",
+          "score": 43.285,
+          "reranker_score": 0.056063
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_ration_water_low_ee98256fdb02",
+          "title": "Apa putina in drumetie? Iata cum o gestionezi!",
+          "domain": "gear_and_preparation",
+          "score": 38.0295,
+          "reranker_score": 0.035368
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_pack_organization_35c33e7b3901",
+          "title": "Cum îți aranjezi rucsacul pentru o zi pe munte",
+          "domain": "gear_and_preparation",
+          "score": 37.203,
+          "reranker_score": 0.050037
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_route_card_c903ad7f268c",
+          "title": "Cardul de traseu: esențial înainte de plecare",
+          "domain": "gear_and_preparation",
+          "score": 36.0,
+          "reranker_score": null
+        }
+      ],
+      "rerank_latency_ms": 1048.2179000000542,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6666666666666666,
+      "key_fact_count": 12,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_10",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre 3 lucruri esentiale in rucsacul meu?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_emergency_extras_700edae8a4db",
+      "ideal_answer": "Află care sunt cele trei lucruri esențiale pe care un drumeț experimentat le are mereu în rucsac pentru orice aventură montană.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_emergency_extras_700edae8a4db",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_emergency_extras_700edae8a4db",
+          "title": "3 lucruri esentiale in rucsacul meu",
+          "domain": "gear_and_preparation",
+          "score": 151.0146,
+          "reranker_score": 0.885182
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_pack_organization_35c33e7b3901",
+          "title": "Cum îți aranjezi rucsacul pentru o zi pe munte",
+          "domain": "gear_and_preparation",
+          "score": 83.5024,
+          "reranker_score": 0.38128
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_pack_size_day_0a02bcd01903",
+          "title": "Rucsacul de o zi: volum și esențialul",
+          "domain": "gear_and_preparation",
+          "score": 71.7809,
+          "reranker_score": 0.434761
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_pack_lid_tricks_4d06d98d2b00",
+          "title": "Capacul rucsacului: ce pui la îndemână",
+          "domain": "gear_and_preparation",
+          "score": 68.7386,
+          "reranker_score": 0.341733
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_pack_overnight_99ffe4835960",
+          "title": "Rucsacul de 2-3 zile vara: esențialul pentru Carpați",
+          "domain": "gear_and_preparation",
+          "score": 62.1554,
+          "reranker_score": 0.414442
+        }
+      ],
+      "rerank_latency_ms": 1041.1371000000145,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7058823529411765,
+      "key_fact_count": 17,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_11",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre tarp 3x3: Adaptabilitate maximă în natură?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_emergency_shelter_t_fb3e8c9cad0e",
+      "ideal_answer": "Descoperă cum să configurezi rapid un tarp de 3x3 metri pentru adăpost eficient în orice condiții meteo.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_emergency_shelter_t_fb3e8c9cad0e",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_emergency_shelter_t_fb3e8c9cad0e",
+          "title": "Tarp 3x3: Adaptabilitate maximă în natură",
+          "domain": "gear_and_preparation",
+          "score": 193.5064,
+          "reranker_score": 0.803831
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_tent_vs_bivy_b1fb74ad7656",
+          "title": "Cort, tarp sau sac de bivuac? Alegerea potrivită în Carpați",
+          "domain": "gear_and_preparation",
+          "score": 56.9538,
+          "reranker_score": 0.081923
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_powerbank_choice_387aefe0f86f",
+          "title": "Câți mAh de powerbank îți trebuie pe munte?",
+          "domain": "gear_and_preparation",
+          "score": 29.1441,
+          "reranker_score": 0.024301
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_hat_buff_value_8051ae0d94eb",
+          "title": "Buff și fes: versatilitate maximă în rucac",
+          "domain": "gear_and_preparation",
+          "score": 23.0273,
+          "reranker_score": 0.047842
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_food_calories_c30012efaada",
+          "title": "Calorii pe munte: Câte îți trebuie, simplu și rapid",
+          "domain": "gear_and_preparation",
+          "score": 21.0675,
+          "reranker_score": 0.023344
+        }
+      ],
+      "rerank_latency_ms": 1032.1667000007437,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6666666666666666,
+      "key_fact_count": 15,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_12",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre sosete pentru 4 zile pe munte?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_extra_socks_b4bf1da4da26",
+      "ideal_answer": "Află câte perechi de șosete să iei într-o tură de 4 zile la munte și de ce tip să fie.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_extra_socks_b4bf1da4da26",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_extra_socks_b4bf1da4da26",
+          "title": "Sosete pentru 4 zile pe munte",
+          "domain": "gear_and_preparation",
+          "score": 179.7404,
+          "reranker_score": 0.779254
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_powerbank_choice_387aefe0f86f",
+          "title": "Câți mAh de powerbank îți trebuie pe munte?",
+          "domain": "gear_and_preparation",
+          "score": 92.5503,
+          "reranker_score": 0.189379
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_pack_overnight_99ffe4835960",
+          "title": "Rucsacul de 2-3 zile vara: esențialul pentru Carpați",
+          "domain": "gear_and_preparation",
+          "score": 91.594,
+          "reranker_score": 0.157425
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_first_aid_minimal_fb0e768652cf",
+          "title": "Trusa minima de prim ajutor pentru o zi pe munte",
+          "domain": "gear_and_preparation",
+          "score": 87.5272,
+          "reranker_score": 0.15159
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_socks_layers_5f044d75038b",
+          "title": "Sosete: una sau doua perechi? Materiale esentiale",
+          "domain": "gear_and_preparation",
+          "score": 83.6793,
+          "reranker_score": 0.268492
+        }
+      ],
+      "rerank_latency_ms": 1065.3050000000803,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7,
+      "key_fact_count": 10,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_13",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre trusa medicală: ușoară, dar completă?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_first_aid_balance_bbd8d222f96f",
+      "ideal_answer": "Află cum să-ți compui o trusă medicală esențială, ușoară și eficientă pentru orice drumeție pe munte, fără să faci compromisuri la siguranță.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_first_aid_balance_bbd8d222f96f",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_first_aid_balance_bbd8d222f96f",
+          "title": "Trusa medicală: ușoară, dar completă",
+          "domain": "gear_and_preparation",
+          "score": 196.2144,
+          "reranker_score": 0.80268
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_first_aid_serious_fcc10fae3092",
+          "title": "Trusa esențială pentru ture multi-zi fără semnal",
+          "domain": "gear_and_preparation",
+          "score": 62.205,
+          "reranker_score": 0.167563
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_first_aid_minimal_fb0e768652cf",
+          "title": "Trusa minima de prim ajutor pentru o zi pe munte",
+          "domain": "gear_and_preparation",
+          "score": 61.2658,
+          "reranker_score": 0.155823
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_emergency_extras_700edae8a4db",
+          "title": "3 lucruri esentiale in rucsacul meu",
+          "domain": "gear_and_preparation",
+          "score": 39.5176,
+          "reranker_score": 0.21397
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_signal_mirror_b2cbce1aac28",
+          "title": "Oglinda de semnalizare: mică, dar vitală",
+          "domain": "gear_and_preparation",
+          "score": 37.9681,
+          "reranker_score": 0.059602
+        }
+      ],
+      "rerank_latency_ms": 1049.091299999418,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.8125,
+      "key_fact_count": 16,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_14",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre trusa minima de prim ajutor pentru o zi pe munte?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_first_aid_minimal_fb0e768652cf",
+      "ideal_answer": "Află ce elemente esențiale trebuie să conțină trusa ta de prim ajutor pentru o tură de o zi pe munte, conform experienței unui drumeț veteran.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_first_aid_minimal_fb0e768652cf",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_first_aid_minimal_fb0e768652cf",
+          "title": "Trusa minima de prim ajutor pentru o zi pe munte",
+          "domain": "gear_and_preparation",
+          "score": 266.6424,
+          "reranker_score": 0.79053
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_first_aid_serious_fcc10fae3092",
+          "title": "Trusa esențială pentru ture multi-zi fără semnal",
+          "domain": "gear_and_preparation",
+          "score": 113.3771,
+          "reranker_score": 0.479714
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_first_aid_balance_bbd8d222f96f",
+          "title": "Trusa medicală: ușoară, dar completă",
+          "domain": "gear_and_preparation",
+          "score": 103.9238,
+          "reranker_score": 0.151548
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_emergency_extras_700edae8a4db",
+          "title": "3 lucruri esentiale in rucsacul meu",
+          "domain": "gear_and_preparation",
+          "score": 98.5031,
+          "reranker_score": 0.413789
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_pack_organization_35c33e7b3901",
+          "title": "Cum îți aranjezi rucsacul pentru o zi pe munte",
+          "domain": "gear_and_preparation",
+          "score": 95.6304,
+          "reranker_score": 0.35288
+        }
+      ],
+      "rerank_latency_ms": 1046.303699999953,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7222222222222222,
+      "key_fact_count": 18,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "gear_and_preparation_15",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre trusa esențială pentru ture multi-zi fără semnal?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_first_aid_serious_fcc10fae3092",
+      "ideal_answer": "Pregătește-ți o trusă de urgență completă pentru turele lungi, mai ales în zone izolate.",
+      "top1_chunk_id": "cg_gear_and_preparati_gear_first_aid_serious_fcc10fae3092",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_first_aid_serious_fcc10fae3092",
+          "title": "Trusa esențială pentru ture multi-zi fără semnal",
+          "domain": "gear_and_preparation",
+          "score": 251.2282,
+          "reranker_score": 0.810353
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_first_aid_minimal_fb0e768652cf",
+          "title": "Trusa minima de prim ajutor pentru o zi pe munte",
+          "domain": "gear_and_preparation",
+          "score": 102.2384,
+          "reranker_score": 0.30298
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_first_aid_balance_bbd8d222f96f",
+          "title": "Trusa medicală: ușoară, dar completă",
+          "domain": "gear_and_preparation",
+          "score": 91.748,
+          "reranker_score": 0.23185
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_water_amount_2a3ff9f4c212",
+          "title": "Apa in rucac: Ghid pentru ture de o zi si o saptamana",
+          "domain": "gear_and_preparation",
+          "score": 70.6676,
+          "reranker_score": 0.158345
+        },
+        {
+          "chunk_id": "cg_gear_and_preparati_gear_signal_mirror_b2cbce1aac28",
+          "title": "Oglinda de semnalizare: mică, dar vitală",
+          "domain": "gear_and_preparation",
+          "score": 65.7755,
+          "reranker_score": 0.107194
+        }
+      ],
+      "rerank_latency_ms": 1050.9124000000156,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.9,
+      "key_fact_count": 10,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "tips_and_tricks_01",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru bandă pe puncte de presiune înainte să apară bășici?",
+      "golden_chunk_id": "cg_tips_and_tricks_banda_puncte_presiune_ba_f2a3d0b440a0",
+      "ideal_answer": "Pune bandă chirurgicală pe călcâie și degete înainte să simți frecarea; oprește-te imediat ce simți căldură pe un punct nou.",
+      "top1_chunk_id": "cg_tips_and_tricks_banda_puncte_presiune_ba_f2a3d0b440a0",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_tips_and_tricks_banda_puncte_presiune_ba_f2a3d0b440a0",
+          "title": "Bandă pe puncte de presiune înainte să apară bășici",
+          "domain": "tips_and_tricks",
+          "score": 258.6379,
+          "reranker_score": 0.860473
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_blister_tape_preempt_8997d4c826ad",
+          "title": "Prevenirea bășicilor la drum lung",
+          "domain": "tips_and_tricks",
+          "score": 157.2482,
+          "reranker_score": 0.568102
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_double_socks_no_fric_2a898800b45e",
+          "title": "Șosete duble, fără bășici",
+          "domain": "tips_and_tricks",
+          "score": 50.6409,
+          "reranker_score": 0.120511
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_wet_skin_blisters_027c5a08ab22",
+          "title": "Usca sosetele la pauze, evita bascicile!",
+          "domain": "tips_and_tricks",
+          "score": 49.9998,
+          "reranker_score": 0.167498
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_food_protein_balance_fe2613a01ac9",
+          "title": "Combustibil pentru ture lungi: Proteine și Carbohidrați",
+          "domain": "tips_and_tricks",
+          "score": 45.189,
+          "reranker_score": 0.027362
+        }
+      ],
+      "rerank_latency_ms": 1046.638200000416,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6666666666666666,
+      "key_fact_count": 18,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "tips_and_tricks_02",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru prevenirea bășicilor la drum lung?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_blister_tape_preempt_8997d4c826ad",
+      "ideal_answer": "Află cum să previi apariția bășicilor aplicând bandă adezivă pe punctele de presiune înainte de a pleca la drum.",
+      "top1_chunk_id": "cg_tips_and_tricks_tip_blister_tape_preempt_8997d4c826ad",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_blister_tape_preempt_8997d4c826ad",
+          "title": "Prevenirea bășicilor la drum lung",
+          "domain": "tips_and_tricks",
+          "score": 146.8805,
+          "reranker_score": 0.688506
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_food_protein_balance_fe2613a01ac9",
+          "title": "Combustibil pentru ture lungi: Proteine și Carbohidrați",
+          "domain": "tips_and_tricks",
+          "score": 93.0249,
+          "reranker_score": 0.110311
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_food_compact_meals_fcfbfdccb72e",
+          "title": "Mese compacte pentru 3 zile pe munte",
+          "domain": "tips_and_tricks",
+          "score": 56.3648,
+          "reranker_score": 0.07206
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_phone_battery_pocket_4eeda399839f",
+          "title": "Bateria la cald, prietena ta de munte",
+          "domain": "tips_and_tricks",
+          "score": 53.3372,
+          "reranker_score": 0.044215
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_socks_change_lunch_87df14b3a377",
+          "title": "Schimbi sosetele la pranz? Energie pentru picioare!",
+          "domain": "tips_and_tricks",
+          "score": 51.8429,
+          "reranker_score": 0.090537
+        }
+      ],
+      "rerank_latency_ms": 1068.0707000001348,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7058823529411765,
+      "key_fact_count": 17,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "tips_and_tricks_03",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru branțul cald iarna: picioare fericite în zăpadă?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_boots_heat_insole_f49e6fbdedf3",
+      "ideal_answer": "Un branț termoizolant este esențial iarna pentru a-ți menține picioarele calde și confortabile pe munte.",
+      "top1_chunk_id": "cg_tips_and_tricks_tip_boots_heat_insole_f49e6fbdedf3",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_boots_heat_insole_f49e6fbdedf3",
+          "title": "Branțul cald iarna: picioare fericite în zăpadă",
+          "domain": "tips_and_tricks",
+          "score": 225.9029,
+          "reranker_score": 0.846286
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_water_warm_for_drink_8ca30132354f",
+          "title": "Apă caldă iarna: De ce bei mai mult?",
+          "domain": "tips_and_tricks",
+          "score": 99.322,
+          "reranker_score": 0.154025
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_socks_change_lunch_87df14b3a377",
+          "title": "Schimbi sosetele la pranz? Energie pentru picioare!",
+          "domain": "tips_and_tricks",
+          "score": 96.7119,
+          "reranker_score": 0.291398
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_food_cold_sandwich_8c2e012a732f",
+          "title": "Sandvișul rece iarna: gustarea care-ți salvează timpul",
+          "domain": "tips_and_tricks",
+          "score": 54.5838,
+          "reranker_score": 0.074797
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_food_hot_breakfast_bb748254d4d5",
+          "title": "Micul dejun cald pe creasta batuta de vant",
+          "domain": "tips_and_tricks",
+          "score": 48.2799,
+          "reranker_score": 0.090999
+        }
+      ],
+      "rerank_latency_ms": 1046.1167000003115,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6,
+      "key_fact_count": 15,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "tips_and_tricks_04",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru pauza la priveliște: Reward și ritm natural?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_break_in_view_reward_169bc83d2d46",
+      "ideal_answer": "Oprește-te și bucură-te de priveliște; e un reward mental care te ajută să-ți găsești ritmul natural în drumeție.",
+      "top1_chunk_id": "cg_tips_and_tricks_tip_break_in_view_reward_169bc83d2d46",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_break_in_view_reward_169bc83d2d46",
+          "title": "Pauza la priveliște: Reward și ritm natural",
+          "domain": "tips_and_tricks",
+          "score": 234.9351,
+          "reranker_score": 0.831689
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_pace_30_min_breaks_2158f3b0ced7",
+          "title": "Pauze scurte, dar dese: secretul unui ritm bun",
+          "domain": "tips_and_tricks",
+          "score": 70.7536,
+          "reranker_score": 0.34942
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_layer_swap_during_br_18b43979a403",
+          "title": "Schimbi straturile in pauza, nu pe traseu",
+          "domain": "tips_and_tricks",
+          "score": 57.5687,
+          "reranker_score": 0.114608
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_breaks_off_trail_74165abb496f",
+          "title": "Pauza la marginea potecii",
+          "domain": "tips_and_tricks",
+          "score": 51.0766,
+          "reranker_score": 0.153457
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_food_protein_balance_fe2613a01ac9",
+          "title": "Combustibil pentru ture lungi: Proteine și Carbohidrați",
+          "domain": "tips_and_tricks",
+          "score": 44.9765,
+          "reranker_score": 0.027207
+        }
+      ],
+      "rerank_latency_ms": 1043.5519999991811,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6666666666666666,
+      "key_fact_count": 15,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "tips_and_tricks_05",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru pauza la marginea potecii?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_breaks_off_trail_74165abb496f",
+      "ideal_answer": "Află cum să iei o pauză pe potecă fără a deranja pe ceilalți sau a te pune în pericol.",
+      "top1_chunk_id": "cg_tips_and_tricks_tip_breaks_off_trail_74165abb496f",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_breaks_off_trail_74165abb496f",
+          "title": "Pauza la marginea potecii",
+          "domain": "tips_and_tricks",
+          "score": 127.0971,
+          "reranker_score": 0.748714
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_layer_swap_during_br_18b43979a403",
+          "title": "Schimbi straturile in pauza, nu pe traseu",
+          "domain": "tips_and_tricks",
+          "score": 90.213,
+          "reranker_score": 0.502662
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_socks_change_lunch_87df14b3a377",
+          "title": "Schimbi sosetele la pranz? Energie pentru picioare!",
+          "domain": "tips_and_tricks",
+          "score": 62.7469,
+          "reranker_score": 0.324336
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_food_protein_balance_fe2613a01ac9",
+          "title": "Combustibil pentru ture lungi: Proteine și Carbohidrați",
+          "domain": "tips_and_tricks",
+          "score": 47.0569,
+          "reranker_score": 0.058211
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_food_double_pack_51648f7d72c2",
+          "title": "Mâncarea pentru ziua a doua, gata împachetată",
+          "domain": "tips_and_tricks",
+          "score": 38.3703,
+          "reranker_score": 0.064629
+        }
+      ],
+      "rerank_latency_ms": 1047.1101000002818,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.5833333333333334,
+      "key_fact_count": 12,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "tips_and_tricks_06",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru nodul jumătate de gură de pește la bățul de trekking?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_clove_hitch_on_pole_1a2792c04b35",
+      "ideal_answer": "Învață nodul jumătate de gură de pește pentru a fixa rapid obiecte de bățul tău de trekking în situații neprevăzute.",
+      "top1_chunk_id": "cg_tips_and_tricks_tip_clove_hitch_on_pole_1a2792c04b35",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_clove_hitch_on_pole_1a2792c04b35",
+          "title": "Nodul jumătate de gură de pește la bățul de trekking",
+          "domain": "tips_and_tricks",
+          "score": 238.271,
+          "reranker_score": 0.840888
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_emergency_id_in_pack_5f6e68229629",
+          "title": "Acte importante: la siguranta in rucsac!",
+          "domain": "tips_and_tricks",
+          "score": 52.2464,
+          "reranker_score": 0.04058
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_food_protein_balance_fe2613a01ac9",
+          "title": "Combustibil pentru ture lungi: Proteine și Carbohidrați",
+          "domain": "tips_and_tricks",
+          "score": 46.2453,
+          "reranker_score": 0.040566
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_socks_change_lunch_87df14b3a377",
+          "title": "Schimbi sosetele la pranz? Energie pentru picioare!",
+          "domain": "tips_and_tricks",
+          "score": 44.3878,
+          "reranker_score": 0.112347
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_paracord_belt_ed566987cc23",
+          "title": "Cureaua din paracord: 5 metri de ingeniozitate",
+          "domain": "tips_and_tricks",
+          "score": 42.8945,
+          "reranker_score": 0.058681
+        }
+      ],
+      "rerank_latency_ms": 1061.1879999996745,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7857142857142857,
+      "key_fact_count": 14,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "tips_and_tricks_07",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru busola si harta: Prietenii tai de nadejde pe munte?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_compass_with_map_fir_dceb24e47ac9",
+      "ideal_answer": "Telefonul e util, dar busola și harta sunt esențiale pentru orientare sigură pe munte, indiferent de condiții.",
+      "top1_chunk_id": "cg_tips_and_tricks_tip_compass_with_map_fir_dceb24e47ac9",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_compass_with_map_fir_dceb24e47ac9",
+          "title": "Busola si harta: Prietenii tai de nadejde pe munte",
+          "domain": "tips_and_tricks",
+          "score": 231.7987,
+          "reranker_score": 0.819984
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_phone_airplane_mode_e4b3bae99426",
+          "title": "Mod avion = baterie mai multă pe munte",
+          "domain": "tips_and_tricks",
+          "score": 69.5998,
+          "reranker_score": 0.137498
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_emergency_phone_char_c6f7ae2e0516",
+          "title": "Verificari telefon: 3 pe ora, nu mai mult!",
+          "domain": "tips_and_tricks",
+          "score": 68.6923,
+          "reranker_score": 0.186153
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_food_protein_balance_fe2613a01ac9",
+          "title": "Combustibil pentru ture lungi: Proteine și Carbohidrați",
+          "domain": "tips_and_tricks",
+          "score": 67.3046,
+          "reranker_score": 0.058808
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_food_compact_meals_fcfbfdccb72e",
+          "title": "Mese compacte pentru 3 zile pe munte",
+          "domain": "tips_and_tricks",
+          "score": 65.8561,
+          "reranker_score": 0.080701
+        }
+      ],
+      "rerank_latency_ms": 1050.0228999999308,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7692307692307693,
+      "key_fact_count": 13,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "tips_and_tricks_08",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru șosete duble, fără bășici?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_double_socks_no_fric_2a898800b45e",
+      "ideal_answer": "Află cum două perechi de șosete te pot salva de bășici și disconfort în drumeții.",
+      "top1_chunk_id": "cg_tips_and_tricks_tip_double_socks_no_fric_2a898800b45e",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_double_socks_no_fric_2a898800b45e",
+          "title": "Șosete duble, fără bășici",
+          "domain": "tips_and_tricks",
+          "score": 187.7009,
+          "reranker_score": 0.788761
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_wet_skin_blisters_027c5a08ab22",
+          "title": "Usca sosetele la pauze, evita bascicile!",
+          "domain": "tips_and_tricks",
+          "score": 114.8535,
+          "reranker_score": 0.508169
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_socks_change_lunch_87df14b3a377",
+          "title": "Schimbi sosetele la pranz? Energie pentru picioare!",
+          "domain": "tips_and_tricks",
+          "score": 87.5741,
+          "reranker_score": 0.177176
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_socks_dry_in_sleepin_4ecf72ec4328",
+          "title": "Șosetele ude se usucă în sacul de dormit? Testul din teren",
+          "domain": "tips_and_tricks",
+          "score": 77.9034,
+          "reranker_score": 0.126292
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_morning_socks_test_79ba03d8bb99",
+          "title": "Șosetele umede dimineața? Schimbă-le!",
+          "domain": "tips_and_tricks",
+          "score": 68.3536,
+          "reranker_score": 0.17192
+        }
+      ],
+      "rerank_latency_ms": 1058.9889000002586,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.5333333333333333,
+      "key_fact_count": 15,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "tips_and_tricks_09",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru pătura de supraviețuire: Izolator la somn în alpin?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_emergency_blanket_ex_7f8131e2fb43",
+      "ideal_answer": "Pătura de supraviețuire e un izolator termic excelent sub izopren, mai ales la cort în zona alpină, reflectând căldura corpului.",
+      "top1_chunk_id": "cg_tips_and_tricks_tip_emergency_blanket_ex_7f8131e2fb43",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_emergency_blanket_ex_7f8131e2fb43",
+          "title": "Pătura de supraviețuire: Izolator la somn în alpin",
+          "domain": "tips_and_tricks",
+          "score": 225.268,
+          "reranker_score": 0.825849
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_food_protein_balance_fe2613a01ac9",
+          "title": "Combustibil pentru ture lungi: Proteine și Carbohidrați",
+          "domain": "tips_and_tricks",
+          "score": 46.6655,
+          "reranker_score": 0.048318
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_socks_change_lunch_87df14b3a377",
+          "title": "Schimbi sosetele la pranz? Energie pentru picioare!",
+          "domain": "tips_and_tricks",
+          "score": 37.938,
+          "reranker_score": 0.034225
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_paracord_belt_ed566987cc23",
+          "title": "Cureaua din paracord: 5 metri de ingeniozitate",
+          "domain": "tips_and_tricks",
+          "score": 37.7525,
+          "reranker_score": 0.091906
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_socks_dry_in_sleepin_4ecf72ec4328",
+          "title": "Șosetele ude se usucă în sacul de dormit? Testul din teren",
+          "domain": "tips_and_tricks",
+          "score": 36.858,
+          "reranker_score": 0.035725
+        }
+      ],
+      "rerank_latency_ms": 1036.2322000000859,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.875,
+      "key_fact_count": 16,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "tips_and_tricks_10",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru haine uscate de schimb: esențiale în rucsac?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_emergency_dry_clothe_d3e0e11eb64b",
+      "ideal_answer": "Un set de haine uscate, sigilat etanș, este esențial în rucsac pentru orice drumeție, protejându-te de frig și disconfort.",
+      "top1_chunk_id": "cg_tips_and_tricks_tip_emergency_dry_clothe_d3e0e11eb64b",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_emergency_dry_clothe_d3e0e11eb64b",
+          "title": "Haine uscate de schimb: esențiale în rucsac",
+          "domain": "tips_and_tricks",
+          "score": 208.0376,
+          "reranker_score": 0.850471
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_socks_loop_dry_b3f51c52bebc",
+          "title": "Uscarea sosetelor pe rucsac: trucul batranesc",
+          "domain": "tips_and_tricks",
+          "score": 91.278,
+          "reranker_score": 0.285975
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_first_aid_quick_acce_ff653aff9305",
+          "title": "Trusa de prim ajutor: la îndemână, nu la fundul rucsacului!",
+          "domain": "tips_and_tricks",
+          "score": 81.6278,
+          "reranker_score": 0.215348
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_pre_dawn_pack_65e8b51f3102",
+          "title": "Pregatirea rucsacului seara: dimineata pleci in 5 minute!",
+          "domain": "tips_and_tricks",
+          "score": 80.9633,
+          "reranker_score": 0.297041
+        },
+        {
+          "chunk_id": "cg_tips_and_tricks_tip_pack_lid_essentials_b096fe69883e",
+          "title": "Capacul rucsacului: organizare rapida",
+          "domain": "tips_and_tricks",
+          "score": 77.8383,
+          "reranker_score": 0.117979
+        }
+      ],
+      "rerank_latency_ms": 1037.2350999996343,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7333333333333333,
+      "key_fact_count": 15,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "survival_basics_01",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren nodul scaun (bowline): un nod de buzunar?",
+      "golden_chunk_id": "cg_survival_basics_nod_scaun_bowline_practi_ead27053bf52",
+      "ideal_answer": "Nodul scaun: buclă fixă care se desface ușor după sarcină — esențial pentru tarp, rucsac, sac cu mâncare.",
+      "top1_chunk_id": "cg_survival_basics_nod_scaun_bowline_practi_ead27053bf52",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_survival_basics_nod_scaun_bowline_practi_ead27053bf52",
+          "title": "Nodul scaun (bowline): un nod de buzunar",
+          "domain": "survival_basics",
+          "score": 242.5591,
+          "reranker_score": 0.811989
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_knot_bowline_ccdad0fc95a0",
+          "title": "Nodul scaun: Prietenul tau de incredere in munti",
+          "domain": "survival_basics",
+          "score": 190.1171,
+          "reranker_score": 0.556464
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_knot_clove_hitc_a9b40e17e7a0",
+          "title": "Nodul jumătate de gură de pește pentru ancorat",
+          "domain": "survival_basics",
+          "score": 91.9098,
+          "reranker_score": 0.203873
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_knot_truckers_h_a2b38c373390",
+          "title": "Nodul Trucker's Hitch: Cortul tau, intins ca o vioara!",
+          "domain": "survival_basics",
+          "score": 83.7621,
+          "reranker_score": 0.182026
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_terrain_reading_fdb793e38847",
+          "title": "Citirea terenului: linii de cadere si contur",
+          "domain": "survival_basics",
+          "score": 48.6263,
+          "reranker_score": 0.072829
+        }
+      ],
+      "rerank_latency_ms": 1054.9357999998392,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6190476190476191,
+      "key_fact_count": 21,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "survival_basics_02",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren singur, pe intuneric: cum iti pastrezi calmul?",
+      "golden_chunk_id": "cg_survival_basics_survival_alone_mental_f83a32f8655f",
+      "ideal_answer": "Cum să-ți păstrezi calmul și să iei decizii bune când te prinde întunericul singur pe munte.",
+      "top1_chunk_id": "cg_survival_basics_survival_alone_mental_f83a32f8655f",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_survival_basics_survival_alone_mental_f83a32f8655f",
+          "title": "Singur, pe intuneric: cum iti pastrezi calmul",
+          "domain": "survival_basics",
+          "score": 252.1555,
+          "reranker_score": 0.891943
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_terrain_reading_fdb793e38847",
+          "title": "Citirea terenului: linii de cadere si contur",
+          "domain": "survival_basics",
+          "score": 88.0084,
+          "reranker_score": 0.115105
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_camp_above_tree_a579dacbc6d3",
+          "title": "Bivuac peste limita padurii: riscuri si cum sa le eviti",
+          "domain": "survival_basics",
+          "score": 80.63,
+          "reranker_score": 0.107875
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_pace_count_967986ee6c68",
+          "title": "Cum estimezi distanța în pădure",
+          "domain": "survival_basics",
+          "score": 43.4343,
+          "reranker_score": 0.047929
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_signaling_audio_9d5ff0474998",
+          "title": "Semnalizare sonora: Fluieraturi si Regula de 3",
+          "domain": "survival_basics",
+          "score": 42.2364,
+          "reranker_score": 0.092955
+        }
+      ],
+      "rerank_latency_ms": 1029.3775000000096,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.4444444444444444,
+      "key_fact_count": 18,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "survival_basics_03",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren igiena pe traseu: Wag bag și groapa de pisică?",
+      "golden_chunk_id": "cg_survival_basics_survival_bathroom_practi_5df9aba73e07",
+      "ideal_answer": "Află cum să gestionezi igiena personală în natură pentru a proteja mediul montan, folosind wag bag sau groapa de pisică.",
+      "top1_chunk_id": "cg_survival_basics_survival_bathroom_practi_5df9aba73e07",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_survival_basics_survival_bathroom_practi_5df9aba73e07",
+          "title": "Igiena pe traseu: Wag bag și groapa de pisică",
+          "domain": "survival_basics",
+          "score": 259.7696,
+          "reranker_score": 0.77962
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_re_locate_strat_c3f1e60831e9",
+          "title": "Ai pierdut traseul? Iata ce faci!",
+          "domain": "survival_basics",
+          "score": 56.3741,
+          "reranker_score": 0.092176
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_terrain_reading_fdb793e38847",
+          "title": "Citirea terenului: linii de cadere si contur",
+          "domain": "survival_basics",
+          "score": 51.0848,
+          "reranker_score": 0.07606
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_walk_at_night_78ec592962dd",
+          "title": "Mersul pe traseu noaptea: sfaturi si precautii",
+          "domain": "survival_basics",
+          "score": 48.7711,
+          "reranker_score": 0.097139
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_signal_visible__14895f00b186",
+          "title": "Semne cand parasesti traseul marcat",
+          "domain": "survival_basics",
+          "score": 45.7643,
+          "reranker_score": 0.059554
+        }
+      ],
+      "rerank_latency_ms": 1046.7674999999872,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6875,
+      "key_fact_count": 16,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "survival_basics_04",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren fara basici: trucuri simple de la un mos montan?",
+      "golden_chunk_id": "cg_survival_basics_survival_blister_prevent_af2f6cdac473",
+      "ideal_answer": "Află cum să previi bășicile enervante cu sfaturi practice de la un drumeț cu experiență pe Carpați.",
+      "top1_chunk_id": "cg_survival_basics_survival_blister_prevent_af2f6cdac473",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_survival_basics_survival_blister_prevent_af2f6cdac473",
+          "title": "Fara basici: trucuri simple de la un mos montan",
+          "domain": "survival_basics",
+          "score": 178.5589,
+          "reranker_score": 0.744487
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_terrain_reading_fdb793e38847",
+          "title": "Citirea terenului: linii de cadere si contur",
+          "domain": "survival_basics",
+          "score": 62.7798,
+          "reranker_score": 0.127247
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_water_purificat_db78c6c6fa8f",
+          "title": "Apa potabila fara filtru: 3 metode simple",
+          "domain": "survival_basics",
+          "score": 57.217,
+          "reranker_score": 0.142712
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_cold_protection_ba81c0749507",
+          "title": "Fara sac de dormit in noapte rece? Iata ce faci!",
+          "domain": "survival_basics",
+          "score": 50.5799,
+          "reranker_score": 0.044749
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_lone_voice_sign_b64bac04a0b3",
+          "title": "Strigi dupa ajutor fara fluier - tehnici eficiente",
+          "domain": "survival_basics",
+          "score": 45.5716,
+          "reranker_score": 0.107144
+        }
+      ],
+      "rerank_latency_ms": 1053.2845999996425,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.75,
+      "key_fact_count": 12,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "survival_basics_05",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren bivuac peste limita padurii: riscuri si cum sa le eviti?",
+      "golden_chunk_id": "cg_survival_basics_survival_camp_above_tree_a579dacbc6d3",
+      "ideal_answer": "Află cum să te pregătești pentru un bivuac sigur și confortabil deasupra limitei pădurii, evitând capcanele vremii și ale terenului.",
+      "top1_chunk_id": "cg_survival_basics_survival_camp_above_tree_a579dacbc6d3",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_survival_basics_survival_camp_above_tree_a579dacbc6d3",
+          "title": "Bivuac peste limita padurii: riscuri si cum sa le eviti",
+          "domain": "survival_basics",
+          "score": 234.9635,
+          "reranker_score": 0.789544
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_morning_routine_85be67533e82",
+          "title": "Dimineața după bivuacul de urgență",
+          "domain": "survival_basics",
+          "score": 80.8963,
+          "reranker_score": 0.348704
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_terrain_reading_fdb793e38847",
+          "title": "Citirea terenului: linii de cadere si contur",
+          "domain": "survival_basics",
+          "score": 61.6422,
+          "reranker_score": 0.108028
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_shelter_snow_tr_a34dd1c66621",
+          "title": "Tranșee în zăpadă: un bivuac de urgență eficient",
+          "domain": "survival_basics",
+          "score": 60.529,
+          "reranker_score": 0.194113
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_alone_mental_f83a32f8655f",
+          "title": "Singur, pe intuneric: cum iti pastrezi calmul",
+          "domain": "survival_basics",
+          "score": 56.7126,
+          "reranker_score": 0.061408
+        }
+      ],
+      "rerank_latency_ms": 1031.9328999994468,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7058823529411765,
+      "key_fact_count": 17,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "survival_basics_06",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren frecarea coapselor: Scapă de ea pe trasee lungi?",
+      "golden_chunk_id": "cg_survival_basics_survival_chafing_prevent_bbb52e460fce",
+      "ideal_answer": "Află cum să previi iritația coapselor pe trasee lungi, folosind trucuri simple și echipament adecvat.",
+      "top1_chunk_id": "cg_survival_basics_survival_chafing_prevent_bbb52e460fce",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_survival_basics_survival_chafing_prevent_bbb52e460fce",
+          "title": "Frecarea coapselor: Scapă de ea pe trasee lungi",
+          "domain": "survival_basics",
+          "score": 200.1253,
+          "reranker_score": 0.826566
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_terrain_reading_fdb793e38847",
+          "title": "Citirea terenului: linii de cadere si contur",
+          "domain": "survival_basics",
+          "score": 49.6609,
+          "reranker_score": 0.085761
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_camp_above_tree_a579dacbc6d3",
+          "title": "Bivuac peste limita padurii: riscuri si cum sa le eviti",
+          "domain": "survival_basics",
+          "score": 37.8621,
+          "reranker_score": 0.033277
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_alone_mental_f83a32f8655f",
+          "title": "Singur, pe intuneric: cum iti pastrezi calmul",
+          "domain": "survival_basics",
+          "score": 33.0883,
+          "reranker_score": 0.048603
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_pace_count_967986ee6c68",
+          "title": "Cum estimezi distanța în pădure",
+          "domain": "survival_basics",
+          "score": 27.6915,
+          "reranker_score": 0.056144
+        }
+      ],
+      "rerank_latency_ms": 1053.447000000233,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.6875,
+      "key_fact_count": 16,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "survival_basics_07",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren fara sac de dormit in noapte rece? Iata ce faci!?",
+      "golden_chunk_id": "cg_survival_basics_survival_cold_protection_ba81c0749507",
+      "ideal_answer": "Află cum să te protejezi de frig dacă rămâi peste noapte în munți fără sac de dormit, folosind resursele din jur și echipamentul pe care îl ai.",
+      "top1_chunk_id": "cg_survival_basics_survival_cold_protection_ba81c0749507",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_survival_basics_survival_cold_protection_ba81c0749507",
+          "title": "Fara sac de dormit in noapte rece? Iata ce faci!",
+          "domain": "survival_basics",
+          "score": 264.9281,
+          "reranker_score": 0.906601
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_re_locate_strat_c3f1e60831e9",
+          "title": "Ai pierdut traseul? Iata ce faci!",
+          "domain": "survival_basics",
+          "score": 76.4004,
+          "reranker_score": 0.405005
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_camp_above_tree_a579dacbc6d3",
+          "title": "Bivuac peste limita padurii: riscuri si cum sa le eviti",
+          "domain": "survival_basics",
+          "score": 56.7497,
+          "reranker_score": 0.164372
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_terrain_reading_fdb793e38847",
+          "title": "Citirea terenului: linii de cadere si contur",
+          "domain": "survival_basics",
+          "score": 49.0372,
+          "reranker_score": 0.072965
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_walk_at_night_78ec592962dd",
+          "title": "Mersul pe traseu noaptea: sfaturi si precautii",
+          "domain": "survival_basics",
+          "score": 47.7645,
+          "reranker_score": 0.057056
+        }
+      ],
+      "rerank_latency_ms": 1055.4960000008577,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7692307692307693,
+      "key_fact_count": 13,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "survival_basics_08",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren orientarea hartii cu busola: Pas cu pas?",
+      "golden_chunk_id": "cg_survival_basics_survival_compass_basic_u_93e2f90910ca",
+      "ideal_answer": "Învață cum să-ți orientezi harta cu ajutorul busolei, un pas esențial pentru navigarea sigură pe munte.",
+      "top1_chunk_id": "cg_survival_basics_survival_compass_basic_u_93e2f90910ca",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_survival_basics_survival_compass_basic_u_93e2f90910ca",
+          "title": "Orientarea hartii cu busola: Pas cu pas",
+          "domain": "survival_basics",
+          "score": 210.5736,
+          "reranker_score": 0.84967
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_navigation_no_c_4d37a4e4ae19",
+          "title": "Orientare fara busola: Soare, Stele, Muschi",
+          "domain": "survival_basics",
+          "score": 97.2581,
+          "reranker_score": 0.328227
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_alone_mental_f83a32f8655f",
+          "title": "Singur, pe intuneric: cum iti pastrezi calmul",
+          "domain": "survival_basics",
+          "score": 90.3142,
+          "reranker_score": 0.181427
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_pace_count_967986ee6c68",
+          "title": "Cum estimezi distanța în pădure",
+          "domain": "survival_basics",
+          "score": 88.159,
+          "reranker_score": 0.214488
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_lost_first_step_d7487f1e706d",
+          "title": "Te-ai rătăcit? Primii 5 pași esențiali",
+          "domain": "survival_basics",
+          "score": 75.2179,
+          "reranker_score": 0.247724
+        }
+      ],
+      "rerank_latency_ms": 1030.962400000135,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": false,
+      "faithfulness_coverage": 0.5,
+      "key_fact_count": 18,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "survival_basics_09",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren gestionarea panicii pe munte: tehnica 4-7-8?",
+      "golden_chunk_id": "cg_survival_basics_survival_dont_panic_209e4756ead3",
+      "ideal_answer": "Află cum să folosești tehnica de respirație 4-7-8 pentru a-ți gestiona panica și a te calma rapid în situații dificile pe munte.",
+      "top1_chunk_id": "cg_survival_basics_survival_dont_panic_209e4756ead3",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_survival_basics_survival_dont_panic_209e4756ead3",
+          "title": "Gestionarea panicii pe munte: tehnica 4-7-8",
+          "domain": "survival_basics",
+          "score": 168.1742,
+          "reranker_score": 0.829678
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_terrain_reading_fdb793e38847",
+          "title": "Citirea terenului: linii de cadere si contur",
+          "domain": "survival_basics",
+          "score": 68.1495,
+          "reranker_score": 0.194368
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_alone_mental_f83a32f8655f",
+          "title": "Singur, pe intuneric: cum iti pastrezi calmul",
+          "domain": "survival_basics",
+          "score": 57.191,
+          "reranker_score": 0.132388
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_wet_clothes_str_da0106fae1c5",
+          "title": "Uscarea hainelor ude pe munte in 60 de minute",
+          "domain": "survival_basics",
+          "score": 54.739,
+          "reranker_score": 0.076737
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_pace_count_967986ee6c68",
+          "title": "Cum estimezi distanța în pădure",
+          "domain": "survival_basics",
+          "score": 47.525,
+          "reranker_score": 0.061562
+        }
+      ],
+      "rerank_latency_ms": 1055.702900000142,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7058823529411765,
+      "key_fact_count": 17,
+      "diacritic_correct": true
+    },
+    {
+      "query_id": "survival_basics_10",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren decizii rapide pe potecă: Continuu, mă întorc sau aștept??",
+      "golden_chunk_id": "cg_survival_basics_survival_emergency_decis_cb56818278e6",
+      "ideal_answer": "Află cum să iei decizii rapide și sigure pe munte: să continui, să te întorci sau să aștepți, în funcție de situație.",
+      "top1_chunk_id": "cg_survival_basics_survival_emergency_decis_cb56818278e6",
+      "top1_correct": true,
+      "top5": [
+        {
+          "chunk_id": "cg_survival_basics_survival_emergency_decis_cb56818278e6",
+          "title": "Decizii rapide pe potecă: Continuu, mă întorc sau aștept?",
+          "domain": "survival_basics",
+          "score": 283.283,
+          "reranker_score": 0.866037
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_alone_mental_f83a32f8655f",
+          "title": "Singur, pe intuneric: cum iti pastrezi calmul",
+          "domain": "survival_basics",
+          "score": 65.5586,
+          "reranker_score": 0.299482
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_terrain_reading_fdb793e38847",
+          "title": "Citirea terenului: linii de cadere si contur",
+          "domain": "survival_basics",
+          "score": 58.2153,
+          "reranker_score": 0.187691
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_camp_above_tree_a579dacbc6d3",
+          "title": "Bivuac peste limita padurii: riscuri si cum sa le eviti",
+          "domain": "survival_basics",
+          "score": 46.3905,
+          "reranker_score": 0.059882
+        },
+        {
+          "chunk_id": "cg_survival_basics_survival_quick_calorie_9e1af8ea09cb",
+          "title": "Calorii rapide in rucsac: Ce sa ai la indemana",
+          "domain": "survival_basics",
+          "score": 44.325,
+          "reranker_score": 0.039063
+        }
+      ],
+      "rerank_latency_ms": 1030.3916999991998,
+      "expression_mode": "ideal_answer_simulation",
+      "faithfulness_pass": true,
+      "faithfulness_coverage": 0.7692307692307693,
+      "key_fact_count": 13,
+      "diacritic_correct": true
+    }
+  ]
+}

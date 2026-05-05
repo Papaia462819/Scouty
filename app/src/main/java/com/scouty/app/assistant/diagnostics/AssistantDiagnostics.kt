@@ -85,6 +85,24 @@ object AssistantDiagnostics {
         )
     }
 
+    fun logExpressionLayer(
+        chunkId: String,
+        invocationCount: Int,
+        fallbackCount: Int,
+        tokenLatencyMs: Long,
+        skippedTierACount: Int,
+        reason: String
+    ) {
+        debug(
+            "CardParaphraseEngine chunkId=$chunkId " +
+                "expression_invocation_count=$invocationCount " +
+                "expression_fallback_count=$fallbackCount " +
+                "expression_token_latency_ms=$tokenLatencyMs " +
+                "expression_skipped_tier_a_count=$skippedTierACount " +
+                "reason=$reason"
+        )
+    }
+
     fun logAnswerStart(
         query: String,
         packStatus: KnowledgePackStatus,

@@ -2,6 +2,8 @@ package com.scouty.app.assistant.domain
 
 import com.scouty.app.assistant.data.KnowledgeChunkStore
 import com.scouty.app.assistant.data.KnowledgePackStatusProvider
+import com.scouty.app.assistant.domain.expression.CardParaphraseEngine
+import com.scouty.app.assistant.domain.expression.CardParaphraseModel
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.assistant.model.KnowledgeChunkRecord
@@ -76,6 +78,68 @@ class AssistantRepositoryIntegrationTest {
         assertEquals(SafetyOutcome.EMERGENCY_ESCALATION, response.safetyOutcome)
         assertEquals(ResponseSectionStyle.IMPORTANT, response.structuredOutput.sections.first().style)
         assertTrue(response.answerText.contains("112") || response.answerText.contains("SOS"))
+    }
+
+    @Test
+    fun tierBExpressionFlag_usesParaphraseBeforeTemplate() = runBlocking {
+        val knowledgePackStatus = KnowledgePackStatus(
+            available = true,
+            packVersion = "pack-1",
+            hashValid = true,
+            integrityValid = true
+        )
+        val body = "Frontala cu baterii de rezervă este critică pe traseu; păstreaz-o la îndemână când plouă sau se întunecă."
+        val paraphrase = "Ține frontala cu baterii de rezervă la îndemână, mai ales dacă plouă sau se întunecă pe traseu."
+        val chunks = listOf(
+            KnowledgeChunkRecord(
+                chunkId = "cg_gear_frontala",
+                domain = "gear_and_preparation",
+                topic = "headlamp_rain_dark",
+                language = "ro",
+                title = "Frontala pe ploaie și întuneric",
+                body = body,
+                sourceTitle = "Scouty",
+                publisher = "Scouty",
+                sourceLanguage = "ro",
+                adaptedLanguage = "ro",
+                sourceTrust = 5,
+                packVersion = "pack-1",
+                keywords = "frontală baterii ploaie întuneric traseu",
+                metadataJson = """{"tier":"B","tone":"conversational","lead":"Frontala cu baterii de rezervă este critică pe traseu."}"""
+            )
+        )
+        val store = FakeSearchKnowledgeStore(chunks, knowledgePackStatus)
+        val repository = AssistantRepository(
+            context = null,
+            knowledgePackManager = FakeKnowledgePackStatusProvider(knowledgePackStatus),
+            knowledgeStore = store,
+            queryAnalyzer = QueryAnalyzer(),
+            retrievalEngine = RetrievalEngine(store),
+            promptBuilder = PromptBuilder(),
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            ),
+            generationEngine = TemplateGenerationEngine(),
+            medicalSafetyPolicy = MedicalSafetyPolicy(),
+            cardParaphraseEngine = CardParaphraseEngine(FakeCardParaphraseModel(paraphrase)),
+            useCardParaphraseExpression = true
+        )
+
+        val response = repository.answer(
+            query = "Ce fac cu frontala dacă plouă și se întunecă?",
+            context = DeviceContextSnapshot(
+                batteryPercent = 73,
+                gpsFixed = true,
+                localeTag = "ro"
+            )
+        )
+
+        assertEquals(GenerationMode.LOCAL_LLM, response.generationMode)
+        assertEquals(paraphrase, response.answerText)
+        assertFalse(response.answerText == body)
+        assertTrue(response.answerText.contains("frontala", ignoreCase = true))
+        assertTrue(response.answerText.contains("baterii", ignoreCase = true))
     }
 
     private fun createRepository(modelManager: ModelManager): AssistantRepository {
@@ -180,4 +244,10 @@ private class FakeSearchKnowledgeStore(
             }
             .sortedByDescending { if (it.language in preferredLanguages) 1 else 0 }
             .take(limit)
+}
+
+private class FakeCardParaphraseModel(
+    private val response: String
+) : CardParaphraseModel {
+    override suspend fun generate(prompt: String, options: LocalLlmGenerationOptions): String = response
 }

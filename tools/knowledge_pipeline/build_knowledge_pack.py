@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sqlite3
 import sys
@@ -51,6 +52,31 @@ REQUIRED_DOMAINS = {
     "route_intelligence_romania",
     "gear_and_preparation",
 }
+
+# Default location for approved card_generator drafts (Tier A + Tier B). Each
+# approved file is one JSON document shaped like a knowledge_chunks row plus a
+# small set of optional embedding-friendly fields. See
+# tools/card_generator/schema.py for the canonical definition.
+DEFAULT_DRAFT_SOURCE = ROOT_DIR / "tools" / "card_generator" / "approved"
+
+# When draft files use these new domains, they are merged into the pack but are
+# NOT added to REQUIRED_DOMAINS (the build still passes if no drafts exist).
+KNOWN_DRAFT_DOMAINS = {
+    "campfire_basics",
+    "trail_culture_ro",
+    "tips_and_tricks",
+    "motivation_and_morale",
+}
+
+# Required keys on every approved draft. The card_generator validator already
+# enforces a stricter superset; this list is the *bare minimum* the builder
+# needs to insert a row safely.
+DRAFT_REQUIRED_KEYS = (
+    "chunk_id", "domain", "topic", "language", "title", "body",
+    "source_title", "publisher", "source_language", "adapted_language",
+    "publish_or_review_date", "source_trust", "safety_tags",
+    "country_scope",
+)
 
 
 def load_fetch_manifest() -> dict[str, dict[str, Any]]:
@@ -274,6 +300,176 @@ def build_campfire_embeddings(cards: list[dict[str, Any]]) -> tuple[list[dict[st
         "dimension": embedder.dimension,
     }
     return card_rows, phrasing_rows, embedding_info
+
+
+def _coerce_keywords(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return normalize_whitespace(value)
+    if isinstance(value, list):
+        return normalize_whitespace(" ".join(str(item).strip() for item in value if item))
+    return ""
+
+
+def _coerce_metadata(value: Any) -> dict[str, Any]:
+    if value is None:
+        return {}
+    if isinstance(value, str):
+        return json.loads(value) if value.strip() else {}
+    if isinstance(value, dict):
+        return dict(value)
+    raise SystemExit(f"[build] metadata_json must be an object or JSON string, got {type(value).__name__}")
+
+
+def _coerce_metadata_json(value: Any) -> str | None:
+    metadata = _coerce_metadata(value)
+    return json.dumps(metadata, ensure_ascii=False, sort_keys=False) if metadata else None
+
+
+def _read_draft_files(draft_sources: list[Path]) -> list[Path]:
+    files: dict[Path, Path] = {}
+    for draft_source in draft_sources:
+        if not draft_source.exists():
+            continue
+        if draft_source.is_file() and draft_source.suffix.lower() == ".json":
+            files[draft_source.resolve()] = draft_source
+            continue
+        for path in draft_source.rglob("*.json"):
+            if path.is_file():
+                files[path.resolve()] = path
+    return sorted(files.values())
+
+
+def _draft_metadata(draft: dict[str, Any]) -> dict[str, Any]:
+    metadata = _coerce_metadata(draft.get("metadata_json"))
+    tier = draft.get("tier") or metadata.get("tier")
+    if tier:
+        metadata["tier"] = tier
+    return metadata
+
+
+def expand_draft_chunks(
+    draft_sources: list[Path],
+    pack_version: str,
+) -> tuple[list[dict[str, Any]], list[Path]]:
+    """Read approved card_generator drafts and convert them to knowledge_chunks rows.
+
+    Returns the merged rows plus the list of source files (used for SHA-256 in the manifest).
+    Drafts with missing required fields raise SystemExit so a broken approved/ tree
+    fails the build loudly rather than silently dropping cards.
+    """
+    files = _read_draft_files(draft_sources)
+    rows: list[dict[str, Any]] = []
+    seen_chunk_ids: set[str] = set()
+
+    for path in files:
+        try:
+            draft = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as error:
+            raise SystemExit(f"[build] approved draft {path} is invalid JSON: {error.msg}")
+
+        missing = [key for key in DRAFT_REQUIRED_KEYS if key not in draft]
+        if missing:
+            raise SystemExit(
+                f"[build] approved draft {path} missing required keys: {', '.join(missing)}"
+            )
+
+        chunk_id = draft["chunk_id"]
+        if chunk_id in seen_chunk_ids:
+            raise SystemExit(f"[build] duplicate chunk_id {chunk_id!r} in approved drafts")
+        seen_chunk_ids.add(chunk_id)
+        metadata_json = json.dumps(_draft_metadata(draft), ensure_ascii=False, sort_keys=False)
+
+        rows.append({
+            "chunk_id": chunk_id,
+            "domain": draft["domain"],
+            "topic": draft["topic"],
+            "language": draft["language"],
+            "title": normalize_whitespace(draft["title"]),
+            "body": normalize_whitespace(draft["body"]),
+            "source_title": draft["source_title"],
+            "source_url": draft.get("source_url"),
+            "publisher": draft["publisher"],
+            "source_language": draft["source_language"],
+            "adapted_language": draft["adapted_language"],
+            "publish_or_review_date": draft["publish_or_review_date"],
+            "source_trust": int(draft["source_trust"]),
+            "safety_tags": list(draft.get("safety_tags") or []),
+            "country_scope": draft["country_scope"],
+            "pack_version": pack_version,
+            "keywords": _coerce_keywords(draft.get("keywords")),
+            "card_family": draft.get("card_family"),
+            "priority": int(draft.get("priority", 0)),
+            "metadata_json": metadata_json,
+        })
+
+    return rows, files
+
+
+def _metadata_value(row: dict[str, Any], key: str) -> Any:
+    metadata_json = row.get("metadata_json")
+    if not metadata_json:
+        return None
+    try:
+        metadata = json.loads(metadata_json)
+    except json.JSONDecodeError:
+        return None
+    return metadata.get(key)
+
+
+def build_row_query_text(row: dict[str, Any]) -> str:
+    parts: list[str] = [
+        row["title"],
+        row["topic"],
+        row.get("keywords") or "",
+        str(_metadata_value(row, "lead") or ""),
+        str(_metadata_value(row, "seed_topic") or ""),
+    ]
+    return normalize_whitespace(" ".join(filter(None, parts)))
+
+
+def build_row_content_text(row: dict[str, Any]) -> str:
+    parts: list[str] = [
+        row["title"],
+        str(_metadata_value(row, "lead") or ""),
+        row["body"],
+    ]
+    return normalize_whitespace(" ".join(filter(None, parts)))
+
+
+def build_row_embeddings(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    if not rows:
+        return [], {
+            "model_name": DEFAULT_EMBEDDING_MODEL,
+            "backend": "disabled",
+            "dimension": EMBEDDING_DIMENSION,
+        }
+
+    embedder = build_text_embedder(DEFAULT_EMBEDDING_MODEL, EMBEDDING_DIMENSION)
+    query_embeddings = embedder.encode([build_row_query_text(row) for row in rows])
+    content_embeddings = embedder.encode([build_row_content_text(row) for row in rows])
+
+    embedding_rows: list[dict[str, Any]] = []
+    for row, query_embedding, content_embedding in zip(rows, query_embeddings, content_embeddings):
+        embedding_rows.append(
+            {
+                "card_id": row["chunk_id"],
+                "topic": row["topic"],
+                "language": row["language"],
+                "query_embedding": pack_float32_vector(query_embedding),
+                "content_embedding": pack_float32_vector(content_embedding),
+                "embedding_model": embedder.model_name,
+                "embedding_backend": embedder.backend_label,
+                "embedding_dimension": embedder.dimension,
+            }
+        )
+
+    return embedding_rows, {
+        "model_name": embedder.model_name,
+        "backend": embedder.backend_label,
+        "dimension": embedder.dimension,
+    }
 
 
 def route_source_info(entry: dict[str, Any]) -> LocalSourceInfo:
@@ -688,11 +884,28 @@ def main(argv: list[str] | None = None) -> int:
         default=ASSETS_DIR,
         help="Directory where final assets are copied.",
     )
+    parser.add_argument(
+        "--draft-source",
+        type=Path,
+        action="append",
+        default=None,
+        help=(
+            "Directory containing approved card_generator drafts (one JSON per card). "
+            "May be repeated. "
+            "Recursively scanned for *.json. Default: tools/card_generator/approved/"
+        ),
+    )
+    parser.add_argument(
+        "--no-drafts",
+        action="store_true",
+        help="Skip ingesting approved drafts even if --draft-source exists.",
+    )
     args = parser.parse_args(argv)
 
     pack_version = load_pack_version()
     build_dir = ensure_directory(args.output_dir)
     assets_dir = ensure_directory(args.assets_dir)
+    draft_sources = args.draft_source or [DEFAULT_DRAFT_SOURCE]
     db_path = build_dir / "knowledge_pack.sqlite"
     manifest_path = build_dir / "knowledge_pack_manifest.json"
 
@@ -703,9 +916,25 @@ def main(argv: list[str] | None = None) -> int:
     curated_rows = expand_curated_chunks(sources_by_id, pack_version)
     campfire_cards = load_campfire_cards()
     campfire_rows = expand_campfire_cards(sources_by_id, pack_version)
-    card_embedding_rows, phrasing_embedding_rows, embedding_info = build_campfire_embeddings(campfire_cards)
+    campfire_card_embedding_rows, phrasing_embedding_rows, embedding_info = build_campfire_embeddings(campfire_cards)
     route_rows, route_catalog_generated_at = expand_route_chunks(pack_version)
-    all_rows = curated_rows + campfire_rows + route_rows
+
+    if args.no_drafts:
+        draft_rows: list[dict[str, Any]] = []
+        draft_files: list[Path] = []
+    else:
+        draft_rows, draft_files = expand_draft_chunks(draft_sources, pack_version)
+
+    all_rows = curated_rows + campfire_rows + route_rows + draft_rows
+    legacy_embedding_ids = {row["card_id"] for row in campfire_card_embedding_rows}
+    generic_embedding_rows, generic_embedding_info = build_row_embeddings(
+        [row for row in all_rows if row["chunk_id"] not in legacy_embedding_ids]
+    )
+    draft_ids = {row["chunk_id"] for row in draft_rows}
+    draft_card_embedding_count = sum(1 for row in generic_embedding_rows if row["card_id"] in draft_ids)
+    card_embedding_rows = campfire_card_embedding_rows + generic_embedding_rows
+    if generic_embedding_rows and not campfire_card_embedding_rows:
+        embedding_info = generic_embedding_info
 
     covered_domains = {row["domain"] for row in all_rows}
     missing_domains = sorted(REQUIRED_DOMAINS - covered_domains)
@@ -721,9 +950,12 @@ def main(argv: list[str] | None = None) -> int:
         "chunk_count": len(all_rows),
         "curated_chunk_count": len(curated_rows),
         "campfire_card_count": len(campfire_rows),
-        "campfire_card_embedding_count": len(card_embedding_rows),
+        "campfire_card_embedding_count": len(campfire_card_embedding_rows),
+        "draft_card_embedding_count": draft_card_embedding_count,
+        "card_embedding_count": len(card_embedding_rows),
         "campfire_phrase_embedding_count": len(phrasing_embedding_rows),
         "route_chunk_count": len(route_rows),
+        "draft_chunk_count": len(draft_rows),
         "domains": sorted(covered_domains),
         "languages": sorted({row["language"] for row in all_rows}),
         "campfire_embeddings": embedding_info,
@@ -745,6 +977,24 @@ def main(argv: list[str] | None = None) -> int:
             manifest_entry["sha256"] = sha256_file(local_path)
         manifest_sources.append(manifest_entry)
 
+    # Aggregate SHA over the concatenated bytes of every approved draft file —
+    # gives the manifest a single fingerprint that changes whenever any approved
+    # draft is added, edited, or removed.
+    if draft_files:
+        draft_digest = hashlib.sha256()
+        for draft_path in draft_files:
+            draft_digest.update(draft_path.name.encode("utf-8"))
+            draft_digest.update(b"\x00")
+            draft_digest.update(draft_path.read_bytes())
+            draft_digest.update(b"\x00")
+        draft_chunk_sha256 = draft_digest.hexdigest()
+    else:
+        draft_chunk_sha256 = None
+
+    draft_domain_counts: dict[str, int] = {}
+    for row in draft_rows:
+        draft_domain_counts[row["domain"]] = draft_domain_counts.get(row["domain"], 0) + 1
+
     manifest_payload = {
         "pack_version": pack_version,
         "generated_at": metadata["generated_at"],
@@ -753,9 +1003,14 @@ def main(argv: list[str] | None = None) -> int:
         "chunk_count": len(all_rows),
         "curated_chunk_count": len(curated_rows),
         "campfire_card_count": len(campfire_rows),
-        "campfire_card_embedding_count": len(card_embedding_rows),
+        "campfire_card_embedding_count": len(campfire_card_embedding_rows),
+        "draft_card_embedding_count": draft_card_embedding_count,
+        "card_embedding_count": len(card_embedding_rows),
         "campfire_phrase_embedding_count": len(phrasing_embedding_rows),
         "route_chunk_count": len(route_rows),
+        "draft_chunk_count": len(draft_rows),
+        "draft_chunk_sha256": draft_chunk_sha256,
+        "draft_domain_counts": dict(sorted(draft_domain_counts.items())),
         "source_count": len(manifest_sources),
         "languages": metadata["languages"],
         "domains": metadata["domains"],
@@ -786,6 +1041,16 @@ def main(argv: list[str] | None = None) -> int:
     print(f"[build] sqlite pack written to {db_path}")
     print(f"[build] manifest written to {manifest_path}")
     print(f"[build] assets copied to {asset_db_path} and {asset_manifest_path}")
+    if draft_rows:
+        print(
+            f"[build] approved drafts merged: {len(draft_rows)} cards across "
+            f"{len(draft_domain_counts)} domains "
+            f"({', '.join(f'{d}={c}' for d, c in sorted(draft_domain_counts.items()))})"
+        )
+        print(f"[build] approved draft embeddings generated: {draft_card_embedding_count}")
+        print(f"[build] total card embeddings generated: {len(card_embedding_rows)}")
+    elif not args.no_drafts:
+        print(f"[build] no approved drafts found at {', '.join(str(path) for path in draft_sources)}")
     return 0
 
 

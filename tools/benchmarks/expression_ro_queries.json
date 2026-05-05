@@ -1,0 +1,425 @@
+{
+  "version": 1,
+  "queries": [
+    {
+      "query_id": "campfire_basics_01",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu secretul lemnului uscat pe vreme umeda?",
+      "golden_chunk_id": "cg_campfire_basics_fire_after_rain_dry_inne_59a14d7b870b",
+      "ideal_answer": "Când totul pare ud, amintește-ți că inima lemnului mort rămâne adesea uscată. Iată cum ajungi la ea cu un cuțit sau un toporaș."
+    },
+    {
+      "query_id": "campfire_basics_02",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu aragaz vs. Foc de Tabara: Alegerea inteleapta in Alpin?",
+      "golden_chunk_id": "cg_campfire_basics_fire_alpine_stove_alt_952808bf3a33",
+      "ideal_answer": "În zona alpină, aragazul portabil este soluția ideală pentru gătit, fiind mai sigur și mai eficient decât focul de tabără."
+    },
+    {
+      "query_id": "campfire_basics_03",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu cafea la 2000m? Uită de focul de tabără în golul alpin?",
+      "golden_chunk_id": "cg_campfire_basics_fire_alpine_zone_9e8aca37771f",
+      "ideal_answer": "În golul alpin nu ai lemne, iar focul deschis e periculos și interzis, așa că hai să vedem ce alternative reale ai pentru o masă caldă."
+    },
+    {
+      "query_id": "campfire_basics_04",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu cenușa de la focul de tabără: împrăștiere sau îngropare??",
+      "golden_chunk_id": "cg_campfire_basics_fire_ash_disposal_c419e055042c",
+      "ideal_answer": "Află cum să gestionezi corect cenușa focului de tabără pentru a proteja mediul și a preveni incendiile."
+    },
+    {
+      "query_id": "campfire_basics_05",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu aprinderea focului cu baterie si sarma de otel?",
+      "golden_chunk_id": "cg_campfire_basics_fire_battery_steel_wool_33fde1116700",
+      "ideal_answer": "Află cum să aprinzi focul de tabără într-o situație de urgență folosind o baterie de 9V și o bucată de lână de oțel."
+    },
+    {
+      "query_id": "campfire_basics_06",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu mesteacanul, bricheta padurii?",
+      "golden_chunk_id": "cg_campfire_basics_fire_birch_bark_1af6578d2893",
+      "ideal_answer": "Învață cum să folosești coaja de mesteacăn, cea mai bună iască naturală, pentru a aprinde focul rapid, chiar și când totul în jur e ud."
+    },
+    {
+      "query_id": "campfire_basics_07",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu economia mesteacanului: cat consumi pentru ce castigi?",
+      "golden_chunk_id": "cg_campfire_basics_fire_birchwood_economy_d72abf618923",
+      "ideal_answer": "Coaja de mesteacăn este excelentă pentru a porni un foc, dar trebuie folosită inteligent, ca o scânteie, nu ca principalul combustibil."
+    },
+    {
+      "query_id": "campfire_basics_08",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu lemne bune pentru foc de tabara?",
+      "golden_chunk_id": "cg_campfire_basics_fire_carpathian_wood_tab_4d7b67a417c4",
+      "ideal_answer": "Alege lemnele potrivite pentru focul de tabără: conifere pentru pornire rapidă, foioase tari pentru căldură constantă și jar durabil."
+    },
+    {
+      "query_id": "campfire_basics_09",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu focul de tabara si cum lasi locul curat?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+      "ideal_answer": "Află cum să stingi focul de tabără și să lași locul curat în doar 5 minute, respectând principiile Leave No Trace."
+    },
+    {
+      "query_id": "campfire_basics_10",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu grătar improvizat la munte?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cooking_grill_diy_cc4c496d947c",
+      "ideal_answer": "Nu improviza grătare din pietre sau crengi; folosește echipament sigur și responsabil pentru foc la munte."
+    },
+    {
+      "query_id": "campfire_basics_11",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu gatit pe jar: cand si cum?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cooking_on_coals_924fb31bef54",
+      "ideal_answer": "Află cum să gătești perfect pe jar, nu pe flacără, pentru o masă delicioasă în natură."
+    },
+    {
+      "query_id": "campfire_basics_12",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu cum așezi focul pentru gătit la ceaun?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cooking_setup_3db08a957169",
+      "ideal_answer": "Nu stinge focul cu oala! Învață să folosești jarul și să construiești o vatră stabilă pentru un gătit eficient și fără fum."
+    },
+    {
+      "query_id": "campfire_basics_13",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu gătit la foc de tabără fără fum în mâncare?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cooking_smoke_food_a4c7ab3c8708",
+      "ideal_answer": "Află cum să gătești la foc de tabără fără să-ți umpli mâncarea de fum și să-ți iriti ochii."
+    },
+    {
+      "query_id": "campfire_basics_14",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu trepiedul pentru ceaun: noduri si echilibru?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cooking_tripod_6c789a99e41f",
+      "ideal_answer": "Învață să construiești un trepied stabil din trei bețe și o sfoară pentru a-ți găti cina la foc de tabără fără surprize neplăcute."
+    },
+    {
+      "query_id": "campfire_basics_15",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu iasca DIY: Vată cu Vaselină?",
+      "golden_chunk_id": "cg_campfire_basics_fire_cotton_vaseline_60c75d3d2e6c",
+      "ideal_answer": "Învață cum să-ți prepari acasă iască din vată și vaselină pentru a aprinde focul ușor în orice condiții."
+    },
+    {
+      "query_id": "campfire_basics_16",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu focul Dakota: cand sa-l sapi?",
+      "golden_chunk_id": "cg_campfire_basics_fire_dakota_pit_8c4cfa84ef41",
+      "ideal_answer": "Află când și cum să folosești un \"Dakota fire pit\" pentru un foc de tabără discret și eficient, mai ales pe vânt."
+    },
+    {
+      "query_id": "campfire_basics_17",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu cum usuci echipamentul langa foc fara sa-l arzi?",
+      "golden_chunk_id": "cg_campfire_basics_fire_drying_gear_8cb5c8caa87d",
+      "ideal_answer": "Află cum să-ți usuci hainele și încălțămintea lângă focul de tabără în siguranță, evitând distrugerea echipamentului."
+    },
+    {
+      "query_id": "campfire_basics_18",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu stingerea corecta a focului de tabara?",
+      "golden_chunk_id": "cg_campfire_basics_fire_extinguish_clean_69461c409c95",
+      "ideal_answer": "Învață cum să stingi corect focul de tabără pentru a preveni incendiile și a proteja natura."
+    },
+    {
+      "query_id": "campfire_basics_19",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu lemnul rășinos (fatwood): Prietenul tău când totul e ud?",
+      "golden_chunk_id": "cg_campfire_basics_fire_fatwood_cab094b575ff",
+      "ideal_answer": "Când plouă și totul e ud, caută lemn rășinos la baza brazilor uscați; rășina din el îl face să ardă ca o torță, chiar și umed."
+    },
+    {
+      "query_id": "campfire_basics_20",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu amnarul: Cum sa faci scantei ca un profesionist?",
+      "golden_chunk_id": "cg_campfire_basics_fire_ferro_rod_basics_a2949ab93863",
+      "ideal_answer": "Uită de brichetele ude; amnarul e prietenul tău de nădejde pentru a aprinde focul în orice condiții, dacă știi să-l folosești corect."
+    },
+    {
+      "query_id": "campfire_basics_21",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu aprinderea focului prin frecare: De ce e greu în realitate?",
+      "golden_chunk_id": "cg_campfire_basics_fire_friction_ignition_r_efcd3da90400",
+      "ideal_answer": "Aprinderea focului prin frecare e o tehnică dificilă, care necesită materiale specifice și mult efort, fiind mai degrabă o abilitate de supraviețuire decât o metodă practică pentru drumeții."
+    },
+    {
+      "query_id": "campfire_basics_22",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu regula brațelor pentru foc de tabără?",
+      "golden_chunk_id": "cg_campfire_basics_fire_gathered_wood_size__af6c6a3d349e",
+      "ideal_answer": "Află cât lemn să strângi pentru o seară la focul de tabără folosind \"regula brațelor\"."
+    },
+    {
+      "query_id": "campfire_basics_23",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu foc pe zapada: cum sa nu-ti ineci jarul?",
+      "golden_chunk_id": "cg_campfire_basics_fire_in_snow_c79c8d528419",
+      "ideal_answer": "Nu face focul direct pe zăpadă! Căldura topește tot și riști să-ți stingi jarul. Iată cum să construiești o platformă izolatoare."
+    },
+    {
+      "query_id": "campfire_basics_24",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu cum sa-ti faci ceaiul la foc de tabara?",
+      "golden_chunk_id": "cg_campfire_basics_fire_kettle_crane_cf83bce8e216",
+      "ideal_answer": "Învață cum să-ți prepari ușor ceaiul sau cafeaua la focul de tabără, folosind o metodă simplă și eficientă."
+    },
+    {
+      "query_id": "campfire_basics_25",
+      "domain": "campfire_basics",
+      "query": "Cum procedez cu cum aprinzi focul din prima: Iasca, surcelele, lemnele?",
+      "golden_chunk_id": "cg_campfire_basics_fire_kindling_layers_0d502a2d17bb",
+      "ideal_answer": "Construirea corectă a focului începe cu o fundație bună: iască uscată, apoi surcele subțiri și la final lemnele groase."
+    },
+    {
+      "query_id": "gear_and_preparation_01",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre rutina de Seara pe Munte?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_alarm_routine_40233540a29a",
+      "ideal_answer": "Află ce trebuie să verifici seara pe munte pentru un somn liniștit și o dimineață fără griji."
+    },
+    {
+      "query_id": "gear_and_preparation_02",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre cum 'rupi' bocancii noi inainte de tura?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_boots_break_in_547bd4ee897e",
+      "ideal_answer": "Află cum să-ți pregătești bocancii noi pentru o tură lungă, evitând bășicile și disconfortul."
+    },
+    {
+      "query_id": "gear_and_preparation_03",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre uscarea bocancilor pe traseu: sfaturi de la un veteran?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_boots_drying_field_6de94f248355",
+      "ideal_answer": "Învață cum să-ți usuci eficient bocancii pe traseu, fără să-i deteriorezi, folosind metode simple și testate."
+    },
+    {
+      "query_id": "gear_and_preparation_04",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre protecția împotriva insectelor pe traseu?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_bug_protection_d6e85aa6abac",
+      "ideal_answer": "Află cum să te protejezi eficient de țânțari, căpușe și viespi în timpul drumețiilor lungi pe munte."
+    },
+    {
+      "query_id": "gear_and_preparation_05",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre echipament esential cu buget redus?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_buying_priority_13bc29bb7e6c",
+      "ideal_answer": "Află cum să-ți cumperi echipamentul de munte esențial, chiar și cu un buget limitat, prioritizând siguranța și confortul."
+    },
+    {
+      "query_id": "gear_and_preparation_06",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre puf vs. Sintetic: Alegerea corectă pentru Carpați?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_down_vs_synth_c3ecb30facd9",
+      "ideal_answer": "Află de ce izolația sintetică este adesea mai practică decât puful în condițiile umede din Carpați."
+    },
+    {
+      "query_id": "gear_and_preparation_07",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre saci impermeabili: Strategia celor 3 culori?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_dry_bag_strategy_e55b55f946ba",
+      "ideal_answer": "Învață cum să-ți organizezi rucsacul cu saci impermeabili de culori diferite pentru a găsi rapid ce ai nevoie, chiar și pe ploaie."
+    },
+    {
+      "query_id": "gear_and_preparation_08",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre pătura de supraviețuire: cum o folosești eficient?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_emergency_blanket_r_5c7b7b5a64e7",
+      "ideal_answer": "Află cum să folosești corect pătura de supraviețuire pentru a te proteja de frig și intemperii în munți."
+    },
+    {
+      "query_id": "gear_and_preparation_09",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre cui și cum anunți traseul montan?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_emergency_contacts_c627035f03dd",
+      "ideal_answer": "Anunță întotdeauna o persoană de încredere despre traseul tău detaliat și ora estimată de întoarcere."
+    },
+    {
+      "query_id": "gear_and_preparation_10",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre 3 lucruri esentiale in rucsacul meu?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_emergency_extras_700edae8a4db",
+      "ideal_answer": "Află care sunt cele trei lucruri esențiale pe care un drumeț experimentat le are mereu în rucsac pentru orice aventură montană."
+    },
+    {
+      "query_id": "gear_and_preparation_11",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre tarp 3x3: Adaptabilitate maximă în natură?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_emergency_shelter_t_fb3e8c9cad0e",
+      "ideal_answer": "Descoperă cum să configurezi rapid un tarp de 3x3 metri pentru adăpost eficient în orice condiții meteo."
+    },
+    {
+      "query_id": "gear_and_preparation_12",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre sosete pentru 4 zile pe munte?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_extra_socks_b4bf1da4da26",
+      "ideal_answer": "Află câte perechi de șosete să iei într-o tură de 4 zile la munte și de ce tip să fie."
+    },
+    {
+      "query_id": "gear_and_preparation_13",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre trusa medicală: ușoară, dar completă?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_first_aid_balance_bbd8d222f96f",
+      "ideal_answer": "Află cum să-ți compui o trusă medicală esențială, ușoară și eficientă pentru orice drumeție pe munte, fără să faci compromisuri la siguranță."
+    },
+    {
+      "query_id": "gear_and_preparation_14",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre trusa minima de prim ajutor pentru o zi pe munte?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_first_aid_minimal_fb0e768652cf",
+      "ideal_answer": "Află ce elemente esențiale trebuie să conțină trusa ta de prim ajutor pentru o tură de o zi pe munte, conform experienței unui drumeț veteran."
+    },
+    {
+      "query_id": "gear_and_preparation_15",
+      "domain": "gear_and_preparation",
+      "query": "Ce trebuie să știu despre trusa esențială pentru ture multi-zi fără semnal?",
+      "golden_chunk_id": "cg_gear_and_preparati_gear_first_aid_serious_fcc10fae3092",
+      "ideal_answer": "Pregătește-ți o trusă de urgență completă pentru turele lungi, mai ales în zone izolate."
+    },
+    {
+      "query_id": "tips_and_tricks_01",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru bandă pe puncte de presiune înainte să apară bășici?",
+      "golden_chunk_id": "cg_tips_and_tricks_banda_puncte_presiune_ba_f2a3d0b440a0",
+      "ideal_answer": "Pune bandă chirurgicală pe călcâie și degete înainte să simți frecarea; oprește-te imediat ce simți căldură pe un punct nou."
+    },
+    {
+      "query_id": "tips_and_tricks_02",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru prevenirea bășicilor la drum lung?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_blister_tape_preempt_8997d4c826ad",
+      "ideal_answer": "Află cum să previi apariția bășicilor aplicând bandă adezivă pe punctele de presiune înainte de a pleca la drum."
+    },
+    {
+      "query_id": "tips_and_tricks_03",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru branțul cald iarna: picioare fericite în zăpadă?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_boots_heat_insole_f49e6fbdedf3",
+      "ideal_answer": "Un branț termoizolant este esențial iarna pentru a-ți menține picioarele calde și confortabile pe munte."
+    },
+    {
+      "query_id": "tips_and_tricks_04",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru pauza la priveliște: Reward și ritm natural?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_break_in_view_reward_169bc83d2d46",
+      "ideal_answer": "Oprește-te și bucură-te de priveliște; e un reward mental care te ajută să-ți găsești ritmul natural în drumeție."
+    },
+    {
+      "query_id": "tips_and_tricks_05",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru pauza la marginea potecii?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_breaks_off_trail_74165abb496f",
+      "ideal_answer": "Află cum să iei o pauză pe potecă fără a deranja pe ceilalți sau a te pune în pericol."
+    },
+    {
+      "query_id": "tips_and_tricks_06",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru nodul jumătate de gură de pește la bățul de trekking?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_clove_hitch_on_pole_1a2792c04b35",
+      "ideal_answer": "Învață nodul jumătate de gură de pește pentru a fixa rapid obiecte de bățul tău de trekking în situații neprevăzute."
+    },
+    {
+      "query_id": "tips_and_tricks_07",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru busola si harta: Prietenii tai de nadejde pe munte?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_compass_with_map_fir_dceb24e47ac9",
+      "ideal_answer": "Telefonul e util, dar busola și harta sunt esențiale pentru orientare sigură pe munte, indiferent de condiții."
+    },
+    {
+      "query_id": "tips_and_tricks_08",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru șosete duble, fără bășici?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_double_socks_no_fric_2a898800b45e",
+      "ideal_answer": "Află cum două perechi de șosete te pot salva de bășici și disconfort în drumeții."
+    },
+    {
+      "query_id": "tips_and_tricks_09",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru pătura de supraviețuire: Izolator la somn în alpin?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_emergency_blanket_ex_7f8131e2fb43",
+      "ideal_answer": "Pătura de supraviețuire e un izolator termic excelent sub izopren, mai ales la cort în zona alpină, reflectând căldura corpului."
+    },
+    {
+      "query_id": "tips_and_tricks_10",
+      "domain": "tips_and_tricks",
+      "query": "Ai un sfat practic pentru haine uscate de schimb: esențiale în rucsac?",
+      "golden_chunk_id": "cg_tips_and_tricks_tip_emergency_dry_clothe_d3e0e11eb64b",
+      "ideal_answer": "Un set de haine uscate, sigilat etanș, este esențial în rucsac pentru orice drumeție, protejându-te de frig și disconfort."
+    },
+    {
+      "query_id": "survival_basics_01",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren nodul scaun (bowline): un nod de buzunar?",
+      "golden_chunk_id": "cg_survival_basics_nod_scaun_bowline_practi_ead27053bf52",
+      "ideal_answer": "Nodul scaun: buclă fixă care se desface ușor după sarcină — esențial pentru tarp, rucsac, sac cu mâncare."
+    },
+    {
+      "query_id": "survival_basics_02",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren singur, pe intuneric: cum iti pastrezi calmul?",
+      "golden_chunk_id": "cg_survival_basics_survival_alone_mental_f83a32f8655f",
+      "ideal_answer": "Cum să-ți păstrezi calmul și să iei decizii bune când te prinde întunericul singur pe munte."
+    },
+    {
+      "query_id": "survival_basics_03",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren igiena pe traseu: Wag bag și groapa de pisică?",
+      "golden_chunk_id": "cg_survival_basics_survival_bathroom_practi_5df9aba73e07",
+      "ideal_answer": "Află cum să gestionezi igiena personală în natură pentru a proteja mediul montan, folosind wag bag sau groapa de pisică."
+    },
+    {
+      "query_id": "survival_basics_04",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren fara basici: trucuri simple de la un mos montan?",
+      "golden_chunk_id": "cg_survival_basics_survival_blister_prevent_af2f6cdac473",
+      "ideal_answer": "Află cum să previi bășicile enervante cu sfaturi practice de la un drumeț cu experiență pe Carpați."
+    },
+    {
+      "query_id": "survival_basics_05",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren bivuac peste limita padurii: riscuri si cum sa le eviti?",
+      "golden_chunk_id": "cg_survival_basics_survival_camp_above_tree_a579dacbc6d3",
+      "ideal_answer": "Află cum să te pregătești pentru un bivuac sigur și confortabil deasupra limitei pădurii, evitând capcanele vremii și ale terenului."
+    },
+    {
+      "query_id": "survival_basics_06",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren frecarea coapselor: Scapă de ea pe trasee lungi?",
+      "golden_chunk_id": "cg_survival_basics_survival_chafing_prevent_bbb52e460fce",
+      "ideal_answer": "Află cum să previi iritația coapselor pe trasee lungi, folosind trucuri simple și echipament adecvat."
+    },
+    {
+      "query_id": "survival_basics_07",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren fara sac de dormit in noapte rece? Iata ce faci!?",
+      "golden_chunk_id": "cg_survival_basics_survival_cold_protection_ba81c0749507",
+      "ideal_answer": "Află cum să te protejezi de frig dacă rămâi peste noapte în munți fără sac de dormit, folosind resursele din jur și echipamentul pe care îl ai."
+    },
+    {
+      "query_id": "survival_basics_08",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren orientarea hartii cu busola: Pas cu pas?",
+      "golden_chunk_id": "cg_survival_basics_survival_compass_basic_u_93e2f90910ca",
+      "ideal_answer": "Învață cum să-ți orientezi harta cu ajutorul busolei, un pas esențial pentru navigarea sigură pe munte."
+    },
+    {
+      "query_id": "survival_basics_09",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren gestionarea panicii pe munte: tehnica 4-7-8?",
+      "golden_chunk_id": "cg_survival_basics_survival_dont_panic_209e4756ead3",
+      "ideal_answer": "Află cum să folosești tehnica de respirație 4-7-8 pentru a-ți gestiona panica și a te calma rapid în situații dificile pe munte."
+    },
+    {
+      "query_id": "survival_basics_10",
+      "domain": "survival_basics",
+      "query": "Cum mă ajută în teren decizii rapide pe potecă: Continuu, mă întorc sau aștept??",
+      "golden_chunk_id": "cg_survival_basics_survival_emergency_decis_cb56818278e6",
+      "ideal_answer": "Află cum să iei decizii rapide și sigure pe munte: să continui, să te întorci sau să aștepți, în funcție de situație."
+    }
+  ]
+}

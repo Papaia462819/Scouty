@@ -208,3 +208,87 @@ Decision:
 - Halted before Step 5 as required by the implementation brief.
 - Did not run the 60-query human-judged retrieval appropriateness gate because the domain-count gate already fails decisively.
 - Content generation/card authoring is out of scope for this migration pass and belongs to the separate content workstream.
+
+## Step 5 - expression-layer inversion (Tier B only)
+
+Status: implemented behind `RuntimeFeatureFlags.useCardParaphraseExpression = false`. Tier B conversational cards can now be routed through a local Qwen paraphrase layer when the flag is explicitly enabled. Tier A/strict cards still short-circuit to the existing response path.
+
+Pre-flight:
+- Commit `2740110`: fixed Romanian diacritics in the Qwen/runtime memory prompts, renamed misleading cache-hit telemetry to `prefix_key_stability_rate`, removed stale summary text, and landed the low-risk runtime/store cleanup from the review notes.
+
+Changed:
+- Extended `tools/knowledge_pipeline/build_knowledge_pack.py` so `--draft-source` can be repeated. The build now ingests both `tools/card_generator/approved/conversational` and `tools/card_generator/approved/strict`.
+- Normalized draft `tier` into `metadata_json` without adding a new SQLite column.
+- Generated `card_embeddings` rows for every `knowledge_chunks` row that did not already have the legacy campfire embedding, eliminating partial embedding coverage for Tier B domains.
+- Added `domain/expression/CardParaphraseEngine.kt`.
+  - It paraphrases only when the feature flag is on, the retrieved card has `metadata_json.tier == "B"`, and retrieval confidence is `HIGH` or `MEDIUM`.
+  - It builds a Romanian prompt from conversation context, device context, the verbatim card body, and the current query.
+  - It calls the local runtime with `temperature=0.4`, `top_p=0.9`, `max_tokens=180`, passing through the conversation prompt-cache hint.
+  - It rejects blank/oversized output and falls back if numeric/named/lead key-fact coverage is below 70%.
+- Wired the expression layer into `AssistantRepository` before the template/grounded wording paths.
+  - Standard retrieval uses the current top-1 retrieved card.
+  - The legacy campfire lane gets a flag-gated Tier B lookup against `campfire_basics` so the new approved conversational cards can be tested without changing flag-off behavior.
+- Added diagnostics fields in `AssistantDiagnostics`: `expression_invocation_count`, `expression_fallback_count`, `expression_token_latency_ms`, and `expression_skipped_tier_a_count`.
+- Added the 60-query Tier B bench files:
+  - `tools/benchmarks/expression_ro_queries.json`
+  - `tools/benchmarks/bench_expression_layer.py`
+  - `tools/benchmarks/expression_ro_results.json`
+
+Files touched:
+- `app/src/main/java/com/scouty/app/assistant/diagnostics/AssistantDiagnostics.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/AssistantRepository.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/AssistantRuntimeGraph.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/CampfireConversationEngine.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/expression/CardParaphraseEngine.kt`
+- `app/src/test/java/com/scouty/app/assistant/domain/AssistantRepositoryIntegrationTest.kt`
+- `app/src/test/java/com/scouty/app/assistant/domain/expression/CardParaphraseEngineTest.kt`
+- `app/src/main/scouty_assets/knowledge_pack.sqlite`
+- `app/src/main/scouty_assets/knowledge_pack_manifest.json`
+- `tools/knowledge_pipeline/build_knowledge_pack.py`
+- `tools/benchmarks/bench_expression_layer.py`
+- `tools/benchmarks/expression_ro_queries.json`
+- `tools/benchmarks/expression_ro_results.json`
+
+Knowledge-pack build:
+
+```powershell
+python tools\knowledge_pipeline\build_knowledge_pack.py `
+  --draft-source tools\card_generator\approved\conversational `
+  --draft-source tools\card_generator\approved\strict
+```
+
+Observed build output:
+- Approved drafts merged: 398 cards across 11 domains.
+- Tier B conversational cards: 388.
+- Tier A strict cards: 10.
+- `campfire_basics=61`, `gear_and_preparation=77`, `tips_and_tricks=58`, `survival_basics=49`.
+- Total `knowledge_chunks`: 2146.
+- Total `card_embeddings`: 2146.
+- Embedding orphans: 0.
+- `metadata_json.tier/tone`: `B/conversational=388`, `A/strict=10`.
+- Manifest/database SHA-256: `dd17ca435f1972ac84cf9a084253f70f3e233978915bdcc6f86f65d24705feb7`.
+
+Validation:
+- `./gradlew.bat testDebugUnitTest` passes.
+- `CardParaphraseEngineTest` covers Tier A skip, LOW-confidence skip, sanitization rejection, faithfulness rejection, successful pass-through, and key-fact extraction.
+- `AssistantRepositoryIntegrationTest.tierBExpressionFlag_usesParaphraseBeforeTemplate` verifies that the flag-on path returns a Tier B paraphrase before the template path.
+- `python tools\benchmarks\bench_expression_layer.py --json-out tools\benchmarks\expression_ro_results.json` ran on the rebuilt pack.
+
+Bench result:
+- Query count: 60.
+- Retrieval top-1 appropriateness: 100% on the title/lead-seeded Tier B bench.
+- Diacritic correctness on simulated ideal answers: 100%.
+- Faithfulness pass rate on simulated ideal answers: 43.3%.
+- Jina reranker host-side p50/p95: 1048.9 ms / 1130.0 ms in Python ONNXRuntime. This is not comparable to the Android Step 1 JNI/runtime latency gate.
+- Qwen expression latency p50/p95: not measured in this host bench.
+
+Deviation:
+- I used `ModelManager.generate(...)` directly from `CardParaphraseEngine` rather than `LocalLlmGenerationEngine`. `LocalLlmGenerationEngine` is still the legacy structured-JSON generator, so routing a free-form paraphrase through it would reintroduce the JSON meta-task Step 5 is explicitly removing.
+- The 60-query bench is generated from approved card titles/leads, not an independent human-judged regression set. It is useful as a deterministic smoke gate, but it is optimistic for retrieval appropriateness.
+- The host bench validates retrieval and the deterministic faithfulness checker only. It does not validate Qwen output quality or p95 expression latency through llama.cpp on a device.
+- The simulated `ideal_answer` strings are intentionally short leads, so the 70% card-body key-fact checker rejects many of them. That is a checker/content mismatch, not evidence that Qwen passed or failed.
+- Tier A paraphrasing remains blocked until strict coverage reaches the original gate. Future work should land as "Step 5b - Tier A paraphrasing" after strict ingest adds the missing medical/mountain-safety cards.
+
+Decision:
+- Do not flip `useCardParaphraseExpression` default yet.
+- The code path is ready for opt-in device validation with Qwen, but the Step 5 ship gate is not fully met until Qwen expression p95 and real generated faithfulness are measured on the dev target.

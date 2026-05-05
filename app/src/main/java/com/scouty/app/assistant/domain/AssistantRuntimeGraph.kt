@@ -4,6 +4,8 @@ import android.content.Context
 import com.scouty.app.assistant.data.ConversationStore
 import com.scouty.app.assistant.data.KnowledgePackManager
 import com.scouty.app.assistant.data.SqliteKnowledgeChunkStore
+import com.scouty.app.assistant.domain.expression.CardParaphraseEngine
+import com.scouty.app.assistant.domain.expression.ModelManagerCardParaphraseModel
 import com.scouty.app.assistant.domain.memory.ConversationContextAssembler
 import com.scouty.app.assistant.domain.memory.SummaryCompactor
 import com.scouty.app.assistant.domain.retrieval.CrossEncoderReranker
@@ -53,6 +55,11 @@ class AssistantRuntimeGraph private constructor(
         modelManager = modelManager,
         fallbackEngine = fallbackEngine
     )
+    private val cardParaphraseEngine = if (featureFlags.useCardParaphraseExpression) {
+        CardParaphraseEngine(ModelManagerCardParaphraseModel(modelManager))
+    } else {
+        null
+    }
     private val trailContextEngine = TrailContextEngine()
 
     val repository = AssistantRepository(
@@ -68,7 +75,9 @@ class AssistantRuntimeGraph private constructor(
         crossEncoderReranker = crossEncoderReranker,
         conversationStore = conversationStore,
         conversationContextAssembler = conversationContextAssembler,
-        summaryCompactor = summaryCompactor
+        summaryCompactor = summaryCompactor,
+        cardParaphraseEngine = cardParaphraseEngine,
+        useCardParaphraseExpression = featureFlags.useCardParaphraseExpression
     )
 
     companion object {

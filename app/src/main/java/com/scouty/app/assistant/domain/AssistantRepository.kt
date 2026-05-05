@@ -12,6 +12,8 @@ import com.scouty.app.assistant.data.buildSearchTokens
 import com.scouty.app.assistant.domain.memory.ConversationContextAssembler
 import com.scouty.app.assistant.domain.memory.ConversationHistory
 import com.scouty.app.assistant.domain.memory.SummaryCompactor
+import com.scouty.app.assistant.domain.expression.CardParaphraseEngine
+import com.scouty.app.assistant.domain.expression.CardParaphraseRequest
 import com.scouty.app.assistant.domain.retrieval.CrossEncoderReranker
 import com.scouty.app.assistant.model.AssistantConversationState
 import com.scouty.app.assistant.model.AssistantCitation
@@ -53,7 +55,9 @@ data class RetrievedChunk(
     val sourceTrust: Int = 0,
     val publishOrReviewDate: String? = null,
     val safetyTags: List<String> = emptyList(),
-    val packVersion: String? = null
+    val packVersion: String? = null,
+    val cardFamily: CardFamily? = null,
+    val metadataJson: String? = null
 )
 
 data class AssistantPrompt(
@@ -79,6 +83,11 @@ data class GenerationInput(
 private data class ConversationMemorySession(
     val conversationId: String,
     val history: ConversationHistory
+)
+
+private data class ExpressionLayerResult(
+    val output: StructuredAssistantOutput,
+    val retrievedChunks: List<RetrievedChunk>
 )
 
 class QueryAnalyzer {
@@ -566,7 +575,9 @@ class RetrievalEngine(
                 sourceTrust = candidate.sourceTrust,
                 publishOrReviewDate = candidate.publishOrReviewDate,
                 safetyTags = candidate.safetyTags,
-                packVersion = candidate.packVersion
+                packVersion = candidate.packVersion,
+                cardFamily = candidate.cardFamily,
+                metadataJson = candidate.metadataJson
             )
         }.sortedByDescending { it.score }
 
@@ -1052,7 +1063,9 @@ class AssistantRepository(
     private val trailContextEngine: TrailContextEngine = TrailContextEngine(),
     private val conversationStore: ConversationStore? = null,
     private val conversationContextAssembler: ConversationContextAssembler? = conversationStore?.let(::ConversationContextAssembler),
-    private val summaryCompactor: SummaryCompactor? = conversationStore?.let(::SummaryCompactor)
+    private val summaryCompactor: SummaryCompactor? = conversationStore?.let(::SummaryCompactor),
+    private val cardParaphraseEngine: CardParaphraseEngine? = null,
+    private val useCardParaphraseExpression: Boolean = false
 ) {
     private var sessionConversationId: String = "session:${UUID.randomUUID()}"
 
@@ -1281,8 +1294,26 @@ class AssistantRepository(
             initial
         }
 
-        val safetyOutcome = medicalSafetyPolicy.evaluate(query, finalCampfire.retrievedChunks, context)
-        val wordedOutput = applyCampfireWordingIfSafe(
+        val expressionResult = maybeBuildExpressionResult(
+            query = query,
+            context = context,
+            analysis = queryAnalysis,
+            retrievedChunks = finalCampfire.retrievedChunks,
+            confidence = finalCampfire.retrievalConfidence,
+            knowledgePackStatus = packStatus,
+            conversationHistory = conversationHistory
+        ) ?: maybeBuildCampfireTierBExpressionResult(
+            query = query,
+            context = context,
+            queryAnalysis = queryAnalysis,
+            conversationState = conversationState,
+            preprocessing = preprocessing,
+            packStatus = packStatus,
+            conversationHistory = conversationHistory
+        )
+        val responseRetrievedChunks = expressionResult?.retrievedChunks ?: finalCampfire.retrievedChunks
+        val safetyOutcome = medicalSafetyPolicy.evaluate(query, responseRetrievedChunks, context)
+        val wordedOutput = expressionResult?.output ?: applyCampfireWordingIfSafe(
             query = query,
             preferredLanguage = queryAnalysis.preferredLanguage,
             structuredOutput = finalCampfire.structuredOutput,
@@ -1296,14 +1327,26 @@ class AssistantRepository(
             isRomanian = queryAnalysis.preferredLanguage == "ro"
         )
         val modelStatus = modelManager.currentStatus()
+        val responseConversationState = expressionResult
+            ?.retrievedChunks
+            ?.firstOrNull()
+            ?.let { chunk ->
+                finalCampfire.conversationState.copy(
+                    lastRetrievedChunkId = chunk.chunkId,
+                    lastRetrievedTopic = chunk.topic,
+                    lastRetrievedTitle = chunk.sectionTitle,
+                    lastInterpretationConfidence = finalCampfire.retrievalConfidence.score
+                )
+            }
+            ?: finalCampfire.conversationState
         return AssistantResponse(
             answerText = buildDisplayText(structuredOutput, safetyOutcome),
             structuredOutput = structuredOutput,
-            citations = buildCitations(queryAnalysis, context, finalCampfire.retrievedChunks),
+            citations = buildCitations(queryAnalysis, context, responseRetrievedChunks),
             safetyOutcome = safetyOutcome,
             generationMode = structuredOutput.generationMode,
             reasoningType = structuredOutput.reasoningType,
-            conversationState = finalCampfire.conversationState,
+            conversationState = responseConversationState,
             modelVersion = modelStatus.modelVersion.takeIf { modelStatus.availableOnDisk },
             modelRuntimeState = modelStatus.state,
             modelStatusDetails = modelStatus.details,
@@ -1351,6 +1394,7 @@ class AssistantRepository(
 
         var finalAnalysis = initialAnalysis
         var finalRetrieved = initialRetrieved
+        var finalAssessment = initialAssessment
         var acceptedInterpretation: ValidatedInterpretation? = null
         if (gateDecision.shouldInvoke) {
             val interpretation = attemptValidatedInterpretation(
@@ -1387,6 +1431,7 @@ class AssistantRepository(
                 ) {
                     finalAnalysis = candidateAnalysis
                     finalRetrieved = candidateRetrieved
+                    finalAssessment = candidateAssessment
                     acceptedInterpretation = interpretation
                 }
             }
@@ -1399,21 +1444,31 @@ class AssistantRepository(
             queryAnalysis = finalAnalysis
         )
         val safetyOutcome = medicalSafetyPolicy.evaluate(query, finalRetrieved, context)
+        val expressionResult = maybeBuildExpressionResult(
+            query = query,
+            context = context,
+            analysis = finalAnalysis,
+            retrievedChunks = finalRetrieved,
+            confidence = finalAssessment,
+            knowledgePackStatus = packStatus,
+            conversationHistory = conversationHistory
+        )
         val structuredOutput = medicalSafetyPolicy.applyFinalGuardrails(
-            output = generationEngine.generate(
-                GenerationInput(
-                    query = query,
-                    prompt = prompt,
-                    queryAnalysis = finalAnalysis,
-                    retrievedChunks = finalRetrieved,
-                    context = context,
-                    safetyOutcome = safetyOutcome,
-                    generationMode = generationMode,
-                    modelStatus = modelStatus,
-                    knowledgePackStatus = packStatus,
-                    conversationHistory = conversationHistory
-                )
-            ),
+            output = expressionResult?.output
+                ?: generationEngine.generate(
+                    GenerationInput(
+                        query = query,
+                        prompt = prompt,
+                        queryAnalysis = finalAnalysis,
+                        retrievedChunks = finalRetrieved,
+                        context = context,
+                        safetyOutcome = safetyOutcome,
+                        generationMode = generationMode,
+                        modelStatus = modelStatus,
+                        knowledgePackStatus = packStatus,
+                        conversationHistory = conversationHistory
+                    )
+                ),
             safetyOutcome = safetyOutcome,
             isRomanian = finalAnalysis.preferredLanguage == "ro"
         )
@@ -1448,6 +1503,93 @@ class AssistantRepository(
             modelStatusDetails = finalModelStatus.details,
             knowledgePackVersion = structuredOutput.knowledgePackVersion,
             usedFallback = structuredOutput.generationMode == GenerationMode.FALLBACK_STRUCTURED
+        )
+    }
+
+    private suspend fun maybeBuildExpressionResult(
+        query: String,
+        context: DeviceContextSnapshot,
+        analysis: QueryAnalysis,
+        retrievedChunks: List<RetrievedChunk>,
+        confidence: RetrievalConfidenceAssessment,
+        knowledgePackStatus: KnowledgePackStatus,
+        conversationHistory: ConversationHistory?
+    ): ExpressionLayerResult? {
+        val engine = cardParaphraseEngine ?: return null
+        if (!useCardParaphraseExpression) {
+            return null
+        }
+        val primary = retrievedChunks.firstOrNull() ?: return null
+        val paraphrased = engine.maybeParaphrase(
+            CardParaphraseRequest(
+                featureEnabled = useCardParaphraseExpression,
+                chunk = primary,
+                userQuery = query,
+                confidenceTier = confidence.tier,
+                deviceContext = context,
+                conversationHistory = conversationHistory
+            )
+        ) ?: return null
+        val modelStatus = modelManager.currentStatus()
+        return ExpressionLayerResult(
+            output = StructuredAssistantOutput(
+                summary = paraphrased.text,
+                sections = emptyList(),
+                generationMode = GenerationMode.LOCAL_LLM,
+                reasoningType = analysis.reasoningType,
+                resolvedTopic = primary.topic,
+                resolvedFamily = primary.cardFamily,
+                modelVersion = modelStatus.modelVersion.takeIf {
+                    modelStatus.availableOnDisk || modelStatus.state != ModelRuntimeState.MISSING
+                },
+                knowledgePackVersion = knowledgePackStatus.packVersion ?: primary.packVersion
+            ),
+            retrievedChunks = retrievedChunks
+        )
+    }
+
+    private suspend fun maybeBuildCampfireTierBExpressionResult(
+        query: String,
+        context: DeviceContextSnapshot,
+        queryAnalysis: QueryAnalysis,
+        conversationState: AssistantConversationState,
+        preprocessing: DeterministicPreprocessingResult,
+        packStatus: KnowledgePackStatus,
+        conversationHistory: ConversationHistory?
+    ): ExpressionLayerResult? {
+        if (!useCardParaphraseExpression || cardParaphraseEngine == null) {
+            return null
+        }
+        val expressionAnalysis = queryAnalysis.copy(
+            domainHints = (
+                listOf(DomainHint("campfire_basics", 5.0)) +
+                    queryAnalysis.domainHints.filterNot { it.domain == "field_know_how" || it.domain == "campfire_basics" }
+                ).take(3),
+            knowledgeLane = ConversationLane.STANDARD,
+            resolvedTopic = null,
+            targetFamily = null
+        )
+        val retrieved = retrievalEngine.retrieve(
+            query = query,
+            context = context,
+            queryAnalysis = expressionAnalysis,
+            limit = 4
+        )
+        val assessment = retrievalConfidencePolicy.assessStandard(
+            query = query,
+            queryAnalysis = expressionAnalysis,
+            conversationState = conversationState,
+            retrieved = retrieved,
+            preprocessing = preprocessing
+        )
+        return maybeBuildExpressionResult(
+            query = query,
+            context = context,
+            analysis = expressionAnalysis,
+            retrievedChunks = retrieved,
+            confidence = assessment,
+            knowledgePackStatus = packStatus,
+            conversationHistory = conversationHistory
         )
     }
 

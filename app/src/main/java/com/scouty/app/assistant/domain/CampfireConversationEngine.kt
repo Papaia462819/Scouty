@@ -1588,7 +1588,9 @@ class CampfireConversationEngine(
             sourceTrust = 0,
             publishOrReviewDate = chunk.publishOrReviewDate,
             safetyTags = chunk.safetyTags,
-            packVersion = chunk.packVersion
+            packVersion = chunk.packVersion,
+            cardFamily = chunk.cardFamily,
+            metadataJson = chunk.metadataJson
         )
 
     private companion object {
