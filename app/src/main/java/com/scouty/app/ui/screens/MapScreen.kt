@@ -68,6 +68,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -592,25 +593,47 @@ fun MapScreen(
                                 },
                                 expanded = isSearchExpanded,
                                 onExpandedChange = { isSearchExpanded = it },
-                                placeholder = { Text(stringResource(R.string.map_search_placeholder)) },
-                                leadingIcon = { Icon(Lucide.Search, contentDescription = null) },
+                                placeholder = {
+                                    Text(
+                                        text = stringResource(R.string.map_search_placeholder),
+                                        color = TextMuted,
+                                    )
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        Lucide.Search,
+                                        contentDescription = null,
+                                        tint = if (isSearchExpanded) AccentGreen else TextTertiary,
+                                    )
+                                },
                                 trailingIcon = {
                                     if (isSearchExpanded) {
                                         IconButton(onClick = {
                                             if (searchText.isNotEmpty()) searchText = "" else isSearchExpanded = false
                                         }) {
-                                            Icon(Lucide.X, contentDescription = null)
+                                            Icon(Lucide.X, contentDescription = null, tint = TextSecondary)
                                         }
                                     } else {
                                         IconButton(onClick = { showLayerMenu = !showLayerMenu }) {
                                             Icon(
                                                 Lucide.Layers,
                                                 contentDescription = null,
-                                                tint = MaterialTheme.colorScheme.primary
+                                                tint = AccentGreen,
                                             )
                                         }
                                     }
-                                }
+                                },
+                                colors = SearchBarDefaults.inputFieldColors(
+                                    focusedTextColor = TextPrimary,
+                                    unfocusedTextColor = TextPrimary,
+                                    cursorColor = AccentGreen,
+                                    focusedPlaceholderColor = TextMuted,
+                                    unfocusedPlaceholderColor = TextMuted,
+                                    focusedLeadingIconColor = AccentGreen,
+                                    unfocusedLeadingIconColor = TextTertiary,
+                                    focusedTrailingIconColor = TextSecondary,
+                                    unfocusedTrailingIconColor = AccentGreen,
+                                ),
                             )
                         },
                         expanded = isSearchExpanded,
@@ -620,7 +643,8 @@ fun MapScreen(
                             .padding(top = if (isSearchExpanded) 0.dp else 16.dp)
                             .fillMaxWidth(if (isSearchExpanded) 1f else 0.92f),
                         colors = SearchBarDefaults.colors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.96f)
+                            containerColor = if (isSearchExpanded) BgPrimary.copy(alpha = 0.98f) else BgSurfaceRaised.copy(alpha = 0.94f),
+                            dividerColor = BorderSubtle,
                         )
                     ) {
                         LazyColumn(
@@ -650,10 +674,10 @@ fun MapScreen(
                                         Icon(
                                             Lucide.History,
                                             contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                            tint = TextTertiary,
                                         )
                                         Spacer(modifier = Modifier.width(16.dp))
-                                        Text(text = historyItem)
+                                        Text(text = historyItem, color = TextSecondary)
                                     }
                                 }
                             }
@@ -662,7 +686,7 @@ fun MapScreen(
                                 item {
                                     Text(
                                         text = "Nu am gasit trasee pentru \"$searchText\".",
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        color = TextSecondary,
                                     )
                                 }
                             }
@@ -677,7 +701,7 @@ fun MapScreen(
                             .padding(top = 80.dp, end = 16.dp)
                             .width(220.dp),
                         shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                        colors = CardDefaults.cardColors(containerColor = BgSurfaceRaised.copy(alpha = 0.96f))
                     ) {
                         Column(modifier = Modifier.padding(8.dp)) {
                             toggleItems.forEach { toggle ->
@@ -2030,7 +2054,7 @@ private fun RouteSuggestionItem(
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.84f)
+            containerColor = BgSurfaceRaised.copy(alpha = 0.96f)
         )
     ) {
         Row(
@@ -2057,13 +2081,13 @@ private fun RouteSuggestionItem(
                         .width(if (showPreviewImage) 76.dp else 44.dp)
                         .height(if (showPreviewImage) 76.dp else 44.dp)
                         .clip(RoundedCornerShape(18.dp))
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)),
+                        .background(AccentGreen.copy(alpha = 0.16f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Lucide.Route,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = AccentGreen
                     )
                 }
             }
@@ -2075,6 +2099,7 @@ private fun RouteSuggestionItem(
                 Text(
                     text = entry.displayTitle ?: suggestion.localCode,
                     style = MaterialTheme.typography.titleSmall,
+                    color = TextPrimary,
                     fontWeight = FontWeight.Medium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -2083,7 +2108,7 @@ private fun RouteSuggestionItem(
                     Text(
                         text = metadata,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = TextTertiary,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -2092,7 +2117,7 @@ private fun RouteSuggestionItem(
                     Text(
                         text = stats,
                         style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary
+                        color = AccentGreen
                     )
                 }
             }
@@ -2137,8 +2162,20 @@ private fun LayerToggleRow(label: String, checked: Boolean, onCheckedChange: (Bo
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = label, style = MaterialTheme.typography.labelMedium)
-        Checkbox(checked = checked, onCheckedChange = onCheckedChange)
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = TextSecondary,
+        )
+        Checkbox(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            colors = CheckboxDefaults.colors(
+                checkedColor = AccentGreen,
+                uncheckedColor = TextTertiary,
+                checkmarkColor = AccentGreenOnSurface,
+            ),
+        )
     }
 }
 
