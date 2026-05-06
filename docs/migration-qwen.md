@@ -290,8 +290,8 @@ Deviation:
 - Tier A paraphrasing remains blocked until strict coverage reaches the original gate. Future work should land as "Step 5b - Tier A paraphrasing" after strict ingest adds the missing medical/mountain-safety cards.
 
 Decision:
-- Do not flip `useCardParaphraseExpression` default yet.
-- The code path is ready for opt-in device validation with Qwen, but the Step 5 ship gate is not fully met until Qwen expression p95 and real generated faithfulness are measured on the dev target.
+- The Step 5 code path was initially kept opt-in because Qwen expression p95 and real generated faithfulness still need device measurement.
+- After the validation-profile flip, `useCardParaphraseExpression` now defaults to `true` so it can be tested in the app. This is not a production-readiness claim.
 
 ## Step 6 - grammar-constrained tool calling
 
@@ -352,4 +352,39 @@ Deviation:
 Conversational readiness:
 - The app now has the intended conversational skeleton: deterministic retrieval/rerank, memory, Qwen expression layer for Tier B, and grammar-constrained tool routing for ambiguous turns.
 - It is not yet safe to call the full conversational model "production-ready" because the two Qwen-dependent gates remain unmeasured on device: Step 5 real paraphrase faithfulness/latency and Step 6 real 50-query GBNF validity.
-- Recommended flag state remains default off for `useCardParaphraseExpression` and `useGrammarToolCalling` until those device gates pass.
+- The validation profile now defaults `useCardParaphraseExpression` and `useGrammarToolCalling` to `true` so those gates can be tested end to end. Keep this distinction clear when reading benchmark results.
+
+## Qwen validation profile - defaults enabled
+
+Status: enabled for app-level validation. This deliberately changes the default profile from staged/off to Qwen-first/on so the new runtime can be tested before deleting the legacy code.
+
+Changed:
+- `RuntimeFeatureFlags` now defaults to the Qwen path:
+  - `useCrossEncoderReranker = true`
+  - `useLlamaCpp = true`
+  - `useConversationMemory = true`
+  - `useLlmSummarizer = true`
+  - `useQwenDefault = true`
+  - `useCardParaphraseExpression = true`
+  - `useGrammarToolCalling = true`
+  - `useLegacyInterpreter = false`
+- Direct `AssistantRepository(context)` construction now follows the same defaults as `AssistantRuntimeGraph`, including Qwen `ModelManager`, Jina reranker, conversation memory, Tier B expression, and grammar tool-calling.
+- Legacy interpreter integration tests now opt into `useLegacyInterpreter = true` and `useGrammarToolCalling = false` explicitly. This keeps the old path testable without making it the app default.
+- Added `RuntimeFeatureFlagsTest.defaultsEnableQwenValidationPath` to lock the requested default profile.
+
+Files touched:
+- `app/src/main/java/com/scouty/app/assistant/domain/AssistantRuntimeGraph.kt`
+- `app/src/main/java/com/scouty/app/assistant/domain/AssistantRepository.kt`
+- `app/src/test/java/com/scouty/app/assistant/domain/AssistantRepositoryInterpretationIntegrationTest.kt`
+- `app/src/test/java/com/scouty/app/assistant/domain/CampfireConversationIntegrationTest.kt`
+- `app/src/test/java/com/scouty/app/assistant/domain/RuntimeFeatureFlagsTest.kt`
+- `docs/local-llm-runtime.md`
+- `docs/migration-qwen.md`
+
+Validation:
+- `./gradlew.bat testDebugUnitTest` passes.
+- `./gradlew.bat :app:assembleDebug` passes.
+
+Deviation:
+- `useLlmSummarizer` is now `true` for validation consistency, but `SummaryCompactor` still performs deterministic compaction. Treat this flag as pre-wired until an actual LLM summarizer lands.
+- Legacy MediaPipe/Gemma code is still present. It is disabled by default, not deleted, so validation can compare behavior or roll back if the Qwen path exposes a blocker.

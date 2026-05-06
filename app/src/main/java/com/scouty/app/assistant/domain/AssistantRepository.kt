@@ -14,8 +14,10 @@ import com.scouty.app.assistant.domain.memory.ConversationHistory
 import com.scouty.app.assistant.domain.memory.SummaryCompactor
 import com.scouty.app.assistant.domain.expression.CardParaphraseEngine
 import com.scouty.app.assistant.domain.expression.CardParaphraseRequest
+import com.scouty.app.assistant.domain.expression.ModelManagerCardParaphraseModel
 import com.scouty.app.assistant.domain.retrieval.CrossEncoderReranker
 import com.scouty.app.assistant.domain.tools.GrammarToolCallPlanner
+import com.scouty.app.assistant.domain.tools.ModelManagerToolCallModel
 import com.scouty.app.assistant.domain.tools.ToolDispatchRequest
 import com.scouty.app.assistant.domain.tools.ToolDispatchResult
 import com.scouty.app.assistant.domain.tools.ToolDispatcher
@@ -1043,14 +1045,16 @@ class AssistantRepository(
     private val interpreterGate: InterpreterGate = InterpreterGate(retrievalConfidencePolicy),
     private val translationEngine: OnDeviceTranslationEngine = OnDeviceTranslationEngine(),
     private val interpreterPromptBuilder: InterpreterPromptBuilder = InterpreterPromptBuilder(translationEngine),
-    private val crossEncoderReranker: CrossEncoderReranker? = null,
+    private val featureFlags: RuntimeFeatureFlags = RuntimeFeatureFlags(),
+    private val crossEncoderReranker: CrossEncoderReranker? =
+        context?.takeIf { featureFlags.useCrossEncoderReranker }?.let(::CrossEncoderReranker),
     private val campfireConversationEngine: CampfireConversationEngine = CampfireConversationEngine(
         knowledgeStore = knowledgeStore,
         confidencePolicy = retrievalConfidencePolicy,
         crossEncoderReranker = crossEncoderReranker
     ),
     private val promptBuilder: PromptBuilder = PromptBuilder(),
-    private val modelManager: ModelManager = context?.let(::ModelManager)
+    private val modelManager: ModelManager = context?.let { ModelManager(it, featureFlags) }
         ?: error("modelManager is required when context is null"),
     private val slmInterpreterEngine: SlmInterpreterEngine = OnDeviceSlmInterpreterEngine(
         modelManager = modelManager,
@@ -1065,15 +1069,39 @@ class AssistantRepository(
     ),
     private val medicalSafetyPolicy: MedicalSafetyPolicy = MedicalSafetyPolicy(),
     private val trailContextEngine: TrailContextEngine = TrailContextEngine(),
-    private val conversationStore: ConversationStore? = null,
+    private val conversationStore: ConversationStore? =
+        context?.takeIf { featureFlags.useConversationMemory }?.let(::ConversationStore),
     private val conversationContextAssembler: ConversationContextAssembler? = conversationStore?.let(::ConversationContextAssembler),
-    private val summaryCompactor: SummaryCompactor? = conversationStore?.let(::SummaryCompactor),
-    private val cardParaphraseEngine: CardParaphraseEngine? = null,
-    private val useCardParaphraseExpression: Boolean = false,
-    private val toolCallPlanner: GrammarToolCallPlanner? = null,
-    private val toolDispatcher: ToolDispatcher? = null,
-    private val useGrammarToolCalling: Boolean = false,
-    private val useLegacyInterpreter: Boolean = true
+    private val summaryCompactor: SummaryCompactor? = conversationStore?.let {
+        SummaryCompactor(
+            store = it,
+            useLlmSummarizer = featureFlags.useLlmSummarizer
+        )
+    },
+    private val cardParaphraseEngine: CardParaphraseEngine? =
+        if (featureFlags.useCardParaphraseExpression) {
+            CardParaphraseEngine(ModelManagerCardParaphraseModel(modelManager))
+        } else {
+            null
+        },
+    private val useCardParaphraseExpression: Boolean = featureFlags.useCardParaphraseExpression,
+    private val toolCallPlanner: GrammarToolCallPlanner? =
+        if (featureFlags.useGrammarToolCalling) {
+            GrammarToolCallPlanner(ModelManagerToolCallModel(modelManager))
+        } else {
+            null
+        },
+    private val toolDispatcher: ToolDispatcher? =
+        if (featureFlags.useGrammarToolCalling) {
+            ToolDispatcher(
+                retrievalEngine = retrievalEngine,
+                queryAnalyzer = queryAnalyzer
+            )
+        } else {
+            null
+        },
+    private val useGrammarToolCalling: Boolean = featureFlags.useGrammarToolCalling,
+    private val useLegacyInterpreter: Boolean = featureFlags.useLegacyInterpreter
 ) {
     private var sessionConversationId: String = "session:${UUID.randomUUID()}"
 

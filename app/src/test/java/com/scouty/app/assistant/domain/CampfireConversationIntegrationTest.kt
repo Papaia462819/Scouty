@@ -543,7 +543,9 @@ class CampfireConversationIntegrationTest {
                 ),
                 fallbackEngine = TemplateGenerationEngine()
             ),
-            medicalSafetyPolicy = MedicalSafetyPolicy()
+            medicalSafetyPolicy = MedicalSafetyPolicy(),
+            useGrammarToolCalling = false,
+            useLegacyInterpreter = true
         )
     }
 

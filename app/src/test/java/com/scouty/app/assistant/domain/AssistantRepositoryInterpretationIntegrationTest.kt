@@ -237,7 +237,9 @@ class AssistantRepositoryInterpretationIntegrationTest {
             slmInterpreterEngine = interpreterEngine,
             groundedWordingEngine = NoopGroundedWordingEngine,
             generationEngine = TemplateGenerationEngine(),
-            medicalSafetyPolicy = MedicalSafetyPolicy()
+            medicalSafetyPolicy = MedicalSafetyPolicy(),
+            useGrammarToolCalling = false,
+            useLegacyInterpreter = true
         )
 
     private fun chunk(

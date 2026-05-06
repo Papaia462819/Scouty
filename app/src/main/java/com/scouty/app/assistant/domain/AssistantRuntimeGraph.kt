@@ -14,14 +14,14 @@ import com.scouty.app.assistant.domain.tools.ModelManagerToolCallModel
 import com.scouty.app.assistant.domain.tools.ToolDispatcher
 
 data class RuntimeFeatureFlags(
-    val useCrossEncoderReranker: Boolean = false,
-    val useLlamaCpp: Boolean = false,
-    val useConversationMemory: Boolean = false,
-    val useLlmSummarizer: Boolean = false,
-    val useQwenDefault: Boolean = false,
-    val useCardParaphraseExpression: Boolean = false,
-    val useGrammarToolCalling: Boolean = false,
-    val useLegacyInterpreter: Boolean = true
+    val useCrossEncoderReranker: Boolean = true,
+    val useLlamaCpp: Boolean = true,
+    val useConversationMemory: Boolean = true,
+    val useLlmSummarizer: Boolean = true,
+    val useQwenDefault: Boolean = true,
+    val useCardParaphraseExpression: Boolean = true,
+    val useGrammarToolCalling: Boolean = true,
+    val useLegacyInterpreter: Boolean = false
 )
 
 class AssistantRuntimeGraph private constructor(
@@ -79,6 +79,7 @@ class AssistantRuntimeGraph private constructor(
     private val trailContextEngine = TrailContextEngine()
 
     val repository = AssistantRepository(
+        featureFlags = featureFlags,
         knowledgePackManager = knowledgePackManager,
         knowledgeStore = knowledgeStore,
         queryAnalyzer = queryAnalyzer,

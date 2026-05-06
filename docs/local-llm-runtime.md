@@ -18,10 +18,15 @@ Scouty now ships with a production-shaped on-device LLM runtime path that keeps 
 
 `AssistantRuntimeGraph` owns runtime selection through `RuntimeFeatureFlags`.
 
-- `useLlamaCpp = false` keeps the legacy MediaPipe/Gemma path active.
 - `useLlamaCpp = true` enables Qwen GGUF discovery and loads through the llama.cpp JNI adapter.
+- `useQwenDefault = true` makes Qwen the preferred local model family.
+- `useCrossEncoderReranker = true` enables the Jina ONNX reranker.
+- `useConversationMemory = true` enables the SQLite-backed conversation memory store.
+- `useCardParaphraseExpression = true` routes eligible Tier B cards through the Qwen expression layer.
+- `useGrammarToolCalling = true` routes ambiguous turns through grammar-constrained tool calling.
+- `useLegacyInterpreter = false` disables the old Gemma-style rewrite/7-field JSON interpreter by default.
 
-The flag defaults to `false` while the Qwen migration is staged.
+The default validation profile now opts into the Qwen/llama.cpp path. MediaPipe/Gemma remains in the codebase only as an explicit legacy fallback during validation.
 
 ## Supported model bundles
 
@@ -64,7 +69,7 @@ When `useLlamaCpp = true`, Scouty scans these Qwen locations:
 2. External app storage:
    - `Context.getExternalFilesDir(null)/models/qwen-2.5-1.5b/`
 
-When `useLlamaCpp = false`, Scouty scans these Gemma locations:
+When `useLlamaCpp = false` is explicitly selected for legacy validation, Scouty scans these Gemma locations:
 
 1. Internal no-backup storage:
    - `Context.noBackupFilesDir/models/gemma-3-1b/`
@@ -75,7 +80,7 @@ In practice, the validated emulator flow pushes the bundle straight into interna
 
 ## Recommended debug install flow
 
-When emulator storage is tight, use the reinstall helper. It rebuilds the debug APKs, uninstalls the previous app package, reinstalls with `adb install --streaming`, re-grants runtime permissions, reloads Gemma into internal storage, reloads map packs, and prints the exact on-device package size report:
+When emulator storage is tight, use the reinstall helper. It rebuilds the debug APKs, uninstalls the previous app package, reinstalls with `adb install --streaming`, re-grants runtime permissions, reloads app assets, reloads map packs, and prints the exact on-device package size report:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tools\reinstall_debug_with_assets.ps1
@@ -155,7 +160,7 @@ Scouty falls back to `TemplateGenerationEngine` when:
 - model import/preparation fails
 - runtime initialization fails
 - local generation fails
-- the model response does not match Scouty’s structured JSON schema
+- the model response does not satisfy the active grammar, tool-call parser, or grounding checks
 
 Fallback still preserves:
 
@@ -168,7 +173,8 @@ Fallback still preserves:
 ## Current limitations
 
 - The model bundle is not stored in the repo and is not packaged in the APK.
-- MediaPipe/Gemma remains available as the legacy fallback path.
+- MediaPipe/Gemma remains available only as an explicit legacy fallback path.
+- `useLlmSummarizer` is enabled in the validation profile, but summary compaction is still deterministic until an LLM summarizer implementation is wired.
 - llama.cpp prompt-cache support is currently a single in-process prefix cache; Step 3 provides stable system + summary cache keys.
 - Generation is text-only for this integration slice. Retrieval and truth remain in the knowledge pack and trail context.
 - GPU backend is not viable on the current emulator image because the required OpenCL stack is missing; the validated runtime path is CPU.
