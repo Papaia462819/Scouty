@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_morning_socks_test_79ba03d8bb99",
+  "card_id": "cg_tips_and_tricks_tip_morning_socks_test_79ba03d8bb99",
+  "domain": "tips_and_tricks",
+  "topic": "tip_morning_socks_test",
+  "language": "ro",
+  "title": "Șosetele umede dimineața? Schimbă-le!",
+  "body": "Băi, știi vorba aia, mai bine previi decât să tratezi. Dimineața, înainte să te încalți, bagă mâna în bocanc și verifică șosetele de rezervă. Dacă le-ai lăsat la uscat peste noapte și sunt încă umede, nu te zgârci! Pune altele uscate. Știu, sună banal, dar picioarele tale îți vor mulțumi. Am văzut destui \"eroi\" care au plecat cu șosete \"aproape uscate\" și s-au ales cu bătături de toată frumusețea după primele ore. O pereche de șosete uscate face minuni pentru confort și pentru a preveni problemele. Nu uita, ai mereu o pereche de rezervă, bine împachetată.",
+  "lead": "Verifică șosetele de rezervă dimineața; dacă sunt umede, schimbă-le pentru a evita bătăturile și disconfortul.",
+  "keywords": "șosete bocanci picioare bătături echipament confort drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Verifică șosetele de rezervă dimineața; dacă sunt umede, schimbă-le pentru a evita bătăturile și disconfortul.",
+    "seed_topic": "Test de șosete dimineața: dacă sunt umede încă, schimbă-le",
+    "seed_topic_slug": "tip_morning_socks_test"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_wood_size_98999cba7cb6",
+  "card_id": "cg_campfire_basics_fire_wood_size_98999cba7cb6",
+  "domain": "campfire_basics",
+  "topic": "fire_wood_size",
+  "language": "ro",
+  "title": "Lemnele pentru foc: mărimea contează!",
+  "body": "Salut, prietene! Când faci un foc de drumeție, mărimea lemnelor e crucială. Pentru început, ai nevoie de bețe subțiri, cam cât degetul mare, care să se aprindă repede. Astea sunt \"starterele\". Apoi, treci la crengi mai groase, cât încheietura mâinii, care ard constant și fac jar. Evită buștenii mari; ard greu, fumegă și consumă inutil resurse. Gândește-te la un foc eficient, nu la un rug de tabără. Un foc mic, bine întreținut, e mai util și mai sigur. Plus că nu vrei să cari după tine un trunchi de copac, nu? Alege cu cap, ca să ai căldură și lumină fără bătăi de cap.",
+  "lead": "Află ce dimensiuni de lemne sunt optime pentru un foc de drumeție eficient și sigur.",
+  "keywords": "lemne foc marime lemne foc drumetie crengi foc jar",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce dimensiuni de lemne sunt optime pentru un foc de drumeție eficient și sigur.",
+    "seed_topic": "Mărimea optimă a lemnelor pentru un foc de drumeție",
+    "seed_topic_slug": "fire_wood_size"
+  }
+}

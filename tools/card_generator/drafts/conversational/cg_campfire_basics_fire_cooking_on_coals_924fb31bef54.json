@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_cooking_on_coals_924fb31bef54",
+  "card_id": "cg_campfire_basics_fire_cooking_on_coals_924fb31bef54",
+  "domain": "campfire_basics",
+  "topic": "fire_cooking_on_coals",
+  "language": "ro",
+  "title": "Gatit pe jar: cand si cum",
+  "body": "Salutare, prieteni! Vrem să facem o cină ca la carte, nu-i așa? Gătitul pe jar e arta supremă, dar trebuie să știi când să te apuci. Flacăra deschisă e pentru fiert apă sau, mă rog, pentru a-ți arde mâncarea. Jarul, în schimb, e cheia pentru o friptură suculentă sau niște legume coapte perfect. Așteaptă până cărbunii sunt acoperiți de un strat fin de cenușă albă, fără flăcări vizibile. E ca o sobă cu temperatură constantă. Poți testa punând mâna la 10-15 cm de jar: dacă reziști 3-4 secunde, e perfect. Dacă e prea fierbinte, mai așteaptă. Dacă e prea rece, mai adaugă lemne și ia-o de la capăt. Eu am ars destule cârnați până am prins șmecheria, dar satisfacția e pe măsură. Nu uita să rotești mâncarea des pentru o coacere uniformă. Spor la treabă și poftă bună!",
+  "lead": "Află cum să gătești perfect pe jar, nu pe flacără, pentru o masă delicioasă în natură.",
+  "keywords": "gatit jar friptura munte campfire cooking temperatura jar mancare tabara sfaturi gatit",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să gătești perfect pe jar, nu pe flacără, pentru o masă delicioasă în natură.",
+    "seed_topic": "Gătit pe jar (nu pe flacără) — diferența și momentul",
+    "seed_topic_slug": "fire_cooking_on_coals"
+  }
+}

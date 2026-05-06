@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_first_summit_int_36236f9c3e61",
+  "card_id": "cg_trail_culture_ro_culture_first_summit_int_36236f9c3e61",
+  "domain": "trail_culture_ro",
+  "topic": "culture_first_summit_intro",
+  "language": "ro",
+  "title": "Ritualul meu pentru primul varf serios",
+  "body": "Băi, știu că sună ciudat, dar am un mic ritual când ajung pe primul vârf serios al sezonului. Nu e nimic mistic, doar o chestie personală. Întâi, îmi scot rucsacul și îl așez cu grijă, să nu alunece. Apoi, îmi scot o ciocolată amăruie (aia cu minim 70% cacao, știi tu) și o mănânc încet, bucățică cu bucățică, savurând priveliștea. E momentul ăla în care te conectezi cu muntele, te gândești la drumul parcurs și la ce urmează. Nu mă grăbesc, las gândurile să curgă. După ce termin ciocolata, scot termosul și beau o gură de ceai cald, indiferent de vreme. E ca o mică celebrare a efortului. Încearcă, poate îți găsești și tu un ritual!",
+  "lead": "Află cum îmi celebrez primul vârf serios al sezonului cu un ritual simplu și personal.",
+  "keywords": "ritual varf primul varf munte ciocolata ceai",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum îmi celebrez primul vârf serios al sezonului cu un ritual simplu și personal.",
+    "seed_topic": "Primul vârf serios — ritualul personal",
+    "seed_topic_slug": "culture_first_summit_intro"
+  }
+}

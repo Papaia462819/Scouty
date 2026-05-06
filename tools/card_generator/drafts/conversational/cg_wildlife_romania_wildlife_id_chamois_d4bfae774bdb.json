@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_id_chamois_d4bfae774bdb",
+  "card_id": "cg_wildlife_romania_wildlife_id_chamois_d4bfae774bdb",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_id_chamois",
+  "language": "ro",
+  "title": "Capra neagră: unde o vezi și de ce stai la distanță",
+  "body": "Capra neagră e un simbol al Carpaților și e o bucurie s-o zărești. Caut-o în zonele stâncoase, abrupte, de la golul alpin în sus. Dimineața devreme sau seara târziu sunt momentele când o vezi cel mai des, când iese la păscut. Deși pare prietenoasă, nu te apropia! Este un animal sălbatic, imprevizibil, și poate reacționa agresiv dacă se simte amenințată. Plus, e protejată prin lege, iar deranjarea ei poate avea consecințe. Admir-o de la distanță, cu binoclul, și las-o să-și vadă de treaba ei. E un spectacol să o vezi cum se mișcă pe stânci, dar siguranța ta și a ei e pe primul loc. Un prieten a încercat odată să-i facă o poză de aproape și a fugit de-a rupt pământul când a văzut-o cum se pregătește să-l ia în coarne. Nu merită riscul!",
+  "lead": "Află unde poți vedea capra neagră în Carpați și de ce este crucial să menții o distanță sigură față de ea.",
+  "keywords": "capra neagră observare animale siguranță munte wildlife carpati respect animale sălbatice",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află unde poți vedea capra neagră în Carpați și de ce este crucial să menții o distanță sigură față de ea.",
+    "seed_topic": "Capra neagră — unde o vezi și de ce nu te apropii",
+    "seed_topic_slug": "wildlife_id_chamois"
+  }
+}

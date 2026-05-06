@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_alpine_zone_9e8aca37771f",
+  "card_id": "cg_campfire_basics_fire_alpine_zone_9e8aca37771f",
+  "domain": "campfire_basics",
+  "topic": "fire_alpine_zone",
+  "language": "ro",
+  "title": "Cafea la 2000m? Uită de focul de tabără în golul alpin",
+  "body": "Ai ajuns sus, în golul alpin, și visezi la un foc de tabără? E o imagine frumoasă, dar nerealistă. În primul rând, nu ai ce să arzi. Jnepenișul e protejat prin lege și oricum arde prost. În al doilea rând, e periculos și strict interzis. Vântul poate purta scânteile pe zeci de metri și poți porni un incendiu care va distruge un ecosistem fragil. Soluția reală și modernă este un arzător mic, pe gaz. O butelie mică și un arzător cântăresc sub 500 de grame și încap oriunde. Fierbi o cană de apă în 3-4 minute, indiferent de vreme. Poți găsi și variante pe spirt solid sau lichid, la fel de eficiente. Crede-mă, o ciorbă caldă la cort, în timp ce afară plouă, face toți banii și nu lasă nicio urmă. Muntele îți va mulțumi.",
+  "lead": "În golul alpin nu ai lemne, iar focul deschis e periculos și interzis, așa că hai să vedem ce alternative reale ai pentru o masă caldă.",
+  "keywords": "foc de tabără gol alpin arzător gaz siguranță alternativă foc jneapăn echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "În golul alpin nu ai lemne, iar focul deschis e periculos și interzis, așa că hai să vedem ce alternative reale ai pentru o masă caldă.",
+    "seed_topic": "Aprindere în zona alpină fără lemne — alternative reale",
+    "seed_topic_slug": "fire_alpine_zone"
+  }
+}

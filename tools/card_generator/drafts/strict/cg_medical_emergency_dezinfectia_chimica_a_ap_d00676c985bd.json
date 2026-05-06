@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_dezinfectia_chimica_a_ap_d00676c985bd",
+  "card_id": "cg_medical_emergency_dezinfectia_chimica_a_ap_d00676c985bd",
+  "domain": "medical_emergency",
+  "topic": "dezinfectia_chimica_a_apei_clor_iod_in_drumetie",
+  "language": "ro",
+  "title": "Dezinfecția chimică a apei: Clor, Iod și Tablete",
+  "body": "Înainte de dezinfectare, dacă apa este tulbure sau colorată, lăsați-o să se așeze, apoi filtrați-o printr-o cârpă curată, un prosop de hârtie sau un filtru de cafea. Depozitați apa decantată și filtrată în recipiente curate, acoperite. Evitați apa cu materiale plutitoare, culoare închisă sau miros suspect. Apa curgătoare este de preferat celei stătătoare.\n\n**Cu înălbitor lichid (8.25% hipoclorit de sodiu):** Adăugați 6 picături la fiecare galon de apă (sau 2 picături la litru). Dublați cantitatea dacă apa este tulbure, colorată sau foarte rece. Amestecați și lăsați să stea 30 de minute. Apa ar trebui să aibă un ușor miros de clor. Dacă nu, repetați dozajul și lăsați să stea încă 15 minute. Dacă gustul de clor este prea puternic, turnați apa dintr-un recipient curat în altul și lăsați-o să stea câteva ore.\n\n**Cu iod (tinctură de iod 2%):** Adăugați 5 picături la fiecare litru de apă. Dacă apa este tulbure sau colorată, adăugați 10 picături. Amestecați și lăsați apa să stea cel puțin 30 de minute înainte de utilizare.\n\n**Cu tablete de dezinfectare a apei:** Urmați instrucțiunile de pe eticheta produsului, deoarece fiecare produs poate avea o concentrație diferită.",
+  "lead": "Aflați cum să dezinfectați chimic apa folosind înălbitor lichid, iod sau tablete, pentru a o face potabilă în situații de urgență.",
+  "keywords": "dezinfecție apă clor apă iod apă purificare apă apă potabilă drumeție sigură urgență apă filtrare apă",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Emergency Disinfection of Drinking Water",
+  "source_url": "https://www.epa.gov/ground-water-and-drinking-water/emergency-disinfection-drinking-water",
+  "publisher": "EPA",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "water_purification",
+    "chemical_disinfection",
+    "drinking_water",
+    "emergency_preparedness",
+    "hiking_safety"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați cum să dezinfectați chimic apa folosind înălbitor lichid, iod sau tablete, pentru a o face potabilă în situații de urgență.",
+    "evidence_confidence": "high",
+    "source_quote": "8.25% bleach, to each gallon of water. Double the amount of bleach if the water is cloudy, colored, or very cold. Stir and let stand for 30 minutes. The water should have a slight chlorine odor. If it doesn’t, repeat the dosage and let stand for another 15 minutes before use. Common household iodine (or “tincture of iodine”). Add five drops of 2% tincture of iodine to each quart or liter of water that you are disinfecting. If the water is cloudy or colored, add 10 drops of iodine. Stir and let the water stand for at least 30 minutes before use. Water disinfection tablets. Follow the instructions on the product label as each product may have a different strength.",
+    "source_id": "epa_water_disinfection"
+  }
+}

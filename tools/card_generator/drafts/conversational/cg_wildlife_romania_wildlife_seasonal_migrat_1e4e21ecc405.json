@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_seasonal_migrat_1e4e21ecc405",
+  "card_id": "cg_wildlife_romania_wildlife_seasonal_migrat_1e4e21ecc405",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_seasonal_migration",
+  "language": "ro",
+  "title": "Migratia animalelor in Carpati: Ce trebuie sa stii",
+  "body": "Salut, prietene! Când ești pe potecă, e bine să știi că animalele nu stau locului. Primăvara și toamna, multe specii, de la urși la capre negre, își schimbă zonele. Urșii, de exemplu, coboară în zonele mai joase toamna, căutând mâncare înainte de hibernare, iar primăvara urcă în altitudini. Căprioarele și cerbii se mișcă și ele după hrană și adăpost. Fii atent la urme proaspete, la zgomote neobișnuite și, mai ales, respectă spațiul lor. Nu te apropia, nu le hrăni! E teritoriul lor, noi suntem doar musafiri. Odată am dat nas în nas cu o căprioară la 2000m, în Piatra Craiului, toamna târziu, căuta ultimele plante verzi.",
+  "lead": "Află cum se mișcă animalele în Carpați pe parcursul anotimpurilor și cum să te comporți pentru a le respecta spațiul.",
+  "keywords": "migratie animale sezonier ursi capre negre respecta natura wildlife carpati urme animale",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum se mișcă animalele în Carpați pe parcursul anotimpurilor și cum să te comporți pentru a le respecta spațiul.",
+    "seed_topic": "Mișcările sezoniere ale animalelor în Carpați",
+    "seed_topic_slug": "wildlife_seasonal_migration"
+  }
+}

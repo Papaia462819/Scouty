@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_pack_size_day_0a02bcd01903",
+  "card_id": "cg_gear_and_preparati_gear_pack_size_day_0a02bcd01903",
+  "domain": "gear_and_preparation",
+  "topic": "gear_pack_size_day",
+  "language": "ro",
+  "title": "Rucsacul de o zi: volum și esențialul",
+  "body": "Pentru o tură de o zi în Carpați, un rucsac de 20-30 de litri e de obicei suficient. Nu-ți imagina că trebuie să cari casa în spate! Ai nevoie de spațiu pentru o jachetă impermeabilă, o bluză de polar (chiar și vara, la altitudine e altă poveste), o sticlă de apă de 1-1.5 litri, niște gustări energizante, o trusă mică de prim ajutor și o hartă. Lasă acasă laptopul, cărțile groase sau setul complet de ustensile de gătit. Scopul e să fii agil, nu să faci mutări. Gândește-te la ce ai nevoie strict pentru siguranță și confort minim, nu la mofturi. Mai puțin înseamnă mai mult, mai ales la deal.",
+  "lead": "Află ce volum trebuie să aibă rucsacul tău pentru o tură de o zi și ce obiecte sunt inutile.",
+  "keywords": "rucsac volum echipament tura de o zi ce nu iei",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce volum trebuie să aibă rucsacul tău pentru o tură de o zi și ce obiecte sunt inutile.",
+    "seed_topic": "Câți litri are nevoie un rucsac de o zi (și ce nu adaugi)",
+    "seed_topic_slug": "gear_pack_size_day"
+  }
+}

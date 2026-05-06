@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_drumetie_in_conditii_de__6af4bfc5eda0",
+  "card_id": "cg_mountain_safety_drumetie_in_conditii_de__6af4bfc5eda0",
+  "domain": "mountain_safety",
+  "topic": "drumetie_in_conditii_de_vizibilitate_redusa",
+  "language": "ro",
+  "title": "Drumeția nocturnă — riscuri și echipament esențial",
+  "body": "Evitați drumeția după lăsarea întunericului. Drumeția pe timp de noapte crește semnificativ riscul de căzături și de întâlniri neașteptate cu animale sălbatice. Dacă vă îndreptați către un loc de campare, planificați-vă sosirea înainte de căderea nopții. Este esențial să aveți întotdeauna la dumneavoastră o lanternă frontală; lanternele telefoanelor mobile nu sunt considerate fiabile pentru iluminare în condiții de drumeție nocturnă. În cazul unui incident grav sau al unei urgențe pe traseu, apelați 112 sau Salvamont (0SALVAMONT). Rețineți că intervenția echipelor de salvare poate dura ore întregi în zonele izolate.",
+  "lead": "Evitați drumeția pe timp de noapte din cauza riscurilor crescute de căzături și întâlniri cu animale sălbatice.",
+  "keywords": "drumeție nocturnă siguranță munte vizibilitate redusă lanterna frontală riscuri drumeție",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Hiking Safety",
+  "source_url": "https://www.nps.gov/grsm/planyourvisit/hikingsafety.htm",
+  "publisher": "National Park Service",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "night_hiking",
+    "reduced_visibility",
+    "falls",
+    "wildlife_encounters",
+    "headlamp"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Evitați drumeția pe timp de noapte din cauza riscurilor crescute de căzături și întâlniri cu animale sălbatice.",
+    "evidence_confidence": "high",
+    "source_quote": "Avoid hiking after dark. Hiking in the dark increases the risk of falls and wildlife encounters. If you're heading to a campsite, plan to arrive before nightfall. Always carry a headlamp; phone flashlights are not reliable.",
+    "source_id": "nps_hiking_safety"
+  }
+}

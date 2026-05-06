@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_water_purificat_db78c6c6fa8f",
+  "card_id": "cg_survival_basics_survival_water_purificat_db78c6c6fa8f",
+  "domain": "survival_basics",
+  "topic": "survival_water_purification_tips",
+  "language": "ro",
+  "title": "Apa potabila fara filtru: 3 metode simple",
+  "body": "Salut, prietene! Știu, se întâmplă să rămâi fără apă sau să nu ai filtru la tine. Nu-i bai, am câteva trucuri de la bunici. Prima metodă: fierberea. Dacă ai foc și un vas, fierbe apa viguros minim 10 minute. Asta omoară majoritatea microbilor. A doua: purificarea chimică. Tabletele de iod sau clor sunt ușoare și eficiente. Urmează instrucțiunile de pe ambalaj, e crucial! Și a treia, pentru cazuri extreme, dar mai puțin eficientă: distilarea solară. Ai nevoie de o folie de plastic, un vas și un loc însorit. E lentă, dar funcționează. Nu uita, prevenția e cea mai bună: ia apă suficientă de la surse sigure!",
+  "lead": "Află 3 metode practice pentru a face apa potabilă în natură, chiar și fără un filtru specializat.",
+  "keywords": "apa potabila fierbere purificare chimica distilare solara supravietuire",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află 3 metode practice pentru a face apa potabilă în natură, chiar și fără un filtru specializat.",
+    "seed_topic": "Trei moduri de a face apa potabilă fără filtru",
+    "seed_topic_slug": "survival_water_purification_tips"
+  }
+}

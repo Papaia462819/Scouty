@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_headlamp_redundancy_343a36f8be71",
+  "card_id": "cg_gear_and_preparati_gear_headlamp_redundancy_343a36f8be71",
+  "domain": "gear_and_preparation",
+  "topic": "gear_headlamp_redundancy",
+  "language": "ro",
+  "title": "Lanterna frontala: De ce ai nevoie de doua?",
+  "body": "Băi, ține minte o chestie: lumina e aur curat pe munte, mai ales când te prinde noaptea. Nu pleca niciodată doar cu o singură frontală, oricât de scumpă și performantă ar fi. Bateria poate să cedeze de la frig sau pur și simplu să uiți s-o încarci. Sau, mai rău, o scapi și se face bucăți. Eu am pățit-o. Odată, pe creasta Făgărașului, mi-a murit frontala principală fix când trebuia să montez cortul. Noroc cu aia de rezervă, mai mică, dar funcțională. Așadar, o frontală puternică pe cap și una mică, de rezervă, cu baterii noi, în rucsac. N-o să regreți niciodată precauția asta.",
+  "lead": "Nu pleca niciodată la drum cu o singură lanternă frontală; o a doua, de rezervă, îți poate salva situația în munți.",
+  "keywords": "frontală lanternă backup siguranță noapte echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Nu pleca niciodată la drum cu o singură lanternă frontală; o a doua, de rezervă, îți poate salva situația în munți.",
+    "seed_topic": "Frontală principală + backup — de ce ambele",
+    "seed_topic_slug": "gear_headlamp_redundancy"
+  }
+}

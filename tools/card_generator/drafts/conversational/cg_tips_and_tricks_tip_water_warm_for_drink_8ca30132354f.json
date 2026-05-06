@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_water_warm_for_drink_8ca30132354f",
+  "card_id": "cg_tips_and_tricks_tip_water_warm_for_drink_8ca30132354f",
+  "domain": "tips_and_tricks",
+  "topic": "tip_water_warm_for_drinking",
+  "language": "ro",
+  "title": "Apă caldă iarna: De ce bei mai mult?",
+  "body": "Salut, prietene! Știi de ce e sfânt termosul cu apă caldă iarna? Nu doar că te încălzește, dar te și hidratează mai bine. Când e frig, corpul tău consumă energie să se mențină la temperatura optimă și, paradoxal, nu simți la fel de acut setea. Apa rece te face să te strângi, iar mulți evită să bea suficient. O cană de ceai cald sau apă cu lămâie te invită să bei mai des și în cantități mai mari. E ca și cum ai bea o ciorbă caldă după o zi rece – te revigorează! Încearcă să ai mereu la tine 1-1.5 litri de lichid cald. O să vezi diferența!",
+  "lead": "Află de ce apa caldă în termos te ajută să te hidratezi mai bine în drumețiile de iarnă, chiar dacă nu simți setea.",
+  "keywords": "hidratare iarna termos munte apă caldă sfaturi drumeție frig hidratare ceai munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce apa caldă în termos te ajută să te hidratezi mai bine în drumețiile de iarnă, chiar dacă nu simți setea.",
+    "seed_topic": "Apă caldă în termos iarna — de ce bei mai mult",
+    "seed_topic_slug": "tip_water_warm_for_drinking"
+  }
+}

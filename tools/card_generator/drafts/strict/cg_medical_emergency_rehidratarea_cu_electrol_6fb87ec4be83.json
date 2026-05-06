@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_rehidratarea_cu_electrol_6fb87ec4be83",
+  "card_id": "cg_medical_emergency_rehidratarea_cu_electrol_6fb87ec4be83",
+  "domain": "medical_emergency",
+  "topic": "rehidratarea_cu_electroliti_dupa_efort_prelungit",
+  "language": "ro",
+  "title": "Crampe de căldură: rehidratare și prim ajutor",
+  "body": "Crampele de căldură afectează de obicei persoanele care transpiră abundent în timpul activităților fizice intense. Transpirația excesivă scade nivelul de sare și umiditate din corp, iar nivelurile scăzute de sare în mușchi provoacă crampe dureroase. Acestea pot fi și un simptom al epuizării termice.\n\nSimptomele includ crampe musculare, durere sau spasme în abdomen, brațe sau picioare.\n\nPentru prim ajutor, beți apă și consumați o gustare sau o băutură care înlocuiește carbohidrații și electroliții (cum ar fi băuturile sportive) la fiecare 15 până la 20 de minute. Evitați tabletele de sare.\n\nSolicitați ajutor medical (apelați 112 / 0SALVAMONT) dacă persoana are probleme cardiace, urmează o dietă cu conținut scăzut de sodiu sau dacă crampele nu dispar în decurs de o oră.",
+  "lead": "Crampele de căldură, cauzate de transpirația abundentă la efort intens, necesită rehidratare cu apă și electroliți și, uneori, asistență medicală.",
+  "keywords": "crampe de căldură deshidratare electroliți efort fizic prim ajutor băuturi sportive spasme musculare transpirație",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Heat-related illnesses",
+  "source_url": "https://www.cdc.gov/niosh/heat-stress/about/illnesses.html",
+  "publisher": "CDC / NIOSH",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "heat_cramps",
+    "dehydration",
+    "electrolyte_imbalance",
+    "strenuous_activity",
+    "first_aid"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Crampele de căldură, cauzate de transpirația abundentă la efort intens, necesită rehidratare cu apă și electroliți și, uneori, asistență medicală.",
+    "evidence_confidence": "high",
+    "source_quote": "Heat cramps usually affect workers who sweat a lot during strenuous activity. This sweating depletes the body's salt and moisture levels. Low salt levels in muscles cause painful cramps. Drink water and have a snack or a drink that replaces carbohydrates and electrolytes (such as sports drinks) every 15 to 20 minutes. Avoid salt tablets. Get medical help if the worker: Has heart problems. Is on a low sodium diet. Has cramps that do not subside within 1 hour",
+    "source_id": "cdc_heat_illnesses"
+  }
+}

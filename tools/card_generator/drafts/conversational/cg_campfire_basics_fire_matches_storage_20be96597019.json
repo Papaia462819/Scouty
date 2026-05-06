@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_matches_storage_20be96597019",
+  "card_id": "cg_campfire_basics_fire_matches_storage_20be96597019",
+  "domain": "campfire_basics",
+  "topic": "fire_matches_storage",
+  "language": "ro",
+  "title": "Chibrituri uscate, foc asigurat!",
+  "body": "Băi, știu cum e să te bazezi pe chibrituri și să te trezești cu ele fleșcăite. Secretul e să le ții în două straturi de protecție. Primul, o pungă mică, resigilabilă, din aia de sandvișuri. Apoi, bagi punga cu chibrituri într-o cutie de plastic etanșă, de exemplu una de la bomboane mentolate sau o cutie specială pentru chibrituri. Unii le dau cu lac de unghii, dar e prea multă bătaie de cap. Și nu uita să ai și o bucată de smirghel lipită pe interiorul cutiei, dacă nu mai ai suprafața originală. Așa, ai foc garantat, chiar și după o ploaie zdravănă. Am pățit-o, crede-mă!",
+  "lead": "Află cum să-ți păstrezi chibriturile uscate și funcționale pe toată durata turei, indiferent de vreme.",
+  "keywords": "chibrituri foc impermeabilizare echipament camping pregătire",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți păstrezi chibriturile uscate și funcționale pe toată durata turei, indiferent de vreme.",
+    "seed_topic": "Cum păstrezi chibriturile uscate într-o tură de o săptămână",
+    "seed_topic_slug": "fire_matches_storage"
+  }
+}

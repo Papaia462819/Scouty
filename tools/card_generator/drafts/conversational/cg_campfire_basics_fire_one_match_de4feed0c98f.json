@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_one_match_de4feed0c98f",
+  "card_id": "cg_campfire_basics_fire_one_match_de4feed0c98f",
+  "domain": "campfire_basics",
+  "topic": "fire_one_match",
+  "language": "ro",
+  "title": "Provocarea unui singur chibrit",
+  "body": "Hai să ne jucăm un pic. Imaginează-ți că ai un singur chibrit. Unul singur. S-a udat cutia, s-au rupt celelalte, nu contează. Doar unul. Primul impuls e să te grăbești. Nu o face. Respiră adânc. Panica e cel mai prost combustibil. Acum, la treabă. Ai nevoie de un munte de iască uscată – scame, coajă de mesteacăn, orice e pufos și ia foc instant. Apoi, o piramidă de vreascuri, de la cele subțiri ca un ac la cele groase cât degetul tău mic. Totul trebuie să fie la îndemână, aranjat ca pentru o ceremonie. Construiește un paravan mic contra vântului din rucsac sau câteva pietre. Abia acum, când totul e gata și ești calm, scoți chibritul. Îl aprinzi protejat, în căușul palmelor, și transferi flacăra la iască cu o mișcare lentă, sigură. Succesul nu stă în chibrit, ci în minutele de pregătire de dinainte.",
+  "lead": "Înainte să scoți chibritul, asigură-te că ai pregătit totul perfect, de la vreascuri la starea ta de spirit.",
+  "keywords": "foc de tabără supraviețuire chibrit iască vreasc pregătire",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Înainte să scoți chibritul, asigură-te că ai pregătit totul perfect, de la vreascuri la starea ta de spirit.",
+    "seed_topic": "Provocarea unui singur chibrit: pregătire mentală și de teren",
+    "seed_topic_slug": "fire_one_match"
+  }
+}

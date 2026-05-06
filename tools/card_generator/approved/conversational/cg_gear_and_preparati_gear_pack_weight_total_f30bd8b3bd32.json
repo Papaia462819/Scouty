@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_pack_weight_total_f30bd8b3bd32",
+  "card_id": "cg_gear_and_preparati_gear_pack_weight_total_f30bd8b3bd32",
+  "domain": "gear_and_preparation",
+  "topic": "gear_pack_weight_total",
+  "language": "ro",
+  "title": "Greutate rucsac: vară vs. iarnă",
+  "body": "Salut, prietene! Când vine vorba de rucsac, regula de aur e să nu cari mai mult de 10-15% din greutatea ta corporală pe timp de vară și maxim 20% iarna. De exemplu, dacă ai 70 kg, vara țintește sub 10 kg. Iarna, echipamentul e mai voluminos și mai greu – bocanci, haine groase, colțari, piolet. Vara, poți reduce mult greutatea: un sac de dormit mai ușor, haine mai puține. Gândește-te la fiecare obiect: chiar am nevoie de el? Am avut o dată un amic care a vrut să care un ghiveci cu flori 'pentru moral'. Nu recomand.",
+  "lead": "Află cum să-ți optimizezi greutatea rucsacului pentru drumeții de vară și de iarnă, respectând limitele de siguranță și confort.",
+  "keywords": "greutate rucsac echipament vară echipament iarnă planificare drumeție rucsac ușor",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți optimizezi greutatea rucsacului pentru drumeții de vară și de iarnă, respectând limitele de siguranță și confort.",
+    "seed_topic": "Greutate totală țintă pentru rucsac vară vs iarnă",
+    "seed_topic_slug": "gear_pack_weight_total"
+  }
+}

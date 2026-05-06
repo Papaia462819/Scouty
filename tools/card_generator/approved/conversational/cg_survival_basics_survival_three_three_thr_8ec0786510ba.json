@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_three_three_thr_8ec0786510ba",
+  "card_id": "cg_survival_basics_survival_three_three_thr_8ec0786510ba",
+  "domain": "survival_basics",
+  "topic": "survival_three_three_three",
+  "language": "ro",
+  "title": "Regula 3-3-3-3: esențialul în situații limită",
+  "body": "Salut, prietene! Când ești pe munte și lucrurile iau o turnură neașteptată, e bine să știi de regula 3-3-3-3. E un ghid simplu pentru priorități. În primul rând, poți supraviețui 3 minute fără aer – deci, dacă ai o problemă respiratorie sau o obstrucție, aia e prioritatea zero. Apoi, 3 ore fără un adăpost decent, mai ales pe vreme rea. Hipotermia e un inamic serios! După, 3 zile fără apă – deshidratarea te doboară rapid. Și la final, 3 săptămâni fără mâncare. Mâncarea e importantă, dar nu la fel de urgentă ca aerul, adăpostul și apa. Ține minte ordinea asta, te poate scoate din bucluc.",
+  "lead": "Regula 3-3-3-3 te ajută să prioritizezi nevoile esențiale în situații de urgență pe munte: aer, adăpost, apă, mâncare.",
+  "keywords": "supraviețuire urgență priorități aer apă adăpost mâncare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Regula 3-3-3-3 te ajută să prioritizezi nevoile esențiale în situații de urgență pe munte: aer, adăpost, apă, mâncare.",
+    "seed_topic": "Regula 3-3-3-3: aer, sânge, temperatură, apă, mâncare",
+    "seed_topic_slug": "survival_three_three_three"
+  }
+}

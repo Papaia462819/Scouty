@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_gathered_wood_size__af6c6a3d349e",
+  "card_id": "cg_campfire_basics_fire_gathered_wood_size__af6c6a3d349e",
+  "domain": "campfire_basics",
+  "topic": "fire_gathered_wood_size_count",
+  "language": "ro",
+  "title": "Regula brațelor pentru foc de tabără",
+  "body": "Când ești la foc, nu vrei să alergi prin pădure după lemne la fiecare oră. O regulă bună, pe care am învățat-o în atâția ani, e \"regula brațelor\". Strânge atâta lemn cât poți duce în brațe, într-o singură tură. Asta ar trebui să-ți ajungă pentru câteva ore bune, mai ales dacă ești singur sau în doi. Dacă sunteți mai mulți, dublați sau triplați. Și nu uita, ia doar lemn uscat, căzut la pământ. Nu tăia copaci verzi, că nu arde și e păcat de ei. Până la urmă, vrei să te bucuri de stele, nu de fum și efort.",
+  "lead": "Află cât lemn să strângi pentru o seară la focul de tabără folosind \"regula brațelor\".",
+  "keywords": "lemn foc tabara strans lemne regula bratelor foc de tabara sfaturi foc lemn uscat",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cât lemn să strângi pentru o seară la focul de tabără folosind \"regula brațelor\".",
+    "seed_topic": "Cât lemn să strângi pentru o seară — regula brațelor",
+    "seed_topic_slug": "fire_gathered_wood_size_count"
+  }
+}

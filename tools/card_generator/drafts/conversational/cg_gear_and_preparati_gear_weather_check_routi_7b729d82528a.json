@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_weather_check_routi_7b729d82528a",
+  "card_id": "cg_gear_and_preparati_gear_weather_check_routi_7b729d82528a",
+  "domain": "gear_and_preparation",
+  "topic": "gear_weather_check_routine",
+  "language": "ro",
+  "title": "Verificarea Vremii: Ghidul Drumețului Experimentat",
+  "body": "Băi, înainte să te culci, aruncă un ochi pe prognoză. Nu te baza pe o singură sursă, că-i păcăleală. Eu folosesc minim două, chiar trei aplicații meteo, plus site-ul ANM. Compară-le! Dacă una zice soare și alta furtună, e clar că trebuie să fii pregătit pentru ambele. Uită-te la temperaturi, vânt (foarte important!), șanse de precipitații și, mai ales, la evoluția vremii pe parcursul zilei. Nu vrei să te prindă ploaia torențială la jumătatea crestei, nu? Mai bine un rucsac mai greu cu o jachetă în plus, decât să tremuri de frig. Odată am plecat cu soare și m-am întors cu zăpadă până la genunchi în iulie, deci nu te juca cu asta. Prognoza e doar o estimare, dar te ajută să iei decizii mai bune.",
+  "lead": "Află cum să verifici corect prognoza meteo cu o seară înainte de drumeție pentru a fi pregătit pentru orice.",
+  "keywords": "vreme prognoza pregatire munte siguranta echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să verifici corect prognoza meteo cu o seară înainte de drumeție pentru a fi pregătit pentru orice.",
+    "seed_topic": "Rutina de verificare a vremii cu o seară înainte",
+    "seed_topic_slug": "gear_weather_check_routine"
+  }
+}

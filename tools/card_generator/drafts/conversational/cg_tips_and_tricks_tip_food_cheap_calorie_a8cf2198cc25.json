@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_food_cheap_calorie_a8cf2198cc25",
+  "card_id": "cg_tips_and_tricks_tip_food_cheap_calorie_a8cf2198cc25",
+  "domain": "tips_and_tricks",
+  "topic": "tip_food_cheap_calorie",
+  "language": "ro",
+  "title": "Calorii ieftine in ture: Orez, paste, ulei",
+  "body": "Băi, știi cum e, în munți ai nevoie de energie, și nu vrei să cari după tine o căruță de bani pentru mâncare. Orezul și pastele sunt baza, frate! Ieftine, ușor de gătit și pline de carbohidrați. O pungă de orez sau paste îți ține de foame o zi întreagă. Și nu uita de ulei! Câteva linguri de ulei de floarea soarelui adăugate la mâncare dublează caloriile instant, fără să adaugi multă greutate. Poți să le combini cu niște conserve de pește sau legume deshidratate și ai o masă completă. Eu am supraviețuit o săptămână în Retezat cu trei pungi de paste, două de orez și un litru de ulei. Funcționează!",
+  "lead": "Descoperă cum orezul, pastele și uleiul pot fi baza ta energetică economică și eficientă în turele montane.",
+  "keywords": "calorii ieftine mâncare munte orez paste ulei alimente drumeție energie munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă cum orezul, pastele și uleiul pot fi baza ta energetică economică și eficientă în turele montane.",
+    "seed_topic": "Caloriile ieftine: orez, paste, ulei — bază pentru ture",
+    "seed_topic_slug": "tip_food_cheap_calorie"
+  }
+}

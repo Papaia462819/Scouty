@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_first_summit_emot_a84660806b50",
+  "card_id": "cg_motivation_and_mor_morale_first_summit_emot_a84660806b50",
+  "domain": "motivation_and_morale",
+  "topic": "morale_first_summit_emotion",
+  "language": "ro",
+  "title": "Prima data pe varf: savora momentul",
+  "body": "Ții minte prima oară când ai ajuns pe un vârf? Eu da, și pot să-ți spun că e o senzație unică. Nu te grăbi! Odată ajuns sus, ia-ți 5-10 minute să te bucuri de panoramă. Scanează orizontul, caută puncte de reper, respiră adânc aerul tare de munte. Nu e o cursă, e o experiență. Fă o poză, dar nu uita să privești și cu ochii tăi, nu doar prin ecran. Simte vântul, ascultă liniștea. Asta e recompensa pentru efortul depus. Eu, de exemplu, am obiceiul să-mi scot bocancii și să simt iarba rece sub picioare, dacă vremea permite. E un mic ritual care mă reconectează cu muntele. Fă-ți și tu un ritual, ceva mic, al tău.",
+  "lead": "Să ajungi pe vârf e o victorie, dar să te bucuri de moment e esențial. Nu te grăbi, savurează peisajul și creează-ți propriul ritual.",
+  "keywords": "primul vârf bucurie munte experiență vârf pauză drumeție ritual munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Să ajungi pe vârf e o victorie, dar să te bucuri de moment e esențial. Nu te grăbi, savurează peisajul și creează-ți propriul ritual.",
+    "seed_topic": "Emoția primei vârf — cum o trăiești fără să te grăbești",
+    "seed_topic_slug": "morale_first_summit_emotion"
+  }
+}

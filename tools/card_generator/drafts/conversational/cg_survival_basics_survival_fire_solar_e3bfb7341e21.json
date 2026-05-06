@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_fire_solar_e3bfb7341e21",
+  "card_id": "cg_survival_basics_survival_fire_solar_e3bfb7341e21",
+  "domain": "survival_basics",
+  "topic": "survival_fire_solar",
+  "language": "ro",
+  "title": "Aprindere foc cu lentila: realitate versus mit",
+  "body": "Salut, prietene! Ai văzut prin filme cum se aprinde focul cu o lentilă, nu? Ei bine, în realitate e un pic mai complicat. Ai nevoie de soare puternic, fără pic de nor, și de material inflamabil extrem de uscat – gen scai uscat, puf de papură sau chiar vată. Încearcă să focalizezi lumina într-un punct cât mai mic și ține-o acolo, fără să miști lentila, până apare fum. E o metodă bună de știut, dar nu te baza pe ea ca primă opțiune. Am încercat o dată cu fundul de la un PET și mi-a ieșit după vreo 15 minute de chinuială, dar eram la amiază, în iulie, fără un nor pe cer. Mai bine ai și o brichetă sau chibrituri la tine. E ca și cum ai încerca să prinzi pește cu mâna goală când ai undiță în rucsac.",
+  "lead": "Află cât de realistă este aprinderea focului cu o lentilă în munți și ce condiții sunt necesare pentru succes.",
+  "keywords": "aprindere foc lentila supravietuire soare material uscat tehnici foc pregatire",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cât de realistă este aprinderea focului cu o lentilă în munți și ce condiții sunt necesare pentru succes.",
+    "seed_topic": "Aprindere cu lentilă (lupă, ceas, fund de cutie) — limite reale",
+    "seed_topic_slug": "survival_fire_solar"
+  }
+}

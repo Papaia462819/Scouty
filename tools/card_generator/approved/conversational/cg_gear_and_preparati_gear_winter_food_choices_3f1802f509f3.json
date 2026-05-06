@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_winter_food_choices_3f1802f509f3",
+  "card_id": "cg_gear_and_preparati_gear_winter_food_choices_3f1802f509f3",
+  "domain": "gear_and_preparation",
+  "topic": "gear_winter_food_choices",
+  "language": "ro",
+  "title": "Mâncare anti-îngheț pentru rucsac iarna",
+  "body": "Iarna, mâncarea în rucsac e o provocare. Evită lichidele sau alimentele cu multă apă, că se fac gheață-n dinți. Eu merg pe batoane energizante, nu cele cu ciocolată care se întăresc ca piatra, ci din cele cu fructe uscate și nuci. Biscuiții digestivi, covrigeii sau pâinea uscată sunt aur. Brânza tare, ca telemeaua sau cașcavalul, rezistă bine, dar taie-o feliuțe înainte. Salamul uscat e și el un prieten bun, dar nu exagera. Nu uita de nuci, alune, semințe – surse excelente de energie și nu îngheață. O termos cu ceai cald e mană cerească, dar pentru mâncare solidă, gândește uscat și dens energetic. Poți înveli batoanele în folie termoizolantă dacă vrei să le ții mai mult la o temperatură decentă. Nu te baza pe ciocolată simplă, devine o glumă proastă la -10 grade.",
+  "lead": "Alege alimente care nu îngheață ușor în rucsac iarna, precum batoane, biscuiți, brânză tare și nuci.",
+  "keywords": "mâncare iarnă rucsac iarnă alimente munte batoane energizante brânză tare nuci sfaturi iarnă",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Alege alimente care nu îngheață ușor în rucsac iarna, precum batoane, biscuiți, brânză tare și nuci.",
+    "seed_topic": "Mâncare care nu îngheață în rucsac iarna",
+    "seed_topic_slug": "gear_winter_food_choices"
+  }
+}

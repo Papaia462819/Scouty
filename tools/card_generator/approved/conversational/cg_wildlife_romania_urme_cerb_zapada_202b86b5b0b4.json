@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_urme_cerb_zapada_202b86b5b0b4",
+  "card_id": "cg_wildlife_romania_urme_cerb_zapada_202b86b5b0b4",
+  "domain": "wildlife_romania",
+  "topic": "urme_cerb_zapada",
+  "language": "ro",
+  "title": "Urme de cerb pe zăpadă — ce ne spun",
+  "body": "Iarna pe Carpați, urmele de cerb sunt printre cele mai frecvente lucruri pe care le vezi pe zăpadă proaspătă. Cerbul carpatin lasă o amprentă dublă, în formă de inimă alungită, de aproximativ 7-9 cm. Când fuge, distanța dintre amprente crește mult și apar urme suplimentare de la pintenii din spate. Dacă urmele duc paralel cu poteca, înseamnă că un grup de cerbi a folosit-o probabil cu câteva ore înainte; mergi mai liniștit, ai șansă să-i vezi. Dacă urmele intră brusc pe potecă și ies imediat, animalele au traversat în grabă, posibil deranjate. Diferența față de capra neagră: urma de capră e mai mică, mai îngustă, ascuțită la vârf. Diferența față de mistreț: mistrețul lasă urme rotunjite, late, cu pinteni clari. Dacă vezi urme proaspete care încă au margini ascuțite, animalul a trecut în ultimele minute; oprește-te 10 minute, ascultă, privește încet. Multe întâlniri frumoase încep așa.",
+  "lead": "Urma de cerb e o inimă alungită de 7-9 cm; urme paralele cu poteca = animal aproape, oprește-te și ascultă.",
+  "keywords": "cerb urme zapada amprenta birdwatching tracking carpatin",
+  "card_family": "DEFINITION",
+  "priority": 45,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": ["tip", "wildlife_observation"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Urma de cerb e o inimă alungită de 7-9 cm; urme paralele cu poteca = animal aproape, oprește-te și ascultă.",
+    "seed_topic": "Cum recunoști un cerb carpatin — sunete și urme",
+    "seed_topic_slug": "wildlife_id_red_deer"
+  }
+}

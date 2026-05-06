@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_kindling_layers_0d502a2d17bb",
+  "card_id": "cg_campfire_basics_fire_kindling_layers_0d502a2d17bb",
+  "domain": "campfire_basics",
+  "topic": "fire_kindling_layers",
+  "language": "ro",
+  "title": "Cum aprinzi focul din prima: Iasca, surcelele, lemnele",
+  "body": "Uite care-i șmecheria, ca să nu te chinui o oră cu bricheta în vânt. Focul e ca o piramidă. La bază pui „iasca”: chestii super uscate și afânate care iau foc de la o scânteie. Coajă de mesteacăn, iarbă uscată, chiar și scame din buzunar. Deasupra, construiești un mic „cort” din surcele subțiri, cam cât degetul mic. Astea trebuie să fie cele mai uscate crenguțe pe care le găsești. Doar după ce surcelele astea ard bine și fac flacără serioasă, începi să adaugi treptat lemne mai groase, de grosimea încheieturii mâinii. Răbdare! Dacă arunci de la început un buștean mare peste iască, stingi totul. Am văzut mulți „experți” care sufocă un foc promițător cu un lemn ud. Fii mai deștept de-atât.",
+  "lead": "Construirea corectă a focului începe cu o fundație bună: iască uscată, apoi surcele subțiri și la final lemnele groase.",
+  "keywords": "foc de tabără iască surcele tehnică foc aprindere foc supraviețuire",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Construirea corectă a focului începe cu o fundație bună: iască uscată, apoi surcele subțiri și la final lemnele groase.",
+    "seed_topic": "Stratificarea iască, surcele, lemne — cum se construiește focul",
+    "seed_topic_slug": "fire_kindling_layers"
+  }
+}

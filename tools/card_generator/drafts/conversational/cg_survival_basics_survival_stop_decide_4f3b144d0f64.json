@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_stop_decide_4f3b144d0f64",
+  "card_id": "cg_survival_basics_survival_stop_decide_4f3b144d0f64",
+  "domain": "survival_basics",
+  "topic": "survival_stop_decide",
+  "language": "ro",
+  "title": "STOP: Opreste-te, Gandeste, Observa, Planifica",
+  "body": "Salut, prietene! Știi acronimul ăla, STOP? E aur curat în munți. Dacă te-ai rătăcit, s-a stricat vremea brusc sau ai o problemă, primul lucru: Oprește-te. Nu te panica și nu te mai mișca aiurea. Apoi, Gândește-te: ce s-a întâmplat? Ce resurse ai? Unde ai văzut ultima dată un marcaj? Observă-ți împrejurimile: vezi un râu, un drum forestier, o creastă? Ești pe o potecă? Auzi ceva? Și abia apoi, Planifică: stabilește un obiectiv clar, chiar și unul mic, cum ar fi să te întorci la ultimul marcaj cunoscut. E mai bine să stai pe loc și să gândești decât să rătăcești fără țintă. Am aplicat asta de câteva ori și m-a scos din belele.",
+  "lead": "Învață acronimul STOP (Oprește-te, Gândește, Observă, Planifică) pentru a gestiona eficient situațiile neprevăzute din munți.",
+  "keywords": "stop ratacire siguranta munte planificare traseu situatii urgenta orientare decizie munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață acronimul STOP (Oprește-te, Gândește, Observă, Planifică) pentru a gestiona eficient situațiile neprevăzute din munți.",
+    "seed_topic": "Acronimul STOP: opriți, gândiți, observați, planificați",
+    "seed_topic_slug": "survival_stop_decide"
+  }
+}

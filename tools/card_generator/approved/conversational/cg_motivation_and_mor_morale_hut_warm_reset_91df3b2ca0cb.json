@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_hut_warm_reset_91df3b2ca0cb",
+  "card_id": "cg_motivation_and_mor_morale_hut_warm_reset_91df3b2ca0cb",
+  "domain": "motivation_and_morale",
+  "topic": "morale_hut_warm_reset",
+  "language": "ro",
+  "title": "Cabana, punctul tau de resetare",
+  "body": "Am urcat munții ăștia de atâtea ori și tot mai văd oameni care se forțează inutil. Dacă simți că nu mai poți, că vremea se strică sau pur și simplu nu-ți mai face plăcere, nu e nicio rușine să te oprești la cabană. E mai bine să te bucuri de o cană de ceai cald și o poveste cu cabanierul, decât să te chinui și să riști. Munții nu pleacă nicăieri, îi găsești și mâine. Am avut un prieten care, de rușine, a continuat pe o ploaie torențială și a ajuns la cabană ud leoarcă și tremurând. Nu face ca el. Fii inteligent, nu încăpățânat. Cabana e un refugiu, folosește-o ca atare. Ești acolo să te bucuri, nu să suferi.",
+  "lead": "Nu e nicio rușine să te oprești la cabană când simți că nu mai poți sau vremea se înrăutățește; e o alegere inteligentă.",
+  "keywords": "cabana resetare siguranta munte pauza ceai",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Nu e nicio rușine să te oprești la cabană când simți că nu mai poți sau vremea se înrăutățește; e o alegere inteligentă.",
+    "seed_topic": "Cabana caldă ca punct de resetare — fără rușine",
+    "seed_topic_slug": "morale_hut_warm_reset"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_water_bottle_vs_bla_4d47bf92f7f8",
+  "card_id": "cg_gear_and_preparati_gear_water_bottle_vs_bla_4d47bf92f7f8",
+  "domain": "gear_and_preparation",
+  "topic": "gear_water_bottle_vs_bladder",
+  "language": "ro",
+  "title": "Sticlă sau bladder? Alegerea sistemului de hidratare",
+  "body": "Salut, prietene! Când vine vorba de hidratare, ambele sisteme au plusuri și minusuri. Sticla rigidă (să zicem, una de 1 litru) e super rezistentă, o poți umple ușor la izvor și vezi exact câtă apă mai ai. Dezavantajul? Trebuie să te oprești, să o scoți din rucsac, să desfaci capacul... un pic de bătaie de cap. Bladder-ul cu pai (de 2-3 litri) e genial pentru că bei din mers, fără să te oprești. E ascuns în rucsac, distribuie greutatea mai bine și nu te încurcă. Dar, dacă vrei să vezi câtă apă mai ai, trebuie să te uiți în rucsac. Și, umplerea la izvor e mai migăloasă. Curățarea e, de asemenea, mai pretențioasă la bladder. Eu le combin: un bladder mare pentru traseu și o sticlă mică, de jumătate de litru, pentru băuturi energizante sau ca rezervă rapidă. Așa, ești acoperit pentru orice situație. Gândește-te la traseul tău și alege ce ți se potrivește mai bine!",
+  "lead": "Află care sistem de hidratare ți se potrivește mai bine în drumeții: sticla rigidă sau bladder-ul cu pai.",
+  "keywords": "hidratare sticla bladder echipament apa munte drumeție sfaturi",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află care sistem de hidratare ți se potrivește mai bine în drumeții: sticla rigidă sau bladder-ul cu pai.",
+    "seed_topic": "Sticlă rigidă vs bladder cu pai — avantaje, dezavantaje reale",
+    "seed_topic_slug": "gear_water_bottle_vs_bladder"
+  }
+}

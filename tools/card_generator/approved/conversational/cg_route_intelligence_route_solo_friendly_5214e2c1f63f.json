@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_solo_friendly_5214e2c1f63f",
+  "card_id": "cg_route_intelligence_route_solo_friendly_5214e2c1f63f",
+  "domain": "route_intelligence_romania",
+  "topic": "route_solo_friendly",
+  "language": "ro",
+  "title": "Trasee sigure pentru drumeții solo în Carpați",
+  "body": "Când vrei să te bucuri de munte singur, alege trasee bine marcate, circulate, dar nu aglomerate excesiv. Evită zonele expuse, cu creste ascuțite sau poteci înguste deasupra prăpăstiilor. Gândește-te la un drum prin pădure, cu urcări moderate, sau la o plimbare pe platouri alpine blânde. De exemplu, în Piatra Craiului, aș evita creasta principală de unul singur, dar o plimbare pe la Prăpăstii sau până la Cabana Curmătura e perfectă. În Bucegi, drumul spre Cascada Urlătoarea sau Valea Cerbului până la Omu (pe vreme bună) sunt opțiuni bune. Important e să știi că vei întâlni alți drumeți, dar nu vei fi în mulțime. Și, desigur, anunță pe cineva unde mergi și când te întorci. Nu uita de bateria externă la telefon!",
+  "lead": "Descoperă trasee de munte sigure și plăcute pentru drumeții solo, cu exemple concrete din Carpați.",
+  "keywords": "trasee solo siguranță munte carpați drumeție singur sfaturi drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă trasee de munte sigure și plăcute pentru drumeții solo, cu exemple concrete din Carpați.",
+    "seed_topic": "Trasee bune pentru a merge singur (relativ sigure)",
+    "seed_topic_slug": "route_solo_friendly"
+  }
+}

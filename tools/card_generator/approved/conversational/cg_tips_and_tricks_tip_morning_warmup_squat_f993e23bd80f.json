@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_morning_warmup_squat_f993e23bd80f",
+  "card_id": "cg_tips_and_tricks_tip_morning_warmup_squat_f993e23bd80f",
+  "domain": "tips_and_tricks",
+  "topic": "tip_morning_warmup_squats",
+  "language": "ro",
+  "title": "Încălzire de dimineață în cort",
+  "body": "Dimineața, mai ales când e răcoare, corpul e cam amorțit. Înainte să te arunci direct pe traseu, fă câteva genuflexiuni chiar în cort. Nu trebuie să fie perfecte, doar să simți că se mișcă sângele. Vreo 10-15 genuflexiuni, apoi niște rotiri de brațe și gât. O să vezi cum te simți mai energic și mai pregătit pentru urcuș. E un mic truc pe care l-am învățat după ani de dimineți friguroase în munți. Nu uita să te hidratezi bine după. Un ceai cald face minuni!",
+  "lead": "Un mic ritual de încălzire dimineața te ajută să pornești la drum plin de energie, chiar și după o noapte rece la cort.",
+  "keywords": "încălzire dimineață cort genuflexiuni circulație energie pregătire",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Un mic ritual de încălzire dimineața te ajută să pornești la drum plin de energie, chiar și după o noapte rece la cort.",
+    "seed_topic": "Genuflexiuni la trezire pentru a porni circulația",
+    "seed_topic_slug": "tip_morning_warmup_squats"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_water_marker_distanc_fd1de999f77a",
+  "card_id": "cg_tips_and_tricks_tip_water_marker_distanc_fd1de999f77a",
+  "domain": "tips_and_tricks",
+  "topic": "tip_water_marker_distance",
+  "language": "ro",
+  "title": "Contorizeaza apa cu un marker permanent",
+  "body": "Salut, prietene! Știi cum e, în turele lungi, mai ales vara, hidratarea e sfântă. Eu am un truc simplu să nu uit câtă apă am băut. Îmi iau o sticlă reutilizabilă și un marker permanent. La plecare, sau la fiecare reper important (cabana, izvor, șa), îmi fac o liniuță pe sticlă. Când o golesc și o reumplu, mai fac o liniuță. Așa, la finalul zilei, știu exact câte sticle am dat pe gât. E mai ușor decât să ții minte, mai ales când oboseala își spune cuvântul. Și nu uita, mai bine bei puțin și des, decât mult și rar. Munții te așteaptă hidratat!",
+  "lead": "Un truc simplu pentru a monitoriza consumul de apă pe traseu folosind un marker permanent pe sticla reutilizabilă.",
+  "keywords": "hidratare apa marker sfaturi drumetie trucuri munte echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Un truc simplu pentru a monitoriza consumul de apă pe traseu folosind un marker permanent pe sticla reutilizabilă.",
+    "seed_topic": "Marker pe sticlă pentru a contoriza apa între repere",
+    "seed_topic_slug": "tip_water_marker_distance"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_first_aid_minimal_fb0e768652cf",
+  "card_id": "cg_gear_and_preparati_gear_first_aid_minimal_fb0e768652cf",
+  "domain": "gear_and_preparation",
+  "topic": "gear_first_aid_minimal",
+  "language": "ro",
+  "title": "Trusa minima de prim ajutor pentru o zi pe munte",
+  "body": "Băi, prietene, chiar și pentru o tură scurtă, trusa de prim ajutor e sfântă. Nu-i loc de glume aici. Ia cu tine neapărat: un bandaj elastic, util pentru entorse, niște leucoplast și comprese sterile pentru julituri sau tăieturi. Adaugă câteva șervețele dezinfectante, o folie de supraviețuire (aia argintie, subțire, care te salvează de hipotermie dacă se strică vremea brusc), și, foarte important, o mică foarfecă și o pensetă. Eu mai pun și niște pastile pentru durere, dar fără să exagerez. Nu uita de dezinfectant pentru mâini. E mai bine să ai și să nu-ți trebuiască, decât să-ți trebuiască și să n-ai. Crede-mă, am văzut destule pe munte în 20 de ani.",
+  "lead": "Află ce elemente esențiale trebuie să conțină trusa ta de prim ajutor pentru o tură de o zi pe munte, conform experienței unui drumeț veteran.",
+  "keywords": "trusa prim ajutor echipament urgenta siguranta munte bandaj elastic folie supravietuire leucoplast comprese sterile",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce elemente esențiale trebuie să conțină trusa ta de prim ajutor pentru o tură de o zi pe munte, conform experienței unui drumeț veteran.",
+    "seed_topic": "Trusă de prim ajutor minimă pentru o tură de o zi",
+    "seed_topic_slug": "gear_first_aid_minimal"
+  }
+}

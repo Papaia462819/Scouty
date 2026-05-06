@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_signal_mirror_b2cbce1aac28",
+  "card_id": "cg_gear_and_preparati_gear_signal_mirror_b2cbce1aac28",
+  "domain": "gear_and_preparation",
+  "topic": "gear_signal_mirror",
+  "language": "ro",
+  "title": "Oglinda de semnalizare: mică, dar vitală",
+  "body": "Știu, pare o prostie să cari o oglindă mică în rucsac, dar ascultă-mă pe mine, moșul cu 20 de ani de Carpați. Am văzut destule. O oglindă de semnalizare, chiar și una improvizată dintr-o folie de supraviețuire, poate face diferența. Nu e pentru selfie-uri, ci pentru a atrage atenția echipelor de salvare. Cu soarele pe cer, un punct luminos se vede de la kilometri distanță. Exersează acasă cum s-o folosești, să știi să țintești. Nu te baza doar pe telefon, că nu-i semnal peste tot. E un obiect ușor, ieftin și stă cuminte într-un buzunar. Mai bine s-o ai și să n-ai nevoie de ea, decât invers. E ca o asigurare, dar fără rate lunare.",
+  "lead": "O oglindă de semnalizare e un obiect mic, dar esențial pentru siguranța ta pe munte, capabilă să atragă atenția echipelor de salvare de la distanță.",
+  "keywords": "oglindă semnalizare siguranță munte echipament urgență salvamont semnalizare optică pregătire drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "O oglindă de semnalizare e un obiect mic, dar esențial pentru siguranța ta pe munte, capabilă să atragă atenția echipelor de salvare de la distanță.",
+    "seed_topic": "Oglinda de semnalizare — pare prost, salvează vieți",
+    "seed_topic_slug": "gear_signal_mirror"
+  }
+}

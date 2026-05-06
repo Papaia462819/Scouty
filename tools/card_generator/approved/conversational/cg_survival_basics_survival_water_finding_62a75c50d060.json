@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_water_finding_62a75c50d060",
+  "card_id": "cg_survival_basics_survival_water_finding_62a75c50d060",
+  "domain": "survival_basics",
+  "topic": "survival_water_finding",
+  "language": "ro",
+  "title": "Găsirea apei în zone uscate din Carpați",
+  "body": "Prietene, chiar și în Carpați poți da de belea cu apa. Primul sfat: planifică-ți traseul și verifică sursele de apă pe hartă înainte să pleci. Dacă totuși te-ai trezit fără, caută zone cu vegetație mai deasă, mai verde – acolo e semn de umezeală sub pământ. Dimineața devreme, poți colecta rouă de pe frunze cu o cârpă curată. Caută văi sau depresiuni, chiar și uscate, pentru că apa se adună acolo după ploi. Urme de animale pot indica și ele o sursă. Nu te baza pe zăpadă topită dacă nu ai mijloace sigure de fierbere, efortul de a o topi te poate deshidrata mai tare. Și, cel mai important, nu bea apă din bălți stagnante sau cu aspect dubios fără să o fierbi sau să o filtrezi corespunzător. E mai bine să fii precaut decât să-ți strici stomacul în mijlocul pustietății.",
+  "lead": "Află cum să găsești și să tratezi apa potabilă în zonele aride ale Carpaților pentru a evita deshidratarea.",
+  "keywords": "apă supraviețuire carpați deshidratare sursa de apă planificare rouă filtrare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să găsești și să tratezi apa potabilă în zonele aride ale Carpaților pentru a evita deshidratarea.",
+    "seed_topic": "Cum găsești apă într-o zonă uscată din Carpați",
+    "seed_topic_slug": "survival_water_finding"
+  }
+}

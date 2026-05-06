@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_mountain_safety_comportament_la_cabana_6453b1d57d3e",
+  "card_id": "cg_mountain_safety_comportament_la_cabana_6453b1d57d3e",
+  "domain": "mountain_safety",
+  "topic": "comportament_la_cabana",
+  "language": "ro",
+  "title": "Interacțiunea cu cabanierul și înregistrarea la cabană",
+  "body": "Înainte de a porni pe traseu, informați cabanierul, familia sau prietenii despre ruta pe care intenționați să o urmați. Este obligatoriu să vă înscrieți în Registrul de trafic al turiștilor, disponibil la cabană. În cazul apariției dificultăților pe traseu sau al înrăutățirii vremii, retrageți-vă la cea mai apropiată cabană pentru siguranță. Aceste măsuri contribuie la siguranța dumneavoastră și facilitează intervenția în caz de urgență.",
+  "lead": "Informați cabanierul despre traseul dumneavoastră și înregistrați-vă în Registrul de trafic al turiștilor.",
+  "keywords": "cabană cabanier înregistrare siguranță traseu salvamont refugiu",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Recomandari pentru turistul montan",
+  "source_url": "https://www.salvamontromania.ro/recomandari-turist-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "cabin_rules",
+    "registration",
+    "mountain_safety",
+    "emergency_shelter"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Informați cabanierul despre traseul dumneavoastră și înregistrați-vă în Registrul de trafic al turiștilor.",
+    "evidence_confidence": "medium",
+    "source_quote": "Informati cabanierul/familia/prietenii asupra traseului pe care doriti sa il urmati si inscrieti-va in Registrul de trafic al turistilor. [...] In cazul aparitiei dificultatilor pe traseu sau inrautatirii vremii retrageti-va la cea mai apropiata cabana.",
+    "source_id": "salvamont_turist_montan"
+  }
+}

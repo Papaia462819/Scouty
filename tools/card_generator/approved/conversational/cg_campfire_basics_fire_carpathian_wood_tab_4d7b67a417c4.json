@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_carpathian_wood_tab_4d7b67a417c4",
+  "card_id": "cg_campfire_basics_fire_carpathian_wood_tab_4d7b67a417c4",
+  "domain": "campfire_basics",
+  "topic": "fire_carpathian_wood_table",
+  "language": "ro",
+  "title": "Lemne bune pentru foc de tabara",
+  "body": "Salut, prietene! Când vrei să faci un foc de tabără fain, nu toate lemnele sunt la fel. Uite câteva sfaturi din experiență. Pentru un foc rapid și intens, caută conifere: brad, molid, pin. Ard repede, fac flacără mare, dar și se consumă la fel de iute. Sunt bune pentru a porni focul. Dacă vrei căldură constantă și jar care ține mult, mergi pe foioase tari: fag, carpen, stejar. Astea ard încet, mocnesc frumos și te țin de cald toată seara. Evită lemnul verde, scoarța groasă sau lemnul putred – fumegă mult și dau puțină căldură. Nu uita să aduni doar crengi uscate, căzute, și să lași pădurea curată după tine. Spor la foc!",
+  "lead": "Alege lemnele potrivite pentru focul de tabără: conifere pentru pornire rapidă, foioase tari pentru căldură constantă și jar durabil.",
+  "keywords": "foc de tabara lemne uscate conifere foioase tari ardere lemn",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Alege lemnele potrivite pentru focul de tabără: conifere pentru pornire rapidă, foioase tari pentru căldură constantă și jar durabil.",
+    "seed_topic": "Tabel scurt: lemnele Carpaților după putere de ardere",
+    "seed_topic_slug": "fire_carpathian_wood_table"
+  }
+}

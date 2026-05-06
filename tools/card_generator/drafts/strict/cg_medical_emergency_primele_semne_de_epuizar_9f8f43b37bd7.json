@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_medical_emergency_primele_semne_de_epuizar_9f8f43b37bd7",
+  "card_id": "cg_medical_emergency_primele_semne_de_epuizar_9f8f43b37bd7",
+  "domain": "medical_emergency",
+  "topic": "primele_semne_de_epuizare_termica",
+  "language": "ro",
+  "title": "Epuizare termică — semne și prim ajutor",
+  "body": "Epuizarea termică este răspunsul corpului la o pierdere excesivă de apă și sare, de obicei prin transpirație abundentă. Simptomele includ: durere de cap, greață, amețeală, slăbiciune, iritabilitate, sete, transpirație puternică, temperatură corporală ridicată și scăderea producției de urină.\n\nPentru a acorda prim ajutor unei persoane cu epuizare termică, urmați acești pași:\n1. Mutați persoana din zona fierbinte.\n2. Oferiți-i lichide de băut.\n3. Îndepărtați hainele inutile, inclusiv încălțămintea și șosetele.\n4. Răcoriți persoana cu comprese reci sau încurajați-o să-și spele capul, fața și gâtul cu apă rece.\n5. Încurajați înghițituri frecvente de apă rece.\n6. Dacă îngrijirea medicală nu este disponibilă, apelați 112 / 0SALVAMONT.\n7. Rămâneți cu persoana până la sosirea ajutorului.\n8. Este recomandat transportul la o clinică sau la o cameră de urgență pentru evaluare și tratament medical.",
+  "lead": "Epuizarea termică apare prin pierderea excesivă de apă și sare; recunoașteți semnele și acționați rapid pentru a răcori victima.",
+  "keywords": "epuizare termică deshidratare căldură prim ajutor transpirație amețeală slăbiciune urgență medicală",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Heat-related illnesses",
+  "source_url": "https://www.cdc.gov/niosh/heat-stress/about/illnesses.html",
+  "publisher": "CDC / NIOSH",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "heat_exhaustion",
+    "dehydration",
+    "first_aid",
+    "heat_illness"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Epuizarea termică apare prin pierderea excesivă de apă și sare; recunoașteți semnele și acționați rapid pentru a răcori victima.",
+    "evidence_confidence": "high",
+    "source_quote": "Heat exhaustion is the body's response to an excessive loss of water and salt, usually through excessive sweating. Symptoms include: Headache, Nausea, Dizziness, Weakness, Irritability, Thirst, Heavy sweating, Elevated body temperature, Decreased urine output.",
+    "source_id": "cdc_heat_illnesses"
+  }
+}

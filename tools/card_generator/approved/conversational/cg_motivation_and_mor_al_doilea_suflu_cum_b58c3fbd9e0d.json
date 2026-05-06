@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_al_doilea_suflu_cum_b58c3fbd9e0d",
+  "card_id": "cg_motivation_and_mor_al_doilea_suflu_cum_b58c3fbd9e0d",
+  "domain": "motivation_and_morale",
+  "topic": "al_doilea_suflu_cum",
+  "language": "ro",
+  "title": "Al doilea suflu — cum îl găsești când picioarele țipă",
+  "body": "Vine un punct pe orice tură mai grea, undeva pe la ora a treia sau a patra de urcare, când corpul îți spune că nu mai poate. Mintea îți spune să te oprești. Dacă ai mâncat, dacă ai băut și dacă nu ai o problemă reală (durere ascuțită, amețeală, simptome medicale), al doilea suflu vine. Trucul: nu te lupta cu el cap-la-cap. Reduce ritmul cu 30%. Scurtează pasul. Respiră ritmic, patru pași inspiri, patru pași expiri. Setează-ți o țintă vizuală foarte aproape — copacul ăla, cotul de acolo, panoul. Mănâncă ceva mic și dulce. Bea câteva înghițituri. Numără până la 200 fără să te oprești. La 200, te uiți: probabil deja te simți altfel. Corpul are rezerve pe care le scoate doar dacă continui să te miști puțin. Dacă, după 15 minute de ritm redus, simți că starea se înrăutățește în loc să se îmbunătățească, asta e altă conversație — te oprești și evaluezi. Diferența e: oboseală vs problemă. Cu experiență, le distingi.",
+  "lead": "Al doilea suflu vine dacă ai mâncat și ai băut; reduci ritmul cu 30%, ținte vizuale aproape, numeri până la 200 — corpul are rezerve.",
+  "keywords": "al doilea suflu oboseala ritm pas energie bivuac mental",
+  "card_family": "SCENARIO",
+  "priority": 55,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": ["morale", "pacing"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Al doilea suflu vine dacă ai mâncat și ai băut; reduci ritmul cu 30%, ținte vizuale aproape, numeri până la 200 — corpul are rezerve.",
+    "seed_topic": "Al doilea suflu — cum îl găsești când picioarele țipă",
+    "seed_topic_slug": "morale_second_wind"
+  }
+}

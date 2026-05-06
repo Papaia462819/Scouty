@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_blister_prevent_af2f6cdac473",
+  "card_id": "cg_survival_basics_survival_blister_prevent_af2f6cdac473",
+  "domain": "survival_basics",
+  "topic": "survival_blister_prevent",
+  "language": "ro",
+  "title": "Fara basici: trucuri simple de la un mos montan",
+  "body": "Bășicile sunt cel mai mare dușman al picioarelor fericite. Înainte să pleci la drum, asigură-te că ai șosete curate, din lână merinos sau sintetice, care elimină transpirația. Niciodată bumbac! Eu, de exemplu, port două perechi: una subțire, de liner, și una mai groasă peste. Reduc frecarea între picior și bocanc. La primele semne de disconfort, oprește-te și aplică o bandă adezivă specială, de tip leucoplast, pe zona sensibilă. Nu aștepta să apară bășica, că e prea târziu! Și nu uita de bocanci: să fie rodați, nu noi-nouți. Am văzut destui \"eroi\" cu bocanci noi, care au ajuns să-și care picioarele în spate.",
+  "lead": "Află cum să previi bășicile enervante cu sfaturi practice de la un drumeț cu experiență pe Carpați.",
+  "keywords": "basici prevenire sosete bocanci frecare leucoplast drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să previi bășicile enervante cu sfaturi practice de la un drumeț cu experiență pe Carpați.",
+    "seed_topic": "Prevenirea bășicilor înainte să apară",
+    "seed_topic_slug": "survival_blister_prevent"
+  }
+}

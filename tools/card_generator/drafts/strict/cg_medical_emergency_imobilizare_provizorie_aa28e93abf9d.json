@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_imobilizare_provizorie_aa28e93abf9d",
+  "card_id": "cg_medical_emergency_imobilizare_provizorie_aa28e93abf9d",
+  "domain": "medical_emergency",
+  "topic": "imobilizare_provizorie",
+  "language": "ro",
+  "title": "Imobilizare provizorie — principii cheie",
+  "body": "Apelați imediat echipa Salvamont prin 112 sau Dispeceratul Național SALVAMONT (0SALVAMONT - 0725826668).\n\nNu mișcați persoana accidentată și nu permiteți nimănui să facă acest lucru, decât dacă victima se află sub influența directă a unui factor de risc care îi pune viața în pericol sau îi provoacă afecțiuni medicale imediate. Orice pacient care, după un traumatism, prezintă dureri sau alterarea stării generale trebuie tratat ca având un posibil traumatism la nivelul coloanei vertebrale, necesitând imobilizare și transport adecvat.\n\nNu permiteți „binevoitorilor” sau „salvatorilor de ocazie” să miște sau să transporte pe brațe, târâș, în spate sau cu mijloace improvizate victima. Nu încercați să aduceți în poziție anatomică membrele sau corpul victimei, indiferent de poziția acestuia, deoarece se pot produce leziuni cu efect ireversibil sau care pot fi fatale.\n\nProtejați termic persoana accidentată (acoperire cu haine, sac de dormit, folie „Sirius”), discutați permanent cu ea, urmăriți o eventuală schimbare a stării de conștiență, a respirației, a culorii tegumentelor și buzelor și așteptați până sosesc echipele Salvamont.",
+  "lead": "În cazul unui traumatism, nu mișcați victima și tratați orice durere ca pe o posibilă leziune a coloanei vertebrale, apelând imediat Salvamont.",
+  "keywords": "imobilizare traumatism coloană vertebrală prim ajutor salvamont nu mișcați transport adecvat leziuni urgență medicală",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Ce faci daca esti martorul unui accident montan",
+  "source_url": "https://www.salvamontromania.ro/martor-accident-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "immobilization",
+    "spinal_injury",
+    "trauma",
+    "first_aid",
+    "emergency_response"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "În cazul unui traumatism, nu mișcați victima și tratați orice durere ca pe o posibilă leziune a coloanei vertebrale, apelând imediat Salvamont.",
+    "evidence_confidence": "high",
+    "source_quote": "Nu miscati persoana accidentata... Orice pacient care, dupa un traumatism, prezinta dureri sau alterarea starii generale trebuie tratat ca avand un posibil traumatism la nivelul coloanei vertebrale, necesitand imobilizare si transport adecvat.",
+    "source_id": "salvamont_martor_accident"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_after_rain_dry_inne_59a14d7b870b",
+  "card_id": "cg_campfire_basics_fire_after_rain_dry_inne_59a14d7b870b",
+  "domain": "campfire_basics",
+  "topic": "fire_after_rain_dry_inner",
+  "language": "ro",
+  "title": "Secretul lemnului uscat pe vreme umeda",
+  "body": "A plouat toată ziua și totul e leoarcă. Tentația e să renunți la foc, dar stai puțin. Lemnul mort, mai ales cel care nu stă direct pe pământ, e ca o nucă de cocos: ud pe dinafară, uscat pe dinăuntru. Caută crengi mai groase, căzute, dar sprijinite pe ceva, nu cele care zac în noroi. Cu un toporaș sau un cuțit zdravăn, curăță coaja udă și stratul exterior de lemn. Vei vedea că miezul e uscat și are o culoare mai deschisă. Apoi, fă așchii subțiri din interiorul ăsta uscat – ele se vor aprinde ușor. Se numește „featherstick” sau, pe românește, „băț cu pene”. Din câteva astfel de bețe poți porni un foc chiar și după o ploaie zdravănă. E un pic de muncă, dar o cană de ceai cald la focul tău merită fiecare așchie.",
+  "lead": "Când totul pare ud, amintește-ți că inima lemnului mort rămâne adesea uscată. Iată cum ajungi la ea cu un cuțit sau un toporaș.",
+  "keywords": "foc de tabără lemne ude supraviețuire tehnici vreme rea aprinderea focului",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Când totul pare ud, amintește-ți că inima lemnului mort rămâne adesea uscată. Iată cum ajungi la ea cu un cuțit sau un toporaș.",
+    "seed_topic": "Lemne ude pe afară, uscate înăuntru — cum ajungi la inima lor",
+    "seed_topic_slug": "fire_after_rain_dry_inner"
+  }
+}

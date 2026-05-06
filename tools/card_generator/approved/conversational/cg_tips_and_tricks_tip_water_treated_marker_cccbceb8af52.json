@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_water_treated_marker_cccbceb8af52",
+  "card_id": "cg_tips_and_tricks_tip_water_treated_marker_cccbceb8af52",
+  "domain": "tips_and_tricks",
+  "topic": "tip_water_treated_marker",
+  "language": "ro",
+  "title": "Sticla de apa tratata: niciodata confuzie!",
+  "body": "Când ești pe munte și ai mai multe sticle de apă, e ușor să le încurci, mai ales dacă tratezi apa din mers. Am pățit-o: am băut din sticla cu apă netratată și am avut o surpriză neplăcută mai târziu. De-atunci, am un obicei simplu: folosesc un marker permanent ca să scriu un mare 'T' (de la tratată) pe sticla cu apă gata de băut. Poți folosi și un 'N' pentru netratată, sau chiar un 'X' pentru 'nu atinge'. Simplu și eficient, te scapă de griji și de o vizită neprogramată la tufișuri. E un mic detaliu care face diferența când oboseala își spune cuvântul și atenția scade. Un prieten chiar își punea o bandă adezivă colorată pe sticla tratată. Fii creativ, dar fii sigur!",
+  "lead": "Marchează-ți sticla cu apă tratată pentru a evita confuziile neplăcute pe munte și a te asigura că bei doar apă sigură.",
+  "keywords": "apa tratata hidratare munte marcaj sticla siguranta apa tips and tricks evita confuzia",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Marchează-ți sticla cu apă tratată pentru a evita confuziile neplăcute pe munte și a te asigura că bei doar apă sigură.",
+    "seed_topic": "Marker pe sticla apei tratate — niciodată confuzie",
+    "seed_topic_slug": "tip_water_treated_marker"
+  }
+}

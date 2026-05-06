@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_no_axe_a27523d156ca",
+  "card_id": "cg_campfire_basics_fire_no_axe_a27523d156ca",
+  "domain": "campfire_basics",
+  "topic": "fire_no_axe",
+  "language": "ro",
+  "title": "Fara Topor: Spargerea Lemnelor cu Tehnica Leverului",
+  "body": "Salut, prieteni! Vrem foc, dar am uitat toporul acasă, nu-i așa? Nu-i bai! Găsește o buturugă mai groasă, stabilă, care să-ți servească drept bază. Apoi, ia o bucată de lemn mai solidă, lungă de vreo 50-70 cm, pe care o vei folosi ca \"ciocan\". Acum, alege o altă bucată de lemn pe care vrei s-o spargi, de preferat cu o crăpătură naturală sau o fibră mai slăbită. Pune-o vertical pe buturuga-bază. Cu \"ciocanul\" tău improvizat, lovește puternic în capătul de sus al lemnului pe care vrei să-l spargi. Nu te sfii, dă cu sete! Repetă până se desprinde. Dacă ai un lemn mai lung, poți folosi și tehnica leverului: introduci un băț rezistent într-o crăpătură și folosești buturuga-bază ca punct de sprijin, apoi apeși. E mai lent, dar sigur. Ai grijă la degete! Mai bine transpiri un pic decât să te tai.",
+  "lead": "Învață cum să spargi lemne pentru foc fără topor, folosind doar alte bucăți de lemn și tehnica leverului.",
+  "keywords": "lemn foc improvizatie lever tehnici foc munte camping",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să spargi lemne pentru foc fără topor, folosind doar alte bucăți de lemn și tehnica leverului.",
+    "seed_topic": "Fără topor: cum spargi lemne folosind alte lemne și tehnica leverului",
+    "seed_topic_slug": "fire_no_axe"
+  }
+}

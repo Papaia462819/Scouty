@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_recunoasterea_raului_acu_0420ece999b0",
+  "card_id": "cg_medical_emergency_recunoasterea_raului_acu_0420ece999b0",
+  "domain": "medical_emergency",
+  "topic": "recunoasterea_raului_acut_de_altitudine",
+  "language": "ro",
+  "title": "Răul acut de altitudine — recunoașterea simptomelor",
+  "body": "Răul acut de altitudine se manifestă în mai multe forme, cu grade diferite de severitate. Cea mai blândă formă este răul acut de munte (AMS), ale cărui simptome includ dureri de cap, oboseală, lipsa poftei de mâncare, greață și vărsături. La copiii care nu pot vorbi, se poate manifesta doar printr-o stare de agitație. Persoanele cu aceste simptome nu trebuie să urce la altitudini mai mari până la dispariția lor. Dacă simptomele se agravează în repaus, coborâți la o altitudine inferioară.\n\nO formă mai gravă este edemul cerebral de mare altitudine (HACE), cu simptome precum oboseală extremă, somnolență, confuzie și pierderea coordonării. Această afecțiune este rară, dar poate fi fatală. Persoana afectată trebuie mutată imediat la o altitudine mai joasă.\n\nUn alt tip de afecțiune este edemul pulmonar de mare altitudine (HAPE), care poate deveni rapid fatal. Simptomele includ dificultăți de respirație, slăbiciune și tuse. O persoană cu aceste simptome trebuie mutată imediat la o altitudine inferioară. Având în vedere gravitatea HACE și HAPE, apelați de urgență 112 sau Salvamont (0SALVAMONT).",
+  "lead": "Răul acut de altitudine are simptome variate, de la dureri de cap și greață (AMS) la confuzie (HACE) sau tuse și dificultăți de respirație (HAPE).",
+  "keywords": "rău de altitudine ams hace hape simptome durere de cap greață confuzie tuse altitudine",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Travel to High Altitudes",
+  "source_url": "https://wwwnc.cdc.gov/travel/page/travel-to-high-altitudes",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "altitude_sickness",
+    "ams",
+    "hace",
+    "hape",
+    "life_threatening"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Răul acut de altitudine are simptome variate, de la dureri de cap și greață (AMS) la confuzie (HACE) sau tuse și dificultăți de respirație (HAPE).",
+    "evidence_confidence": "high",
+    "source_quote": "Acute mountain sickness (AMS) is the mildest form... Symptoms include: Headache, Tiredness, Lack of appetite, Nausea, Vomiting... High-altitude cerebral edema (HACE) is a more serious form... High-altitude pulmonary edema (HAPE)...",
+    "source_id": "cdc_high_altitude"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "chunk_id": "cg_wildlife_romania_intalnire_urs_comportame_760b91b986b8",
+  "card_id": "cg_wildlife_romania_intalnire_urs_comportame_760b91b986b8",
+  "domain": "wildlife_romania",
+  "topic": "intalnire_urs_comportament",
+  "language": "ro",
+  "title": "Întâlnire cu urs brun: comportament la distanță și apropiat",
+  "body": "În Carpați trăiește o populație importantă de urs brun (Ursus arctos). La o întâlnire la distanță (peste 50 metri), opriți-vă, vorbiți calm cu voce normală pentru ca ursul să vă identifice ca om și retrageți-vă încet, fără să întoarceți spatele. Nu fugiți; fuga poate declanșa instinctul de urmărire. Nu vă apropiați pentru fotografii. Dacă ursul este mai aproape, măriți-vă silueta (ridicați brațele, deschideți geaca) și vorbiți ferm. Dacă există un pui în apropiere, retrageți-vă imediat pe direcția pe care ați venit; mama protejează puiul agresiv. Dacă întâlnirea este surprinsă (sub 20 metri), nu țipați și nu faceți gesturi bruște; rămâneți pe loc și retrageți-vă lent. În cazul foarte rar al unui atac, comportamentul recomandat depinde de tip: la atac defensiv (mama cu pui, urs surprins), poziționați-vă pe abdomen, mâinile la ceafă, picioarele depărtate; jucați mort. La atac prădător (rar la urs brun, urs care urmărește persistent), luptați cu orice obiect contondent, lovind în bot și ochi. Nu lăsați mâncare în cort și nu hrăniți niciodată un urs; un urs deprins cu oamenii ajunge eutanasiat. Sunați 0SALVAMONT (apel: 0SALVAMONT) sau 112 după orice incident.",
+  "keywords": "urs brun intalnire fuga retragere atac defensiv pradator pui",
+  "card_family": "SCENARIO",
+  "priority": 88,
+  "tier": "A",
+  "source_title": "Bear Safety",
+  "source_url": "https://www.nps.gov/subjects/bears/safety.htm",
+  "publisher": "National Park Service",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 5,
+  "safety_tags": ["bear_encounter", "wildlife_safety", "life_threatening"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "La distanță: vorbiți calm, retrageți-vă încet, nu fugiți. Aproape: măriți-vă silueta. Atac defensiv: jucați mort. Sunați 0SALVAMONT/112 după incident.",
+    "evidence_confidence": "high",
+    "source_id": "nps_bear_safety"
+  }
+}

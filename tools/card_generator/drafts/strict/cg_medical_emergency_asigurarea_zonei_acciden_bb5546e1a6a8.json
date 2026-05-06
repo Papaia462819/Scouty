@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_asigurarea_zonei_acciden_bb5546e1a6a8",
+  "card_id": "cg_medical_emergency_asigurarea_zonei_acciden_bb5546e1a6a8",
+  "domain": "medical_emergency",
+  "topic": "asigurarea_zonei_accidentului",
+  "language": "ro",
+  "title": "Martor la accident montan — primele măsuri",
+  "body": "Dacă ești martor la un incident montan soldat cu victime sau cu starea de sănătate afectată, este esențial să urmezi câțiva pași. În primul rând, nu intrați în panică. Apoi, protejați victima prin marcarea locului accidentului. Dacă accidentul se află pe un traseu de coborâre rapidă (schiuri, biciclete, vehicule offroad), amplasați un marcaj vizual în formă de \"X\" în amonte, la o distanță suficientă pentru a avertiza coborâtorii despre pericol. Anunțați imediat echipa Salvamont prin apel la SNAU 112 sau la Dispeceratul Național SALVAMONT (0SALVAMONT - 0725826668). Este crucial să nu mișcați persoana accidentată și să nu permiteți nimănui să facă acest lucru, decât dacă victima se află sub influența directă a unui factor de risc care îi pune viața în pericol sau îi provoacă afecțiuni medicale imediate.",
+  "lead": "Dacă ești martor la un accident montan, păstrează-ți calmul și ia măsuri imediate pentru a proteja victima și a alerta echipele de salvare.",
+  "keywords": "accident montan prim ajutor salvamont urgență siguranță montană apel 112 protejare victimă marcare accident nu mișca victima",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Ce faci daca esti martorul unui accident montan",
+  "source_url": "https://www.salvamontromania.ro/martor-accident-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "mountain_accident",
+    "first_responder",
+    "emergency_call",
+    "victim_protection",
+    "accident_scene_safety"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Dacă ești martor la un accident montan, păstrează-ți calmul și ia măsuri imediate pentru a proteja victima și a alerta echipele de salvare.",
+    "evidence_confidence": "high",
+    "source_quote": "Pentru ca in ultimii ani inregistram o crestere ingrijorator de mare de a numarului de accidente pe munte va prezinta cateva masuri pe care sa le intreprindeti daca sunteti martor la un incident soldat cu victime...",
+    "source_id": "salvamont_martor_accident"
+  }
+}

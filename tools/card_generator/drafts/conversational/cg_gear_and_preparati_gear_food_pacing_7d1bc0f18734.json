@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_food_pacing_7d1bc0f18734",
+  "card_id": "cg_gear_and_preparati_gear_food_pacing_7d1bc0f18734",
+  "domain": "gear_and_preparation",
+  "topic": "gear_food_pacing",
+  "language": "ro",
+  "title": "Mâncare pe traseu: gustări dese, nu mese mari",
+  "body": "Băi, pe munte, uită de mesele copioase de la prânz! Cel mai bine e să mănânci puțin și des. Gândește-te la o gustare la fiecare oră și jumătate, maxim două. Nu vrei să-ți îngreunezi digestia când ai de tras la deal. Eu, de exemplu, îmi iau batoane energizante, fructe uscate, nuci, covrigei sau chiar un sandviș micuț. Evită chestiile grele, prăjite sau dulciurile care-ți dau un \"boost\" rapid, dar te lasă apoi fără energie. Hidratarea e la fel de importantă, așa că bea apă regulat, nu doar când ți-e sete. O să vezi că ritmul ăsta te ține în priză toată ziua, fără \"pene\" de energie.",
+  "lead": "Pe munte, e mai eficient să mănânci gustări mici și dese decât mese mari, pentru a menține un nivel constant de energie.",
+  "keywords": "mâncare traseu gustări munte energie drumeție hidratare munte nutriție traseu",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Pe munte, e mai eficient să mănânci gustări mici și dese decât mese mari, pentru a menține un nivel constant de energie.",
+    "seed_topic": "Mâncare pe traseu: ritm de gustări vs mese mari",
+    "seed_topic_slug": "gear_food_pacing"
+  }
+}

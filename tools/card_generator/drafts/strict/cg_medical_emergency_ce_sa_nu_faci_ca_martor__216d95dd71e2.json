@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_ce_sa_nu_faci_ca_martor__216d95dd71e2",
+  "card_id": "cg_medical_emergency_ce_sa_nu_faci_ca_martor__216d95dd71e2",
+  "domain": "medical_emergency",
+  "topic": "ce_sa_nu_faci_ca_martor_la_accident",
+  "language": "ro",
+  "title": "Acțiuni de evitat la un accident montan",
+  "body": "Dacă sunteți martor la un accident montan, este crucial să evitați anumite acțiuni pentru a nu agrava situația. În primul rând, nu intrați în panică. Păstrați-vă calmul pentru a putea acționa rațional și eficient. În al doilea rând, nu mișcați persoana accidentată și nu permiteți nimănui să facă acest lucru. Această regulă are o excepție importantă: puteți mișca victima doar dacă se află sub influența directă a unui factor de risc care îi pune viața în pericol sau îi provoacă afecțiuni medicale imediate. Orice mișcare nejustificată poate agrava leziunile existente. După ce ați evitat aceste acțiuni, anunțați echipa Salvamont prin apel telefonic la SNAU 112 sau la Dispeceratul Național SALVAMONT (0SALVAMONT).",
+  "lead": "La un accident montan, este esențial să evitați panica și să nu mișcați victima, cu excepția situațiilor de pericol imediat.",
+  "keywords": "accident montan prim ajutor ce nu faci victima salvamont urgență siguranță nu mișcați",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Ce faci daca esti martorul unui accident montan",
+  "source_url": "https://www.salvamontromania.ro/martor-accident-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "mountain_accident",
+    "first_aid",
+    "do_not_move",
+    "panic_avoidance",
+    "emergency_response"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "La un accident montan, este esențial să evitați panica și să nu mișcați victima, cu excepția situațiilor de pericol imediat.",
+    "evidence_confidence": "high",
+    "source_quote": "1. Nu intrati in panica. [...] 4. Nu miscati persoana accidentata si nu permiteti nimanui sa faca acest lucru, decat daca victima se afla sub influenta directa a unui factor de risc care ii pune viata in pericol sau ii provoaca afectiuni medicale imediate.",
+    "source_id": "salvamont_martor_accident"
+  }
+}

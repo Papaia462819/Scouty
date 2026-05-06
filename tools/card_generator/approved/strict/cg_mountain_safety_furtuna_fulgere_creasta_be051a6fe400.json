@@ -1,0 +1,29 @@
+{
+  "chunk_id": "cg_mountain_safety_furtuna_fulgere_creasta_be051a6fe400",
+  "card_id": "cg_mountain_safety_furtuna_fulgere_creasta_be051a6fe400",
+  "domain": "mountain_safety",
+  "topic": "furtuna_fulgere_creasta",
+  "language": "ro",
+  "title": "Furtună cu fulgere pe creastă: protocol de coborâre",
+  "body": "Furtunile cu descărcări electrice sunt frecvente vara pe Carpați, în special după-amiaza. Dacă auziți tunete, riscul de fulger este deja prezent, chiar dacă cerul deasupra dumneavoastră pare senin. Părăsiți imediat creasta, vârful, șaua sau orice punct înalt expus și coborâți cât mai mult posibil. Evitați copacii izolați, suprafețele metalice (cabluri, scări, balustrade), peșterile mici și zonele cu apă. Îndepărtați-vă unii de alții cel puțin 5 metri pentru a reduce riscul ca un singur fulger să afecteze tot grupul. Dacă nu reușiți să coborâți la timp, ghemuiți-vă pe vârful picioarelor (călcâiele lipite), pe un izolator (rucsac, sac de bivuac), cu capul aplecat și mâinile pe genunchi; nu vă întindeți pe pământ. Așteptați minim 30 de minute după ultimul tunet auzit înainte de a relua activitatea. Bețele de trekking metalice și obiectele lungi din metal trebuie depărtate de corp. Dacă o persoană este lovită de fulger, este sigur de atins; verificați respirația și pulsul, începeți manevre de resuscitare dacă este necesar și apelați imediat 0SALVAMONT (apel: 0SALVAMONT) sau 112.",
+  "keywords": "furtuna fulger trasnet creasta coborare adapostire salvamont",
+  "card_family": "SCENARIO",
+  "priority": 96,
+  "tier": "A",
+  "source_title": "Lightning Safety",
+  "source_url": "https://www.cdc.gov/lightning/safety/index.html",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 5,
+  "safety_tags": ["lightning", "storm", "ridge_safety", "life_threatening"],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Auziți tunet — coborâți imediat de pe creastă; ghemuiți-vă pe izolator dacă nu puteți coborî; așteptați 30 de minute după ultimul tunet.",
+    "evidence_confidence": "high",
+    "source_id": "cdc_lightning_safety"
+  }
+}

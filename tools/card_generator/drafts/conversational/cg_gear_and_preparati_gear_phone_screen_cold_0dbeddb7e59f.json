@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_phone_screen_cold_0dbeddb7e59f",
+  "card_id": "cg_gear_and_preparati_gear_phone_screen_cold_0dbeddb7e59f",
+  "domain": "gear_and_preparation",
+  "topic": "gear_phone_screen_cold",
+  "language": "ro",
+  "title": "Touchscreen pe frig: mănuși capacitive sau vârf de creion?",
+  "body": "Frigul și telefoanele nu se înțeleg bine, mai ales când vrei să faci o poză sau să verifici harta. Am încercat și eu tot felul de mănuși capacitive, dar majoritatea sunt cam groase și nu ai precizie. Mai bine ia-ți niște mănuși subțiri, de lână sau polar, și peste ele o pereche de mănuși groase, impermeabile. Când ai nevoie de telefon, dai jos doar mănușa groasă. O altă variantă e să folosești un vârf de creion sau un stylus special pentru touchscreen. E mai precis și nu-ți îngheață degetul. Am văzut unii care folosesc chiar și un bețișor, dar trebuie să fii atent să nu zgârii ecranul. Secretul e să testezi acasă, la rece, înainte să pleci pe munte. Să nu te prindă nepregătit!",
+  "lead": "Află cum să folosești eficient telefonul cu touchscreen pe frig, fără să-ți înghețe mâinile, folosind mănuși potrivite sau un stylus.",
+  "keywords": "mănuși capacitive vârf creion touchscreen frig echipament munte sfaturi drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să folosești eficient telefonul cu touchscreen pe frig, fără să-ți înghețe mâinile, folosind mănuși potrivite sau un stylus.",
+    "seed_topic": "Touchscreen pe frig: mănuși capacitive vs vârf de creion",
+    "seed_topic_slug": "gear_phone_screen_cold"
+  }
+}

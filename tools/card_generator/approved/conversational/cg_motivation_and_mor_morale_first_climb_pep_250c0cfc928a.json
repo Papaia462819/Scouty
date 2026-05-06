@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_first_climb_pep_250c0cfc928a",
+  "card_id": "cg_motivation_and_mor_morale_first_climb_pep_250c0cfc928a",
+  "domain": "motivation_and_morale",
+  "topic": "morale_first_climb_pep",
+  "language": "ro",
+  "title": "Prima urcare grea? Nu-i bai, o scoatem la capat!",
+  "body": "Auzi, știu că-i greu și că-ți vine să te oprești la fiecare zece pași. Respiră adânc! Nu ești singur, toți am trecut pe-aici. Amintește-ți de ce ai plecat la drum: aer curat, peisaje de vis și o cafea fierbinte la cabană. Fă pași mici și ritmici, nu te grăbi. E ca la sarmale, nu le mănânci pe toate dintr-o dată. Bea apă regulat, chiar dacă nu-ți e sete, și ia o gustare energizantă. Dacă simți că nu mai poți, ia o pauză scurtă, admiră priveliștea și apoi pornește din nou. Fiecare pas e o victorie! La final, satisfacția e imensă. Hai, că poți!",
+  "lead": "Sfaturi practice și încurajări pentru a depăși prima urcare dificilă pe munte, transformând provocarea într-o victorie personală.",
+  "keywords": "motivatie prima urcare incurajare rezistenta sfaturi practice munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Sfaturi practice și încurajări pentru a depăși prima urcare dificilă pe munte, transformând provocarea într-o victorie personală.",
+    "seed_topic": "Pep talk pentru prima ta urcare grea",
+    "seed_topic_slug": "morale_first_climb_pep"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_sunset_descent_pro_bdabcb3fc4b4",
+  "card_id": "cg_route_intelligence_route_sunset_descent_pro_bdabcb3fc4b4",
+  "domain": "route_intelligence_romania",
+  "topic": "route_sunset_descent_problem",
+  "language": "ro",
+  "title": "Apusul te prinde pe coborâre? Iată cum eviți!",
+  "body": "Știi cum e, te ia valul la urcare, dar uităm că și coborârea durează. Ca să nu te prindă apusul pe potecă, mai ales toamna, când ziua e scurtă, începe coborârea cu cel puțin 3-4 ore înainte de apus. Verifică ora apusului înainte să pleci! Odată, prin Retezat, am calculat greșit și am ajuns la mașină pe beznă, luminând cu telefonul. Nu e o experiență pe care vrei s-o repeți. Echipamentul de iluminat e obligatoriu, dar e mai bine să nu-l folosești decât în caz de urgență. Planifică-ți bine timpul, mai ales dacă știi că ești mai lent la coborâre.",
+  "lead": "Află cum să eviți să te prindă apusul pe coborâre, planificând inteligent timpul petrecut pe munte.",
+  "keywords": "planificare timp coborâre apus siguranță munte lanternă drumeție noapte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să eviți să te prindă apusul pe coborâre, planificând inteligent timpul petrecut pe munte.",
+    "seed_topic": "Coborâri în care apusul te prinde — cum eviți",
+    "seed_topic_slug": "route_sunset_descent_problem"
+  }
+}

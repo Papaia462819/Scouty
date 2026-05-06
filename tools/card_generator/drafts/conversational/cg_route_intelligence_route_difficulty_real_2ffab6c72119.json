@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_difficulty_real_2ffab6c72119",
+  "card_id": "cg_route_intelligence_route_difficulty_real_2ffab6c72119",
+  "domain": "route_intelligence_romania",
+  "topic": "route_difficulty_real",
+  "language": "ro",
+  "title": "Cum citești un grad de dificultate românesc",
+  "body": "Salutare, prieteni! Vă zic din experiență, gradele de dificultate românești de pe indicatoare sunt un pic altfel decât te-ai aștepta. Nu e ca la schi, cu verde-albastru-roșu-negru. La noi, un traseu \"ușor\" înseamnă de obicei că nu ai pasaje expuse sau porțiuni periculoase, dar tot poate avea o diferență de nivel considerabilă. De exemplu, un \"ușor\" de 3-4 ore poate însemna 800m diferență de nivel. Un traseu \"mediu\" poate implica urcușuri mai abrupte, porțiuni stâncoase sau chiar cabluri/lanțuri, dar fără tehnică de alpinism. \"Dificil\" e pentru cei cu experiență, unde ai pasaje expuse, grohotiș, porțiuni unde trebuie să te cațeri puțin. Nu te baza doar pe grad, ci și pe diferența de nivel și timpul estimat. Verifică mereu descrieri mai detaliate înainte de a pleca. Eu am pățit să subestimez un \"ușor\" și să mă trezesc cu o urcare de nu mai vedeam capătul. Întreabă mereu un localnic sau un Salvamontist dacă ai dubii.",
+  "lead": "Înțelege cum sunt clasificate traseele montane în România, de la \"ușor\" la \"dificil\", și la ce să te aștepți pe fiecare.",
+  "keywords": "dificultate traseu grade romanesti evaluare traseu indicatoare montane tipuri trasee experienta munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Înțelege cum sunt clasificate traseele montane în România, de la \"ușor\" la \"dificil\", și la ce să te aștepți pe fiecare.",
+    "seed_topic": "Cum citești un grad de dificultate românesc — exemple concrete",
+    "seed_topic_slug": "route_difficulty_real"
+  }
+}

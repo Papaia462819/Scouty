@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_cold_protection_ba81c0749507",
+  "card_id": "cg_survival_basics_survival_cold_protection_ba81c0749507",
+  "domain": "survival_basics",
+  "topic": "survival_cold_protection",
+  "language": "ro",
+  "title": "Fara sac de dormit in noapte rece? Iata ce faci!",
+  "body": "Băi, am pățit-o și eu, nu e de glumă. Dacă te prinde noaptea fără sac, primul pas e să-ți găsești un adăpost natural: o grotă mică, sub un brad des, ceva care să te ferească de vânt. Apoi, izolează-te de pământ! Folosește frunze uscate, crengi mici, mușchi – orice găsești. Fă un strat gros. Pune-ți pe tine toate hainele, inclusiv cele de ploaie, chiar și pelerina. E mai bine să transpiri un pic decât să îngheți. Dacă ai un rucsac mare, golește-l și bagă-ți picioarele în el. Nu uita să mănânci ceva, chiar dacă e un baton, corpul tău are nevoie de energie pentru a genera căldură. Și mișcă-te din când în când, dar nu te epuiza. E o experiență, dar una din care înveți mult!",
+  "lead": "Află cum să te protejezi de frig dacă rămâi peste noapte în munți fără sac de dormit, folosind resursele din jur și echipamentul pe care îl ai.",
+  "keywords": "frig fara sac adapost natural izolare supravietuire noapte rece haine energie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te protejezi de frig dacă rămâi peste noapte în munți fără sac de dormit, folosind resursele din jur și echipamentul pe care îl ai.",
+    "seed_topic": "Cum te aperi de frig dacă rămâi peste noapte fără sac",
+    "seed_topic_slug": "survival_cold_protection"
+  }
+}

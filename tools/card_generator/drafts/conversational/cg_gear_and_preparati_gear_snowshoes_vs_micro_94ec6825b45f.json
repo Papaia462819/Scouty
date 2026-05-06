@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_snowshoes_vs_micro_94ec6825b45f",
+  "card_id": "cg_gear_and_preparati_gear_snowshoes_vs_micro_94ec6825b45f",
+  "domain": "gear_and_preparation",
+  "topic": "gear_snowshoes_vs_micro",
+  "language": "ro",
+  "title": "Rachete de zapada sau coltari mici? Alegerea corecta pentru traseu",
+  "body": "Alegerea între rachete de zăpadă și colțari mici depinde mult de traseu. Dacă mergi pe zăpadă afânată, nebatută, prin pădure sau pe platouri ușor înclinate, rachetele sunt prietenele tale. Îți distribui greutatea și nu te afunzi până la brâu. Gândește-te la o plimbare prin Postăvaru iarna, pe poteci mai puțin umblate. Pe de altă parte, dacă ai de-a face cu zăpadă tare, ghețată, sau porțiuni scurte de gheață, colțarii mici (gen microspikes) sunt mult mai eficienți. Îți oferă aderență excelentă și te ajută să nu-ți rupi gâtul pe gheața de pe crestele joase sau pe potecile înghețate din Bucegi. Nu uita, rachetele sunt pentru plutit, colțarii pentru aderență pe gheață. Nu le confunda!",
+  "lead": "Află când să alegi rachete de zăpadă și când colțari mici, în funcție de tipul de zăpadă și înclinația traseului.",
+  "keywords": "rachete zapada coltari mici aderenta zapada echipament iarna traseu iarna drumetie zapada",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află când să alegi rachete de zăpadă și când colțari mici, în funcție de tipul de zăpadă și înclinația traseului.",
+    "seed_topic": "Rachete de zăpadă vs colțari mici — alegerea după traseu",
+    "seed_topic_slug": "gear_snowshoes_vs_micro"
+  }
+}

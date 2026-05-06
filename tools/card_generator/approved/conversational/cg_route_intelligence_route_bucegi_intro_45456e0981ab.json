@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_bucegi_intro_45456e0981ab",
+  "card_id": "cg_route_intelligence_route_bucegi_intro_45456e0981ab",
+  "domain": "route_intelligence_romania",
+  "topic": "route_bucegi_intro",
+  "language": "ro",
+  "title": "Bucegi: Trasee de zi pe care le-aș repeta oricând",
+  "body": "Bucegiul e plin de frumuseți, dar unele trasee pur și simplu te cheamă înapoi. Unul dintre preferatele mele este cel care urcă de la Bușteni, pe Valea Jepilor, până la Cabana Caraiman și apoi la Crucea Eroilor de pe Caraiman. E solicitant, dar priveliștile sunt spectaculoase. Ai grijă la echipament, mai ales la bocanci și la o jachetă impermeabilă, că vremea se schimbă repede. Altă opțiune grozavă e de la Peștera, prin Cheile Urșilor, până la Cabana Babele și Sfinx. E mai lejer, dar la fel de pitoresc. Nu uita de rucsacul de zi cu apă, gustări și o folie de supraviețuire. Merge și o pălărie, vara, să nu te topești. Am urcat pe Jepilor și de 10 ori și tot găsesc ceva nou de admirat. Nu uita să te bucuri de fiecare pas!",
+  "lead": "Descoperă două trasee de o zi în Bucegi, pe care un drumeț experimentat le-ar repeta oricând, cu sfaturi practice de echipament.",
+  "keywords": "bucegi trasee valeajepilor caraiman babele sfinx echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă două trasee de o zi în Bucegi, pe care un drumeț experimentat le-ar repeta oricând, cu sfaturi practice de echipament.",
+    "seed_topic": "Bucegi: trasee de zi pe care le-ai face și a doua oară",
+    "seed_topic_slug": "route_bucegi_intro"
+  }
+}

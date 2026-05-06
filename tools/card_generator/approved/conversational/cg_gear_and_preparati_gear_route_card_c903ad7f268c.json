@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_route_card_c903ad7f268c",
+  "card_id": "cg_gear_and_preparati_gear_route_card_c903ad7f268c",
+  "domain": "gear_and_preparation",
+  "topic": "gear_route_card",
+  "language": "ro",
+  "title": "Cardul de traseu: esențial înainte de plecare",
+  "body": "Băi, știi vorba aia, mai bine să ai și să nu-ți trebuiască, decât să-ți trebuiască și să n-ai. Înainte să pleci la drum, chiar și pentru o tură de o zi, fă-ți un obicei să lași cuiva o foaie sau un mesaj cu detaliile traseului. Scrie clar data plecării și ora estimată de întoarcere. Apoi, pune numele tău și al tuturor din grup, plus un număr de telefon de contact pentru fiecare. Nu uita să menționezi traseul planificat, cu punctele cheie și, dacă e cazul, o rută alternativă. E ca o asigurare simplă, dar care poate face o diferență enormă dacă ceva nu merge conform planului. Și nu uita să anunți când te-ai întors!",
+  "lead": "Lasă cuiva o foaie cu detaliile traseului tău, numele participanților și ora estimată de întoarcere înainte de a pleca în drumeție.",
+  "keywords": "card traseu siguranta munte planificare tura detalii contact traseu planificat echipament siguranta",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Lasă cuiva o foaie cu detaliile traseului tău, numele participanților și ora estimată de întoarcere înainte de a pleca în drumeție.",
+    "seed_topic": "Cardul de traseu: ce scrii pe o foaie înainte să pleci",
+    "seed_topic_slug": "gear_route_card"
+  }
+}

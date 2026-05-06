@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_rain_3hours_49abfd22945a",
+  "card_id": "cg_motivation_and_mor_morale_rain_3hours_49abfd22945a",
+  "domain": "motivation_and_morale",
+  "topic": "morale_rain_3hours",
+  "language": "ro",
+  "title": "Ploaia torentiala si moralul in munti",
+  "body": "Aoleu, ploaia! Trei ore de udat continuu pot fi un test. Primul sfat: acceptă. Nu te lupta cu ploaia, e mai puternică. Încearcă să te gândești la ceaiul fierbinte de la cabană sau la o poveste amuzantă de la ultima tură. O glumă bună, chiar și una proastă, poate face minuni. Verifică-ți echipamentul: ai pelerină, husă de rucsac? Dacă ești ud la piele, moralul scade. Mănâncă ceva dulce, o ciocolată, un baton energizant. Zaharul ajută. Și nu uita, fiecare ploaie se termină. Ești în Carpați, nu la piscină. Fii mândru că reziști!",
+  "lead": "Cum să-ți menții moralul ridicat când ești prins de ploaie torențială în munți.",
+  "keywords": "ploaie munte moral drumetie echipament ploaie motivatie munte rezistenta ploaie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Cum să-ți menții moralul ridicat când ești prins de ploaie torențială în munți.",
+    "seed_topic": "Trei ore de ploaie continuă — cum păstrezi moralul",
+    "seed_topic_slug": "morale_rain_3hours"
+  }
+}

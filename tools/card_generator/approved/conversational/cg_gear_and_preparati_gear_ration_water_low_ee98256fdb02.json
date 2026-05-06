@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_ration_water_low_ee98256fdb02",
+  "card_id": "cg_gear_and_preparati_gear_ration_water_low_ee98256fdb02",
+  "domain": "gear_and_preparation",
+  "topic": "gear_ration_water_low",
+  "language": "ro",
+  "title": "Apa putina in drumetie? Iata cum o gestionezi!",
+  "body": "Băi, am pățit-o de câteva ori să mă trezesc cu mai puțină apă decât planificasem. Primul sfat: nu bea niciodată toată apa dintr-o dată, chiar dacă ești mort de sete. Împarte-o în porții mici și bea-le la intervale regulate. Umezește-ți buzele și gura cu o gură mică de apă, nu înghiți imediat. Asta te ajută să simți că ai băut mai mult. Evită mâncărurile sărate sau picante, că-ți fac o sete de lup. Dacă ai fructe proaspete, gen mere sau portocale, salvează-le pentru momentele critice. Și nu uita, chiar și o picătură de apă pe o batistă și aplicată pe față te poate revigora. Am avut o dată o sticlă de jumate de litru care trebuia să-mi ajungă o zi. Am reușit, dar nu e de joacă.",
+  "lead": "Învață cum să gestionezi eficient rezervele de apă limitate în timpul drumețiilor montane.",
+  "keywords": "apa rationalizare hidratare drumetie sfaturi urgenta resurse",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să gestionezi eficient rezervele de apă limitate în timpul drumețiilor montane.",
+    "seed_topic": "Cum îți raționalizezi apa când e puțină",
+    "seed_topic_slug": "gear_ration_water_low"
+  }
+}

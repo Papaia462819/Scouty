@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_signal_visible__14895f00b186",
+  "card_id": "cg_survival_basics_survival_signal_visible__14895f00b186",
+  "domain": "survival_basics",
+  "topic": "survival_signal_visible_path",
+  "language": "ro",
+  "title": "Semne cand parasesti traseul marcat",
+  "body": "Băi, dacă te abați de la traseul marcat, chiar și pentru o pauză rapidă sau o explorare scurtă, lasă un semn! Nu te baza doar pe GPS, că bateria se duce sau semnalul e slab. O creangă ruptă vizibil, o mică movilă de pietre (cairn) sau chiar o bucată de material colorat legată de un copac te pot ajuta să găsești drumul înapoi. Gândește-te la asta ca la firul Ariadnei, dar pentru drumeți. Am pățit-o o dată, am plecat după niște ciuperci și m-am trezit că nu mai știam exact de unde am venit. Un brad cu o creangă ruptă strategic m-a salvat. E un obicei simplu, dar care te poate scoate din bucluc.",
+  "lead": "Lasă semne fizice clare (crengi rupte, movile de pietre) dacă te abați de la traseul marcat, pentru a te orienta mai ușor la întoarcere.",
+  "keywords": "semne traseu orientare munte siguranta drumetie cairn abandon traseu",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Lasă semne fizice clare (crengi rupte, movile de pietre) dacă te abați de la traseul marcat, pentru a te orienta mai ușor la întoarcere.",
+    "seed_topic": "Lasă semne fizice când părăsești traseul oficial",
+    "seed_topic_slug": "survival_signal_visible_path"
+  }
+}

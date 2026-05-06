@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_helmet_when_97f567db4971",
+  "card_id": "cg_gear_and_preparati_gear_helmet_when_97f567db4971",
+  "domain": "gear_and_preparation",
+  "topic": "gear_helmet_when",
+  "language": "ro",
+  "title": "Cand chiar ai nevoie de casca pe Carpati",
+  "body": "Salut, prietene! Chiar dacă nu urcăm pe Everest, cascada poate face diferența în anumite situații. Gândește-te la zonele cu grohotiș instabil, unde pietrele mici sau chiar mai mari pot fi dislocate ușor, fie de tine, fie de cei de deasupra. Pe traseele de via ferrata, e obligatorie, evident. La fel și pe porțiunile expuse, cu cabluri, unde te poți dezechilibra și lovi de stâncă. Nu e pentru \"fițe\", ci pentru siguranța capului tău. Am văzut destule incidente unde o cască ar fi prevenit o vizită la spital. Nu e o investiție mare, dar îți poate salva ziua, sau chiar mai mult. Gândește-te la traseele din Piatra Craiului, anumite brâne din Bucegi sau cheile mai sălbatice. Acolo, o cască e prietena ta cea mai bună, pe lângă bocanci și rucsac.",
+  "lead": "Află când o cască de protecție devine esențială pe traseele montane din Carpați, dincolo de aparențe.",
+  "keywords": "casca munte siguranta carpati echipament protectie grohotis via ferrata trasee expuse",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află când o cască de protecție devine esențială pe traseele montane din Carpați, dincolo de aparențe.",
+    "seed_topic": "Când chiar ai nevoie de cască pe Carpați",
+    "seed_topic_slug": "gear_helmet_when"
+  }
+}

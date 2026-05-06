@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_glove_layers_8388b05ce830",
+  "card_id": "cg_gear_and_preparati_gear_glove_layers_8388b05ce830",
+  "domain": "gear_and_preparation",
+  "topic": "gear_glove_layers",
+  "language": "ro",
+  "title": "Mănuși: De ce ai nevoie de două perechi, plus rezervă",
+  "body": "Băi, știi cum e în munți: vremea se schimbă mai repede decât îți schimbi tu șosetele. De-aia, la mănuși, eu merg mereu pe principiul celor două perechi, plus o rezervă. Ai nevoie de o pereche subțire, de polartec sau lână merinos, pentru zilele mai răcoroase sau ca prim strat. Peste ele, o pereche mai groasă, impermeabilă și rezistentă la vânt, pentru când se strică treaba de-a binelea. Și, neapărat, o a treia pereche, uscată, într-un săculeț etanș, în rucsac. S-a udat una, o schimbi. Ai pierdut-o pe aia groasă, ai rezervă. Crede-mă, am văzut destui băieți cu degetele vineții, că au uitat de rezerva asta. Nu e loc de glume când îți îngheață mâinile.",
+  "lead": "Află de ce e esențial să ai două perechi de mănuși, plus o rezervă, pentru a te proteja de vremea imprevizibilă din munți.",
+  "keywords": "mănuși echipament munte stratificare rezervă vreme rece",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce e esențial să ai două perechi de mănuși, plus o rezervă, pentru a te proteja de vremea imprevizibilă din munți.",
+    "seed_topic": "Mănuși: subțiri + groase, și de ce mereu doi cu rezervă",
+    "seed_topic_slug": "gear_glove_layers"
+  }
+}

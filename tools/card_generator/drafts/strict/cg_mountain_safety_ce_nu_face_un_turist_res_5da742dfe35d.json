@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_ce_nu_face_un_turist_res_5da742dfe35d",
+  "card_id": "cg_mountain_safety_ce_nu_face_un_turist_res_5da742dfe35d",
+  "domain": "mountain_safety",
+  "topic": "ce_nu_face_un_turist_responsabil",
+  "language": "ro",
+  "title": "Turistul montan responsabil: ce să NU faci",
+  "body": "Pentru a fi un turist montan responsabil, evitați anumite acțiuni care pot pune în pericol siguranța dumneavoastră și a celorlalți. Nu plecați în drumeție dacă sunteți obosit sau dacă suferiți de anumite boli ori sunteți în convalescență, fără avizul medicului. Evitați deplasarea pe munte pe timp nefavorabil, după ce v-ați informat despre prognoza meteo pentru următoarele 24 de ore. Nu alegeți trasee care depășesc experiența și pregătirea dumneavoastră fizică. Nu porniți la drum fără a vă informa în prealabil despre itinerariul propus, gradul de dificultate, starea marcajului, accesibilitate, porțiuni periculoase și programul mijloacelor de transport pe cablu. Informați-vă de la salvamontiști, cabanieri, pădurari sau ciobani despre starea potecilor, podetelor, marcajelor, refugiilor și punctelor Salvamont. Nu subestimați timpul necesar parcurgerii traseului și nu plecați fără echipament adecvat condițiilor meteo și specificului traseului, incluzând haine de schimb și de protecție împotriva vântului și ploii. În caz de urgență, apelați 112 sau 0SALVAMONT.",
+  "lead": "Aflați ce acțiuni trebuie să evitați pentru a asigura o experiență sigură și responsabilă pe munte, conform recomandărilor Salvamont.",
+  "keywords": "siguranță montană turist responsabil evitare riscuri pregătire drumeție echipament munte condiții meteo salvamont urgență munte planificare traseu sănătate drumeție",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Recomandari pentru turistul montan",
+  "source_url": "https://www.salvamontromania.ro/recomandari-turist-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "mountain_safety",
+    "responsible_hiking",
+    "risk_prevention",
+    "trip_planning",
+    "emergency_protocol"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați ce acțiuni trebuie să evitați pentru a asigura o experiență sigură și responsabilă pe munte, conform recomandărilor Salvamont.",
+    "evidence_confidence": "high",
+    "source_quote": "Nu plecati in drumetie daca sunteti obosit sau nu aveti avizul medicului... evitati deplasarea pe timp nefavorabil; Calculati timpul necesar parcurgerii traseului... Plecati pe munte cu echipament adecvat.",
+    "source_id": "salvamont_turist_montan"
+  }
+}

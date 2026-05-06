@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_ridge_decision_poi_f3b0aea06690",
+  "card_id": "cg_route_intelligence_route_ridge_decision_poi_f3b0aea06690",
+  "domain": "route_intelligence_romania",
+  "topic": "route_ridge_decision_points",
+  "language": "ro",
+  "title": "Decizii cruciale pe creasta Făgărașului",
+  "body": "Pe creasta Făgărașului, vremea se schimbă rapid. Ai pornit dimineață cu soare, dar la amiază e ceață și vânt? E momentul să evaluezi. Dacă vizibilitatea scade sub 10-20 de metri și vântul e puternic, nu forța. Caută un refugiu sau o coborâre marcată într-o vale laterală. Nu te baza doar pe GPS, marcajele pot fi greu de găsit în ceață densă. Odată, am prins o furtună de zăpadă în august, aproape de Vânătoarea lui Buteanu. Am decis să coborăm spre Bâlea, deși planul era să continuăm spre Podragu. Mai bine o zi pierdută decât o noapte la limită. Ascultă-ți instinctul și nu te teme să schimbi planul.",
+  "lead": "Află cum să iei decizii corecte pe creasta Făgărașului când vremea se schimbă brusc.",
+  "keywords": "făgăraș creastă decizii vreme rea siguranță refugiu vizibilitate",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să iei decizii corecte pe creasta Făgărașului când vremea se schimbă brusc.",
+    "seed_topic": "Puncte cheie de decizie pe creastă — exemple Făgăraș",
+    "seed_topic_slug": "route_ridge_decision_points"
+  }
+}

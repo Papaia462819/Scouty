@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_phone_airplane_mode_e4b3bae99426",
+  "card_id": "cg_tips_and_tricks_tip_phone_airplane_mode_e4b3bae99426",
+  "domain": "tips_and_tricks",
+  "topic": "tip_phone_airplane_mode",
+  "language": "ro",
+  "title": "Mod avion = baterie mai multă pe munte",
+  "body": "Bateria telefonului e aur curat pe munte, mai ales când ai nevoie de hartă sau să suni la nevoie. Un truc simplu: activează modul avion între repere. Când ajungi la un punct de interes sau o intersecție, scoți telefonul, dezactivezi modul avion, verifici traseul, faci o poză, apoi îl pui înapoi pe avion. Vei economisi lejer 60% din baterie. Am testat asta de nenumărate ori, de la Bucegi la Retezat. Vezi tu, telefonul nu mai caută semnal non-stop, o chestie care consumă enorm. Și nu uita o baterie externă, dar modul avion e prima linie de apărare.",
+  "lead": "Folosește modul avion între repere pentru a economisi semnificativ bateria telefonului tău pe munte, prelungind autonomia acestuia.",
+  "keywords": "mod avion economie baterie telefon munte sfaturi drumeție navigație munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Folosește modul avion între repere pentru a economisi semnificativ bateria telefonului tău pe munte, prelungind autonomia acestuia.",
+    "seed_topic": "Mod avion între repere — economisești 60% din baterie",
+    "seed_topic_slug": "tip_phone_airplane_mode"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_heat_protection_00a5f7cbc5ff",
+  "card_id": "cg_survival_basics_survival_heat_protection_00a5f7cbc5ff",
+  "domain": "survival_basics",
+  "topic": "survival_heat_protection",
+  "language": "ro",
+  "title": "Protectie solara la altitudine fara palarie",
+  "body": "Am uitat pălăria acasă? Nu-i bai! La altitudine, soarele e mai puternic și te poate arde rapid, chiar și prin nori. Folosește o bandană sau un buff pe care să le uzi și să le pui pe cap. Îți protejează scalpul și ceafa. Dacă ai o bluză cu mânecă lungă, poți improviza o glugă legând mânecile în jurul capului. Nu uita de ochelarii de soare – lumina reflectată de zăpadă sau piatră e intensă. Și, bineînțeles, cremă cu factor de protecție mare pe față, gât și urechi. Am văzut odată un prieten care a adormit la prânz pe un vârf și a doua zi arăta de parcă fusese la concurs de bronzat la solar. Nu vrei să fii tu ăla, crede-mă!",
+  "lead": "Sfaturi practice pentru a te proteja de soare la altitudine, chiar dacă ai uitat pălăria acasă.",
+  "keywords": "protectie solara altitudine bandana ochelari de soare crema spf",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Sfaturi practice pentru a te proteja de soare la altitudine, chiar dacă ai uitat pălăria acasă.",
+    "seed_topic": "Cum te aperi de soare la altitudine fără pălărie",
+    "seed_topic_slug": "survival_heat_protection"
+  }
+}

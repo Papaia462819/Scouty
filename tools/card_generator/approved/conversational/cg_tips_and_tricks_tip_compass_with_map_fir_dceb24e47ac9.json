@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_compass_with_map_fir_dceb24e47ac9",
+  "card_id": "cg_tips_and_tricks_tip_compass_with_map_fir_dceb24e47ac9",
+  "domain": "tips_and_tricks",
+  "topic": "tip_compass_with_map_first",
+  "language": "ro",
+  "title": "Busola si harta: Prietenii tai de nadejde pe munte",
+  "body": "Băi, știi cum e? Telefonul e bun pentru poze și, poate, o verificare rapidă, dar pe munte, el e doar un accesoriu. Bateria te poate lăsa când ți-e lumea mai dragă, iar semnalul e o loterie. Investește într-o busolă bună și învață să citești o hartă topografică. Nu e rocket science, îți promit! Am avut un prieten care s-a bazat doar pe telefon și a ajuns să doarmă sub o stâncă pentru că s-a rătăcit. Cu o busolă și o hartă, știi mereu unde ești și în ce direcție te îndrepți, chiar și prin ceață deasă. E ca o asigurare, dar una care chiar funcționează.",
+  "lead": "Telefonul e util, dar busola și harta sunt esențiale pentru orientare sigură pe munte, indiferent de condiții.",
+  "keywords": "busola harta orientare siguranta munte navigatie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Telefonul e util, dar busola și harta sunt esențiale pentru orientare sigură pe munte, indiferent de condiții.",
+    "seed_topic": "Mereu busolă + hartă — telefonul e accesoriu, nu primar",
+    "seed_topic_slug": "tip_compass_with_map_first"
+  }
+}

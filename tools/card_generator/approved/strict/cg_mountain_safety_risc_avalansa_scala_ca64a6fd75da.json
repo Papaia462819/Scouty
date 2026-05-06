@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_mountain_safety_risc_avalansa_scala_ca64a6fd75da",
+  "card_id": "cg_mountain_safety_risc_avalansa_scala_ca64a6fd75da",
+  "domain": "mountain_safety",
+  "topic": "risc_avalansa_scala",
+  "language": "ro",
+  "title": "Risc de avalanșă: scala europeană în 5 trepte",
+  "body": "În sezonul rece, ANM publică buletinul nivometeorologic și aplică scala europeană standardizată cu 5 trepte. Treapta 1 (redus, verde): zăpada în general stabilă; declanșarea naturală e improbabilă, dar pot apărea pante locale instabile. Treapta 2 (moderat, galben): instabilitate moderată pe pante abrupte; majoritatea avalanșelor declanșate de oameni apar în zone marcate. Treapta 3 (însemnat, portocaliu): zăpada e deseori instabilă; declanșarea de către un om singur este probabilă pe multe pante abrupte; este cea mai frecvent asociată cu accidente. Treapta 4 (mare, roșu): instabilitate amplă, declanșări naturale posibile chiar și pe pante moderate; deplasările sunt limitate la rute foarte sigure. Treapta 5 (foarte mare, roșu/negru): avalanșe naturale numeroase, inclusiv pe terenuri puțin abrupte; orice deplasare în zona montană este descurajată. Înainte de tură, consultați buletinul ANM curent pentru regiunea vizată. Pe traseu, evitați chei, văi înguste, pante de 30-45° încărcate de vânt, cornișe și placaje vizibile. Dacă observați zăpadă fragmentată, sunete de bufnitură sau crăpături, retrageți-vă. La cea mai mică incertitudine, alegeți o rută inferioară sau întoarceți-vă; sunați 0SALVAMONT (apel: 0SALVAMONT) sau 112 dacă cineva este implicat într-o avalanșă.",
+  "keywords": "avalansa scala risc anm zapada nivometeorologic creasta iarna",
+  "card_family": "DEFINITION",
+  "priority": 90,
+  "tier": "A",
+  "source_title": "Scala riscului de avalansa",
+  "source_url": "https://www.meteoromania.ro/despre-noi/meteorologie-operationala/activitati-de-baza/nivometeoroogie/scala-riscului-de-avalansa/",
+  "publisher": "ANM / Meteoromania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 5,
+  "safety_tags": ["avalanche", "winter", "snow_stability", "life_threatening"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Scala 1-5: la treapta 3 (însemnat) majoritatea accidentelor; consultați buletinul ANM înainte de plecare și retrageți-vă la primul semn de instabilitate.",
+    "evidence_confidence": "high",
+    "source_id": "anm_avalanche_scale",
+    "term": "scala riscului de avalanșă"
+  }
+}

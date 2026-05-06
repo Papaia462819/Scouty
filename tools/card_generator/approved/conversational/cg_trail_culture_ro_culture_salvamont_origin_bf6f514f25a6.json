@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_salvamont_origin_bf6f514f25a6",
+  "card_id": "cg_trail_culture_ro_culture_salvamont_origin_bf6f514f25a6",
+  "domain": "trail_culture_ro",
+  "topic": "culture_salvamont_origin",
+  "language": "ro",
+  "title": "Salvamont: Prietenul tău de încredere pe munte",
+  "body": "Salvamontul e ca un înger păzitor, dar cu rucsac și bocanci. Ei sunt băieții și fetele care intervin când te-ai rătăcit, ți-ai rupt o gleznă sau pur și simplu ai subestimat muntele. Nu e o rușine să ceri ajutor; e o dovadă de responsabilitate. Am văzut destui \"eroi\" care au ajuns la spital pentru că le-a fost jenă să sune. Nu uita, serviciile lor sunt gratuite și sunt acolo pentru siguranța ta. Înainte de orice tură, salvează-le numărul de urgență (112) în telefon. Și nu uita, o descriere clară a locației tale e vitală. Folosește aplicații de localizare dacă ai semnal. Odată, un prieten a crezut că e la \"stâna aia cu câini mulți\", dar erau vreo trei stâne în zonă. Fii precis!",
+  "lead": "Salvamontul este serviciul de urgență montan din România, esențial pentru siguranța ta pe traseele montane.",
+  "keywords": "salvamont siguranta munte urgenta munte ajutor munte numar urgenta responsabilitate",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Salvamontul este serviciul de urgență montan din România, esențial pentru siguranța ta pe traseele montane.",
+    "seed_topic": "Salvamont — ce înseamnă pentru drumeția din Romania",
+    "seed_topic_slug": "culture_salvamont_origin"
+  }
+}

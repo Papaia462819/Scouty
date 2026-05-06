@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_route_card_in_pack_64f1a1b352b0",
+  "card_id": "cg_tips_and_tricks_tip_route_card_in_pack_64f1a1b352b0",
+  "domain": "tips_and_tricks",
+  "topic": "tip_route_card_in_pack",
+  "language": "ro",
+  "title": "Cardul de traseu printat - backup mental",
+  "body": "Băi, știu că trăim în era digitală, dar crede-mă pe cuvânt: un card de traseu printat, laminat dacă poți, e aur curat în rucsac. Telefonul se descarcă, semnalul dispare, aplicația se blochează fix când ai mai mare nevoie. Am pățit-o de prea multe ori. Pe hârtie, ai mereu o referință. Poți să-l scrii cu notițe, să-l îndoi, să-l ții la îndemână. Nu e doar pentru orientare, e și un backup mental. Când ești obosit și confuz, o privire rapidă pe traseu te poate readuce pe linia de plutire. E o bucățică de siguranță în plus, fără baterie și fără griji.",
+  "lead": "Un card de traseu printat e un backup esențial pentru orientare, mai ales când tehnologia te lasă baltă în munți.",
+  "keywords": "card traseu harta printata backup orientare siguranta munte echipament esential",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Un card de traseu printat e un backup esențial pentru orientare, mai ales când tehnologia te lasă baltă în munți.",
+    "seed_topic": "Cardul de traseu printat în rucsac — backup mental",
+    "seed_topic_slug": "tip_route_card_in_pack"
+  }
+}

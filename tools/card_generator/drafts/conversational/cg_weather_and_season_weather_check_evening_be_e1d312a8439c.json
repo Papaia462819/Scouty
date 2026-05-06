@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_check_evening_be_e1d312a8439c",
+  "card_id": "cg_weather_and_season_weather_check_evening_be_e1d312a8439c",
+  "domain": "weather_and_season",
+  "topic": "weather_check_evening_before",
+  "language": "ro",
+  "title": "Vremea-n munti: ANM, doua surse, plan B",
+  "body": "Băi, înainte de orice tură, mai ales seara, verifică vremea! Nu te baza pe o singură sursă, că-i ca și cum ai merge cu un singur băț de trekking – te descurci, dar e riscant. Eu verific mereu ANM-ul și încă o aplicație de vreme, gen AccuWeather sau WeatherPro. Compară-le! Dacă una zice soare și alta furtună, e clar că trebuie să sapi mai adânc sau, mai bine, să ai un plan B. Ce faci dacă plouă torențial și tu trebuia să traversezi un râu? Ai o rută alternativă, mai scurtă sau mai sigură? Gândește-te la asta dinainte, nu când ești deja cu bocancii în noroi. Mai bine să ai un plan B și să nu-l folosești, decât să ai nevoie de el și să nu-l ai. Că muntele nu-i gluma.",
+  "lead": "Verifică mereu vremea din mai multe surse și ai un plan B pentru orice eventualitate, ca să nu te prindă muntele nepregătit.",
+  "keywords": "vremea munte anm plan b siguranta munte verificare vreme",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Verifică mereu vremea din mai multe surse și ai un plan B pentru orice eventualitate, ca să nu te prindă muntele nepregătit.",
+    "seed_topic": "Verificarea de seară: ANM, două surse, plan B",
+    "seed_topic_slug": "weather_check_evening_before"
+  }
+}

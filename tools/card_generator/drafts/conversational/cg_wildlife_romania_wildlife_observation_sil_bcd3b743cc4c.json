@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_observation_sil_bcd3b743cc4c",
+  "card_id": "cg_wildlife_romania_wildlife_observation_sil_bcd3b743cc4c",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_observation_silence",
+  "language": "ro",
+  "title": "Silențios prin pădure: vezi mai mult!",
+  "body": "Vrei să vezi animale, nu doar să le auzi fugind? Secretul e să te miști ca o umbră. În primul rând, alege-ți încălțămintea: bocanci ușori, flexibili, cu talpă moale, nu din aia rigidă care face zgomot la fiecare pas. Apoi, învață să calci. Nu ateriza cu toată greutatea pe călcâi, ci mai întâi cu vârful piciorului, apoi rulează ușor spre călcâi. Asta îți permite să simți terenul și să eviți crengile uscate. Fă pauze dese, stai nemișcat câteva minute și ascultă. Vei fi uimit câte lucruri încep să se audă odată ce taci tu. Și un pont: evită culorile stridente, camuflajul e prietenul tău.",
+  "lead": "Învață cum să te miști discret prin pădure pentru a observa mai ușor fauna sălbatică, folosind tehnicile potrivite de mers și echipament.",
+  "keywords": "mișcare silențioasă observare animale drumeție pădure încălțăminte potrivită tehnici mers camuflaj",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să te miști discret prin pădure pentru a observa mai ușor fauna sălbatică, folosind tehnicile potrivite de mers și echipament.",
+    "seed_topic": "Cum te miști silențios prin pădure ca să vezi mai mult",
+    "seed_topic_slug": "wildlife_observation_silence"
+  }
+}

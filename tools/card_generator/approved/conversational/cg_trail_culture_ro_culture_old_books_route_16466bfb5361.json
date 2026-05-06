@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_old_books_route_16466bfb5361",
+  "card_id": "cg_trail_culture_ro_culture_old_books_route_16466bfb5361",
+  "domain": "trail_culture_ro",
+  "topic": "culture_old_books_route",
+  "language": "ro",
+  "title": "Carti clasice romanesti de munte",
+  "body": "Băi, dacă vrei să înțelegi mai bine spiritul muntelui românesc, pe lângă bocanci și rucsac, mai pune mâna și pe o carte bună! Începe cu \"Muntii Nostri\" a lui Nae Popescu, e o colecție de ghiduri vechi, dar pline de farmec și informații surprinzător de actuale. Apoi, \"Poteci spre inima Padurii\" de Ion Agârbiceanu îți va arăta o altă față a Carpaților, mai literară, mai introspectivă. Nu uita de \"Sub semnul vulturului\" de Nicolae Iorga, chiar dacă nu e strict despre drumeții, îți dă o perspectivă istorică și culturală asupra locurilor. Sunt cărți care te învață să privești muntele nu doar ca pe un traseu, ci ca pe o poveste. Îți garantez că o să simți altfel fiecare pas după ce le citești. E ca și cum ai avea un ghid bătrân și înțelept alături, care îți șoptește secretele muntelui.",
+  "lead": "Descoperă cărți clasice românești care îți vor îmbogăți experiența montană și te vor conecta mai profund cu spiritul Carpaților.",
+  "keywords": "carti munte cultura montana literatura munte istorie carpați ghiduri vechi inspiratie munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă cărți clasice românești care îți vor îmbogăți experiența montană și te vor conecta mai profund cu spiritul Carpaților.",
+    "seed_topic": "Cărți clasice românești de munte care merită citite",
+    "seed_topic_slug": "culture_old_books_route"
+  }
+}

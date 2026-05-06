@@ -1,0 +1,38 @@
+{
+  "chunk_id": "cg_medical_emergency_recunoasterea_raului_acu_9889ea7399d3",
+  "card_id": "cg_medical_emergency_recunoasterea_raului_acu_9889ea7399d3",
+  "domain": "medical_emergency",
+  "topic": "recunoasterea_raului_acut_de_altitudine_ams",
+  "language": "ro",
+  "title": "Răul Acut de Altitudine (AMS) — Semne și Acțiuni",
+  "body": "Răul Acut de Altitudine (AMS) este cea mai ușoară formă de boală de altitudine, cauzată de nivelurile scăzute de oxigen din aer. Simptomele includ durere de cap, oboseală, lipsa poftei de mâncare, greață și vărsături. Copiii care nu pot vorbi pot părea doar iritabili.\n\nCazurile ușoare de AMS pot fi tratate prin ameliorarea simptomelor, de exemplu, utilizând analgezice pentru durerea de cap. Simptomele ar trebui să dispară de la sine în câteva zile. Persoanele cu boală de altitudine nu trebuie să călătorească la altitudini mai mari până când simptomele nu dispar complet.\n\nDacă simptomele unei persoane se agravează în timp ce se odihnește, aceasta trebuie să coboare la o altitudine mai mică pentru a evita îmbolnăvirea gravă sau decesul. În situații de agravare rapidă sau incapacitate de a coborî, apelați 112 sau Salvamont (0SALVAMONT).",
+  "lead": "Răul Acut de Altitudine (AMS) este cea mai ușoară formă de boală de altitudine, manifestându-se prin durere de cap, oboseală și greață.",
+  "keywords": "rău de altitudine ams altitudine simptome greață durere de cap oboseală vărsături urgență medicală prim ajutor",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Travel to High Altitudes",
+  "source_url": "https://wwwnc.cdc.gov/travel/page/travel-to-high-altitudes",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "altitude_sickness",
+    "ams",
+    "headache",
+    "nausea",
+    "fatigue",
+    "high_altitude"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Răul Acut de Altitudine (AMS) este cea mai ușoară formă de boală de altitudine, manifestându-se prin durere de cap, oboseală și greață.",
+    "evidence_confidence": "high",
+    "source_quote": "Acute mountain sickness (AMS) is the mildest form of altitude illness. Symptoms include: Headache, Tiredness, Lack of appetite, Nausea, Vomiting.",
+    "source_id": "cdc_high_altitude"
+  }
+}

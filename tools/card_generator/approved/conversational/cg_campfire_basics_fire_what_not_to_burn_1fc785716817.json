@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_what_not_to_burn_1fc785716817",
+  "card_id": "cg_campfire_basics_fire_what_not_to_burn_1fc785716817",
+  "domain": "campfire_basics",
+  "topic": "fire_what_not_to_burn",
+  "language": "ro",
+  "title": "Ce NU arzi in focul de tabara",
+  "body": "Băi, știi cum e, focul de tabără e sufletul serii, dar trebuie să știi ce bagi în el. Nu arde niciodată plante necunoscute, mai ales cele cu trei frunze lucioase – gen iedera otrăvitoare. O să-ți iasă un fum care te mănâncă de viu. Plasticul e la fel de rău, scoate chimicale toxice de-ți strică plămânii și mediul. Lemnul vopsit sau tratat chimic? Nici gând! Fumul e periculos și miroase oribil. Și, cel mai important, lasă jneapănul în pace! E o specie protejată, nu te atinge de el. Adună doar crengi uscate, căzute, de la specii comune. Nu vrei să te trezești cu Salvamontul pe cap pentru un foc de tabără, nu? Fii responsabil!",
+  "lead": "Află ce materiale trebuie să eviți cu orice preț în focul de tabără pentru siguranța ta și a naturii.",
+  "keywords": "foc tabara siguranta foc lemn ars plastic ars jneapan",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce materiale trebuie să eviți cu orice preț în focul de tabără pentru siguranța ta și a naturii.",
+    "seed_topic": "Ce să NU arzi: poison ivy, plastic, lemn vopsit, jneapăn protejat",
+    "seed_topic_slug": "fire_what_not_to_burn"
+  }
+}

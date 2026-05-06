@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_fleece_vs_wool_d913d291dcd1",
+  "card_id": "cg_gear_and_preparati_gear_fleece_vs_wool_d913d291dcd1",
+  "domain": "gear_and_preparation",
+  "topic": "gear_fleece_vs_wool",
+  "language": "ro",
+  "title": "Polar vs. lână Merino: Stratul ideal",
+  "body": "Alegerea între polar și lână Merino pentru stratul intermediar depinde mult de condiții. Lâna Merino e campioană la reglarea temperaturii și la gestionarea transpirației, chiar și udă. E super pentru ture lungi, unde nu vrei să cari multe haine, sau pentru zile cu variații mari de temperatură. Dezavantajul? Se usucă mai greu și e mai scumpă. Polarul, pe de altă parte, e mai ușor, se usucă rapid și e mai rezistent la abraziune. E perfect pentru zile reci și uscate, sau ca strat de \"pauză\". Eu personal le combin: un strat subțire de Merino direct pe piele, apoi un polar mai gros dacă e frig. Așa, am avantajele ambelor. Gândește-te la ce fel de tură faci și alege înțelept!",
+  "lead": "Află cum să alegi între polar și lână Merino pentru stratul intermediar, în funcție de condițiile meteo și tipul turei.",
+  "keywords": "lână merino polar stratificare echipament munte sfaturi drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să alegi între polar și lână Merino pentru stratul intermediar, în funcție de condițiile meteo și tipul turei.",
+    "seed_topic": "Polar vs lână Merino — pe ce stratifici",
+    "seed_topic_slug": "gear_fleece_vs_wool"
+  }
+}

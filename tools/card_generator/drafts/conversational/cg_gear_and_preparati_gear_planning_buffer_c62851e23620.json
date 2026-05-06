@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_planning_buffer_c62851e23620",
+  "card_id": "cg_gear_and_preparati_gear_planning_buffer_c62851e23620",
+  "domain": "gear_and_preparation",
+  "topic": "gear_planning_buffer",
+  "language": "ro",
+  "title": "Timp extra pe munte: de ce 30% buffer e aur curat",
+  "body": "Salut, prietene! Știi vorba aia cu socoteala de acasă? Pe munte, socoteala fără un 30% în plus la timp e ca rucsacul fără apă. De ce? Păi, gândește-te: o pauză mai lungă la o priveliște superbă, o întâlnire neașteptată cu o turmă de oi (și ciobanul lor povestitor), o porțiune mai noroioasă decât te așteptai sau, pur și simplu, ritmul grupului e mai lent. Toate astea adună minute, apoi ore. Mai bine ajungi mai devreme și te bucuri de peisaj, decât să te prindă întunericul sau să ratezi ultima telecabină. E o marjă de siguranță care îți salvează ziua și nervii. Am pățit-o, crede-mă. Acum, 30% e minimul sfânt.",
+  "lead": "Află de ce e crucial să adaugi un buffer de 30% la timpul estimat pentru traseele montane, pentru o experiență sigură și relaxantă.",
+  "keywords": "timp extra planificare traseu siguranta munte ritm grup imprevizibil",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce e crucial să adaugi un buffer de 30% la timpul estimat pentru traseele montane, pentru o experiență sigură și relaxantă.",
+    "seed_topic": "De ce planifici 30% buffer la timpul estimat",
+    "seed_topic_slug": "gear_planning_buffer"
+  }
+}

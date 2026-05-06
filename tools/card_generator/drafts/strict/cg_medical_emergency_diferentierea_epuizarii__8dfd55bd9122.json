@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_diferentierea_epuizarii__8dfd55bd9122",
+  "card_id": "cg_medical_emergency_diferentierea_epuizarii__8dfd55bd9122",
+  "domain": "medical_emergency",
+  "topic": "diferentierea_epuizarii_termice_de_soc_termic",
+  "language": "ro",
+  "title": "Șoc termic vs. epuizare termică: semne și prim ajutor",
+  "body": "Șocul termic este cea mai gravă afecțiune cauzată de căldură și poate fi fatală. Apare atunci când corpul nu își mai poate controla temperatura, mecanismul de transpirație cedează, iar temperatura internă poate crește rapid la 41°C sau mai mult în 10-15 minute. Simptomele includ: confuzie, status mental alterat, vorbire neclară, pierderea cunoștinței (comă), piele fierbinte și uscată sau transpirație abundentă, convulsii și temperatură corporală foarte ridicată.\n\nEpuizarea termică este răspunsul organismului la o pierdere excesivă de apă și sare, de obicei prin transpirație abundentă. Simptomele includ: dureri de cap, greață, amețeală, slăbiciune, iritabilitate, sete, transpirație abundentă, temperatură corporală ridicată și debit urinar scăzut.\n\nPrim ajutor pentru șoc termic: Sunați imediat la 112 sau 0SALVAMONT. Mutați victima într-o zonă umbrită și răcoroasă și îndepărtați-i hainele exterioare. Răcoriți victima rapid, plasând comprese reci cu apă sau gheață pe cap, gât, axile și în zona inghinală.\n\nPrim ajutor pentru epuizarea termică: Mutați persoana din zona fierbinte, îndepărtați-i hainele inutile și oferiți-i lichide de băut, în înghițituri frecvente. Răcoriți-o cu comprese reci sau spălând fața, capul și gâtul cu apă rece. Sunați la 112 dacă nu este disponibilă îngrijire medicală.",
+  "lead": "Șocul termic este o urgență medicală fatală în care corpul nu se mai poate răci, spre deosebire de epuizarea termică, cauzată de pierderea de apă și sare.",
+  "keywords": "șoc termic epuizare termică insolație căldură excesivă prim ajutor urgență medicală simptome hipertermie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Heat-related illnesses",
+  "source_url": "https://www.cdc.gov/niosh/heat-stress/about/illnesses.html",
+  "publisher": "CDC / NIOSH",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "heat_stroke",
+    "heat_exhaustion",
+    "hyperthermia",
+    "medical_emergency",
+    "first_aid"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Șocul termic este o urgență medicală fatală în care corpul nu se mai poate răci, spre deosebire de epuizarea termică, cauzată de pierderea de apă și sare.",
+    "evidence_confidence": "high",
+    "source_quote": "Heat stroke is the most serious heat-related illness. It occurs when the body can no longer control its temperature... Heat exhaustion is the body's response to an excessive loss of water and salt, usually through excessive sweating.",
+    "source_id": "cdc_heat_illnesses"
+  }
+}

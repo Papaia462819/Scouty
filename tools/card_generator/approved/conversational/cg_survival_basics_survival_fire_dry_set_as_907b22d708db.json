@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_fire_dry_set_as_907b22d708db",
+  "card_id": "cg_survival_basics_survival_fire_dry_set_as_907b22d708db",
+  "domain": "survival_basics",
+  "topic": "survival_fire_dry_set_aside",
+  "language": "ro",
+  "title": "Setul de aprindere de urgență: uscat și la îndemână",
+  "body": "Băi, știi vorba aia cu \"mai bine să ai și să nu-ți trebuiască, decât să-ți trebuiască și să n-ai\"? Se aplică perfect la setul de aprindere uscat. Ia o punguță etanșă, de preferat cu fermoar dublu, și bagă în ea o brichetă, chibrituri rezistente la vânt și o bucățică de amnar. Nu uita și niște vată îmbibată cu vaselină sau câteva tampoane demachiante uscate – prind foc super rapid. Eu le țin într-un buzunar separat, la piept, unde știu că rămân uscate și le găsesc imediat. Nu le folosi la pauza de masă pentru țigară! Alea sunt pentru situații de criză, când ești ud leoarcă și hipotermia îți bate la ușă. E un fel de poliță de asigurare, sper să nu o folosești niciodată, dar e bine să știi că o ai.",
+  "lead": "Pregătește un set de aprindere de urgență, ține-l uscat și folosește-l doar când e absolut necesar.",
+  "keywords": "aprindere foc kit urgenta supravietuire munte chibrituri uscate amnar bricheta vaselina",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Pregătește un set de aprindere de urgență, ține-l uscat și folosește-l doar când e absolut necesar.",
+    "seed_topic": "Setul de aprindere uscat pe care nu-l atingi până nu trebuie",
+    "seed_topic_slug": "survival_fire_dry_set_aside"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_elementele_unui_plan_de__dda8343d0265",
+  "card_id": "cg_mountain_safety_elementele_unui_plan_de__dda8343d0265",
+  "domain": "mountain_safety",
+  "topic": "elementele_unui_plan_de_urgenta_pentru_drumetie",
+  "language": "ro",
+  "title": "Plan de Urgență pentru Drumeții Montane: Prevenire și Acțiuni",
+  "body": "Un plan de urgență este esențial pentru drumețiile montane, deoarece accidentele pot apărea, iar ajutorul poate întârzia. Preveniți pierderea sau rănirea înainte de plecare: obțineți o hartă și exersați citirea ei, revizuiți ruta și punctele de reper, împachetați cele 10 Obiecte Esențiale (inclusiv baterii suplimentare, fluier și oglindă de semnalizare), purtați haine viu colorate și lăsați un Plan de Călătorie unei persoane de încredere care nu participă la drumeție.\n\nÎn timpul drumeției, rămâneți pe traseele marcate și fiți atenți la intersecții, semne și puncte de reper, verificând frecvent ruta. Dacă vă pierdeți, opriți-vă și respirați calm. Folosiți harta, busola, GPS-ul sau reperele vizibile pentru a vă localiza. Dacă este sigur, refaceți pașii pentru a reveni pe traseu. Dacă nu puteți, apelați 112 (sau 0SALVAMONT pentru urgențe montane) și furnizați coordonatele GPS, numele traseului, ultima locație cunoscută, descrierea împrejurimilor, tipul și culoarea hainelor, echipamentul și orice condiții medicale. Rămâneți pe loc, deplasându-vă doar dacă există un pericol imediat. Dacă nu aveți semnal, găsiți adăpost, inventariați și conservați resursele, mențineți-vă cald și semnalizați ajutorul suflând fluierul de trei ori, cu pauze, sau folosind lanterna.",
+  "lead": "Aflați cum să preveniți incidentele și ce pași să urmați într-o situație de urgență în timpul drumețiilor montane, de la pregătire la acțiuni concrete.",
+  "keywords": "plan de urgență siguranță montană drumeție pierdut pe munte prim ajutor apel 112 salvamont echipament esențial prevenire accidente semnalizare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "NPS Outdoor Emergency Plan",
+  "source_url": "https://www.nps.gov/subjects/healthandsafety/upload/NPS-Outdoor-Emergency-Plan-508c.pdf",
+  "publisher": "National Park Service",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "emergency_plan",
+    "mountain_safety",
+    "getting_lost",
+    "first_aid_preparation",
+    "signaling_for_help"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați cum să preveniți incidentele și ce pași să urmați într-o situație de urgență în timpul drumețiilor montane, de la pregătire la acțiuni concrete.",
+    "evidence_confidence": "high",
+    "source_quote": "Accidents happen. You may get lost or injured while recreating outdoors. Help can take hours or days depending on your location, weather, and resources. Read and practice the Outdoor Emergency Plan to learn how you can prevent getting lost or injured and what to do in case it happens.",
+    "source_id": "nps_outdoor_emergency_plan"
+  }
+}

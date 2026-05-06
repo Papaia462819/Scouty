@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_storm_postpone_da9f2694270d",
+  "card_id": "cg_weather_and_season_weather_storm_postpone_da9f2694270d",
+  "domain": "weather_and_season",
+  "topic": "weather_storm_postpone",
+  "language": "ro",
+  "title": "Când amâni o tură: 3 indicatori obiectivi",
+  "body": "Băi, nu te juca cu muntele! Chiar dacă ești entuziasmat, sunt momente când e mai bine să stai acasă. Primul indicator e vântul: dacă e anunțat peste 40-50 km/h la altitudine, mai ales pe creastă, las-o baltă. Nu e fun să te lupți cu rafalele, riști să te dezechilibrezi. Al doilea: vizibilitatea sub 50 de metri, adică ceață de nu vezi la doi pași. Pe lângă faptul că te rătăcești ușor, devine periculos pe teren expus. Și al treilea, dar nu cel din urmă: precipitații abundente combinate cu temperaturi scăzute. Ploaia rece sau lapovița te pot duce rapid la hipotermie. Nu uita, muntele te așteaptă și mâine, și poimâine. Siguranța pe primul loc!",
+  "lead": "Află când e mai bine să amâni o tură montană, bazându-te pe trei indicatori meteo esențiali pentru siguranța ta.",
+  "keywords": "amânare tură vânt puternic ceață densă precipitații abundente siguranță munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află când e mai bine să amâni o tură montană, bazându-te pe trei indicatori meteo esențiali pentru siguranța ta.",
+    "seed_topic": "Când amâni o tură: 3 indicatori obiectivi",
+    "seed_topic_slug": "weather_storm_postpone"
+  }
+}

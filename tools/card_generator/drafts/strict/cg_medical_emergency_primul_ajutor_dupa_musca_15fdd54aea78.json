@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_primul_ajutor_dupa_musca_15fdd54aea78",
+  "card_id": "cg_medical_emergency_primul_ajutor_dupa_musca_15fdd54aea78",
+  "domain": "medical_emergency",
+  "topic": "primul_ajutor_dupa_muscatura_de_vipera",
+  "language": "ro",
+  "title": "Primul ajutor în caz de mușcătură de șarpe veninos",
+  "body": "După o mușcătură de la un șarpe suspectat a fi veninos, urmați acești pași. Îndepărtați-vă imediat de zona în care a avut loc incidentul. Îndepărtați orice obiect strâns (inel, brățară, ceas) din jurul zonei mușcate pentru a evita complicații în caz de umflare. Liniștiți victima; majoritatea mușcăturilor de șerpi veninoși nu provoacă moartea imediată. Imobilizați complet persoana și asigurați transportul la o unitate medicală cât mai repede posibil. Apelați 112 sau Salvamont (0SALVAMONT) pentru ajutor specializat. Aplicarea unui pansament compresiv la locul mușcăturii poate fi potrivită în anumite cazuri. Evitați metodele tradiționale de prim ajutor sau leacurile din plante. Pentru durerea locală, care poate fi severă, se poate administra paracetamol. Deoarece pot apărea vărsături, așezați victima pe partea stângă, în poziția de recuperare. Tratamentul eficient este disponibil doar în unități medicale și constă în administrarea de antivenin.",
+  "lead": "După o mușcătură de șarpe veninos, imobilizați victima, îndepărtați obiectele strânse și asigurați transportul rapid la o unitate medicală.",
+  "keywords": "mușcătură de șarpe viperă venin prim ajutor imobilizare transport urgență salvamont",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Snakebite envenoming - The facts",
+  "source_url": "https://www.who.int/health-topics/snakebite/snakebite-envenoming---the-facts",
+  "publisher": "WHO",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "snakebite",
+    "venom",
+    "first_aid",
+    "medical_emergency",
+    "immobilization"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "După o mușcătură de șarpe veninos, imobilizați victima, îndepărtați obiectele strânse și asigurați transportul rapid la o unitate medicală.",
+    "evidence_confidence": "high",
+    "source_quote": "After a bite by a snake suspected of being venomous, follow these steps: Immediately move away from the area... Remove anything tight... Reassure the victim... Immobilize the person completely and transport... to a health facility...",
+    "source_id": "who_snakebite_facts"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_after_argument_d28c4ef74b61",
+  "card_id": "cg_motivation_and_mor_morale_after_argument_d28c4ef74b61",
+  "domain": "motivation_and_morale",
+  "topic": "morale_after_argument",
+  "language": "ro",
+  "title": "Cearta in grup pe creasta — protocol simplu",
+  "body": "Ești pe creastă, oboseala își spune cuvântul și spiritele se încing? Clasic. Primul pas: pauză imediată. Nu continuați să mergeți în timp ce vă certați, că nu rezolvați nimic, doar vă enervați mai tare și riscați accidente. Beți apă, mâncați un baton, respirați adânc. Apoi, desemnați un \"arbitru\" neutru, dacă există unul în grup. Fiecare își expune pe rând punctul de vedere, fără întreruperi. Scopul nu e să câștige cineva, ci să înțelegeți de ce a apărut tensiunea. De cele mai multe ori, e vorba de oboseală, foame sau o neînțelegere simplă. Stabiliți o soluție de compromis și mergeți mai departe. Muntele nu așteaptă, iar prietenia e mai importantă decât o ceartă de moment.",
+  "lead": "Află cum să gestionezi eficient conflictele într-un grup de drumeție, mai ales când oboseala își spune cuvântul pe creastă.",
+  "keywords": "cearta grup tensiuni munte rezolvare conflicte pauza drumeție comunicare grup psihologia muntelui",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să gestionezi eficient conflictele într-un grup de drumeție, mai ales când oboseala își spune cuvântul pe creastă.",
+    "seed_topic": "Cearta în grup pe creastă — protocol simplu",
+    "seed_topic_slug": "morale_after_argument"
+  }
+}

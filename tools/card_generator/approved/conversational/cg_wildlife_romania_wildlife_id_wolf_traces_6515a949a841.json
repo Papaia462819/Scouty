@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_id_wolf_traces_6515a949a841",
+  "card_id": "cg_wildlife_romania_wildlife_id_wolf_traces_6515a949a841",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_id_wolf_traces",
+  "language": "ro",
+  "title": "Urme de lup vs. câine pe zăpadă",
+  "body": "Salut, drumețule! Pe zăpadă, e mai ușor să distingi urmele. La lupi, vei observa că, de obicei, urmele picioarelor din spate calcă exact în cele din față, formând o linie aproape perfectă. E ca și cum ar merge pe sârmă. La câini, mai ales la cei mari, urmele sunt mai împrăștiate, haotice, ca și cum ar fi beți. Lupii au și o pasiune pentru poteci, le folosesc des. Ghearele de la lupi sunt mai vizibile, mai ascuțite, iar pernuțele sunt mai alungite. Dacă vezi urme mari, aliniate, cu pași lungi și direcți, e posibil să fi trecut un lup. Nu te speria, ei sunt timizi. Dar e bine să știi cine-i prin zonă.",
+  "lead": "Învață să distingi urmele de lup de cele de câine pe zăpadă, observând alinierea pașilor și forma pernuțelor.",
+  "keywords": "urme lup urme câine zăpadă identificare urme wildlife carpați",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață să distingi urmele de lup de cele de câine pe zăpadă, observând alinierea pașilor și forma pernuțelor.",
+    "seed_topic": "Urme de lup vs câine — cum le distingi pe zăpadă",
+    "seed_topic_slug": "wildlife_id_wolf_traces"
+  }
+}

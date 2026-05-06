@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_id_lizard_alpin_638c9b05296b",
+  "card_id": "cg_wildlife_romania_wildlife_id_lizard_alpin_638c9b05296b",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_id_lizard_alpine",
+  "language": "ro",
+  "title": "Soparlele alpine: Unde le gasesti prin munti",
+  "body": "Salut, prietene! Când urci prin munții noștri, mai ales pe la peste 1500 de metri, fii atent la șopârlele alpine. Nu te aștepta să le vezi prin păduri dese, ele preferă zonele deschise, stâncăriile însorite sau grohotișurile. Le place să se bronzeze pe pietre calde, așa că dacă vezi o lespede mare, plată, cu siguranță e un loc bun de căutat. Sunt destul de sperioase, dar dacă te miști încet și ești atent, s-ar putea să le observi cum se furișează printre pietre. Am văzut odată una pe Vârful Omu, era cam rece, dar stătea la soare. Sunt mici, rapide și au o culoare care le ajută să se camufleze perfect. Ochiul de drumeț antrenat le va găsi mai ușor. Nu le deranja, doar admiră-le de la distanță.",
+  "lead": "Află unde poți observa șopârlele alpine în Carpați, preferând zonele stâncoase și însorite de la altitudini mari.",
+  "keywords": "soparle alpine habitat munte stancarii grohotis wildlife carpati",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află unde poți observa șopârlele alpine în Carpați, preferând zonele stâncoase și însorite de la altitudini mari.",
+    "seed_topic": "Șopârlele alpine — repere de habitat",
+    "seed_topic_slug": "wildlife_id_lizard_alpine"
+  }
+}

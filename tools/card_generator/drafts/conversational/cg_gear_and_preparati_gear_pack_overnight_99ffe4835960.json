@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_pack_overnight_99ffe4835960",
+  "card_id": "cg_gear_and_preparati_gear_pack_overnight_99ffe4835960",
+  "domain": "gear_and_preparation",
+  "topic": "gear_pack_overnight",
+  "language": "ro",
+  "title": "Rucsacul de 2-3 zile vara: esențialul pentru Carpați",
+  "body": "Pentru o tură de 2-3 zile vara în Carpați, rucsacul tău ar trebui să fie cam de 40-50 de litri. Nu-l umple până la refuz, că o să-ți blestemi zilele la urcare. Pune-ți un sac de dormit ușor (confort la 0-5°C), o izopren sau saltea gonflabilă, un cort de 2-3 persoane (împărțiți-l cu prietenii, e mai ușor). La haine, gândește-te la straturi: un tricou sintetic, un polar subțire, o geacă impermeabilă (chiar și vara plouă serios la munte!), pantaloni lungi de drumeție. Nu uita o lanternă frontală, trusa de prim ajutor (mică, dar esențială!), ochelari de soare și cremă cu SPF. Mâncare pentru 2-3 zile, apă (sau un filtru de apă dacă știi că ai surse pe traseu) și neapărat o hartă și busolă, pe lângă GPS-ul de pe telefon. Lasă acasă bibelourile și cărțile groase. Fiecare gram contează!",
+  "lead": "Află ce echipament esențial îți trebuie în rucsac pentru o drumeție de 2-3 zile pe Carpați, pe timp de vară.",
+  "keywords": "rucsac echipament vara lista rucsac carpați 2-3 zile drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce echipament esențial îți trebuie în rucsac pentru o drumeție de 2-3 zile pe Carpați, pe timp de vară.",
+    "seed_topic": "Rucsac de 2-3 zile — o listă realistă pentru Carpați vara",
+    "seed_topic_slug": "gear_pack_overnight"
+  }
+}

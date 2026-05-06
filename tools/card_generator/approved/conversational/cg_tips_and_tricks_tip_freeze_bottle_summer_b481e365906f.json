@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_freeze_bottle_summer_b481e365906f",
+  "card_id": "cg_tips_and_tricks_tip_freeze_bottle_summer_b481e365906f",
+  "domain": "tips_and_tricks",
+  "topic": "tip_freeze_bottle_summer",
+  "language": "ro",
+  "title": "Sticla înghețată: trucul verii pe munte",
+  "body": "Când e caniculă și știi că ai o urcare lungă, îngheață o sticlă de apă de 1 litru pe jumătate, umple restul cu apă rece și gata! Ai apă rece pentru cel puțin 3-4 ore, chiar și pe soare arzător. Eu fac asta de ani de zile și e sfânt. Apa se topește treptat și rămâne rece mult timp. E mult mai eficient decât să cari o sticlă plină cu apă rece care se încălzește în prima oră. Ai grijă să nu pui sticla direct pe piele, să nu te ardă de la gheață. Pune-o într-un buzunar lateral al rucsacului sau învelită într-o batistă.",
+  "lead": "Află cum să ai apă rece ore întregi în turele de vară folosind o sticlă înghețată pe jumătate.",
+  "keywords": "apă rece caniculă trucuri munte hidratare vară echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să ai apă rece ore întregi în turele de vară folosind o sticlă înghețată pe jumătate.",
+    "seed_topic": "Înghețarea unei sticle pentru o tură caldă",
+    "seed_topic_slug": "tip_freeze_bottle_summer"
+  }
+}

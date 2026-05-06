@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_river_crossing__92c57f27335b",
+  "card_id": "cg_survival_basics_survival_river_crossing__92c57f27335b",
+  "domain": "survival_basics",
+  "topic": "survival_river_crossing_low",
+  "language": "ro",
+  "title": "Traversarea unui râu mic",
+  "body": "Băi, dacă apa-i la genunchi, nu te arunca cu capul înainte. Primul pas: desfă-ți chinga de la rucsac, să-l poți arunca rapid dacă te ia apa. Apoi, caută un băț gros, să-l folosești ca al treilea punct de sprijin. Pune-l în amonte, adică în direcția din care vine apa, și sprijină-te bine. Pășește încet, lateral, cu picioarele ușor depărtate, să ai o bază stabilă. Nu te uita la apă cum curge, te amețește. Privește malul celălalt și concentrează-te. Încălțămintea o ții în picioare, îți dă aderență. După ce treci, stoarce șosetele și mergi înainte, se usucă ele.",
+  "lead": "Învață cum să traversezi în siguranță un râu mic, cu apa până la genunchi, folosind tehnici simple și echipamentul minim.",
+  "keywords": "traversare râu siguranță apă echipament râu băț sprijin tehnici traversare rucsac",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să traversezi în siguranță un râu mic, cu apa până la genunchi, folosind tehnici simple și echipamentul minim.",
+    "seed_topic": "Cum traversezi un râu mic cu apa la genunchi",
+    "seed_topic_slug": "survival_river_crossing_low"
+  }
+}

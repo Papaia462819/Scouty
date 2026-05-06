@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_water_collect_d_f931f3f83b73",
+  "card_id": "cg_survival_basics_survival_water_collect_d_f931f3f83b73",
+  "domain": "survival_basics",
+  "topic": "survival_water_collect_dew",
+  "language": "ro",
+  "title": "Colectarea roua cu o carpa",
+  "body": "Dacă te prinde dimineața fără apă și ai o cârpă curată, poți încerca să aduni rouă. E o soluție de urgență, nu te baza pe ea pentru hidratare pe termen lung, dar e mai bine decât nimic. Ia cârpa, plimb-o prin iarba înaltă, prin frunzișul tufișurilor, prin orice vegetație care a reținut umezeală peste noapte. Stoarce apoi cârpa într-un recipient. Repetă procesul de mai multe ori. Nu e mult, dar într-o situație limită, fiecare picătură contează. Am făcut asta o dată, în Retezat, și mi-a potolit puțin setea până am găsit un izvor. Nu e cine știe ce, dar te ajută să te menții în parametri până la o soluție reală. E ca și cum ai bea apă dintr-o frunză mare, dar mai eficient.",
+  "lead": "Află cum poți aduna roua dimineața cu o cârpă, o metodă de urgență pentru a obține puțină apă în munți.",
+  "keywords": "rouă colectare apă cârpă supraviețuire urgență hidratare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum poți aduna roua dimineața cu o cârpă, o metodă de urgență pentru a obține puțină apă în munți.",
+    "seed_topic": "Colectare rouă cu o cârpă dimineața",
+    "seed_topic_slug": "survival_water_collect_dew"
+  }
+}

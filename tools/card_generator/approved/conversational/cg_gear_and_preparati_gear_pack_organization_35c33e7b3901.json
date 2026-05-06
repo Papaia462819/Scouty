@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_pack_organization_35c33e7b3901",
+  "card_id": "cg_gear_and_preparati_gear_pack_organization_35c33e7b3901",
+  "domain": "gear_and_preparation",
+  "topic": "gear_pack_organization",
+  "language": "ro",
+  "title": "Cum îți aranjezi rucsacul pentru o zi pe munte",
+  "body": "Salut, prietene! Ca să nu te caute Salvamontul prin toate buzunarele, e bine să știi cum să-ți pui lucrurile în rucsac. Jos de tot, bagă ce nu-ți trebuie decât la cabană sau la finalul turei: sacul de dormit (dacă e cazul), haine de schimb. La mijloc, lucrurile mai grele, aproape de spate, ca să nu-ți tragă rucsacul în spate: mâncare, apă, kit de prim ajutor. Sus, la îndemână, pune ce-ți trebuie des: pelerina de ploaie (nu știi niciodată când te prinde o aversă), ochelarii de soare, harta, busola, frontală. Pe șolduri, în buzunarele de la centură, ține batoane energizante sau telefonul. Așa, nu mai scotocești o oră după ele!",
+  "lead": "Află cum să-ți organizezi eficient rucsacul pentru o tură pe munte, având lucrurile esențiale la îndemână.",
+  "keywords": "rucsac organizare echipament munte traseu sfaturi practice",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți organizezi eficient rucsacul pentru o tură pe munte, având lucrurile esențiale la îndemână.",
+    "seed_topic": "Organizarea în rucsac: ce sus, ce jos, ce pe șold",
+    "seed_topic_slug": "gear_pack_organization"
+  }
+}

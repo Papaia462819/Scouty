@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_extinguish_clean_69461c409c95",
+  "card_id": "cg_campfire_basics_fire_extinguish_clean_69461c409c95",
+  "domain": "campfire_basics",
+  "topic": "fire_extinguish_clean",
+  "language": "ro",
+  "title": "Stingerea corecta a focului de tabara",
+  "body": "După o zi de drumeție, focul de tabără e o binecuvântare, dar stingerea lui corectă e crucială. Nu te baza doar pe apă! Toarnă apă din abundență, apoi amestecă bine cu un băț sau o lopățică. Verifică cu mâna (cu grijă, la o distanță sigură) dacă mai simți căldură. Dacă da, mai toarnă apă și amestecă. Repetă până când totul e rece la atingere. Nu lăsa niciodată jar mocnit, vântul îl poate reaprinde. E o regulă de aur: dacă e prea fierbinte să-l atingi, e prea fierbinte să-l lași. Am văzut odată un foc reaprins după ore, doar pentru că cineva a fost grăbit. Nu fi acel cineva!",
+  "lead": "Învață cum să stingi corect focul de tabără pentru a preveni incendiile și a proteja natura.",
+  "keywords": "stingere foc siguranta munte foc tabara jar ascuns prevenire incendii drumeție responsabilă",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să stingi corect focul de tabără pentru a preveni incendiile și a proteja natura.",
+    "seed_topic": "Cum stingi focul fără să lași jar ascuns",
+    "seed_topic_slug": "fire_extinguish_clean"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_knot_clove_hitc_a9b40e17e7a0",
+  "card_id": "cg_survival_basics_survival_knot_clove_hitc_a9b40e17e7a0",
+  "domain": "survival_basics",
+  "topic": "survival_knot_clove_hitch",
+  "language": "ro",
+  "title": "Nodul jumătate de gură de pește pentru ancorat",
+  "body": "Salut, prietene! Când trebuie să ancorezi ceva rapid și sigur, mai ales dacă ai un capăt de coardă liber, nodul jumătate de gură de pește e salvarea. E simplu: treci coarda pe sub obiectul de ancorat, faci un nod simplu în jurul corzii principale cu capătul liber, apoi mai faci încă un nod simplu, dar în sens invers, tot în jurul corzii principale. Strânge-l bine și gata! E un nod de bază, dar eficient pentru sarcini ușoare și medii. Nu uita, verifică întotdeauna să fie strâns și să nu alunece, mai ales dacă obiectul e rotund sau alunecos. Practică-l de câteva ori acasă, să-ți intre în reflex. Niciodată nu știi când ai nevoie să legi ceva rapid în drumeție!",
+  "lead": "Învață cum să folosești nodul jumătate de gură de pește pentru ancorări rapide și eficiente în drumețiile tale montane.",
+  "keywords": "noduri ancorare coarda siguranta munte tehnici",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să folosești nodul jumătate de gură de pește pentru ancorări rapide și eficiente în drumețiile tale montane.",
+    "seed_topic": "Nodul jumătate de gură de pește pentru ancorat",
+    "seed_topic_slug": "survival_knot_clove_hitch"
+  }
+}

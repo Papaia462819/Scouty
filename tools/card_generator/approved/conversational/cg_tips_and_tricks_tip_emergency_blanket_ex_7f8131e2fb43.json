@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_emergency_blanket_ex_7f8131e2fb43",
+  "card_id": "cg_tips_and_tricks_tip_emergency_blanket_ex_7f8131e2fb43",
+  "domain": "tips_and_tricks",
+  "topic": "tip_emergency_blanket_extra",
+  "language": "ro",
+  "title": "Pătura de supraviețuire: Izolator la somn în alpin",
+  "body": "Băi, știi că pătura aia de supraviețuire, deși subțire, e aur curat pe munte? Mulți o văd doar pentru urgențe, dar e excelentă și ca strat izolator suplimentar sub izopren, mai ales când dormi la cort în zona alpină. Eu o pun direct pe sol, sub folia cortului, sau chiar sub izopren, în interior. Reflectă căldura corpului înapoi și chiar face o diferență când temperaturile scad sub zero. Am testat-o și pe un pat de zăpadă sub cort, și a funcționat. E ușoară, nu ocupă loc, și te poate salva de la o noapte friguroasă. Nu uita, e vorba de confort și siguranță. Un somn bun înseamnă o zi bună pe traseu.",
+  "lead": "Pătura de supraviețuire e un izolator termic excelent sub izopren, mai ales la cort în zona alpină, reflectând căldura corpului.",
+  "keywords": "pătura supraviețuire izolare termică somn munte zona alpină echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Pătura de supraviețuire e un izolator termic excelent sub izopren, mai ales la cort în zona alpină, reflectând căldura corpului.",
+    "seed_topic": "Pătura de supraviețuire ca insulator pentru somn în zona alpină",
+    "seed_topic_slug": "tip_emergency_blanket_extra"
+  }
+}

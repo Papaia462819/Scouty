@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_unmarked_paths_a2818b8a55c0",
+  "card_id": "cg_trail_culture_ro_culture_unmarked_paths_a2818b8a55c0",
+  "domain": "trail_culture_ro",
+  "topic": "culture_unmarked_paths",
+  "language": "ro",
+  "title": "Trasee nemarcate: Respectă localnicii și natura",
+  "body": "Băi, știu că e tentant să explorezi poteci mai puțin umblate, cele \"știute\" de localnici. Am făcut-o și eu de nenumărate ori. Dar e crucial să respecți eticheta. În primul rând, nu te aventura singur pe ele, mai ales dacă nu ai experiență off-trail. Apoi, dacă întâlnești localnici, salută-i și, dacă ești curios, poți întreba politicos despre traseu. Nu insista dacă nu vor să-ți dea detalii. Ei știu cel mai bine zona și e posibil să aibă motive întemeiate să nu dezvăluie anumite locuri. Și, cel mai important, lasă locul exact cum l-ai găsit. Fără gunoaie, fără zgomot excesiv, fără să deranjezi animalele sau proprietățile private. E un pact tacit de respect, știi? Altfel, se strică și pentru tine, și pentru următorii.",
+  "lead": "Află cum să te comporți pe traseele nemarcate, respectând localnicii și mediul înconjurător.",
+  "keywords": "trasee nemarcate eticheta locala respect natura drumeție responsabilă comunitate munte explorare off-trail",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te comporți pe traseele nemarcate, respectând localnicii și mediul înconjurător.",
+    "seed_topic": "Trasee 'știute', nemarcate — eticheta locală",
+    "seed_topic_slug": "culture_unmarked_paths"
+  }
+}

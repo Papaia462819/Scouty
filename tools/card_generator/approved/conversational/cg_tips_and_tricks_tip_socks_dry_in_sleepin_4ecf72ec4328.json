@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_socks_dry_in_sleepin_4ecf72ec4328",
+  "card_id": "cg_tips_and_tricks_tip_socks_dry_in_sleepin_4ecf72ec4328",
+  "domain": "tips_and_tricks",
+  "topic": "tip_socks_dry_in_sleeping_bag",
+  "language": "ro",
+  "title": "Șosetele ude se usucă în sacul de dormit? Testul din teren",
+  "body": "Auzi des mitul ăsta, nu? Că-ți bagi șosetele ude în sacul de dormit și se usucă până dimineață. Ei bine, am testat de nenumărate ori prin Carpați și pot să-ți zic direct: NU. Poate se \"dezgheță\" dacă sunt înghețate bocnă, dar de uscat, nici vorbă. Ba chiar riști să-ți uzi și sacul de dormit, și atunci e belea mare. Mai bine le storci cât poți de bine, le pui la aer (dacă e vânt), sau le ții la tine în jachetă, lângă corp, să se încălzească. Dar nu te baza pe sacul de dormit pentru uscat. E o metodă bună doar dacă vrei să te trezești cu picioarele reci și umede.",
+  "lead": "Nu te baza pe sacul de dormit pentru a-ți usca șosetele ude; riști să-ți uzi și sacul, nu doar să nu le usuci.",
+  "keywords": "șosete ude sac de dormit uscare echipament mituri munte sfaturi practice",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Nu te baza pe sacul de dormit pentru a-ți usca șosetele ude; riști să-ți uzi și sacul, nu doar să nu le usuci.",
+    "seed_topic": "Șosetele ude se usucă în sacul de dormit — testul din teren",
+    "seed_topic_slug": "tip_socks_dry_in_sleeping_bag"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_route_old_names_ce676fd6a9d0",
+  "card_id": "cg_trail_culture_ro_culture_route_old_names_ce676fd6a9d0",
+  "domain": "trail_culture_ro",
+  "topic": "culture_route_old_names",
+  "language": "ro",
+  "title": "Poveștile traseelor: mai mult decât un nume vechi",
+  "body": "Când vezi un indicator cu un nume ciudat, gen \"Poteca Hoților\" sau \"Drumul de Fier\", nu-l ignora! Fiecare denumire are o poveste în spate, adesea legată de istoria locală, de meserii uitate sau chiar de legende. De exemplu, \"Poteca Hoților\" ar putea fi un vechi drum de contrabandă, iar \"Drumul de Fier\" o rută folosită pentru transportul minereului. Află aceste povești înainte de a pleca. Te ajută să înțelegi mai bine locul, să apreciezi efortul celor de dinaintea noastră și să te conectezi altfel cu muntele. E ca și cum ai avea un ghid invizibil care-ți șoptește secrete. Plus, e un subiect bun de povestit la o bere, după drumeție!",
+  "lead": "Descoperă poveștile din spatele numelor vechi de trasee pentru o experiență montană mai profundă și conectată cu istoria locului.",
+  "keywords": "istorie trasee nume vechi cultura muntelui povești locale tradiții montane",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă poveștile din spatele numelor vechi de trasee pentru o experiență montană mai profundă și conectată cu istoria locului.",
+    "seed_topic": "Trasee cu nume vechi — de ce contează poveștile lor",
+    "seed_topic_slug": "culture_route_old_names"
+  }
+}

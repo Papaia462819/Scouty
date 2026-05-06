@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_thermal_inversi_869fa82ccfd0",
+  "card_id": "cg_survival_basics_survival_thermal_inversi_869fa82ccfd0",
+  "domain": "survival_basics",
+  "topic": "survival_thermal_inversion",
+  "language": "ro",
+  "title": "Inversiunea termica: Vai reci, creste calde",
+  "body": "Ai observat vreodată că dimineața, în vale e frig de crapă pietrele, iar când ajungi pe creastă, te topești de cald? Ăsta-i fenomenul de inversiune termică, des întâlnit toamna și iarna. Aerul rece, mai dens, se așează în văi, iar cel cald urcă. E ca și cum frigiderul ar fi jos și cuptorul sus. Îmbracă-te în straturi: un prim strat subțire care elimină transpirația, un strat izolator (polar sau fleece) și o jachetă rezistentă la vânt și ploaie. Nu uita de căciulă și mănuși, chiar dacă pe creastă pare cald. În vale, s-ar putea să ai nevoie de ele. Am pățit-o, am crezut că scap de mănuși, dar în vale era un ger de-ți îngheța și gândurile.",
+  "lead": "Află cum să te echipezi corect pentru inversiunea termică, fenomenul când e frig în vale și cald pe creastă.",
+  "keywords": "inversiune termică echipament straturi frig vale cald creastă drumeție toamnă drumeție iarnă",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te echipezi corect pentru inversiunea termică, fenomenul când e frig în vale și cald pe creastă.",
+    "seed_topic": "Văi reci, creste calde — fenomenul de inversiune termică",
+    "seed_topic_slug": "survival_thermal_inversion"
+  }
+}

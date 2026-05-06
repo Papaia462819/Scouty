@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_marcaje_turistice_si_ori_cde155999b87",
+  "card_id": "cg_mountain_safety_marcaje_turistice_si_ori_cde155999b87",
+  "domain": "mountain_safety",
+  "topic": "marcaje_turistice_si_orientare",
+  "language": "ro",
+  "title": "Orientare și marcaje — pregătirea traseului",
+  "body": "Înainte de a pleca în excursie, informați-vă despre itinerariul propus, gradul de dificultate al traseului, starea marcajului, accesibilitate și porțiunile periculoase. De asemenea, informați-vă despre starea vremii și programul de funcționare al mijloacelor de transport pe cablu. Căutați aceste informații la salvamontiști, cabanieri, pădurari sau ciobani, pentru a afla starea traseului (poteci, podețe, marcaje), a refugiilor și a punctelor Salvamont. Apelați 112 sau 0SALVAMONT pentru asistență în caz de urgență.",
+  "lead": "Înainte de a pleca în drumeție, informați-vă despre itinerariul propus, dificultatea traseului și starea marcajelor.",
+  "keywords": "orientare marcaje turistice planificare traseu siguranță montană informații traseu salvamont",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Recomandari pentru turistul montan",
+  "source_url": "https://www.salvamontromania.ro/recomandari-turist-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "trail_navigation",
+    "mountain_safety",
+    "route_planning",
+    "trail_markers",
+    "pre_hike_prep"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Înainte de a pleca în drumeție, informați-vă despre itinerariul propus, dificultatea traseului și starea marcajelor.",
+    "evidence_confidence": "high",
+    "source_quote": "Inainte de plecare in excursie, informati-va despre itinerariul propus, gradul de dificultate al traseului, starea marcajului, accesibilitate, portiuni periculoase...",
+    "source_id": "salvamont_turist_montan"
+  }
+}

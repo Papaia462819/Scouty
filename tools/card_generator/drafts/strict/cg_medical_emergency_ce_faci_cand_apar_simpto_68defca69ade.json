@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_ce_faci_cand_apar_simpto_68defca69ade",
+  "card_id": "cg_medical_emergency_ce_faci_cand_apar_simpto_68defca69ade",
+  "domain": "medical_emergency",
+  "topic": "ce_faci_cand_apar_simptome_de_hape_edem_pulmonar",
+  "language": "ro",
+  "title": "Edem pulmonar de altitudine (HAPE) — semne și acțiuni",
+  "body": "Edemul pulmonar de altitudine (HAPE) este o formă de boală de altitudine care poate deveni rapid fatală. Simptomele edemului pulmonar de altitudine includ: dificultăți de respirație, slăbiciune și tuse. O persoană care prezintă aceste simptome trebuie să se deplaseze imediat, sau să fie deplasată, la o altitudine mai joasă. Este probabil ca persoana să necesite tratament cu oxigen. Având în vedere gravitatea situației, apelați de urgență 112 sau Salvamont (0SALVAMONT) pentru asistență medicală și evacuare.",
+  "lead": "Edemul pulmonar de altitudine (HAPE) este o formă gravă de boală de altitudine, care poate deveni rapid fatală.",
+  "keywords": "edem pulmonar hape altitudine urgență medicală dificultăți de respirație slăbiciune tuse evacuare oxigen salvamont",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Travel to High Altitudes",
+  "source_url": "https://wwwnc.cdc.gov/travel/page/travel-to-high-altitudes",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "hape",
+    "altitude_sickness",
+    "pulmonary_edema",
+    "life_threatening",
+    "emergency_response"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Edemul pulmonar de altitudine (HAPE) este o formă gravă de boală de altitudine, care poate deveni rapid fatală.",
+    "evidence_confidence": "high",
+    "source_quote": "A third type of altitude illness, is called high-altitude pulmonary edema (HAPE). It can quickly become life-threatening. Symptoms of high-altitude pulmonary edema include: Shortness of breath, Weakness, Cough. A person with these symptoms must immediately move, or be moved, to a lower elevation and will likely need treatment with oxygen.",
+    "source_id": "cdc_high_altitude"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_first_solo_lesso_588de210f44a",
+  "card_id": "cg_trail_culture_ro_culture_first_solo_lesso_588de210f44a",
+  "domain": "trail_culture_ro",
+  "topic": "culture_first_solo_lessons",
+  "language": "ro",
+  "title": "Primele ture solo: ce am invatat pe carari",
+  "body": "După primele 5 ture solo, am învățat că e crucial să fii flexibil. Planul e bun, dar muntele are mereu ultimul cuvânt. Am avut o dată o ceață de nu vedeam la doi metri, și a trebuit să mă reorientez complet, folosind doar harta și busola, fără GPS. Apoi, am înțeles că rucsacul e cel mai bun prieten: fiecare obiect contează. Nu mai iau niciodată un tricou de bumbac în plus, ci doar lână merinos sau sintetic. Și cel mai important: înveți să te asculți. Când simți că e prea mult, e prea mult. Nu forța. Muntele te așteaptă și mâine. E o lecție de răbdare și de respect față de tine însuți. Și nu uita de gustarea preferată, un baton de ciocolată face minuni când moralul e la pământ.",
+  "lead": "Am adunat câteva lecții prețioase după primele mele ture solo pe cărările Carpaților, de la flexibilitate la echipament și ascultarea propriilor limite.",
+  "keywords": "ture solo invataminte munte echipament esential flexibilitate traseu rabdare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Am adunat câteva lecții prețioase după primele mele ture solo pe cărările Carpaților, de la flexibilitate la echipament și ascultarea propriilor limite.",
+    "seed_topic": "Lecții pe care le înveți după primele 5 ture solo",
+    "seed_topic_slug": "culture_first_solo_lessons"
+  }
+}

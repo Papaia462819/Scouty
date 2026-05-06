@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_winter_wind_prot_229db9b5078c",
+  "card_id": "cg_weather_and_season_weather_winter_wind_prot_229db9b5078c",
+  "domain": "weather_and_season",
+  "topic": "weather_winter_wind_protection",
+  "language": "ro",
+  "title": "Adăpost rapid de vânt la creastă, iarna",
+  "body": "Băi, dacă te prinde vântul turbat pe creastă iarna și n-ai cort, trebuie să te miști rapid. Caută o depresiune naturală, o groapă în zăpadă sau chiar în spatele unei stânci mai mari. Scoate-ți pelerina de ploaie sau folia de supraviețuire și întinde-o ca un paravan, ancorând-o cu bețele de trekking, rucsacul sau pietre. E crucial să te pui la adăpost din calea vântului dominant. Nu sta mult, e doar o soluție temporară să te poți regrupa, să bei un ceai cald și să iei o decizie. Odată am stat așa o oră, până s-a mai potolit vijelia, și am putut continua. E mai bine decât să te lupți direct cu vântul, care îți fură energia și te expune la frig.",
+  "lead": "Află cum să improvizezi un adăpost rapid de vânt pe creastă iarna, folosind echipamentul pe care-l ai la îndemână.",
+  "keywords": "adăpost vânt creastă iarna folie supraviețuire pelerină ploaie bețe trekking protecție frig",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să improvizezi un adăpost rapid de vânt pe creastă iarna, folosind echipamentul pe care-l ai la îndemână.",
+    "seed_topic": "Protecție de vânt la creastă iarna fără cort",
+    "seed_topic_slug": "weather_winter_wind_protection"
+  }
+}

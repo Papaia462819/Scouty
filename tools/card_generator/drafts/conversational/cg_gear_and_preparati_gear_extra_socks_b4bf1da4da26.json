@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_extra_socks_b4bf1da4da26",
+  "card_id": "cg_gear_and_preparati_gear_extra_socks_b4bf1da4da26",
+  "domain": "gear_and_preparation",
+  "topic": "gear_extra_socks",
+  "language": "ro",
+  "title": "Sosete pentru 4 zile pe munte",
+  "body": "Pentru o tură de 4 zile, eu iau minim 3 perechi de șosete. Una pe picioare, una de rezervă în rucsac și încă una pentru seara în cabană sau cort. Așa, ai mereu o pereche uscată pentru somn, și nu te trezești cu bășici. Dacă știi că e zonă mai umedă sau ești predispus la transpirație, mai poți adăuga o pereche. Întotdeauna aleg șosete din lână merinos sau un amestec sintetic bun, care elimină transpirația și se usucă repede. Bumbacul e de evitat, e ca un burete ud pe picior. Nu vrei asta la o zi de mers!",
+  "lead": "Află câte perechi de șosete să iei într-o tură de 4 zile la munte și de ce tip să fie.",
+  "keywords": "sosete munte echipament drumetie lână merinos pregatire tura numar sosete",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află câte perechi de șosete să iei într-o tură de 4 zile la munte și de ce tip să fie.",
+    "seed_topic": "Câte perechi de șosete cari pentru 4 zile",
+    "seed_topic_slug": "gear_extra_socks"
+  }
+}

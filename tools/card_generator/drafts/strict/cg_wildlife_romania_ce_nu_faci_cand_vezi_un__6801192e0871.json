@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_wildlife_romania_ce_nu_faci_cand_vezi_un__6801192e0871",
+  "card_id": "cg_wildlife_romania_ce_nu_faci_cand_vezi_un__6801192e0871",
+  "domain": "wildlife_romania",
+  "topic": "ce_nu_faci_cand_vezi_un_urs",
+  "language": "ro",
+  "title": "Întâlnire cu ursul: ce să NU faci",
+  "body": "Dacă un urs te surprinde, rămâi calm. Nu surprinde ursul dacă acesta nu este conștient de prezența ta. Odată ce ursul te-a observat și îți acordă atenție, evită anumite acțiuni pentru a preveni escaladarea situației. Nu imita sunete de urs și nu scoate țipete ascuțite. Nu face zgomote puternice sau țipete, deoarece ursul ar putea crede că este sunetul unei prăzi. Un țipăt sau o mișcare bruscă pot declanșa un atac. Continuă să vorbești cu ursul pe un ton jos; acest lucru te va ajuta să rămâi mai calm și nu va fi amenințător pentru urs. Ridică imediat copiii mici. Reține că nu există o strategie unică ce funcționează în toate situațiile și care garantează siguranța, dar respectarea acestor linii directoare poate reduce amenințarea.",
+  "lead": "Află ce acțiuni să eviți atunci când te întâlnești cu un urs pentru a preveni escaladarea situației și a-ți menține siguranța.",
+  "keywords": "urs siguranță întâlnire urs ce nu faci prevenire atac comportament urs animale sălbatice drumeție sigură",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Bear Safety",
+  "source_url": "https://www.nps.gov/subjects/bears/safety.htm",
+  "publisher": "National Park Service",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "bear_encounter",
+    "wildlife_safety",
+    "do_not_do",
+    "animal_attack_prevention"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Află ce acțiuni să eviți atunci când te întâlnești cu un urs pentru a preveni escaladarea situației și a-ți menține siguranța.",
+    "evidence_confidence": "high",
+    "source_quote": "Never imitate bear sounds or make a high-pitched squeal. Do not make any loud noises or screams—the bear may think it’s the sound of a prey animal. A scream or sudden movement may trigger an attack.",
+    "source_id": "nps_bear_safety"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_food_compact_meals_fcfbfdccb72e",
+  "card_id": "cg_tips_and_tricks_tip_food_compact_meals_fcfbfdccb72e",
+  "domain": "tips_and_tricks",
+  "topic": "tip_food_compact_meals",
+  "language": "ro",
+  "title": "Mese compacte pentru 3 zile pe munte",
+  "body": "Băi, știi cum e, fiecare gram contează. Pentru 3 zile, îmi pregătesc acasă niște mese rapide și ușoare. Dimineața, un terci de ovăz cu lapte praf și fructe uscate, amestecate deja într-o pungă. Doar adaugi apă fierbinte. La prânz, o lipie cu pateu vegetal sau hummus, plus niște cașcaval afumat și ardei gras tăiat felii. Și nu uita batoanele energizante făcute în casă! Seara, o supă instant cu crutoane și niște salam uscat. Sau, și mai fain, niște cuscus cu legume deshidratate. Secretul e să le ambalezi în pungi zi de zi, etichetate. Așa știi exact ce ai și nu cari în plus. Și nu uita să-ți iei și un baton de ciocolată, pentru \"urgențe\" sau pur și simplu ca răsfăț. Efort minim, energie maximă!",
+  "lead": "Învață cum să-ți pregătești mese compacte și energizante acasă pentru 3 zile de drumeție, economisind timp și greutate în rucsac.",
+  "keywords": "mese munte mâncare drumeție preparate acasă alimente ușoare nutriție munte mese compacte planificare mese",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să-ți pregătești mese compacte și energizante acasă pentru 3 zile de drumeție, economisind timp și greutate în rucsac.",
+    "seed_topic": "Mese compacte pre-pregătite acasă pentru 3 zile",
+    "seed_topic_slug": "tip_food_compact_meals"
+  }
+}

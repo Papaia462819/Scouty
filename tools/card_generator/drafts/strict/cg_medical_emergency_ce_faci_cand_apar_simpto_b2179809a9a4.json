@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_ce_faci_cand_apar_simpto_b2179809a9a4",
+  "card_id": "cg_medical_emergency_ce_faci_cand_apar_simpto_b2179809a9a4",
+  "domain": "medical_emergency",
+  "topic": "ce_faci_cand_apar_simptome_de_hace_sau_hape",
+  "language": "ro",
+  "title": "Edem cerebral (HACE) și pulmonar (HAPE) de altitudine",
+  "body": "Edemul cerebral de mare altitudine (HACE) este o formă gravă a răului acut de munte (AMS). Simptomele includ oboseală extremă, somnolență, confuzie și pierderea coordonării. Deși rar, HACE poate cauza decesul. Dacă o persoană dezvoltă aceste simptome, trebuie mutată imediat la o altitudine inferioară.\n\nEdemul pulmonar de mare altitudine (HAPE) este o altă formă de rău de altitudine care poate deveni rapid fatală. Simptomele specifice sunt dificultăți de respirație (lipsă de aer), slăbiciune și tuse. O persoană cu aceste simptome trebuie, de asemenea, mutată imediat la o altitudine mai joasă și probabil va necesita tratament cu oxigen.\n\nAmbele condiții reprezintă urgențe medicale. Acționați imediat la apariția simptomelor și nu ezitați să solicitați ajutor specializat. Sunați la 112 sau la Salvamont (0SALVAMONT) pentru asistență de urgență.",
+  "lead": "HACE și HAPE sunt forme severe de rău de altitudine care necesită coborâre imediată pentru a preveni consecințe fatale.",
+  "keywords": "hace hape edem cerebral edem pulmonar rău de altitudine urgență medicală confuzie tuse lipsă de aer coborâre",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Travel to High Altitudes",
+  "source_url": "https://wwwnc.cdc.gov/travel/page/travel-to-high-altitudes",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "hace",
+    "hape",
+    "altitude_sickness",
+    "life_threatening",
+    "medical_emergency"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "HACE și HAPE sunt forme severe de rău de altitudine care necesită coborâre imediată pentru a preveni consecințe fatale.",
+    "evidence_confidence": "high",
+    "source_quote": "High-altitude cerebral edema is rare, but it can cause death. If it develops, the person must immediately move... to a lower elevation. ...Symptoms of high-altitude pulmonary edema include: Shortness of breath, Weakness, Cough.",
+    "source_id": "cdc_high_altitude"
+  }
+}

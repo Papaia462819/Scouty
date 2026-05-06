@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_wind_break_logs_d77190bf4eb4",
+  "card_id": "cg_campfire_basics_fire_wind_break_logs_d77190bf4eb4",
+  "domain": "campfire_basics",
+  "topic": "fire_wind_break_logs",
+  "language": "ro",
+  "title": "Adăpost rapid împotriva vântului",
+  "body": "Când vântul bate cu putere, mai ales la altitudine, un paravan e aur curat pentru foc. Nu te apuca să tai copaci, că nu suntem la tăietori de lemne! Caută bușteni căzuți, pietre mai mari sau chiar rucsacurile voastre, dacă sunt goale și rezistente. Aranjează-le în formă de U sau de semicerc, cu deschiderea în direcția opusă vântului. E important să fie suficient de înalte cât să protejeze flacăra, dar nu atât de înalte încât să blocheze fumul. Odată am făcut un \"zid\" din pietre pe creastă, iar focul a ars impecabil, deși vântul zbura pe lângă noi ca un avion. Gândește-te la siguranță: nu lăsa focul nesupravegheat și asigură-te că nu sunt materiale inflamabile în apropiere. Un paravan bun te ajută să economisești lemne și să ai o seară mai plăcută.",
+  "lead": "Învață cum să construiești rapid un paravan pentru focul de tabără, folosind materiale găsite în natură, pentru a-l proteja de vânt.",
+  "keywords": "adăpost vânt foc tabără siguranță foc bușteni pietre protecție vânt",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să construiești rapid un paravan pentru focul de tabără, folosind materiale găsite în natură, pentru a-l proteja de vânt.",
+    "seed_topic": "Improvizat un parapet pentru vânt din bușteni sau pietre",
+    "seed_topic_slug": "fire_wind_break_logs"
+  }
+}

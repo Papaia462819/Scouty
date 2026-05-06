@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_food_dehydrated_fd8cedadb314",
+  "card_id": "cg_gear_and_preparati_gear_food_dehydrated_fd8cedadb314",
+  "domain": "gear_and_preparation",
+  "topic": "gear_food_dehydrated",
+  "language": "ro",
+  "title": "Mancare deshidratata: prieten sau dusman in ture lungi?",
+  "body": "Auzi, de mâncarea deshidratată am o relație complicată. Pe ture lungi, de peste 3-4 zile, e clar că e ușoară și compactă. Nu cari kilograme de conserve, iar asta e un mare plus când urci pe Vârful Omu. Dar gustul... ei, aici e buba. Multe sunt fade, iar după o zi de mers, ai nevoie de ceva care să-ți bucure și papilele gustative. Eu zic să iei câteva pachete, dar să le combini cu batoane energizante, nuci, fructe uscate și, neapărat, niște ciocolată. O supă la plic e bună la prânz, dar seara, după un efort susținut, un piure cu niște carne deshidratată sau orez cu legume poate fi o salvare. Testează acasă înainte să pleci cu ea în rucsac! Nu vrei surprize neplăcute la 2000 de metri.",
+  "lead": "Mâncarea deshidratată e ușoară și compactă pentru ture lungi, dar gustul poate fi o problemă; combin-o cu alte alimente și testează-le acasă.",
+  "keywords": "mancare deshidratata ture lungi nutritie munte greutate rucsac planificare masa sfaturi alimentatie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Mâncarea deshidratată e ușoară și compactă pentru ture lungi, dar gustul poate fi o problemă; combin-o cu alte alimente și testează-le acasă.",
+    "seed_topic": "Mâncare deshidratată — pro/contra pentru ture lungi",
+    "seed_topic_slug": "gear_food_dehydrated"
+  }
+}

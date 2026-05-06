@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_amphibians_carp_98e09c76a33c",
+  "card_id": "cg_wildlife_romania_wildlife_amphibians_carp_98e09c76a33c",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_amphibians_carpati",
+  "language": "ro",
+  "title": "Vietuitoarele din izvoare: Triton, salamandra, broaste alpine",
+  "body": "Când ajungi la un izvor de munte, pe lângă bucuria apei reci, aruncă o privire și în jur. Ai șanse să vezi tritoni de munte, cu pielea lor netedă și culori vii, sau chiar salamandre, mai ales după ploaie, când ies la vânătoare. Broaștele alpine, mici și rapide, se camuflează perfect printre pietre. Sunt indicatori de apă curată și un ecosistem sănătos. Nu le deranja, nu le atinge și nu le scoate din mediul lor. Lasă-le să-și vadă de treabă. E un spectacol fain să le observi cum se mișcă, dar de la distanță. Am văzut odată un triton care părea să facă flotări într-o băltoacă, era amuzant.",
+  "lead": "Descoperă viețuitoarele fascinante din izvoarele montane, precum tritoni, salamandre și broaște alpine, și învață cum să le observi fără să le deranjezi.",
+  "keywords": "triton salamandra broaste alpine izvoare wildlife ecologie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă viețuitoarele fascinante din izvoarele montane, precum tritoni, salamandre și broaște alpine, și învață cum să le observi fără să le deranjezi.",
+    "seed_topic": "Triton, salamandră, broaște alpine — viețuitoarele din izvoare",
+    "seed_topic_slug": "wildlife_amphibians_carpati"
+  }
+}

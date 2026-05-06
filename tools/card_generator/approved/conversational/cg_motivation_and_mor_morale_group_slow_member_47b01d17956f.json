@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_group_slow_member_47b01d17956f",
+  "card_id": "cg_motivation_and_mor_morale_group_slow_member_47b01d17956f",
+  "domain": "motivation_and_morale",
+  "topic": "morale_group_slow_member",
+  "language": "ro",
+  "title": "Cand un coleg e obosit pe traseu",
+  "body": "Băi, am pățit-o de multe ori. Unul dintre voi dă semne de oboseală. Nu-l lăsa să se simtă vinovat. Prima chestie: pauză. Scoate rucsacul, bea apă, mănâncă o ciocolată. Dacă e doar o mică criză de zahăr, își revine. Apoi, vezi dacă poți să-i preiei o parte din greutate – poate un litru de apă sau ceva ce nu-ți încurcă echilibrul. Nu-l forța să vorbească mult, doar întreabă-l cum se simte. Mergi mai încet, adaptează ritmul la el. O vorbă bună, o glumă scurtă, fac minuni. Nu uita, suntem o echipă, nu o cursă. Și nu-l lăsa niciodată singur în urmă. Am avut un prieten care a vrut să se oprească \"doar un pic\" și l-am găsit dormind lângă cărare. E important să fim atenți unii la alții, mai ales când oboseala își spune cuvântul. O să ajungem toți, chiar dacă mai lent.",
+  "lead": "Află cum să gestionezi oboseala unui membru din grup pe traseu, fără să-l lași în urmă sau să-l faci să se simtă vinovat.",
+  "keywords": "oboseala pe traseu suport grup ritm adaptat pauze dese spirit de echipă ajutor reciproc",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să gestionezi oboseala unui membru din grup pe traseu, fără să-l lași în urmă sau să-l faci să se simtă vinovat.",
+    "seed_topic": "Cum gestionezi un membru de grup obosit fără să fie penalizat",
+    "seed_topic_slug": "morale_group_slow_member"
+  }
+}

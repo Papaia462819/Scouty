@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_mountain_safety_respectarea_naturii_si_a_77497473e5bd",
+  "card_id": "cg_mountain_safety_respectarea_naturii_si_a_77497473e5bd",
+  "domain": "mountain_safety",
+  "topic": "respectarea_naturii_si_a_animalelor",
+  "language": "ro",
+  "title": "Respectarea naturii și a mediului montan",
+  "body": "Nu faceți focul în pădure și pe pășunile alpine. Nu aruncați chibrituri sau țigări aprinse. Ocrotiți flora, fauna, peșterile, monumentele naturii și apele. Nu poluați natura. La plecarea dintr-un loc de popas, lăsați curat în urma voastră. Nu deteriorați amenajările turistice, marcajele și indicatoarele. Respectați monumentele naturii și ariile protejate. Nu aruncați deșeuri în zona montană.",
+  "lead": "Respectați mediul montan prin acțiuni responsabile, evitând poluarea și deteriorarea florei, faunei și infrastructurii.",
+  "keywords": "respect natură mediu montan foc poluare deșeuri floră faună arii protejate",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Recomandari pentru turistul montan",
+  "source_url": "https://www.salvamontromania.ro/recomandari-turist-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "environmental_protection",
+    "leave_no_trace",
+    "fire_prevention",
+    "wildlife_protection"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Respectați mediul montan prin acțiuni responsabile, evitând poluarea și deteriorarea florei, faunei și infrastructurii.",
+    "evidence_confidence": "high",
+    "source_quote": "Nu faceti focul in padure si pe pasunile alpine. Nu aruncati chibrituri sau tigari aprinse; Ocrotiti flora, fauna, pesterile, monumentele naturii, apele; Nu poluati natura; La plecarea dintr-un loc de popas lasati curat in urma voastra; Nu deteriorati amenajarile turistice, marcajele si indicatoarele. Respectati monumentele naturii si ariile protejate. Nu aruncati deseuri in zona montana.",
+    "source_id": "salvamont_turist_montan"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_food_storage_bears_957c5a9d493a",
+  "card_id": "cg_gear_and_preparati_gear_food_storage_bears_957c5a9d493a",
+  "domain": "gear_and_preparation",
+  "topic": "gear_food_storage_bears",
+  "language": "ro",
+  "title": "Mancarea si ursii: Sfaturi practice pentru noapte",
+  "body": "Salut, drumețule! Când vine vorba de ursi și mâncare, regula de aur e să nu le dai ocazia să asocieze tabăra ta cu o sursă de hrană ușoară. Nu ține niciodată mâncarea în cort. Cel mai sigur e să folosești un sac special, rezistent la urși, pe care să-l agăți de o creangă solidă, la cel puțin 3-4 metri de sol și la 2-3 metri de trunchiul copacului. Asigură-te că e la o distanță considerabilă de cort, vreo 100 de metri, dacă e posibil. Chiar și recipientele goale sau ambalajele trebuie depozitate la fel, mirosul le atrage. Am avut un prieten care a lăsat o pungă de chipsuri goală lângă cort și a avut vizitatori nepoftiți. Nu vrei să te trezești cu o surpriză dimineața!",
+  "lead": "Află cum să-ți păstrezi mâncarea în siguranță peste noapte în zonele cu urși, evitând incidente neplăcute.",
+  "keywords": "ursi mancare depozitare siguranta camping sac anti-urs",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți păstrezi mâncarea în siguranță peste noapte în zonele cu urși, evitând incidente neplăcute.",
+    "seed_topic": "Cum păstrezi mâncarea peste noapte în zone cu urși",
+    "seed_topic_slug": "gear_food_storage_bears"
+  }
+}

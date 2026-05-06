@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_carpati_first_time_67b9e0d91cd7",
+  "card_id": "cg_route_intelligence_route_carpati_first_time_67b9e0d91cd7",
+  "domain": "route_intelligence_romania",
+  "topic": "route_carpati_first_time",
+  "language": "ro",
+  "title": "Prima ta tură ușoară pe Carpați",
+  "body": "Salut! Pentru prima ta tură, alege un traseu marcat ușor, de 3-4 ore, cu diferență mică de nivel. De exemplu, o plimbare prin pădure până la o cabană. Verifică mereu prognoza meteo, dar ia cu tine o jachetă impermeabilă subțire, chiar dacă e soare. Vremea la munte e ca o babă capricioasă. Bocancii sunt esențiali, nu adidași! Un rucsac mic cu apă (minim 1.5L), o gustare (nuci, fructe uscate, un sandviș) și o hartă (chiar dacă ai GPS pe telefon, o hartă fizică nu rămâne fără baterie). Spune cuiva unde mergi și când te întorci. Și, cel mai important, bucură-te de natură! Nu e concurs.",
+  "lead": "Sfaturi esențiale pentru prima ta drumeție ușoară pe Carpați, de la echipament la siguranță și planificare.",
+  "keywords": "prima tură traseu ușor echipament minim siguranță munte apă gustare prognoza meteo",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Sfaturi esențiale pentru prima ta drumeție ușoară pe Carpați, de la echipament la siguranță și planificare.",
+    "seed_topic": "Prima tură ușoară pe Carpați pentru cineva fără experiență",
+    "seed_topic_slug": "route_carpati_first_time"
+  }
+}

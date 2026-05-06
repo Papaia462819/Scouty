@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_evidence_book_6fa808d434e0",
+  "card_id": "cg_wildlife_romania_wildlife_evidence_book_6fa808d434e0",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_evidence_book",
+  "language": "ro",
+  "title": "Intalniri cu fauna: ce sa notezi in caietul de teren",
+  "body": "Salutare, drumețule! Când te întâlnești cu animale sălbatice, e o idee bună să notezi câteva detalii. Nu doar pentru amintiri, ci și pentru a înțelege mai bine comportamentul lor. Ce să pui în caiet? Păi, data și ora exactă, locul (poți folosi coordonate GPS dacă ai), specia animalului (dacă o recunoști), numărul de indivizi. Apoi, comportamentul observat: se hrănea, se odihnea, alerga, era agitat? A reacționat la prezența ta? Ce făcea înainte să te vadă? De exemplu: \"2 capre negre, 15:30, Vârful Omu, pășteau liniștite, au fugit la 50m distanță după ce m-au simțit\". Detaliile astea, adunate în timp, îți pot oferi o perspectivă super interesantă despre viața sălbatică de la noi. E ca un jurnal de detectiv montan!",
+  "lead": "Află ce detalii să notezi în caietul de teren când te întâlnești cu animale sălbatice, pentru a înțelege mai bine comportamentul lor.",
+  "keywords": "fauna salbatica caiet de teren observatii animale comportament animale drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce detalii să notezi în caietul de teren când te întâlnești cu animale sălbatice, pentru a înțelege mai bine comportamentul lor.",
+    "seed_topic": "Caiet de teren: ce notezi despre o întâlnire cu fauna",
+    "seed_topic_slug": "wildlife_evidence_book"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_post_trip_reflect_087602e65eae",
+  "card_id": "cg_motivation_and_mor_morale_post_trip_reflect_087602e65eae",
+  "domain": "motivation_and_morale",
+  "topic": "morale_post_trip_reflect",
+  "language": "ro",
+  "title": "Reflecția post-tură: Învață din fiecare aventură",
+  "body": "După fiecare tură, chiar și după o plimbare scurtă, ia-ți 10 minute să te gândești la ce a fost bine și ce nu. Ai simțit că-ți lipsește ceva în rucsac? Poate un strat în plus sau niște batoane energizante. Ai mers prea repede sau prea încet? Ai subestimat o porțiune de traseu? E ca la școală, doar că notele ți le pui singur și nu te ceartă nimeni. De exemplu, îmi amintesc o dată când am uitat frontală și m-a prins noaptea pe coborâre. De atunci, e primul lucru pe lista de verificare. O mică reflecție acum te scutește de bătăi de cap mari pe viitor. E cel mai bun mod să crești ca drumeț.",
+  "lead": "Ia-ți 10 minute după fiecare drumeție să analizezi ce a mers bine și ce nu, pentru a învăța și a te pregăti mai bine data viitoare.",
+  "keywords": "reflecție tură învățare montană experiență drumeție planificare viitoare autoevaluare traseu",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Ia-ți 10 minute după fiecare drumeție să analizezi ce a mers bine și ce nu, pentru a învăța și a te pregăti mai bine data viitoare.",
+    "seed_topic": "Reflecția post-tură — învață mai mult în 10 minute decât în 10 ore",
+    "seed_topic_slug": "morale_post_trip_reflect"
+  }
+}

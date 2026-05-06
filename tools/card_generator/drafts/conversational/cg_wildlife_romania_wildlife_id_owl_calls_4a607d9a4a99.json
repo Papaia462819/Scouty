@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_id_owl_calls_4a607d9a4a99",
+  "card_id": "cg_wildlife_romania_wildlife_id_owl_calls_4a607d9a4a99",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_id_owl_calls",
+  "language": "ro",
+  "title": "Bufnițe în Carpați: Ce auzi noaptea în pădure",
+  "body": "Noaptea, pădurea prinde viață cu tot felul de sunete. Bufnițele sunt printre cele mai fascinante. Vei auzi adesea un \"hu-hu-hu\" profund, repetat, specific bufniței mari. E ca și cum ar vorbi cu pădurea. Ciuvica, mai mică, scoate un \"piu-piu\" ascuțit, aproape metalic, care te poate face să tresari dacă nu ești obișnuit. E un sunet care parcă taie liniștea. Huhurezul, cel mai comun, are un \"uh-uh-uh-uh-uh\" mai ritmat și mai moale. Sună ca o șoaptă, o prezență constantă. Nu te speria, sunt doar locatarii nocturni. De multe ori, le auzi înainte să le vezi. E o experiență faină, te conectează cu sălbăticia. Ascultă cu atenție și vei descoperi o lume nouă. Poți chiar să încerci să le imiți, uneori răspund. Dar nu le deranja prea tare, sunt la ele acasă.",
+  "lead": "Află ce sunete scot bufnițele în Carpați și cum să le recunoști în liniștea nopții.",
+  "keywords": "bufnite sunete noapte padure carpati wildlife romania huhurez ciuvica bufnita mare observare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce sunete scot bufnițele în Carpați și cum să le recunoști în liniștea nopții.",
+    "seed_topic": "Sunete de bufnițe în Carpați: ce auzi noaptea în pădure",
+    "seed_topic_slug": "wildlife_id_owl_calls"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_water_cold_hands_4af67e2ce424",
+  "card_id": "cg_gear_and_preparati_gear_water_cold_hands_4af67e2ce424",
+  "domain": "gear_and_preparation",
+  "topic": "gear_water_cold_hands",
+  "language": "ro",
+  "title": "Hidratare la rece: trucuri pentru maini calde",
+  "body": "La -5°C, fiecare secundă cu mănușile jos contează. Uite cum fac eu: în loc de sticlă, folosesc un termos cu gura largă, umplut cu ceai cald sau apă călâie. E mai ușor de deschis și închis, chiar și cu mănuși subțiri. Sau, dacă ești fan camelbak, izolează bine furtunul și suflă aer înapoi după fiecare înghițitură, să nu înghețe apa pe traseu. Încearcă să bei des, dar puține înghițituri, ca să nu te deshidratezi fără să-ți dai seama. Și nu uita, o gură de apă caldă face minuni pentru moral!",
+  "lead": "Află cum să te hidratezi eficient pe munte la temperaturi negative, fără să-ți îngheți mâinile.",
+  "keywords": "hidratare iarna apa rece termos munte camelbak iarna maini calde",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te hidratezi eficient pe munte la temperaturi negative, fără să-ți îngheți mâinile.",
+    "seed_topic": "Cum bei apă fără să-ți îngheți mâinile la -5°C",
+    "seed_topic_slug": "gear_water_cold_hands"
+  }
+}

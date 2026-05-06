@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_id_red_deer_71fdc71ee270",
+  "card_id": "cg_wildlife_romania_wildlife_id_red_deer_71fdc71ee270",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_id_red_deer",
+  "language": "ro",
+  "title": "Cum recunosti un cerb carpatin: sunete si urme",
+  "body": "Salut, prieteni! Vreți să știți cum recunoașteți un cerb carpatin în sălbăticie? E o experiență faină! Primăvara și toamna, ascultați boncănitul. E un muget puternic, gutural, care te face să simți munții. Toamna, în perioada de împerechere, masculii se \"bat\" vocal pentru femele. Cât despre urme, căutați copite desprinse, ca două jumătăți de inimă, lungi de 7-9 cm și late de 5-7 cm. Sunt mai mari și mai rotunde decât ale căpriorului. Pe zăpadă moale sau noroi, s-ar putea să vedeți și impresia pintenilor, două puncte mici în spatele copitei. Și nu uitați, cerbii lasă și \"paturi\" – locuri unde au dormit, arată ca niște gropițe în iarbă sau frunze. Fiți atenți la detalii, și veți avea parte de surprize plăcute!",
+  "lead": "Află cum să recunoști prezența cerbului carpatin în munți, după sunete specifice și urmele lăsate pe potecă.",
+  "keywords": "cerb carpatin boncanit urme animale wildlife romania recunoastere cerb copite cerb",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să recunoști prezența cerbului carpatin în munți, după sunete specifice și urmele lăsate pe potecă.",
+    "seed_topic": "Cum recunoști un cerb carpatin — sunete și urme",
+    "seed_topic_slug": "wildlife_id_red_deer"
+  }
+}

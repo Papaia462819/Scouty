@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_50_hikes_lessons_1b87e9e5bd94",
+  "card_id": "cg_trail_culture_ro_culture_50_hikes_lessons_1b87e9e5bd94",
+  "domain": "trail_culture_ro",
+  "topic": "culture_50_hikes_lessons",
+  "language": "ro",
+  "title": "50 de ture pe Carpați: lecții învățate",
+  "body": "După atâția ani, am învățat că muntele nu iartă graba. Începe-ți ziua devreme, mai ales vara, să eviți căldura și furtunile de după-amiază. Un start la 6 dimineața îți dă timp să savurezi peisajul și să nu te grăbești. Echipamentul? Investește în bocanci buni și un rucsac confortabil. Am avut odată niște bocanci noi care mi-au făcut bășici cât prunele, și am ajuns să cobor desculț o bucată. Și nu uita de straturi: un tricou tehnic, un polar și o geacă impermeabilă sunt baza. Chiar și în august, sus bate vântul! Și cel mai important: respectă muntele și pe ceilalți drumeți. Lasă poteca mai curată decât ai găsit-o.",
+  "lead": "Află ce lecții esențiale am învățat după zeci de ture pe Carpați, de la planificare la echipament și respectul față de natură.",
+  "keywords": "lecții montane echipament esențial planificare traseu respect munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce lecții esențiale am învățat după zeci de ture pe Carpați, de la planificare la echipament și respectul față de natură.",
+    "seed_topic": "Ce înveți după 50 de ture pe Carpați",
+    "seed_topic_slug": "culture_50_hikes_lessons"
+  }
+}

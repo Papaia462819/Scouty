@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_shelter_lean_to_fdb23eabad7f",
+  "card_id": "cg_survival_basics_survival_shelter_lean_to_fdb23eabad7f",
+  "domain": "survival_basics",
+  "topic": "survival_shelter_lean_to",
+  "language": "ro",
+  "title": "Adăpost improvizat: Lean-to din crengi și frunze",
+  "body": "Băi, să sperăm că n-o să ai nevoie, dar dacă te prinde noaptea în sălbăticie, un lean-to e salvarea. Caută un copac căzut sau o stâncă mare ca suport. Apoi, găsește o creangă rezistentă, de vreo 2-3 metri, și sprijin-o la un unghi de 45 de grade de suportul tău. Asta va fi coloana vertebrală. Pe ea, așează alte crengi mai mici, una lângă alta, ca niște coaste. Acoperă totul cu un strat gros de frunze uscate, mușchi, ferigi – orice găsești să izoleze. Gândește-te la un acoperiș de țiglă, să nu intre ploaia. Lasă o intrare mică, cât să te strecori. E rudimentar, dar te ferește de vânt și frig. Am dormit o dată sub unul, după ce m-a prins ceața groasă pe Retezat. Nu-i Hilton, dar e cald și uscat.",
+  "lead": "Învață cum să construiești rapid un adăpost simplu, un lean-to, folosind crengi și frunze, pentru o noapte neprevăzută în natură.",
+  "keywords": "adăpost improvizat lean-to supraviețuire crengi frunze munte noapte izolație",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să construiești rapid un adăpost simplu, un lean-to, folosind crengi și frunze, pentru o noapte neprevăzută în natură.",
+    "seed_topic": "Lean-to cu crengi și frunze pentru o noapte",
+    "seed_topic_slug": "survival_shelter_lean_to"
+  }
+}

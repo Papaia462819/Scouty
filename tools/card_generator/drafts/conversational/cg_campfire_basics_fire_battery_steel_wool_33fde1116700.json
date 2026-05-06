@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_battery_steel_wool_33fde1116700",
+  "card_id": "cg_campfire_basics_fire_battery_steel_wool_33fde1116700",
+  "domain": "campfire_basics",
+  "topic": "fire_battery_steel_wool",
+  "language": "ro",
+  "title": "Aprinderea focului cu baterie si sarma de otel",
+  "body": "Băi, știi că poți aprinde focul cu o baterie și o bucată de sârmă de oțel? E o metodă de avarie, dar super eficientă când ești în pană de brichete sau chibrituri ude. Ai nevoie de o baterie de 9V și o bucățică de lână de oțel (aia de curățat oale, știi tu). Pur și simplu atingi cei doi poli ai bateriei cu lâna de oțel. Se va încinge instant și va scoate scântei. Ai grijă să ai deja pregătit iasca uscată – scoarță de mesteacăn, puf de ciulin, sau chiar vată. E esențial să ai iasca fină, care să ia foc ușor de la scântei. Nu e o metodă de fițe, dar te scoate din belele! Am folosit-o o dată când ploua de rupea și nu mai aveam nimic uscat. A funcționat ca un vis.",
+  "lead": "Află cum să aprinzi focul de tabără într-o situație de urgență folosind o baterie de 9V și o bucată de lână de oțel.",
+  "keywords": "aprindere foc baterie 9v sarma otel metoda urgenta iasca foc de tabara",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să aprinzi focul de tabără într-o situație de urgență folosind o baterie de 9V și o bucată de lână de oțel.",
+    "seed_topic": "Baterie + sârmă de oțel: când și cum funcționează",
+    "seed_topic_slug": "fire_battery_steel_wool"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_shelter_snow_tr_a34dd1c66621",
+  "card_id": "cg_survival_basics_survival_shelter_snow_tr_a34dd1c66621",
+  "domain": "survival_basics",
+  "topic": "survival_shelter_snow_trench",
+  "language": "ro",
+  "title": "Tranșee în zăpadă: un bivuac de urgență eficient",
+  "body": "Dacă te prinde noaptea-n munte și n-ai cort, o tranșee în zăpadă e o soluție bună pentru izolare termică. Caută un loc ferit de vânt, cu zăpadă adâncă. Sapă o groapă lungă, cam de 2 metri, lată cât să încapi tu și rucsacul, și adâncă de un metru. Cu cât mai adâncă, cu atât mai bine. Acoperă tranșeea cu crengi de brad, folie de supraviețuire sau chiar bucăți de zăpadă tăiate ca niște cărămizi. Lasă o mică gaură pentru ventilație. Zăpada e un izolator fantastic, iar spațiul mic se încălzește repede de la căldura corpului. Am stat o dată așa, la -15 grade, și am dormit buștean. E mai bine decât să îngheți de frig în vânt.",
+  "lead": "Află cum să-ți construiești rapid o tranșee în zăpadă pentru a te proteja de frig în caz de urgență.",
+  "keywords": "tranșee zăpadă bivuac urgență izolare termică adăpost zăpadă supraviețuire iarnă",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți construiești rapid o tranșee în zăpadă pentru a te proteja de frig în caz de urgență.",
+    "seed_topic": "Tranșee în zăpadă pentru izolare termică",
+    "seed_topic_slug": "survival_shelter_snow_trench"
+  }
+}

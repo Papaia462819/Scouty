@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_morning_temperat_d7570aca3ed0",
+  "card_id": "cg_weather_and_season_weather_morning_temperat_d7570aca3ed0",
+  "domain": "weather_and_season",
+  "topic": "weather_morning_temperature_check",
+  "language": "ro",
+  "title": "Plecarea la -2°C: Ești pregătit?",
+  "body": "La -2°C, dimineața la cabană, primul lucru e să verifici vântul. Dacă e calm, e bine. Dacă bate tare, s-ar putea să simți ca -10°C. Apoi, uită-te la cer. E senin? Super! Norii groși, mai ales cei negri, pot aduce ninsoare. Verifică stratul de zăpadă. E proaspăt sau vechi și bătătorit? Zăpada proaspătă, mai ales dacă e multă, înseamnă efort suplimentar și risc de avalanșă pe pantele abrupte. Nu uita să te uiți și la prognoza meteo locală, dar ia-o cu un grăunte de sare. Munții au propriile lor reguli. Echipamentul e crucial: ai straturi suficiente (termic, polar, impermeabil), mănuși, căciulă, ochelari de soare și bocanci impermeabili? Dacă ai bifat tot, ești gata de drum! Dar dacă ai dubii, mai bine mai aștepți o oră, două. Muntele nu fuge.",
+  "lead": "Înainte de a pleca pe munte la temperaturi negative, verifică vântul, cerul, stratul de zăpadă și asigură-te că ai echipamentul potrivit.",
+  "keywords": "vreme rece plecare iarna evaluare risc echipament iarna zapada vant temperatura",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Înainte de a pleca pe munte la temperaturi negative, verifică vântul, cerul, stratul de zăpadă și asigură-te că ai echipamentul potrivit.",
+    "seed_topic": "Cum verifici dacă ai bun să pleci când e -2°C la cabană",
+    "seed_topic_slug": "weather_morning_temperature_check"
+  }
+}

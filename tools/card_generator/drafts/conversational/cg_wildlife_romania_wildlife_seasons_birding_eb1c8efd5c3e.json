@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_seasons_birding_eb1c8efd5c3e",
+  "card_id": "cg_wildlife_romania_wildlife_seasons_birding_eb1c8efd5c3e",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_seasons_birding",
+  "language": "ro",
+  "title": "Birdwatching in Carpati: Cand si Unde",
+  "body": "Salut, prietene! Ești gata să descoperi păsările Carpaților? Primăvara (aprilie-mai) e aur curat: mierle, cinteze, pitulici, toate cântă de zor. Caută-le în pădurile de foioase și mixte, mai ales dimineața devreme. Vara (iunie-iulie) e bună pentru rapitoare, cum ar fi acvila de munte sau șorecarul, care planează deasupra crestelor. Toamna (septembrie-octombrie) e spectaculoasă pentru migrație, când stoluri mari de păsări trec prin trecători. Iarna, dacă ești curajos, poți vedea cocoșul de munte sau bufnița, mai ales în zonele împădurite, liniștite. Ia-ți un binoclu bun și răbdare, că natura nu se grăbește niciodată. Odată am stat trei ore pentru o ciocănitoare, dar a meritat fiecare secundă!",
+  "lead": "Află care sunt cele mai bune perioade și locuri pentru a observa păsările în Carpați, de la primăvară la iarnă.",
+  "keywords": "birdwatching carpati pasari sezon ghid",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află care sunt cele mai bune perioade și locuri pentru a observa păsările în Carpați, de la primăvară la iarnă.",
+    "seed_topic": "Calendar de birdwatching pe Carpați",
+    "seed_topic_slug": "wildlife_seasons_birding"
+  }
+}

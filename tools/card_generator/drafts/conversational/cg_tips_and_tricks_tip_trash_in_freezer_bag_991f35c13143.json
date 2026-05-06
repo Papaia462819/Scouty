@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_trash_in_freezer_bag_991f35c13143",
+  "card_id": "cg_tips_and_tricks_tip_trash_in_freezer_bag_991f35c13143",
+  "domain": "tips_and_tricks",
+  "topic": "tip_trash_in_freezer_bag",
+  "language": "ro",
+  "title": "Punga cu fermoar: prietenul tău anti-miros în drumeții",
+  "body": "Băi, știi cum e, nu-i așa? Ajungi sus, mănânci un baton, bei un ceai, și-ți rămâne ambalajul. Sau, mai rău, hârtia igienică folosită. Nu lăsa nimic în urmă! Eu am mereu la mine o pungă cu fermoar, din aia resigilabilă. Îți bagi în ea toate gunoaiele, de la coji de portocală la ambalaje lipicioase. Se închide etanș, nu curge, nu miroase și nu-ți murdărește rucsacul. E mică, ușoară și face o diferență enormă. Gândește-te la ea ca la un mini-coș de gunoi personal, pe care-l golești acasă. Am văzut odată un urs curios la o pungă lăsată la vedere. Nu vrei să atragi așa ceva! Fii responsabil și Carpații o să-ți mulțumească.",
+  "lead": "Folosește o pungă resigilabilă pentru a-ți depozita gunoiul în drumeții, evitând mirosurile și menținând curățenia rucsacului și a naturii.",
+  "keywords": "gunoi curățenie zero impact pungă fermoar igienă munte randonare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Folosește o pungă resigilabilă pentru a-ți depozita gunoiul în drumeții, evitând mirosurile și menținând curățenia rucsacului și a naturii.",
+    "seed_topic": "Pungă cu fermoar pentru gunoi — închide miros, ține curat",
+    "seed_topic_slug": "tip_trash_in_freezer_bag"
+  }
+}

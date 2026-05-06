@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_ciucas_intro_cf2117ad0801",
+  "card_id": "cg_route_intelligence_route_ciucas_intro_cf2117ad0801",
+  "domain": "route_intelligence_romania",
+  "topic": "route_ciucas_intro",
+  "language": "ro",
+  "title": "Ciucaș: Perla subestimată a Carpaților",
+  "body": "Băi, dacă nu ai fost în Ciucaș, e musai să-l pui pe listă! E un munte mai mic, dar cu peisaje unice, parcă desprinse dintr-o altă lume. Formațiunile stâncoase, cum ar fi Sfinxul sau Babele din Ciucaș, sunt spectaculoase și le vezi chiar de pe potecă. Traseele sunt bine marcate și nu foarte solicitante, perfecte pentru o zi de relaxare. Dar nu te culca pe-o ureche, vremea se poate schimba rapid și aici. Ia-ți mereu o jachetă impermeabilă și un polar, chiar și vara. Și nu uita de bocanci, că noroiul e prietenul nostru veșnic.",
+  "lead": "Ciucașul oferă peisaje unice și trasee accesibile, fiind o destinație excelentă pentru o zi de drumeție.",
+  "keywords": "ciucaș trasee ușoare peisaje unice echipament munte românia",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Ciucașul oferă peisaje unice și trasee accesibile, fiind o destinație excelentă pentru o zi de drumeție.",
+    "seed_topic": "Ciucaș: zonă subevaluată, perspectivă unică",
+    "seed_topic_slug": "route_ciucas_intro"
+  }
+}

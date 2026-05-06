@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_compass_basic_u_93e2f90910ca",
+  "card_id": "cg_survival_basics_survival_compass_basic_u_93e2f90910ca",
+  "domain": "survival_basics",
+  "topic": "survival_compass_basic_use",
+  "language": "ro",
+  "title": "Orientarea hartii cu busola: Pas cu pas",
+  "body": "Salut, drumețule! Să știi să folosești busola e vital, mai ales când GPS-ul face figuri. E simplu: pui harta pe o suprafață plană. Așezi busola pe hartă, cu marginea lungă de-a lungul unei linii nord-sud (meridian). Rotești harta cu tot cu busolă până când acul magnetic al busolei (partea roșie, de obicei) se suprapune perfect peste linia de nord de pe hartă. Gata! Harta ta e acum orientată corect față de teren. Vei vedea că dealurile și văile de pe hartă se aliniază cu cele din jurul tău. E ca o mică magie, dar una care te scoate din belele. Practică asta de câteva ori și o să-ți intre în sânge. Nu uita, acul roșu arată mereu Nordul magnetic. Spor la drum!",
+  "lead": "Învață cum să-ți orientezi harta cu ajutorul busolei, un pas esențial pentru navigarea sigură pe munte.",
+  "keywords": "busola orientare harta navigatie munti supravietuire",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să-ți orientezi harta cu ajutorul busolei, un pas esențial pentru navigarea sigură pe munte.",
+    "seed_topic": "Folosirea unei busole pentru orientarea hărții",
+    "seed_topic_slug": "survival_compass_basic_use"
+  }
+}

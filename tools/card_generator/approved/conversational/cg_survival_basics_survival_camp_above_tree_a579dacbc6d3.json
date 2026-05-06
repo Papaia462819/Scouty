@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_camp_above_tree_a579dacbc6d3",
+  "card_id": "cg_survival_basics_survival_camp_above_tree_a579dacbc6d3",
+  "domain": "survival_basics",
+  "topic": "survival_camp_above_treeline",
+  "language": "ro",
+  "title": "Bivuac peste limita padurii: riscuri si cum sa le eviti",
+  "body": "Bivuacul deasupra golului alpin e o experiență faină, dar trebuie să știi la ce te înhami. Vântul e cel mai mare dușman, poate să-ți smulgă cortul sau să te lase fără izopren. Ancorează-ți bine cortul cu pietre mari sau cu bețe de trekking legate de cordeline. Fii pregătit pentru temperaturi scăzute, chiar și vara. Un sac de dormit cu confort sub 0 grade e obligatoriu, plus o folie de supraviețuire sub izopren, care reflectă căldura. Nu uita de pelerina de ploaie, vremea se schimbă rapid. Am avut o dată un prieten căruia i-a zburat prelata de la cort și a dormit cu stelele în cap, la propriu. Nu vrei să fii tu ăla. Gândește-te la surse de apă și la locuri adăpostite. Nu instala cortul fix pe creastă, caută o depresiune sau o zonă mai ferită.",
+  "lead": "Află cum să te pregătești pentru un bivuac sigur și confortabil deasupra limitei pădurii, evitând capcanele vremii și ale terenului.",
+  "keywords": "bivuac gol alpin cort vant frig siguranta",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te pregătești pentru un bivuac sigur și confortabil deasupra limitei pădurii, evitând capcanele vremii și ale terenului.",
+    "seed_topic": "Bivuac peste limita pădurii — riscuri și mitigare",
+    "seed_topic_slug": "survival_camp_above_treeline"
+  }
+}

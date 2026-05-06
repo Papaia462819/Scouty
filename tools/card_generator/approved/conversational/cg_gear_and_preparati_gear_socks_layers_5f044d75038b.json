@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_socks_layers_5f044d75038b",
+  "card_id": "cg_gear_and_preparati_gear_socks_layers_5f044d75038b",
+  "domain": "gear_and_preparation",
+  "topic": "gear_socks_layers",
+  "language": "ro",
+  "title": "Sosete: una sau doua perechi? Materiale esentiale",
+  "body": "Băi, cu șosetele e simplu: una, dar bună! Uităm de bumbac, că ăla reține umezeala și-ți face bășici de zici că ai mers pe jar. Mergi pe lână merinos, e regele șosetelor de munte. Respiră, izolează chiar și udă și nu-ți miros picioarele după o zi întreagă. Alternativa e un material sintetic bun, gen poliester sau nylon, care transportă umezeala departe de piele. Dacă vrei să fii șmecher, poți folosi o pereche subțire de șosete sintetice pe post de liner, direct pe picior, și peste ea o pereche mai groasă de lână merinos. Așa reduci frecarea și crești confortul. Am încercat și varianta cu două perechi groase și m-am ales cu picioare umflate de la căldură și frecare. Mai bine o pereche de calitate decât două proaste.",
+  "lead": "Află de ce o singură pereche de șosete de calitate, din lână merinos sau material sintetic, este superioară la munte.",
+  "keywords": "sosete drumetie lana merinos material sintetic prevenire basici echipament munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce o singură pereche de șosete de calitate, din lână merinos sau material sintetic, este superioară la munte.",
+    "seed_topic": "Șosete: două perechi sau una? Materialele care contează",
+    "seed_topic_slug": "gear_socks_layers"
+  }
+}

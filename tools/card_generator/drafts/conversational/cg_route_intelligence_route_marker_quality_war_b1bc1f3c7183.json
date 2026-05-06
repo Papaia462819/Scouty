@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_marker_quality_war_b1bc1f3c7183",
+  "card_id": "cg_route_intelligence_route_marker_quality_war_b1bc1f3c7183",
+  "domain": "route_intelligence_romania",
+  "topic": "route_marker_quality_warn",
+  "language": "ro",
+  "title": "Marcaje vechi sau sterse: Fii cu ochii in patru!",
+  "body": "Băi, știi cum e, pe la noi prin munți mai găsești marcaje care par făcute de bunicii bunicilor. Sau, și mai rău, șterse de ploaie, zăpadă și nepăsare. Fii atent mai ales în zonele de creastă expuse, unde vântul și intemperiile își fac de cap, sau în pădurile dese, unde vegetația le acoperă. La fel și la intersecțiile de poteci mai puțin circulate. Nu te baza doar pe un singur semn, caută-l pe următorul înainte să te avânți. Și nu uita, o hartă fizică și o busolă (sau GPS-ul de pe telefon, cu o baterie externă) sunt prietenii tăi cei mai buni când marcajele îți joacă feste. Am pățit-o o dată, am urmat un marcaj vechi, aproape invizibil, și m-am trezit într-o poiană plină de urși. Noroc că erau de pluș, lăsați de un grup de copii. Dar tot m-am speriat!",
+  "lead": "Află unde să fii cel mai atent la marcajele vechi sau șterse și cum să te orientezi corect în munții României.",
+  "keywords": "marcaje vechi poteci sterse orientare munte harta busola siguranta traseu",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află unde să fii cel mai atent la marcajele vechi sau șterse și cum să te orientezi corect în munții României.",
+    "seed_topic": "Marcaje vechi sau șterse — zone unde să fii atent",
+    "seed_topic_slug": "route_marker_quality_warn"
+  }
+}

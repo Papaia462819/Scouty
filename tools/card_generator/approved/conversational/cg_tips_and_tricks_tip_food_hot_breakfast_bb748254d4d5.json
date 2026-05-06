@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_food_hot_breakfast_bb748254d4d5",
+  "card_id": "cg_tips_and_tricks_tip_food_hot_breakfast_bb748254d4d5",
+  "domain": "tips_and_tricks",
+  "topic": "tip_food_hot_breakfast",
+  "language": "ro",
+  "title": "Micul dejun cald pe creasta batuta de vant",
+  "body": "Băi, știi ce face diferența pe creastă când te bate vântul de-ți mută căciula? Un mic dejun cald. Nu-i deloc un moft, crede-mă. O cană de ceai fierbinte sau o supă instant, mâncată cu mănuși ca să nu-ți înghețe degetele, îți resetează corpul și mintea. Parcă te încarci cu energie de la soare, chiar dacă e înnorat. Am avut o dată o dimineață în Făgăraș, vântul urla, iar o cană de griș cu lapte cald mi-a dat senzația că pot muta munții. E o investiție mică de timp și combustibil, dar câștigul e imens la moral și la confort termic. Nu uita termosul, e sfânt!",
+  "lead": "Un mic dejun cald face minuni pe creastă, mai ales într-o zi cu vânt, oferind confort termic și un boost de energie.",
+  "keywords": "mic dejun cald creasta vant energie moral termos",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Un mic dejun cald face minuni pe creastă, mai ales într-o zi cu vânt, oferind confort termic și un boost de energie.",
+    "seed_topic": "Micul dejun cald — diferența pe creastă într-o zi cu vânt",
+    "seed_topic_slug": "tip_food_hot_breakfast"
+  }
+}

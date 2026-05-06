@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_long_descent_pain_dd7df1acbceb",
+  "card_id": "cg_motivation_and_mor_morale_long_descent_pain_dd7df1acbceb",
+  "domain": "motivation_and_morale",
+  "topic": "morale_long_descent_pain",
+  "language": "ro",
+  "title": "Cum faci față coborârilor lungi",
+  "body": "După o urcare solicitantă, coborârea poate fi la fel de epuizantă, mai ales mental. Când simți că nu se mai termină, împarte traseul în segmente mici. Gândește-te la următorul copac, la următoarea curbă sau la următoarea stâncă. Oprește-te scurt, bea apă, mănâncă o bucățică de ciocolată, dar nu te așeza. Odată ce te-ai așezat, e mai greu să te ridici. Ascultă-ți pașii, ritmul respirației. Poți să-ți pui o melodie în cap sau să observi detaliile din jurul tău. Odată, pe o coborâre interminabilă din Piatra Craiului, am început să număr pietrele de pe potecă. M-a ajutat să nu mă gândesc la cât mai am. Fii prezent și concentrat, dar nu te lăsa copleșit de lungimea totală.",
+  "lead": "Află cum să-ți menții moralul ridicat și concentrarea pe coborârile lungi din munți.",
+  "keywords": "coborâre lungă strategii mentale motivație concentrare drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți menții moralul ridicat și concentrarea pe coborârile lungi din munți.",
+    "seed_topic": "Coborârea lungă care te termină — strategii mentale",
+    "seed_topic_slug": "morale_long_descent_pain"
+  }
+}

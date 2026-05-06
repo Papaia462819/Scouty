@@ -1,0 +1,38 @@
+{
+  "chunk_id": "cg_mountain_safety_cele_10_esentiale_pentru_98555673173a",
+  "card_id": "cg_mountain_safety_cele_10_esentiale_pentru_98555673173a",
+  "domain": "mountain_safety",
+  "topic": "cele_10_esentiale_pentru_drumetie",
+  "language": "ro",
+  "title": "Cele 10 esențiale pentru drumeție",
+  "body": "Echipamentul necesar pentru o drumeție depinde de mulți factori, însă există zece elemente esențiale pe care trebuie să le aveți la orice ieșire. Acestea reprezintă minimul pe care oricine ar trebui să-l poarte în aer liber. Pot fi necesare provizii suplimentare în funcție de durata drumeției și nevoile specifice.\n\nCele zece esențiale sunt:\n1.  **Navigație:** hartă, busolă și GPS.\n2.  **Protecție solară:** ochelari de soare, cremă de protecție solară și pălărie.\n3.  **Izolație:** jachetă, căciulă, mănuși, straturi de îmbrăcăminte și echipament de ploaie.\n4.  **Iluminare:** lanternă sau frontală (telefonul nu este considerat suficient).\n5.  **Trusă de prim ajutor:** asigurați-vă că proviziile nu sunt expirate.\n6.  **Aprindere foc:** chibrituri, brichetă și amnar.\n7.  **Kit de reparații și unelte:** bandă adezivă, cuțit, șurubelniță și foarfecă.\n8.  **Alimente:** gustări nutritive care nu necesită gătire.\n9.  **Hidratare:** apă și echipament de tratare a apei (cel puțin 1 litru la fiecare 2 ore de drumeție).\n10. **Adăpost de urgență:** cort, prelată, sac de bivy sau folie de supraviețuire.\n\nPurtați încălțăminte de drumeție adecvată, cu suport bun pentru gleznă. Salvarea nu este niciodată o certitudine; intervenția rangerilor poate dura ore în zonele izolate.",
+  "lead": "Cele zece esențiale sunt echipamentul minim obligatoriu pentru orice drumeție, asigurând siguranța și pregătirea pentru diverse situații în natură.",
+  "keywords": "esențiale echipament drumeție siguranță pregătire navigație prim_ajutor hidratare adăpost iluminare",
+  "card_family": "DEFINITION",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Hiking Safety",
+  "source_url": "https://www.nps.gov/grsm/planyourvisit/hikingsafety.htm",
+  "publisher": "National Park Service",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "hiking_essentials",
+    "gear",
+    "preparation",
+    "safety",
+    "navigation",
+    "first_aid"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Cele zece esențiale sunt echipamentul minim obligatoriu pentru orice drumeție, asigurând siguranța și pregătirea pentru diverse situații în natură.",
+    "evidence_confidence": "high",
+    "source_quote": "What to bring on a hike depends on many factors, but there are ten essentials that you must have for any outing. Keep in mind that these are the minimum items everyone should carry while recreating outdoors.",
+    "source_id": "nps_hiking_safety"
+  }
+}

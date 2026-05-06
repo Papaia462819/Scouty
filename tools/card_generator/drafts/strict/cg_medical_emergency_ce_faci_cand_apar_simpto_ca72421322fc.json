@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_ce_faci_cand_apar_simpto_ca72421322fc",
+  "card_id": "cg_medical_emergency_ce_faci_cand_apar_simpto_ca72421322fc",
+  "domain": "medical_emergency",
+  "topic": "ce_faci_cand_apar_simptome_de_hace_edem_cerebral",
+  "language": "ro",
+  "title": "Edem cerebral de altitudine (HACE) — semne și acțiuni",
+  "body": "Edemul cerebral de altitudine (HACE) reprezintă o formă mai gravă a bolii acute de munte (AMS). Această afecțiune este rară, dar poate fi fatală. Simptomele includ oboseală extremă, somnolență, confuzie și pierderea coordonării. Dacă o persoană dezvoltă aceste simptome, este imperativ să fie mutată imediat la o altitudine mai joasă. Nu amânați coborârea, deoarece starea se poate agrava rapid. Asigurați-vă că persoana este asistată în timpul coborârii, având în vedere pierderea coordonării și starea de confuzie. În cazul în care persoana nu se poate deplasa singură sau situația este critică, apelați de urgență 112 sau Salvamont (0SALVAMONT) pentru asistență specializată și evacuare. Coborârea rapidă la o altitudine mai mică este singura măsură salvatoare în cazul HACE.",
+  "lead": "Edemul cerebral de altitudine (HACE) este o formă gravă de boală de altitudine, ce necesită coborâre imediată la o altitudine mai joasă.",
+  "keywords": "edem cerebral hace altitudine urgență medicală coborâre imediată oboseală extremă confuzie pierderea coordonării boală de altitudine",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Travel to High Altitudes",
+  "source_url": "https://wwwnc.cdc.gov/travel/page/travel-to-high-altitudes",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "hace",
+    "altitude_sickness",
+    "cerebral_edema",
+    "life_threatening",
+    "emergency_descent"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Edemul cerebral de altitudine (HACE) este o formă gravă de boală de altitudine, ce necesită coborâre imediată la o altitudine mai joasă.",
+    "evidence_confidence": "high",
+    "source_quote": "High-altitude cerebral edema (HACE) is rare, but it can cause death. If it develops, the person must immediately move, or be moved, to a lower elevation.",
+    "source_id": "cdc_high_altitude"
+  }
+}

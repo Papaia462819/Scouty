@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_dont_panic_209e4756ead3",
+  "card_id": "cg_survival_basics_survival_dont_panic_209e4756ead3",
+  "domain": "survival_basics",
+  "topic": "survival_dont_panic",
+  "language": "ro",
+  "title": "Gestionarea panicii pe munte: tehnica 4-7-8",
+  "body": "Băi, am pățit-o și eu, să te ia panica pe munte. Nu e o rușine, dar trebuie să știi să te scoți. Când simți că te sufoci sau că îți bate inima ca la maraton, încearcă tehnica 4-7-8. Inspiră încet pe nas timp de 4 secunde, umplându-ți plămânii. Apoi, ține-ți respirația 7 secunde. După aia, expiră complet pe gură, cu un mic șuierat, timp de 8 secunde. Repetă asta de 3-4 ori. Te ajută să-ți încetinești ritmul cardiac și să te calmezi. E un truc simplu, dar eficient, testat în multe situații nasoale. Nu uita, mintea limpede e cel mai bun echipament.",
+  "lead": "Află cum să folosești tehnica de respirație 4-7-8 pentru a-ți gestiona panica și a te calma rapid în situații dificile pe munte.",
+  "keywords": "anti-panica respiratie calmare munte situatii de urgenta control emotional",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să folosești tehnica de respirație 4-7-8 pentru a-ți gestiona panica și a te calma rapid în situații dificile pe munte.",
+    "seed_topic": "Anti-panică: tehnica de respirație 4-7-8 pe munte",
+    "seed_topic_slug": "survival_dont_panic"
+  }
+}

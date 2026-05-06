@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_ash_disposal_c419e055042c",
+  "card_id": "cg_campfire_basics_fire_ash_disposal_c419e055042c",
+  "domain": "campfire_basics",
+  "topic": "fire_ash_disposal",
+  "language": "ro",
+  "title": "Cenușa de la focul de tabără: împrăștiere sau îngropare?",
+  "body": "Dimineața, după un foc fain, e important să nu lași urme. Cenușa nu se îngroapă, că alterează solul și poate mocni sub pământ, provocând incendii târzii. Cel mai bine e s-o împrăștii, dar cu cap! Asigură-te că e complet stinsă, fără jar ascuns. Toarnă apă din belșug, amestecă, apoi mai toarnă. Când e rece la atingere, împrăștie-o pe o suprafață cât mai mare, departe de potecă și de surse de apă. Gândește-te la vânt, să nu-ți arunce cenușa în ochi sau pe corturi. E un gest simplu, dar care menține muntele curat și în siguranță pentru toți. Și da, am văzut destule incendii pornite de la \"am stins eu bine focul\".",
+  "lead": "Află cum să gestionezi corect cenușa focului de tabără pentru a proteja mediul și a preveni incendiile.",
+  "keywords": "cenușă foc de tabără siguranță munte curat împrăștiere cenușă fără urme",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să gestionezi corect cenușa focului de tabără pentru a proteja mediul și a preveni incendiile.",
+    "seed_topic": "Ce faci cu cenușa dimineața: împrăștiere vs îngropare",
+    "seed_topic_slug": "fire_ash_disposal"
+  }
+}

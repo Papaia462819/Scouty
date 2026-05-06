@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_blister_tape_preempt_8997d4c826ad",
+  "card_id": "cg_tips_and_tricks_tip_blister_tape_preempt_8997d4c826ad",
+  "domain": "tips_and_tricks",
+  "topic": "tip_blister_tape_preempt",
+  "language": "ro",
+  "title": "Prevenirea bășicilor la drum lung",
+  "body": "Bășicile sunt coșmarul oricărui drumeț. Știu din experiență, după zeci de ture, că cel mai bine e să previi. Înainte să pleci la drum, sau chiar la prima oprire, identifică punctele de presiune: călcâiul, degetul mare, lateralele piciorului. Acolo unde simți că se freacă șoseta de piele, aplică o bandă adezivă medicală, lată de 2-3 cm. Nu aștepta să apară roșeața sau durerea! Odată ce ai bășica, e mult mai greu de gestionat. Schimbă banda dacă se udă sau se desprinde. E un truc simplu care-ți poate salva tura.",
+  "lead": "Află cum să previi apariția bășicilor aplicând bandă adezivă pe punctele de presiune înainte de a pleca la drum.",
+  "keywords": "bășici prevenire bandă adezivă puncte presiune drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să previi apariția bășicilor aplicând bandă adezivă pe punctele de presiune înainte de a pleca la drum.",
+    "seed_topic": "Bandă pe puncte de presiune înainte să apară bășici",
+    "seed_topic_slug": "tip_blister_tape_preempt"
+  }
+}

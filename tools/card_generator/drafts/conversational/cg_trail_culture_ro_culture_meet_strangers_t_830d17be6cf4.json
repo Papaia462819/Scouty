@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_meet_strangers_t_830d17be6cf4",
+  "card_id": "cg_trail_culture_ro_culture_meet_strangers_t_830d17be6cf4",
+  "domain": "trail_culture_ro",
+  "topic": "culture_meet_strangers_trail",
+  "language": "ro",
+  "title": "Cum abordezi drumeții pe potecă",
+  "body": "Când întâlnești alți drumeți, o salutare simplă e de aur. Un \"Bună ziua!\" sau \"Salut!\" face minuni. Dacă ești curios de traseu, întreabă direct: \"E liberă poteca până la x?\" sau \"Cum e apa la izvorul y?\". Nu te arunca direct în povești lungi, respectă ritmul fiecăruia. Un zâmbet și un \"Drum bun!\" la despărțire sunt suficiente. Am văzut odată un tip care a început să povestească despre toate cele 14 vârfuri de peste 2500m pe care le-a făcut, fără să-l întrebe nimeni. Nu fi tipul ăla. Fii tu, dar cu bun simț.",
+  "lead": "Află cum să interacționezi politicos și eficient cu alți drumeți pe traseu, respectând spațiul și ritmul fiecăruia.",
+  "keywords": "eticheta pe munte salut pe poteca conversatii scurte bun simt munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să interacționezi politicos și eficient cu alți drumeți pe traseu, respectând spațiul și ritmul fiecăruia.",
+    "seed_topic": "Conversațiile cu drumeți necunoscuți — protocol simplu",
+    "seed_topic_slug": "culture_meet_strangers_trail"
+  }
+}

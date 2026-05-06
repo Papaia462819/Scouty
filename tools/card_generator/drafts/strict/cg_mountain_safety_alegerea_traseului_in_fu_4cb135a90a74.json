@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_alegerea_traseului_in_fu_4cb135a90a74",
+  "card_id": "cg_mountain_safety_alegerea_traseului_in_fu_4cb135a90a74",
+  "domain": "mountain_safety",
+  "topic": "alegerea_traseului_in_functie_de_experienta",
+  "language": "ro",
+  "title": "Alegerea traseului montan: experiență și pregătire",
+  "body": "Alegeți traseele montane în funcție de experiența și pregătirea dumneavoastră fizică. Nu plecați în drumeție dacă sunteți obosit sau dacă nu aveți avizul medicului, în cazul în care suferiți de anumite boli sau sunteți în convalescență. Înainte de a pleca în excursie, informați-vă despre itinerariul propus, gradul de dificultate al traseului, starea marcajului, accesibilitate, porțiuni periculoase, starea vremii și programul de funcționare al mijloacelor de transport pe cablu. Obțineți informații de la salvamontiști, cabanieri, pădurari sau ciobani despre starea traseului (poteci, podețe, marcaje), a refugiilor și a punctelor Salvamont. Informați-vă despre prognoza meteo pentru următoarele 24 de ore și evitați deplasarea pe timp nefavorabil. Calculați timpul necesar parcurgerii traseului în funcție de pregătirea dumneavoastră. Plecați pe munte cu echipament adecvat, atât pentru condițiile meteo, cât și pentru specificul traseului și al activităților, incluzând haine de schimb și de protecție împotriva vântului și ploii. Apelați 0SALVAMONT pentru informații sau ajutor.",
+  "lead": "Alegeți traseele montane în funcție de experiența și pregătirea personală, informându-vă temeinic despre condițiile traseului și vreme.",
+  "keywords": "alegere traseu pregătire drumeție dificultate traseu condiții meteo echipament montan siguranță montană informare traseu salvamont",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Recomandari pentru turistul montan",
+  "source_url": "https://www.salvamontromania.ro/recomandari-turist-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "trail_selection",
+    "mountain_preparation",
+    "route_difficulty",
+    "weather_assessment",
+    "personal_fitness"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Alegeți traseele montane în funcție de experiența și pregătirea personală, informându-vă temeinic despre condițiile traseului și vreme.",
+    "evidence_confidence": "high",
+    "source_quote": "Alegeti traseele in functie de experienta si pregatirea dumneavoastra; Nu plecati in drumetie daca sunteti obosit sau nu aveti avizul medicului... Inainte de plecare in excursie, informati-va despre itinerariul propus, gradul de dificultate al traseului...",
+    "source_id": "salvamont_turist_montan"
+  }
+}

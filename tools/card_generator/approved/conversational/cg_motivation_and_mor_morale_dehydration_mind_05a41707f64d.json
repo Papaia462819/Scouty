@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_dehydration_mind_05a41707f64d",
+  "card_id": "cg_motivation_and_mor_morale_dehydration_mind_05a41707f64d",
+  "domain": "motivation_and_morale",
+  "topic": "morale_dehydration_mind",
+  "language": "ro",
+  "title": "Hidratarea: bea preventiv!",
+  "body": "Băi, știi cum e, pe munte, mintea-ți joacă feste. Când simți setea, ești deja un pic deshidratat, iar asta-ți scade judecata. Nu vrei să te trezești că te gândești la o bere rece în loc să fii atent la potecă. Bea preventiv, la fiecare oră, chiar dacă nu-ți arde buza. Ia-ți o sticlă de 1-1.5 litri și umple-o ori de câte ori ai ocazia la izvoare. O să-mi mulțumești când ajungi sus și încă mai ai chef de poze, nu doar de o căzătură pe iarbă. Eu, odată, am uitat să beau și am ajuns să întreb o capră neagră direcții. Nu vrei să fii ca mine.",
+  "lead": "Bea apă regulat pe munte, înainte să simți setea, pentru a-ți menține claritatea mentală și energia.",
+  "keywords": "hidratare prevenire sete energie munte sfaturi",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Bea apă regulat pe munte, înainte să simți setea, pentru a-ți menține claritatea mentală și energia.",
+    "seed_topic": "Mintea se închide la deshidratare — bea înainte să crezi că ai nevoie",
+    "seed_topic_slug": "morale_dehydration_mind"
+  }
+}

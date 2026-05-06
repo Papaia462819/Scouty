@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_lessons_from_failur_dec58b1464ce",
+  "card_id": "cg_campfire_basics_fire_lessons_from_failur_dec58b1464ce",
+  "domain": "campfire_basics",
+  "topic": "fire_lessons_from_failures",
+  "language": "ro",
+  "title": "3 greseli clasice la primul foc de tabara",
+  "body": "Hai să-ți zic din experiență, că am ars destule lemne. Prima greșeală e să nu pregătești locul: curăță bine zona de frunze uscate și crengi, fă-ți un cerc de pietre. Altfel, te trezești cu focul \"fugind\" prin iarbă și nu vrei asta. A doua, și asta o văd des, e să nu ai material de aprins. Nu te baza doar pe lemne groase. Începe cu vreascuri subțiri, coajă de mesteacăn sau chiar niște scame de la uscător (le țin într-o punguță, sunt aur curat!). A treia, și poate cea mai frustrantă, e să nu ai răbdare. Nu turna benzină! Suflă ușor, aerisește, lasă flacăra să prindă. E ca la o cafea bună, nu te grăbi. Un foc bun se construiește, nu se aprinde instant.",
+  "lead": "Evită cele mai comune greșeli la primul tău foc de tabără, de la pregătirea locului la răbdarea necesară aprinderii.",
+  "keywords": "foc de tabara aprindere foc siguranta foc material aprins greseli foc",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Evită cele mai comune greșeli la primul tău foc de tabără, de la pregătirea locului la răbdarea necesară aprinderii.",
+    "seed_topic": "3 greșeli clasice pe care le faci la primul foc",
+    "seed_topic_slug": "fire_lessons_from_failures"
+  }
+}

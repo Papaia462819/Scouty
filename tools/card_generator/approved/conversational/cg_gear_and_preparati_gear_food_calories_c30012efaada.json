@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_food_calories_c30012efaada",
+  "card_id": "cg_gear_and_preparati_gear_food_calories_c30012efaada",
+  "domain": "gear_and_preparation",
+  "topic": "gear_food_calories",
+  "language": "ro",
+  "title": "Calorii pe munte: Câte îți trebuie, simplu și rapid",
+  "body": "Când ești pe munte, corpul tău arde mult mai mult decât acasă, cam 3000-4500 de calorii pe zi, în funcție de cât de greu e traseul și cât de mult cară rucsacul. Nu te stresa cu calcule precise, dar gândește-te așa: la fiecare oră de efort susținut, arzi cam 300-500 de calorii. Asta înseamnă că ai nevoie de gustări dese și consistente. O ciocolată are vreo 250-300 de calorii, un baton energizant cam la fel. Nu uita de nuci, fructe uscate, salam uscat (e ușor și plin de energie). Pune-ți în rucsac mai mult decât crezi că ai nevoie, e mai bine să rămâi cu ceva decât să ți se facă foame. Odată am rămas fără mâncare și am învățat pe pielea mea că un pachet în plus nu strică niciodată. Planifică-ți mesele și gustările să fie bogate în carbohidrați și grăsimi sănătoase, îți vor da energia necesară să ajungi la cabană.",
+  "lead": "Află cum să estimezi rapid necesarul de calorii pentru o zi pe munte și ce gustări să iei cu tine.",
+  "keywords": "calorii munte nutritie drumetie energie traseu gustari munte planificare masa alimentatie munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să estimezi rapid necesarul de calorii pentru o zi pe munte și ce gustări să iei cu tine.",
+    "seed_topic": "Câte calorii pe zi pe munte — calcule simple",
+    "seed_topic_slug": "gear_food_calories"
+  }
+}

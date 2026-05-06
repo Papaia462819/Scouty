@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_wet_wood_50bc25f6b3d0",
+  "card_id": "cg_campfire_basics_fire_wet_wood_50bc25f6b3d0",
+  "domain": "campfire_basics",
+  "topic": "fire_wet_wood",
+  "language": "ro",
+  "title": "Cum aprinzi focul când totul e ud în jur",
+  "body": "A plouat toată ziua și acum vrei un ceai cald. Lemnele sunt fleașcă. Ce faci? Nu dispera, nu e misiune imposibilă. Caută crengi uscate, moarte, dar care încă atârnă de copaci – alea de pe jos sunt cele mai ude. Ia cu tine un cuțit bun. Găsește o bucată de lemn mai grosuță, chiar dacă e udă la exterior. Despic-o în două și apoi iar în două. Miezul, lemnul din interior, e aproape mereu uscat. Cu cuțitul, scobește din acest miez așchii foarte fine, ca niște pene. Astea sunt iasca ta. Adună o grămăjoară bună. Apoi, pregătește surcele din ce în ce mai groase, tot din interiorul lemnului despicat. Aprinde grămada de așchii fine, suflă ușor și adaugă treptat surcelele, de la cele mai subțiri la cele mai groase. Răbdare, că o să meargă!",
+  "lead": "Când totul e ud în jur, cheia e să găsești sau să creezi uscăciune în interiorul lemnului.",
+  "keywords": "foc lemne ude ploaie supraviețuire iască tehnică camping",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Când totul e ud în jur, cheia e să găsești sau să creezi uscăciune în interiorul lemnului.",
+    "seed_topic": "Cum aprinzi focul când lemnele sunt ude după ploaie",
+    "seed_topic_slug": "fire_wet_wood"
+  }
+}

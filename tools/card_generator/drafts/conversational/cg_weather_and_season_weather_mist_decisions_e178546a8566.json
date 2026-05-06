@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_mist_decisions_e178546a8566",
+  "card_id": "cg_weather_and_season_weather_mist_decisions_e178546a8566",
+  "domain": "weather_and_season",
+  "topic": "weather_mist_decisions",
+  "language": "ro",
+  "title": "Ceața pe creastă: ce faci și ce nu",
+  "body": "Ceața pe creastă e ca o pătură groasă care-ți fură orizontul. Dacă te prinde, primul lucru e să nu te panichezi. Verifică-ți traseul pe hartă și GPS. E crucial să nu te abați de la potecă; un pas greșit poate duce la o coborâre necontrolată. Dacă ești pe un traseu marcat, caută cu atenție marcajele, chiar dacă par să dispară în lapte. Nu te aventura pe scurtături sau pe poteci care nu sunt marcate. Vizibilitatea redusă te poate face să subestimezi pericolele. Dacă situația devine prea incertă, mai bine aștepți să se ridice ceața sau să se îmbunătățească vizibilitatea. Nu e nicio rușine să faci o pauză, chiar dacă ești la un pas de vârf. Siguranța e pe primul loc, întotdeauna.",
+  "lead": "Află cum să te descurci când ceața te învăluie pe creastă, păstrându-ți calmul și siguranța.",
+  "keywords": "ceață creastă siguranță orientare traseu vizibilitate munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te descurci când ceața te învăluie pe creastă, păstrându-ți calmul și siguranța.",
+    "seed_topic": "Pe creastă în ceață — ce poți încă face și ce nu",
+    "seed_topic_slug": "weather_mist_decisions"
+  }
+}

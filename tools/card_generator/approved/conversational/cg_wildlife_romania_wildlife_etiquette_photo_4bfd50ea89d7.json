@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_etiquette_photo_4bfd50ea89d7",
+  "card_id": "cg_wildlife_romania_wildlife_etiquette_photo_4bfd50ea89d7",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_etiquette_photo",
+  "language": "ro",
+  "title": "Fotografie etică în natură: Păstrează distanța!",
+  "body": "Când vrei să fotografiezi animale sălbatice, regula de aur e să le lași spațiu. Nu te apropia prea mult, chiar dacă ai impresia că sunt \"blânde\". O lentilă lungă, de peste 200mm, e prietena ta. Îți permite să surprinzi esența fără să deranjezi. Gândește-te că le stresezi, le schimbi comportamentul natural, iar asta nu e deloc etic. Am văzut odată un ursuleț speriat de niște turiști care voiau selfie-uri. Nu e de râs. Fii discret, observă de la distanță și bucură-te de spectacol. Natura nu e un studio foto, e casa lor.",
+  "lead": "Păstrează distanța față de animalele sălbatice și folosește lentile lungi pentru fotografii etice.",
+  "keywords": "fotografie etica animale salbatice lentile tele distanta respect natura ursi",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Păstrează distanța față de animalele sălbatice și folosește lentile lungi pentru fotografii etice.",
+    "seed_topic": "Fotografie etică: lentile lungi, nu apropiere",
+    "seed_topic_slug": "wildlife_etiquette_photo"
+  }
+}

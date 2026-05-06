@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_medical_emergency_necesarul_minim_de_apa_p_003b15146d24",
+  "card_id": "cg_medical_emergency_necesarul_minim_de_apa_p_003b15146d24",
+  "domain": "medical_emergency",
+  "topic": "necesarul_minim_de_apa_pe_zi_in_drumetie",
+  "language": "ro",
+  "title": "Hidratare în drumeție — necesar minim de lichide",
+  "body": "În drumețiile montane, cantitatea de lichid necesară se calculează individual, ținând cont de nevoile fiecărei persoane și de temperatura ambientală. Este esențial să adăugați întotdeauna o rezervă la cantitatea estimată. Asigurați-vă că aveți la dumneavoastră nu mai puțin de 2 litri de lichid pentru o tură. Evitați consumul de băuturi alcoolice pe parcursul drumeției, deoarece acestea pot contribui la deshidratare și pot afecta judecata și performanța fizică.",
+  "lead": "Cantitatea de lichid necesară în drumeție se stabilește individual, dar nu trebuie să fie mai mică de 2 litri, la care se adaugă o rezervă.",
+  "keywords": "hidratare lichide apă drumeție necesar minim temperatură alcool",
+  "card_family": "DEFINITION",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Alimentatia si hidratarea in muntii Romaniei",
+  "source_url": "https://www.salvamontromania.ro/alimentatia-hidratarea.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "hydration",
+    "water_intake",
+    "hiking_safety",
+    "fluid_management"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Cantitatea de lichid necesară în drumeție se stabilește individual, dar nu trebuie să fie mai mică de 2 litri, la care se adaugă o rezervă.",
+    "evidence_confidence": "high",
+    "source_quote": "Cantitatea de lichid se va calcula in functie de necesarul fiecaruia si temperatura ambientala, la care se va adauga o rezerva, dar nu mai putin de 2 L. Se vor evita bauturile alcoolice...",
+    "source_id": "salvamont_alimentatie_hidratare"
+  }
+}

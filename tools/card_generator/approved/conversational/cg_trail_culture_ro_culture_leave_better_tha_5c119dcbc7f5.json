@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_leave_better_tha_5c119dcbc7f5",
+  "card_id": "cg_trail_culture_ro_culture_leave_better_tha_5c119dcbc7f5",
+  "domain": "trail_culture_ro",
+  "topic": "culture_leave_better_than",
+  "language": "ro",
+  "title": "Lasă locul mai bun decât l-ai găsit: Ghid practic",
+  "body": "Salut, prietene! Știi vorba aia, 'lasă locul mai bun decât l-ai găsit'? Nu e doar o vorbă, e un principiu de bază la munte. Concret, asta înseamnă să nu lași niciun gunoi în urma ta, nici măcar coji de semințe sau resturi de fructe – ele se descompun greu și atrag animale. Dacă vezi o sticlă sau o pungă uitată de altcineva, ia-o cu tine. De asemenea, nu rupe flori sau crengi, nu sculpta în copaci și nu muta pietre de pe potecă. Respectă fauna: nu hrăni animalele sălbatice și nu le deranja. Gândește-te că fiecare pas al nostru influențează ecosistemul. E simplu, dar face o diferență enormă. Hai să fim drumeți responsabili!",
+  "lead": "Află ce înseamnă concret să lași natura mai curată decât ai găsit-o, prin acțiuni simple și responsabile pe munte.",
+  "keywords": "eticheta montana fara gunoi respect mediu drumeție responsabilă carpați trail culture principii munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce înseamnă concret să lași natura mai curată decât ai găsit-o, prin acțiuni simple și responsabile pe munte.",
+    "seed_topic": "Lasă locul mai bun decât l-ai găsit — ce înseamnă concret",
+    "seed_topic_slug": "culture_leave_better_than"
+  }
+}

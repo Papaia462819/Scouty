@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_alpinism_clubs_0e0be79a685f",
+  "card_id": "cg_trail_culture_ro_culture_alpinism_clubs_0e0be79a685f",
+  "domain": "trail_culture_ro",
+  "topic": "culture_alpinism_clubs",
+  "language": "ro",
+  "title": "De ce sa te alaturi unui club de drumetie",
+  "body": "Băi, știi ce? La început, mergeam singur sau cu 2-3 prieteni. Dar de când m-am alăturat unui club, parcă s-a deschis o nouă lume. Nu e doar despre a avea cu cine merge. E despre a învăța de la alții, de la ghizi cu experiență care știu fiecare potecă și fiecare truc. Odată, am prins o furtună pe creastă și ghidul a știut exact cum să ne ducă la cea mai apropiată cabană. Plus că, e mult mai sigur în grup mare, mai ales pe trasee mai dificile. Și să nu uităm de socializare, faci prieteni noi cu aceeași pasiune. Îți recomand să încerci măcar o dată, s-ar putea să-ți placă mai mult decât crezi. Vei descoperi locuri pe care singur nu le-ai fi găsit.",
+  "lead": "Află de ce să te alături unui club de drumeție îți poate îmbunătăți semnificativ experiența montană, oferind siguranță și noi oportunități.",
+  "keywords": "club drumetie grup organizat siguranta munte experienta ghid socializare munte trasee noi",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce să te alături unui club de drumeție îți poate îmbunătăți semnificativ experiența montană, oferind siguranță și noi oportunități.",
+    "seed_topic": "Cluburi de drumeție — de ce merită să te alături unuia",
+    "seed_topic_slug": "culture_alpinism_clubs"
+  }
+}

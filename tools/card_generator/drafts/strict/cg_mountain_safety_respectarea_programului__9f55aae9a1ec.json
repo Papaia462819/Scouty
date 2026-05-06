@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_respectarea_programului__9f55aae9a1ec",
+  "card_id": "cg_mountain_safety_respectarea_programului__9f55aae9a1ec",
+  "domain": "mountain_safety",
+  "topic": "respectarea_programului_de_tura",
+  "language": "ro",
+  "title": "Planificarea timpului și programului de tură",
+  "body": "Înainte de a pleca în excursie, informați-vă despre itinerariul propus și calculați timpul necesar parcurgerii traseului, în funcție de pregătirea dumneavoastră. De asemenea, informați-vă despre programul de funcționare al mijloacelor de transport pe cablu, dacă intenționați să le utilizați. Aceste măsuri sunt esențiale pentru o tură sigură și pentru a evita situațiile neprevăzute.",
+  "lead": "Planificați-vă tura calculând timpul necesar și informându-vă despre programul mijloacelor de transport pe cablu.",
+  "keywords": "planificare tură timp traseu program transport cablu pregătire drumeție siguranță montană",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Recomandari pentru turistul montan",
+  "source_url": "https://www.salvamontromania.ro/recomandari-turist-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "trip_planning",
+    "time_management",
+    "cable_car_schedule",
+    "mountain_safety",
+    "preparation"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Planificați-vă tura calculând timpul necesar și informându-vă despre programul mijloacelor de transport pe cablu.",
+    "evidence_confidence": "medium",
+    "source_quote": "Inainte de plecare in excursie, informati-va despre ... programul de functionare al mijloacelor de transport pe cablu. Calculati timpul necesar parcurgerii traseului functie de pregatirea dumneavoastra;",
+    "source_id": "salvamont_turist_montan"
+  }
+}

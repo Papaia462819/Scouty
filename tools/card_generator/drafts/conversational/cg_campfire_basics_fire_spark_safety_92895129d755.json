@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+  "card_id": "cg_campfire_basics_fire_spark_safety_92895129d755",
+  "domain": "campfire_basics",
+  "topic": "fire_spark_safety",
+  "language": "ro",
+  "title": "Foc de tabara si cortul tau: Cum sa le impaci",
+  "body": "Salut, prietene! Știu, un foc de tabără e sufletul muntelui, mai ales seara. Dar să nu-ți transformi cortul în scrum, că nu-i de glume. Primul și cel mai important: alege locul cu grijă. Fă focul la cel puțin 5-10 metri distanță de cort, de copaci sau de orice material inflamabil. Vântul e cel mai mare inamic. Verifică direcția lui înainte să aprinzi focul și asigură-te că scânteile nu zboară spre cort. Un paravan natural sau improvizat (o stâncă, un trunchi gros) poate face minuni. Și, desigur, nu lăsa niciodată focul nesupravegheat. O scânteie mică poate deveni rapid o problemă mare. Gândește-te la asta ca la o asigurare ieftină pentru un somn liniștit.",
+  "lead": "Află cum să te bucuri de focul de tabără fără să-ți pui cortul în pericol, respectând câteva reguli simple de distanță și atenție la vânt.",
+  "keywords": "foc de tabara cort siguranta scantei distanta vant",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te bucuri de focul de tabără fără să-ți pui cortul în pericol, respectând câteva reguli simple de distanță și atenție la vânt.",
+    "seed_topic": "Cum eviți să-ți arzi cortul cu o scânteie",
+    "seed_topic_slug": "fire_spark_safety"
+  }
+}

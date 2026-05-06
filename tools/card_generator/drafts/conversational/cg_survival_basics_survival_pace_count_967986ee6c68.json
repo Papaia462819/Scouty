@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_pace_count_967986ee6c68",
+  "card_id": "cg_survival_basics_survival_pace_count_967986ee6c68",
+  "domain": "survival_basics",
+  "topic": "survival_pace_count",
+  "language": "ro",
+  "title": "Cum estimezi distanța în pădure",
+  "body": "Când ești în pădure deasă și GPS-ul nu prinde semnal, sau pur și simplu vrei să-ți exersezi simțul orientării, numărarea pașilor e o metodă veche și bună. Stabilește o distanță de referință, de exemplu 100 de metri, și numără câți pași îți ia să o parcurgi. Fă asta de câteva ori, pe teren variat, și calculează o medie. De obicei, un pas dublu (stânga-dreapta) e cam 1.5-2 metri, dar depinde de statura ta și de înclinația terenului. Eu, la 1.80m, fac cam 60 de pași dubli pe 100m de plat. Când urci, pasul se scurtează, când cobori, se lungește. Fii atent la repere: un copac mai mare, o stâncă, o cotitură a potecii. Așa, chiar și fără hartă, știi aproximativ cât ai mers. E o tehnică utilă, mai ales când vrei să te întorci pe același drum.",
+  "lead": "Învață să estimezi distanța parcursă în pădure numărând pașii, o tehnică utilă când GPS-ul nu funcționează.",
+  "keywords": "numarat pasi estimare distanta orientare padure tehnici survival mers pe munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață să estimezi distanța parcursă în pădure numărând pașii, o tehnică utilă când GPS-ul nu funcționează.",
+    "seed_topic": "Numărarea pașilor pentru distanță în pădure",
+    "seed_topic_slug": "survival_pace_count"
+  }
+}

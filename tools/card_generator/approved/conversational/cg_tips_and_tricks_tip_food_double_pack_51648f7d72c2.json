@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_food_double_pack_51648f7d72c2",
+  "card_id": "cg_tips_and_tricks_tip_food_double_pack_51648f7d72c2",
+  "domain": "tips_and_tricks",
+  "topic": "tip_food_double_pack",
+  "language": "ro",
+  "title": "Mâncarea pentru ziua a doua, gata împachetată",
+  "body": "Pentru ziua a doua, e aur să ai mâncarea deja porționată și gata de scos din rucsac. Eu îmi pregătesc de acasă pungi separate pentru mic dejun, prânz și cină. De exemplu, pentru mic dejun, pun într-o pungă ovăz instant, nuci și fructe uscate. Pentru prânz, sandvișuri cu pâine integrală și brânză maturată, plus o ciocolată. Când ajungi la refugiu sau la locul de campare, nu mai pierzi timp cu împărțitul sau căutatul prin rucsac. E simplu, eficient și te scapă de o grijă. Plus, știi exact ce ai și cât mai ai, fără surprize. Un prieten a uitat odată pâinea și a mâncat salam cu lingura... Nu vrei să fii el.",
+  "lead": "Organizează-ți mesele pentru ziua a doua în pungi separate, pentru eficiență și mai puțin stres pe traseu.",
+  "keywords": "mancare munte pungi separate organizare rucsac mancare drumetie planificare masa tips&tricks",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Organizează-ți mesele pentru ziua a doua în pungi separate, pentru eficiență și mai puțin stres pe traseu.",
+    "seed_topic": "Mâncarea pe ziua 2 pregătită de acasă în pungi separate",
+    "seed_topic_slug": "tip_food_double_pack"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_no_lighter_8ff5b2e1fcbf",
+  "card_id": "cg_campfire_basics_fire_no_lighter_8ff5b2e1fcbf",
+  "domain": "campfire_basics",
+  "topic": "fire_no_lighter",
+  "language": "ro",
+  "title": "Scantei, iasca si rabdare: focul fara chibrit",
+  "body": "Bricheta e udă, chibriturile s-au terminat. E momentul să scoți amnarul. Nu e magie, e doar fizică și puțină tehnică. Ai nevoie de trei lucruri: amnarul (acea tijă metalică), o bucată de oțel cu muchie dreaptă (spatele unui cuțit e perfect) și „iască” – materialul care se aprinde de la o scânteie. Iasca poate fi orice e foarte uscat și fibros: scame din buzunar, vată, coajă de mesteacăn fărâmițată sau ciuperca de iască, dacă o găsești. Pregătește un ghemotoc de iască. Apoi, ține lama cuțitului ferm și trage amnarul pe ea, spre tine, ca scânteile să cadă direct pe iască. Nu lovi, ci răzuiește cu presiune. Când iasca prinde o scânteie și începe să fumege, suflă ușor și constant în ea până apare flacăra. Adaugă treptat surcele subțiri și gata, ai foc. Nu te enerva dacă nu iese din prima, necesită răbdare.",
+  "lead": "Învață să aprinzi focul folosind un amnar și o bucată de oțel, o tehnică esențială când bricheta sau chibriturile te lasă la greu.",
+  "keywords": "amnar foc supraviețuire iască scântei echipament tehnică",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață să aprinzi focul folosind un amnar și o bucată de oțel, o tehnică esențială când bricheta sau chibriturile te lasă la greu.",
+    "seed_topic": "Aprindere fără brichetă: amnar, oțel, scântei",
+    "seed_topic_slug": "fire_no_lighter"
+  }
+}

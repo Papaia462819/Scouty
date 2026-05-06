@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_summer_minimal_51d563100da8",
+  "card_id": "cg_gear_and_preparati_gear_summer_minimal_51d563100da8",
+  "domain": "gear_and_preparation",
+  "topic": "gear_summer_minimal",
+  "language": "ro",
+  "title": "Echipament esențial pentru o tură de vară la cabană (6h)",
+  "body": "Pentru o tură de 6 ore vara, la cabană, nu te încărca inutil. Pe tine ai un tricou tehnic, pantaloni de drumeție și bocanci ușori, de vară. În rucsacul mic (15-20L), îți pui o bluză polar subțire (chiar și vara, sus poate fi frig), o pelerină de ploaie ușoară (nu vrei să te prindă o aversă nepregătit), o șapcă sau pălărie și ochelari de soare. Nu uita de bidonul cu apă (1.5-2L, depinde cât de transpiri) și câteva gustări energizante: batoane, nuci, fructe uscate. Un mic kit de prim ajutor, o lanternă frontală (nu știi niciodată ce te reține pe traseu) și un telefon complet încărcat sunt obligatorii. Lasă cortul acasă, doar mergi la cabană!",
+  "lead": "Află ce echipament esențial îți trebuie pentru o tură de vară de 6 ore la cabană, fără să te încarci prea mult.",
+  "keywords": "echipament vară tură cabană rucsac minimalist pregătire drumeție siguranță munte haine tehnice apă gustări",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce echipament esențial îți trebuie pentru o tură de vară de 6 ore la cabană, fără să te încarci prea mult.",
+    "seed_topic": "Minimal de vară pentru o tură de 6 ore într-o cabană",
+    "seed_topic_slug": "gear_summer_minimal"
+  }
+}

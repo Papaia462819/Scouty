@@ -1,0 +1,222 @@
+{
+  "_comment": "Expanded strict manifest. `path` is resolved relative to this file and points at the canonical fetch cache. source_id MUST match an entry in tools/knowledge_pipeline/sources.json. Topics that come back insufficient_evidence should be moved to conversational seeds.",
+  "files": [
+    {
+      "path": "../../../knowledge_pipeline/cache/salvamont_recomandari.html",
+      "source_id": "salvamont_recomandari",
+      "domain": "mountain_safety",
+      "section_hint": "recomandări generale Salvamont",
+      "topics": [
+        "echipament minimal pentru tură de o zi",
+        "comportament la furtună pe creastă",
+        "ce face un drumeț prudent înainte de plecare",
+        "anunțarea traseului înainte de plecare",
+        "ce să nu faci dacă te-ai rătăcit",
+        "decizia de a renunța la tură",
+        "ora de plecare recomandată dimineața",
+        "evaluarea propriei condiții fizice",
+        "drumeție în grup vs solo",
+        "ce iei la tine pe vreme rea"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/salvamont_turist_montan.html",
+      "source_id": "salvamont_turist_montan",
+      "domain": "mountain_safety",
+      "section_hint": "reguli pentru turistul montan",
+      "topics": [
+        "alegerea traseului în funcție de experiență",
+        "marcaje turistice și orientare",
+        "ce faci dacă rătăcești poteca",
+        "respectarea programului de tură",
+        "comportament la cabană",
+        "respectarea naturii și a animalelor",
+        "regulile de bază pentru turistul începător",
+        "ce nu face un turist responsabil"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/salvamont_martor_accident.html",
+      "source_id": "salvamont_martor_accident",
+      "domain": "medical_emergency",
+      "section_hint": "ce faci dacă ești martor la un accident montan",
+      "topics": [
+        "evaluare rapidă a victimei",
+        "apel la 0SALVAMONT și 112",
+        "imobilizare provizorie",
+        "ce informații dai operatorului 112 sau 0SALVAMONT",
+        "asigurarea zonei accidentului",
+        "ce să NU faci ca martor la accident",
+        "transportul victimei când nu există altă opțiune",
+        "comunicare cu echipa Salvamont la sosire"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/salvamont_alimentatie_hidratare.html",
+      "source_id": "salvamont_alimentatie_hidratare",
+      "domain": "medical_emergency",
+      "section_hint": "alimentație și hidratare în drumeție",
+      "topics": [
+        "necesarul minim de apă pe zi în drumeție",
+        "semne de deshidratare pe munte",
+        "ce mănânci înainte de o tură lungă",
+        "gustări recomandate pe parcurs",
+        "evitarea alcoolului în efort prelungit",
+        "ce eviți să mănânci înainte de efort",
+        "rehidratare după efort intens"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/anm_avalanche_scale.html",
+      "source_id": "anm_avalanche_scale",
+      "domain": "mountain_safety",
+      "section_hint": "scara europeană a riscului de avalanșă 1-5",
+      "topics": [
+        "interpretarea gradelor de risc avalanșă 1-5",
+        "decizia de a rămâne acasă la grad 4 sau 5",
+        "ce înseamnă risc 1 (slab) în practică",
+        "comportament la risc 3 (însemnat)",
+        "diferența practică între risc 2 și risc 3",
+        "ce evidențe vizuale corespund fiecărui grad",
+        "consultarea buletinului nivometeorologic înainte de tură"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/anm_nivometeorologic_buletin.html",
+      "source_id": "anm_nivometeorologic_buletin",
+      "domain": "weather_and_season",
+      "section_hint": "buletinul nivometeorologic ANM",
+      "topics": [
+        "cum citești buletinul nivometeorologic ANM",
+        "ce informații cheie urmărești în buletin",
+        "frecvența actualizării buletinului în sezonul de iarnă",
+        "diferența între buletin nivologic și prognoză meteo obișnuită"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/meteoromania_home.html",
+      "source_id": "meteoromania_home",
+      "domain": "weather_and_season",
+      "section_hint": "prognoza meteo ANM",
+      "topics": [
+        "consultarea prognozei ANM înainte de tură",
+        "interpretarea atenționărilor cod galben/portocaliu/roșu",
+        "diferența între prognoză generală și prognoză montană"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/cdc_lightning_safety.html",
+      "source_id": "cdc_lightning_safety",
+      "domain": "mountain_safety",
+      "section_hint": "lightning safety outdoors",
+      "topics": [
+        "poziția de fulger când ești prins pe creastă",
+        "regula 30/30 pentru fulger și tunet",
+        "locuri de evitat în timpul furtunii cu descărcări electrice",
+        "ce faci dacă cineva e lovit de fulger",
+        "când e sigur să reiei drumeția după furtună",
+        "comportament în pădure vs zonă deschisă în furtună",
+        "obiecte metalice și risc la fulger"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/cdc_high_altitude.html",
+      "source_id": "cdc_high_altitude",
+      "domain": "medical_emergency",
+      "section_hint": "altitude illness symptoms and response",
+      "topics": [
+        "recunoașterea răului acut de altitudine (AMS)",
+        "ce faci când apar simptome de HACE (edem cerebral)",
+        "ce faci când apar simptome de HAPE (edem pulmonar)",
+        "aclimatizarea graduală peste 2500 m",
+        "diferența între AMS, HACE și HAPE",
+        "decizia de coborâre imediată",
+        "factori care cresc riscul de altitude illness"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/cdc_heat_illnesses.html",
+      "source_id": "cdc_heat_illnesses",
+      "domain": "medical_emergency",
+      "section_hint": "heat exhaustion vs heat stroke",
+      "topics": [
+        "diferențierea epuizării termice de șoc termic",
+        "primul ajutor în șoc termic pe munte",
+        "primele semne de epuizare termică",
+        "prevenția afecțiunilor termice în drumeție de vară",
+        "rolul hidratării în prevenția insolației",
+        "rehidratarea cu electroliți după efort prelungit"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/who_snakebite_facts.html",
+      "source_id": "who_snakebite_facts",
+      "domain": "medical_emergency",
+      "section_hint": "snakebite first response",
+      "topics": [
+        "primul ajutor după mușcătură de viperă",
+        "ce să NU faci după o mușcătură de șarpe",
+        "imobilizarea membrului mușcat",
+        "transport victimă mușcată de șarpe",
+        "recunoașterea simptomelor de envenimare",
+        "informații utile pentru spital despre șarpe"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/epa_water_disinfection.html",
+      "source_id": "epa_water_disinfection",
+      "domain": "medical_emergency",
+      "section_hint": "metode de dezinfecție a apei",
+      "topics": [
+        "fierberea apei ca metodă sigură de dezinfecție",
+        "dezinfecția chimică a apei (clor, iod) în drumeție",
+        "filtrarea apei vs dezinfecția chimică",
+        "timp de fierbere recomandat la altitudine",
+        "ce contaminanți NU sunt eliminați prin fierbere",
+        "ordinea corectă: filtrare apoi dezinfecție"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/nps_hiking_safety.html",
+      "source_id": "nps_hiking_safety",
+      "domain": "mountain_safety",
+      "section_hint": "general hiking safety",
+      "topics": [
+        "Cele 10 esențiale pentru drumeție",
+        "evaluarea propriilor capacități înainte de tură",
+        "informarea cuiva despre planul tău de tură",
+        "rămâi pe potecă: de ce contează",
+        "ce faci dacă întâlnești terenuri instabile",
+        "drumeție în condiții de vizibilitate redusă"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/nps_outdoor_emergency_plan.pdf",
+      "source_id": "nps_outdoor_emergency_plan",
+      "domain": "mountain_safety",
+      "section_hint": "outdoor emergency planning",
+      "topics": [
+        "elementele unui plan de urgență pentru drumeție",
+        "lista de contacte de urgență pe care o iei cu tine",
+        "ce documente păstrezi pe persoană vs în rucsac",
+        "comunicare în zone fără semnal",
+        "scenarii de urgență comune și cum răspunzi"
+      ]
+    },
+    {
+      "path": "../../../knowledge_pipeline/cache/nps_bear_safety.html",
+      "source_id": "nps_bear_safety",
+      "domain": "wildlife_romania",
+      "section_hint": "bear encounter safety (adapt for ursul brun din Carpați)",
+      "topics": [
+        "comportament la întâlnire neașteptată cu un urs",
+        "depozitarea mâncării în zonele cu urși",
+        "diferența între urs surprins și urs habituat",
+        "ce NU faci când vezi un urs",
+        "spray-ul cu piper și cum se folosește",
+        "semne că un urs e prin apropiere (urme, scaune, copaci)",
+        "când fugi vs când rămâi pe loc"
+      ]
+    }
+  ]
+}

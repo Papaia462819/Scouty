@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_apuseni_intro_cb63d4ab595b",
+  "card_id": "cg_route_intelligence_route_apuseni_intro_cb63d4ab595b",
+  "domain": "route_intelligence_romania",
+  "topic": "route_apuseni_intro",
+  "language": "ro",
+  "title": "Apuseni: peisaj si ritm diferit",
+  "body": "Apusenii sunt o poveste aparte, nu te aștepta la creste ascuțite ca-n Făgăraș. Aici domină pădurile dese, cheile spectaculoase și satele risipite. Traseele sunt adesea mai domoale, dar nu subestima noroiul după ploaie sau potecile pietroase. E un ritm mai lent, perfect pentru explorat peșteri sau cascade ascunse. Nu uita să ai la tine o hartă bună și baterie la telefon, semnalul poate fi capricios. Și, cel mai important, bucură-te de liniștea locului și de ospitalitatea localnicilor. O ciorbă caldă la o pensiune e aur după o zi de hoinăreală!",
+  "lead": "Apusenii oferă o experiență de drumeție unică, cu păduri dese, chei și sate tradiționale, necesitând o abordare diferită față de alți munți.",
+  "keywords": "apuseni trasee peisaj rhythm echipament ospitalitate",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Apusenii oferă o experiență de drumeție unică, cu păduri dese, chei și sate tradiționale, necesitând o abordare diferită față de alți munți.",
+    "seed_topic": "Apuseni: peisaj diferit, ritm diferit — ce te așteaptă",
+    "seed_topic_slug": "route_apuseni_intro"
+  }
+}

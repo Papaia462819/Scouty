@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_autumn_color_rou_7278ebbe3d4b",
+  "card_id": "cg_weather_and_season_weather_autumn_color_rou_7278ebbe3d4b",
+  "domain": "weather_and_season",
+  "topic": "weather_autumn_color_routes",
+  "language": "ro",
+  "title": "Trasee de Toamnă: O Explozie de Culori în Carpați",
+  "body": "Toamna în munți e o nebunie de culori, de la galbenul-auriu al mestecenilor la roșul-ruginiu al fagilor. Pentru o priveliște de neuitat, îți recomand cu drag Bucegii, mai ales zona Peștera - Padina, unde pădurile de conifere se împletesc cu foioasele, creând un spectacol vizual. Sau, dacă vrei ceva mai sălbatic, Făgărașii, pe Valea Sâmbetei, unde poți vedea culorile reflectate în lacurile glaciare. O altă variantă faină e Piatra Craiului, mai ales pe la poale, unde poți admira contrastele dintre stânca albă și pădurea colorată. Nu uita să ai la tine o jachetă impermeabilă și un polar, că vremea de toamnă e schimbătoare ca o fată mare.",
+  "lead": "Descoperă cele mai spectaculoase trasee montane din Carpați pentru a admira explozia de culori a toamnei.",
+  "keywords": "toamnă culori trasee munți bucegi făgăraș piatra craiului",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă cele mai spectaculoase trasee montane din Carpați pentru a admira explozia de culori a toamnei.",
+    "seed_topic": "Trasee bune pentru culorile de toamnă — exemple regionale",
+    "seed_topic_slug": "weather_autumn_color_routes"
+  }
+}

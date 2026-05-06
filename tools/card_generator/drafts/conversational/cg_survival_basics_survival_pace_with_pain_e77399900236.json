@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_pace_with_pain_e77399900236",
+  "card_id": "cg_survival_basics_survival_pace_with_pain_e77399900236",
+  "domain": "survival_basics",
+  "topic": "survival_pace_with_pain",
+  "language": "ro",
+  "title": "Durerea la drum: cand te opresti si cand reduci ritmul",
+  "body": "Auzi, e important să știi când corpul tău îți cere o pauză. Dacă simți o durere ușoară, de genunchi sau de gleznă, de la efort, poți să încerci să reduci ritmul, să faci pași mai mici, să folosești bețele de trekking mai intens. Uneori, o scurtă pauză de 5-10 minute, cu niște întinderi ușoare, poate face minuni. Dar dacă durerea e ascuțită, constantă, sau te împiedică să pui piciorul jos normal, atunci e musai să te oprești. Nu forța! O entorsă minoră poate deveni o problemă serioasă la vale. Mai bine pierzi o oră, decât să ajungi la spital. Ascultă-ți corpul, e cel mai bun ghid.",
+  "lead": "Învață să distingi între durerea de efort și cea care necesită oprire imediată, pentru siguranța ta pe munte.",
+  "keywords": "durere munte pauza drumetie ritm mers siguranta munte oprire urgenta",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață să distingi între durerea de efort și cea care necesită oprire imediată, pentru siguranța ta pe munte.",
+    "seed_topic": "Mers cu durere — când reduci ritmul vs te oprești",
+    "seed_topic_slug": "survival_pace_with_pain"
+  }
+}

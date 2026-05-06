@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_etiquette_food_d67e8d0b3b6e",
+  "card_id": "cg_wildlife_romania_wildlife_etiquette_food_d67e8d0b3b6e",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_etiquette_food",
+  "language": "ro",
+  "title": "Nu hrăni animalele sălbatice: consecințe",
+  "body": "Băi, știu că e tentant să arunci un covrig la ursulețul ăla drăguț de pe marginea drumului, dar te rog, nu o face! Când animalele se obișnuiesc cu mâncarea de la oameni, își pierd instinctul de a-și căuta singure hrana. Devine o problemă serioasă, pentru că apoi se apropie prea mult de așezările umane, cauzând conflicte și punându-se în pericol. Nu mai vorbim de faptul că hrana noastră le poate face rău, nefiind adaptată sistemului lor digestiv. Vrei să ajuți? Lasă-le în pace, în mediul lor natural. E cel mai bun lucru pe care-l poți face pentru ele. Am văzut destule cazuri în care animalele au plătit prețul pentru \"bunătatea\" noastră.",
+  "lead": "Hrănirea animalelor sălbatice le face mai mult rău decât bine, alterându-le comportamentul natural și punându-le în pericol.",
+  "keywords": "animale sălbatice hrănire pericol urs natură impact",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Hrănirea animalelor sălbatice le face mai mult rău decât bine, alterându-le comportamentul natural și punându-le în pericol.",
+    "seed_topic": "De ce nu hrănești animalele — efectul asupra populației",
+    "seed_topic_slug": "wildlife_etiquette_food"
+  }
+}

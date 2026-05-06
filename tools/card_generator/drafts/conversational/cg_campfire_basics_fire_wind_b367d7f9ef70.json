@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_wind_b367d7f9ef70",
+  "card_id": "cg_campfire_basics_fire_wind_b367d7f9ef70",
+  "domain": "campfire_basics",
+  "topic": "fire_wind",
+  "language": "ro",
+  "title": "Focul pe vânt: Vatra și paravanul",
+  "body": "Uite o chestie pe care o înveți repede pe creste: vântul nu e dușmanul tău, dacă știi cum să-l păcălești. Primul pas: găsește sau fă-ți un paravan. Poate fi o stâncă, un rucsac pus strategic sau chiar un mic zid improvizat din pietre. Asta îți protejează flacăra la început, când e cea mai firavă. Apoi, vatra. Nu fă un cerc simplu. Sapă un șanț mic în formă de U sau de potcoavă, cu deschiderea în direcția din care bate vântul. Așa, aerul intră controlat, oxigenează jarul, dar nu îți stinge flacăra. E ca un motor cu admisie naturală. Pui iasca și surcelele în partea închisă a 'potcoavei' și lași vântul să-și facă treaba. Odată am aprins așa un foc într-o vijelie în Făgăraș de nu-mi venea să cred. Cheia e să direcționezi aerul, nu să te bați cu el.",
+  "lead": "Când bate vântul, nu te lupți cu el, ci îl folosești. Construiește un paravan și sapă o vatră în formă de U pentru a proteja și oxigena flacăra.",
+  "keywords": "foc de tabără vânt vatră supraviețuire tehnică paravan",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Când bate vântul, nu te lupți cu el, ci îl folosești. Construiește un paravan și sapă o vatră în formă de U pentru a proteja și oxigena flacăra.",
+    "seed_topic": "Aprins focul pe vânt: ecranare și forma vetrei",
+    "seed_topic_slug": "fire_wind"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_safe_distance_437f37bec821",
+  "card_id": "cg_campfire_basics_fire_safe_distance_437f37bec821",
+  "domain": "campfire_basics",
+  "topic": "fire_safe_distance",
+  "language": "ro",
+  "title": "Focul de tabara si siguranta cortului",
+  "body": "Salut, prietene! Știi vorba aia, focul e slugă bună, dar stăpân rău. Când faci foc de tabără, gândește-te la distanță. Minim 3-4 metri de cort, ca să nu te trezești cu o gaură arsă și să-ți plouă în cap. Același lucru e valabil și pentru copaci, mai ales cei cu crengi joase sau uscate. Flăcările sar repede! Frunzele uscate, iarba uscată, mușchiul – tot ce e combustibil trebuie curățat pe o rază de măcar 2 metri în jurul focului. Eu, de obicei, fac un cerc de pietre, apoi curăț bine în interior. Și nu uita, niciodată nu lași focul nesupravegheat! O rafală de vânt și ai belea. E mai bine să fii precaut decât să plângi după cort sau, mai rău, după pădure. Gândește-te mereu la ce se poate întâmpla.",
+  "lead": "Află cum să poziționezi focul de tabără la o distanță sigură de cort și vegetație, pentru a preveni incendiile.",
+  "keywords": "foc de tabără siguranță foc distanță cort prevenire incendiu frunze uscate copaci foc camping sigur",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să poziționezi focul de tabără la o distanță sigură de cort și vegetație, pentru a preveni incendiile.",
+    "seed_topic": "Distanță sigură de cort, copaci, frunze uscate",
+    "seed_topic_slug": "fire_safe_distance"
+  }
+}

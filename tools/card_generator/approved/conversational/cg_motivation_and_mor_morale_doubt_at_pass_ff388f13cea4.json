@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_doubt_at_pass_ff388f13cea4",
+  "card_id": "cg_motivation_and_mor_morale_doubt_at_pass_ff388f13cea4",
+  "domain": "motivation_and_morale",
+  "topic": "morale_doubt_at_pass",
+  "language": "ro",
+  "title": "Cand sa te opresti pe munte: semne de oboseala",
+  "body": "Băi, știi cum e, entuziasmul e mare la început, dar muntele nu-i de joacă. Dacă simți că-ți tremură picioarele mai mult decât de la frig, dacă te împiedici des sau dacă ai impresia că pietrele de pe potecă se mișcă singure, e clar: e timpul să iei o pauză. Nu-i nicio rușine să te oprești, ba dimpotrivă, e semn de inteligență. Mai bine să ajungi în vârf mâine, decât să nu ajungi deloc azi. Ascultă-ți corpul, e cel mai bun ghid. Odată am forțat nota și am ajuns să mă târăsc. Nu repeta greșeala mea. Oprește-te, bea apă, mănâncă ceva și vezi dacă te simți mai bine. Dacă nu, poate e cazul să te gândești la retragere. Muntele te așteaptă și altă dată!",
+  "lead": "Află cum să recunoști semnele de oboseală excesivă și când este momentul potrivit să te oprești sau să te retragi în siguranță de pe traseu.",
+  "keywords": "oboseala munte semne oprire siguranta drumetie asculta corpul pauza munte retrage intelept",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să recunoști semnele de oboseală excesivă și când este momentul potrivit să te oprești sau să te retragi în siguranță de pe traseu.",
+    "seed_topic": "Îndoiala la șa — semne că trebuie să te oprești",
+    "seed_topic_slug": "morale_doubt_at_pass"
+  }
+}

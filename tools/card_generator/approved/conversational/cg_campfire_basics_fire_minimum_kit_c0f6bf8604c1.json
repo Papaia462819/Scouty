@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_minimum_kit_c0f6bf8604c1",
+  "card_id": "cg_campfire_basics_fire_minimum_kit_c0f6bf8604c1",
+  "domain": "campfire_basics",
+  "topic": "fire_minimum_kit",
+  "language": "ro",
+  "title": "Focul de urgență: Kitul de buzunar care te salvează",
+  "body": "Băi, știi vorba aia, mai bine să ai și să nu-ți trebuiască, decât să-ți trebuiască și să n-ai? Așa e și cu focul. Pentru un kit minim de urgență, gândește-te la trei chestii esențiale: aprindere, combustibil inițial și protecție. Ia o brichetă rezistentă la vânt (sau două, că nu strică), un amnar (îl poți folosi și ud) și niște chibrituri impermeabile, sigilate într-o punguță ziplock. Ca iască, eu folosesc discuri demachiante îmbibate cu vaselină sau vată, tot în pungi separate. Ard fantastic și prind ușor. Un pic de coajă de mesteacăn sau câteva crenguțe uscate sub un brad îți pot fi de mare ajutor. Nu uita să ai și un cuțit mic, bun la pregătit iasca. Toate astea în buzunarul lateral al rucsacului, la îndemână, nu la fundul sacului de dormit. Niciodată nu știi când te prinde ploaia sau frigul și ai nevoie de un ceai cald sau de un pic de căldură.",
+  "lead": "Pregătește-ți un kit minim de foc pentru urgențe, cu elemente de aprindere, iască și protecție, ușor accesibil în rucsac.",
+  "keywords": "kit foc urgență munte aprindere foc iască echipament esențial siguranță drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Pregătește-ți un kit minim de foc pentru urgențe, cu elemente de aprindere, iască și protecție, ușor accesibil în rucsac.",
+    "seed_topic": "Kit minim pentru foc într-un buzunar al rucsacului",
+    "seed_topic_slug": "fire_minimum_kit"
+  }
+}

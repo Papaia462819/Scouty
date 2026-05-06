@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_medical_emergency_primul_ajutor_in_soc_ter_d03bdafb113c",
+  "card_id": "cg_medical_emergency_primul_ajutor_in_soc_ter_d03bdafb113c",
+  "domain": "medical_emergency",
+  "topic": "primul_ajutor_in_soc_termic_pe_munte",
+  "language": "ro",
+  "title": "Șocul termic (insolația) — semne și prim ajutor",
+  "body": "Șocul termic este cea mai gravă afecțiune cauzată de căldură. Acesta apare atunci când corpul nu își mai poate controla temperatura, care crește rapid, mecanismul de transpirație cedează, iar corpul nu se mai poate răcori. Temperatura corporală poate atinge 41°C sau mai mult în 10-15 minute. Fără tratament de urgență, șocul termic poate provoca dizabilități permanente sau deces.\n\nSemnele includ: confuzie, stare mentală alterată, vorbire neclară, pierderea cunoștinței (comă), piele fierbinte și uscată sau transpirație abundentă, convulsii și o temperatură corporală foarte ridicată.\n\nPași de prim ajutor:\n1. Sunați imediat la 112 sau la Salvamont (0SALVAMONT).\n2. Rămâneți cu victima până la sosirea serviciilor de urgență.\n3. Mutați victima într-o zonă umbrită și răcoroasă și îndepărtați-i hainele exterioare.\n4. Răcoriți victima rapid: udați pielea și hainele cu apă rece, plasați comprese reci sau gheață pe cap, gât, axile și în zona inghinală. Dacă este posibil, o baie cu apă rece sau gheață este eficientă. Ventilați aerul în jurul victimei pentru a accelera răcirea.",
+  "lead": "Șocul termic este o urgență medicală fatală în care corpul își pierde capacitatea de a se răcori. Acționați imediat pentru a răcori victima și sunați la 112.",
+  "keywords": "șoc termic insolație hipertermie prim ajutor urgență căldură extremă temperatură ridicată convulsii",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Heat-related illnesses",
+  "source_url": "https://www.cdc.gov/niosh/heat-stress/about/illnesses.html",
+  "publisher": "CDC / NIOSH",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "heat_stroke",
+    "hyperthermia",
+    "life_threatening",
+    "medical_emergency"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Șocul termic este o urgență medicală fatală în care corpul își pierde capacitatea de a se răcori. Acționați imediat pentru a răcori victima și sunați la 112.",
+    "evidence_confidence": "high",
+    "source_quote": "Heat stroke is the most serious heat-related illness. It occurs when the body can no longer control its temperature... Heat stroke can cause permanent disability or death if the person does not receive emergency treatment.",
+    "source_id": "cdc_heat_illnesses"
+  }
+}

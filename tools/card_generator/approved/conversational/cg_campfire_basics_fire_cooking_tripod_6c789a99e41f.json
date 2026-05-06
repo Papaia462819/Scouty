@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_cooking_tripod_6c789a99e41f",
+  "card_id": "cg_campfire_basics_fire_cooking_tripod_6c789a99e41f",
+  "domain": "campfire_basics",
+  "topic": "fire_cooking_tripod",
+  "language": "ro",
+  "title": "Trepiedul pentru ceaun: noduri si echilibru",
+  "body": "Bun, hai să nu vărșăm ciorba în foc. Găsește trei bețe zdravene, cam de grosimea brațului tău și pe cât posibil egale ca lungime. Lemnul verde e ideal, arde mai greu. Pune-le unul lângă altul pe pământ. Ia o bucată de sfoară rezistentă și leagă-le strâns, la vreo palmă de capăt. Nu te complica: înfășoară sfoara de vreo 5-6 ori în jurul tuturor, apoi trece sfoara și printre bețe, ca să strângi legătura. Asta se cheamă fășurare și strangulare, sună dramatic, dar e eficient. Când ridici ansamblul, depărtează picioarele trepiedului până stă solid. Cu cât le depărtezi mai mult, cu atât e mai stabil, dar ceaunul atârnă mai jos. Găsește echilibrul perfect pentru focul tău. Agață oala cu o sârmă sau un lanț subțire, nu direct de sfoară, că o pârlești. Acum poți să te lauzi că ai bucătărie de câmp.",
+  "lead": "Învață să construiești un trepied stabil din trei bețe și o sfoară pentru a-ți găti cina la foc de tabără fără surprize neplăcute.",
+  "keywords": "trepied foc de tabără noduri supraviețuire ceaun camping gătit la foc",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață să construiești un trepied stabil din trei bețe și o sfoară pentru a-ți găti cina la foc de tabără fără surprize neplăcute.",
+    "seed_topic": "Trepiede din lemn pentru oală — noduri și echilibru",
+    "seed_topic_slug": "fire_cooking_tripod"
+  }
+}

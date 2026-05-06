@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_pack_lid_essentials_b096fe69883e",
+  "card_id": "cg_tips_and_tricks_tip_pack_lid_essentials_b096fe69883e",
+  "domain": "tips_and_tricks",
+  "topic": "tip_pack_lid_essentials",
+  "language": "ro",
+  "title": "Capacul rucsacului: organizare rapida",
+  "body": "Salut, prietene! Știi ce e cel mai enervant când ești pe potecă? Să scotocești prin tot rucsacul după o chestie mică. De-aia, capacul rucsacului e sfânt! Acolo îți țin mereu lucrurile la care trebuie să ajungi rapid, fără să-ți dai jos tot echipamentul. Mă refer la harta (întotdeauna o hartă fizică, nu doar pe telefon!), ochelarii de soare, o mică trusă de prim ajutor (pentru zgârieturi, bătături), o lanternă frontală (chiar dacă pleci dimineața, nu știi niciodată) și o gustare rapidă, gen un baton energizant. Gândește-te la el ca la o mini-geantă de acces rapid. Te salvează de multe înjurături și de timp pierdut aiurea. Încearcă, o să-mi mulțumești după prima tură!",
+  "lead": "Folosește capacul rucsacului pentru cele 5 lucruri esențiale la care ai nevoie de acces rapid pe potecă.",
+  "keywords": "rucsac organizare acces rapid echipament sfaturi drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Folosește capacul rucsacului pentru cele 5 lucruri esențiale la care ai nevoie de acces rapid pe potecă.",
+    "seed_topic": "Capacul rucsacului pentru cele 5 lucruri pe care le scoți des",
+    "seed_topic_slug": "tip_pack_lid_essentials"
+  }
+}

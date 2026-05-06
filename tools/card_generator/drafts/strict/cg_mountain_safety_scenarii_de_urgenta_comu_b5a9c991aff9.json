@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_scenarii_de_urgenta_comu_b5a9c991aff9",
+  "card_id": "cg_mountain_safety_scenarii_de_urgenta_comu_b5a9c991aff9",
+  "domain": "mountain_safety",
+  "topic": "scenarii_de_urgenta_comune_si_cum_raspunzi",
+  "language": "ro",
+  "title": "Rătăcire în natură: Pași de urgență",
+  "body": "Accidentele se întâmplă. Dacă vă rătăciți în natură, ajutorul poate ajunge în ore sau zile, în funcție de locație, vreme și resurse. Folosiți-vă cunoștințele, abilitățile și instrumentele pentru a vă reface pașii, dacă este sigur. Dacă apelați ajutor și așteptați salvarea, inventariați-vă resursele și conservați energia.\n\n1.  **Refaceți-vă pașii:** Opriți-vă și respirați pentru a evalua calm situația. Găsiți-vă locația folosind harta, busola, GPS-ul portabil sau repere vizibile. Dacă este sigur, refaceți-vă pașii pentru a reveni pe ruta planificată.\n\n2.  **Apelați ajutor (112 / Salvamont):** Dacă nu vă puteți reface pașii, apelați 112 (sau 0SALVAMONT). Comunicați coordonatele GPS (dacă sunt disponibile), numele traseului sau zona de unde ați pornit, ultima locație cunoscută, descrierea împrejurimilor și a reperelor vizibile, tipurile și culorile hainelor purtate, echipamentul avut și orice condiții medicale. Rămâneți pe loc; schimbarea locației va îngreuna găsirea dumneavoastră. Deplasați-vă doar dacă există o amenințare imediată la viața dumneavoastră.\n\n3.  **Așteptați ajutor:** Dacă nu aveți telefon mobil sau semnal, găsiți adăpost pentru a vă proteja de elementele naturale. Inventariați și conservați resursele. Păstrați-vă cald; dacă începeți să simțiți frigul, îmbrăcați straturi suplimentare. Semnalizați ajutor: suflați des în fluier (trei suflări, pauză, apoi iar trei) și folosiți lanterna.",
+  "lead": "Aflați pașii esențiali de urmat dacă vă rătăciți în natură, de la refacerea traseului la apelarea și așteptarea ajutorului.",
+  "keywords": "rătăcire urgență salvamont prim_ajutor orientare semnalizare siguranță planificare munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "NPS Outdoor Emergency Plan",
+  "source_url": "https://www.nps.gov/subjects/healthandsafety/upload/NPS-Outdoor-Emergency-Plan-508c.pdf",
+  "publisher": "National Park Service",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "lost_in_wilderness",
+    "emergency_response",
+    "mountain_safety",
+    "search_and_rescue",
+    "signaling_for_help"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați pașii esențiali de urmat dacă vă rătăciți în natură, de la refacerea traseului la apelarea și așteptarea ajutorului.",
+    "evidence_confidence": "high",
+    "source_quote": "WHAT TO DO IF YOU GET LOST Help can take hours or days depending on your location, weather, and resources. Use your knowledge, skills, and tools to retrace your steps if it is safe to do so. If you call for help and are waiting for rescue, follow the steps below to inventory your resources and conserve energy.",
+    "source_id": "nps_outdoor_emergency_plan"
+  }
+}

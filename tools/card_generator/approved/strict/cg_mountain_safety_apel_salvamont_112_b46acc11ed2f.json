@@ -1,0 +1,29 @@
+{
+  "chunk_id": "cg_mountain_safety_apel_salvamont_112_b46acc11ed2f",
+  "card_id": "cg_mountain_safety_apel_salvamont_112_b46acc11ed2f",
+  "domain": "mountain_safety",
+  "topic": "apel_salvamont_112",
+  "language": "ro",
+  "title": "Apel la 0SALVAMONT și 112: ce informații transmiteți",
+  "body": "Pe traseul montan, numărul scurt 0SALVAMONT (apel: 0SALVAMONT, adică 0725826668) vă conectează direct la cel mai apropiat dispecerat Salvamont. Alternativ, sunați 112 și solicitați explicit Salvamont. Dacă semnalul este slab, încercați un SMS la 113 (urgențe SMS); deplasați-vă pe un loc deschis pentru a câștiga semnal. La apel, transmiteți calm și clar: locul exact (denumirea muntelui, traseul, marcajul, reperele vizibile, coordonatele GPS dacă le aveți), numărul persoanelor, starea victimei (conștient, respiră, sângerează, prinsă), tipul accidentului (cădere, hipotermie, mușcătură etc.), echipamentul disponibil, condițiile meteo locale, vizibilitatea, vântul. Dați un număr de telefon de contact și nu închideți primul; așteptați instrucțiuni de la dispecer. Nu mutați victima decât dacă viața ei este în pericol direct (cădere imediată, foc, avalanșă în zonă). Marcați locul cu un obiect colorat vizibil de sus, dacă există posibilitate de evacuare aeriană. Mențineți telefonul pornit și economisiți bateria; comunicați doar prin mesaje scurte cu dispecerul.",
+  "keywords": "salvamont 112 113 sms apel urgenta munte coordonate gps semnal",
+  "card_family": "SCENARIO",
+  "priority": 99,
+  "tier": "A",
+  "source_title": "Recomandari Salvamont Romania",
+  "source_url": "https://www.salvamontromania.ro/recomandari.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 5,
+  "safety_tags": ["rescue_call", "0salvamont", "112", "communication"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "0SALVAMONT (0725826668) sau 112; transmiteți locul, numărul persoanelor, starea victimei și nu închideți primul.",
+    "evidence_confidence": "high",
+    "source_id": "salvamont_recomandari"
+  }
+}

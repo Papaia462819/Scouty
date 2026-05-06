@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_first_aid_balance_bbd8d222f96f",
+  "card_id": "cg_gear_and_preparati_gear_first_aid_balance_bbd8d222f96f",
+  "domain": "gear_and_preparation",
+  "topic": "gear_first_aid_balance",
+  "language": "ro",
+  "title": "Trusa medicală: ușoară, dar completă",
+  "body": "Băi, știu, fiecare gram contează, dar la trusa medicală nu te joci. Nu-ți spun să cari o farmacie, dar nici să pleci doar cu un plasture. Gândește-te la esențial: dezinfectant (spirt sau șervețele), fașă elastică pentru entorse (că nu știi niciodată unde calci strâmb), câteva plasturi de diferite mărimi, comprese sterile și leucoplast. O folie de supraviețuire e obligatorie, cântărește aproape nimic și te scoate din belele la o răcire bruscă. Un analgezic ușor e bun la dureri de cap, dar nu te baza pe el pentru probleme serioase. Eu mai pun și niște pastile pentru stomac, că altitudinea sau apa de la izvor pot face figuri. E mai bine să ai și să nu folosești, decât să ai nevoie și să nu găsești. Nu uita, prevenția e cel mai bun medicament!",
+  "lead": "Află cum să-ți compui o trusă medicală esențială, ușoară și eficientă pentru orice drumeție pe munte, fără să faci compromisuri la siguranță.",
+  "keywords": "trusa medicala echipament munte siguranta drumetie greutate rucsac prim ajutor pregatire drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți compui o trusă medicală esențială, ușoară și eficientă pentru orice drumeție pe munte, fără să faci compromisuri la siguranță.",
+    "seed_topic": "Echilibrul între greutate și utilitate în trusa medicală",
+    "seed_topic_slug": "gear_first_aid_balance"
+  }
+}

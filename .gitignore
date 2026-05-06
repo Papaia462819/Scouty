@@ -6,6 +6,8 @@ build/
 *.iml
 .kotlin/
 tools/__pycache__/
+**/__pycache__/
+*.pyc
 tools/knowledge_pipeline/cache/
 tools/knowledge_pipeline/build/
 scratch/

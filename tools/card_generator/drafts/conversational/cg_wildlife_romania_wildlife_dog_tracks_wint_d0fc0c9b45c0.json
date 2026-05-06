@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_dog_tracks_wint_d0fc0c9b45c0",
+  "card_id": "cg_wildlife_romania_wildlife_dog_tracks_wint_d0fc0c9b45c0",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_dog_tracks_winter",
+  "language": "ro",
+  "title": "Câine vs. Lup pe Zăpadă: Decizii Rapide",
+  "body": "Prietene, pe zăpadă, urmele pot fi înșelătoare. Când vezi urme mari de canid, primul lucru e să te uiți la mărime și formă. Urmele de lup sunt de obicei mai mari, mai alungite și mai drepte, ca o linie. Cele de câine sunt mai rotunde și mai haotice, cu pași care se abat. Lupul își așează labele posterioare în urmele celor anterioare, formând o singură linie, ca un șirag de perle. Câinele, mai leneș, calcă de-a latul. Dacă vezi urme clare de gheare, e mai probabil câine, lupii își retrag ghearele. Nu te panica, dar fii atent la semne. Odată, am crezut că urmăresc un ciobănesc, dar am dat de un lup tânăr. Am mers încet, am vorbit calm și am ocolit. Important e să nu-l surprinzi și să-i lași spațiu.",
+  "lead": "Învață să distingi rapid urmele de lup de cele de câine pe zăpadă, pentru a ști cum să reacționezi corect în sălbăticie.",
+  "keywords": "urme zăpadă lup câine recunoaștere urme siguranță munți wildlife românia",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață să distingi rapid urmele de lup de cele de câine pe zăpadă, pentru a ști cum să reacționezi corect în sălbăticie.",
+    "seed_topic": "Câine vs lup pe zăpadă: cum decizi într-o secundă",
+    "seed_topic_slug": "wildlife_dog_tracks_winter"
+  }
+}

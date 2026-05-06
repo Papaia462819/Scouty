@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_layer_zip_chest_dc1136993392",
+  "card_id": "cg_tips_and_tricks_tip_layer_zip_chest_dc1136993392",
+  "domain": "tips_and_tricks",
+  "topic": "tip_layer_zip_chest",
+  "language": "ro",
+  "title": "Fermoarul desfacut la shell: ventilatie rapida",
+  "body": "Urcăm și simți că-ți fierbe sângele în vene, nu? E normal. Un truc rapid, mai ales când e mai răcoare și ai pe tine o geacă shell (hardshell sau softshell), e să deschizi fermoarul principal de la gât în jos. Nu de tot, doar cât să simți curentul. E ca un aer condiționat natural. Ai grijă să nu-l lași prea mult deschis dacă vântul bate tare, să nu răcești. Eu îl folosesc des pe urcările abrupte, când transpir mult, și mă ajută să reglez temperatura corpului fără să mă opresc să dau jos un strat. E mult mai eficient decât să te oprești și să te dezbraci complet.",
+  "lead": "Deschiderea fermoarului de la geaca shell în timpul urcării oferă o ventilație rapidă și eficientă.",
+  "keywords": "fermoar ventilatie shell urcare temperatura corpului sfaturi drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Deschiderea fermoarului de la geaca shell în timpul urcării oferă o ventilație rapidă și eficientă.",
+    "seed_topic": "Fermoarul de la șell desfăcut la urcare — ventilație rapidă",
+    "seed_topic_slug": "tip_layer_zip_chest"
+  }
+}

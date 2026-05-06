@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_emergency_extras_700edae8a4db",
+  "card_id": "cg_gear_and_preparati_gear_emergency_extras_700edae8a4db",
+  "domain": "gear_and_preparation",
+  "topic": "gear_emergency_extras",
+  "language": "ro",
+  "title": "3 lucruri esentiale in rucsacul meu",
+  "body": "Salut, prietene! După 20 de ani prin Carpați, am învățat că sunt trei lucruri de bază care nu-mi lipsesc niciodată din rucsac. Primul e o pelerină de ploaie ușoară, dar rezistentă – vremea la munte e imprevizibilă, te prinde ploaia și la soare. A doua e o frontală cu baterii de rezervă; chiar dacă pleci dimineața, se poate lungi traseul sau te prinde ceața și nu mai vezi la un metru. A treia, și poate cea mai importantă, e o trusă de prim ajutor minimalistă: de la plasturi pentru bătături la dezinfectant și fașă elastică. Nu e de glumit cu ele, te scot din multe belele mici înainte să devină mari. E ca o asigurare, speri să n-o folosești, dar e bine să o ai.",
+  "lead": "Află care sunt cele trei lucruri esențiale pe care un drumeț experimentat le are mereu în rucsac pentru orice aventură montană.",
+  "keywords": "pelerina ploaie frontala trusa prim ajutor echipament esential siguranta munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află care sunt cele trei lucruri esențiale pe care un drumeț experimentat le are mereu în rucsac pentru orice aventură montană.",
+    "seed_topic": "Cele 3 lucruri care nu lipsesc niciodată din rucsacul meu",
+    "seed_topic_slug": "gear_emergency_extras"
+  }
+}

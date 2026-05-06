@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_pack_phone_warm_e86f40fb792d",
+  "card_id": "cg_tips_and_tricks_tip_pack_phone_warm_e86f40fb792d",
+  "domain": "tips_and_tricks",
+  "topic": "tip_pack_phone_warm",
+  "language": "ro",
+  "title": "Pastreaza telefonul la caldura pe munte",
+  "body": "Băi, ține minte asta: pe frig, bateria telefonului se duce mai repede decât o bere la cabană după o zi lungă. Nu-l ține în buzunarul exterior de la geacă! Frigul îi scade autonomia drastic. Pune-l într-un buzunar interior, aproape de corp, unde e mai cald. Eu îl țin de obicei în buzunarul de la piept, sub polar și geacă. Așa, dacă ai nevoie să verifici harta sau să faci o poză la un peisaj spectaculos, ai șanse să mai ai baterie. Și nu uita de o baterie externă, e sfântă!",
+  "lead": "Protejează bateria telefonului de frig ținându-l aproape de corp în buzunarul interior.",
+  "keywords": "telefon baterie frig munte traseu echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Protejează bateria telefonului de frig ținându-l aproape de corp în buzunarul interior.",
+    "seed_topic": "Telefonul în interior, nu în buzunarul exterior, pe frig",
+    "seed_topic_slug": "tip_pack_phone_warm"
+  }
+}

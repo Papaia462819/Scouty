@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_spruce_pine_5a12d9685809",
+  "card_id": "cg_campfire_basics_fire_spruce_pine_5a12d9685809",
+  "domain": "campfire_basics",
+  "topic": "fire_spruce_pine",
+  "language": "ro",
+  "title": "Focul de tabără: Brad vs. Pin și scânteile buclucașe",
+  "body": "Salutare, prieteni! Vrem să facem un foc de tabără ca la carte, nu-i așa? Când vine vorba de lemne, bradul și pinul sunt la tot pasul, dar au niște secrete. Ambele sunt rășinoase și ard repede, cu flacără puternică. Secretul e rășina! Ea acționează ca un combustibil suplimentar, de-asta ard așa \"cu poftă\". Dar tot rășina e de vină și pentru pocniturile și scânteile care sar. Se formează mici buzunare de aer și rășină care, sub căldură, explodează. E spectaculos, dar ai grijă la haine și la cort! Ideal e să le folosești pentru a porni focul rapid, apoi să adaugi lemne de esență tare, cum ar fi fagul sau carpenul, care ard mai lent și cu jar mai puternic. Așa, focul tău va ține mai mult și va fi mai sigur. Și nu uita, focul se face doar în locuri amenajate sau unde e permis și ai grijă să-l stingi complet la plecare!",
+  "lead": "Află de ce bradul și pinul ard rapid și de ce sar scântei la focul de tabără, și cum să folosești asta în avantajul tău.",
+  "keywords": "foc de tabara lemne de foc brad pin scantei rasina siguranta focului",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce bradul și pinul ard rapid și de ce sar scântei la focul de tabără, și cum să folosești asta în avantajul tău.",
+    "seed_topic": "Brad vs pin — care arde mai bine și de ce sare scântei",
+    "seed_topic_slug": "fire_spruce_pine"
+  }
+}

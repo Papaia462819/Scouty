@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_medical_emergency_ce_mananci_inainte_de_o__c4fa25376db0",
+  "card_id": "cg_medical_emergency_ce_mananci_inainte_de_o__c4fa25376db0",
+  "domain": "medical_emergency",
+  "topic": "ce_mananci_inainte_de_o_tura_lunga",
+  "language": "ro",
+  "title": "Alimentația înainte de drumeție: Micul dejun",
+  "body": "Alimentația consumată pe munte, într-o tură de o zi, trebuie gândită în contextul mesei de dimineață. Ideal ar fi ca micul dejun să asigure necesarul de energie pentru prima parte a zilei, fără însă să creeze o senzație de încărcare și sațietate. Este contraindicat să plecați în drumeții imediat după masă, mai ales pe zone care necesită efort susținut. Cantitatea de alimente se va calcula în funcție de lungimea și dificultatea traseului. Sunt de preferat alimentele care nu se deteriorează la temperaturi ridicate și au un conținut redus de sare, pentru a nu provoca sete.",
+  "lead": "Micul dejun înainte de o tură de o zi trebuie să asigure energie fără a crea senzație de sațietate, evitând plecarea imediată în drumeție după masă.",
+  "keywords": "alimentație mic dejun drumeție energie pregătire munte hidratare efort",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Alimentatia si hidratarea in muntii Romaniei",
+  "source_url": "https://www.salvamontromania.ro/alimentatia-hidratarea.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "nutrition",
+    "hydration",
+    "hike_preparation",
+    "energy_management"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Micul dejun înainte de o tură de o zi trebuie să asigure energie fără a crea senzație de sațietate, evitând plecarea imediată în drumeție după masă.",
+    "evidence_confidence": "high",
+    "source_quote": "Hrana consumata pe munte intr-o tura de o zi trebuie gandita in contextul mesei de dimineata. Ideal ar fi ca micul dejun sa asigure necesarul de energie pentru prima parte a zilei, fara insa se se creeze o senzatie de incarcare si satietate. Este contraindicat ca imediat dupa masa sa se plece in drumetii, pe zone care necesita efort sustinut.",
+    "source_id": "salvamont_alimentatie_hidratare"
+  }
+}

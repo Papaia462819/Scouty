@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_sleeping_bag_temp_e2ea710e1270",
+  "card_id": "cg_gear_and_preparati_gear_sleeping_bag_temp_e2ea710e1270",
+  "domain": "gear_and_preparation",
+  "topic": "gear_sleeping_bag_temp",
+  "language": "ro",
+  "title": "Sacul de dormit: citeste rating-ul corect",
+  "body": "Salut, prietene! Ai văzut că pe sacii de dormit sunt mai multe temperaturi? E important să știi ce înseamnă fiecare. Temperatura de confort e cea la care o femeie (care tinde să-i fie mai frig) doarme confortabil. Limita inferioară e pentru bărbați, unde poți supraviețui, dar s-ar putea să-ți cam clănțăne dinții. Extremă e fix asta: extremă. Nu vrei să ajungi acolo, e temperatura la care riști hipotermia severă. Alege mereu în funcție de confort, nu de limită, și gândește-te că o noapte rece în munți e mai rea decât o dimineață cu un sac prea cald. Mai bine să-ți fie un pic prea cald și să deschizi fermoarul, decât să tremuri toată noaptea!",
+  "lead": "Înțelege diferențele dintre temperaturile afișate pe sacul de dormit pentru a alege corect și a evita nopțile friguroase în munți.",
+  "keywords": "sac de dormit temperaturi sac confort termic echipament munte alegere sac",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Înțelege diferențele dintre temperaturile afișate pe sacul de dormit pentru a alege corect și a evita nopțile friguroase în munți.",
+    "seed_topic": "Cum citești corect rating-ul unui sac de dormit",
+    "seed_topic_slug": "gear_sleeping_bag_temp"
+  }
+}

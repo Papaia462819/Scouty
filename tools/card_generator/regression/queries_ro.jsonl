@@ -1,0 +1,220 @@
+{"query": "cum aprind foc cu lemne ude", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "common rainy-day question"}
+{"query": "ce fac cu lemnul ud din pădure", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "rephrasing"}
+{"query": "vânt puternic și foc nu se face", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "wind constraint"}
+{"query": "amnar cum se folosește", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "ferro rod"}
+{"query": "iască naturală pe carpați", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "tinder discovery"}
+{"query": "coaja de mesteacăn arde", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "birch bark"}
+{"query": "ce să fac dacă mi se udă bricheta", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "tool failure"}
+{"query": "cum gătesc pe foc fără să-l sting", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "cooking setup"}
+{"query": "stingere foc cum corect", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "extinguish"}
+{"query": "câte chibrituri îmi trebuie pe tură", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "redundancy"}
+{"query": "scântei de la amnar pe vată", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "tinder + spark"}
+{"query": "construit foc piramidă", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "structure"}
+{"query": "ce nu ard pe foc în pădure", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "what not to burn"}
+{"query": "uscare bocanci la foc fără să se ardă", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "drying gear"}
+{"query": "foc pe zăpadă", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "winter"}
+{"query": "fără brichetă fără chibrit", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "no ignition"}
+{"query": "vatră improvizată din pietre", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "improvised pit"}
+{"query": "cum păstrez focul peste noapte", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "long burn"}
+{"query": "cantitate lemn pentru o seară", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "wood quantity"}
+{"query": "fum prea mult ce fac", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "smoke"}
+{"query": "ce fac dacă cineva se taie adânc", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "bleeding"}
+{"query": "sângerare puternică în deget primul ajutor", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "wound"}
+{"query": "rana adâncă cum opresc sângerarea", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "wound severe"}
+{"query": "victimă inconștientă pe traseu", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "unconscious"}
+{"query": "respirație artificială când o fac", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "CPR"}
+{"query": "stop cardiac munte ce fac", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "CPR"}
+{"query": "muscat de viperă", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "snakebite"}
+{"query": "căpușă cum scot", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "tick removal"}
+{"query": "alergie severă pe traseu", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "anaphylaxis"}
+{"query": "fractură deschisă ce fac", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "fracture"}
+{"query": "entorsă imobilizare provizorie", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "sprain"}
+{"query": "deshidratare semne primul ajutor", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "dehydration"}
+{"query": "insolație traseu vară", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "heatstroke"}
+{"query": "hipotermie ușoară simptome", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "hypothermia"}
+{"query": "degerături mâini ce fac", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "frostbite"}
+{"query": "rău de altitudine peste 2000m", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "AMS"}
+{"query": "arsură pe traseu primul ajutor", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "burns"}
+{"query": "leșin sub efort", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "syncope"}
+{"query": "convulsii pe traseu", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "seizure"}
+{"query": "trauma cap căzut pe pietre", "expected_domain": "medical_emergency", "expected_tier": "A", "notes": "head trauma"}
+{"query": "apel salvamont când suni", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "rescue protocol"}
+{"query": "0SALVAMONT număr telefon", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "rescue number"}
+{"query": "ce spun la 112 muntan", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "calling 112"}
+{"query": "fulger pe creastă protecție", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "lightning"}
+{"query": "furtună la altitudine", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "storm"}
+{"query": "avalanșă risc cum citesc", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "avalanche"}
+{"query": "trecere râu siguranță", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "river crossing"}
+{"query": "căzut accidentat ce facem", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "accident response"}
+{"query": "martor accident montan", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "witness protocol"}
+{"query": "căzut prin gheață lac alpin", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "ice fall"}
+{"query": "rămas izolat noapte fără echipament", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "stranded"}
+{"query": "vizibilitate zero ce fac", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "whiteout"}
+{"query": "cădere pietre traseu marcat", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "rockfall"}
+{"query": "căzut într-o crăpătură stâncă", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "crevice"}
+{"query": "cum semnalizez că am nevoie de ajutor", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "distress signal"}
+{"query": "bivuac de urgență la altitudine", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "emergency bivy"}
+{"query": "alunecat pe gheață imobilizat", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "ice slip"}
+{"query": "hipotermie la creastă", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "cold exposure"}
+{"query": "vârtej de zăpadă pe șa", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "snow squall"}
+{"query": "evacuare medicală auto-organizată", "expected_domain": "mountain_safety", "expected_tier": "A", "notes": "self-evac decision"}
+{"query": "am întâlnit un urs ce fac", "expected_domain": "wildlife_romania", "expected_tier": "A", "notes": "bear encounter"}
+{"query": "urs aproape de cort", "expected_domain": "wildlife_romania", "expected_tier": "A", "notes": "bear at camp"}
+{"query": "puiul de urs văzut singur", "expected_domain": "wildlife_romania", "expected_tier": "A", "notes": "cub alone"}
+{"query": "mistret în potecă", "expected_domain": "wildlife_romania", "expected_tier": "A", "notes": "wild boar"}
+{"query": "viperă pe potecă cum reacționez", "expected_domain": "wildlife_romania", "expected_tier": "A", "notes": "viper sighting"}
+{"query": "câine ciobănesc agresiv", "expected_domain": "wildlife_romania", "expected_tier": "A", "notes": "shepherd dog (safety)"}
+{"query": "spray ursi există la noi", "expected_domain": "wildlife_romania", "expected_tier": "A", "notes": "deterrents"}
+{"query": "rănit de animal pe traseu", "expected_domain": "wildlife_romania", "expected_tier": "A", "notes": "animal injury"}
+{"query": "mâncare în cort urși", "expected_domain": "wildlife_romania", "expected_tier": "A", "notes": "food storage"}
+{"query": "cum să nu provoci un urs", "expected_domain": "wildlife_romania", "expected_tier": "A", "notes": "bear behavior"}
+{"query": "pasăre rănită pe traseu", "expected_domain": "wildlife_romania", "expected_tier": "B", "notes": "non-dangerous concern"}
+{"query": "cerb la marginea pădurii", "expected_domain": "wildlife_romania", "expected_tier": "B", "notes": "deer ID"}
+{"query": "capra neagră distanță", "expected_domain": "wildlife_romania", "expected_tier": "B", "notes": "chamois etiquette"}
+{"query": "urme de lup în zăpadă", "expected_domain": "wildlife_romania", "expected_tier": "B", "notes": "tracks"}
+{"query": "ciuperci albe în pădure", "expected_domain": "wildlife_romania", "expected_tier": "B", "notes": "mushroom etiquette"}
+{"query": "fluturi alpini specii", "expected_domain": "wildlife_romania", "expected_tier": "B", "notes": "butterflies"}
+{"query": "marmotă unde văd", "expected_domain": "wildlife_romania", "expected_tier": "B", "notes": "marmot"}
+{"query": "păsări de noapte ce aud", "expected_domain": "wildlife_romania", "expected_tier": "B", "notes": "owl sounds"}
+{"query": "cum să nu sperii fauna", "expected_domain": "wildlife_romania", "expected_tier": "B", "notes": "etiquette"}
+{"query": "câine ciobănesc apropiat ce fac", "expected_domain": "wildlife_romania", "expected_tier": "B", "notes": "shepherd dog behavior"}
+{"query": "cum mă îmbrac la 0 grade pe creastă", "expected_domain": "weather_and_season", "expected_tier": "B", "notes": "layering"}
+{"query": "ploaie surprinde pe creastă ce fac", "expected_domain": "weather_and_season", "expected_tier": "B", "notes": "rain response"}
+{"query": "ceață densă ce fac pe potecă", "expected_domain": "weather_and_season", "expected_tier": "B", "notes": "fog"}
+{"query": "cea mai bună lună pentru făgăraș", "expected_domain": "weather_and_season", "expected_tier": "B", "notes": "season"}
+{"query": "vânt puternic pe creastă protecție", "expected_domain": "weather_and_season", "expected_tier": "B", "notes": "wind"}
+{"query": "ar trebui să plec dacă plouă dimineața", "expected_domain": "weather_and_season", "expected_tier": "B", "notes": "go/no-go"}
+{"query": "norii negri cresc rapid", "expected_domain": "weather_and_season", "expected_tier": "B", "notes": "cloud reading"}
+{"query": "soare arde piele la altitudine", "expected_domain": "weather_and_season", "expected_tier": "B", "notes": "UV"}
+{"query": "umiditate vară piatra craiului", "expected_domain": "weather_and_season", "expected_tier": "B", "notes": "humidity"}
+{"query": "iarnă cabană deschisă", "expected_domain": "weather_and_season", "expected_tier": "B", "notes": "winter huts"}
+{"query": "furtună după-amiază pe făgăraș", "expected_domain": "weather_and_season", "expected_tier": "A", "notes": "storm hazard subset"}
+{"query": "fulgere când mă întind la sol", "expected_domain": "weather_and_season", "expected_tier": "A", "notes": "lightning hazard"}
+{"query": "cum decid dacă cobor sau aștept furtuna", "expected_domain": "weather_and_season", "expected_tier": "A", "notes": "storm decision"}
+{"query": "vânt 80 km/h pe creastă risc", "expected_domain": "weather_and_season", "expected_tier": "A", "notes": "extreme wind"}
+{"query": "frig sub zero adormit pe traseu", "expected_domain": "weather_and_season", "expected_tier": "A", "notes": "exposure threshold"}
+{"query": "rucsac de o zi pe carpați", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "day pack"}
+{"query": "ce să iau de mâncare pe ture de o zi", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "food"}
+{"query": "câtă apă cari pe tură", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "water amount"}
+{"query": "stratificare iarnă", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "winter layers"}
+{"query": "bocanci pentru piatra craiului", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "boots"}
+{"query": "cort sau cabană", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "shelter choice"}
+{"query": "filtru de apă recomandare", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "water filter"}
+{"query": "trusă prim ajutor minimă", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "first aid kit"}
+{"query": "frontală pe ture lungi", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "headlamp"}
+{"query": "bețe trekking utile", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "poles"}
+{"query": "sac de dormit temperatură carpați", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "sleeping bag"}
+{"query": "geacă impermeabilă alegere", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "rain jacket"}
+{"query": "casca pe ce trasee carpați", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "helmet"}
+{"query": "powerbank capacitate ce ajunge", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "power"}
+{"query": "ochelari de soare la altitudine", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "eyewear"}
+{"query": "cremă solară pe munte", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "sun cream"}
+{"query": "lista pentru tură de 3 zile", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "multi-day list"}
+{"query": "rachete de zăpadă vs colțari", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "snowshoes"}
+{"query": "păstrare mâncare urs cabană", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "food storage"}
+{"query": "echipament pentru creasta făgărașului iarna", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "winter ridge"}
+{"query": "ce iau în plus iarna față de vară", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "winter extras"}
+{"query": "harti offline telefon recomandare", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "navigation"}
+{"query": "saci impermeabili în rucsac", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "dry bags"}
+{"query": "cuțit fix sau briceag", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "knife"}
+{"query": "fluier pe rucsac de ce", "expected_domain": "gear_and_preparation", "expected_tier": "B", "notes": "whistle"}
+{"query": "cum găsesc apă în pădure uscată", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "water finding"}
+{"query": "adăpost rapid din tarp", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "tarp setup"}
+{"query": "noduri esențiale pe munte", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "knots"}
+{"query": "orientare fără busolă", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "no compass"}
+{"query": "stelele pentru direcție noaptea", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "stars"}
+{"query": "rămas pierdut primii pași", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "lost protocol"}
+{"query": "stop look plan", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "STOP acronym"}
+{"query": "ratie alimentară 48 ore", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "rationing"}
+{"query": "noduri de bivuac pe creste", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "knots advanced"}
+{"query": "haine ude scenariu rapid", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "wet clothes"}
+{"query": "cabana traseu sosesc seara", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "evening arrival"}
+{"query": "cum semnalizez vizual din distanță", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "visual signal"}
+{"query": "fluier semnal SOS", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "audio signal"}
+{"query": "regula 3-3-3 supraviețuire", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "rule of three"}
+{"query": "panică pe traseu cum gestionez", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "panic"}
+{"query": "ce fac dacă rămân fără semnal de telefon", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "no signal"}
+{"query": "pătura de supraviețuire cum se folosește", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "space blanket"}
+{"query": "improvizare adăpost zăpadă", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "snow shelter"}
+{"query": "jderul pe lângă cort", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "small predator"}
+{"query": "mers cu durere ce fac", "expected_domain": "survival_basics", "expected_tier": "B", "notes": "pain pacing"}
+{"query": "trasee bune făgăraș pentru începători", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "beginner routes"}
+{"query": "cel mai frumos vârf din făgăraș pentru începători", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "summit choice"}
+{"query": "trasee aglomerate weekend alternative", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "off-peak"}
+{"query": "trasee bucegi de o zi", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "Bucegi day hikes"}
+{"query": "creasta piatra craiului ce să știu", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "Piatra Craiului"}
+{"query": "retezat trasee recomandate", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "Retezat"}
+{"query": "marcaje vechi triunghi galben", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "marker"}
+{"query": "ce mănânc la cabană", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "hut food"}
+{"query": "surse de apă pe traseu vară", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "water sources"}
+{"query": "trasee ușoare apuseni", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "Apuseni"}
+{"query": "ciucaș rute neaglomerate", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "Ciucaș"}
+{"query": "loc de picnic frumos pe traseu", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "picnic spot"}
+{"query": "fotografie peisaj punct de privit", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "photo spot"}
+{"query": "trasee solo în siguranță", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "solo-friendly"}
+{"query": "coborârea de pe vârf îmi prinde apusul", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "sunset descent"}
+{"query": "puncte cheie de decizie pe creastă", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "decision points"}
+{"query": "trasee pentru ploaie", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "rain alternates"}
+{"query": "marcaj șters ce fac", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "missing marker"}
+{"query": "trasee de o zi care surprind", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "underrated"}
+{"query": "trasee alternative weekend agitat", "expected_domain": "route_intelligence_romania", "expected_tier": "B", "notes": "alternates"}
+{"query": "cabane carpați istorie", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "hut history"}
+{"query": "salvamont ce face", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "rescue org"}
+{"query": "cine pictează marcajele de creastă", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "marker painters"}
+{"query": "club de drumeție merită", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "clubs"}
+{"query": "cărți românești de munte", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "books"}
+{"query": "cabane deschise iarna care", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "winter huts"}
+{"query": "trasee clasice de iarnă ardeal", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "winter classics"}
+{"query": "etichetă cabană pansiune", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "etiquette"}
+{"query": "cioban cu turmă pe traseu", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "shepherd encounters"}
+{"query": "trasee cu nume vechi", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "old route names"}
+{"query": "cartea de impresii cabană", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "guestbook"}
+{"query": "ștampila cabanei tradiție", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "stamp tradition"}
+{"query": "cum citeau bătrânii vremea", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "old weather lore"}
+{"query": "tabere de munte tradiție", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "summer camps"}
+{"query": "alpinism istoria românească", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "alpinism history"}
+{"query": "câinii cabanelor poveste", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "hut dogs"}
+{"query": "obiceiul de a duce gunoi acasă", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "trash lore"}
+{"query": "primul vârf serios ritual", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "first summit"}
+{"query": "tradiția pachetului de cabană", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "hut packed lunch"}
+{"query": "drumeț necunoscut pe creastă conversație", "expected_domain": "trail_culture_ro", "expected_tier": "B", "notes": "trail talk"}
+{"query": "bandă pe călcâi prevenire bășici", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "blister prevention"}
+{"query": "șosete uscate în sacul de dormit", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "sock drying"}
+{"query": "trucuri cu paracord pe rucsac", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "paracord uses"}
+{"query": "telefon pe frig ce fac", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "phone cold"}
+{"query": "termos vară de ce", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "thermos summer"}
+{"query": "cum împachetez rucsacul", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "packing"}
+{"query": "trucuri de gătit fără gaz", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "cooking hacks"}
+{"query": "noduri rapide pentru tarp", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "tarp knots"}
+{"query": "uscare bocanci ziar", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "newspaper trick"}
+{"query": "păstrare mâncare în sac", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "food packing"}
+{"query": "bandă duct utilă pe traseu", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "duct tape"}
+{"query": "trei surse de foc de ce", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "redundancy"}
+{"query": "ritm pași pauze", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "pace"}
+{"query": "centura de șold rucsac confort", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "hip belt"}
+{"query": "schimbat șosete la prânz", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "midday socks"}
+{"query": "buff utilizări multiple", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "buff uses"}
+{"query": "fermoar reparat în teren", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "zipper repair"}
+{"query": "telefon mod avion baterie", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "battery save"}
+{"query": "haine uscate sigilate", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "dry change"}
+{"query": "marker pe sticla de apă tratată", "expected_domain": "tips_and_tricks", "expected_tier": "B", "notes": "water marker"}
+{"query": "moralul scade pe ploaie", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "rain morale"}
+{"query": "al doilea suflu de unde", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "second wind"}
+{"query": "membru de grup obosit cum gestionez", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "group dynamics"}
+{"query": "prima tură grea sfaturi", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "first hard hike"}
+{"query": "îndoiala la șa cobor sau urc", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "doubt"}
+{"query": "vârful nu e tot reflecție", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "humble summit"}
+{"query": "moralul în coborâri lungi", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "long descent"}
+{"query": "reflectie post tură", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "reflection"}
+{"query": "respirație 4-7-8 calmare", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "breath technique"}
+{"query": "renunț la tură să mă întorc", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "turning back"}
+{"query": "prieten vrea să renunțe la jumătate", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "supporting friend"}
+{"query": "ritm cu partener mai rapid", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "pace mismatch"}
+{"query": "panică gestionare pe creastă", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "panic"}
+{"query": "deshidratare schimbă starea", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "dehydration mind"}
+{"query": "prima vârf emoție", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "first summit emotion"}
+{"query": "ceartă în grup pe traseu", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "group conflict"}
+{"query": "cabană caldă restart", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "hut reset"}
+{"query": "mâncarea schimbă moralul", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "food morale"}
+{"query": "dimineață mohorâtă în cort", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "morning grumpy"}
+{"query": "cântec interior pentru ritm", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "song pace"}

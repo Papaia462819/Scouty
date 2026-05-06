@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_kettle_crane_cf83bce8e216",
+  "card_id": "cg_campfire_basics_fire_kettle_crane_cf83bce8e216",
+  "domain": "campfire_basics",
+  "topic": "fire_kettle_crane",
+  "language": "ro",
+  "title": "Cum sa-ti faci ceaiul la foc de tabara",
+  "body": "Salut, prietene! Știu că ești nerăbdător să bei un ceai cald la foc. Cel mai simplu mod de a-ți suspenda ceainicul e să găsești două bețe groase, înfipte solid în pământ, de-o parte și de alta a focului. Apoi, un al treilea băț, mai subțire, dar rezistent, îl așezi deasupra, sprijinit pe cele două. Ai grijă să fie suficient de înalt încât flacăra să nu lingă direct ceainicul, altfel îți afumi tot. Dacă ai o sârmă, poți chiar agăța ceainicul de bățul superior. E o improvizație clasică, testată de ani de zile. Nu uita să ai mănuși sau o cârpă groasă când îl iei de pe foc!",
+  "lead": "Învață cum să-ți prepari ușor ceaiul sau cafeaua la focul de tabără, folosind o metodă simplă și eficientă.",
+  "keywords": "ceainic foc de tabara improvizatie gatit in natura sfaturi camping",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să-ți prepari ușor ceaiul sau cafeaua la focul de tabără, folosind o metodă simplă și eficientă.",
+    "seed_topic": "Suspendat ceainicul deasupra flăcării — improvizație simplă",
+    "seed_topic_slug": "fire_kettle_crane"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_piatra_craiului_in_a04528fe66d0",
+  "card_id": "cg_route_intelligence_route_piatra_craiului_in_a04528fe66d0",
+  "domain": "route_intelligence_romania",
+  "topic": "route_piatra_craiului_intro",
+  "language": "ro",
+  "title": "Piatra Craiului: Pe Creasta, cu cap!",
+  "body": "Piatra Craiului e superbă, dar nu te juca cu creasta ei! Înainte să te aventurezi, asigură-te că ai echipament de trei sezoane, chiar și vara. Vremea se poate schimba la fel de repede ca dispoziția mea dimineața. Vezi să ai bocanci cu aderență bună, nu adidași de oraș, că alunecă pe calcar de zici că e patinoar. Verifică prognoza meteo pentru altitudine, nu doar pentru Zărnești. Și nu uita de apă, multă apă, că pe creastă nu prea găsești izvoare. Traseul e lung, expus și necesită o condiție fizică bună. Nu e de făcut la prima ta urcare pe munte. Dacă nu ești sigur, mai bine te bucuri de potecile de la baza masivului. Creasta te așteaptă când ești pregătit, nu când ești grăbit!",
+  "lead": "Află ce trebuie să știi înainte să te aventurezi pe creasta Pietrei Craiului, un traseu spectaculos dar solicitant.",
+  "keywords": "piatra craiului creasta echipament munte siguranta munte traseu dificil apa munte prognoza meteo",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce trebuie să știi înainte să te aventurezi pe creasta Pietrei Craiului, un traseu spectaculos dar solicitant.",
+    "seed_topic": "Piatra Craiului: ce să știi înainte să te urci pe creastă",
+    "seed_topic_slug": "route_piatra_craiului_intro"
+  }
+}

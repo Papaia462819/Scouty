@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_hat_buff_value_8051ae0d94eb",
+  "card_id": "cg_gear_and_preparati_gear_hat_buff_value_8051ae0d94eb",
+  "domain": "gear_and_preparation",
+  "topic": "gear_hat_buff_value",
+  "language": "ro",
+  "title": "Buff și fes: versatilitate maximă în rucac",
+  "body": "Băi, știi care-s cele mai subestimate piese de echipament? Un buff și un fes subțire! Fesul, pe lângă că-ți ține de cald la cap când bate vântul ăla tăios de creastă, poate fi tras și peste urechi sau chiar pe post de ochelari de dormit în refugiu, dacă ai un coleg care sforăie mai ceva ca ursul. Iar buff-ul, ăsta e campionul! Îl poți folosi ca eșarfă, bandană să-ți țină părul, mască de praf sau de vânt, bentiță, ori chiar ca o mini-căciulă. Am văzut odată un tip care și-a improvizat o compresă cu el după o entorsă minoră. Sunt ușoare, ocupă puțin loc și te scot din multe belele. Nu pleca fără ele!",
+  "lead": "Descoperă de ce un buff și un fes sunt esențiale în rucacul tău de drumeție, oferind protecție și versatilitate în orice situație.",
+  "keywords": "buff fes echipament versatil protecție vânt căldură cap sfaturi drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă de ce un buff și un fes sunt esențiale în rucacul tău de drumeție, oferind protecție și versatilitate în orice situație.",
+    "seed_topic": "Buff și fes — de ce sunt cele mai versatile bucăți",
+    "seed_topic_slug": "gear_hat_buff_value"
+  }
+}

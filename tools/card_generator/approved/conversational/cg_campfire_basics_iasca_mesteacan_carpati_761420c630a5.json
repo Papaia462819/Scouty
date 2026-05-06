@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_iasca_mesteacan_carpati_761420c630a5",
+  "card_id": "cg_campfire_basics_iasca_mesteacan_carpati_761420c630a5",
+  "domain": "campfire_basics",
+  "topic": "iasca_mesteacan_carpati",
+  "language": "ro",
+  "title": "Coaja de mesteacăn — iasca naturală pe Carpați",
+  "body": "Dacă ar fi să aleg o singură iască pentru Carpați, ar fi coaja de mesteacăn. Are uleiuri esențiale care ard chiar și după o săptămână de ploaie. Ia doar coaja exterioară, albă și subțire, care se desprinde singură; nu tăia adânc, copacul se infectează. Strânge cât încape într-un pumn și păstreaz-o într-o pungă plastic în partea de sus a rucsacului. La aprindere, rupe-o în fâșii subțiri ca firele de paste, formează un cuib mic și pune iasca scumpă jos. O singură scânteie de la amnar o aprinde. Trucul: lasă coaja să se așeze 10 minute la aer curent dacă a stat în pungă, ca să prindă oxigen. Mai funcționează la fel: rășina de brad uscată (perlele de pe trunchi), conurile uscate de molid și surcelele rupte din inima unui buștean putred. Dar coaja de mesteacăn e regină — merită să o cauți activ pe traseu.",
+  "lead": "Coaja de mesteacăn arde și după ploaie; rupe-o în fâșii subțiri și aprinde cu o scânteie de la amnar.",
+  "keywords": "mesteacan coaja iasca natural amnar scanteie",
+  "card_family": "DEFINITION",
+  "priority": 65,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": ["tip", "fire", "natural_tinder"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Coaja de mesteacăn arde și după ploaie; rupe-o în fâșii subțiri și aprinde cu o scânteie de la amnar.",
+    "seed_topic": "Coaja de mesteacăn — cea mai bună iască naturală pe Carpați",
+    "seed_topic_slug": "fire_birch_bark"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_best_season_carp_f1c6abc8318b",
+  "card_id": "cg_weather_and_season_weather_best_season_carp_f1c6abc8318b",
+  "domain": "weather_and_season",
+  "topic": "weather_best_season_carpati",
+  "language": "ro",
+  "title": "Cele mai bune luni pentru crestele Carpatilor",
+  "body": "Salut, prietene! Vrei să te avânți pe creste, nu? E o idee excelentă, dar alege-ți bine luna, ca să nu te trezești cu surprize. Pentru crestele înalte, gen Făgăraș, Retezat sau Parâng, cel mai bine e din iulie până în septembrie. Atunci zăpada e topită, iar vremea e, în general, mai stabilă. În iunie mai poți prinde petice de zăpadă, iar octombrie e deja riscant, cu primele ninsori. Pentru crestele mai joase, cum ar fi Piatra Craiului sau Bucegi (pe la altitudini medii), poți merge și din mai până în octombrie. Dar fii mereu pregătit pentru o ploaie zdravănă de vară sau pentru o răcire bruscă. Echipamentul adecvat face diferența între o amintire frumoasă și o poveste de groază. Nu uita, muntele nu e o glumă!",
+  "lead": "Află care sunt cele mai bune luni pentru a explora crestele înalte și medii din Carpați, evitând surprizele vremii.",
+  "keywords": "creste carpați sezon drumeții vreme munte perioade optime făgăraș retezat piatra craiului",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află care sunt cele mai bune luni pentru a explora crestele înalte și medii din Carpați, evitând surprizele vremii.",
+    "seed_topic": "Când urci pe Carpați: lunile bune pentru fiecare creastă",
+    "seed_topic_slug": "weather_best_season_carpati"
+  }
+}

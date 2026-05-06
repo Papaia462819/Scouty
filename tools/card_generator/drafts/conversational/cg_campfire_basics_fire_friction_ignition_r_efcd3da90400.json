@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_friction_ignition_r_efcd3da90400",
+  "card_id": "cg_campfire_basics_fire_friction_ignition_r_efcd3da90400",
+  "domain": "campfire_basics",
+  "topic": "fire_friction_ignition_reality",
+  "language": "ro",
+  "title": "Aprinderea focului prin frecare: De ce e greu în realitate",
+  "body": "Ai văzut în filme, nu? Doi bețe și gata focul! Ei bine, în realitate, aprinderea focului prin frecare e mult mai complicată și necesită răbdare, tehnică și materialele potrivite. Ai nevoie de o placă de bază din lemn moale (plop, tei), un fus din lemn mai tare (alun, frasin), un arc, o sfoară rezistentă și, cel mai important, de iască uscată. Fără iască, nu ai ce aprinde. Practic, freci fusul de placă până obții jar, pe care apoi îl transferi cu grijă în iască. Efortul fizic e considerabil și, sincer, e mai mult o abilitate de supraviețuire extremă decât ceva ce ai face la fiecare ieșire. Eu prefer bricheta sau amnarul, sunt mult mai eficiente și mai puțin frustrante. Dar e o experiență interesantă de încercat măcar o dată, să vezi cât de greu e.",
+  "lead": "Aprinderea focului prin frecare e o tehnică dificilă, care necesită materiale specifice și mult efort, fiind mai degrabă o abilitate de supraviețuire decât o metodă practică pentru drumeții.",
+  "keywords": "aprindere foc frecare tehnici foc supravietuire iasca lemne",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Aprinderea focului prin frecare e o tehnică dificilă, care necesită materiale specifice și mult efort, fiind mai degrabă o abilitate de supraviețuire decât o metodă practică pentru drumeții.",
+    "seed_topic": "Aprindere prin frecare — de ce e mai grea decât pare în filme",
+    "seed_topic_slug": "fire_friction_ignition_reality"
+  }
+}

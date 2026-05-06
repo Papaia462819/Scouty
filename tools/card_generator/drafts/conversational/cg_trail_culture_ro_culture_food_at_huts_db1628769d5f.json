@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_food_at_huts_db1628769d5f",
+  "card_id": "cg_trail_culture_ro_culture_food_at_huts_db1628769d5f",
+  "domain": "trail_culture_ro",
+  "topic": "culture_food_at_huts",
+  "language": "ro",
+  "title": "Mancarea la cabane: sup si pachet",
+  "body": "Când auzi de 'supă și pachet' la cabane, să știi că e mai mult decât o vorbă. Supa e de obicei caldă, bună, dar nu te aștepta la cine știe ce delicatese. E acolo să te încălzească și să-ți dea energie. 'Pachetul' înseamnă mâncarea ta, adusă de acasă. Sandvișuri, batoane energizante, fructe uscate, nuci. Nu te baza că vei găsi de cumpărat prea multe, mai ales în cabanele izolate. Odată am văzut un tip care se baza doar pe ce găsește și a sfârșit prin a împărți un baton cu ciocolată cu noi. Nu-i un capăt de lume, dar e mai bine să fii pregătit. Gândește-te la calorii și la greutate. Un termos cu ceai cald face minuni la pachet, mai ales când e frig.",
+  "lead": "Află ce înseamnă 'supă și pachet' la cabane și cum să te pregătești pentru o masă consistentă pe munte.",
+  "keywords": "mancare cabana supa pachet provizii munte echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce înseamnă 'supă și pachet' la cabane și cum să te pregătești pentru o masă consistentă pe munte.",
+    "seed_topic": "Mâncarea la cabane: ce înseamnă cu adevărat 'sup și pachet'",
+    "seed_topic_slug": "culture_food_at_huts"
+  }
+}

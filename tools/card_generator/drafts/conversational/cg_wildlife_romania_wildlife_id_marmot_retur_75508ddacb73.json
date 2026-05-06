@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_id_marmot_retur_75508ddacb73",
+  "card_id": "cg_wildlife_romania_wildlife_id_marmot_retur_75508ddacb73",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_id_marmot_returns",
+  "language": "ro",
+  "title": "Marmota: Ce faci cand o auzi? (Si cum a ajuns la noi)",
+  "body": "Băi, știi că marmotele pe care le vezi (sau mai degrabă, le auzi) prin Făgăraș sau Retezat nu sunt de-ale noastre, autohtone? Au fost reintroduse acum vreo 50 de ani din Alpi, să mai populeze golurile alpine. Sunt niște ghemotoace pufoase, dar au un simț al pericolului fantastic. Când o marmotă fluieră ascuțit, e semn de alarmă. De obicei, înseamnă că a zărit un prădător – vultur, urs, sau, mă rog, un drumeț mai zgomotos. Nu te panica, dar fii atent la împrejurimi. E un semnal că ceva se mișcă. Privește în jur calm, fără mișcări bruște. Poate vezi și tu ce a speriat-o. De cele mai multe ori, e doar curiozitatea ei. Dar e bine să știi ce înseamnă fluieratul ăla strident.",
+  "lead": "Marmotele din Carpați sunt specii reintroduse din Alpi, iar fluieratul lor e un semnal de alarmă care indică prezența unui pericol.",
+  "keywords": "marmota reintroducere specii sunet alarma wildlife carpati comportament animale observare natura",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Marmotele din Carpați sunt specii reintroduse din Alpi, iar fluieratul lor e un semnal de alarmă care indică prezența unui pericol.",
+    "seed_topic": "Marmota — speciile reintroduse și sunetul lor de alarmă",
+    "seed_topic_slug": "wildlife_id_marmot_returns"
+  }
+}

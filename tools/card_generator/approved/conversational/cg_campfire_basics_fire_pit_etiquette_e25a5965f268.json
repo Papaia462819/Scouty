@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_pit_etiquette_e25a5965f268",
+  "card_id": "cg_campfire_basics_fire_pit_etiquette_e25a5965f268",
+  "domain": "campfire_basics",
+  "topic": "fire_pit_etiquette",
+  "language": "ro",
+  "title": "Vatra de foc: reguli nescrise la cabana sau in camping",
+  "body": "Salut, prietene! Știi cum e, focul de tabără e sufletul serii, dar trebuie să fim cu băgare de seamă. Când ajungi la o vatră, verifică dacă nu e deja folosită sau dacă nu cumva gazda (cabana, campingul) are reguli specifice. Nu face focul direct pe iarbă sau pe pietre care pot exploda de la căldură; folosește vetrele amenajate. Adună lemne uscate, dar nu tăia copaci vii și nu lăsa o grămadă de lemne nearse în urmă. Când pleci, asigură-te că focul e stins complet, cu apă și pământ, până nu mai simți căldură. E un gest de respect pentru natură și pentru următorii drumeți. Am văzut odată un foc lăsat mocnind care a ars jumătate de pădure. Nu vrem să se repete așa ceva!",
+  "lead": "Află cum să te comporți responsabil la vatra de foc, respectând natura și pe ceilalți drumeți.",
+  "keywords": "vatra foc reguli camping siguranta foc lemn uscat stins foc respect natura",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te comporți responsabil la vatra de foc, respectând natura și pe ceilalți drumeți.",
+    "seed_topic": "Eticheta vetrei la o cabană sau loc de campare",
+    "seed_topic_slug": "fire_pit_etiquette"
+  }
+}

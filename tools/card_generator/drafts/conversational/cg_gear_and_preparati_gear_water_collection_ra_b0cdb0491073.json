@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_water_collection_ra_b0cdb0491073",
+  "card_id": "cg_gear_and_preparati_gear_water_collection_ra_b0cdb0491073",
+  "domain": "gear_and_preparation",
+  "topic": "gear_water_collection_rain",
+  "language": "ro",
+  "title": "Colectarea apei de ploaie cu poncho-ul",
+  "body": "Băi, știi că poncho-ul tău, pe lângă că te apără de ploaie, poate deveni și un sistem de colectare a apei? E simplu: întinde-l între doi copaci, sau chiar pe pământ, având grijă să creezi o mică depresiune în mijloc. Poți folosi o piatră sau un obiect mai greu ca să formezi pâlnia. Apa de ploaie se va aduna acolo și o poți colecta într-o sticlă sau un recipient. Nu uita să o fierbi sau să folosești pastile de purificare înainte de a o bea, chiar dacă pare curată. Am făcut asta o dată pe Retezat, când am rămas fără apă și ploaia m-a prins pe nepregătite. M-a salvat de la o sete cruntă! E o metodă bună de backup, dar nu te baza doar pe ea.",
+  "lead": "Învață cum să folosești poncho-ul pentru a colecta apă de ploaie în situații neprevăzute, o tehnică utilă de supraviețuire.",
+  "keywords": "colectare apa poncho apa de ploaie supravietuire hidratare echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să folosești poncho-ul pentru a colecta apă de ploaie în situații neprevăzute, o tehnică utilă de supraviețuire.",
+    "seed_topic": "Colectare apă de ploaie cu un poncho",
+    "seed_topic_slug": "gear_water_collection_rain"
+  }
+}

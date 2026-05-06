@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_dry_bag_strategy_e55b55f946ba",
+  "card_id": "cg_gear_and_preparati_gear_dry_bag_strategy_e55b55f946ba",
+  "domain": "gear_and_preparation",
+  "topic": "gear_dry_bag_strategy",
+  "language": "ro",
+  "title": "Saci impermeabili: Strategia celor 3 culori",
+  "body": "Băi, știi cum e, ploaia te prinde unde nu te aștepți. Eu am o strategie simplă, de ani de zile, cu saci impermeabili de culori diferite în rucsac. Un sac roșu pentru haine de schimb uscate (șosete, tricou, polar subțire), un sac albastru pentru mâncare (sandvișuri, batoane, nuci) și un sac verde pentru electronice și documente (telefon, baterie externă, buletin). Așa, chiar și pe întuneric sau cu mâinile înghețate, știi exact unde e ce-ți trebuie. Nu mai scotocești o veșnicie și nu riști să-ți uzi tot rucsacul căutând o banană. E simplu, eficient și te salvează de multe ori. Plus, e o satisfacție când știi că ai totul la locul lui, chiar și în mijlocul furtunii. Încearcă, o să-ți placă!",
+  "lead": "Învață cum să-ți organizezi rucsacul cu saci impermeabili de culori diferite pentru a găsi rapid ce ai nevoie, chiar și pe ploaie.",
+  "keywords": "saci impermeabili organizare rucsac echipament ploaie strategie culori protejare echipament haine uscate mancare munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să-ți organizezi rucsacul cu saci impermeabili de culori diferite pentru a găsi rapid ce ai nevoie, chiar și pe ploaie.",
+    "seed_topic": "Saci impermeabili în interiorul rucsacului — strategia 3 culori",
+    "seed_topic_slug": "gear_dry_bag_strategy"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_knife_size_8a3e3daebe71",
+  "card_id": "cg_gear_and_preparati_gear_knife_size_8a3e3daebe71",
+  "domain": "gear_and_preparation",
+  "topic": "gear_knife_size",
+  "language": "ro",
+  "title": "Cutit fix sau briceag: Alege intelept",
+  "body": "Salut, prietene! Aud des discuția asta cu cuțitul. Pe munte, un briceag bun, cu lamă blocabilă, e de cele mai multe ori suficient. E mai ușor, mai sigur de purtat și mai versatil. Gândește-te: vrei să tai o sfoară, să cureți o ciupercă sau să desfaci un pachet. Ai nevoie de o lamă uriașă pentru asta? Nu prea. Un cuțit fix mare e mai mult o povară și un risc inutil. L-am văzut pe unul tăind pâine cu un 'macete' de pădure. Incomod și periculos. Alege ceva compact, ascuțit și de încredere. Eu am un briceag de 10 cm lama de ani buni și m-a scos din multe situații. Nu uita, esențial e să știi să-l folosești, nu cât de mare e.",
+  "lead": "Află de ce un briceag compact și sigur e mai practic pe munte decât un cuțit fix mare și greu.",
+  "keywords": "cutit munte briceag drumetie echipament esential siguranta munte lama blocabila",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce un briceag compact și sigur e mai practic pe munte decât un cuțit fix mare și greu.",
+    "seed_topic": "Cuțit fix sau briceag — de ce cele mari nu-s mai bune",
+    "seed_topic_slug": "gear_knife_size"
+  }
+}

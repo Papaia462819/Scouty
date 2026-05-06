@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_buying_priority_13bc29bb7e6c",
+  "card_id": "cg_gear_and_preparati_gear_buying_priority_13bc29bb7e6c",
+  "domain": "gear_and_preparation",
+  "topic": "gear_buying_priority",
+  "language": "ro",
+  "title": "Echipament esential cu buget redus",
+  "body": "Salut! Știu cum e la început, buzunarul e subțire, dar cheful de munte e mare. Prioritizează așa: mai întâi bocancii – ăștia te țin în siguranță și confort. Nu te zgârci la ei, ia unii impermeabili, cu talpă bună. Apoi, un rucsac de 30-40 litri, să-ți încapă esențialul. După, ia o jachetă impermeabilă și rezistentă la vânt; chiar și una mai simplă e sfântă la schimbările bruște de vreme. Straturile de îmbrăcăminte le poți completa cu ce ai deja, gen un tricou sintetic și un polar. Ia-le pe rând și vei fi gata de traseu fără să-ți golești contul. Nu uita de harta și busola, astea sunt gratis dacă le ai pe telefon, dar mai bine o hartă fizică.",
+  "lead": "Află cum să-ți cumperi echipamentul de munte esențial, chiar și cu un buget limitat, prioritizând siguranța și confortul.",
+  "keywords": "echipament munte buget mic bocanci rucsac jacheta impermeabila straturi harta",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți cumperi echipamentul de munte esențial, chiar și cu un buget limitat, prioritizând siguranța și confortul.",
+    "seed_topic": "Ordinea în care îți cumperi echipament dacă ai buget mic",
+    "seed_topic_slug": "gear_buying_priority"
+  }
+}

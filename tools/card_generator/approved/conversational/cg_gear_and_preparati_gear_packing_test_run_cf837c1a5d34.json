@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_packing_test_run_cf837c1a5d34",
+  "card_id": "cg_gear_and_preparati_gear_packing_test_run_cf837c1a5d34",
+  "domain": "gear_and_preparation",
+  "topic": "gear_packing_test_run",
+  "language": "ro",
+  "title": "Testează rucsacul plin înainte de tura mare",
+  "body": "Băi, amice, înainte de a pleca în tura aia lungă, bagă tot în rucsac și fă o plimbare de măcar o oră prin cartier sau pe un deal ușor. Nu vrei să descoperi în creastă că te roade cureaua de la șold sau că îți intră sticla de apă în coaste. Ajustează-l bine, să-ți stea greutatea pe șolduri, nu pe umeri. Vezi cum se simte la urcare, la coborâre. Poate descoperi că ai nevoie de o curea de piept mai lată sau că trebuie să redistribui greutatea. E mai bine să transpiri un pic acasă decât să înjuri în vârful muntelui. Am pățit-o și eu, crede-mă!",
+  "lead": "Testează rucsacul plin într-o plimbare scurtă înainte de tura mare pentru a identifica probleme de confort sau ajustare.",
+  "keywords": "rucsac testare pregătire echipament greutate ajustare tura",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Testează rucsacul plin într-o plimbare scurtă înainte de tura mare pentru a identifica probleme de confort sau ajustare.",
+    "seed_topic": "Test de încărcare cu rucsacul plin înainte de tura mare",
+    "seed_topic_slug": "gear_packing_test_run"
+  }
+}

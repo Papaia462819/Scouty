@@ -1,0 +1,29 @@
+{
+  "chunk_id": "cg_weather_and_season_coborare_fortata_furtuna_fff0def92c18",
+  "card_id": "cg_weather_and_season_coborare_fortata_furtuna_fff0def92c18",
+  "domain": "weather_and_season",
+  "topic": "coborare_fortata_furtuna",
+  "language": "ro",
+  "title": "Coborâre forțată în furtună: decizia și execuția",
+  "body": "Decizia de a coborî forțat dintr-o tură în desfășurare se ia înainte ca furtuna să se instaleze deplin. Indicatori obiectivi: tunete tot mai apropiate, cer întunecat care avansează rapid, scăderea bruscă a vizibilității sub 200 metri, schimbarea temperaturii cu peste 5 grade în mai puțin de o oră, vânt în creștere la peste 60 km/h. La oricare doi indicatori prezenți simultan, se inițiază coborârea. Părăsiți creasta sau punctele expuse pe ruta cea mai scurtă către pădure sau o vale adăpostită; nu vă întoarceți pe creastă pentru a recupera echipament uitat. Verificați harta și marcajele înainte ca vizibilitatea să dispară; identificați refugii pe direcția aleasă (cabană, stână, pădure deasă). Mențineți grupul compact dar la cel puțin 5 metri unii de alții pe creastă. Schimbați stratul ud cu unul uscat în primul loc adăpostit; hipotermia poate apărea la temperaturi pozitive dacă există vânt și umezeală. Anunțați persoana de contact prin SMS sau apel scurt despre schimbarea planului. Dacă pierdeți o persoană din grup în timpul coborârii, sunați 0SALVAMONT (apel: 0SALVAMONT) sau 112 imediat ce ajungeți la un loc cu semnal; nu reluați urcarea pe propria răspundere.",
+  "keywords": "furtuna coborare fortata decizie creasta vant tunet vizibilitate",
+  "card_family": "SCENARIO",
+  "priority": 84,
+  "tier": "A",
+  "source_title": "Recomandari Salvamont Romania",
+  "source_url": "https://www.salvamontromania.ro/recomandari.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 5,
+  "safety_tags": ["storm", "forced_descent", "weather_hazard", "life_threatening"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Doi indicatori obiectivi simultan = coborâre imediată; ruta cea mai scurtă spre pădure, schimbare strat ud, anunț persoană de contact, apel 0SALVAMONT/112 dacă pierdeți pe cineva.",
+    "evidence_confidence": "high",
+    "source_id": "salvamont_recomandari"
+  }
+}

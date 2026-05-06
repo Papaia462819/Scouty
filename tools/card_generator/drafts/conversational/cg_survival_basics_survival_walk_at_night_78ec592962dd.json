@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_walk_at_night_78ec592962dd",
+  "card_id": "cg_survival_basics_survival_walk_at_night_78ec592962dd",
+  "domain": "survival_basics",
+  "topic": "survival_walk_at_night",
+  "language": "ro",
+  "title": "Mersul pe traseu noaptea: sfaturi si precautii",
+  "body": "Băi, mersul noaptea prin munți e o experiență aparte, dar trebuie să știi când să te bagi și când nu. În general, evită-l dacă nu ești super familiarizat cu traseul și cu zona. Nu te baza doar pe frontală, că lumina ei e înșelătoare și distorsionează perspectivele. Dacă totuși te prinde noaptea, asigură-te că ai baterii de rezervă și o hartă pe care o poți citi la lumină slabă, plus un GPS. E ușor să te rătăcești când nu vezi reperele. Eu am pățit-o o dată, credeam că știu drumul, dar un copac căzut m-a făcut să o iau pe o potecă greșită. A fost o aventură, dar nu una pe care aș repeta-o nepregătit. Mai bine campezi și continui dimineața decât să riști o noapte de rătăcire. Păstrează-ți calmul și fii atent la fiecare pas.",
+  "lead": "Află când e sigur să mergi noaptea pe traseu și ce precauții să iei pentru a evita pericolele și rătăcirile.",
+  "keywords": "traseu noaptea siguranta munte echipament noapte orientare nocturna evitare rătăcire frontală baterii de rezervă",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află când e sigur să mergi noaptea pe traseu și ce precauții să iei pentru a evita pericolele și rătăcirile.",
+    "seed_topic": "Mers pe traseu noaptea — când da, când nu",
+    "seed_topic_slug": "survival_walk_at_night"
+  }
+}

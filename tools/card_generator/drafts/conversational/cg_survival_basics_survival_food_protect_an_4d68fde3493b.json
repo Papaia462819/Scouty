@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_food_protect_an_4d68fde3493b",
+  "card_id": "cg_survival_basics_survival_food_protect_an_4d68fde3493b",
+  "domain": "survival_basics",
+  "topic": "survival_food_protect_animals",
+  "language": "ro",
+  "title": "Mancarea in munti: Fara vizitatori nepoftiti!",
+  "body": "Salut, prietene! Știu că ești entuziasmat să explorezi, dar hai să vorbim puțin despre mâncare și... musafiri nepoftiți. Jderii, vulpile și șoarecii sunt hoți iscusiți când vine vorba de provizii. Am pățit-o eu, o dată, cu un jder care mi-a \"împrumutat\" salamul direct din cort. De atunci, am învățat! Nu lăsa niciodată mâncarea în cort peste noapte sau nesupravegheată. Folosește saci etanși, rezistenți la rozătoare, și agață-i într-un copac, la cel puțin 3-4 metri înălțime și 1-2 metri distanță de trunchi. Poți folosi o sfoară subțire și o pungă rezistentă. Dacă ești la cabană, depozitează totul în dulapuri închise sau în locuri special amenajate. Nu uita, mirosul de mâncare atrage, așa că păstrează curățenia și nu lăsa resturi!",
+  "lead": "Află cum să-ți protejezi mâncarea de animalele sălbatice în timpul drumețiilor, pentru a evita surprizele neplăcute.",
+  "keywords": "protectie mancare animale salbatice depozitare provizii jderi vulpi soareci camping munti",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți protejezi mâncarea de animalele sălbatice în timpul drumețiilor, pentru a evita surprizele neplăcute.",
+    "seed_topic": "Cum protejezi mâncarea de jderi, vulpi, șoareci",
+    "seed_topic_slug": "survival_food_protect_animals"
+  }
+}

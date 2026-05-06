@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_protected_areas_e2c3cd401280",
+  "card_id": "cg_wildlife_romania_wildlife_protected_areas_e2c3cd401280",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_protected_areas_intro",
+  "language": "ro",
+  "title": "Parcuri Naționale: Ce înseamnă pentru drumeț",
+  "body": "Băi, știi de ce unele zone sunt parcuri naționale? Nu e doar o etichetă pe hartă, e o promisiune că natura e lăsată în pace pe cât posibil. Pentru noi, drumeții, asta înseamnă că avem șansa să vedem peisaje neatinse, să auzim liniștea aia ruptă doar de vântul prin brazi sau de un pârâu. Gândește-te la Retezat sau Piatra Craiului – acolo simți că ești musafir într-o casă mult mai veche și mai măreață decât a noastră. E esențial să respectăm regulile: nu facem foc, nu lăsăm gunoaie (nici măcar coji de banană, că nu-s de-ale locului), nu deranjăm animalele. Practic, te comporți ca un oaspete civilizat. E o bucurie să știi că și generațiile viitoare se vor bucura de ele așa cum o facem noi.",
+  "lead": "Parcurile naționale sunt zone protejate unde natura primează, oferind drumeților peisaje autentice și o șansă de a se conecta cu sălbăticia, impunând respectarea unor reguli stricte.",
+  "keywords": "parcuri naționale conservare natură drumeție responsabilă respect mediu reguli munte experiență natură",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Parcurile naționale sunt zone protejate unde natura primează, oferind drumeților peisaje autentice și o șansă de a se conecta cu sălbăticia, impunând respectarea unor reguli stricte.",
+    "seed_topic": "De ce sunt parcuri naționale unele zone — ce înseamnă pentru tine",
+    "seed_topic_slug": "wildlife_protected_areas_intro"
+  }
+}

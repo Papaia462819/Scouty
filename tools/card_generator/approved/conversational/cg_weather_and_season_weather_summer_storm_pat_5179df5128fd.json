@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_summer_storm_pat_5179df5128fd",
+  "card_id": "cg_weather_and_season_weather_summer_storm_pat_5179df5128fd",
+  "domain": "weather_and_season",
+  "topic": "weather_summer_storm_pattern",
+  "language": "ro",
+  "title": "Furtunile de vara in Fagarasi: cum le anticipezi",
+  "body": "Pe Făgăraș, mai ales vara, e aproape lege: după-amiaza vine furtuna. De obicei, începe pe la 14-15. Dimineața e senin, apoi pe la prânz încep să se adune norii, mai întâi albi, apoi se fac negri și amenințători. E important să-ți planifici traseul să fii deja la vale sau într-un refugiu până atunci. Dacă te prinde sus, caută un loc ferit de fulgere, departe de creste și copaci izolați. Nu sta niciodată sub un copac înalt! Am văzut odată un brad lovit de fulger... nu vrei să fii lângă el. Cel mai bine e să pleci devreme și să te miști repede. Soarele de dimineață e cel mai bun prieten al tău, folosește-l!",
+  "lead": "Află cum să te pregătești pentru furtunile tipice de după-amiază din Făgăraș și cum să-ți planifici traseul inteligent.",
+  "keywords": "furtuna fagaras vara prognoza meteo siguranta",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te pregătești pentru furtunile tipice de după-amiază din Făgăraș și cum să-ți planifici traseul inteligent.",
+    "seed_topic": "Tiparul tipic al furtunii de după-amiază pe Făgăraș",
+    "seed_topic_slug": "weather_summer_storm_pattern"
+  }
+}

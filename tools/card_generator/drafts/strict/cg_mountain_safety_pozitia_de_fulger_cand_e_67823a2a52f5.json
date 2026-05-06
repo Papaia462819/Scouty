@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_mountain_safety_pozitia_de_fulger_cand_e_67823a2a52f5",
+  "card_id": "cg_mountain_safety_pozitia_de_fulger_cand_e_67823a2a52f5",
+  "domain": "mountain_safety",
+  "topic": "pozitia_de_fulger_cand_esti_prins_pe_creasta",
+  "language": "ro",
+  "title": "Poziția de siguranță în caz de fulger pe creastă",
+  "body": "Dacă sunteți surprins de o furtună cu fulgere într-o zonă deschisă, fără un adăpost sigur în apropiere, acționați rapid. Părăsiți imediat zonele elevate precum dealuri, creste montane sau vârfuri. Nu vă întindeți niciodată la pământ. Adoptați o poziție ghemuită, ca o minge, cu capul aplecat și mâinile peste urechi. Scopul este să fiți cât mai jos, cu un contact minim cu solul. Nu căutați adăpost sub un copac izolat. Dacă vă aflați într-o pădure, adăpostiți-vă lângă copaci mai scunzi. Nu folosiți niciodată o stâncă sau o surplombă stâncoasă ca adăpost. Îndepărtați-vă imediat de lacuri, iazuri sau alte întinderi de apă. Evitați obiectele care conduc electricitatea, cum ar fi gardurile de sârmă ghimpată sau liniile electrice. Aceste acțiuni pot reduce șansele de a fi lovit, dar nu elimină complet pericolul. În caz de accident, sunați la 112 sau la Salvamont (0SALVAMONT).",
+  "lead": "Dacă sunteți surprins de o furtună cu fulgere pe o creastă montană, părăsiți zona elevată și adoptați o poziție ghemuită pentru a minimiza riscul.",
+  "keywords": "fulger trăsnet furtună creastă siguranță poziție ghemuit adăpost pericol",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Lightning Safety",
+  "source_url": "https://www.cdc.gov/lightning/safety/index.html",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "lightning",
+    "mountain_safety",
+    "storm",
+    "emergency_procedure"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Dacă sunteți surprins de o furtună cu fulgere pe o creastă montană, părăsiți zona elevată și adoptați o poziție ghemuită pentru a minimiza riscul.",
+    "evidence_confidence": "high",
+    "source_quote": "If you are caught outside with no safe shelter nearby: Immediately get off elevated areas such as hills, mountain ridges, or peaks. Never lie flat on the ground. Crouch down in a ball-like position with your head tucked...",
+    "source_id": "cdc_lightning_safety"
+  }
+}

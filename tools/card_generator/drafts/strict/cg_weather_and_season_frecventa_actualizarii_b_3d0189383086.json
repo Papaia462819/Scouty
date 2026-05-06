@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_weather_and_season_frecventa_actualizarii_b_3d0189383086",
+  "card_id": "cg_weather_and_season_frecventa_actualizarii_b_3d0189383086",
+  "domain": "weather_and_season",
+  "topic": "frecventa_actualizarii_buletinului_in_sezonul_de_iarna",
+  "language": "ro",
+  "title": "Buletinul nivometeorologic ANM — frecvența actualizării",
+  "body": "Buletinele nivometeorologice sunt elaborate zilnic de către Administrația Națională de Meteorologie. Acestea au rolul de a estima starea zăpezii și a riscului de avalanșă în afara pârtiilor amenajate. Buletinele conțin prognoza meteorologică a zonei monitorizate pentru următoarele 24 de ore, tendința meteorologică pentru următoarele 48 de ore, diagnoza fenomenelor meteorologice și nivologice din ultimele 24 de ore, estimarea evoluției stabilității stratului de zăpadă și a riscului de avalanșă pentru următoarele 24 de ore, precum și tendința evoluției stabilității stratului de zăpadă și a riscului de avalanșă pentru următoarele 48 de ore. Informațiile sunt postate zilnic pe site-ul oficial al Administrației Naționale de Meteorologie (www.meteoromania.ro) și sunt diseminate către Dispeceratul Ministerului Mediului și Pădurilor, Serviciile Europene de Avalanșă, formațiile Salvamont și alte organizații cu profil alpin. Pentru siguranța dumneavoastră, consultați aceste buletine înainte de a pleca în drumeții montane în zone cu zăpadă. În caz de urgență, apelați 112 sau 0SALVAMONT.",
+  "lead": "Buletinul nivometeorologic al ANM este actualizat și postat zilnic, oferind informații esențiale despre starea zăpezii și riscul de avalanșă.",
+  "keywords": "buletin nivometeorologic frecvență actualizare risc avalanșă stare zăpadă prognoză montană ANM Salvamont siguranță montană iarnă zăpadă",
+  "card_family": "DEFINITION",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Buletin nivometeorologic",
+  "source_url": "https://www.meteoromania.ro/despre-noi/meteorologie-operationala/activitati-de-baza/nivometeoroogie/buletinul-nivometeorologic/",
+  "publisher": "ANM / Meteoromania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "avalanche_risk",
+    "snow_conditions",
+    "weather_forecast",
+    "mountain_safety",
+    "daily_update"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Buletinul nivometeorologic al ANM este actualizat și postat zilnic, oferind informații esențiale despre starea zăpezii și riscul de avalanșă.",
+    "evidence_confidence": "high",
+    "source_quote": "Ulterior sunt elaborate buletinele nivometeorologice zilnice, care au rolul de a estima starea zăpezii şi a riscului de avalanşă în afara pârtiilor amenajate... Buletinul nivometeorologic este postat zilnic pe site-ul oficial al Administraţiei Naţionale de Meteorologie.",
+    "source_id": "anm_nivometeorologic_buletin"
+  }
+}

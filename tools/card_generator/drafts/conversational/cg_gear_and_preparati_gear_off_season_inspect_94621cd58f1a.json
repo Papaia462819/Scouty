@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_off_season_inspect_94621cd58f1a",
+  "card_id": "cg_gear_and_preparati_gear_off_season_inspect_94621cd58f1a",
+  "domain": "gear_and_preparation",
+  "topic": "gear_off_season_inspect",
+  "language": "ro",
+  "title": "Verificarea echipamentului dupa sezon",
+  "body": "Gata cu drumețiile pe anul ăsta? Nu pune rucsacul direct în dulap! Scoate tot din el și verifică fiecare cusătură, fermoar, cataramă. Dacă ai avut noroc de ploaie, usucă-l bine înainte să-l depozitezi, altfel te trezești cu surprize neplăcute la primăvară. Cortul? Curăță-l de noroi și frunze, verifică bețele și cuiele. Sacul de dormit și izoprenul, la fel. Vezi dacă ai pierdut vreo curea, dacă vreun șnur e pe ducă. E momentul perfect să repari ce se poate sau să-ți faci o listă cu ce ai de înlocuit pentru sezonul viitor. Mai bine acum, decât să te ia prin surprindere muntele! Eu am pățit-o cu un rucsac care a cedat la prima urcare după iarnă, de atunci sunt mult mai atent.",
+  "lead": "La final de sezon, ia-ți timp să inspectezi și să cureți echipamentul înainte de depozitare, pentru a evita surprizele neplăcute la primăvară.",
+  "keywords": "verificare echipament intretinere rucsac final de sezon depozitare corecta pregatire iarna",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "La final de sezon, ia-ți timp să inspectezi și să cureți echipamentul înainte de depozitare, pentru a evita surprizele neplăcute la primăvară.",
+    "seed_topic": "Inspecția echipamentului la sfârșit de sezon",
+    "seed_topic_slug": "gear_off_season_inspect"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_quick_calorie_9e1af8ea09cb",
+  "card_id": "cg_survival_basics_survival_quick_calorie_9e1af8ea09cb",
+  "domain": "survival_basics",
+  "topic": "survival_quick_calorie",
+  "language": "ro",
+  "title": "Calorii rapide in rucsac: Ce sa ai la indemana",
+  "body": "Când simți că ți se taie picioarele și ai nevoie de energie instant, nu e timp de gătit. Eu am mereu la mine batoane energizante, d-alea cu ovăz și fructe uscate, sau niște ciocolată neagră (minim 70% cacao, să nu fie prea dulce). Nucile și migdalele sunt iarăși aur curat, dar ai grijă să nu le mănânci pe toate odată, că-s bune și pentru moral. O punguță de jeleuri, d-alea simple, cu zahăr, poate face minuni când ești la limită. Sunt ușoare, nu ocupă mult loc și îți dau un boost rapid. Le ții într-un buzunar la îndemână, nu la fundul rucsacului, că nu vrei să sapi după ele când te lasă puterile. Și nu uita de apă, că fără hidratare, nici caloriile nu-și fac treaba cum trebuie.",
+  "lead": "Află ce gustări rapide și calorice să ai la îndemână în rucsac pentru un boost de energie pe munte.",
+  "keywords": "calorii rapide energie munte gustari drumetie ciocolata neagra nuci jeleuri batoane energizante",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce gustări rapide și calorice să ai la îndemână în rucsac pentru un boost de energie pe munte.",
+    "seed_topic": "Cea mai rapidă sursă de calorii dintr-un rucsac normal",
+    "seed_topic_slug": "survival_quick_calorie"
+  }
+}

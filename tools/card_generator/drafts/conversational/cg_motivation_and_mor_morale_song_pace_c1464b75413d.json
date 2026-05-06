@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_song_pace_c1464b75413d",
+  "card_id": "cg_motivation_and_mor_morale_song_pace_c1464b75413d",
+  "domain": "motivation_and_morale",
+  "topic": "morale_song_pace",
+  "language": "ro",
+  "title": "Ritmul Pasului: Cântecul Interior al Drumețului",
+  "body": "Băi, știi cum e să urci o oră și să simți că nu mai poți? Maratoniștii au un truc: își găsesc un cântec interior. Nu trebuie să fie o melodie anume, ci mai degrabă un ritm constant, repetitiv, ca un metronom. Eu, de exemplu, îmi zic în gând: „stânga-dreapta, sus-jos, stânga-dreapta, sus-jos”. Sau, dacă e mai abrupt, „un-doi, un-doi, respiră, un-doi”. Ajută enorm să îți calibrezi efortul și să nu te epuizezi inutil. E ca și cum ai avea un pilot automat pentru picioare, care te ajută să treci peste porțiunile mai grele fără să simți că te trage cineva înapoi. Încearcă, o să vezi că merge!",
+  "lead": "Descoperă cum un \"cântec interior\" te ajută să-ți menții ritmul și să depășești momentele dificile pe traseu.",
+  "keywords": "ritm pas motivație anduranță mental concentrare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă cum un \"cântec interior\" te ajută să-ți menții ritmul și să depășești momentele dificile pe traseu.",
+    "seed_topic": "Cântec interior pentru ritm — un truc al maratoniștilor",
+    "seed_topic_slug": "morale_song_pace"
+  }
+}

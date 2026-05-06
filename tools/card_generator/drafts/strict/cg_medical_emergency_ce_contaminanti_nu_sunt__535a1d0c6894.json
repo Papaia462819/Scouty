@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_ce_contaminanti_nu_sunt__535a1d0c6894",
+  "card_id": "cg_medical_emergency_ce_contaminanti_nu_sunt__535a1d0c6894",
+  "domain": "medical_emergency",
+  "topic": "ce_contaminanti_nu_sunt_eliminati_prin_fierbere",
+  "language": "ro",
+  "title": "Fierberea apei: ce contaminanți nu elimină",
+  "body": "În situații de urgență, fierberea apei este o metodă eficientă pentru a distruge majoritatea microorganismelor patogene, inclusiv bacterii, viruși și protozoare. Cu toate acestea, este crucial de reținut că fierberea apei nu va elimina toți contaminanții. Această metodă nu distruge metalele grele, sărurile și majoritatea celorlalte substanțe chimice care pot fi prezente în apă. Prin urmare, chiar și după fierbere, apa poate conține în continuare acești contaminanți. Asigurați-vă că folosiți doar apă dezinfectată corespunzător pentru băut, gătit, prepararea băuturilor, spălarea vaselor și periajul dinților. Dacă există suspiciuni de contaminare cu substanțe chimice sau metale grele, fierberea nu este suficientă pentru a face apa sigură.",
+  "lead": "Fierberea apei elimină microorganismele, dar nu distruge metalele grele, sărurile și majoritatea substanțelor chimice.",
+  "keywords": "fierbere apă contaminanți apă metale grele săruri apă substanțe chimice dezinfecție apă apă potabilă urgență",
+  "card_family": "DEFINITION",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Emergency Disinfection of Drinking Water",
+  "source_url": "https://www.epa.gov/ground-water-and-drinking-water/emergency-disinfection-drinking-water",
+  "publisher": "EPA",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "water_safety",
+    "water_purification",
+    "chemical_contaminants",
+    "heavy_metals",
+    "emergency_water"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Fierberea apei elimină microorganismele, dar nu distruge metalele grele, sărurile și majoritatea substanțelor chimice.",
+    "evidence_confidence": "high",
+    "source_quote": "However, boiling or disinfection will not destroy other contaminants, such as heavy metals, salts, and most other chemicals.",
+    "source_id": "epa_water_disinfection"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_emergency_decis_cb56818278e6",
+  "card_id": "cg_survival_basics_survival_emergency_decis_cb56818278e6",
+  "domain": "survival_basics",
+  "topic": "survival_emergency_decisions_tree",
+  "language": "ro",
+  "title": "Decizii rapide pe potecă: Continuu, mă întorc sau aștept?",
+  "body": "Când ești pe munte, deciziile rapide te pot salva. Ai trei opțiuni de bază: continui, te întorci sau aștepți. Dacă vremea se strică brusc și ești aproape de refugiu, poate continui. Dar dacă ești la jumătatea crestei și începe furtuna, cel mai sigur e să te întorci la ultimul punct de siguranță. Nu te încăpățâna! Am văzut destui care au crezut că \"mai e puțin\" și au regretat amarnic. Dacă ești într-un grup și cineva se simte rău, dar nu e o urgență, așteaptă. Analizează situația cu calm. E mai bine să pierzi o oră decât să riști o situație gravă. Gândește-te mereu la cel mai rău scenariu și ia decizia cea mai sigură, nu cea mai rapidă.",
+  "lead": "Află cum să iei decizii rapide și sigure pe munte: să continui, să te întorci sau să aștepți, în funcție de situație.",
+  "keywords": "decizii munte siguranță potecă continuu mă întorc aștept vreme rea munte planificare traseu",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să iei decizii rapide și sigure pe munte: să continui, să te întorci sau să aștepți, în funcție de situație.",
+    "seed_topic": "Arborele decizional simplu: continuu, mă întorc, aștept",
+    "seed_topic_slug": "survival_emergency_decisions_tree"
+  }
+}

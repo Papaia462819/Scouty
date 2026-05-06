@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_ferro_rod_basics_a2949ab93863",
+  "card_id": "cg_campfire_basics_fire_ferro_rod_basics_a2949ab93863",
+  "domain": "campfire_basics",
+  "topic": "fire_ferro_rod_basics",
+  "language": "ro",
+  "title": "Amnarul: Cum sa faci scantei ca un profesionist",
+  "body": "Bun, deci ai un amnar. Uită de brichetele ude; bățul ăsta magic merge și pe viscol. Mai întâi, pregătește-ți iasca: niște coajă de mesteacăn uscată, scame fine de lemn sau chiar o dischetă demachiantă cu vaselină. Pune iasca pe o suprafață uscată. Acum, ține amnarul ferm, cu vârful aproape lipit de iască. Ia răzuitorul (sau muchia neascuțită a cuțitului) și apasă ferm pe amnar. Mișcarea trebuie să fie hotărâtă, nu o mângâiere. Vrei să 'zgârii' metalul, nu să-l gâdili. O ploaie de scântei fierbinți ar trebui să sară direct pe iască. Un truc de la mine: în loc să împingi răzuitorul, ține-l fix deasupra iascăi și trage amnarul spre tine. Așa nu riști să împrăștii tot cuibul. Când iasca s-a aprins, adaugă treptat surcele subțiri și suflă ușor. Felicitări, ai foc!",
+  "lead": "Uită de brichetele ude; amnarul e prietenul tău de nădejde pentru a aprinde focul în orice condiții, dacă știi să-l folosești corect.",
+  "keywords": "amnar ferro rod aprindere foc iască supraviețuire echipament montan tehnici",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Uită de brichetele ude; amnarul e prietenul tău de nădejde pentru a aprinde focul în orice condiții, dacă știi să-l folosești corect.",
+    "seed_topic": "Cum folosești corect un amnar (ferro rod)",
+    "seed_topic_slug": "fire_ferro_rod_basics"
+  }
+}

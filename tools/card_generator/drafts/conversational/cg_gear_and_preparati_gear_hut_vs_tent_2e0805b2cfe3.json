@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_hut_vs_tent_2e0805b2cfe3",
+  "card_id": "cg_gear_and_preparati_gear_hut_vs_tent_2e0805b2cfe3",
+  "domain": "gear_and_preparation",
+  "topic": "gear_hut_vs_tent",
+  "language": "ro",
+  "title": "Cabana sau cortul? Ghidul tau rapid pentru nopti in munti",
+  "body": "Alegerea între cabană și cort depinde mult de traseu și de vreme. La cabană ești ferit de ploaie și vânt, ai un pat și, de multe ori, o ciorbă caldă. E perfect când vrei confort sau când vremea e incertă. Gândește-te la o noapte la Mălăiești după o zi de viscol, e aur curat! Pe de altă parte, cortul îți oferă libertate. Îl pui unde vrei (respectând regulile parcurilor naturale, bineînțeles!) și te bucuri de liniște, de răsăritul direct din sacul de dormit. E ideal pentru trasee lungi, de creastă, unde cabanele sunt rare, sau când vrei o experiență mai sălbatică. Ai grijă să ai un cort bun, rezistent la vânt și ploaie, și un sac de dormit adaptat temperaturilor nopții. Nu uita că la cort trebuie să cari mai mult: mâncare, apă, echipament de gătit. La cabană, scapi de o parte din greutate. Fiecare are farmecul lui, dar planificarea e cheia!",
+  "lead": "Află când să alegi cabana pentru confort și siguranță, și când cortul îți oferă libertatea explorării montane.",
+  "keywords": "cabana cort cazare munte planificare traseu echipament campare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află când să alegi cabana pentru confort și siguranță, și când cortul îți oferă libertatea explorării montane.",
+    "seed_topic": "Cabană vs cort: când alegi una, când alegi alta",
+    "seed_topic_slug": "gear_hut_vs_tent"
+  }
+}

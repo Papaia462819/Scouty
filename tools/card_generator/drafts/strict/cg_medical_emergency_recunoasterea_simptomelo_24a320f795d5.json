@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_recunoasterea_simptomelo_24a320f795d5",
+  "card_id": "cg_medical_emergency_recunoasterea_simptomelo_24a320f795d5",
+  "domain": "medical_emergency",
+  "topic": "recunoasterea_simptomelor_de_envenimare",
+  "language": "ro",
+  "title": "Envenimare după mușcătura de șarpe — semne și pași inițiali",
+  "body": "Envenimarea, cauzată de toxinele din mușcătura unui șarpe veninos sau de veninul pulverizat în ochi, poate provoca o serie de urgențe medicale acute și grave. Simptomele variază în funcție de tipul de șarpe, unele fiind mai severe decât altele. Copiii sunt expuși unui risc mai mare de efecte severe din cauza masei corporale mai mici.\n\nSemnele de envenimare pot include:\n*   Paralizie severă, care poate împiedica respirația.\n*   Tulburări de coagulare, ce pot duce la hemoragii fatale.\n*   Insuficiență renală ireversibilă.\n*   Distrugere locală severă a țesuturilor, putând rezulta dizabilitate permanentă sau chiar amputarea unui membru.\n*   Durere locală intensă.\n*   Vărsături.\n\nAcordați imediat atenție medicală. Apelați 112 / Salvamont (0SALVAMONT).",
+  "lead": "Recunoașteți semnele de envenimare după mușcătura de șarpe, care pot include paralizie, tulburări de coagulare, insuficiență renală și distrugere tisulară.",
+  "keywords": "envenimare mușcătură șarpe simptome paralizie hemoragie insuficiență renală distrugere țesuturi prim ajutor urgență medicală șarpe veninos",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Snakebite envenoming - The facts",
+  "source_url": "https://www.who.int/health-topics/snakebite/snakebite-envenoming---the-facts",
+  "publisher": "WHO",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "snakebite",
+    "envenoming",
+    "venom",
+    "medical_emergency",
+    "life_threatening"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Recunoașteți semnele de envenimare după mușcătura de șarpe, care pot include paralizie, tulburări de coagulare, insuficiență renală și distrugere tisulară.",
+    "evidence_confidence": "high",
+    "source_quote": "Envenoming can cause severe paralysis that may prevent breathing, making immediate medical attention critical. People may also experience bleeding disorders that can lead to fatal haemorrhages or irreversible kidney failure.",
+    "source_id": "who_snakebite_facts"
+  }
+}

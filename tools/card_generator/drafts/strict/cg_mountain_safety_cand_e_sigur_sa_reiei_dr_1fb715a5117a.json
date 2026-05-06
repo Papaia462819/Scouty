@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_cand_e_sigur_sa_reiei_dr_1fb715a5117a",
+  "card_id": "cg_mountain_safety_cand_e_sigur_sa_reiei_dr_1fb715a5117a",
+  "domain": "mountain_safety",
+  "topic": "cand_e_sigur_sa_reiei_drumetia_dupa_furtuna",
+  "language": "ro",
+  "title": "Reluarea activităților după furtună cu fulgere",
+  "body": "După o furtună cu fulgere și tunete, este crucial să așteptați înainte de a relua activitățile în aer liber. Nu reluați drumeția sau alte activități în exterior timp de cel puțin 30 de minute după ce ați auzit ultimul tunet. Rețineți că începutul și sfârșitul unei furtuni sunt cele mai periculoase momente. Chiar dacă vedeți cer senin, pericolul poate persista. Căutați un adăpost sigur, închis, cum ar fi o casă, un birou, un centru comercial sau un vehicul cu acoperiș rigid și geamurile închise. Adăposturile deschise, precum corturile, foișoarele sau dugheanele de baseball, nu oferă protecție împotriva fulgerelor. Fraza „When thunder roars, go indoors” (Când tună, intrați înăuntru) subliniază importanța de a căuta adăpost imediat ce auziți tunete. Apelați 112 sau 0SALVAMONT dacă situația o impune.",
+  "lead": "Nu reluați activitățile în aer liber timp de cel puțin 30 de minute după ce ați auzit ultimul tunet, deoarece începutul și sfârșitul furtunii sunt cele mai periculoase momente.",
+  "keywords": "furtună fulgere tunete siguranță reluare activitate adăpost pericol 30 minute drumeție munte",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Lightning Safety",
+  "source_url": "https://www.cdc.gov/lightning/safety/index.html",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "lightning_safety",
+    "thunderstorm",
+    "outdoor_activity",
+    "post_storm",
+    "shelter"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Nu reluați activitățile în aer liber timp de cel puțin 30 de minute după ce ați auzit ultimul tunet, deoarece începutul și sfârșitul furtunii sunt cele mai periculoase momente.",
+    "evidence_confidence": "high",
+    "source_quote": "Don't resume outdoor activities for at least 30 minutes after the storm. The beginning and the end of a storm are the most dangerous times. If you hear thunder or see lightning, seek shelter away from the water. When thunder roars, go indoors.",
+    "source_id": "cdc_lightning_safety"
+  }
+}

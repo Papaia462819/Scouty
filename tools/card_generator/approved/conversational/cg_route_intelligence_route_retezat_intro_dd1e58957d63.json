@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_retezat_intro_dd1e58957d63",
+  "card_id": "cg_route_intelligence_route_retezat_intro_dd1e58957d63",
+  "domain": "route_intelligence_romania",
+  "topic": "route_retezat_intro",
+  "language": "ro",
+  "title": "Retezat: Trasee populare și caracteristicile lor",
+  "body": "Salut, prietene! În Retezat, ai de unde alege, dar unele trasee sunt mai călcate. Clasic e circuitul lacurilor: de la Gura Zlata sau Carnic, urci spre Lacul Bucura, apoi pe la Zănoaga, Lia, Ana. E lung, dar spectaculos, cu peisaje glaciare de te lasă mască. Pregătește-te pentru o zi întreagă de mers, cu porțiuni de urcare susținută. Un alt favorit e vârful Peleaga, accesibil tot din zona Bucura. Aici, terenul e stâncos, expus, și ai nevoie de aderență bună la bocanci. Nu uita de Poiana Pelegii, punct de plecare spre Vârful Retezat, unde potecile sunt mai puțin aglomerate și sălbatice. Atenție la vreme, se schimbă repede sus!",
+  "lead": "Descoperă cele mai populare trasee din Retezat, de la circuitul lacurilor glaciare la ascensiuni spre vârfuri, cu sfaturi despre dificultate și peisaje.",
+  "keywords": "retezat trasee montane lacuri glaciare varfuri drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă cele mai populare trasee din Retezat, de la circuitul lacurilor glaciare la ascensiuni spre vârfuri, cu sfaturi despre dificultate și peisaje.",
+    "seed_topic": "Retezat: cele mai vorbite trasee și ce caracter au",
+    "seed_topic_slug": "route_retezat_intro"
+  }
+}

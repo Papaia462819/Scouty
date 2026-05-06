@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_powerbank_choice_387aefe0f86f",
+  "card_id": "cg_gear_and_preparati_gear_powerbank_choice_387aefe0f86f",
+  "domain": "gear_and_preparation",
+  "topic": "gear_powerbank_choice",
+  "language": "ro",
+  "title": "Câți mAh de powerbank îți trebuie pe munte?",
+  "body": "Salut, prietene! Pe munte, un powerbank e esențial, nu doar pentru telefon, ci și pentru lanterna frontală sau GPS. Eu zic să te orientezi la minim 10.000 mAh. Asta îți asigură cam 2-3 încărcări complete pentru un smartphone obișnuit. Dacă ai un telefon cu baterie mare sau vrei să încarci mai multe dispozitive (ceas smart, cameră foto), mergi spre 20.000 mAh. E mai greu, dar îți dă liniște pentru 4-5 zile. Nu uita să-l încarci complet înainte de plecare și să ai un cablu scurt, rezistent. Am pățit să rămân fără baterie la GPS într-o ceață de-aia de nu vedeai la doi pași, nu e fun deloc!",
+  "lead": "Află câți mAh îți trebuie la powerbank pentru a nu rămâne fără baterie pe munte, în funcție de nevoile tale.",
+  "keywords": "powerbank baterie externă munte echipament încărcare mah",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află câți mAh îți trebuie la powerbank pentru a nu rămâne fără baterie pe munte, în funcție de nevoile tale.",
+    "seed_topic": "Powerbank pentru munte — câți mAh chiar îți trebuie",
+    "seed_topic_slug": "gear_powerbank_choice"
+  }
+}

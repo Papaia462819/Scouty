@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_mountain_safety_obiecte_metalice_si_risc_788daff5f497",
+  "card_id": "cg_mountain_safety_obiecte_metalice_si_risc_788daff5f497",
+  "domain": "mountain_safety",
+  "topic": "obiecte_metalice_si_risc_la_fulger",
+  "language": "ro",
+  "title": "Fulger: Evitați obiectele conductoare de electricitate",
+  "body": "În timpul unei furtuni cu fulgere, este esențial să vă îndepărtați de obiectele care conduc electricitatea. Acestea includ, dar nu se limitează la, gardurile de sârmă ghimpată, liniile electrice și morile de vânt. Dacă sunteți surprins de o furtună în aer liber, căutați imediat adăpost sigur. Chiar și atunci când vă aflați într-o cabină de barcă în timpul unei furtuni cu fulgere, este important să stați departe de toate componentele metalice și electrice, inclusiv radioul. Aceste precauții sunt vitale pentru a reduce riscul de a fi lovit de fulger. Apelați 112 / 0SALVAMONT în caz de urgență.",
+  "lead": "Îndepărtați-vă de obiectele conductoare de electricitate în timpul unei furtuni cu fulgere pentru a reduce riscul de a fi lovit.",
+  "keywords": "fulger siguranță furtună obiecte metalice electricitate pericol adăpost munte",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Lightning Safety",
+  "source_url": "https://www.cdc.gov/lightning/safety/index.html",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "lightning_safety",
+    "electrical_conductors",
+    "storm_safety",
+    "outdoor_hazards"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Îndepărtați-vă de obiectele conductoare de electricitate în timpul unei furtuni cu fulgere pentru a reduce riscul de a fi lovit.",
+    "evidence_confidence": "high",
+    "source_quote": "Stay away from objects that conduct electricity (such as barbed wire fences, power lines, or windmills). When inside the cabin during a lightning storm, stay away from all metal and electrical components, including the radio.",
+    "source_id": "cdc_lightning_safety"
+  }
+}

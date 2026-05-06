@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_lost_first_step_d7487f1e706d",
+  "card_id": "cg_survival_basics_survival_lost_first_step_d7487f1e706d",
+  "domain": "survival_basics",
+  "topic": "survival_lost_first_steps",
+  "language": "ro",
+  "title": "Te-ai rătăcit? Primii 5 pași esențiali",
+  "body": "Băi, nu-i panică, se întâmplă și la case mai mari. Primul lucru: STOP! Nu mai merge niciun pas. Al doilea: Gândește. Încearcă să-ți amintești ultimul punct de reper clar. Ai văzut o stână, un copac ciudat, o potecă marcată? Al treilea: Observă. Uită-te în jur. Ești pe o creastă, într-o vale, lângă un râu? Ce vezi în depărtare? Al patrulea: Evaluează. Ai semnal la telefon? Ai hartă, busolă, GPS? Câtă apă și mâncare mai ai? Al cincilea: Planifică. Dacă ai semnal, sună la 112 sau la Salvamont. Dacă nu, gândește-te la un adăpost provizoriu și rămâi pe loc. Nu te avânta aiurea, mai ales dacă se apropie seara.",
+  "lead": "Dacă te-ai rătăcit pe munte, urmează acești 5 pași simpli pentru a-ți crește șansele de a te orienta sau de a fi salvat.",
+  "keywords": "rătăcit pierdut urgență salvamont stop",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Dacă te-ai rătăcit pe munte, urmează acești 5 pași simpli pentru a-ți crește șansele de a te orienta sau de a fi salvat.",
+    "seed_topic": "Primii 5 pași când realizezi că ești pierdut",
+    "seed_topic_slug": "survival_lost_first_steps"
+  }
+}

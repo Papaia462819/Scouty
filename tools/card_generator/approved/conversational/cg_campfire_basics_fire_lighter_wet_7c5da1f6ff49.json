@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_lighter_wet_7c5da1f6ff49",
+  "card_id": "cg_campfire_basics_fire_lighter_wet_7c5da1f6ff49",
+  "domain": "campfire_basics",
+  "topic": "fire_lighter_wet",
+  "language": "ro",
+  "title": "Bricheta udă? Revino la foc!",
+  "body": "Ai scăpat bricheta în râu sau a plouat torențial? Nu-i bai, am pățit-o de zeci de ori. Scoate-i capacul, aruncă-i piatra și roata de la cremene, apoi scutură-o bine de apă. Suflă puternic în ea, mai ales în zona unde iese gazul. Dacă ai o bucată de material absorbant, gen șervețel sau batistă curată, înfășoară-o în jurul brichetei și stoarce-o ușor. Poți să o ții câteva minute la subraț sau într-un buzunar interior, căldura corpului ajută. Nu te grăbi să o încerci imediat, dă-i 5-10 minute. Apoi, pune piatra și roata la loc. De cele mai multe ori, o să pornească din prima. Dacă nu, mai repetă procesul. E o mică șmecherie care te salvează când ești departe de civilizație și ai nevoie de foc. Nu uita, o brichetă de rezervă e aur curat!",
+  "lead": "Află cum să-ți usuci rapid bricheta udă și să o faci să funcționeze din nou, chiar și în mijlocul naturii.",
+  "keywords": "bricheta uda uscare rapida foc munte echipament urgenta trucuri drumetie salvamont supravietuire",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți usuci rapid bricheta udă și să o faci să funcționeze din nou, chiar și în mijlocul naturii.",
+    "seed_topic": "Bricheta s-a udat — uscare rapidă și revenire la viață",
+    "seed_topic_slug": "fire_lighter_wet"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_shoes_for_river_c3433107615f",
+  "card_id": "cg_gear_and_preparati_gear_shoes_for_river_c3433107615f",
+  "domain": "gear_and_preparation",
+  "topic": "gear_shoes_for_river",
+  "language": "ro",
+  "title": "Traversare râu: încalță-te sau descalță-te?",
+  "body": "Aici e o dilemă veche, ca \"oul sau găina\". Eu zic așa: dacă apa e mică și știi sigur că nu-s pietre ascuțite, poți să te descalți. Dar, de cele mai multe ori, e mai sigur să traversezi cu bocancii în picioare. Da, se udă, dar măcar ai aderență și protecție. Gândește-te la glezne! Nimic nu e mai nasol decât să-ți scrântești piciorul în mijlocul râului. După traversare, scoți șosetele, le storci bine, pui unele uscate și mergi mai departe. Bocancii se usucă ei în mers. Sau, dacă ai, poți avea niște sandale de trekking ușoare, speciale pentru apă. Dar nu e musai, bocancii fac treaba.",
+  "lead": "Decizia de a traversa un râu cu sau fără bocanci depinde de condiții, dar siguranța și aderența sunt prioritare.",
+  "keywords": "traversare râu încălțăminte munte bocanci uzi siguranță râu echipament apă aderență",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Decizia de a traversa un râu cu sau fără bocanci depinde de condiții, dar siguranța și aderența sunt prioritare.",
+    "seed_topic": "Încălțăminte pentru traversare râu — poartă-le sau nu",
+    "seed_topic_slug": "gear_shoes_for_river"
+  }
+}

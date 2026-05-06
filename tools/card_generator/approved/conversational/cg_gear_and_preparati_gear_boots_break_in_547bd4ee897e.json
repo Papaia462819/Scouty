@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_boots_break_in_547bd4ee897e",
+  "card_id": "cg_gear_and_preparati_gear_boots_break_in_547bd4ee897e",
+  "domain": "gear_and_preparation",
+  "topic": "gear_boots_break_in",
+  "language": "ro",
+  "title": "Cum 'rupi' bocancii noi inainte de tura",
+  "body": "Ai bocanci noi? Excelent! Dar nu-i lua direct pe creastă, că-ți faci picioarele praf. Începe cu plimbări scurte prin parc sau prin oraș, de 1-2 ore. Apoi, mărește treptat distanța și dificultatea. Fă câteva ture scurte de o zi pe dealuri mai blânde, cu rucsacul în spate, ca să simți cum se comportă. E important să-i încalți cu șosetele pe care le vei folosi și în tura lungă. Nu vrei surprize neplăcute. Eu, de exemplu, am pățit-o o dată: i-am luat noi-nouți direct în Făgăraș și am ajuns cu niște bășici de toată frumusețea. Acum, îi testez măcar 20-30 de kilometri înainte de orice tură serioasă. Mai bine previi decât să regreți pe munte!",
+  "lead": "Află cum să-ți pregătești bocancii noi pentru o tură lungă, evitând bășicile și disconfortul.",
+  "keywords": "bocanci incaltaminte pregatire tura echipament drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți pregătești bocancii noi pentru o tură lungă, evitând bășicile și disconfortul.",
+    "seed_topic": "Cum 'rupi' o bocanci înainte de o tură lungă",
+    "seed_topic_slug": "gear_boots_break_in"
+  }
+}

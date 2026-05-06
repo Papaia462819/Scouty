@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_citire_nori_o_ora_7bb8437ca438",
+  "card_id": "cg_weather_and_season_citire_nori_o_ora_7bb8437ca438",
+  "domain": "weather_and_season",
+  "topic": "citire_nori_o_ora",
+  "language": "ro",
+  "title": "Cum citești norii pentru o oră înainte",
+  "body": "Nu trebuie să fii meteorolog ca să-ți dai seama în 60 de secunde dacă vremea se strică în următoarea oră. Trei lucruri privești: forma, culoarea și viteza de mișcare. Norii subțiri, înalți, ca niște fâșii albe (cirrus) — vreme stabilă, dar uneori semnal că ceva mare vine peste 12-24 de ore. Norii cumulus, ca niște bucăți de vată cu bază plată, înălțați separat pe cer — vreme bună de drumeție. Dacă cumulus-ul crește pe verticală și ia formă de turn, atenție: în 1-2 ore poate deveni cumulonimbus și aduce furtună. Norii întunecați, joși, care se așază peste creste ca o pătură — așteaptă-te la ploaie sau ceață în 30-60 de minute. Privește și viteza: dacă norii merg vizibil mai repede decât ai mers tu de la pauza precedentă, vântul de altitudine e puternic, schimbarea vremii e probabilă. Truc final: dacă vântul de la sol se întoarce brusc în direcție opusă, ceva se întâmplă. Coboară la următorul punct adăpostit.",
+  "lead": "Cumulus în creștere = furtună în 1-2 ore; nori joși peste creste = ploaie în 30-60 minute; vânt care se întoarce = coboară.",
+  "keywords": "nori citire vreme cumulus cirrus furtuna creasta vant",
+  "card_family": "DEFINITION",
+  "priority": 60,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": ["tip", "weather"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Cumulus în creștere = furtună în 1-2 ore; nori joși peste creste = ploaie în 30-60 minute; vânt care se întoarce = coboară.",
+    "seed_topic": "Cum citești norii pentru o oră înainte (nivel începător)",
+    "seed_topic_slug": "weather_clouds_basic"
+  }
+}

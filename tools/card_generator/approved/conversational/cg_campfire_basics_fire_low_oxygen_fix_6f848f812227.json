@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_low_oxygen_fix_6f848f812227",
+  "card_id": "cg_campfire_basics_fire_low_oxygen_fix_6f848f812227",
+  "domain": "campfire_basics",
+  "topic": "fire_low_oxygen_fix",
+  "language": "ro",
+  "title": "Focul abia trage? Trucul cu suflarea calmă",
+  "body": "Ai aprins focul, a început să mocnească, dar nu vrea să se întețească? E o situație clasică. Greșeala multora e să sufle agresiv, ca un dragon, dar asta doar împrăștie jarul și fumul, fără să-crească temperatura eficient. Secretul e să sufli calm, constant și prelung, direct la baza flăcării sau a jarului. Gândește-te că vrei să alimentezi cu oxigen, nu să faci vânt. Poți folosi un bețișor gol pe interior sau un pai metalic, dacă ai. Odată ce vezi că jarul se aprinde mai bine, poți adăuga lemne mai mici, apoi treptat, pe cele mai mari. Răbdarea e cheia, nu forța. Am pățit-o de atâtea ori, mai ales când plouase recent și lemnele erau cam umede. Cu suflarea calmă, am salvat multe focuri de la eșec total.",
+  "lead": "Află cum să-ți faci focul să ardă mai bine, suflând calm și constant, nu agresiv.",
+  "keywords": "foc de tabara aprindere foc suflat foc tehnici foc lemne umede jar",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți faci focul să ardă mai bine, suflând calm și constant, nu agresiv.",
+    "seed_topic": "Focul abia trage — trucul cu suflarea calmă, nu agresivă",
+    "seed_topic_slug": "fire_low_oxygen_fix"
+  }
+}

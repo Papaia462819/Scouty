@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_transport_victima_muscat_6b7b14d7bc58",
+  "card_id": "cg_medical_emergency_transport_victima_muscat_6b7b14d7bc58",
+  "domain": "medical_emergency",
+  "topic": "transport_victima_muscata_de_sarpe",
+  "language": "ro",
+  "title": "Transport victimă mușcată de șarpe",
+  "body": "După o mușcătură de șarpe suspectat a fi veninos, îndepărtați-vă imediat din zona în care a avut loc mușcătura. Îndepărtați orice obiect strâns (ex: inele, brățări) de pe zona mușcată pentru a evita complicațiile în caz de umflare. Reasigurați victima, deoarece majoritatea mușcăturilor de șarpe veninos nu cauzează moarte imediată.\n\nImobilizați complet persoana și transportați-o la o unitate medicală cât mai curând posibil. Dacă victima vomită, așezați-o în poziție de recuperare, pe partea stângă. Aplicarea unei presiuni la locul mușcăturii cu un bandaj compresiv poate fi potrivită în unele cazuri. Evitați metodele tradiționale de prim ajutor sau remediile pe bază de plante. Pentru durerea locală, care poate fi severă, se poate administra paracetamol.\n\nDeoarece mușcăturile de șarpe veninos pot fi o urgență medicală gravă, cu risc de paralizie respiratorie, hemoragii fatale sau insuficiență renală, apelați de urgență 112 sau Salvamont (0SALVAMONT) pentru asistență medicală și transport specializat.",
+  "lead": "După o mușcătură de șarpe veninos, imobilizați victima și transportați-o rapid la o unitate medicală, apelând 112/Salvamont.",
+  "keywords": "mușcătură de șarpe prim ajutor transport victimă urgență medicală imobilizare salvamont venin paralizie hemoragie spital",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Snakebite envenoming - The facts",
+  "source_url": "https://www.who.int/health-topics/snakebite/snakebite-envenoming---the-facts",
+  "publisher": "WHO",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "snakebite",
+    "first_aid",
+    "emergency_transport",
+    "venomous_bite",
+    "medical_emergency"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "După o mușcătură de șarpe veninos, imobilizați victima și transportați-o rapid la o unitate medicală, apelând 112/Salvamont.",
+    "evidence_confidence": "high",
+    "source_quote": "Immobilize the person completely and transport the person to a health facility as soon as possible. Vomiting may occur, so place the person on their left side in the recovery position.",
+    "source_id": "who_snakebite_facts"
+  }
+}

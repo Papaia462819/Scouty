@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_id_marten_squir_230d57ad062b",
+  "card_id": "cg_wildlife_romania_wildlife_id_marten_squir_230d57ad062b",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_id_marten_squirrel",
+  "language": "ro",
+  "title": "Jder vs. Veveriță: Cum le deosebești în pădure",
+  "body": "Salutare, prieteni! Când ești prin pădure și auzi foșnete sau vezi urme, e fain să știi cu cine ai de-a face. La veverițe, urmele sunt de obicei în perechi, cu cele din spate mai mari și aterizează în fața celor din față. Sunt sărituri scurte. Le auzi des țârâind sau chicotind, mai ales când se ceartă pe o alună. Jderul, în schimb, are un mers mai elegant, cu urmele aproape aliniate, ca o pisică mare, și sare mai mult. Sunetele lui sunt mai variate, de la un mârâit la un fel de ciripit ascuțit, mai ales noaptea. Dacă vezi urme lungi și înguste, cu cinci degete și gheare, e jder. Veverița are patru degete la cele din față și cinci la cele din spate, dar ghearele sunt mai mici. E fain să știi, îți dă altă perspectivă asupra pădurii!",
+  "lead": "Află cum să deosebești jderul de veveriță după urme și sunete, pentru o experiență mai bogată în natură.",
+  "keywords": "jder veveriță urme animale sunete animale wildlife românia recunoaștere animale",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să deosebești jderul de veveriță după urme și sunete, pentru o experiență mai bogată în natură.",
+    "seed_topic": "Jderul și veverița — diferența la urme și la sunete",
+    "seed_topic_slug": "wildlife_id_marten_squirrel"
+  }
+}

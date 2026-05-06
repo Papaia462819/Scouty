@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_etiquette_dogs_d5cc6330e915",
+  "card_id": "cg_wildlife_romania_wildlife_etiquette_dogs_d5cc6330e915",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_etiquette_dogs",
+  "language": "ro",
+  "title": "Câinele tău și animalele sălbatice: reguli simple",
+  "body": "Băi, știi cum e, munții sunt casa lor, nu a noastră. Dacă vii cu patrupedul, ține-l mereu în lesă, mai ales în zonele cu animale sălbatice. Nu vrei să-ți sperii ursul sau să-ți fugă capra neagră din cauza unui cățel entuziast. E și pentru siguranța lui! Un lup sau un mistreț nu glumesc. Am văzut odată un ciobanesc care a crezut că poate \"discuta\" cu un cerb... nu s-a terminat bine pentru cerb, dar nici pentru stăpânul care a alergat după el. Respectă natura, respectă și celelalte viețuitoare. E simplu: lesa face minuni și te scutește de multe bătăi de cap.",
+  "lead": "Află cum să-ți protejezi câinele și animalele sălbatice în munți, ținându-l în lesă.",
+  "keywords": "caine munte animale salbatice lesa caine siguranta animale drumetie caine",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți protejezi câinele și animalele sălbatice în munți, ținându-l în lesă.",
+    "seed_topic": "Câinele tău și animalele sălbatice — reguli simple",
+    "seed_topic_slug": "wildlife_etiquette_dogs"
+  }
+}

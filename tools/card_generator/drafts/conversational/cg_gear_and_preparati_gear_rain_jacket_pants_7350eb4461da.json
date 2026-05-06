@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_rain_jacket_pants_7350eb4461da",
+  "card_id": "cg_gear_and_preparati_gear_rain_jacket_pants_7350eb4461da",
+  "domain": "gear_and_preparation",
+  "topic": "gear_rain_jacket_pants",
+  "language": "ro",
+  "title": "Geaca, Poncho sau Costum Impermeabil?",
+  "body": "Alegerea echipamentului de ploaie e crucială. Geaca impermeabilă e baza, dar ai nevoie și de pantaloni. Eu prefer o geacă bună de tip hardshell, care respiră, și pantaloni impermeabili separați. E mai versatil așa: poți da jos pantalonii când se oprește ploaia fără să te dezbraci complet. Poncho-ul e bun pentru ploi scurte și intense, mai ales dacă ai un rucsac mare pe care vrei să-l protejezi rapid, dar la vânt puternic te face navă cu pânze. Costumul complet e overkill pentru majoritatea turelor, e mai mult pentru stat la pândă în ploaie torențială. Gândește-te la durata turei și la intensitatea ploii. Nu uita, stratul de bază e cel mai important, dar un strat exterior bun te salvează de la hipotermie.",
+  "lead": "Află ce tip de echipament de ploaie e cel mai potrivit pentru tura ta, de la geacă și pantaloni la poncho sau costum complet.",
+  "keywords": "echipament ploaie geaca impermeabila poncho drumetie pantaloni impermeabili protectie ploaie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce tip de echipament de ploaie e cel mai potrivit pentru tura ta, de la geacă și pantaloni la poncho sau costum complet.",
+    "seed_topic": "Geacă vs poncho vs costum impermeabil",
+    "seed_topic_slug": "gear_rain_jacket_pants"
+  }
+}

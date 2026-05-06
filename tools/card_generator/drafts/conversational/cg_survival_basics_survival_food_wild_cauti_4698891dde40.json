@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_food_wild_cauti_4698891dde40",
+  "card_id": "cg_survival_basics_survival_food_wild_cauti_4698891dde40",
+  "domain": "survival_basics",
+  "topic": "survival_food_wild_caution",
+  "language": "ro",
+  "title": "Plante salbatice: Regula de aur 'cand nu stii, nu mananci'",
+  "body": "Băi, știu că sună tentant să încerci plante din sălbăticie, mai ales când ești flămând sau curios. Dar regula de aur e simplă și clară: dacă nu ești 100% sigur ce e, NU mănânci! Carpații sunt plini de plante care arată inofensiv, dar sunt toxice. De exemplu, brândușa de toamnă seamănă cu șofranul, dar e mortală. Sau mătrăguna, care are fructe ca niște cireșe negre, dar e extrem de periculoasă. Mai bine te ții de proviziile tale sau de ce știi sigur că e comestibil. Nu e loc de ghicit aici. O singură greșeală te poate trimite direct la spital, sau mai rău. Am văzut destule cazuri. Fii inteligent, nu curajos inutil.",
+  "lead": "Află de ce e crucial să nu consumi plante sălbatice dacă nu le recunoști cu certitudine, pentru a evita pericolele.",
+  "keywords": "plante salbatice nu manca siguranta munte toxice supravietuire alimentatie munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce e crucial să nu consumi plante sălbatice dacă nu le recunoști cu certitudine, pentru a evita pericolele.",
+    "seed_topic": "Plante sălbatice — de ce regula 'când nu știi, nu mănânci'",
+    "seed_topic_slug": "survival_food_wild_caution"
+  }
+}

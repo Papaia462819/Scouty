@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_alternates_for_rai_0b30e0727be7",
+  "card_id": "cg_route_intelligence_route_alternates_for_rai_0b30e0727be7",
+  "domain": "route_intelligence_romania",
+  "topic": "route_alternates_for_rain",
+  "language": "ro",
+  "title": "Trasee alternative pe ploaie: Siguranța pe primul loc",
+  "body": "Când plouă, munții se schimbă radical. Evită crestele expuse, unde vântul te poate dezechilibra, și văile înguste, unde viiturile pot fi periculoase. Gândește-te la trasee prin pădure, cu pante mai domoale. Pădurea îți oferă adăpost și solul e mai stabil. De exemplu, în loc de creasta principală a Făgărașului, alege o potecă prin pădure pe Valea Sâmbetei sau Valea Bâlei, până la o cabană. Verifică mereu prognoza meteo și nu te sfii să schimbi planul. E mai bine să ajungi la cabană uscat și întreg, chiar dacă nu ai bifat vârful propus. Munții nu fug nicăieri, îi găsești și altădată.",
+  "lead": "Află cum să alegi trasee mai sigure prin munți când vremea se strică, evitând pericolele și bucurându-te de natură.",
+  "keywords": "trasee ploaie siguranta munte alternative traseu drumetie ploaie padure adăpost viituri pericole",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să alegi trasee mai sigure prin munți când vremea se strică, evitând pericolele și bucurându-te de natură.",
+    "seed_topic": "Trasee alternative când plouă — variante mai sigure",
+    "seed_topic_slug": "route_alternates_for_rain"
+  }
+}

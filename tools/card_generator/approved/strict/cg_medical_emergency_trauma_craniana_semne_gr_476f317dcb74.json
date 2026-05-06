@@ -1,0 +1,29 @@
+{
+  "chunk_id": "cg_medical_emergency_trauma_craniana_semne_gr_476f317dcb74",
+  "card_id": "cg_medical_emergency_trauma_craniana_semne_gr_476f317dcb74",
+  "domain": "medical_emergency",
+  "topic": "trauma_craniana_semne_grave",
+  "language": "ro",
+  "title": "Trauma craniană: semne care impun evacuare imediată",
+  "body": "Orice lovitură puternică la cap pe traseu trebuie luată în serios, chiar dacă persoana pare că își revine. Semnele care indică o leziune potențial gravă includ: pierderea conștienței (chiar și pentru câteva secunde), confuzie sau dezorientare persistentă, vărsături repetate, dureri de cap care se agravează, vedere dublă sau neclară, sângerare sau scurgere de lichid clar din nas sau urechi, asimetrie a pupilelor, slăbiciune pe o parte a corpului, vorbire dificilă, somnolență accentuată sau dificultate de a fi trezit. Dacă apare oricare dintre aceste semne, este o urgență medicală. Sunați imediat 0SALVAMONT (apel: 0SALVAMONT) sau 112 și solicitați evacuare. Stabilizați capul și gâtul victimei în poziția în care le-ați găsit; nu mișcați persoana decât dacă viața este în pericol direct (de exemplu, risc de cădere ulterioară). Dacă persoana este conștientă, mențineți-o orizontală, calmă și caldă. Dacă este inconștientă dar respiră, plasați-o cu atenție în poziție laterală de siguranță. Nu dați mâncare sau apă; nu dați medicamente împotriva durerii pe cont propriu, deoarece pot masca semnele. Monitorizați respirația și pulsul până la sosirea ajutorului.",
+  "keywords": "trauma cap lovitura confuzie pierdere constienta salvamont evacuare urgenta",
+  "card_family": "SCENARIO",
+  "priority": 92,
+  "tier": "A",
+  "source_title": "Ce faci daca esti martorul unui accident montan",
+  "source_url": "https://www.salvamontromania.ro/martor-accident-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 5,
+  "safety_tags": ["head_trauma", "first_aid", "evacuation", "life_threatening"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Pierderea conștienței, confuzia, vărsăturile sau scurgerea din urechi după o lovitură la cap impun apel imediat la 0SALVAMONT/112 și imobilizare cu cap-gât stabilizate.",
+    "evidence_confidence": "high",
+    "source_id": "salvamont_martor_accident"
+  }
+}

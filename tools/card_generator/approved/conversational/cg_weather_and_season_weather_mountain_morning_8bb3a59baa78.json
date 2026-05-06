@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_mountain_morning_8bb3a59baa78",
+  "card_id": "cg_weather_and_season_weather_mountain_morning_8bb3a59baa78",
+  "domain": "weather_and_season",
+  "topic": "weather_mountain_morning",
+  "language": "ro",
+  "title": "Dimineața în Carpați: Secretul unei ture reușite",
+  "body": "Băi, dimineața e sfântă în munți, mai ales vara. Pleacă devreme, pe la 6-7, cât e încă răcoare și lumina aia aurie te motivează. Până la prânz, ai deja o bună parte din traseu făcut. De ce e important? Păi, pe la amiază, mai ales în iulie-august, se adună norii ăia pufoși care, în 2-3 ore, pot deveni furtuni zdravene, cu tunete și fulgere. Nu vrei să te prindă pe creastă. În plus, animalele sălbatice sunt mai active dimineața, ai șanse mai mari să vezi o căprioară sau chiar un urs, de la distanță, bineînțeles. Eu am învățat-o pe pielea mea, după ce am prins o ploaie torențială pe Piatra Craiului. Acum plec mereu cu noaptea-n cap.",
+  "lead": "Află de ce plecarea dimineața devreme este cheia succesului și siguranței în turele montane de vară.",
+  "keywords": "dimineață vară furtuni traseu siguranță animale sălbatice",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce plecarea dimineața devreme este cheia succesului și siguranței în turele montane de vară.",
+    "seed_topic": "De ce dimineața e regele în Carpați vara",
+    "seed_topic_slug": "weather_mountain_morning"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_temp_drop_per_10_19a18de61ff8",
+  "card_id": "cg_weather_and_season_weather_temp_drop_per_10_19a18de61ff8",
+  "domain": "weather_and_season",
+  "topic": "weather_temp_drop_per_100m",
+  "language": "ro",
+  "title": "Cat de frig e sus pe munte?",
+  "body": "Ține minte regula de bază: la fiecare 100 de metri urcați, temperatura scade cu aproximativ 0,6 grade Celsius. Așa că, dacă pleci de la 1000m altitudine și sunt 20 de grade, iar vârful e la 2000m, sus vor fi vreo 14 grade. Pare puțin, dar adaugă vântul și umezeala și se simte mult mai rece. De-asta e musai să ai la tine un polar gros sau o jachetă de vânt, chiar dacă jos e soare și cald. Nu de puține ori am văzut drumeți în tricou, tremurând de frig pe creastă. Mai bine să ai și să nu-ți trebuiască, decât să-ți trebuiască și să n-ai! Îmbracă-te în straturi: un tricou tehnic, un polar și o geacă impermeabilă sunt o combinație câștigătoare.",
+  "lead": "Află cum scade temperatura cu altitudinea și de ce trebuie să fii pregătit pentru frig, chiar și în zilele calde de vară.",
+  "keywords": "temperatura altitudine frig echipament vreme munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum scade temperatura cu altitudinea și de ce trebuie să fii pregătit pentru frig, chiar și în zilele calde de vară.",
+    "seed_topic": "Regula scăderii temperaturii cu altitudinea",
+    "seed_topic_slug": "weather_temp_drop_per_100m"
+  }
+}

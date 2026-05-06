@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_animal_calm_sig_9e848d7b8fcb",
+  "card_id": "cg_wildlife_romania_wildlife_animal_calm_sig_9e848d7b8fcb",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_animal_calm_signs",
+  "language": "ro",
+  "title": "Cum citești limbajul corpului animalelor sălbatice",
+  "body": "Când ești pe potecă și dai nas în nas cu un animal, e bine să știi dacă e relaxat sau stresat. Un animal relaxat își vede de treabă, urechile sunt normale, nu încordate, iar mișcările sunt lente, fără smucituri. Poate chiar te ignoră, ceea ce e un semn bun. Dar dacă vezi urechi ciulite, orientate spre tine, coada ridicată sau, dimpotrivă, băgată între picioare, mișcări bruște, sau un rânjet, atunci e clar că e alertat. Un animal stresat poate fi imprevizibil. Cel mai bun lucru e să-i lași spațiu și să te retragi încet, fără mișcări bruște. Nu uita, ești în casa lor.",
+  "lead": "Învață să distingi semnele de relaxare sau alertă la animalele sălbatice pentru a evita situațiile neplăcute.",
+  "keywords": "animale sălbatice limbaj corporal siguranță munte întâlniri animale respect faună",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață să distingi semnele de relaxare sau alertă la animalele sălbatice pentru a evita situațiile neplăcute.",
+    "seed_topic": "Semne că un animal e relaxat sau alertat la prezența ta",
+    "seed_topic_slug": "wildlife_animal_calm_signs"
+  }
+}

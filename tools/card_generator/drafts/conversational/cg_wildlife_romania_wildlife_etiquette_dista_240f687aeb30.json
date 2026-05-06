@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_etiquette_dista_240f687aeb30",
+  "card_id": "cg_wildlife_romania_wildlife_etiquette_dista_240f687aeb30",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_etiquette_distance",
+  "language": "ro",
+  "title": "Respectă distanța față de animalele sălbatice",
+  "body": "Băi, am văzut destule animale în munți, de la capre negre la urși. Regula de aur e simplă: dacă animalul își schimbă comportamentul din cauza ta, ești prea aproape. Ideal ar fi să menții o distanță de cel puțin 20-30 de metri față de animalele mici și de cel puțin 100 de metri față de animalele mari, cum ar fi urșii sau cerbii. Nu le hrăni niciodată, nici măcar o bucățică de pâine. Asta le face dependente de oameni și le pune în pericol. Odată, am văzut un urs la o distanță sigură și am stat pur și simplu să-l privesc cum își vede de treabă. E o experiență mult mai faină așa, crede-mă. Lasă-le spațiul lor, e casa lor, noi suntem doar în vizită.",
+  "lead": "Află cum să interacționezi responsabil cu animalele sălbatice din Carpați, menținând o distanță etică și sigură pentru ambele părți.",
+  "keywords": "animale sălbatice distanță sigură respect natură nu hrăni animale etichă munte urși carpați",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să interacționezi responsabil cu animalele sălbatice din Carpați, menținând o distanță etică și sigură pentru ambele părți.",
+    "seed_topic": "Distanța minimă etică față de orice animal sălbatic",
+    "seed_topic_slug": "wildlife_etiquette_distance"
+  }
+}

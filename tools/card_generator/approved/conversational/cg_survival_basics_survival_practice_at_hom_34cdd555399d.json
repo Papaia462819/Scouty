@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_practice_at_hom_34cdd555399d",
+  "card_id": "cg_survival_basics_survival_practice_at_hom_34cdd555399d",
+  "domain": "survival_basics",
+  "topic": "survival_practice_at_home",
+  "language": "ro",
+  "title": "Antrenament acasa pentru munte",
+  "body": "Băi, înainte să te arunci pe creste, hai să exersăm acasă câteva chestii. Începe cu noduri simple, gen nodul opt sau nodul de școtă, utile la ancorat cortul sau la mici reparații. Apoi, învață să-ți împachetezi rucsacul eficient. Pune lucrurile grele aproape de spate, la jumătatea superioară, iar cele de care ai nevoie des, la îndemână. Exersează montarea cortului în beznă, cu lanterna frontală. Și nu uita de orientare: folosește o hartă și o busolă prin parc, identifică repere. E amuzant și te scutește de bătăi de cap pe munte. Odată am montat cortul invers, pe ploaie, că nu exersasem. Nu vrei să pățești asta!",
+  "lead": "Exersează acasă noduri, împachetarea rucsacului, montarea cortului și orientarea pentru a fi pregătit pe munte.",
+  "keywords": "noduri impachetat rucsac montat cort orientare exercitii acasa pregatire munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Exersează acasă noduri, împachetarea rucsacului, montarea cortului și orientarea pentru a fi pregătit pe munte.",
+    "seed_topic": "Skills pe care le exersezi în curte înainte de munte",
+    "seed_topic_slug": "survival_practice_at_home"
+  }
+}

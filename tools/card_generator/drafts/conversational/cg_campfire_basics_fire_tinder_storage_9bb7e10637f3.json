@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_tinder_storage_9bb7e10637f3",
+  "card_id": "cg_campfire_basics_fire_tinder_storage_9bb7e10637f3",
+  "domain": "campfire_basics",
+  "topic": "fire_tinder_storage",
+  "language": "ro",
+  "title": "Cum tii iasca uscata cand totul e ud",
+  "body": "Ploaia torențială ți-a udat tot rucsacul? Nu-i problemă, se întâmplă și la case mai mari. Regula de aur pentru a păstra iasca uscată este redundanța. Pune iasca într-o pungă mică, resigilabilă, din care scoți tot aerul. Apoi, punga asta o bagi într-un sac de compresie impermeabil (un dry bag), alături de alte lucruri esențiale care trebuie să rămână uscate, cum ar fi un rând de haine de schimb sau sacul de dormit. Chiar dacă apa pătrunde prin cusăturile rucsacului și trece de husa de ploaie (și crede-mă, se întâmplă), ai două bariere de protecție. O altă variantă e o cutie mică de plastic cu capac etanș, gen caserolă. E mai rigidă, protejează iasca și de strivire. Astfel, când ajungi la refugiu sau la locul de cort, vei avea combustibilul perfect pentru a porni focul care să te usuce.",
+  "lead": "Ploaia torențială ți-a udat tot rucsacul? Iată cum să te asiguri că iasca pentru foc rămâne perfect uscată, indiferent de vreme.",
+  "keywords": "iască foc ploaie rucsac ud echipament supraviețuire impermeabil",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Ploaia torențială ți-a udat tot rucsacul? Iată cum să te asiguri că iasca pentru foc rămâne perfect uscată, indiferent de vreme.",
+    "seed_topic": "Cum cari iasca uscată într-un rucsac umed",
+    "seed_topic_slug": "fire_tinder_storage"
+  }
+}

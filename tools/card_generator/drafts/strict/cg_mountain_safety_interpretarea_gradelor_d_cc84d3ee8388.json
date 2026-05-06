@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_mountain_safety_interpretarea_gradelor_d_cc84d3ee8388",
+  "card_id": "cg_mountain_safety_interpretarea_gradelor_d_cc84d3ee8388",
+  "domain": "mountain_safety",
+  "topic": "interpretarea_gradelor_de_risc_avalansa_1_5",
+  "language": "ro",
+  "title": "Scara europeană a riscului de avalanșă (gradele 1-5)",
+  "body": "Stratul de zăpadă este evaluat pe o scară de la 1 la 5 pentru a determina riscul de avalanșă. Consultați întotdeauna buletinul nivometeorologic local.\n\n**Grad 1 - Redus:** Stratul de zăpadă este în general stabilizat. Declanșarea este posibilă doar izolat, pe pante foarte înclinate și la supraîncărcări mari. Spontan, pot apărea doar curgeri sau avalanșe mici.\n\n**Grad 2 - Moderat:** Pe anumite pante, zăpada este mediu stabilizată; în rest, este stabilă. Declanșarea este posibilă la supraîncărcări mari, pe pantele descrise în buletin. Nu sunt așteptate declanșări spontane de mare amploare.\n\n**Grad 3 - Însemnat:** Pe numeroase pante suficient de înclinate, zăpada este mediu sau puțin stabilizată. Declanșarea este posibilă chiar și la o supraîncărcare slabă, mai ales pe pantele specificate. Sunt posibile unele declanșări spontane de avalanșe medii sau mari.\n\n**Grad 4 - Mare:** Zăpada este puțin stabilizată pe majoritatea pantelor înclinate. Declanșarea este probabilă chiar și la o supraîncărcare slabă. Se pot produce spontan numeroase avalanșe medii și mari.\n\n**Grad 5 - Foarte mare:** Instabilitatea zăpezii este generalizată. Chiar și pe pante puțin abrupte se pot produce spontan numeroase avalanșe de mari dimensiuni. În caz de urgență, apelați 112 sau Salvamont (0SALVAMONT).",
+  "lead": "Înțelegeți cele cinci grade ale scării europene de risc de avalanșă pentru a evalua corect stabilitatea zăpezii și probabilitatea declanșării.",
+  "keywords": "avalanșă risc zăpadă scară europeană siguranță montană nivometeorologie stabilitate zăpadă",
+  "card_family": "DEFINITION",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Scala riscului de avalansa",
+  "source_url": "https://www.meteoromania.ro/despre-noi/meteorologie-operationala/activitati-de-baza/nivometeoroogie/scala-riscului-de-avalansa/",
+  "publisher": "ANM / Meteoromania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "avalanche_risk",
+    "snow_safety",
+    "mountain_safety",
+    "hazard_scale"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Înțelegeți cele cinci grade ale scării europene de risc de avalanșă pentru a evalua corect stabilitatea zăpezii și probabilitatea declanșării.",
+    "evidence_confidence": "high",
+    "source_quote": "Declanşarea avalanşelor este posibilă chiar în condiţiile unei slabe supraîncărcări**, mai ales pe pantele descrise în buletin. În anumite situaţii sunt posibile unele declanşări spontane de avalanşe medii şi câteodată chiar mari.",
+    "source_id": "anm_avalanche_scale"
+  }
+}

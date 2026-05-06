@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_pace_in_heat_267b243090d8",
+  "card_id": "cg_weather_and_season_weather_pace_in_heat_267b243090d8",
+  "domain": "weather_and_season",
+  "topic": "weather_pace_in_heat",
+  "language": "ro",
+  "title": "Ritmul pe canicula de vară: Cum să nu te topești pe traseu",
+  "body": "Băi, pe căldură mare, nu te arunca ca berbecul la deal! Începe dimineața devreme, la răcoare. Ia pauze mai dese și mai lungi, mai ales la umbră. Bea apă cu sorbituri mici și dese, nu toată sticla odată. Mănâncă ceva ușor, fructe, batoane energizante, nu slănină cu ceapă. Eu, când e soare puternic, îmi iau o pălărie cu boruri largi și o batistă udă la gât. Ajută enorm! Și nu uita de crema de soare, că arzi mai rău ca micii pe grătar. Ascultă-ți corpul, dacă simți că te ia amețeala, oprește-te imediat. Nu e concurs, e drumeție!",
+  "lead": "Află cum să-ți adaptezi ritmul de drumeție pe timp de vară, pentru a evita epuizarea și a te bucura de traseu.",
+  "keywords": "ritm drumeție căldură vară hidratare traseu pauze umbră echipament vară protecție solară drumeție vară",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți adaptezi ritmul de drumeție pe timp de vară, pentru a evita epuizarea și a te bucura de traseu.",
+    "seed_topic": "Reglarea ritmului în zile calde de vară",
+    "seed_topic_slug": "weather_pace_in_heat"
+  }
+}

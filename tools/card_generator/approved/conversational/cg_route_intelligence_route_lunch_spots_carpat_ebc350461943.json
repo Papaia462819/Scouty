@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_lunch_spots_carpat_ebc350461943",
+  "card_id": "cg_route_intelligence_route_lunch_spots_carpat_ebc350461943",
+  "domain": "route_intelligence_romania",
+  "topic": "route_lunch_spots_carpati",
+  "language": "ro",
+  "title": "Pauza de prânz în munți: Unde și cum?",
+  "body": "Când ești pe traseu, pauza de prânz nu e doar despre mâncare, ci și despre refacerea energiei și bucuria peisajului. Caută un loc ferit de vânt, cu o priveliște faină, dacă se poate. Evită zonele expuse la căderi de pietre sau la avalanșe, mai ales iarna. O stâncă plată, un luminiș, marginea unei poieni, lângă un izvor (dacă apa e potabilă!) sunt locuri ideale. Scoate-ți rucsacul, întinde-ți picioarele, bea apă și mănâncă ceva consistent: un sandviș, fructe uscate, nuci. Nu zăbovi prea mult, ca să nu te răcești sau să nu te prindă întunericul. Maxim 30-45 de minute e suficient. Și nu uita: tot ce ai adus, iei înapoi! Fără gunoaie în natură, te rog.",
+  "lead": "Află cum să alegi cel mai bun loc pentru pauza de prânz pe munte, pentru a te bucura de peisaj și a-ți reîncărca bateriile în siguranță.",
+  "keywords": "pauza de prânz locuri de pauză sfaturi traseu hidratare alimentație munte curățenie munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să alegi cel mai bun loc pentru pauza de prânz pe munte, pentru a te bucura de peisaj și a-ți reîncărca bateriile în siguranță.",
+    "seed_topic": "Unde meriți să te oprești pentru pauza de prânz",
+    "seed_topic_slug": "route_lunch_spots_carpati"
+  }
+}

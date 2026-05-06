@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_wildlife_romania_cand_fugi_vs_cand_ramai__f25d19e1d30c",
+  "card_id": "cg_wildlife_romania_cand_fugi_vs_cand_ramai__f25d19e1d30c",
+  "domain": "wildlife_romania",
+  "topic": "cand_fugi_vs_cand_ramai_pe_loc",
+  "language": "ro",
+  "title": "Întâlnire cu ursul: ce faci când te-a observat",
+  "body": "Dacă un urs te-a observat și îți acordă atenție, păstrează-ți calmul. Identifică-te vorbind calm, astfel încât ursul să știe că ești un om și nu o pradă. Rămâi nemișcat; stai pe loc, dar flutură-ți încet brațele. Ajută ursul să te recunoască drept om. Acesta se poate apropia sau se poate ridica pe picioarele din spate pentru a vedea sau mirosi mai bine. Un urs care stă în două picioare este de obicei curios, nu amenințător. Continuă să vorbești cu ursul pe un ton scăzut; acest lucru te va ajuta să rămâi mai calm, iar pentru urs nu va fi amenințător. Un țipăt sau o mișcare bruscă pot declanșa un atac. Nu imita niciodată sunete de urs și nu scoate un țipăt ascuțit. Nu face zgomote puternice sau țipete – ursul ar putea crede că este sunetul unei prăzi. Ridicați imediat copiii mici.",
+  "lead": "Dacă un urs te-a observat, păstrează-ți calmul și identifică-te ca om pentru a preveni escaladarea situației.",
+  "keywords": "urs întâlnire siguranță sălbăticie rămâi pe loc calm comportament defensiv Carpați",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Bear Safety",
+  "source_url": "https://www.nps.gov/subjects/bears/safety.htm",
+  "publisher": "National Park Service",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "bear_encounter",
+    "wildlife_safety",
+    "stay_calm",
+    "defensive_behavior",
+    "mountain_safety"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Dacă un urs te-a observat, păstrează-ți calmul și identifică-te ca om pentru a preveni escaladarea situației.",
+    "evidence_confidence": "high",
+    "source_quote": "Identify yourself by talking calmly so the bear knows you are a human and not a prey animal. Remain still; stand your ground but slowly wave your arms. Help the bear recognize you as a human. A standing bear is usually curious, not threatening.",
+    "source_id": "nps_bear_safety"
+  }
+}

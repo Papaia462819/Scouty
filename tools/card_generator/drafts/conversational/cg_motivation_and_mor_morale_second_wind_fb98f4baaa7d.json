@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_second_wind_fb98f4baaa7d",
+  "card_id": "cg_motivation_and_mor_morale_second_wind_fb98f4baaa7d",
+  "domain": "motivation_and_morale",
+  "topic": "morale_second_wind",
+  "language": "ro",
+  "title": "Al doilea suflu: cand picioarele tipa",
+  "body": "Știi momentul ăla când simți că nu mai poți face niciun pas? Picioarele ard, plămânii cer pauză. E perfect normal! Eu îi zic \"zidul\", și toți drumeții îl întâlnesc. Secretul e să nu te oprești brusc. Încetinește ritmul, respiră adânc și regulat. Concentrează-te pe un punct fix în fața ta, nu pe cât mai ai de urcat. Gândește-te la o recompensă mică, dar concretă, care te așteaptă sus – o ciocolată, panorama. Uneori, o gură de apă și un ritm constant, chiar și lent, fac minuni. Amintește-ți de ce ai plecat la drum. Ești mai puternic decât crezi!",
+  "lead": "Află cum să-ți găsești resursele interioare când oboseala te copleșește pe munte și picioarele îți refuză ascultarea.",
+  "keywords": "al doilea suflu motivatie drumetie oboseala munte rezistenta fizica depasire limite sfaturi drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți găsești resursele interioare când oboseala te copleșește pe munte și picioarele îți refuză ascultarea.",
+    "seed_topic": "Al doilea suflu — cum îl găsești când picioarele țipă",
+    "seed_topic_slug": "morale_second_wind"
+  }
+}

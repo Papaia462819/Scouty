@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_first_aid_quick_acce_ff653aff9305",
+  "card_id": "cg_tips_and_tricks_tip_first_aid_quick_acce_ff653aff9305",
+  "domain": "tips_and_tricks",
+  "topic": "tip_first_aid_quick_access",
+  "language": "ro",
+  "title": "Trusa de prim ajutor: la îndemână, nu la fundul rucsacului!",
+  "body": "Salutare, prieteni! Vreau să vă spun o chestie vitală, învățată pe pielea mea. Trusa de prim ajutor nu se ține niciodată la fundul rucsacului, sub sandvișuri și șosete de schimb! Gândiți-vă la un scenariu: ai nevoie urgent de un bandaj, o folie de supraviețuire sau o pastilă pentru durere. Începi să scotocești, să arunci tot din rucsac pe jos, în ploaie sau vânt. Pierzi timp prețios și te enervezi. Soluția e simplă: pune trusa într-un buzunar exterior, lateral, sau chiar atașată cu chingi de rucsac, la vedere. Eu o țin într-un buzunar de la capacul superior, accesibilă în maxim 10 secunde. E ca și cum ai avea o cheie de rezervă la mașină, dar mult mai importantă. Nu știi niciodată când îți va salva ziua... sau piciorul!",
+  "lead": "Trusa de prim ajutor trebuie să fie mereu la îndemână, nu îngropată în rucsac, pentru acces rapid în situații de urgență.",
+  "keywords": "trusă prim ajutor echipament accesibil siguranță munte organizare rucsac urgențe montane sfaturi drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Trusa de prim ajutor trebuie să fie mereu la îndemână, nu îngropată în rucsac, pentru acces rapid în situații de urgență.",
+    "seed_topic": "Trusa pe sus, nu pe jos — accesibilă în 10 secunde",
+    "seed_topic_slug": "tip_first_aid_quick_access"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_id_capercaillie_bd2769cb42fd",
+  "card_id": "cg_wildlife_romania_wildlife_id_capercaillie_bd2769cb42fd",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_id_capercaillie",
+  "language": "ro",
+  "title": "Cocoșul de munte: când îl auzi și de ce să nu-l deranjezi",
+  "body": "Băi, știi că ești cu adevărat în sălbăticie când auzi cocoșul de munte! Cântă el, de obicei, dimineața devreme, la răsărit, sau seara, înainte de apus, mai ales primăvara. E un sunet inconfundabil, puternic, ca un fel de cloncănit metalic, urmat de un fâșâit. Dacă ai norocul să-l auzi, oprește-te și bucură-te de moment. Dar atenție mare: nu te apropia! E o pasăre extrem de timidă și sensibilă la prezența umană. Deranjul, mai ales în perioada de împerechere, poate duce la abandonarea cuiburilor sau la stres sever. Fii un observator discret, ca o umbră în peisaj. Lasă-l să-și vadă de treaba lui, să cânte și să-și ducă viața. Respectul față de natură e cel mai important echipament pe care-l cari în rucsac.",
+  "lead": "Află când și cum poți auzi cocoșul de munte și de ce e crucial să nu-l deranjezi în habitatul său natural.",
+  "keywords": "cocoș de munte wildlife păsări observare respect natură",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află când și cum poți auzi cocoșul de munte și de ce e crucial să nu-l deranjezi în habitatul său natural.",
+    "seed_topic": "Cocoșul de munte: când îl auzi cântând și de ce nu deranjezi",
+    "seed_topic_slug": "wildlife_id_capercaillie"
+  }
+}

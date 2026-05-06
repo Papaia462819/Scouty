@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_flagging_for_oth_1a023ca16939",
+  "card_id": "cg_trail_culture_ro_culture_flagging_for_oth_1a023ca16939",
+  "domain": "trail_culture_ro",
+  "topic": "culture_flagging_for_others",
+  "language": "ro",
+  "title": "Semne pe poteca, fara sa strici natura",
+  "body": "Când mergi pe munte, e fain să lași un semn discret pentru cei care vin din urmă, mai ales la bifurcații sau pe vreme rea. Nu e vorba de graffiti sau de dărâmat pietre! Folosește elemente naturale: o crenguță ruptă și așezată într-o direcție, trei pietre mici puse una peste alta (cairn), sau o bucată de mușchi întoarsă. Odată, pe o ceață deasă în Piatra Craiului, am găsit un cairn care mi-a salvat ziua. E un gest de respect și solidaritate între drumeți. Asigură-te că semnul e vizibil, dar nu deranjant. Scopul e să ajuți, nu să lași gunoi sau să alterezi peisajul. După ce au trecut și alții, vântul sau ploaia oricum le vor șterge.",
+  "lead": "Învață cum să lași semne discrete și utile pe potecă pentru alți drumeți, folosind doar elemente naturale, fără să afectezi mediul.",
+  "keywords": "semne poteca cairn orientare munte cultura montana respect natura solidaritate drumeti",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să lași semne discrete și utile pe potecă pentru alți drumeți, folosind doar elemente naturale, fără să afectezi mediul.",
+    "seed_topic": "Lasă semn pentru cei care vin din spate — fără să strici natura",
+    "seed_topic_slug": "culture_flagging_for_others"
+  }
+}

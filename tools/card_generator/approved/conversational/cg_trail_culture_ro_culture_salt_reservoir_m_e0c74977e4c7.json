@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_salt_reservoir_m_e0c74977e4c7",
+  "card_id": "cg_trail_culture_ro_culture_salt_reservoir_m_e0c74977e4c7",
+  "domain": "trail_culture_ro",
+  "topic": "culture_salt_reservoir_meet",
+  "language": "ro",
+  "title": "Rezervorul cu sare: oaza ciobanilor",
+  "body": "Când vezi un rezervor cu sare în mijlocul golului alpin, să știi că e un punct de întâlnire pentru ciobani și turmele lor. E ca un fel de cafenea montană, dar cu mult mai multă lână și mai puțină cafea. Aici se adună oile să-și ia doza de minerale, iar ciobanii mai schimbă o vorbă, mai află noutăți. E un loc de socializare vechi de când lumea și muntele. Dacă ai noroc, poți prinde o discuție autentică despre vreme, urși sau cele mai bune pășuni. Fii respectuos, salută-i și, dacă ai ceva de împărțit (o bucată de brânză, o poveste), ești binevenit. Nu te apropia prea mult de oi fără permisiunea ciobanului și lasă locul curat, așa cum l-ai găsit. E un ritual, o tradiție. Până la urmă, suntem cu toții oaspeți pe munte.",
+  "lead": "Rezervorul cu sare este un punct de întâlnire tradițional pentru ciobani și turme, o ocazie de a observa cultura pastorală.",
+  "keywords": "rezervor sare ciobani turme cultura montana traditii interactiune",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Rezervorul cu sare este un punct de întâlnire tradițional pentru ciobani și turme, o ocazie de a observa cultura pastorală.",
+    "seed_topic": "Întâlnirile la rezervorul cu sare — un fenomen pastoral",
+    "seed_topic_slug": "culture_salt_reservoir_meet"
+  }
+}

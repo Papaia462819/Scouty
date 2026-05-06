@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_down_vs_synth_c3ecb30facd9",
+  "card_id": "cg_gear_and_preparati_gear_down_vs_synth_c3ecb30facd9",
+  "domain": "gear_and_preparation",
+  "topic": "gear_down_vs_synth",
+  "language": "ro",
+  "title": "Puf vs. Sintetic: Alegerea corectă pentru Carpați",
+  "body": "Salut, dragilor! Când vine vorba de izolație în Carpați, mai ales pe vreme umedă, e o dilemă clasică: puf sau sintetic? Experiența mea de 20 de ani pe munte îmi spune clar: pentru Carpații noștri, cu umiditatea lor specifică, sinteticele sunt adesea o alegere mai bună. Puful e fantastic când e uscat, dar odată udat, își pierde proprietățile izolatoare și se usucă greu. Îți spun din patima proprie: am dormit o noapte întreagă tremurând, pentru că mi se udase sacul de puf. Un sac de dormit sau o geacă cu umplutură sintetică, chiar și udă, va mai oferi o oarecare izolație și se va usca mult mai repede. Gândește-te la o geacă cu izolație sintetică pentru stratul exterior, peste un polar, sau la un sac de dormit sintetic pentru turele de primăvară/toamnă. Nu e la fel de compresibil ca puful, dar e mult mai iertător.",
+  "lead": "Află de ce izolația sintetică este adesea mai practică decât puful în condițiile umede din Carpați.",
+  "keywords": "puf sintetic izolatie echipament munte carpați umed sac dormit geaca",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce izolația sintetică este adesea mai practică decât puful în condițiile umede din Carpați.",
+    "seed_topic": "Puf vs sintetic în Carpații umezi",
+    "seed_topic_slug": "gear_down_vs_synth"
+  }
+}

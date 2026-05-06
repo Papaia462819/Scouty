@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_cooking_grill_diy_cc4c496d947c",
+  "card_id": "cg_campfire_basics_fire_cooking_grill_diy_cc4c496d947c",
+  "domain": "campfire_basics",
+  "topic": "fire_cooking_grill_diy",
+  "language": "ro",
+  "title": "Grătar improvizat la munte",
+  "body": "Băi, știu că e tentant să improvizezi un grătar din pietre plate sau crengi verzi, dar e o idee proastă. Pietrele pot exploda la căldură, iar crengile verzi afumă mâncarea și pot lua foc necontrolat. Mai bine ia cu tine un grătar mic, pliabil, din metal. E ușor, nu ocupă mult loc și e mult mai sigur. Sau, și mai simplu, folosește un ceaun sau o tigaie direct pe foc. Gândul e să te bucuri de natură, nu să ai surprize neplăcute. Eu am văzut o dată un tip care a încercat cu pietre și a sărit o bucată fierbinte la câțiva metri. Nu vrei asta. Fii responsabil cu focul, e cel mai important.",
+  "lead": "Nu improviza grătare din pietre sau crengi; folosește echipament sigur și responsabil pentru foc la munte.",
+  "keywords": "grătar improvizat siguranță foc echipament camping sfaturi drumeție foc tabără",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Nu improviza grătare din pietre sau crengi; folosește echipament sigur și responsabil pentru foc la munte.",
+    "seed_topic": "Grătar improvizat din pietre plate sau crengi verzi",
+    "seed_topic_slug": "fire_cooking_grill_diy"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_old_compass_valu_ec5c28a56fe2",
+  "card_id": "cg_trail_culture_ro_culture_old_compass_valu_ec5c28a56fe2",
+  "domain": "trail_culture_ro",
+  "topic": "culture_old_compass_value",
+  "language": "ro",
+  "title": "Busola: Inainte de GPS, dupa bunul simt",
+  "body": "Băi, știu că ai GPS pe telefon și că ești \"digital native\", dar busola aia clasică e ca un prieten vechi care nu te lasă la greu. Bateria se descarcă, semnalul dispare, dar busola și o hartă sunt acolo. Nu trebuie să fii cartograf să o folosești. Învață să o orientezi cu nordul magnetic și să identifici puncte de reper pe hartă. E o chestie de bază, ca să știi mereu unde ești și în ce direcție mergi. Îmi amintesc o dată, pe Călimani, o ceață de nu vedeai la doi metri. Fără busolă și hartă, încă mai căutam stâna. E o asigurare, nu o relicvă.",
+  "lead": "Chiar și în era digitală, busola clasică și harta rămân esențiale pentru siguranța ta pe munte.",
+  "keywords": "busola orientare harta siguranta munti echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Chiar și în era digitală, busola clasică și harta rămân esențiale pentru siguranța ta pe munte.",
+    "seed_topic": "Busola părintelui — de ce o cari și azi",
+    "seed_topic_slug": "culture_old_compass_value"
+  }
+}

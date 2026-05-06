@@ -1,0 +1,27 @@
+{
+  "_comment": "Copy this to manifest.json and edit. One entry per source file. Each entry maps a local file (relative to sources/strict/) to a logical source_id whose URL/title/publisher live in the canonical sources.json. If a source_id isn't in sources.json yet, add it there first.",
+  "files": [
+    {
+      "path": "salvamont_recomandari.html",
+      "source_id": "salvamont_recomandari",
+      "domain": "mountain_safety",
+      "section_hint": "recomandări generale",
+      "topics": [
+        "echipament minimal pentru tură de o zi",
+        "comportament la furtună pe creastă",
+        "ce face un drumeț prudent înainte de plecare"
+      ]
+    },
+    {
+      "path": "salvamont_martor_accident.html",
+      "source_id": "salvamont_martor_accident",
+      "domain": "medical_emergency",
+      "section_hint": "ce faci dacă ești martor",
+      "topics": [
+        "evaluare rapidă a victimei",
+        "apel la 0SALVAMONT și 112",
+        "imobilizare provizorie"
+      ]
+    }
+  ]
+}

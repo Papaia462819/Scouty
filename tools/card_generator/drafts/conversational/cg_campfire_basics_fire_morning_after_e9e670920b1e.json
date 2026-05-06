@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_morning_after_e9e670920b1e",
+  "card_id": "cg_campfire_basics_fire_morning_after_e9e670920b1e",
+  "domain": "campfire_basics",
+  "topic": "fire_morning_after",
+  "language": "ro",
+  "title": "Reaprinde focul dimineața din jarul nopții",
+  "body": "Salut! Ca să nu tremuri dimineața după chibrituri, uite un truc. Seara, înainte de culcare, adună jarul la un loc și acoperă-l cu un strat gros de cenușă. Asta îl izolează și îl ține cald până dimineață, ca o plapumă. Când te trezești, dai ușor cenușa la o parte cu un băț. Vei găsi mici puncte roșii, incandescente. Acolo e viața! Așează lângă ele cele mai fine și uscate materiale pe care le ai: iască, scame, scoarță de mesteacăn sau vreascuri subțiri ca scobitorile. Suflă foarte, foarte încet și constant. Nu te grăbi, ai răbdare. Când vezi prima flacără, adaugă treptat crenguțe din ce în ce mai groase. În câteva minute, ai foc pentru cafea și nu mai clănțăni din dinți. E o satisfacție faină, crede-mă.",
+  "lead": "Învață cum să folosești jarul și cenușa de peste noapte pentru a reaprinde focul rapid și eficient dimineața la cort.",
+  "keywords": "foc de tabără jar reaprindere supraviețuire camping iască tehnici",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să folosești jarul și cenușa de peste noapte pentru a reaprinde focul rapid și eficient dimineața la cort.",
+    "seed_topic": "Reaprins focul dimineața din jarul nopții",
+    "seed_topic_slug": "fire_morning_after"
+  }
+}

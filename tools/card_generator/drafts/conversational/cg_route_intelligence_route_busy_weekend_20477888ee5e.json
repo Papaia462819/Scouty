@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_busy_weekend_20477888ee5e",
+  "card_id": "cg_route_intelligence_route_busy_weekend_20477888ee5e",
+  "domain": "route_intelligence_romania",
+  "topic": "route_busy_weekend",
+  "language": "ro",
+  "title": "Evita aglomeratia: Alternative la traseele clasice de weekend",
+  "body": "Știu cum e, vrei să te bucuri de munte, dar te trezești într-un șir indian pe potecă. Pentru weekend-urile aglomerate, gândește-te la alternative mai puțin cunoscute. În loc de Bucegi, poți explora Piatra Craiului, pe la Plaiul Foii, sau chiar Munții Ciucaș, mai ales dacă mergi pe trasee care nu duc direct la vârf. O altă idee e să începi drumeția foarte devreme, la răsărit, sau să alegi zilele de vineri sau duminică seara. Uneori, o drumeție mai scurtă, dar pe un traseu mai izolat, e mult mai satisfăcătoare decât una lungă, dar cu coadă la punctele de belvedere. Încearcă zona Leaota sau Iezer-Păpușa, sunt superbe și mai liniștite.",
+  "lead": "Descoperă alternative mai liniștite la traseele populare de weekend, pentru o experiență montană autentică și fără aglomerație.",
+  "keywords": "trasee alternative munti mai putin aglomerati evita aglomeratia weekend la munte piatra craiului ciucas leaota",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă alternative mai liniștite la traseele populare de weekend, pentru o experiență montană autentică și fără aglomerație.",
+    "seed_topic": "Trasee aglomerate weekend — alternative cu mai puțin trafic",
+    "seed_topic_slug": "route_busy_weekend"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_alpine_stove_alt_952808bf3a33",
+  "card_id": "cg_campfire_basics_fire_alpine_stove_alt_952808bf3a33",
+  "domain": "campfire_basics",
+  "topic": "fire_alpine_stove_alt",
+  "language": "ro",
+  "title": "Aragaz vs. Foc de Tabara: Alegerea inteleapta in Alpin",
+  "body": "Salut, prietene! Când ești sus, în zona alpină, uită de focul de tabără. Nu e doar o chestiune de 'lasă curat', ci și de siguranță și bun simț. Vegetația e rară și sensibilă, iar riscul de incendiu, chiar și la o adiere mai puternică, e imens. Plus, lemnele lipsesc cu desăvârșire. Un aragaz portabil cu butelie e sfânt. E rapid, eficient și nu lasă urme. Gândește-te la o supă caldă sau un ceai fierbinte într-o dimineață răcoroasă – aragazul face minuni. Lasă focul pentru pădure, unde ai lemne din belșug și un loc sigur. Sus, respectăm muntele și ne bazăm pe tehnologie. E mai simplu și mai sigur pentru toți.",
+  "lead": "În zona alpină, aragazul portabil este soluția ideală pentru gătit, fiind mai sigur și mai eficient decât focul de tabără.",
+  "keywords": "aragaz portabil foc tabara alpin siguranta munte echipament gatit zona alpina",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "În zona alpină, aragazul portabil este soluția ideală pentru gătit, fiind mai sigur și mai eficient decât focul de tabără.",
+    "seed_topic": "Aragaz cu gaz vs foc real — compromisuri în zona alpină",
+    "seed_topic_slug": "fire_alpine_stove_alt"
+  }
+}

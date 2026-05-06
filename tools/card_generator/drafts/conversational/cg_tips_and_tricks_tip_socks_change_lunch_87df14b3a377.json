@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_socks_change_lunch_87df14b3a377",
+  "card_id": "cg_tips_and_tricks_tip_socks_change_lunch_87df14b3a377",
+  "domain": "tips_and_tricks",
+  "topic": "tip_socks_change_lunch",
+  "language": "ro",
+  "title": "Schimbi sosetele la pranz? Energie pentru picioare!",
+  "body": "Băi, știi care e unul dintre cele mai simple trucuri pentru a-ți menține picioarele fericite pe potecă? Schimbă-ți șosetele la prânz! Serios, nu e glumă. După câteva ore de mers, chiar și cele mai bune șosete se umezesc puțin, iar asta e rețeta perfectă pentru bătături și disconfort. Scoți șosetele ude, pui o pereche curată și uscată, și parcă ai primit un shot de energie direct în tălpi. E ca o mini-pauză de răsfăț pentru picioarele tale. Am pățit-o de multe ori să simt că nu mai pot, am schimbat șosetele și am zburat mai departe. Încearcă, o să-mi mulțumești!",
+  "lead": "Un truc simplu pentru a-ți menține picioarele proaspete și a preveni bătăturile: schimbă șosetele la prânz.",
+  "keywords": "șosete uscate prevenire bătături energie picioare trucuri drumeție confort mers echipament drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Un truc simplu pentru a-ți menține picioarele proaspete și a preveni bătăturile: schimbă șosetele la prânz.",
+    "seed_topic": "Schimbi șosetele la prânz — bash de energie pentru picioare",
+    "seed_topic_slug": "tip_socks_change_lunch"
+  }
+}

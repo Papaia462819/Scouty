@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_morning_routine_85be67533e82",
+  "card_id": "cg_survival_basics_survival_morning_routine_85be67533e82",
+  "domain": "survival_basics",
+  "topic": "survival_morning_routine",
+  "language": "ro",
+  "title": "Dimineața după bivuacul de urgență",
+  "body": "Așa, prietene, ai supraviețuit nopții. Primul lucru: verifică-te pe tine și pe ceilalți. Ești întreg? Ai degerături? Ai vreo rană? Apoi, evaluează situația: e ceață, plouă, bate vântul? Unde ești pe hartă? Ai semnal? Dacă ai foc, mai ai lemne? E important să te hidratezi imediat, chiar dacă e frig. Un ceai cald, dacă ai, face minuni. Mănâncă ceva ușor, energizant. Nu te grăbi să pleci. Planifică-ți ruta de retragere cu atenție, ținând cont de condițiile meteo și de starea fizică a grupului. Nu uita să strângi tot după tine, lăsând locul curat. E o regulă de aur, chiar și în urgențe. Mult succes la coborâre!",
+  "lead": "Cum să gestionezi dimineața după o noapte petrecută într-un bivuac de urgență, de la verificare personală la planificarea retragerii.",
+  "keywords": "bivuac urgență rutină dimineață evaluare situație hidratare munte planificare retragere",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Cum să gestionezi dimineața după o noapte petrecută într-un bivuac de urgență, de la verificare personală la planificarea retragerii.",
+    "seed_topic": "Rutina de dimineață într-un bivuac de urgență",
+    "seed_topic_slug": "survival_morning_routine"
+  }
+}

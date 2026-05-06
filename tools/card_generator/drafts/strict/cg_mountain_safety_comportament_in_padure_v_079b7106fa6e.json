@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_comportament_in_padure_v_079b7106fa6e",
+  "card_id": "cg_mountain_safety_comportament_in_padure_v_079b7106fa6e",
+  "domain": "mountain_safety",
+  "topic": "comportament_in_padure_vs_zona_deschisa_in_furtuna",
+  "language": "ro",
+  "title": "Comportament în furtună: zonă deschisă vs. pădure",
+  "body": "Dacă sunteți surprins de o furtună cu fulgere în aer liber și nu există un adăpost sigur în apropiere, acționați rapid pentru a vă proteja. Adăposturile sigure includ case, birouri, centre comerciale și vehicule cu plafon rigid, cu geamurile ridicate. Corturile, adăposturile de picnic, foișoarele și alte structuri deschise NU oferă protecție împotriva fulgerelor.\n\nÎn zone deschise: \n*   Părăsiți imediat zonele înalte, cum ar fi dealurile, crestele montane sau vârfurile.\n*   Nu vă întindeți niciodată la pământ.\n*   Așezați-vă într-o poziție ghemuită, ca o minge, cu capul băgat și mâinile peste urechi, astfel încât să fiți jos, cu contact minim cu solul.\n\nÎntr-o pădure:\n*   Nu vă adăpostiți niciodată sub un copac izolat.\n*   Căutați adăpost lângă copaci mai scunzi.\n\nEvitați obiectele care conduc electricitatea (cum ar fi gardurile de sârmă ghimpată, liniile electrice sau morile de vânt). Nu folosiți niciodată o stâncă sau o surplombă stâncoasă pentru adăpost. Dacă auziți tunete sau vedeți fulgere, căutați adăpost imediat. Nu reluați activitățile în aer liber timp de cel puțin 30 de minute după furtună. Apel: 0SALVAMONT.",
+  "lead": "Aflați cum să vă protejați de fulgere în zone deschise sau în pădure atunci când sunteți surprins de o furtună.",
+  "keywords": "furtună fulger siguranță adăpost pădure zonă deschisă munte prim ajutor salvamont",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Lightning Safety",
+  "source_url": "https://www.cdc.gov/lightning/safety/index.html",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "lightning_safety",
+    "thunderstorm",
+    "outdoor_safety",
+    "shelter_seeking",
+    "mountain_safety"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați cum să vă protejați de fulgere în zone deschise sau în pădure atunci când sunteți surprins de o furtună.",
+    "evidence_confidence": "high",
+    "source_quote": "If you are caught outside with no safe shelter nearby: Immediately get off elevated areas such as hills, mountain ridges, or peaks. Never shelter under an isolated tree. If you are in a forest, shelter near lower trees.",
+    "source_id": "cdc_lightning_safety"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_timp_de_fierbere_recoman_4456986bfeeb",
+  "card_id": "cg_medical_emergency_timp_de_fierbere_recoman_4456986bfeeb",
+  "domain": "medical_emergency",
+  "topic": "timp_de_fierbere_recomandat_la_altitudine",
+  "language": "ro",
+  "title": "Dezinfecția apei prin fierbere la altitudine",
+  "body": "Fierberea este o metodă eficientă pentru a distruge bacteriile patogene, virușii și protozoarele prezente în apă, fiind o soluție în situații de urgență când serviciul de apă este întrerupt sau nu aveți apă îmbuteliată. Dacă apa este tulbure, lăsați-o să se decanteze și filtrați-o printr-o cârpă curată, un prosop de hârtie sau un filtru de cafea înainte de fierbere.\n\nAduceți apa la fierbere puternică (clocot) pentru cel puțin un minut. La altitudini de peste 1.000 de metri (5.000 de picioare), fierbeți apa timp de trei minute. Lăsați apa să se răcească natural și depozitați-o în recipiente curate, acoperite. Pentru a îmbunătăți gustul plat al apei fierte, adăugați un praf de sare la fiecare litru de apă sau turnați apa dintr-un recipient curat în altul de mai multe ori.",
+  "lead": "Aflați cum să dezinfectați apa prin fierbere, cu instrucțiuni specifice pentru altitudini mari, pentru a o face sigură de consum în situații de urgență.",
+  "keywords": "dezinfecție apă fierbere apă apă potabilă altitudine siguranță apă urgență bacterii viruși protozoare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Emergency Disinfection of Drinking Water",
+  "source_url": "https://www.epa.gov/ground-water-and-drinking-water/emergency-disinfection-drinking-water",
+  "publisher": "EPA",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "water_disinfection",
+    "boiling_water",
+    "altitude_safety",
+    "drinking_water",
+    "emergency_preparedness"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați cum să dezinfectați apa prin fierbere, cu instrucțiuni specifice pentru altitudini mari, pentru a o face sigură de consum în situații de urgență.",
+    "evidence_confidence": "high",
+    "source_quote": "Bring water to a rolling boil for at least one minute. At altitudes above 5,000 feet (1,000 meters), boil water for three minutes.",
+    "source_id": "epa_water_disinfection"
+  }
+}

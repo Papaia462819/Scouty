@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_layer_swap_during_br_18b43979a403",
+  "card_id": "cg_tips_and_tricks_tip_layer_swap_during_br_18b43979a403",
+  "domain": "tips_and_tricks",
+  "topic": "tip_layer_swap_during_break",
+  "language": "ro",
+  "title": "Schimbi straturile in pauza, nu pe traseu",
+  "body": "Am văzut destui care se opresc în mijlocul potecii să-și dea jos geaca. Nu face asta! Când ești în mișcare, corpul tău produce căldură. Dacă te dezbraci în timp ce transpiri, te răcești rapid și riști să-ți prindă frig. Mai bine, când simți că ți-e cald, așteaptă următoarea pauză scurtă. Te oprești, îți dai jos stratul de mijloc (polarul, de exemplu) sau geaca, bei o gură de apă și apoi o iei din loc. E mai eficient și mult mai sigur. Gândește-te la asta ca la o strategie: anticipezi, nu reacționezi. E ca la șah, dar cu munții în loc de tablă.",
+  "lead": "Află de ce e mai bine să-ți ajustezi îmbrăcămintea în timpul pauzelor, nu în mers, pentru a evita răcirea corpului.",
+  "keywords": "echipament straturi pauza termoreglare sfaturi drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce e mai bine să-ți ajustezi îmbrăcămintea în timpul pauzelor, nu în mers, pentru a evita răcirea corpului.",
+    "seed_topic": "Schimbi straturile în pauza de 5 minute, nu pe mers",
+    "seed_topic_slug": "tip_layer_swap_during_break"
+  }
+}

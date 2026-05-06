@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_id_doc_copy_511fc37c658f",
+  "card_id": "cg_gear_and_preparati_gear_id_doc_copy_511fc37c658f",
+  "domain": "gear_and_preparation",
+  "topic": "gear_id_doc_copy",
+  "language": "ro",
+  "title": "Copii CI si Asigurare: Unde le tii?",
+  "body": "Salut, prietene! Când pleci pe munte, nu uita de actele astea esențiale. O copie a Cărții de Identitate și a asigurării medicale (dacă ai) sunt cruciale. Nu le ține pe toate în același loc cu originalele, că dacă pierzi rucsacul, ai rămas fără nimic. Eu le pun într-o pungă etanșă, una în buzunarul de la piept al gecii, alta în rucsac, într-un compartiment separat. Unii le salvează și pe telefon, dar bateria poate ceda. Gândește-te la scenariul cel mai prost și pregătește-te pentru el. E mai bine să fii precaut decât să ai surprize neplăcute. E o chestie minoră, dar te poate scuti de mult stres. Și nu uita, suntem pe munte, nu la promenadă!",
+  "lead": "Află cum să-ți păstrezi în siguranță copiile actelor esențiale când ești pe munte, pentru a evita situațiile neplăcute.",
+  "keywords": "copie ci asigurare medicala acte munte siguranta pregatire",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți păstrezi în siguranță copiile actelor esențiale când ești pe munte, pentru a evita situațiile neplăcute.",
+    "seed_topic": "Copie după CI și asigurare — unde să le ții",
+    "seed_topic_slug": "gear_id_doc_copy"
+  }
+}

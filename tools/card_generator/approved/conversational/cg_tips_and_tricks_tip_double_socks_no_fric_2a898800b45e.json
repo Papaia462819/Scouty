@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_double_socks_no_fric_2a898800b45e",
+  "card_id": "cg_tips_and_tricks_tip_double_socks_no_fric_2a898800b45e",
+  "domain": "tips_and_tricks",
+  "topic": "tip_double_socks_no_friction",
+  "language": "ro",
+  "title": "Șosete duble, fără bășici",
+  "body": "Știu, sună ciudat să porți două perechi de șosete, dar crede-mă, e un truc vechi de când lumea montană. Ideea e simplă: o pereche subțire, sintetică, direct pe picior, care să evacueze transpirația. Peste ea, o pereche mai groasă, de lână merinos, care să absoarbă umezeala și să ofere amortizare. Frecarea nu mai e pe piele, ci între cele două șosete. Am testat asta pe creste lungi de Bucegi și Retezat, și de atunci nu mă mai despart de combinația asta. E ca o armură pentru picioarele tale. Plus, reduce semnificativ riscul de alunecare a piciorului în bocanc, prevenind astfel bășicile. Încearcă, o să-mi mulțumești la finalul turei!",
+  "lead": "Află cum două perechi de șosete te pot salva de bășici și disconfort în drumeții.",
+  "keywords": "șosete duble fără bășici drumeție echipament confort",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum două perechi de șosete te pot salva de bășici și disconfort în drumeții.",
+    "seed_topic": "Două perechi de șosete + zero alunecare = zero bășici",
+    "seed_topic_slug": "tip_double_socks_no_friction"
+  }
+}

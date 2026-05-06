@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_morning_lookahead_d06a331c83cd",
+  "card_id": "cg_campfire_basics_fire_morning_lookahead_d06a331c83cd",
+  "domain": "campfire_basics",
+  "topic": "fire_morning_lookahead",
+  "language": "ro",
+  "title": "Lemne pentru focul de dimineață",
+  "body": "Prietenule, când ajungi seara la locul de campare și te apuci de foc, nu uita un lucru: strânge mai multe lemne decât crezi că ai nevoie pentru seara aia. Întotdeauna. De ce? Păi, dimineața, când ești somnoros și ți-e frig, ultimul lucru pe care vrei să-l faci e să cauți crengi ude sau să te lupți cu roua. E mult mai ușor să ai o grămadă de lemne uscate deja pregătite lângă foc. Așa, poți să-ți faci repede un ceai sau o cafea fierbinte și să-ți începi ziua cu dreptul. E un mic truc, dar face o mare diferență.",
+  "lead": "Strânge lemne pentru focul de dimineață încă de seara, pentru a evita căutarea în frig și rouă.",
+  "keywords": "lemne foc campare seara foc dimineata pregătire foc sfaturi foc",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Strânge lemne pentru focul de dimineață încă de seara, pentru a evita căutarea în frig și rouă.",
+    "seed_topic": "Strâns lemne seara pentru micul dejun de dimineață",
+    "seed_topic_slug": "fire_morning_lookahead"
+  }
+}

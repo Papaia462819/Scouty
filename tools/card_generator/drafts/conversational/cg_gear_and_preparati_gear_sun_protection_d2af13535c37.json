@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_sun_protection_d2af13535c37",
+  "card_id": "cg_gear_and_preparati_gear_sun_protection_d2af13535c37",
+  "domain": "gear_and_preparation",
+  "topic": "gear_sun_protection",
+  "language": "ro",
+  "title": "Soare alpin: ochelari, crema, buze – protectie UV esentiala",
+  "body": "Băi, știi că-n munți soarele e mai puternic decât la mare? La fiecare mie de metri altitudine, UV-ul crește cu 10-12%. Nu glumi cu el! Ochelarii de soare sunt obligatorii, cu filtru UV 400 sau categoria 3-4. Fără ei, riști arsuri la ochi și chiar probleme mai serioase. Crema de soare, minim SPF 30, aplic-o pe față, gât, urechi și orice zonă expusă, și repetă la câteva ore. Am văzut odată un băiat care a uitat să-și dea pe lobul urechii și a ajuns cu el roșu ca racul. Și nu uita de balsamul de buze cu SPF! Buzele sunt super sensibile. Nu vrei să te trezești cu ele crăpate și dureroase, crede-mă. Echipamentul ăsta mic face o mare diferență la finalul zilei.",
+  "lead": "Protejează-te eficient de razele UV puternice din munți cu ochelari de soare, cremă SPF și balsam de buze.",
+  "keywords": "protectie uv ochelari soare crema spf balsam buze arsuri solare munti",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Protejează-te eficient de razele UV puternice din munți cu ochelari de soare, cremă SPF și balsam de buze.",
+    "seed_topic": "Soare alpin: ochelari, cremă, buze — nu glumi cu UV-ul",
+    "seed_topic_slug": "gear_sun_protection"
+  }
+}

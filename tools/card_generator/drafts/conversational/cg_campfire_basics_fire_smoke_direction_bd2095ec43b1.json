@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_smoke_direction_bd2095ec43b1",
+  "card_id": "cg_campfire_basics_fire_smoke_direction_bd2095ec43b1",
+  "domain": "campfire_basics",
+  "topic": "fire_smoke_direction",
+  "language": "ro",
+  "title": "De ce vine fumul mereu spre tine",
+  "body": "Se zice că fumul se duce la frumos, dar după 20 de ani de stat la foc, cred că e mai degrabă o chestiune de fizică, nu de aspect. Focul are nevoie de oxigen și trage aer din toate părțile. Când te așezi lângă el, corpul tău blochează acest flux de aer. În spatele tău se creează o zonă cu presiune mai mică, un fel de mic vid, care pur și simplu „suge” fumul spre tine. E ca și cum ai deveni un magnet de fum. Soluția? Nu te așeza direct în calea vântului, ci puțin lateral. Observă direcția fumului de la început și alege-ți locul strategic. Dacă sunteți mai mulți, lăsați puțin spațiu între voi, nu formați un zid compact. Astfel, aerul poate circula, iar fumul își vede de drumul lui, probabil spre altcineva frumos.",
+  "lead": "Înțelege de ce fumul te urmărește la focul de tabără și cum să te așezi strategic pentru a scăpa de el.",
+  "keywords": "foc de tabără fum direcția vântului sfaturi practice drumeție camping",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Înțelege de ce fumul te urmărește la focul de tabără și cum să te așezi strategic pentru a scăpa de el.",
+    "seed_topic": "Cum citești fumul ca să nu fie mereu în fața ta",
+    "seed_topic_slug": "fire_smoke_direction"
+  }
+}

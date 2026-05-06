@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+  "card_id": "cg_campfire_basics_fire_cleanup_lnt_96311032e973",
+  "domain": "campfire_basics",
+  "topic": "fire_cleanup_lnt",
+  "language": "ro",
+  "title": "Focul de tabara si cum lasi locul curat",
+  "body": "După o seară faină la foc, e timpul să lași locul lună. Începe prin a stinge focul complet cu apă. Amestecă bine cenușa cu pământ până e rece la atingere. Apoi, adună toate resturile, chiar și cele mici, cum ar fi mucurile de țigară sau folia de la ciocolată. Folosește o pungă rezistentă pentru gunoi. Dacă ai ars lemne aduse de tine, e mai ușor. Dacă ai folosit lemne din zonă, asigură-te că nu ai lăsat urme. Până și pietrele de la \"vetră\" le poți rearanja la loc, dacă nu au fost mișcate prea mult. Scopul e să nu se vadă că a fost foc acolo. E ca și cum n-ai fost niciodată, dar cu amintiri faine!",
+  "lead": "Află cum să stingi focul de tabără și să lași locul curat în doar 5 minute, respectând principiile Leave No Trace.",
+  "keywords": "foc de tabara leave no trace curatenie munte protectia mediului stingere foc gunoi munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să stingi focul de tabără și să lași locul curat în doar 5 minute, respectând principiile Leave No Trace.",
+    "seed_topic": "Leave No Trace la foc: cum lași locul curat în 5 minute",
+    "seed_topic_slug": "fire_cleanup_lnt"
+  }
+}

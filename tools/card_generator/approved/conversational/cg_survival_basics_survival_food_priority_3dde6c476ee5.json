@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_food_priority_3dde6c476ee5",
+  "card_id": "cg_survival_basics_survival_food_priority_3dde6c476ee5",
+  "domain": "survival_basics",
+  "topic": "survival_food_priority",
+  "language": "ro",
+  "title": "Prioritati in salbaticie: adapost, apa, foc, mancare",
+  "body": "Salut, prietene! Când ești în munți și ceva nu merge ca la carte, ordinea priorităților e crucială. Primul lucru la care te gândești e adăpostul. Nu vrei să te prindă noaptea sau o ploaie torențială fără un loc cât de cât ferit. Poate fi o grotă, o folie de supraviețuire, sau chiar un bivuac improvizat din crengi. Apoi, apa. O poți filtra sau fierbe dacă ai foc. Focul e al treilea pe listă – te încălzește, usucă hainele, fierbe apa și ține animalele la distanță. Abia la final te gândești la mâncare. Poți rezista zile bune fără mâncare, dar fără apă și adăpost, situația se complică rapid. Ține minte asta, nu e o glumă!",
+  "lead": "În situații de urgență în munți, prioritizează adăpostul, apoi apa, focul și abia la urmă mâncarea.",
+  "keywords": "adapost apa foc mancare supravietuire prioritati munti",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "În situații de urgență în munți, prioritizează adăpostul, apoi apa, focul și abia la urmă mâncarea.",
+    "seed_topic": "Prioritățile reale: adăpost > apă > foc > mâncare",
+    "seed_topic_slug": "survival_food_priority"
+  }
+}

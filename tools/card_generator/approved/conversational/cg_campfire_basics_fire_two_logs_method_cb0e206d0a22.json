@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_two_logs_method_cb0e206d0a22",
+  "card_id": "cg_campfire_basics_fire_two_logs_method_cb0e206d0a22",
+  "domain": "campfire_basics",
+  "topic": "fire_two_logs_method",
+  "language": "ro",
+  "title": "Gateste ca un pro: metoda cu doi busteni paraleli",
+  "body": "Uite o șmecherie veche, dar sfântă, ca să nu-ți mai verși ciorba în foc. Când ai un pat de jar serios, nu doar flăcări, ia doi bușteni verzi sau uzi, cam de grosimea pulpei tale. Pune-i paralel, la o distanță potrivită pentru oala sau tigaia ta. Între ei, trage jarul încins. Așa ți-ai creat o plită de munte perfectă. Buștenii verzi nu vor arde repede și îți oferă un suport stabil. Poți regla intensitatea căldurii foarte ușor: apropii buștenii pentru foc mai iute sau îi depărtezi pentru a găti mai lent. E metoda ideală pentru o mămăligă ca la carte sau pentru a prăji niște slănină fără să afumi totul și, mai ales, fără să stai cu ceaunul în mână ca un începător. Simplu, eficient și sigur.",
+  "lead": "Învață cum să-ți faci o plită stabilă și eficientă la focul de tabără, folosind doar doi bușteni și jarul dintre ei.",
+  "keywords": "foc de tabără gătit la ceaun tehnici de supraviețuire jar bușteni mâncare la munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să-ți faci o plită stabilă și eficientă la focul de tabără, folosind doar doi bușteni și jarul dintre ei.",
+    "seed_topic": "Metoda celor două bușteni paraleli pentru gătit pe jar",
+    "seed_topic_slug": "fire_two_logs_method"
+  }
+}

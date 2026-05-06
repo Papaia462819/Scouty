@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_emergency_signal_boo_816b3bda9d7b",
+  "card_id": "cg_tips_and_tricks_tip_emergency_signal_boo_816b3bda9d7b",
+  "domain": "tips_and_tricks",
+  "topic": "tip_emergency_signal_book",
+  "language": "ro",
+  "title": "Noteaza planul in carnet",
+  "body": "Băi, știu că suntem în era digitală, dar telefonul nu ține la frig, umezeală sau o căzătură. E un backup esențial să ai traseul, numerele de urgență (Salvamont, 112) și chiar un mic inventar al echipamentului tău notate într-un carnet rezistent la apă și cu un pix. Am pățit-o o dată, pe creastă, la -10 grade, când bateria a murit subit. Fără notițele mele, eram cam pierdut. Îți garantez că un carnet și un pix nu cer încărcător și nu se sparg dacă le scapi. E o investiție mică pentru liniștea ta pe munte.",
+  "lead": "Notează-ți planul de traseu și numerele de urgență într-un carnet rezistent la apă, ca backup pentru telefon.",
+  "keywords": "plan traseu carnet backup siguranta munte echipament esential numere urgenta",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Notează-ți planul de traseu și numerele de urgență într-un carnet rezistent la apă, ca backup pentru telefon.",
+    "seed_topic": "Notează planul în carnet — backup dacă telefonul pică",
+    "seed_topic_slug": "tip_emergency_signal_book"
+  }
+}

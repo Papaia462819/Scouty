@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_replace_pack_when_0016b9f71e31",
+  "card_id": "cg_gear_and_preparati_gear_replace_pack_when_0016b9f71e31",
+  "domain": "gear_and_preparation",
+  "topic": "gear_replace_pack_when",
+  "language": "ro",
+  "title": "Cand e timpul sa schimbi rucsacul?",
+  "body": "Salut, prietene! Știi, rucsacul e ca un partener de drum, dar și el are o vârstă. Dacă vezi că fermoarele încep să agațe sau dinții se rup, e un semn clar. Materialul se subțiază și devine lucios în zonele de frecare? Asta înseamnă că nu mai e rezistent la apă și riști să-ți uzi echipamentul. Căptușeala interioară, aia care se desprinde și face ca rucsacul să arate ca o piele de șarpe năpârlită, e alt semnal. Bretelele se lasă, sunt scâlciate și nu mai distribuie greutatea cum trebuie? O să te doară spatele de numa'. Și dacă începi să repari mai mult decât să folosești, e clar. Mai bine un rucsac nou, decât unul care te lasă-n pană la mijlocul traseului. Experiența mea spune că un rucsac bun te ține câțiva ani buni, dar nu la nesfârșit.",
+  "lead": "Află semnele clare care îți spun că e timpul să-ți înlocuiești rucsacul vechi cu unul nou și de încredere.",
+  "keywords": "rucsac echipament uzura fermoare bretele impermeabilitate",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află semnele clare care îți spun că e timpul să-ți înlocuiești rucsacul vechi cu unul nou și de încredere.",
+    "seed_topic": "Când îți schimbi rucsacul — semnele care contează",
+    "seed_topic_slug": "gear_replace_pack_when"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_nod_scaun_bowline_practi_ead27053bf52",
+  "card_id": "cg_survival_basics_nod_scaun_bowline_practi_ead27053bf52",
+  "domain": "survival_basics",
+  "topic": "nod_scaun_bowline_practic",
+  "language": "ro",
+  "title": "Nodul scaun (bowline): un nod de buzunar",
+  "body": "Dacă înveți un singur nod în viața ta, învață scaunul. Face o buclă fixă care nu strânge sub sarcină și se desface ușor după ce a fost încărcată. Practic: vrei să legi rapid o frânghie de un copac, de un rucsac, de un partener — scaunul. Tehnica clasică se învață în 30 de secunde dacă povestești istoria iepurașului. Faci o buclă mică pe coardă; iepurașul (capătul liber) iese din vizuină, ocolește copacul (linia principală) și se întoarce în vizuină. Strângi. Gata. Pe munte îl folosesc concret la: ridicat un rucsac peste o ruptură, întins un tarp între doi copaci ca să dorm uscat, securizat un partener pe o porțiune scurtă neexpusă, atârnat un sac cu mâncare sus să nu ajungă jderul. Atenție: scaunul nu e nod de cățărare modernă; pentru ham și echipare folosești noduri specifice învățate cu un instructor. Pe traseu obișnuit, însă, e nodul care îți rezolvă 80% din problemele cu o coardă.",
+  "lead": "Nodul scaun: buclă fixă care se desface ușor după sarcină — esențial pentru tarp, rucsac, sac cu mâncare.",
+  "keywords": "nod scaun bowline iepuras frumghie tarp rucsac vatra",
+  "card_family": "DEFINITION",
+  "priority": 60,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": ["tip", "knot"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Nodul scaun: buclă fixă care se desface ușor după sarcină — esențial pentru tarp, rucsac, sac cu mâncare.",
+    "seed_topic": "Nodul scaun (bowline) — un nod care îți poate salva viața",
+    "seed_topic_slug": "survival_knot_bowline"
+  }
+}

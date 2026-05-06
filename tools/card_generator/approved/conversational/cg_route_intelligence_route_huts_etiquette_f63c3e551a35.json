@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_huts_etiquette_f63c3e551a35",
+  "card_id": "cg_route_intelligence_route_huts_etiquette_f63c3e551a35",
+  "domain": "route_intelligence_romania",
+  "topic": "route_huts_etiquette",
+  "language": "ro",
+  "title": "Eticheta la cabane: Respect și bun-simț montan",
+  "body": "Când ajungi la cabană, mai ales după o zi lungă, e important să respecți pe toată lumea. Nu trânti ușa, nu vorbi tare, mai ales dacă e târziu. Lasă-ți bocancii murdari la intrare, în spațiile special amenajate, nu-i căra prin dormitor. Dacă folosești bucătăria comună, curăță după tine. Nu lăsa vase murdare sau resturi de mâncare. Și un sfat de la mine: salută mereu cabanierul și mulțumește-i. Un \"bună ziua\" și un zâmbet deschid mai multe uși decât crezi. Am văzut odată un tip care a încercat să negocieze prețul unei ciorbe... nu a fost o imagine prea plăcută. Respectă prețurile și regulile cabanei, sunt acolo pentru un motiv.",
+  "lead": "Află cum să te comporți civilizat la cabanele montane, respectând spațiul și liniștea celorlalți drumeți și a cabanierului.",
+  "keywords": "eticheta cabana respect montan reguli cabana bun-simt munte viata cabana bocanci curati bucatarie comuna",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te comporți civilizat la cabanele montane, respectând spațiul și liniștea celorlalți drumeți și a cabanierului.",
+    "seed_topic": "Eticheta la cabane românești — gesturi mici care contează",
+    "seed_topic_slug": "route_huts_etiquette"
+  }
+}

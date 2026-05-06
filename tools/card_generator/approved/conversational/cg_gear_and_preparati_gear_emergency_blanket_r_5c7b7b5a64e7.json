@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_emergency_blanket_r_5c7b7b5a64e7",
+  "card_id": "cg_gear_and_preparati_gear_emergency_blanket_r_5c7b7b5a64e7",
+  "domain": "gear_and_preparation",
+  "topic": "gear_emergency_blanket_real",
+  "language": "ro",
+  "title": "Pătura de supraviețuire: cum o folosești eficient",
+  "body": "Auzi, pătura aia argintie, subțire, nu e doar pentru poze! E super utilă când te prinde frigul sau ploaia. Dacă ești nevoit să aștepți ajutoare sau să petreci o noapte neplanificată, e aur. Îmbracă-te cu toate hainele uscate pe care le ai, apoi înfășoară-te strâns în pătură. Partea argintie trebuie să fie spre corp, să reflecte căldura înapoi. Poți să o folosești și ca paravan improvizat contra vântului sau a ploii, dacă o prinzi între doi copaci. Am prins odată o furtună pe Vârful Omu și, fără ea, aș fi tremurat ca piftia. Nu uita, e mică și ușoară, deci nu ai scuze să n-o ai în rucsac!",
+  "lead": "Află cum să folosești corect pătura de supraviețuire pentru a te proteja de frig și intemperii în munți.",
+  "keywords": "pătura supraviețuire hipotermie echipament urgență adăpost improvizat frig munte refugiu",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să folosești corect pătura de supraviețuire pentru a te proteja de frig și intemperii în munți.",
+    "seed_topic": "Pătura de supraviețuire — cum o folosești CHIAR (nu ca decor)",
+    "seed_topic_slug": "gear_emergency_blanket_real"
+  }
+}

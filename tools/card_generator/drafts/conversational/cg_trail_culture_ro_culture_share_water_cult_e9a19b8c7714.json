@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_share_water_cult_e9a19b8c7714",
+  "card_id": "cg_trail_culture_ro_culture_share_water_cult_e9a19b8c7714",
+  "domain": "trail_culture_ro",
+  "topic": "culture_share_water_culture",
+  "language": "ro",
+  "title": "Apa pe traseu: E de aur!",
+  "body": "Băi, știi cum e cu apa pe munte, mai ales pe traseele uscate, vara? E ca aurul! Niciodată să nu pleci la drum fără să ai suficientă, dar și mai important: fii pregătit să împarți. Am pățit-o de atâtea ori să dau de cineva rămas fără apă, la o oră bună de orice sursă. E o regulă nescrisă printre drumeți: dacă vezi pe cineva în dificultate, mai ales cu apa, oferi. Nu te aștepta la mulțumiri pompoase, e pur și simplu spiritul muntelui. Și nu uita să-ți reumpli sticla la fiecare izvor, chiar dacă mai ai jumătate. Nu știi niciodată când dai de următorul. E mai bine să cari un pic în plus decât să te deshidratezi. Gândește-te la asta ca la o asigurare. Și nu uita: o gură de apă rece de izvor e mai bună decât orice băutură energizantă!",
+  "lead": "Pe traseele uscate, apa e vitală; fii pregătit să împarți și să-ți reumpli sticla la fiecare izvor.",
+  "keywords": "apa pe munte împărțit apa trasee uscate spiritul muntelui hidratare izvoare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Pe traseele uscate, apa e vitală; fii pregătit să împarți și să-ți reumpli sticla la fiecare izvor.",
+    "seed_topic": "Cultura împărțirii apei pe trasee uscate",
+    "seed_topic_slug": "culture_share_water_culture"
+  }
+}

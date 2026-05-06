@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_breath_focus_56288ae48227",
+  "card_id": "cg_motivation_and_mor_morale_breath_focus_56288ae48227",
+  "domain": "motivation_and_morale",
+  "topic": "morale_breath_focus",
+  "language": "ro",
+  "title": "Respirația, ancora ta mentală pe potecă",
+  "body": "Când simți că mintea începe să o ia razna, că urcușul nu se mai termină sau că rucsacul e plin cu pietre, ia o pauză scurtă. Nu te gândi la cât mai ai, ci la cum respiri. Inspiră adânc pe nas, numărând până la patru, ține aerul o secundă, apoi expiră lent pe gură, numărând până la șase. Repetă de 5-10 ori. O să vezi cum ritmul se așează, inima se calmează și mintea se limpezește. E o tehnică veche, dar mereu eficientă. Am aplicat-o de nenumărate ori, mai ales pe crestele expuse, când vântul îți suflă gândurile din cap. Te ajută să te reconectezi cu prezentul și cu pasul tău. Nu uita, muntele e și o călătorie interioară.",
+  "lead": "Învață cum să-ți folosești respirația pentru a-ți calma mintea și a-ți recăpăta concentrarea pe potecă, mai ales în momentele dificile.",
+  "keywords": "respirație calm concentrare stres munte tehnică",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să-ți folosești respirația pentru a-ți calma mintea și a-ți recăpăta concentrarea pe potecă, mai ales în momentele dificile.",
+    "seed_topic": "Focus pe respirație când mintea o ia razna",
+    "seed_topic_slug": "morale_breath_focus"
+  }
+}

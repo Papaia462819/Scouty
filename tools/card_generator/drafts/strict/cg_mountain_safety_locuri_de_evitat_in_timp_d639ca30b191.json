@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_locuri_de_evitat_in_timp_d639ca30b191",
+  "card_id": "cg_mountain_safety_locuri_de_evitat_in_timp_d639ca30b191",
+  "domain": "mountain_safety",
+  "topic": "locuri_de_evitat_in_timpul_furtunii_cu_descarcari_electrice",
+  "language": "ro",
+  "title": "Furtună cu descărcări electrice: Locuri de evitat",
+  "body": "În timpul unei furtuni cu descărcări electrice, este crucial să evitați anumite locuri și structuri care nu oferă protecție. Nu vă adăpostiți sub copaci izolați, stânci sau surplombe stâncoase. Evitați zonele deschise, cum ar fi terenurile de golf, parcurile, locurile de joacă, iazurile, lacurile, piscinele și plajele. Părăsiți imediat zonele elevate, precum dealurile, crestele montane sau vârfurile. Ieșiți din apă și îndepărtați-vă de iazuri, lacuri și alte corpuri de apă. Stați departe de obiecte care conduc electricitatea, cum ar fi gardurile de sârmă ghimpată, liniile electrice sau morile de vânt. Evitați vehiculele deschise (cabriolete, motociclete, cărucioare de golf) și structurile deschise (verande, foișoare, adăposturi de picnic, dug-out-uri de baseball, arene sportive), deoarece acestea nu vă protejează de fulgere. Adăposturile sigure includ casele, birourile, centrele comerciale și vehiculele cu acoperiș rigid și geamurile închise. Dacă sunteți într-o barcă cu cabină, stați departe de componentele metalice și electrice.",
+  "lead": "Identificați și evitați locurile periculoase în timpul unei furtuni cu descărcări electrice pentru a vă proteja de fulgere.",
+  "keywords": "furtună descărcări electrice siguranță adăpost munte pericol fulger zone deschise apă copaci izolați",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Lightning Safety",
+  "source_url": "https://www.cdc.gov/lightning/safety/index.html",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "lightning_safety",
+    "thunderstorm",
+    "outdoor_safety",
+    "places_to_avoid",
+    "electrical_hazard"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Identificați și evitați locurile periculoase în timpul unei furtuni cu descărcări electrice pentru a vă proteja de fulgere.",
+    "evidence_confidence": "high",
+    "source_quote": "Avoid open spaces such as golf courses, parks, playgrounds, ponds, lakes, swimming pools, and beaches. Avoid open vehicles such as convertibles, motorcycles, and golf carts. Avoid open structures such as porches, gazebos, baseball dugouts, and sports arenas. Never shelter under an isolated tree. Never use a cliff or rocky overhang for shelter. Immediately get out of and away from ponds, lakes, and other bodies of water.",
+    "source_id": "cdc_lightning_safety"
+  }
+}

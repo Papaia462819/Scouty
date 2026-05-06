@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_zipper_repair_field_c282a26446cb",
+  "card_id": "cg_gear_and_preparati_gear_zipper_repair_field_c282a26446cb",
+  "domain": "gear_and_preparation",
+  "topic": "gear_zipper_repair_field",
+  "language": "ro",
+  "title": "Fermoar stricat? Nu-i bai, reparăm!",
+  "body": "Am pățit-o și eu, pe creastă, să-mi cedeze fermoarul la geacă. Panică! Dar există soluții rapide. Dacă e vorba de cursorul care nu mai prinde dințișorii, încearcă să-l strângi ușor cu un clește multifuncțional. Ai unul la tine, nu? Sau, dacă ai pierdut un dinte, poți coase capetele de material deasupra zonei cu probleme, ca să nu se deschidă mai mult. O sfoară subțire sau o agrafă de birou te pot scoate din impas, legând cele două părți ale fermoarului. E doar o soluție temporară, dar te ajută să ajungi jos în siguranță. Nu uita, prevenția e cea mai bună: verifică-ți echipamentul înainte de tură!",
+  "lead": "Un fermoar stricat în mijlocul turei nu e sfârșitul lumii; iată câteva trucuri rapide pentru a rezolva problema.",
+  "keywords": "fermoar reparatii rapide echipament munte solutii urgente trucuri drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Un fermoar stricat în mijlocul turei nu e sfârșitul lumii; iată câteva trucuri rapide pentru a rezolva problema.",
+    "seed_topic": "Reparat un fermoar stricat în mijlocul turei",
+    "seed_topic_slug": "gear_zipper_repair_field"
+  }
+}

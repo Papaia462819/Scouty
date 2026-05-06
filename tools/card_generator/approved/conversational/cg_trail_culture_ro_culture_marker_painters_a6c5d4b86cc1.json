@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_marker_painters_a6c5d4b86cc1",
+  "card_id": "cg_trail_culture_ro_culture_marker_painters_a6c5d4b86cc1",
+  "domain": "trail_culture_ro",
+  "topic": "culture_marker_painters",
+  "language": "ro",
+  "title": "Cine pictează marcajele și de ce le respectăm",
+  "body": "Salut, prietene! Marcajele nu apar pur și simplu. Ele sunt trasate și întreținute de voluntari pasionați, cluburi de turism și, ocazional, de administrațiile parcurilor naționale. E o muncă grea, făcută din dragoste pentru munte. De ce le respectăm? Simplu: ele te țin pe traseu, te feresc de pericole (stânci instabile, zone cu grohotiș, prăpăstii), te ajută să nu te rătăcești și să ajungi la destinație în siguranță. Gândește-te la ele ca la niște indicatoare rutiere, dar pentru munte. Odată, am ignorat un marcaj șters și am ajuns într-o zonă cu jnepeni de nu mai vedeam soarele! Nu e de joacă, respectă-le mereu.",
+  "lead": "Află cine se ocupă de marcajele montane și de ce este crucial să le respecți pentru siguranța ta pe munte.",
+  "keywords": "marcaje montane respect traseu siguranta munte voluntari orientare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cine se ocupă de marcajele montane și de ce este crucial să le respecți pentru siguranța ta pe munte.",
+    "seed_topic": "Cine pictează marcajele și de ce le respectăm",
+    "seed_topic_slug": "culture_marker_painters"
+  }
+}

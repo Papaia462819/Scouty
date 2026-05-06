@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_evaluare_rapida_a_victim_07030e599e13",
+  "card_id": "cg_medical_emergency_evaluare_rapida_a_victim_07030e599e13",
+  "domain": "medical_emergency",
+  "topic": "evaluare_rapida_a_victimei",
+  "language": "ro",
+  "title": "Evaluare rapidă și prim ajutor inițial la locul accidentului",
+  "body": "Apelați imediat echipa Salvamont prin SNAU 112 sau Dispeceratul Național Salvamont (0SALVAMONT - 0725826668). Nu mișcați persoana accidentată și nu permiteți altora să o facă, decât dacă victima este sub influența directă a unui factor de risc iminent. Orice pacient cu dureri sau alterarea stării generale după un traumatism trebuie tratat ca având un posibil traumatism la coloana vertebrală, necesitând imobilizare. Dacă victima este inconștientă, deschideți-i căile aeriene prin subluxația mandibulei (ridicarea acesteia de la nivelul unghiului posterior, lângă ureche), fără a bascula capul spre spate. Verificați timp de 10 secunde dacă respiră, observând mișcările toracelui. Dacă nu respiră, efectuați resuscitare cardio-pulmonară (masaj cardiac extern, aprox. 100 compresii/minut, raport 30:2 compresii toracice – ventilații, dacă decideți să faceți respirație gură la gură). Folosiți telefonul pe speaker pentru a urma indicațiile dispeceratului medical. Discutați cu victima și observați coerența. Identificați hemoragiile puternice și faceți compresie, de preferință cu comprese sterile. Dacă hemoragia este abundentă și nu se oprește, aplicați un garou deasupra leziunii și anunțați dispeceratul. Evitați contactul direct cu sângele. Nu încercați să aduceți în poziție anatomică membrele sau corpul victimei. Protejați termic persoana accidentată (haine, sac de dormit, folie „Sirius”), discutați permanent cu ea și urmăriți schimbările stării de conștiență, respirației și culorii tegumentelor. Purtati masca de protecție individuală și spălați-vă pe mâini după contact. Salvamont este singura structură competentă legal pentru intervenții în accidente montane.",
+  "lead": "În cazul unui accident montan, apelați imediat Salvamont/112, nu mișcați victima decât dacă este în pericol iminent și evaluați rapid starea de conștiență, respirația și prezența hemoragiilor.",
+  "keywords": "prim ajutor evaluare victimă urgență medicală salvamont resuscitare hemoragie traumatism inconștiență apel urgență siguranță montană",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Ce faci daca esti martorul unui accident montan",
+  "source_url": "https://www.salvamontromania.ro/martor-accident-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "first_aid",
+    "emergency_response",
+    "victim_assessment",
+    "mountain_rescue",
+    "cpr"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "În cazul unui accident montan, apelați imediat Salvamont/112, nu mișcați victima decât dacă este în pericol iminent și evaluați rapid starea de conștiență, respirația și prezența hemoragiilor.",
+    "evidence_confidence": "high",
+    "source_quote": "Apelați echipa Salvamont prin SNAU 112 sau Dispeceratul National SALVAMONT (0SALVAMONT). Nu mișcați persoana accidentată. Dacă victima este inconștientă, deschideți-i căile aeriene și verificați dacă respiră. Dacă nu respiră, efectuați resuscitare cardio-pulmonară. Identificați hemoragiile puternice și faceți compresie. Protejați termic persoana accidentată.",
+    "source_id": "salvamont_martor_accident"
+  }
+}

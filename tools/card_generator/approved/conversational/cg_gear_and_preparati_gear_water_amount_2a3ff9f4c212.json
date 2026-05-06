@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_water_amount_2a3ff9f4c212",
+  "card_id": "cg_gear_and_preparati_gear_water_amount_2a3ff9f4c212",
+  "domain": "gear_and_preparation",
+  "topic": "gear_water_amount",
+  "language": "ro",
+  "title": "Apa in rucac: Ghid pentru ture de o zi si o saptamana",
+  "body": "Băi, cu apa nu te joci! Pentru o tură de o zi, pe vreme bună, eu iau minim 2 litri. Dacă e vară și știi că transpiri ca un urs la saună, bagă 3 litri fără discuții. Mai bine să rămână, decât să te usuci pe traseu. Îți amintești de Vasile, care a crezut că-i ajunge o sticlă mică până la Omu? L-am găsit aproape deshidratat și i-am dat toată rezerva mea. Pentru turele de mai multe zile, treaba se schimbă. Nu poți căra 20 de litri de apă în spate. Aici intervine planificarea: studiază harta și vezi unde sunt izvoare sau cabane. Eu iau un filtru de apă și o pastilă de purificare, plus o sticlă de 1-1.5 litri pe care o umplu la fiecare sursă. E esențial să știi să citești terenul și să identifici sursele sigure. Și nu uita, dimineața, înainte să pleci, bea bine!",
+  "lead": "Află câtă apă să cari în rucsac pentru ture scurte sau lungi, și cum să te descurci cu hidratarea pe munte.",
+  "keywords": "apa hidratare rucsac filtru apa izvoare planificare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află câtă apă să cari în rucsac pentru ture scurte sau lungi, și cum să te descurci cu hidratarea pe munte.",
+    "seed_topic": "Câtă apă cari pe ture de o zi vs o săptămână",
+    "seed_topic_slug": "gear_water_amount"
+  }
+}

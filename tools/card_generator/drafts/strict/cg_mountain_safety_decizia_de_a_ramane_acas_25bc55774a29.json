@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_mountain_safety_decizia_de_a_ramane_acas_25bc55774a29",
+  "card_id": "cg_mountain_safety_decizia_de_a_ramane_acas_25bc55774a29",
+  "domain": "mountain_safety",
+  "topic": "decizia_de_a_ramane_acasa_la_grad_4_sau_5",
+  "language": "ro",
+  "title": "Riscul de avalanșă: grad 4 (mare) și 5 (foarte mare)",
+  "body": "La gradul 4 (mare), stratul de zăpadă este puțin stabilizat pe majoritatea pantelor suficient de înclinate. Declanșarea avalanșelor este probabilă chiar și la o supraîncărcare slabă, cum ar fi un singur schior sau un turist pedestru, pe numeroase pante. În aceste condiții, sunt de așteptat numeroase declanșări spontane de avalanșe de dimensiuni medii și adesea chiar mari.\n\nLa gradul 5 (foarte mare), instabilitatea stratului de zăpadă este generalizată. Se pot produce spontan numeroase avalanșe de mari dimensiuni, adesea chiar foarte mari, inclusiv pe pantele puțin abrupte.\n\nAceste condiții reprezintă un pericol extrem. Informați-vă întotdeauna din buletinul nivometeorologic înainte de a pleca pe munte. În caz de urgență, apelați 112 sau Salvamont (0SALVAMONT).",
+  "lead": "La grad 4 și 5, riscul de avalanșă este extrem, cu declanșări probabile la supraîncărcări slabe și numeroase avalanșe spontane, mari sau foarte mari.",
+  "keywords": "avalanșă risc mare risc foarte mare zăpadă instabilitate pericol munte siguranță",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Scala riscului de avalansa",
+  "source_url": "https://www.meteoromania.ro/despre-noi/meteorologie-operationala/activitati-de-baza/nivometeoroogie/scala-riscului-de-avalansa/",
+  "publisher": "ANM / Meteoromania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "avalanche_risk",
+    "high_danger",
+    "snow_stability",
+    "mountain_safety"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "La grad 4 și 5, riscul de avalanșă este extrem, cu declanșări probabile la supraîncărcări slabe și numeroase avalanșe spontane, mari sau foarte mari.",
+    "evidence_confidence": "high",
+    "source_quote": "5-foarte mare: Instabilitatea stratului de zăpadă este generalizată. [...] se pot produce spontan numeroase avalanşe de mari, adesea chiar foarte mari dimensiuni. 4-mare: Stratul de zăpadă este puţin stabilizat [...].",
+    "source_id": "anm_avalanche_scale"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_pre_dawn_pack_65e8b51f3102",
+  "card_id": "cg_tips_and_tricks_tip_pre_dawn_pack_65e8b51f3102",
+  "domain": "tips_and_tricks",
+  "topic": "tip_pre_dawn_pack",
+  "language": "ro",
+  "title": "Pregatirea rucsacului seara: dimineata pleci in 5 minute!",
+  "body": "Băi, știi cum e, dimineața devreme, când ești cu mintea-n ceață, ultimul lucru pe care vrei să-l faci e să-ți împachetezi rucsacul. De-aia, pregătește totul de seara! Pune-ți hainele pe care le vei purta a doua zi lângă rucsac, ca să nu le mai cauți. Verifică lista de echipament și asigură-te că totul e în rucsac, mai puțin ce-ți trebuie pentru micul dejun și cafea. Eu îmi pun chiar și bocancii lângă ușă. Așa, dimineața, doar te îmbraci, mănânci rapid, bagi termosul cu ceai în rucsac și ești gata de drum. Gata cu stresul, gata cu uitatul lucrurilor esențiale. E o mică șmecherie care-ți salvează mult timp și nervi, mai ales când vrei să fii primul pe potecă. Și nu uita de gustări, că foamea nu așteaptă!",
+  "lead": "Pregateste rucsacul si echipamentul de seara pentru a pleca rapid si fara stres dimineata la drumetie.",
+  "keywords": "pregatire rucsac economie timp planificare drumetie echipament munte dimineata eficienta",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Pregateste rucsacul si echipamentul de seara pentru a pleca rapid si fara stres dimineata la drumetie.",
+    "seed_topic": "Pre-pachetare de seara: pleci în 5 minute dimineața",
+    "seed_topic_slug": "tip_pre_dawn_pack"
+  }
+}

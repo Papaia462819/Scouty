@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_summer_rain_quic_421a3f5c8372",
+  "card_id": "cg_weather_and_season_weather_summer_rain_quic_421a3f5c8372",
+  "domain": "weather_and_season",
+  "topic": "weather_summer_rain_quick",
+  "language": "ro",
+  "title": "Ploaia de vara: pregatire rapida pe poteca",
+  "body": "Ploaia de vară te poate prinde pe nepregătite, chiar și după o dimineață însorită. Secretul e să fii gata în 60 de secunde. Primul pas: scoate pelerina de ploaie sau jacheta impermeabilă din rucsac și pune-o la îndemână, nu la fundul rucsacului. Dacă porți pantaloni scurți, ia în considerare să ai un pantalon de ploaie ușor, pe care să-l poți trage peste. Protejează electronicele: telefonul și bateria externă trebuie să stea într-o pungă etanșă. Rucsacul, chiar dacă e rezistent la apă, ar trebui să aibă o husă de ploaie, mai ales dacă ai lucruri sensibile în el. Nu uita să te uiți după un copac mai des sau o stâncă mare unde să te adăpostești rapid, doar cât să te organizezi. E mai bine să fii ud și în mișcare decât să îngheți de frig așteptând să treacă. Și nu uita, chiar și o ploaie scurtă poate face poteca alunecoasă. Fii atent la fiecare pas!",
+  "lead": "Pregătește-te rapid pentru o ploaie de vară pe munte, având echipamentul la îndemână și protejând electronicele.",
+  "keywords": "ploaie de vara echipament ploaie adapost rapid siguranta munte protectie electronice husa rucsac",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Pregătește-te rapid pentru o ploaie de vară pe munte, având echipamentul la îndemână și protejând electronicele.",
+    "seed_topic": "Ploaia de vară — cum te pregătești în 60 de secunde",
+    "seed_topic_slug": "weather_summer_rain_quick"
+  }
+}

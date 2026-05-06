@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_water_sources_carp_fb0b774242ca",
+  "card_id": "cg_route_intelligence_route_water_sources_carp_fb0b774242ca",
+  "domain": "route_intelligence_romania",
+  "topic": "route_water_sources_carpati",
+  "language": "ro",
+  "title": "Surse de apa pe trasee: ce sa stii despre izvoare",
+  "body": "Salutare, prietene! Când pleci pe munte, apa e aur curat. Izvoarele marcate pe hărți sunt, în general, de încredere, dar nu uita că natura are capriciile ei. Primăvara, după topirea zăpezilor, majoritatea sunt pline. Vara târziu și toamna, mai ales după o perioadă secetoasă, multe izvoare de altitudine pot seca complet sau pot curge doar un firicel. Am pățit-o de câteva ori, să ajung la un izvor dat ca sigur și să găsesc doar pietre uscate. E bine să ai mereu o rezervă mai mare decât crezi că ai nevoie, măcar un litru în plus. Nu te baza orbește pe ele, verifică mereu starea traseului și a surselor de apă înainte de plecare, dacă e posibil. Un filtru de apă portabil e o investiție bună, te poate scoate din bucluc.",
+  "lead": "Află cum să te pregătești pentru sursele de apă sezoniere de pe traseele montane, evitând surprizele neplăcute.",
+  "keywords": "apa munte izvoare carpați fiabilitate surse apa planificare apa echipament apa trasee montane",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te pregătești pentru sursele de apă sezoniere de pe traseele montane, evitând surprizele neplăcute.",
+    "seed_topic": "Surse de apă pe trasee — fiabilitate sezonieră",
+    "seed_topic_slug": "route_water_sources_carpati"
+  }
+}

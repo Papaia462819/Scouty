@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_scat_basics_4ac687d22222",
+  "card_id": "cg_wildlife_romania_wildlife_scat_basics_4ac687d22222",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_scat_basics",
+  "language": "ro",
+  "title": "Urme de animale: Ghid pentru excremente",
+  "body": "Salut, prietene! Pe munte, să știi să citești semnele naturii e esențial. Excrementele animalelor sunt ca o carte deschisă. La urs, o să vezi niște grămăjoare mari, cilindrice, pline de resturi vegetale (fructe de pădure, iarbă), mai ales toamna. La lup, sunt mai subțiri, alungite, adesea cu fire de păr și oase mici, semn că a avut o masă bogată în proteine. Vulpea lasă urme similare cu lupul, dar mult mai mici și ascuțite la capete. La căprior, sunt niște biluțe negre, lucioase, ca niște măsline. La mistreț, o să găsești niște grămezi mai mari, amorfe, adesea cu resturi de pământ și rădăcini. E fascinant să vezi ce a mâncat animalul! Acum știi cine a trecut pe potecă înaintea ta. Nu uita să te uiți și la context: unde sunt, ce e prin zonă. Succes la \"citit\"!",
+  "lead": "Află cum să identifici animalele comune din Carpați după urmele de excremente, o metodă utilă pentru orice drumeț.",
+  "keywords": "excremente animale urme animale urs lup vulpe căprior mistreț wildlife romania",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să identifici animalele comune din Carpați după urmele de excremente, o metodă utilă pentru orice drumeț.",
+    "seed_topic": "Cum citești urmele de excremente — animale comune",
+    "seed_topic_slug": "wildlife_scat_basics"
+  }
+}

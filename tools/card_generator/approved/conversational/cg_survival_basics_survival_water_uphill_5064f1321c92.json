@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_water_uphill_5064f1321c92",
+  "card_id": "cg_survival_basics_survival_water_uphill_5064f1321c92",
+  "domain": "survival_basics",
+  "topic": "survival_water_uphill",
+  "language": "ro",
+  "title": "Apa de izvor: sus e mai curata",
+  "body": "Salut, prietene! Când ești pe munte și dai de un izvor, e bine să știi că apa de sus, din zonele înalte, e aproape mereu mai sigură. De ce? Păi, sus sunt mai puține șanse să fi trecut animale mari sau să se fi scurs substanțe din așezări omenești. Gândește-te la un pârâu: cu cât coboară, cu atât adună mai multe \"surprize\" de pe drum. Eu unul, dacă am de ales între un izvor din golul alpin și unul de lângă o stână părăsită, aleg fără să clipesc izvorul de sus. E un principiu simplu: cu cât e mai aproape de sursă, cu atât e mai curată. Acum, nu înseamnă că apa de sus e sterilă, dar riscul scade considerabil. Totuși, dacă ai dubii, filtrează sau fierbe. Mai bine precaut decât să-ți strici tura cu o indigestie.",
+  "lead": "Află de ce apa de izvor din zonele înalte ale muntelui este, de obicei, mai sigură pentru consum decât cea din vale.",
+  "keywords": "apa izvor siguranta apa izvor munte apa potabila purificare apa survival apa",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce apa de izvor din zonele înalte ale muntelui este, de obicei, mai sigură pentru consum decât cea din vale.",
+    "seed_topic": "De ce apa de izvor sus e adesea mai sigură decât din vale",
+    "seed_topic_slug": "survival_water_uphill"
+  }
+}

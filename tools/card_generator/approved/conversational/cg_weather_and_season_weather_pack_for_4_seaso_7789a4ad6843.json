@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_pack_for_4_seaso_7789a4ad6843",
+  "card_id": "cg_weather_and_season_weather_pack_for_4_seaso_7789a4ad6843",
+  "domain": "weather_and_season",
+  "topic": "weather_pack_for_4_seasons",
+  "language": "ro",
+  "title": "Echipamentul pentru 4 anotimpuri intr-o zi",
+  "body": "Băi, știi cum e prin munți, azi e soare, mâine plouă, poimâine ninge. Sau toate în aceeași zi! Îmbracă-te în straturi: un tricou tehnic care să-ți țină pielea uscată, un polar subțire pentru căldură și o geacă impermeabilă, dar respirabilă, pe deasupra. Pantalonii la fel, ceva rezistent la vânt și apă. Nu uita o pereche de mănuși subțiri și o căciulă, chiar și vara, că vântul sus e tăios. O folie de supraviețuire e ușoară și poate face minuni dacă te prinde frigul. Și, bineînțeles, rucsacul să fie impermeabil sau să ai o husă de ploaie. Am pățit să-mi înghețe sandvișurile de la ploaie, nu e fun deloc. Verifică mereu prognoza, dar pregătește-te pentru ce-i mai rău. Mai bine să ai și să nu folosești, decât să-ți pară rău.",
+  "lead": "Pregătește-te pentru orice vreme în munți, îmbrăcându-te în straturi și având echipament impermeabil.",
+  "keywords": "echipament munte straturi haine impermeabil prognoza meteo rucsac ploaie zapada",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Pregătește-te pentru orice vreme în munți, îmbrăcându-te în straturi și având echipament impermeabil.",
+    "seed_topic": "Cum împachetezi pentru o tură unde poate ploua, ninge și soare",
+    "seed_topic_slug": "weather_pack_for_4_seasons"
+  }
+}

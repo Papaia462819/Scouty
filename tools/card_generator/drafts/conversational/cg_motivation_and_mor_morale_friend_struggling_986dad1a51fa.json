@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_friend_struggling_986dad1a51fa",
+  "card_id": "cg_motivation_and_mor_morale_friend_struggling_986dad1a51fa",
+  "domain": "motivation_and_morale",
+  "topic": "morale_friend_struggling",
+  "language": "ro",
+  "title": "Cand prietenul vrea sa renunte la jumatate de drum",
+  "body": "Băi, știu cum e. Oboseala și descurajarea te pot lovi brusc. Când vezi că un prieten e gata să arunce prosopul, nu-l lăsa. Încearcă să-i distragi atenția de la efort: povestește-i o întâmplare amuzantă de la o tură veche, întreabă-l de planurile lui de după drumeție. Apoi, împarte traseul în bucăți mici, ușor de atins. \"Hai până la bradul ăla mare!\" sau \"Mai facem 10 minute și luăm o pauză serioasă!\" Dă-i o gură de apă, o bucățică de ciocolată. Nu-l cicăli, nu-i spune \"ți-am zis eu\". Fii lângă el, arată-i că sunteți o echipă. Uneori, doar faptul că ești acolo, tăcut, e suficient. Și nu uita, o pauză scurtă poate face minuni. Gândiți-vă la ciorba aia bună de la cabană!",
+  "lead": "Află cum să-ți susții prietenul când oboseala îl face să vrea să renunțe la jumătatea drumului, prin distragere și împărțirea traseului în etape mici.",
+  "keywords": "motivatie prietenie sustinere oboseala moral pauza echipa",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți susții prietenul când oboseala îl face să vrea să renunțe la jumătatea drumului, prin distragere și împărțirea traseului în etape mici.",
+    "seed_topic": "Cum susții un prieten care vrea să renunțe la jumătate",
+    "seed_topic_slug": "morale_friend_struggling"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_solo_book_36370c7bbada",
+  "card_id": "cg_trail_culture_ro_culture_solo_book_36370c7bbada",
+  "domain": "trail_culture_ro",
+  "topic": "culture_solo_book",
+  "language": "ro",
+  "title": "Jurnalul de tura: De ce sa-ti notezi aventurile montane",
+  "body": "Băi, am un obicei de vreo 15 ani: îmi notez fiecare tură într-un caiet. Nu e doar un jurnal, e un fel de hartă a experiențelor. Scriu data, traseul, vremea (și cum s-a schimbat, că știi cum e în munți!), ce am mâncat, cât am băut și, mai ales, ce am învățat. De exemplu, am notat odată că mi-au înghețat degetele de la picioare chiar dacă aveam șosete groase – am realizat apoi că bocancii erau prea strânși. Sau că rucsacul meu era prea greu pentru o tură scurtă. E o mină de aur pentru planificarea turelor viitoare și te ajută să nu repeți greșelile. Plus că e fain să recitești peste ani și să-ți amintești de momentele alea epice sau de râsul cu prietenii. Încearcă, o să vezi că merită!",
+  "lead": "Un caiet de tură te ajută să înveți din experiențele montane, să planifici mai bine și să-ți păstrezi amintirile vii.",
+  "keywords": "jurnal tura experienta montana planificare traseu amintiri munte invatare personala",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Un caiet de tură te ajută să înveți din experiențele montane, să planifici mai bine și să-ți păstrezi amintirile vii.",
+    "seed_topic": "Caietul personal de tură — un obicei care îți schimbă perspectiva",
+    "seed_topic_slug": "culture_solo_book"
+  }
+}

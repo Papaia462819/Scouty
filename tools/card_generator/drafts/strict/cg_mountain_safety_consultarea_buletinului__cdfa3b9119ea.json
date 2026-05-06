@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_consultarea_buletinului__cdfa3b9119ea",
+  "card_id": "cg_mountain_safety_consultarea_buletinului__cdfa3b9119ea",
+  "domain": "mountain_safety",
+  "topic": "consultarea_buletinului_nivometeorologic_inainte_de_tura",
+  "language": "ro",
+  "title": "Scara Europeană a Riscului de Avalanșă",
+  "body": "Scara Europeană a Riscului de Avalanșă clasifică stabilitatea stratului de zăpadă și probabilitatea declanșării avalanșelor în cinci grade:\n\nGradul 1 (redus): Stratul de zăpadă este în general stabilizat. Declanșarea avalanșelor este posibilă doar izolat pe pantele foarte înclinate și la supraîncărcări mari. Spontan se pot produce doar curgeri sau avalanșe de mici dimensiuni.\n\nGradul 2 (moderat): Pe anumite pante suficient de înclinate, stratul de zăpadă este mediu stabilizat; în rest este stabil. Declanșările de avalanșe sunt posibile mai ales la supraîncărcări mari și pe pantele descrise în buletin. Nu sunt așteptate declanșări spontane de mare amploare.\n\nGradul 3 (însemnat): Pe numeroase pante suficient de înclinate, stratul de zăpadă este mediu sau puțin stabilizat. Declanșarea avalanșelor este posibilă chiar în condițiile unei slabe supraîncărcări, mai ales pe pantele descrise în buletin. Sunt posibile unele declanșări spontane de avalanșe medii și câteodată chiar mari.\n\nGradul 4 (mare): Stratul de zăpadă este puțin stabilizat pe majoritatea pantelor suficient de înclinate. Declanșarea avalanșelor este probabilă chiar și printr-o slabă supraîncărcare, pe numeroase pante. Sunt de așteptat numeroase declanșări spontane de avalanșe medii și adesea chiar mari.\n\nGradul 5 (foarte mare): Instabilitatea stratului de zăpadă este generalizată. Chiar și pe pantele puțin abrupte se pot produce spontan numeroase avalanșe de mari, adesea chiar foarte mari dimensiuni.\n\nDefiniții:\n*   Pante suficient de înclinate: zonele expuse riscului de avalanșă sunt descrise în buletin (altitudine, orientare, tip teren). Pantele moderat înclinate au un unghi mai mic de 30°, cele înclinate mai mare de 30°, iar cele foarte înclinate și periculoase, în general, mai mare de 40°.\n*   Supraîncărcare: slabă (schior izolat, turist pe jos, grup cu distanță minimă de 10m între turiști); mare (doi sau mai mulți schiori/snowboarderi care nu păstrează distanța).\n\nConsultați buletinul nivometeorologic înainte de tură. În caz de urgență, apelați 112 sau 0SALVAMONT.",
+  "lead": "Scara Europeană a Riscului de Avalanșă clasifică stabilitatea stratului de zăpadă și probabilitatea declanșării avalanșelor în cinci grade.",
+  "keywords": "avalanșă risc zăpadă stabilitate pante supraîncărcare salvamont siguranță munte",
+  "card_family": "DEFINITION",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Scala riscului de avalansa",
+  "source_url": "https://www.meteoromania.ro/despre-noi/meteorologie-operationala/activitati-de-baza/nivometeoroogie/scala-riscului-de-avalansa/",
+  "publisher": "ANM / Meteoromania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "avalanche_risk",
+    "snow_stability",
+    "mountain_safety",
+    "winter_hiking",
+    "hazard_assessment"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Scara Europeană a Riscului de Avalanșă clasifică stabilitatea stratului de zăpadă și probabilitatea declanșării avalanșelor în cinci grade.",
+    "evidence_confidence": "high",
+    "source_quote": "SCALA RISCULUI DE AVALANŞĂ Gradul de risc Simbol Stabilitatea stratului de zăpadă Probabilitatea de declanşare a avalanşelor 5-foarte mare Instabilitatea stratului de zăpadă este generalizată.",
+    "source_id": "anm_avalanche_scale"
+  }
+}

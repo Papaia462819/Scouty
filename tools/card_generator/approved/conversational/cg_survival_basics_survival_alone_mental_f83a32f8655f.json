@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_alone_mental_f83a32f8655f",
+  "card_id": "cg_survival_basics_survival_alone_mental_f83a32f8655f",
+  "domain": "survival_basics",
+  "topic": "survival_alone_mental",
+  "language": "ro",
+  "title": "Singur, pe intuneric: cum iti pastrezi calmul",
+  "body": "Am pățit-o de câteva ori, să mă prindă întunericul singur pe potecă. Primul instinct e panica, dar trebuie să-l ignori. Respiră adânc și gândește rațional. Verifică frontală, baterii de rezervă. Mănâncă o ciocolată, bea apă. Asta te ajută să-ți stabilizezi glicemia și să gândești mai limpede. Orientează-te cu busola sau GPS-ul. Dacă nu știi încotro, rămâi pe loc, sub un copac, și așteaptă dimineața. Nu te aventura în necunoscut. E mai bine să tremuri de frig o noapte decât să te rătăcești iremediabil. Gândește-te la un plan B, la ce vei face la răsărit. Ocupă-ți mintea cu asta, nu cu scenarii catastrofale. Ești bine, e doar întuneric. Ai mai trecut prin asta, nu-i așa?",
+  "lead": "Cum să-ți păstrezi calmul și să iei decizii bune când te prinde întunericul singur pe munte.",
+  "keywords": "disciplina mentala intuneric munte singur pe munte gestionare panica noapte munte siguranta munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Cum să-ți păstrezi calmul și să iei decizii bune când te prinde întunericul singur pe munte.",
+    "seed_topic": "Disciplina mentală când ești singur și e întuneric",
+    "seed_topic_slug": "survival_alone_mental"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_paracord_uses_c7464b9deef0",
+  "card_id": "cg_gear_and_preparati_gear_paracord_uses_c7464b9deef0",
+  "domain": "gear_and_preparation",
+  "topic": "gear_paracord_uses",
+  "language": "ro",
+  "title": "5 utilizari paracord pe munte",
+  "body": "Paracordul e un prieten de nădejde. În primul rând, îl folosesc să-mi usuc hainele ude, întins între doi copaci. Apoi, e excelent pentru a lega cortul mai bine la vânt puternic sau pentru a repara un bețe de cort rupt, improvizând o atelă. Odată, mi-am pierdut șiretul și paracordul m-a salvat. Poți face și un ham improvizat pentru a trage un rucsac greu pe o pantă mai abruptă, legându-l de talie. Și nu uita, poți folosi firele interioare pentru pescuit sau pentru a repara echipament fin. E ușor și ocupă puțin loc, merită mereu să ai câțiva metri la tine. Nu știi niciodată când te scoate din belele!",
+  "lead": "Descoperă 5 moduri practice în care paracordul te poate ajuta în situații neprevăzute pe traseele montane.",
+  "keywords": "paracord utilizari munte echipament improvizatii siguranta",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă 5 moduri practice în care paracordul te poate ajuta în situații neprevăzute pe traseele montane.",
+    "seed_topic": "5 utilizări reale ale paracord-ului pe munte",
+    "seed_topic_slug": "gear_paracord_uses"
+  }
+}

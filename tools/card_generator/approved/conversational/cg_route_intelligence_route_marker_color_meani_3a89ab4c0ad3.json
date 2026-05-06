@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_marker_color_meani_3a89ab4c0ad3",
+  "card_id": "cg_route_intelligence_route_marker_color_meani_3a89ab4c0ad3",
+  "domain": "route_intelligence_romania",
+  "topic": "route_marker_color_meaning",
+  "language": "ro",
+  "title": "Marcajele de creasta: banda rosie si triunghiul galben",
+  "body": "Salutare, prieteni! Pe creastă, banda roșie e, de obicei, marcajul principal, cel care te ține pe culmea cea mai înaltă, pe traseul de bază. E ca autostrada munților. Triunghiul galben, pe de altă parte, e adesea o ramificație, o scurtătură, sau un traseu secundar care se desprinde de creastă pentru a ajunge la un refugiu, la o cabană, sau pentru a coborî într-o vale. Nu te baza că te va duce tot pe creastă. Îmi amintesc o dată, în Făgăraș, am urmat un triunghi galben crezând că e o variantă scurtă pe creastă și m-am trezit într-o vale adâncă, la o stână, departe de traseul principal. A fost o experiență, dar nu una pe care aș recomanda-o dacă nu ești pregătit. Verifică mereu harta înainte să schimbi marcajul principal!",
+  "lead": "Află ce înseamnă banda roșie și triunghiul galben pe creastă și cum să le interpretezi corect pentru a nu te rătăci.",
+  "keywords": "marcaje montane banda rosie triunghi galben trasee creasta orientare munte harta munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce înseamnă banda roșie și triunghiul galben pe creastă și cum să le interpretezi corect pentru a nu te rătăci.",
+    "seed_topic": "Marcajele de creastă: bandă roșie, triunghi galben — ce se întâmplă în teren",
+    "seed_topic_slug": "route_marker_color_meaning"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_fauna_lore_old_fd2f73d8446f",
+  "card_id": "cg_trail_culture_ro_culture_fauna_lore_old_fd2f73d8446f",
+  "domain": "trail_culture_ro",
+  "topic": "culture_fauna_lore_old",
+  "language": "ro",
+  "title": "Animale salbatice: Intalniri si Legende",
+  "body": "Auzi multe povești pe traseu despre lupi, urși și vulturi. E important să știi ce e mit și ce e realitate. Lupi și urși? Da, există, dar de obicei evită omul. Nu te panica dacă vezi urme proaspete, dar fii vigilent, mai ales la răsărit și apus. Fă zgomot, vorbește tare, nu lăsa mâncare la îndemână. Vulturii? Sunt mai mult o priveliște impresionantă, nu un pericol. Nu te apropia de pui sau cuiburi. Am văzut odată un ursuleț pe Piatra Craiului, la vreo 50 de metri. Am făcut zgomot și a fugit. Nu uita, muntele e casa lor, noi suntem doar musafiri. Respectă-le spațiul și vei fi în siguranță.",
+  "lead": "Află cum să distingi miturile de realitate despre animalele sălbatice din Carpați și cum să te comporți în preajma lor.",
+  "keywords": "animale salbatice ursi lupi vulturi siguranta munte mituri munte respect natura",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să distingi miturile de realitate despre animalele sălbatice din Carpați și cum să te comporți în preajma lor.",
+    "seed_topic": "Povești locale despre lupi, urși și vulturi — ce să iei și ce să lași",
+    "seed_topic_slug": "culture_fauna_lore_old"
+  }
+}

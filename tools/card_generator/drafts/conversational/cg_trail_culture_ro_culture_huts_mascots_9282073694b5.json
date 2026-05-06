@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_huts_mascots_9282073694b5",
+  "card_id": "cg_trail_culture_ro_culture_huts_mascots_9282073694b5",
+  "domain": "trail_culture_ro",
+  "topic": "culture_huts_mascots",
+  "language": "ro",
+  "title": "Câinii cabanelor: ghizi blănoși și camarazi de drum",
+  "body": "Ah, câinii cabanelor! Ei sunt sufletul muntelui, niște ghizi neoficiali care apar de nicăieri și te însoțesc kilometri întregi. Am avut un ciobănesc la Cabana Curmătura care m-a dus până la Piatra Craiului și înapoi, fără să ceară altceva decât o mângâiere și o bucată de salam. Sunt o prezență caldă, mai ales când ești singur pe potecă. Nu uita să ai la tine o bucățică de mâncare pentru ei, dar nu le da ciocolată sau alte dulciuri. O bucată de pâine, un biscuite simplu sau o felie de șuncă sunt perfecte. Unii chiar te avertizează de animale sălbatice sau de vremea rea. Sunt niște parteneri de nădejde, chiar dacă nu vorbesc.",
+  "lead": "Câinii cabanelor sunt camarazi fideli, ghizi neoficiali care aduc o bucurie aparte drumețiilor montane.",
+  "keywords": "câini cabană ghizi blănoși drumeție sigură prieteni munte cultura cabanelor",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Câinii cabanelor sunt camarazi fideli, ghizi neoficiali care aduc o bucurie aparte drumețiilor montane.",
+    "seed_topic": "Câinii cabanelor — povești care fac drumeția mai caldă",
+    "seed_topic_slug": "culture_huts_mascots"
+  }
+}

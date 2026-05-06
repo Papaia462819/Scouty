@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_birthday_hike_2a0b9fabb743",
+  "card_id": "cg_trail_culture_ro_culture_birthday_hike_2a0b9fabb743",
+  "domain": "trail_culture_ro",
+  "topic": "culture_birthday_hike",
+  "language": "ro",
+  "title": "Tura de ziua mea: 10 ani de traditie montana",
+  "body": "De un deceniu, de ziua mea, sunt pe munte. E o tradiție personală care îmi aduce bucurie și mă reconectează. Nu e vorba de performanță, ci de prezență. Aleg o rută care îmi place, de la o plimbare ușoară prin pădure la o creastă mai expusă, în funcție de chef și de vreme. Anul trecut, am urcat pe Vârful Omu, exact de ziua mea. A fost frig, dar răsăritul... neprețuit. Îți recomand și ție să-ți creezi un astfel de obicei. Nu trebuie să fie de ziua ta. Poate e o tură anuală de primăvară sau o explorare a unui nou masiv în fiecare toamnă. Important e să ai un reper, o ancoră în natură care să te cheme înapoi. E ca o întâlnire cu un prieten vechi, dar de data asta, prietenul e muntele.",
+  "lead": "Descoperă bucuria unei tradiții montane anuale, o ancoră personală în natură care te reconectează cu muntele.",
+  "keywords": "traditie montana tura anuala conectare natura experienta personala munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă bucuria unei tradiții montane anuale, o ancoră personală în natură care te reconectează cu muntele.",
+    "seed_topic": "Tura de ziua mea — un obicei pe care îl țin de 10 ani",
+    "seed_topic_slug": "culture_birthday_hike"
+  }
+}

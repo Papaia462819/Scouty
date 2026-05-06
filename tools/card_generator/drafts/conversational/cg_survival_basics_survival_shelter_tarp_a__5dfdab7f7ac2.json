@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_shelter_tarp_a__5dfdab7f7ac2",
+  "card_id": "cg_survival_basics_survival_shelter_tarp_a__5dfdab7f7ac2",
+  "domain": "survival_basics",
+  "topic": "survival_shelter_tarp_a_frame",
+  "language": "ro",
+  "title": "Adapost rapid A-frame cu prelata si paracord",
+  "body": "Salut, prietene! Știi cum e, uneori te prinde noaptea-n munte și n-ai cort. Nu-i bai, un adăpost A-frame e soluția rapidă. Îți iei o prelată (tarp) impermeabilă, de măcar 2x3 metri, și 10-15 metri de paracord. Găsește doi copaci rezistenți, la vreo 3-4 metri distanță. Întinde o bucată de paracord între ei, la înălțimea șoldului tău. Asta va fi coama adăpostului. Aruncă prelata peste coardă, apoi ancorează colțurile de jos cu bețe sau pietre, sau le legi de alți copaci mai mici. Ai grijă să fie bine întinsă, să nu se adune apa. Lasă o intrare mică, să te poți strecura. E simplu, eficient și te ferește de ploaie și vânt. Am dormit eu așa de multe ori, mai ales când voiam să prind răsăritul dintr-un loc anume. Spor la treabă!",
+  "lead": "Învață să construiești rapid un adăpost A-frame cu o prelată și paracord, folosind doi copaci ca suport principal.",
+  "keywords": "adapost a-frame tarp paracord survival adapost improvizat campare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață să construiești rapid un adăpost A-frame cu o prelată și paracord, folosind doi copaci ca suport principal.",
+    "seed_topic": "Adăpost A-frame cu tarp și paracord între doi copaci",
+    "seed_topic_slug": "survival_shelter_tarp_a_frame"
+  }
+}

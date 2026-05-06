@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_first_lighter_c_f0db03126c76",
+  "card_id": "cg_survival_basics_survival_first_lighter_c_f0db03126c76",
+  "domain": "survival_basics",
+  "topic": "survival_first_lighter_check",
+  "language": "ro",
+  "title": "Verifică bricheta înainte de drumeție!",
+  "body": "Salut, prietene! Știi vorba aia, \"socoteala de acasă nu se potrivește cu aia din târg\"? Ei bine, la munte, socoteala cu bricheta e și mai complicată. Că ai una cu gaz sau cu benzină, sau chiar chibrituri rezistente la vânt, testul suprem e acasă, înainte să pleci. Nu vrei să te trezești pe creastă, cu vântul tăind și frigul mușcând, că bricheta ta, minune de tehnologie, refuză să pornească. Scoate-o din rucsac, aprinde-o de câteva ori, vezi dacă face flacără constant. Dacă e pe gaz, verifică nivelul. Dacă e pe benzină, asigură-te că e plină și că piatra e bună. Chibriturile, la fel, testează-le. E un minut de efort care te poate salva de la o noapte friguroasă sau de la o cafea rece dimineața. Am pățit-o, crede-mă, și nu e fun deloc!",
+  "lead": "Nu lăsa bricheta să te lase la greu! Verific-o acasă, înainte de a pleca în drumeție, pentru a evita surprize neplăcute.",
+  "keywords": "bricheta chibrituri foc supraviețuire echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Nu lăsa bricheta să te lase la greu! Verific-o acasă, înainte de a pleca în drumeție, pentru a evita surprize neplăcute.",
+    "seed_topic": "Verifică bricheta înainte să-ți trebuiască — testul de teren",
+    "seed_topic_slug": "survival_first_lighter_check"
+  }
+}

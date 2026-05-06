@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_emergency_shelter_t_fb3e8c9cad0e",
+  "card_id": "cg_gear_and_preparati_gear_emergency_shelter_t_fb3e8c9cad0e",
+  "domain": "gear_and_preparation",
+  "topic": "gear_emergency_shelter_tarp",
+  "language": "ro",
+  "title": "Tarp 3x3: Adaptabilitate maximă în natură",
+  "body": "Salut, prietene de munte! Un tarp de 3x3 metri e ca un cuțit elvețian pentru adăpost. Cel mai simplu? A-frame. Întinde o coardă între doi copaci, aruncă tarpul peste și ancorează colțurile cu bețe sau pietre. E rapid și te apără bine de ploaie. Dacă plouă cu vânt, poți face un lean-to: un lat jos, celălalt ridicat cu un băț, orientat cu spatele la vânt. Sau, pentru o protecție completă, un \"tent\" închis pe trei laturi, cu o intrare mică. Joacă-te cu el acasă, în curte, înainte să-l iei pe munte. O să vezi câte poți face!",
+  "lead": "Descoperă cum să configurezi rapid un tarp de 3x3 metri pentru adăpost eficient în orice condiții meteo.",
+  "keywords": "tarp 3x3 adăpost munte a-frame lean-to camping",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă cum să configurezi rapid un tarp de 3x3 metri pentru adăpost eficient în orice condiții meteo.",
+    "seed_topic": "Configurări simple cu un tarp de 3x3 m",
+    "seed_topic_slug": "gear_emergency_shelter_tarp"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_transportul_victimei_can_a390901e76ec",
+  "card_id": "cg_medical_emergency_transportul_victimei_can_a390901e76ec",
+  "domain": "medical_emergency",
+  "topic": "transportul_victimei_cand_nu_exista_alta_optiune",
+  "language": "ro",
+  "title": "Victima accidentată: când este permisă mișcarea",
+  "body": "Dacă sunteți martor la un accident montan, este esențial să nu mișcați persoana accidentată și să nu permiteți nimănui să facă acest lucru. Această regulă are o singură excepție: mișcarea victimei este permisă doar dacă aceasta se află sub influența directă a unui factor de risc care îi pune viața în pericol imediat sau îi provoacă afecțiuni medicale grave, imediate. În toate celelalte situații, mențineți victima nemișcată pentru a preveni agravarea leziunilor. Protejați victima prin marcarea locului accidentului, dacă acesta se află pe un traseu periculos, amplasând un marcaj vizual în formă de \"X\" în amonte, la o distanță suficientă pentru a avertiza pe ceilalți. Anunțați imediat echipa Salvamont prin apel la 112 sau la Dispeceratul Național SALVAMONT (0SALVAMONT).",
+  "lead": "Nu mișcați o victimă accidentată decât dacă viața îi este în pericol iminent din cauza unui factor de risc direct.",
+  "keywords": "mișcare victimă accident montan prim ajutor salvamont situații de urgență siguranță montană risc vital apel 112 0salvamont protejare victimă",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Ce faci daca esti martorul unui accident montan",
+  "source_url": "https://www.salvamontromania.ro/martor-accident-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "victim_movement",
+    "life_threatening",
+    "emergency_protocol",
+    "mountain_safety",
+    "first_aid"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Nu mișcați o victimă accidentată decât dacă viața îi este în pericol iminent din cauza unui factor de risc direct.",
+    "evidence_confidence": "high",
+    "source_quote": "Nu miscati persoana accidentata si nu permiteti nimanui sa faca acest lucru, decat daca victima se afla sub influenta directa a unui factor de risc care ii pune viata in pericol sau ii provoaca afectiuni medicale imediate.",
+    "source_id": "salvamont_martor_accident"
+  }
+}

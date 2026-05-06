@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_packing_pyramid_edd97b6dc6a3",
+  "card_id": "cg_gear_and_preparati_gear_packing_pyramid_edd97b6dc6a3",
+  "domain": "gear_and_preparation",
+  "topic": "gear_packing_pyramid",
+  "language": "ro",
+  "title": "Cum sa-ti impachetezi rucsacul corect",
+  "body": "Salut, prietene! Știi vorba aia, un rucsac bine făcut e jumătate din drumeție. Regula de aur e \"piramida greutății\": ce e greu, aproape de spate, între omoplați și șolduri. Aici intră cortul, mâncarea principală, butelia. Asta te ajută să-ți menții echilibrul și să nu te tragă rucsacul în spate.  Obiectele de greutate medie, cum ar fi hainele de schimb sau trusa de prim ajutor, le pui în partea de sus și de jos a compartimentului principal. Iar ce e ușor și voluminos, gen sacul de dormit sau pufoaica, merge în partea de jos a rucsacului. Așa, centrul de greutate rămâne sus și aproape de corp. Nu uita de buzunarele laterale pentru sticle de apă sau hărți, să le ai la îndemână. Un rucsac echilibrat face minuni pentru spatele tău!",
+  "lead": "Învață cum să-ți distribui greutatea în rucsac pentru o drumeție mai ușoară și mai sigură.",
+  "keywords": "rucsac impachetare greutate echilibru sfaturi",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să-ți distribui greutatea în rucsac pentru o drumeție mai ușoară și mai sigură.",
+    "seed_topic": "Piramida greutății: greu lângă spate, ușor jos",
+    "seed_topic_slug": "gear_packing_pyramid"
+  }
+}

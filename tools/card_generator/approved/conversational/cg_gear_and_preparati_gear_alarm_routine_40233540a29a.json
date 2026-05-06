@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_alarm_routine_40233540a29a",
+  "card_id": "cg_gear_and_preparati_gear_alarm_routine_40233540a29a",
+  "domain": "gear_and_preparation",
+  "topic": "gear_alarm_routine",
+  "language": "ro",
+  "title": "Rutina de Seara pe Munte",
+  "body": "După o zi de cățărat, ești frânt, știu. Dar înainte să te bagi în sacul de dormit, mai ai câteva verificări esențiale. În primul rând, asigură-te că cortul e bine ancorat și fermoarele închise complet, să nu ai surprize cu vântul sau vreo vizită nocturnă de la vreo vietate curioasă. Apoi, pune toate hainele uscate de mâine la îndemână, eventual în sacul de dormit, să le găsești calde dimineața. Nu uita să depozitezi mâncarea și gunoiul într-un loc sigur, departe de cort, ideal într-un sac agățat de un copac, ca să nu atragi urși sau alte animale. Umple-ți sticla cu apă pentru dimineață, e mai bine decât să te trezești deshidratat. Și, cel mai important, verifică-ți traseul pentru a doua zi, mai ales dacă ești într-o zonă necunoscută. O hartă și o lanternă la îndemână sunt obligatorii. Somn ușor!",
+  "lead": "Află ce trebuie să verifici seara pe munte pentru un somn liniștit și o dimineață fără griji.",
+  "keywords": "rutina de seară cort mâncare sigură apă traseu",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce trebuie să verifici seara pe munte pentru un somn liniștit și o dimineață fără griji.",
+    "seed_topic": "Rutina de seară: ce verifici înainte să te culci pe munte",
+    "seed_topic_slug": "gear_alarm_routine"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_photo_spots_basic_07ec15ec99c3",
+  "card_id": "cg_route_intelligence_route_photo_spots_basic_07ec15ec99c3",
+  "domain": "route_intelligence_romania",
+  "topic": "route_photo_spots_basic",
+  "language": "ro",
+  "title": "Fotografie spectaculoasa in Carpati, usor accesibila",
+  "body": "Vrei poze de pus în ramă, dar nu vrei să te rupi cu rucacul? Nicio problemă! Îți zic eu câteva locuri unde ajungi ușor și peisajul e demențial. De exemplu, Transfăgărășanul, zona Bâlea Lac. Ai drum asfaltat până sus, iar priveliștile cu lacul glaciar și crestele Făgărașului sunt de vis. Poți prinde răsărituri și apusuri magice, fără să transpiri prea mult. Altă variantă e Cheile Bicazului, cu drumul șerpuit printre stâncile impunătoare. Acolo ai perspective unice, mai ales dacă te abați puțin pe potecile marcate din apropiere. Și nu uita de Sfinxul și Babele din Bucegi, accesibile cu telecabina. E o experiență faină și ai timp să te joci cu unghiurile. Nu uita să ai bateria încărcată și un card de memorie gol, că o să faci multe poze!",
+  "lead": "Descoperă locuri spectaculoase în Carpați, ușor accesibile, perfecte pentru fotografii memorabile, fără efort fizic intens.",
+  "keywords": "fotografie munte locuri accesibile transfagarasan cheile bicazului bucegi",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă locuri spectaculoase în Carpați, ușor accesibile, perfecte pentru fotografii memorabile, fără efort fizic intens.",
+    "seed_topic": "Locuri de fotografie în zone accesibile",
+    "seed_topic_slug": "route_photo_spots_basic"
+  }
+}

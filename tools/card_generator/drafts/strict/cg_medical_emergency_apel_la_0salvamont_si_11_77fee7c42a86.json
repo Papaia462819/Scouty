@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_apel_la_0salvamont_si_11_77fee7c42a86",
+  "card_id": "cg_medical_emergency_apel_la_0salvamont_si_11_77fee7c42a86",
+  "domain": "medical_emergency",
+  "topic": "apel_la_0salvamont_si_112",
+  "language": "ro",
+  "title": "Martor la accident montan — pași inițiali și apel de urgență",
+  "body": "Dacă sunteți martor la un accident montan soldat cu victime sau cu starea de sănătate afectată, urmați acești pași:\n\n1. Nu intrați în panică.\n2. Protejați victima prin marcarea locului accidentului. Dacă acesta se află pe un traseu de coborâre rapidă (schiuri, bicicletă, vehicule offroad), amplasați un marcaj vizual în formă de \"X\" în amonte, la o distanță suficientă pentru a avertiza coborâtorii despre accident.\n3. Anunțați echipa Salvamont prin apel telefonic la SNAU 112 sau la Dispeceratul Național SALVAMONT - VODAFONE (0SALVAMONT - 0725826668).\n4. Nu mișcați persoana accidentată și nu permiteți nimănui să facă acest lucru, decât dacă victima se află sub influența directă a unui factor de risc care îi pune viața în pericol sau îi provoacă afecțiuni medicale imediate.",
+  "lead": "Aflați pașii esențiali de urmat dacă sunteți martor la un accident montan, de la protejarea victimei până la apelarea serviciilor de urgență.",
+  "keywords": "accident montan prim ajutor apel urgență salvamont 112 siguranță munte martor accident protejare victimă urgență medicală nu mișca victima",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Ce faci daca esti martorul unui accident montan",
+  "source_url": "https://www.salvamontromania.ro/martor-accident-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "mountain_accident",
+    "emergency_call",
+    "first_responder",
+    "victim_protection",
+    "salvamont_call"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați pașii esențiali de urmat dacă sunteți martor la un accident montan, de la protejarea victimei până la apelarea serviciilor de urgență.",
+    "evidence_confidence": "high",
+    "source_quote": "Anuntati echipa Salvamont prin apel telefonic SNAU 112 sau Dispeceratul National SALVAMONT - VODAFONE (0SALVAMONT - 0725826668). Nu miscati persoana accidentata...",
+    "source_id": "salvamont_martor_accident"
+  }
+}

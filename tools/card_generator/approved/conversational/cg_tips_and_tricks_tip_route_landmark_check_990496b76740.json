@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_route_landmark_check_990496b76740",
+  "card_id": "cg_tips_and_tricks_tip_route_landmark_check_990496b76740",
+  "domain": "tips_and_tricks",
+  "topic": "tip_route_landmark_check",
+  "language": "ro",
+  "title": "Cum să nu te rătăcești: Semnele de pe potecă",
+  "body": "Băi, e esențial să știi să citești marcajele turistice, altfel riști să ajungi la mama dracului în loc de cabană. Caută mereu semnele alea vopsite pe copaci, pietre sau chiar stâlpișori. Punctul albastru e de obicei pentru poteci principale, crucea roșie e pentru legături, iar banda galbenă poate fi un traseu secundar. Dacă mergi de ceva vreme și nu mai vezi niciun semn, oprește-te! Întoarce-te la ultimul marcaj pe care l-ai văzut clar. Nu te baza pe cărări de animale sau pe urme vechi, alea te pot duce în eroare. Și nu uita, marcajele sunt făcute să fie vizibile, nu ascunse. Dacă trebuie să te chinui să le găsești, probabil ești pe lângă. Acum, hai, că ne așteaptă peisajele!",
+  "lead": "Află cum să interpretezi corect marcajele turistice și să te asiguri că ești mereu pe drumul cel bun în munți.",
+  "keywords": "marcaje turistice orientare munte poteci carpați semne traseu nu te rătăci siguranță munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să interpretezi corect marcajele turistice și să te asiguri că ești mereu pe drumul cel bun în munți.",
+    "seed_topic": "Marker-uri vizuale care te asigură că ești pe drum",
+    "seed_topic_slug": "tip_route_landmark_check"
+  }
+}

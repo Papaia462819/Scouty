@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_huts_kept_open_e4998b8a2549",
+  "card_id": "cg_trail_culture_ro_culture_huts_kept_open_e4998b8a2549",
+  "domain": "trail_culture_ro",
+  "topic": "culture_huts_kept_open",
+  "language": "ro",
+  "title": "Cabane deschise iarna: respect pentru cabanieri",
+  "body": "Știi cine face posibilă magia cabanelor deschise iarna? Cabanierii! Ei sunt sufletul muntelui, cei care ne primesc cu un ceai cald și o vorbă bună după o zi geroasă. Gândește-te la ei ca la niște super-eroi ai Carpaților. Când ajungi la cabană, un simplu mulțumesc, o mână de ajutor la strâns masa sau pur și simplu respectarea regulilor casei fac minuni. Nu uita că munca lor e grea, iar condițiile pot fi vitrege. Fii un drumeț responsabil și recunoscător. E un gest mic pentru tine, dar înseamnă mult pentru ei și pentru continuitatea acestor oaze montane.",
+  "lead": "Află cine sunt eroii nevăzuți care mențin cabanele deschise iarna și cum le poți arăta aprecierea.",
+  "keywords": "cabane iarna cabanieri respect munte cultura cabanei drumeție iarna",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cine sunt eroii nevăzuți care mențin cabanele deschise iarna și cum le poți arăta aprecierea.",
+    "seed_topic": "Cabane care rămân deschise iarna — mulțumită cui",
+    "seed_topic_slug": "culture_huts_kept_open"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_dressing_changin_489070e8b071",
+  "card_id": "cg_weather_and_season_weather_dressing_changin_489070e8b071",
+  "domain": "weather_and_season",
+  "topic": "weather_dressing_changing",
+  "language": "ro",
+  "title": "Echipamentul 'trei straturi' pentru vreme imprevizibilă",
+  "body": "Știi cum e, pleci dimineață cu soare, și până la prânz te prinde ploaia, apoi vântul. Secretul e sistemul 'trei straturi'. Primul strat, cel de lângă piele, trebuie să fie sintetic sau lână merinos, să absoarbă transpirația și să te țină uscat. Evită bumbacul, că te răcește. Al doilea strat e cel izolator, un polar gros sau o jachetă subțire de puf, care să-ți țină de cald. Iar al treilea, stratul exterior, e o jachetă impermeabilă și rezistentă la vânt. Asta te apără de ploaie și vânt. Gândește-te la ele ca la niște cepe: le pui și le scoți după cum se schimbă vremea. Nu uita că și pantalonii pot fi stratificați, cu o pereche impermeabilă peste cei de drumeție.",
+  "lead": "Află cum să te îmbraci inteligent în munți folosind sistemul 'trei straturi' pentru a face față schimbărilor bruște de vreme.",
+  "keywords": "echipament straturi imbracaminte munte vreme schimbatoare stratificare haine lână merinos geaca impermeabila polar",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te îmbraci inteligent în munți folosind sistemul 'trei straturi' pentru a face față schimbărilor bruște de vreme.",
+    "seed_topic": "Cum te îmbraci când vremea își schimbă fața în 30 de minute",
+    "seed_topic_slug": "weather_dressing_changing"
+  }
+}

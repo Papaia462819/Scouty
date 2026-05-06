@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_long_burn_overnight_16581cbc0438",
+  "card_id": "cg_campfire_basics_fire_long_burn_overnight_16581cbc0438",
+  "domain": "campfire_basics",
+  "topic": "fire_long_burn_overnight",
+  "language": "ro",
+  "title": "Focul care ține toată noaptea: trucul cu lemne în Y",
+  "body": "Vrei să ai jar până dimineață, fără să te trezești să pui lemne? Secretul e să folosești bușteni mai groși, aranjați în formă de Y. Găsești doi-trei bușteni solizi, de preferat esență tare, și îi așezi astfel încât să se întâlnească într-un punct, formând un Y. În spațiul dintre ei, vei aprinde focul cu lemne mai mici și vreascuri. Pe măsură ce ard, buștenii mari se vor consuma încet, menținând jarul ore în șir. E un truc vechi, bun pentru nopțile reci la cort. Ai grijă să nu lași focul nesupravegheat complet și să ai mereu apă la îndemână pentru stingere.",
+  "lead": "Află cum să menții focul de tabără aprins toată noaptea folosind bușteni groși așezați în formă de Y, pentru jar constant și căldură.",
+  "keywords": "foc de tabara lemne groase jar noapte trucuri foc siguranta foc campare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să menții focul de tabără aprins toată noaptea folosind bușteni groși așezați în formă de Y, pentru jar constant și căldură.",
+    "seed_topic": "Foc care ține toată noaptea: lemne mari în formă de Y",
+    "seed_topic_slug": "fire_long_burn_overnight"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_regulile_de_baza_pentru__24f7c4b0b5f3",
+  "card_id": "cg_mountain_safety_regulile_de_baza_pentru__24f7c4b0b5f3",
+  "domain": "mountain_safety",
+  "topic": "regulile_de_baza_pentru_turistul_incepator",
+  "language": "ro",
+  "title": "Recomandări esențiale pentru siguranța pe munte",
+  "body": "Pentru o drumeție sigură, alegeți traseele în funcție de experiența și pregătirea dumneavoastră. Nu plecați la drum dacă sunteți obosit sau dacă aveți afecțiuni medicale ce necesită avizul medicului. Înainte de a pleca, informați-vă despre itinerariul propus, gradul de dificultate, starea marcajelor, accesibilitate și eventualele porțiuni periculoase. Verificați starea vremii și programul mijloacelor de transport pe cablu. Obțineți informații despre starea traseului (poteci, podete, marcaje), a refugiilor și a punctelor Salvamont de la salvamontiști, cabanieri, pădurari sau ciobani. Consultați prognoza meteo pentru următoarele 24 de ore și evitați deplasarea pe timp nefavorabil. Calculați timpul necesar parcurgerii traseului, ținând cont de pregătirea fizică. Plecați pe munte cu echipament adecvat condițiilor meteo și specificului traseului, incluzând haine de schimb și protecție împotriva vântului și ploii.",
+  "lead": "Respectați recomandările esențiale pentru a vă asigura siguranța și a preveni incidentele în timpul drumețiilor montane.",
+  "keywords": "siguranță montană pregătire drumeție alegere traseu echipament munte prognoză meteo informații traseu evitare pericole sfaturi salvamont",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Recomandari pentru turistul montan",
+  "source_url": "https://www.salvamontromania.ro/recomandari-turist-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "mountain_safety",
+    "hiking_preparation",
+    "route_planning",
+    "weather_check",
+    "equipment_essentials"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Respectați recomandările esențiale pentru a vă asigura siguranța și a preveni incidentele în timpul drumețiilor montane.",
+    "evidence_confidence": "high",
+    "source_quote": "Alegeti traseele in functie de experienta si pregatirea dumneavoastra; Nu plecati in drumetie daca sunteti obosit sau nu aveti avizul medicului... Informati-va despre itinerariul propus, gradul de dificultate... Plecati pe munte cu echipament adecvat...",
+    "source_id": "salvamont_turist_montan"
+  }
+}

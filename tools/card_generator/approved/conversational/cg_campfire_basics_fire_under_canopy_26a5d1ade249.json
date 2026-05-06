@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_under_canopy_26a5d1ade249",
+  "card_id": "cg_campfire_basics_fire_under_canopy_26a5d1ade249",
+  "domain": "campfire_basics",
+  "topic": "fire_under_canopy",
+  "language": "ro",
+  "title": "De ce nu facem focul sub coroana unui copac",
+  "body": "Uite o greșeală clasică de începător, pe care am văzut-o de prea multe ori. Tentant, știu, mai ales dacă bate vântul sau picură puțin. Zici că te adăpostești. Problema e că focul sub un copac e o rețetă pentru dezastru. Căldura se ridică și usucă rapid crengile de deasupra, chiar dacă par verzi. O singură scânteie care sare mai sus și ai aprins bradul de Crăciun în mijlocul pădurii. Și nu vrei asta. Rădăcinile de la suprafață, acoperite de frunze uscate sau ace de brad, pot lua foc pe furiș și pot arde mocnit ore în șir, izbucnind apoi la zeci de metri distanță. Caută mereu un loc deschis, curățat bine de vegetație, departe de orice coroană de copac. Nu merită riscul, crede-mă pe cuvânt.",
+  "lead": "Chiar dacă pare o idee bună să te adăpostești de vânt, să faci focul direct sub un copac este periculos pentru tine și pentru pădure.",
+  "keywords": "foc de tabără siguranță incendiu forestier prevenire vatră de foc copaci",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Chiar dacă pare o idee bună să te adăpostești de vânt, să faci focul direct sub un copac este periculos pentru tine și pentru pădure.",
+    "seed_topic": "Foc sub coroana copacilor: ce să eviți",
+    "seed_topic_slug": "fire_under_canopy"
+  }
+}

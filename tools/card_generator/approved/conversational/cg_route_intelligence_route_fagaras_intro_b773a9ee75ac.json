@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_fagaras_intro_b773a9ee75ac",
+  "card_id": "cg_route_intelligence_route_fagaras_intro_b773a9ee75ac",
+  "domain": "route_intelligence_romania",
+  "topic": "route_fagaras_intro",
+  "language": "ro",
+  "title": "Făgăraș pentru începători: unde NU începi creasta",
+  "body": "Salutare, prieteni! Vreți să gustați din măreția Făgărașului? Excelent! Dar hai să fim realiști: creasta principală nu e o plimbare prin parc, mai ales dacă ești la început. Evită porțiuni ca Custura Sărății, Portița Viștei sau Fereastra Zmeilor. Sunt spectaculoase, dar necesită experiență, echipament specific și, uneori, nervi de oțel. Îmi amintesc o dată când am văzut un începător blocat pe Custura, tremurând ca o frunză. Nu e de glumit. Începe cu trasee de aclimatizare, cum ar fi urcarea la Bâlea Lac și o plimbare pe lângă lac, sau o drumeție la Cabana Bâlea Cascadă. Gustă muntele, dar cu respect și prudență. E ca la vin: începi cu ceva ușor, nu cu un Merlot din '89.",
+  "lead": "Află ce porțiuni din creasta Făgărașului trebuie evitate de începători pentru a te bucura de munte în siguranță.",
+  "keywords": "făgăraș creastă începători trasee dificile siguranță montană custura sărății",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce porțiuni din creasta Făgărașului trebuie evitate de începători pentru a te bucura de munte în siguranță.",
+    "seed_topic": "Făgăraș pentru începători: pe unde NU începi creasta",
+    "seed_topic_slug": "route_fagaras_intro"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_wind_chill_e38cbe5e3b54",
+  "card_id": "cg_weather_and_season_weather_wind_chill_e38cbe5e3b54",
+  "domain": "weather_and_season",
+  "topic": "weather_wind_chill",
+  "language": "ro",
+  "title": "Vântul și senzația termică: Cum te pregătești",
+  "body": "Băi, știi că vântul ăla rece nu-i doar o senzație? Chiar îți fură căldura din corp! E ca și cum ai avea o temperatură reală, dar vântul o face să se simtă mult mai frig. De exemplu, la 0 grade Celsius, un vânt de 30 km/h te face să simți ca la -10 grade. De-aia e vital să ai un strat exterior rezistent la vânt, o geacă hardshell sau softshell. Nu uita de mănuși și căciulă, că pe acolo pierzi multă căldură. Am pățit-o o dată pe Retezat, am subestimat vântul și am simțit că-mi îngheață urechile, deși termometrul arăta peste zero. De atunci, mereu verific prognoza pentru vânt, nu doar pentru temperatură. E mai important decât crezi!",
+  "lead": "Vântul amplifică senzația de frig, transformând o temperatură moderată într-una periculoasă; protejează-te cu echipament adecvat.",
+  "keywords": "vânt senzație termică frig echipament vânt prognoza meteo straturi",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Vântul amplifică senzația de frig, transformând o temperatură moderată într-una periculoasă; protejează-te cu echipament adecvat.",
+    "seed_topic": "Vântul taie la oase — cum calculezi senzația termică",
+    "seed_topic_slug": "weather_wind_chill"
+  }
+}

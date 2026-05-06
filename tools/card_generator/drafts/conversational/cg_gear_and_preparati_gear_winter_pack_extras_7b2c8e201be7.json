@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_winter_pack_extras_7b2c8e201be7",
+  "card_id": "cg_gear_and_preparati_gear_winter_pack_extras_7b2c8e201be7",
+  "domain": "gear_and_preparation",
+  "topic": "gear_winter_pack_extras",
+  "language": "ro",
+  "title": "Echipament esential de iarna in rucsac",
+  "body": "Iarna, rucsacul tău arată altfel. Pe lângă ce știi deja, adaugă o folie de supraviețuire – e ușoară și poate face diferența la un popas neprevăzut. O termos umplut cu ceai fierbinte e aur curat, crede-mă, după o urcare pe vânt. Nu uita de colțari și piolet, chiar dacă zăpada pare mică la plecare; vremea se schimbă repede. O pereche de ochelari de schi te salvează de viscol și de lumina puternică reflectată de zăpadă. Și, foarte important, o trusă de prim ajutor mai generoasă, cu bandaje extra și plasturi pentru degerături incipiente. Nu uita de frontala, cu baterii de rezervă, că ziua e scurtă. E mai bine să ai și să nu-ți trebuiască, decât să-ți trebuiască și să n-ai. Am pățit-o, nu-i de glumit.",
+  "lead": "Află ce echipament esențial de iarnă trebuie să adaugi în rucsac pentru siguranța și confortul tău pe munte.",
+  "keywords": "iarna echipament rucsac coltari piolet folie supravietuire termos ochelari schi",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce echipament esențial de iarnă trebuie să adaugi în rucsac pentru siguranța și confortul tău pe munte.",
+    "seed_topic": "Ce adaugi în rucsac iarna și nu cari vara",
+    "seed_topic_slug": "gear_winter_pack_extras"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_clouds_basic_16df5bfd732d",
+  "card_id": "cg_weather_and_season_weather_clouds_basic_16df5bfd732d",
+  "domain": "weather_and_season",
+  "topic": "weather_clouds_basic",
+  "language": "ro",
+  "title": "Cititul norilor: ghid rapid pentru vremea din ora următoare",
+  "body": "Salut, prietene! Știi, norii sunt ca o carte deschisă dacă știi să-i citești un pic. Pentru ora următoare, e simplu: dacă vezi cum norii se adună repede și devin mai închiși la culoare, mai ales spre vest, e semn clar de ploaie. Dacă sunt pufoși, albi, ca niște bulgări de vată (cum sunt cumulusii), și se mișcă lent, ai șanse mari de vreme bună. Dar dacă încep să se înalțe mult, să arate ca niște turnuri (cumulonimbus), și au o bază întunecată, atunci pregătește-te de furtună cu tunete și fulgere. Începe să te gândești la un adăpost. Nu uita, norii de seară roșii, în general, prevestesc vreme bună a doua zi. E o zicală veche: „Roșu-n cer, vreme bună-i cer”.",
+  "lead": "Învață să interpretezi rapid norii pentru a anticipa vremea din ora următoare pe munte.",
+  "keywords": "norii vreme prognoza scurta munte ploaie furtuna cumulus cumulonimbus",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață să interpretezi rapid norii pentru a anticipa vremea din ora următoare pe munte.",
+    "seed_topic": "Cum citești norii pentru o oră înainte (nivel începător)",
+    "seed_topic_slug": "weather_clouds_basic"
+  }
+}

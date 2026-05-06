@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_cattle_dogs_eti_7cefd3b8dfef",
+  "card_id": "cg_wildlife_romania_wildlife_cattle_dogs_eti_7cefd3b8dfef",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_cattle_dogs_etiquette",
+  "language": "ro",
+  "title": "Câinii ciobănești pe pășune: cum interacționezi",
+  "body": "Băi, știu că-i tentant să te apropii de o turmă de oi, dar ține minte: câinii ciobănești își iau treaba în serios. Nu-i ignora și nu încerca să-i mângâi, oricât de pufoși ar părea. Cel mai bine e să-i lași să te observe, să știe că ești acolo, dar să nu le dai motive de alarmă. Mergi pe lângă turmă, nu prin ea. Dacă vezi ciobanul, salută-l! O vorbă bună face minuni. Câinii, de obicei, sunt mai relaxați când văd că omul lor e relaxat. Și, cel mai important, nu alerga! Câinii interpretează fuga ca pe o invitație la joacă sau, mai rău, ca pe o amenințare. Am pățit-o, crede-mă. Odată, am alergat să prind o poză și m-am trezit cu trei dulăi pe urme. Nu a fost o experiență plăcută, dar am învățat pe pielea mea. Păstrează distanța, fii calm și respectă-le spațiul. Ei te respectă la rândul lor. E simplu, ca-n orice relație bună.",
+  "lead": "Află cum să te comporți corect în preajma câinilor ciobănești de pe pășune pentru a evita incidente.",
+  "keywords": "câini ciobănești pășune interacțiune siguranță drumeție animale sălbatice",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te comporți corect în preajma câinilor ciobănești de pe pășune pentru a evita incidente.",
+    "seed_topic": "Câinii ciobănești pe pășune — reguli sociale, nu de luptă",
+    "seed_topic_slug": "wildlife_cattle_dogs_etiquette"
+  }
+}

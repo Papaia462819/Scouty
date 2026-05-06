@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_diferenta_intre_ams_hace_f249e98ba086",
+  "card_id": "cg_medical_emergency_diferenta_intre_ams_hace_f249e98ba086",
+  "domain": "medical_emergency",
+  "topic": "diferenta_intre_ams_hace_si_hape",
+  "language": "ro",
+  "title": "Maladia de altitudine: AMS, HACE și HAPE — simptome și acțiuni",
+  "body": "Maladia de altitudine este cauzată de nivelurile scăzute de oxigen la altitudini mari. Este esențial să recunoașteți simptomele pentru a acționa prompt.\n\n**Maladia Acută de Munte (AMS)** este forma cea mai ușoară. Simptomele includ dureri de cap, oboseală, lipsa poftei de mâncare, greață și vărsături. Copiii mici pot fi doar iritabili. Cazurile ușoare pot fi tratate prin ameliorarea simptomelor (ex: analgezice pentru dureri de cap), iar simptomele ar trebui să dispară în câteva zile. Nu urcați la altitudini mai mari până la dispariția simptomelor. Dacă simptomele se agravează în repaus, coborâți imediat la o altitudine mai joasă pentru a evita complicațiile grave sau decesul.\n\n**Edemul Cerebral de Altitudine (HACE)** este o formă mai gravă de AMS, rară, dar potențial fatală. Simptomele includ oboseală extremă, somnolență, confuzie și pierderea coordonării. Dacă se dezvoltă, persoana trebuie imediat mutată la o altitudine mai joasă.\n\n**Edemul Pulmonar de Altitudine (HAPE)** este un al treilea tip de maladie de altitudine, care poate deveni rapid letal. Simptomele includ dificultăți de respirație, slăbiciune și tuse. O persoană cu aceste simptome trebuie imediat mutată la o altitudine mai joasă și va necesita probabil tratament cu oxigen. În caz de urgență, apelați 112 sau 0SALVAMONT.",
+  "lead": "Aflați diferențele cheie între Maladia Acută de Munte (AMS), Edemul Cerebral de Altitudine (HACE) și Edemul Pulmonar de Altitudine (HAPE), precum și acțiunile necesare.",
+  "keywords": "maladie de altitudine ams hace hape simptome altitudine prim ajutor munte urgență medicală coborâre de urgență lipsă oxigen salvamont",
+  "card_family": "DEFINITION",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Travel to High Altitudes",
+  "source_url": "https://wwwnc.cdc.gov/travel/page/travel-to-high-altitudes",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "altitude_sickness",
+    "ams",
+    "hace",
+    "hape",
+    "life_threatening"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați diferențele cheie între Maladia Acută de Munte (AMS), Edemul Cerebral de Altitudine (HACE) și Edemul Pulmonar de Altitudine (HAPE), precum și acțiunile necesare.",
+    "evidence_confidence": "high",
+    "source_quote": "Acute mountain sickness (AMS) is the mildest form of altitude illness. High-altitude cerebral edema (HACE) is a more serious form of AMS. A third type of altitude illness, is called high-altitude pulmonary edema (HAPE).",
+    "source_id": "cdc_high_altitude"
+  }
+}

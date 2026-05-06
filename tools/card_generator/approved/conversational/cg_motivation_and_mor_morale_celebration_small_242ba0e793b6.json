@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_celebration_small_242ba0e793b6",
+  "card_id": "cg_motivation_and_mor_morale_celebration_small_242ba0e793b6",
+  "domain": "motivation_and_morale",
+  "topic": "morale_celebration_small",
+  "language": "ro",
+  "title": "Sărbători mici la fiecare oră",
+  "body": "Băi, știu că uneori e greu pe traseu, mai ales când panta nu se mai termină. Dar ai observat cât de mult ajută să-ți antrenezi mintea? Eu, de exemplu, la fiecare oră fixă, îmi propun o mică \"sărbătoare\". Poate e o gură de ciocolată, o privire mai atentă la un peisaj, sau pur și simplu o pauză de 30 de secunde în care respir adânc și îmi spun că sunt tare. Nu e doar o chestie de moral, e și un mod de a-ți structura timpul și de a evita să te simți copleșit. Încearcă, o să vezi că merge! E ca și cum ai avea mici borne de bucurie care te trag înainte. Și nu uita, fiecare pas contează, chiar și cel mai mic.",
+  "lead": "Antrenează-ți mintea pe traseu cu mici \"sărbători\" orare pentru a-ți menține moralul și a evita epuizarea.",
+  "keywords": "motivatie traseu moral munte strategii mentale pauze scurte bucurii mici",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Antrenează-ți mintea pe traseu cu mici \"sărbători\" orare pentru a-ți menține moralul și a evita epuizarea.",
+    "seed_topic": "Sărbătorile mici la fiecare oră — antrenez-ți creierul",
+    "seed_topic_slug": "morale_celebration_small"
+  }
+}

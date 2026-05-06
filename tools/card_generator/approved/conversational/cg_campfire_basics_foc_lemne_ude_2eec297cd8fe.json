@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_foc_lemne_ude_2eec297cd8fe",
+  "card_id": "cg_campfire_basics_foc_lemne_ude_2eec297cd8fe",
+  "domain": "campfire_basics",
+  "topic": "foc_lemne_ude",
+  "language": "ro",
+  "title": "Aprins focul când lemnele sunt ude",
+  "body": "Lemnul ud arde, doar că ai nevoie de răbdare și de inima lui uscată. După o ploaie de două zile, ramurile de pe sol sunt pierdute — ridică privirea. Ramurile uscate, agățate de jos pe copacii de conifere (în special brad și molid), sunt cele mai uscate lucruri din pădure. Le rupi cu mâna; dacă se îndoaie, sunt prea verzi. Ia bucățele cât creionul. Cu briceagul, decojește un buștean mai mare și fă așchii dintr-un strat de un centimetru: sub coajă, lemnul e adesea uscat. Cea mai bună iască naturală pe Carpați rămâne coaja de mesteacăn — uleiurile ei ard chiar și ude. Construiește focul mic, sub un acoperiș improvizat din rucsac sau dintr-un buștean lat ținut peste tine. Începe cu așchii fine, adaugă bețe de mărimea unui creion, apoi ramurile rupte de sus. Aerează ușor de jos, nu sufla violent. Așteaptă-te la mult fum primele cinci minute. Asta e normal.",
+  "lead": "Lemnele ude au inima uscată; ridică privirea după ramuri agățate de conifere și folosește coaja de mesteacăn ca iască.",
+  "keywords": "lemn ud foc ploaie mesteacan asçhii conifer fum",
+  "card_family": "SCENARIO",
+  "priority": 70,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": ["tip", "fire"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Lemnele ude au inima uscată; ridică privirea după ramuri agățate de conifere și folosește coaja de mesteacăn ca iască.",
+    "seed_topic": "Cum aprinzi focul când lemnele sunt ude după ploaie",
+    "seed_topic_slug": "fire_wet_wood"
+  }
+}

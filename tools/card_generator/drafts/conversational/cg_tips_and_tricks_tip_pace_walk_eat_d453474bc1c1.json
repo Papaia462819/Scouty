@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_pace_walk_eat_d453474bc1c1",
+  "card_id": "cg_tips_and_tricks_tip_pace_walk_eat_d453474bc1c1",
+  "domain": "tips_and_tricks",
+  "topic": "tip_pace_walk_eat",
+  "language": "ro",
+  "title": "Mănânci în mers? Doar pe drumuri ușoare. Pe greu, te oprești",
+  "body": "Când e poteca lată și lină, e perfect să ronțăi un baton sau un măr în timp ce mergi. Însă, când dai de bolovăniș, rădăcini sau o urcare abruptă, oprește-te! Nu merită să te împiedici sau să-ți scrântești glezna doar pentru că ai vrut să câștigi 3 minute. Ia-ți 5-10 minute, așează-te pe un bolovan, savurează-ți gustarea și bea apă. O să vezi că te refaci mult mai bine și ai energie proaspătă pentru următoarea porțiune. Nu uita, muntele nu fuge nicăieri. Graba strică treaba, și la mâncat, și la mers.",
+  "lead": "Află când e sigur să mănânci în mers pe munte și de ce e mai bine să te oprești pe porțiunile dificile.",
+  "keywords": "alimentatie munte pauze traseu siguranta drumetie gustari munte hidratare traseu",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află când e sigur să mănânci în mers pe munte și de ce e mai bine să te oprești pe porțiunile dificile.",
+    "seed_topic": "Mănânci în mers? Doar pe drumuri ușoare. Pe greu, te oprești",
+    "seed_topic_slug": "tip_pace_walk_eat"
+  }
+}

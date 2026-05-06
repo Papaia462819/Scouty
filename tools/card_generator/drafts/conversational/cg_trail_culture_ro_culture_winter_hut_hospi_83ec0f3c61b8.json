@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_winter_hut_hospi_83ec0f3c61b8",
+  "card_id": "cg_trail_culture_ro_culture_winter_hut_hospi_83ec0f3c61b8",
+  "domain": "trail_culture_ro",
+  "topic": "culture_winter_hut_hospitality",
+  "language": "ro",
+  "title": "Caldura de iarna la cabana izolata",
+  "body": "Băi, când prinzi o cabană izolată iarna, e o poveste aparte. Nu te aștepta la lux, ci la căldură și camaraderie. E musai să ai la tine un sac de dormit bun, chiar dacă e cabanier. Nu știi niciodată cât de cald e în cameră, mai ales dacă ești singur sau soba nu a fost focărită bine. O lanternă frontală e sfântă, curentul pică des. Ajută la treburile cabanei, că ești și tu oaspete. Adună lemne, cară apă, ajută la gătit – așa se leagă prietenii la munte. Și nu uita de o sticlă de pălincă, merge de minune la povești, după o zi de mers prin zăpadă. Am stat odată într-o cabană unde am dormit cu geaca pe mine, dar dimineața am râs de ne-am spart la o cană de ceai fierbinte.",
+  "lead": "Află cum să te bucuri de ospitalitatea unei cabane izolate iarna, cu sfaturi practice de la un drumeț experimentat.",
+  "keywords": "cabana iarna ospitalitate munte echipament iarna cultura cabanei sac de dormit lanterna frontala",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te bucuri de ospitalitatea unei cabane izolate iarna, cu sfaturi practice de la un drumeț experimentat.",
+    "seed_topic": "Ospitalitatea de iarnă la o cabană izolată",
+    "seed_topic_slug": "culture_winter_hut_hospitality"
+  }
+}

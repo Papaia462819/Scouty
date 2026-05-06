@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_seasonal_dishes__f8b49ac62ab3",
+  "card_id": "cg_trail_culture_ro_culture_seasonal_dishes__f8b49ac62ab3",
+  "domain": "trail_culture_ro",
+  "topic": "culture_seasonal_dishes_huts",
+  "language": "ro",
+  "title": "Mâncărurile de sezon la cabane",
+  "body": "Când ajungi la cabană, după o zi de mers, e tentant să te arunci pe orice. Dar stai puțin! Mâncărurile de sezon sunt aur curat. Vara, caută ciorbe de legume proaspete, poate o tocăniță cu ciuperci de pădure, dacă ești norocos. Iarna, o ciorbă de burtă sau fasole cu ciolan te încălzește mai bine decât orice. Gândește-te la ce au avut ușor de adus cabanierii. Nu te aștepta la fructe de mare în Făgăraș, oricât de poftă ai avea. Întreabă cabanierul ce e proaspăt și local. S-ar putea să descoperi o rețetă veche, de munte, pe care nu o găsești nicăieri altundeva. Și nu uita de ceaiul de plante, e mereu o alegere bună.",
+  "lead": "Alege inteligent mâncarea la cabană, optând pentru preparate de sezon care te refac și te conectează cu specificul locului.",
+  "keywords": "mâncare cabană sezonier sfaturi culinare experiență munte tradiții",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Alege inteligent mâncarea la cabană, optând pentru preparate de sezon care te refac și te conectează cu specificul locului.",
+    "seed_topic": "Mâncărurile de sezon la cabane — ce alegi când",
+    "seed_topic_slug": "culture_seasonal_dishes_huts"
+  }
+}

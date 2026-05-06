@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_pinecone_ignite_84f0981f866a",
+  "card_id": "cg_campfire_basics_fire_pinecone_ignite_84f0981f866a",
+  "domain": "campfire_basics",
+  "topic": "fire_pinecone_ignite",
+  "language": "ro",
+  "title": "Conuri de brad uscate: secretele iascăi perfecte",
+  "body": "Băi, știi că un con de brad uscat e aur curat la foc? Nu te baza pe el ca pe singura iască, dar e un starter excelent. Caută-le pe cele căzute de mult, maro închis, deschise și ușoare. Alea umede sau verzi sunt bune doar de decor. Le poți rupe în bucăți mai mici pentru a expune rășina uscată, care arde ca spirtul. Îți zic din experiență, am aprins odată focul cu vreo trei conuri și o scânteie, după o ploaie zdravănă. Eram leoarcă, dar focul a pornit. Pune-le sub lemnele subțiri, nu direct sub butuci. Funcționează cel mai bine ca prim strat, înainte de crenguțe și bețe mai groase. E o metodă simplă și la îndemână, mai ales când ești pe grabă.",
+  "lead": "Conurile uscate de brad sunt o iască naturală excelentă, dacă știi să le alegi și să le folosești corect pentru a porni focul.",
+  "keywords": "conuri brad uscate iască naturală aprindere foc sfaturi foc material combustibil rășină uscată",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Conurile uscate de brad sunt o iască naturală excelentă, dacă știi să le alegi și să le folosești corect pentru a porni focul.",
+    "seed_topic": "Conuri uscate de brad ca iască — când funcționează",
+    "seed_topic_slug": "fire_pinecone_ignite"
+  }
+}

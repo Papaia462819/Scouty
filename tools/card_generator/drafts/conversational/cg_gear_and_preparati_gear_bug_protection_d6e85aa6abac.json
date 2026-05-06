@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_bug_protection_d6e85aa6abac",
+  "card_id": "cg_gear_and_preparati_gear_bug_protection_d6e85aa6abac",
+  "domain": "gear_and_preparation",
+  "topic": "gear_bug_protection",
+  "language": "ro",
+  "title": "Protecția împotriva insectelor pe traseu",
+  "body": "Băi, știi cum e, munții sunt frumoși, dar vin și cu chiriașii lor. Pentru țânțari și căpușe, un spray bun cu DEET sau icaridin e sfânt. Aplică-l pe piele și pe haine, mai ales la glezne și încheieturi. Căpușele stau prin iarba înaltă, așa că pantalonii lungi sunt obligatorii, chiar și vara. După fiecare tură, verifică-te bine de căpușe, mai ales în zonele calde și umede ale corpului. Pentru viespi, evită hainele viu colorate și parfumurile dulci. Dacă te bâzâie una, rămâi calm, nu face mișcări bruște. Am avut un prieten care a alergat de o viespe și a căzut într-un pârâu. Nu-i o idee bună. Fii pregătit, dar nu paranoic!",
+  "lead": "Află cum să te protejezi eficient de țânțari, căpușe și viespi în timpul drumețiilor lungi pe munte.",
+  "keywords": "țânțari căpușe viespi protecție spray echipament siguranță",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te protejezi eficient de țânțari, căpușe și viespi în timpul drumețiilor lungi pe munte.",
+    "seed_topic": "Țânțari, căpușe, viespi — cum te protejezi pe drumuri lungi",
+    "seed_topic_slug": "gear_bug_protection"
+  }
+}

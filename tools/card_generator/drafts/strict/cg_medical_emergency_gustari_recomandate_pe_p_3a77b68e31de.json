@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_gustari_recomandate_pe_p_3a77b68e31de",
+  "card_id": "cg_medical_emergency_gustari_recomandate_pe_p_3a77b68e31de",
+  "domain": "medical_emergency",
+  "topic": "gustari_recomandate_pe_parcurs",
+  "language": "ro",
+  "title": "Alimente hiperenergetice în timpul efortului montan",
+  "body": "Cantitatea de alimente necesare se calculează în funcție de lungimea și dificultatea traseului. Sunt de preferat alimentele care nu se deteriorează la temperaturi ridicate și care au un conținut redus de sare, pentru a nu provoca sete. În timpul efortului fizic susținut pe munte, se vor consuma alimente hiperenergetice. Exemple de astfel de alimente includ batoane energetice, ciocolată, fructe confiate, smochine și curmale. Masa principală se va consuma, de preferință, după terminarea unui efort susținut, nu imediat. Este contraindicat să se plece în drumeții pe zone care necesită efort susținut imediat după masă.",
+  "lead": "Consumați alimente hiperenergetice precum batoane, ciocolată sau fructe confiate în timpul efortului susținut pe munte.",
+  "keywords": "alimentație drumeție efort gustări energie batoane energetice ciocolată fructe confiate salvamont",
+  "card_family": "DEFINITION",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Alimentatia si hidratarea in muntii Romaniei",
+  "source_url": "https://www.salvamontromania.ro/alimentatia-hidratarea.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "hiking",
+    "nutrition",
+    "energy_food",
+    "mountain_safety",
+    "food_preparation"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Consumați alimente hiperenergetice precum batoane, ciocolată sau fructe confiate în timpul efortului susținut pe munte.",
+    "evidence_confidence": "high",
+    "source_quote": "iar in timpul efortului se vor consuma alimente hiperenergetice (batoane energetice, ciocolata, fructe confiate, smochine, curmale, etc).",
+    "source_id": "salvamont_alimentatie_hidratare"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_knot_bowline_ccdad0fc95a0",
+  "card_id": "cg_survival_basics_survival_knot_bowline_ccdad0fc95a0",
+  "domain": "survival_basics",
+  "topic": "survival_knot_bowline",
+  "language": "ro",
+  "title": "Nodul scaun: Prietenul tau de incredere in munti",
+  "body": "Băi, știi nodul ăla care te scoate din belele? Nodul scaun, sau bowline, e esențial. E un nod simplu, dar incredibil de sigur, care nu alunecă sub tensiune și se desface ușor chiar și după o sarcină mare. Gândește-te că trebuie să legi o coardă de tine ca să te asiguri când treci un pasaj mai expus, sau să ridici un rucsac dintr-o râpă. Se face rapid: faci o buclă mică, treci capătul liber prin ea, apoi înfășori în jurul capătului fix și te întorci prin bucla mică. Practică-l acasă, la televizor. Nu vrei să-l înveți la fața locului, cu inima-n gât. E ca și cum ai avea o a doua șansă, legată bine.",
+  "lead": "Învață nodul scaun, un nod sigur care nu alunecă și te poate ajuta în situații critice pe munte.",
+  "keywords": "nodul scaun bowline noduri esentiale siguranta munte tehnici coarda survival",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață nodul scaun, un nod sigur care nu alunecă și te poate ajuta în situații critice pe munte.",
+    "seed_topic": "Nodul scaun (bowline) — un nod care îți poate salva viața",
+    "seed_topic_slug": "survival_knot_bowline"
+  }
+}

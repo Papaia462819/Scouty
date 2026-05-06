@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_terrain_reading_fdb793e38847",
+  "card_id": "cg_survival_basics_survival_terrain_reading_fdb793e38847",
+  "domain": "survival_basics",
+  "topic": "survival_terrain_reading",
+  "language": "ro",
+  "title": "Citirea terenului: linii de cadere si contur",
+  "body": "Salut, prietene! Când ești pe munte, e esențial să știi să citești terenul. Liniile de cădere sunt, practic, direcția în care ar curge apa. Urmărește-le pentru a înțelege panta. Contururile de pe hartă îți arată altitudinea: dacă sunt apropiate, e pantă abruptă; dacă-s rare, e mai lin. Talvegii sunt văile, punctele cele mai joase, unde se adună apa. E bine să-i eviți pe ploaie, că se transformă în torenți. Odată, am prins o ploaie zdravănă și un talveg s-a umflat cât o baltă. Am învățat să citesc harta și terenul ca pe o carte deschisă. Te ajută să anticipezi pericolele și să alegi cel mai bun traseu.",
+  "lead": "Află cum să interpretezi liniile de cădere, contururile și talvegii pentru a naviga în siguranță pe munte.",
+  "keywords": "citirea hărții linii de cădere contur talveg orientare teren montan",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să interpretezi liniile de cădere, contururile și talvegii pentru a naviga în siguranță pe munte.",
+    "seed_topic": "Citirea terenului: linii de cădere, contur, talvegi",
+    "seed_topic_slug": "survival_terrain_reading"
+  }
+}

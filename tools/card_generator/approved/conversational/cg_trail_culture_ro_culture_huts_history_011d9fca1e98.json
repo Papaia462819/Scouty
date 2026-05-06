@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_huts_history_011d9fca1e98",
+  "card_id": "cg_trail_culture_ro_culture_huts_history_011d9fca1e98",
+  "domain": "trail_culture_ro",
+  "topic": "culture_huts_history",
+  "language": "ro",
+  "title": "Cabanele Românești: O Poveste pe Cărare",
+  "body": "Când ajungi la o cabană, nu e doar un loc de odihnă, e o bucată de istorie. Multe au fost construite acum peste 100 de ani, cu povești nespuse în fiecare grindă. Imaginează-ți cum arăta viața fără telefoane, doar cu hărți pe hârtie și bocanci grei. Cabanierii de azi duc mai departe o tradiție veche, de la ceaiul fierbinte până la poveștile spuse la lumina lămpii. Respectă locul, oamenii și liniștea. E un privilegiu să te bucuri de ele. Amintesc de vremurile când singurul 'check-in' era o strângere de mână.",
+  "lead": "Cabanele românești sunt mai mult decât adăposturi, ele sunt mărturii vii ale istoriei și culturii montane, purtând povești din generație în generație.",
+  "keywords": "cabane montane istorie munți cultura drumeției tradiții românești respect munte experiențe autentice",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Cabanele românești sunt mai mult decât adăposturi, ele sunt mărturii vii ale istoriei și culturii montane, purtând povești din generație în generație.",
+    "seed_topic": "Cabanele românești — un strat de istorie pe care nu-l vezi",
+    "seed_topic_slug": "culture_huts_history"
+  }
+}

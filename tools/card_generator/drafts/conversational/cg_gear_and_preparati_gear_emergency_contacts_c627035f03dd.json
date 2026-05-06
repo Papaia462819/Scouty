@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_emergency_contacts_c627035f03dd",
+  "card_id": "cg_gear_and_preparati_gear_emergency_contacts_c627035f03dd",
+  "domain": "gear_and_preparation",
+  "topic": "gear_emergency_contacts",
+  "language": "ro",
+  "title": "Cui și cum anunți traseul montan",
+  "body": "Băi, e crucial să spui cuiva de încredere exact pe unde mergi. Nu doar că te duci la munte, ci traseul detaliat: punctul de plecare, cel de sosire, obiective intermediare și, cel mai important, ora estimată de întoarcere sau de ajungere la destinație. Eu, de exemplu, îi trimit mereu soției o poză cu harta și traseul marcat, plus un SMS cu detaliile. Dacă nu mă știe acasă până la ora X, știe că e cazul să se îngrijoreze și să sune la 112 sau la Salvamont. Nu e de joacă, munții nu iartă nepăsarea. Mai bine să știe de zece ori degeaba, decât o dată să nu știe de nevoie.",
+  "lead": "Anunță întotdeauna o persoană de încredere despre traseul tău detaliat și ora estimată de întoarcere.",
+  "keywords": "siguranță montană anunț traseu persoană contact planificare drumeție salvamont urgență",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Anunță întotdeauna o persoană de încredere despre traseul tău detaliat și ora estimată de întoarcere.",
+    "seed_topic": "Cui îi spui exact pe unde mergi și până când",
+    "seed_topic_slug": "gear_emergency_contacts"
+  }
+}

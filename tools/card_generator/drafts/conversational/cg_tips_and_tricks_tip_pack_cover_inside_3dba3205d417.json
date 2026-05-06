@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_pack_cover_inside_3dba3205d417",
+  "card_id": "cg_tips_and_tricks_tip_pack_cover_inside_3dba3205d417",
+  "domain": "tips_and_tricks",
+  "topic": "tip_pack_cover_inside",
+  "language": "ro",
+  "title": "Protejeaza-ti echipamentul de ploaie",
+  "body": "Salut! Știi cum e, în munți vremea se schimbă mai repede decât îți bei tu cafeaua de dimineață. Chiar dacă ai o husă de ploaie pentru rucsac, nu te baza doar pe ea. O ploaie zdravănă sau o căzătură într-o baltă îți pot uda tot. Eu îmi pun hainele de schimb, sacul de dormit și electronicele în saci impermeabili individuali, din cei ușori. Poți folosi și pungi de gunoi mai rezistente, legate bine. Așa, chiar dacă rucsacul e leoarcă pe dinafară, înăuntru e totul uscat. E o metodă veche, dar care nu dă greș niciodată. Mai bine previi decât să tremuri de frig în vârf de munte, nu crezi?",
+  "lead": "Află de ce sacii impermeabili individuali sunt mai buni decât o simplă husă de rucsac pentru a-ți proteja echipamentul de ploaie.",
+  "keywords": "impermeabilizare rucsac saci impermeabili protectie ploaie echipament uscat sfaturi drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce sacii impermeabili individuali sunt mai buni decât o simplă husă de rucsac pentru a-ți proteja echipamentul de ploaie.",
+    "seed_topic": "Saci impermeabili în interior, husa exterioară opțională",
+    "seed_topic_slug": "tip_pack_cover_inside"
+  }
+}

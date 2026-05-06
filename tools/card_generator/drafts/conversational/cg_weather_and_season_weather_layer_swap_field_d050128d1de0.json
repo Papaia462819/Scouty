@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_layer_swap_field_d050128d1de0",
+  "card_id": "cg_weather_and_season_weather_layer_swap_field_d050128d1de0",
+  "domain": "weather_and_season",
+  "topic": "weather_layer_swap_field",
+  "language": "ro",
+  "title": "Schimbatul straturilor pe traseu",
+  "body": "Băi, știu, e tentant să te oprești și să te dezbraci când îți e cald. Dar nu sta pe loc prea mult! Când vrei să te schimbi, găsește un loc ferit de vânt, dacă se poate. Scoate rucsacul, scoate stratul de care nu mai ai nevoie și pune-l repede în rucsac. Apoi, dacă e cazul, îmbracă stratul nou. Fii rapid! Cu cât stai mai puțin expus la frig, cu atât mai bine. Eu, de exemplu, am un sistem: mai întâi scot hanoracul, apoi, dacă tot îmi e cald, mă opresc iar și scot și tricoul tehnic. Nu le da jos pe toate odată, că te ia frigul instant. Și nu uita să bei apă chiar dacă e frig, deshidratarea e la fel de periculoasă.",
+  "lead": "Află cum să te schimbi rapid pe traseu, fără să-ți fie frig, și cum să-ți gestionezi eficient straturile de îmbrăcăminte.",
+  "keywords": "straturi echipament frig vânt schimbare rapidă hidratare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te schimbi rapid pe traseu, fără să-ți fie frig, și cum să-ți gestionezi eficient straturile de îmbrăcăminte.",
+    "seed_topic": "Schimbatul straturilor pe traseu fără să îngheți",
+    "seed_topic_slug": "weather_layer_swap_field"
+  }
+}

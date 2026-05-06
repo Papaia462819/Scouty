@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_summer_dew_point_b89c6ac87a2a",
+  "card_id": "cg_weather_and_season_weather_summer_dew_point_b89c6ac87a2a",
+  "domain": "weather_and_season",
+  "topic": "weather_summer_dew_point",
+  "language": "ro",
+  "title": "Punctul de rouă vara: cum să te simți mai bine pe traseu",
+  "body": "Vara, când e cald și umed, punctul de rouă mare e cel care te face să te simți lipicios și să transpiri abundent, chiar dacă temperatura nu e extremă. Aerul e deja plin de vapori de apă, așa că transpirația ta nu se mai evaporă eficient. Ca să-o duci mai bine, alege haine lejere, din materiale sintetice care elimină rapid umezeala de pe piele. Evită bumbacul, care reține apa și te răcește când te oprești. Bea multă apă, chiar dacă nu simți sete, și ia pauze dese la umbră. Nu uita o șapcă sau pălărie și ochelari de soare. O batistă mică, din microfibră, e aur curat să-ți ștergi fața. Nu te forța, munții sunt acolo și mâine.",
+  "lead": "Află cum să gestionezi disconfortul cauzat de punctul de rouă ridicat în drumețiile de vară, alegând echipamentul potrivit și hidratându-te corect.",
+  "keywords": "punct de rouă transpirație umiditate echipament vară hidratare confort termic",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să gestionezi disconfortul cauzat de punctul de rouă ridicat în drumețiile de vară, alegând echipamentul potrivit și hidratându-te corect.",
+    "seed_topic": "Punct de rouă vara — disconfort și transpirație",
+    "seed_topic_slug": "weather_summer_dew_point"
+  }
+}

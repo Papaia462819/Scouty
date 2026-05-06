@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_local_dialects_s_b1c7aac09e03",
+  "card_id": "cg_trail_culture_ro_culture_local_dialects_s_b1c7aac09e03",
+  "domain": "trail_culture_ro",
+  "topic": "culture_local_dialects_signage",
+  "language": "ro",
+  "title": "Termeni regionali pe potecile din Carpați",
+  "body": "Salutare, prieteni! Pe potecile noastre, mai ales prin Apuseni sau prin Maramureș, s-ar putea să dai de termeni mai puțin obișnuiți pe indicatoare. Nu te panica! De exemplu, unii numesc creasta 'coamă', iar o poiană poate fi 'fânaț' sau 'pășune'. O 'curmătură' e tot o șa sau o trecătoare, iar 'zăvoi' înseamnă o pădure de luncă. Am pățit-o o dată, căutam 'izvorul' și am trecut pe lângă 'fântână' de vreo trei ori. E bine să știi că 'fântână' poate însemna și izvor, nu doar puț. Fii atent la context și la harta ta, că de obicei se completează reciproc. Cu experiența, o să le prinzi din zbor. Spor la drumeție!",
+  "lead": "Descoperă termenii regionali întâlniți pe indicatoarele montane din Carpați și cum să-i interpretezi corect pentru o orientare sigură.",
+  "keywords": "termeni regionali semne montane cultura muntelui vocabular montan carpați orientare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă termenii regionali întâlniți pe indicatoarele montane din Carpați și cum să-i interpretezi corect pentru o orientare sigură.",
+    "seed_topic": "Diferențe de termeni regionali pe semne și panouri",
+    "seed_topic_slug": "culture_local_dialects_signage"
+  }
+}

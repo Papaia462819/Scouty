@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_wet_clothes_str_da0106fae1c5",
+  "card_id": "cg_survival_basics_survival_wet_clothes_str_da0106fae1c5",
+  "domain": "survival_basics",
+  "topic": "survival_wet_clothes_strategy",
+  "language": "ro",
+  "title": "Uscarea hainelor ude pe munte in 60 de minute",
+  "body": "Ai plouat torențial și ești leoarcă? Nu te panica. Scoate hainele ude și stoarce-le bine, cu putere, până nu mai picură. Apoi, dacă e soare, întinde-le pe pietre calde sau pe crengi, la vânt. Dacă nu e soare, folosește căldura corpului. Îmbracă stratul de bază (cel mai subțire) direct pe piele, sub celelalte haine uscate (dacă ai). Căldura corpului tău va ajuta la evaporare. Schimbă ordinea straturilor la fiecare 15-20 de minute. E ca la rotisor, dar cu haine. Nu e ideal, dar te ajută să nu îngheți și să continui. Am făcut asta de multe ori pe crestele Făgărașului, funcționează de minune dacă ești în mișcare.",
+  "lead": "Află cum să-ți usuci rapid hainele ude pe munte, chiar și fără soare, folosind căldura corpului și tehnici simple de stoarcere.",
+  "keywords": "haine ude uscare rapida caldura corpului supravietuire munte echipament ud",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți usuci rapid hainele ude pe munte, chiar și fără soare, folosind căldura corpului și tehnici simple de stoarcere.",
+    "seed_topic": "Hainele s-au udat complet — strategia de uscare în 60 de minute",
+    "seed_topic_slug": "survival_wet_clothes_strategy"
+  }
+}

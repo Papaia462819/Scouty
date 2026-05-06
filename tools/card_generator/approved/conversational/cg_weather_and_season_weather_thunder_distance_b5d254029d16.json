@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_thunder_distance_b5d254029d16",
+  "card_id": "cg_weather_and_season_weather_thunder_distance_b5d254029d16",
+  "domain": "weather_and_season",
+  "topic": "weather_thunder_distance_rule",
+  "language": "ro",
+  "title": "Regula 30/30: Cand fulgera, nu te juca cu focul",
+  "body": "Salutare, prietene! Ai auzit de regula 30/30 la munte? E simplă și te poate scoate din bucluc. Când vezi un fulger, numără secundele până auzi tunetul. Dacă sunt 30 de secunde sau mai puțin, ești prea aproape de furtună și trebuie să te adăpostești imediat. Asta înseamnă că fulgerul a lovit la mai puțin de 10 kilometri de tine. Apoi, după ce a trecut furtuna, mai așteaptă 30 de minute de la ultimul tunet înainte să-ți continui drumul. Nu e o glumă cu vremea la munte, că se schimbă mai repede decât îți bei tu ceaiul. Eu am pățit-o o dată pe Retezat, credeam că scap, dar m-a prins o rupere de nori de nu știam pe unde să mă ascund. De atunci, respect regula cu sfințenie. Nu uita, siguranța pe primul loc!",
+  "lead": "Află cum să folosești regula 30/30 pentru a te proteja de furtunile montane și a evita pericolele fulgerelor.",
+  "keywords": "regula 30/30 furtuna fulger tunet siguranta munte adpostire",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să folosești regula 30/30 pentru a te proteja de furtunile montane și a evita pericolele fulgerelor.",
+    "seed_topic": "Regula 30/30 (informativ, nu de siguranță) — cum o folosești",
+    "seed_topic_slug": "weather_thunder_distance_rule"
+  }
+}

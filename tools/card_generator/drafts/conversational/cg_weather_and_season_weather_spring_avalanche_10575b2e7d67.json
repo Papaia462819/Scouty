@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_spring_avalanche_10575b2e7d67",
+  "card_id": "cg_weather_and_season_weather_spring_avalanche_10575b2e7d67",
+  "domain": "weather_and_season",
+  "topic": "weather_spring_avalanche_signs_general",
+  "language": "ro",
+  "title": "Zapada instabila primavara: semne de avertizare",
+  "body": "Primăvara, zăpada e șmecheră, se preface că-i stabilă, dar poate fi o capcană. Fii atent la schimbările bruște de temperatură – o încălzire rapidă slăbește stratul de zăpadă. Dacă vezi bulgări mari, umezi, care se desprind singuri de pe pante, e un semn clar că stratul e instabil. La fel, crăpăturile în zăpadă, mai ales cele care se extind, indică tensiuni interne. Un alt indiciu e sunetul: dacă zăpada sună a gol sub bocanci sau auzi șuierături ciudate, retrage-te. Nu te baza pe urmele altora, condițiile se pot schimba rapid. Mai bine să fii precaut decât să ai surprize neplăcute. Am pățit-o o dată în Bucegi, am crezut că știu zona, dar o porțiune de pantă s-a mișcat sub mine. Am avut noroc.",
+  "lead": "Află cum să recunoști semnele de zăpadă instabilă primăvara și să eviți pericolele din munți.",
+  "keywords": "zăpadă instabilă primăvară risc avalanșă semne pericol siguranță munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să recunoști semnele de zăpadă instabilă primăvara și să eviți pericolele din munți.",
+    "seed_topic": "Primăvara: semne generale că zăpada e instabilă (nivel cunoștință generală)",
+    "seed_topic_slug": "weather_spring_avalanche_signs_general"
+  }
+}

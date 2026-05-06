@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_id_fox_0ce1f3236bb0",
+  "card_id": "cg_wildlife_romania_wildlife_id_fox_0ce1f3236bb0",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_id_fox",
+  "language": "ro",
+  "title": "Vulpea pe Carpați: ce trebuie să știi",
+  "body": "Băi, știi că vulpea e un animal super adaptabil și o să o vezi des prin Carpați, chiar și pe lângă așezările umane. Nu e agresivă de fel, dar e curioasă și oportunistă, mai ales dacă simte miros de mâncare. Am avut o dată una care mi-a furat o șosetă lăsată la uscat, credeam că-i prietenul meu ursul! Nu o hrăni niciodată, o să devină dependentă și își va pierde frica de om. Păstrează mâncarea sigilată, în cort sau rucsac, nu lăsa nimic la vedere. E mai mult nocturnă, dar o poți vedea și ziua, mai ales la răsărit sau apus. Privește-o de la distanță, bucură-te de moment și las-o în pace. E un spectacol frumos să o vezi cum își caută de-ale gurii.",
+  "lead": "Vulpea este un animal comun în Carpați, adaptabil și curios, dar nu trebuie hrănită sau abordată direct.",
+  "keywords": "vulpe carpați wildlife siguranță animale sălbatice comportament vulpe",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Vulpea este un animal comun în Carpați, adaptabil și curios, dar nu trebuie hrănită sau abordată direct.",
+    "seed_topic": "Vulpea pe Carpați: comportament și obișnuințe",
+    "seed_topic_slug": "wildlife_id_fox"
+  }
+}

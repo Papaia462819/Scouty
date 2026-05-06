@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_stove_types_ba6f09ede470",
+  "card_id": "cg_gear_and_preparati_gear_stove_types_ba6f09ede470",
+  "domain": "gear_and_preparation",
+  "topic": "gear_stove_types",
+  "language": "ro",
+  "title": "Alegerea aragazului: gaz, spirt sau lemn?",
+  "body": "Salut, prietene! Când vine vorba de aragaze, fiecare are avantaje. Pentru trasee scurte, de o zi-două, cu acces la magazine, gazul e rege: rapid, curat, fără bătăi de cap. Cartușele sunt ușoare și eficiente. Dacă mergi în ture lungi, izolate, unde realimentarea cu gaz e problematică, aragazul pe spirt e o opțiune bună. Combustibilul e mai ușor de găsit și mai ieftin, dar fierbe mai lent. Și nu uita de cel pe lemne! E cel mai fain pentru experiența rustică, dar depinzi de ce găsești în pădure. E perfect pentru bivuacuri lungi, unde ai timp să te bucuri de foc. Gândește-te la durata turei și la disponibilitatea combustibilului.",
+  "lead": "Află ce tip de aragaz se potrivește cel mai bine turelor tale montane, în funcție de durata și specificul traseului.",
+  "keywords": "aragaz gaz spirt lemn echipament alegere",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce tip de aragaz se potrivește cel mai bine turelor tale montane, în funcție de durata și specificul traseului.",
+    "seed_topic": "Aragaze: gaz vs spirit vs lemn — pentru ce traseu",
+    "seed_topic_slug": "gear_stove_types"
+  }
+}

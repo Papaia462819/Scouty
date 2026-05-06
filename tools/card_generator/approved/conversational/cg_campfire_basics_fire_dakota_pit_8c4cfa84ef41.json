@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_dakota_pit_8c4cfa84ef41",
+  "card_id": "cg_campfire_basics_fire_dakota_pit_8c4cfa84ef41",
+  "domain": "campfire_basics",
+  "topic": "fire_dakota_pit",
+  "language": "ro",
+  "title": "Focul Dakota: cand sa-l sapi",
+  "body": "Salut, prietene! Ai auzit de \"Dakota fire pit\"? E un tip de foc de tabără săpat în pământ, ideal când vrei să fii discret sau când vântul e puternic. Merită să-l sapi când vrei să ascunzi lumina focului de la distanță sau când vrei să-l folosești pentru gătit, pentru că e super eficient. Practic, sapi două găuri: una mai mare pentru lemne și alta, mai mică, la vreo 30-40 cm distanță, conectată la prima printr-un tunel subteran. Gaura mică e pentru tiraj, ca un coș. E minunat și când vrei să lași un impact minim, pentru că odată acoperit, nu se mai vede nimic. Doar ai grijă unde sapi, să nu dai de rădăcini sau să nu fii într-o zonă protejată. Și nu uita să stingi focul complet înainte de a acoperi totul!",
+  "lead": "Află când și cum să folosești un \"Dakota fire pit\" pentru un foc de tabără discret și eficient, mai ales pe vânt.",
+  "keywords": "foc de tabara dakota fire pit foc sapat campare discreta siguranta focului",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află când și cum să folosești un \"Dakota fire pit\" pentru un foc de tabără discret și eficient, mai ales pe vânt.",
+    "seed_topic": "Dakota fire pit — când merită săpat",
+    "seed_topic_slug": "fire_dakota_pit"
+  }
+}

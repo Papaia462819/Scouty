@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_fagaras_incepatori_trase_77a0d78f1907",
+  "card_id": "cg_route_intelligence_fagaras_incepatori_trase_77a0d78f1907",
+  "domain": "route_intelligence_romania",
+  "topic": "fagaras_incepatori_trasee",
+  "language": "ro",
+  "title": "Făgăraș pentru începători: pe unde NU începi creasta",
+  "body": "Fagăraș are reputație și o merită — nu e munte de început. Dar dacă ai inima să-l vezi, există abordări blânde care îți dau o idee despre ce e pe creastă fără să te arunce direct în lupta cu Negoiul. Bâlea Lac la Bâlea Cascadă, telecabina pe vară, o plimbare de jumătate de zi — atât. Bâlea Lac în jurul lacului, fără să urci pe creastă — încă o jumătate de zi. Cabana Capra spre cabana Bâlea Lac de-a lungul lacului — jumătate de zi blândă. Dacă vrei un vârf, Vârful Vânătoarea lui Buteanu de la Bâlea (4-5 ore dus-întors, cu marcaj clar) e o introducere onestă în creastă. Ce să eviți la prima vizită: traversarea Negoiu-Moldoveanu, lanțuri pe Lazuri, urcarea de la Sebeșu de Sus pe Vârful Cânaia. Acelea sunt zile lungi, expuse, cu pasaje tehnice. Du-te în iulie sau august, niciodată după prima zăpadă fără pregătire de iarnă. Și verifică buletinul ANM înainte de orice plecare — Făgăraș nu iartă vremea proastă.",
+  "lead": "Bâlea Lac, Capra-Bâlea, Vânătoarea lui Buteanu — abordări blânde; evită Negoiu-Moldoveanu, Lazuri, Cânaia la prima vizită.",
+  "keywords": "fagaras incepatori balea capra vanatoarea buteanu negoiul anm",
+  "card_family": "DEFINITION",
+  "priority": 65,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": ["tip", "route_choice"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Bâlea Lac, Capra-Bâlea, Vânătoarea lui Buteanu — abordări blânde; evită Negoiu-Moldoveanu, Lazuri, Cânaia la prima vizită.",
+    "seed_topic": "Făgăraș pentru începători: pe unde NU începi creasta",
+    "seed_topic_slug": "route_fagaras_intro"
+  }
+}

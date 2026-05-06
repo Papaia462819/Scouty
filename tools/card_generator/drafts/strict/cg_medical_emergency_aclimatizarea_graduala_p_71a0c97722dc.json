@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_aclimatizarea_graduala_p_71a0c97722dc",
+  "card_id": "cg_medical_emergency_aclimatizarea_graduala_p_71a0c97722dc",
+  "domain": "medical_emergency",
+  "topic": "aclimatizarea_graduala_peste_2500_m",
+  "language": "ro",
+  "title": "Aclimatizarea graduală la altitudini mari (peste 2500 m)",
+  "body": "Pentru a preveni răul de altitudine, ascensiunea trebuie să fie graduală. Evitați să călătoriți de la o altitudine joasă la una mai mare de 2.750 m într-o singură zi. Dacă este posibil, petreceți câteva zile la 2.400–2.750 m înainte de a urca mai sus, pentru a permite corpului să se adapteze la nivelurile scăzute de oxigen.\n\nOdată ce sunteți la o altitudine de peste 2.750 m, creșteți altitudinea la care veți dormi cu cel mult 488 m pe zi. Pentru fiecare 1.000 m ascensiune, încercați să petreceți o zi suplimentară la acea altitudine fără a urca mai departe. Nu consumați alcool și nu faceți exerciții fizice intense în primele 48 de ore după sosirea la o altitudine de peste 2.400 m.\n\nLuați în considerare excursii de o zi la altitudini mai mari, revenind apoi la o altitudine mai joasă pentru a dormi. Călătoriile la altitudini de peste 2.750 m pentru cel puțin două nopți, în decurs de 30 de zile înainte de călătoria principală, pot ajuta la prevenirea răului de altitudine pe o durată mai lungă. Dacă itinerariul nu permite o ascensiune graduală, discutați cu medicul despre medicamente preventive. În caz de urgență, apelați 112 sau 0SALVAMONT.",
+  "lead": "Aclimatizarea graduală este esențială pentru a preveni răul de altitudine la altitudini mari, permițând corpului să se adapteze la nivelurile scăzute de oxigen.",
+  "keywords": "aclimatizare altitudine rău de altitudine prevenire ascensiune graduală peste 2500m siguranță montană hipoxie sfaturi drumeție altitudine mare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Travel to High Altitudes",
+  "source_url": "https://wwwnc.cdc.gov/travel/page/travel-to-high-altitudes",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "altitude_sickness",
+    "acclimatization",
+    "high_altitude",
+    "prevention",
+    "mountain_safety"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aclimatizarea graduală este esențială pentru a preveni răul de altitudine la altitudini mari, permițând corpului să se adapteze la nivelurile scăzute de oxigen.",
+    "evidence_confidence": "high",
+    "source_quote": "Ascend gradually. Avoid traveling from a low elevation to an elevation higher than 9,000 feet (2,750 m) above sea level in one day. If possible, spend a few days at 8,000–9,000 feet before traveling to a higher elevation.",
+    "source_id": "cdc_high_altitude"
+  }
+}

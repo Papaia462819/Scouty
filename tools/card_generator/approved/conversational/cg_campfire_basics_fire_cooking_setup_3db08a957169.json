@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_cooking_setup_3db08a957169",
+  "card_id": "cg_campfire_basics_fire_cooking_setup_3db08a957169",
+  "domain": "campfire_basics",
+  "topic": "fire_cooking_setup",
+  "language": "ro",
+  "title": "Cum așezi focul pentru gătit la ceaun",
+  "body": "Uite greșeala clasică: faci un foc frumos, piramidal, și trântești oala direct deasupra. În 30 de secunde, ai stins totul și ai afumat mâncarea. Secretul nu e flacăra, ci jarul. Fă un foc normal, lasă-l să ardă bine vreo 20-30 de minute până produce un pat serios de jar. Apoi, ai două variante. Fie tragi cu un băț o parte din jarul ăla încins într-o parte și pui oala deasupra, pe două pietre plate, fie construiești de la început focul între două bucăți de lemn verde, paralele. Așa, oala stă pe lemnele alea, deasupra jarului, și poți alimenta focul pe margine fără să deranjezi. Gătești controlat, nu te lupți cu flăcările și fumul.",
+  "lead": "Nu stinge focul cu oala! Învață să folosești jarul și să construiești o vatră stabilă pentru un gătit eficient și fără fum.",
+  "keywords": "foc de tabără gătit la foc ceaun jar tehnică foc supraviețuire",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Nu stinge focul cu oala! Învață să folosești jarul și să construiești o vatră stabilă pentru un gătit eficient și fără fum.",
+    "seed_topic": "Cum așezi focul ca să gătești fără să-l stingi cu oala",
+    "seed_topic_slug": "fire_cooking_setup"
+  }
+}

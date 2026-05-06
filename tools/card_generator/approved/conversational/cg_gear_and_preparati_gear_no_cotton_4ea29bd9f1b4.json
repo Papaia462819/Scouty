@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_no_cotton_4ea29bd9f1b4",
+  "card_id": "cg_gear_and_preparati_gear_no_cotton_4ea29bd9f1b4",
+  "domain": "gear_and_preparation",
+  "topic": "gear_no_cotton",
+  "language": "ro",
+  "title": "Bumbacul pe munte: de ce e periculos?",
+  "body": "Auzi des vorba asta: bumbacul te poate omorî pe munte. Nu e o exagerare! Bumbacul absoarbe transpirația și ploaia, rămâne ud și se usucă extrem de greu. Când ești ud, corpul tău pierde căldură mult mai repede, chiar și la temperaturi pozitive. Asta duce la hipotermie. Imaginează-ți o zi răcoroasă de toamnă, o ploaie neașteptată și un tricou de bumbac ud lipit de tine. Frisoanele nu te vor părăsi. Așa că, lasă bumbacul pentru oraș și alege materiale sintetice sau lână merinos, care evacuează umezeala și te mențin uscat și cald. Mai bine dai un ban în plus acum, decât să tremuri ca varga pe creastă.",
+  "lead": "Află de ce bumbacul este periculos pe munte și cum te poate expune la hipotermie, chiar și la temperaturi blânde.",
+  "keywords": "bumbac pericol hipotermie echipament materiale munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce bumbacul este periculos pe munte și cum te poate expune la hipotermie, chiar și la temperaturi blânde.",
+    "seed_topic": "De ce bumbacul te poate omorî pe munte",
+    "seed_topic_slug": "gear_no_cotton"
+  }
+}

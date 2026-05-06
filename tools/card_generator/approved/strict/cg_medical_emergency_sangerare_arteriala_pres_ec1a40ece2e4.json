@@ -1,0 +1,29 @@
+{
+  "chunk_id": "cg_medical_emergency_sangerare_arteriala_pres_ec1a40ece2e4",
+  "card_id": "cg_medical_emergency_sangerare_arteriala_pres_ec1a40ece2e4",
+  "domain": "medical_emergency",
+  "topic": "sangerare_arteriala_presiune",
+  "language": "ro",
+  "title": "Sângerare gravă: presiune directă, ridicare, urgență",
+  "body": "Sângerarea gravă, în special cea arterială (sânge roșu deschis, în jet sau pulsatil), poate duce la șoc în câteva minute. Acționați imediat. Așezați victima jos pentru a reduce riscul de leșin. Aplicați presiune directă, fermă și continuă pe rană, folosind un pansament curat sau o bucată groasă de material; nu ridicați pansamentul pentru a verifica sângerarea, deoarece desprinderea poate relua hemoragia. Dacă pansamentul se îmbibă, adăugați alt material peste el și mențineți presiunea. Dacă rana este pe un membru și nu există suspiciune de fractură, ridicați membrul deasupra nivelului inimii. Continuați presiunea cel puțin 10 minute neîntrerupt. Pentru sângerări masive la membre care nu se opresc cu presiune directă, garoul (improvizat dintr-o curea lată sau bandă) poate salva viața; notați ora aplicării. Sunați 0SALVAMONT (apel: 0SALVAMONT) sau 112 cât mai devreme. Țineți victima caldă și liniștită până la sosirea echipei. Nu dați apă sau mâncare dacă victima este confuză sau pe cale să leșine.",
+  "keywords": "sangerare hemoragie presiune directa garou rana adanca prim ajutor",
+  "card_family": "SCENARIO",
+  "priority": 95,
+  "tier": "A",
+  "source_title": "Ce faci daca esti martorul unui accident montan",
+  "source_url": "https://www.salvamontromania.ro/martor-accident-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 5,
+  "safety_tags": ["bleeding", "first_aid", "trauma", "life_threatening"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Presiune directă continuă cel puțin 10 minute, ridicare a membrului, apel imediat la 0SALVAMONT/112; garoul se aplică doar dacă presiunea nu oprește hemoragia.",
+    "evidence_confidence": "high",
+    "source_id": "salvamont_martor_accident"
+  }
+}

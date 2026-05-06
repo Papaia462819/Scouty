@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_weather_and_season_ce_informatii_cheie_urma_a829cb474288",
+  "card_id": "cg_weather_and_season_ce_informatii_cheie_urma_a829cb474288",
+  "domain": "weather_and_season",
+  "topic": "ce_informatii_cheie_urmaresti_in_buletin",
+  "language": "ro",
+  "title": "Buletin nivometeorologic ANM: informații cheie de urmărit",
+  "body": "Un buletin nivometeorologic ANM conține date esențiale pentru evaluarea condițiilor montane. Acestea includ: temperatura aerului, viteza și direcția vântului, nebulozitatea (starea cerului, de exemplu, senin, acoperit sau parțial noros), presiunea atmosferică și tendința acesteia (în creștere, în scădere, variabilă sau staționară), precum și umiditatea relativă. De asemenea, buletinul poate indica fenomene specifice, cum ar fi aerul cetos, și informații despre stratul de zăpadă, inclusiv prezența acestuia (discontinuu) sau grosimea (ex: 72 cm). Este important să se consulte aceste detalii pentru fiecare locație și oră specificată.",
+  "lead": "Buletinul nivometeorologic ANM oferă detalii despre temperatură, vânt, nebulozitate, presiune, umiditate și stratul de zăpadă.",
+  "keywords": "buletin meteo anm nivometeorologic temperatura vânt zăpadă presiune umiditate nebulozitate fenomene meteo",
+  "card_family": "DEFINITION",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Buletin nivometeorologic",
+  "source_url": "https://www.meteoromania.ro/despre-noi/meteorologie-operationala/activitati-de-baza/nivometeoroogie/buletinul-nivometeorologic/",
+  "publisher": "ANM / Meteoromania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "weather_forecast",
+    "mountain_safety",
+    "snow_conditions",
+    "wind_speed",
+    "temperature"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Buletinul nivometeorologic ANM oferă detalii despre temperatură, vânt, nebulozitate, presiune, umiditate și stratul de zăpadă.",
+    "evidence_confidence": "high",
+    "source_quote": "Temperatură : 9.5 &#186;C Vânt : 1.1 m/s, directia : SSV Nebulozitate : cer senin Presiune : 947.8 mb, in crestere Umezeală relativă : 36% Strat zăpadă : discontinuu Fenomen : aer cetos",
+    "source_id": "anm_nivometeorologic_buletin"
+  }
+}

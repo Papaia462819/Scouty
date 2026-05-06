@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_bring_back_trash_8a1f7a415970",
+  "card_id": "cg_trail_culture_ro_culture_bring_back_trash_8a1f7a415970",
+  "domain": "trail_culture_ro",
+  "topic": "culture_bring_back_trash",
+  "language": "ro",
+  "title": "De ce iau gunoiul altora de pe potecă",
+  "body": "Știu, pare ciudat să cari gunoiul altuia, dar gândește-te așa: fiecare ambalaj lăsat în urmă e un cui bătut în sicriul frumuseții locului. Dacă eu iau o sticlă goală sau o folie de ciocolată, poate data viitoare cel care a lăsat-o se va gândi de două ori. Nu e vorba de a fi erou, ci de a menține muntele curat pentru noi toți. Am văzut odată un ursuleț mestecând dintr-o pungă de chipsuri. Nu e locul ei acolo. E un gest mic, dar cu impact mare. Muntele nu e coș de gunoi, e casa noastră temporară.",
+  "lead": "Află de ce e important să iei gunoiul găsit pe potecă, chiar dacă nu e al tău, pentru a păstra frumusețea munților.",
+  "keywords": "gunoi munte curățenie potecă respect natură ecologie drumeție responsabilitate carpați curat",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce e important să iei gunoiul găsit pe potecă, chiar dacă nu e al tău, pentru a păstra frumusețea munților.",
+    "seed_topic": "De ce duc gunoiul cuiva înapoi — motivul real",
+    "seed_topic_slug": "culture_bring_back_trash"
+  }
+}

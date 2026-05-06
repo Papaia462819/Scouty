@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_ordinea_corecta_filtrare_62b1d37ae9a0",
+  "card_id": "cg_medical_emergency_ordinea_corecta_filtrare_62b1d37ae9a0",
+  "domain": "medical_emergency",
+  "topic": "ordinea_corecta_filtrare_apoi_dezinfectie",
+  "language": "ro",
+  "title": "Purificarea apei de băut — filtrare și dezinfecție",
+  "body": "În situații de urgență, când serviciul regulat de apă este întrerupt, autoritățile locale pot recomanda utilizarea apei îmbuteliate, fierte sau dezinfectate. Aceste instrucțiuni arată cum să fierbeți și să dezinfectați apa pentru a distruge majoritatea microorganismelor patogene. Totuși, fierberea sau dezinfecția nu vor distruge alți contaminanți precum metalele grele, sărurile și majoritatea substanțelor chimice. Folosiți doar apă care a fost dezinfectată corespunzător pentru băut, gătit, prepararea oricărei băuturi, spălarea vaselor și periajul dinților. Dacă apa este tulbure, lăsați-o să se așeze și filtrați-o printr-o cârpă curată, un prosop de hârtie sau un filtru de cafea. Această etapă de filtrare este crucială înainte de a proceda la dezinfecție, fie prin fierbere, fie prin utilizarea înălbitorului de uz casnic. Fierberea este suficientă pentru a distruge bacteriile patogene, virușii și protozoarele. Dacă nu puteți fierbe apa, dezinfectați-o folosind înălbitor de uz casnic. Apelarea la 112 / 0SALVAMONT nu este necesară pentru această procedură.",
+  "lead": "În situații de urgență, dacă apa este tulbure, filtrați-o înainte de a o dezinfecta prin fierbere sau cu înălbitor.",
+  "keywords": "apă potabilă dezinfecție apă filtrare apă urgență apă fierbere apă înălbitor apă siguranță apă microorganisme contaminanți",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Emergency Disinfection of Drinking Water",
+  "source_url": "https://www.epa.gov/ground-water-and-drinking-water/emergency-disinfection-drinking-water",
+  "publisher": "EPA",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "water_purification",
+    "emergency_water",
+    "water_disinfection",
+    "filtration",
+    "boiling_water"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "În situații de urgență, dacă apa este tulbure, filtrați-o înainte de a o dezinfecta prin fierbere sau cu înălbitor.",
+    "evidence_confidence": "high",
+    "source_quote": "If water is cloudy, let it settle and filter it through a clean cloth, paper towel, or coffee filter. Bring water to a rolling boil for at least one minute. Disinfect water using household bleach, if you can’t boil water.",
+    "source_id": "epa_water_disinfection"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_hut_stamp_culture_5f7adc45cc04",
+  "card_id": "cg_tips_and_tricks_tip_hut_stamp_culture_5f7adc45cc04",
+  "domain": "tips_and_tricks",
+  "topic": "tip_hut_stamp_culture",
+  "language": "ro",
+  "title": "Ștampila la cabană: O tradiție montană de păstrat",
+  "body": "Băi, știi ce-i fain la cabane, pe lângă ciorba caldă și o bere rece? Ștampila! E o tradiție veche, ca o pată de culoare pe harta amintirilor tale. Nu e doar o bucată de cauciuc, e dovada că ai fost acolo, că ai urcat, că ai simțit aerul ăla curat. Când ajungi la cabană, întreabă cabanierul de ștampilă. Unii o au la vedere, alții mai ascunsă. Eu am un carnețel mic, special pentru ștampile, dar merge și pe o foaie din caietul de notițe sau chiar pe harta ta. E o chestie simplă, dar care îți aduce un zâmbet când o revezi acasă. Plus, e un mod subtil de a susține cabanele, arătând că le apreciezi efortul. Păstrează tradiția vie!",
+  "lead": "Descoperă tradiția ștampilelor de cabană, o dovadă simpatică a aventurilor tale montane și un mod de a-ți aminti fiecare urcare.",
+  "keywords": "ștampilă cabană tradiție montană amintiri drumeție cabanier carnețel ștampile susține cabane",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă tradiția ștampilelor de cabană, o dovadă simpatică a aventurilor tale montane și un mod de a-ți aminti fiecare urcare.",
+    "seed_topic": "Ștampila la cabană — o tradiție și o dovadă",
+    "seed_topic_slug": "tip_hut_stamp_culture"
+  }
+}

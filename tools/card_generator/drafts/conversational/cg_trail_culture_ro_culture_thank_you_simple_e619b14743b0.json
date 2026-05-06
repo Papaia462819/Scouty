@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_thank_you_simple_e619b14743b0",
+  "card_id": "cg_trail_culture_ro_culture_thank_you_simple_e619b14743b0",
+  "domain": "trail_culture_ro",
+  "topic": "culture_thank_you_simple",
+  "language": "ro",
+  "title": "Mici gesturi de multumire la cabana",
+  "body": "Când ajungi la cabană, obosit, dar fericit, nu uita de cei care o fac să funcționeze. Un \"mulțumesc\" sincer cabanierului face minuni. Dacă vezi că e aglomerat, poți să-l întrebi dacă are nevoie de ajutor la ceva simplu, cum ar fi să duci niște farfurii goale la bucătărie sau să aduni niște lemne pentru foc. Odată am ajutat la curățat masa după un grup mare și am primit o cană de ceai din partea casei. Nu e despre recompensă, ci despre respect și comunitate. Lasă locul mai curat decât l-ai găsit, e o regulă de aur. E frumos să lași și un bacșiș, dacă serviciile au fost pe măsură. O vorbă bună sau un zâmbet sunt la fel de valoroase.",
+  "lead": "Gesturile mici de mulțumire la cabană creează o atmosferă plăcută și arată respect pentru munca celor de acolo.",
+  "keywords": "cabana multumire comunitate respect bacsis ajutor",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Gesturile mici de mulțumire la cabană creează o atmosferă plăcută și arată respect pentru munca celor de acolo.",
+    "seed_topic": "Gesturile mici de mulțumire la cabane care contează",
+    "seed_topic_slug": "culture_thank_you_simple"
+  }
+}

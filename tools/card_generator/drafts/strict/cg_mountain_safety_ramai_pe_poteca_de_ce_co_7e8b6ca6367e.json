@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_mountain_safety_ramai_pe_poteca_de_ce_co_7e8b6ca6367e",
+  "card_id": "cg_mountain_safety_ramai_pe_poteca_de_ce_co_7e8b6ca6367e",
+  "domain": "mountain_safety",
+  "topic": "ramai_pe_poteca_de_ce_conteaza",
+  "language": "ro",
+  "title": "Rămâi pe potecă: siguranță și conservarea naturii",
+  "body": "Rămâneți pe potecile desemnate și întreținute pentru a evita terenul instabil și a proteja habitatele naturale. Această practică este crucială pentru siguranța dumneavoastră, deoarece terenul din afara potecilor marcate poate fi imprevizibil și periculos, crescând riscul de alunecări, împiedicări și căzături. De asemenea, respectarea traseelor marcate contribuie la conservarea mediului înconjurător, prevenind deteriorarea florei și faunei locale. Asigurați-vă întotdeauna că urmați indicațiile și rămâneți pe căile stabilite pentru o experiență sigură și responsabilă în natură.",
+  "lead": "Rămâneți pe potecile marcate pentru a vă proteja de terenul instabil și pentru a contribui la conservarea habitatelor naturale.",
+  "keywords": "potecă siguranță teren instabil habitate naturale conservare drumeție",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Hiking Safety",
+  "source_url": "https://www.nps.gov/grsm/planyourvisit/hikingsafety.htm",
+  "publisher": "National Park Service",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "trail_safety",
+    "environmental_protection",
+    "unstable_terrain",
+    "hiking_rules"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Rămâneți pe potecile marcate pentru a vă proteja de terenul instabil și pentru a contribui la conservarea habitatelor naturale.",
+    "evidence_confidence": "high",
+    "source_quote": "Stay on designated, maintained trails to avoid unstable terrain and protect natural habitats.",
+    "source_id": "nps_hiking_safety"
+  }
+}

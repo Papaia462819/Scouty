@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_silence_practice_a435fa60bfd7",
+  "card_id": "cg_trail_culture_ro_culture_silence_practice_a435fa60bfd7",
+  "domain": "trail_culture_ro",
+  "topic": "culture_silence_practice",
+  "language": "ro",
+  "title": "Ora de tăcere pe creastă — un experiment de grup",
+  "body": "Când mergi pe creastă, mai ales în grup, e o idee faină să încerci o 'oră de tăcere'. Nu e vorba de plictiseală, ci de a te conecta altfel cu muntele. Stabiliți de la început: o oră, fără vorbit, fără muzică în căști, fără telefoane (doar pentru urgențe, desigur). Vei fi surprins cât de mult auzi: vântul, pietrele mișcându-se sub bocanci, poate un vultur. Observi mai bine detaliile, culorile, umbrele. E o meditație activă, o șansă să-ți limpezești gândurile și să te bucuri de peisaj fără distracții. Am făcut asta de câteva ori și mereu a fost o experiență memorabilă. Încercați, merită!",
+  "lead": "Experimentează o oră de tăcere pe creastă alături de grupul tău pentru a te conecta mai profund cu muntele și cu tine însuți.",
+  "keywords": "tăcere creastă grup meditație experiență montană conexiune natură",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Experimentează o oră de tăcere pe creastă alături de grupul tău pentru a te conecta mai profund cu muntele și cu tine însuți.",
+    "seed_topic": "Ora de tăcere pe creastă — un mic experiment de grup",
+    "seed_topic_slug": "culture_silence_practice"
+  }
+}

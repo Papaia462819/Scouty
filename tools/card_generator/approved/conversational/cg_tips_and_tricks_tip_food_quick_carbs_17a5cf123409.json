@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_food_quick_carbs_17a5cf123409",
+  "card_id": "cg_tips_and_tricks_tip_food_quick_carbs_17a5cf123409",
+  "domain": "tips_and_tricks",
+  "topic": "tip_food_quick_carbs",
+  "language": "ro",
+  "title": "Glucoza sau ciocolata la munte? Ce te ridica mai repede",
+  "body": "Când simți că ți se taie picioarele și energia e la pământ, ai nevoie de un \"boost\" rapid. Ciocolata e bună la gust, dar are și grăsimi care încetinesc absorbția zahărului. E perfectă pentru o pauză mai lungă, ca să-ți refaci rezervele. Dar dacă ai nevoie de energie ACUM, tabletele de glucoză sunt campioane. Se absorb direct în sânge, te pun pe picioare în câteva minute. Eu țin mereu câteva în buzunarul de la piept, pentru urgențe. Odată, pe Retezat, mi-au salvat pielea când am subestimat o urcare. Nu te baza doar pe ele, dar sunt un as în mânecă!",
+  "lead": "Află ce e mai eficient pentru un \"boost\" rapid de energie pe munte: tabletele de glucoză sau ciocolata.",
+  "keywords": "energie rapida glucoza ciocolata munte alimentatie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce e mai eficient pentru un \"boost\" rapid de energie pe munte: tabletele de glucoză sau ciocolata.",
+    "seed_topic": "Tabletă de glucoză vs ciocolată: ce alegi când scade energia",
+    "seed_topic_slug": "tip_food_quick_carbs"
+  }
+}

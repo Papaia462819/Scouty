@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_socks_loop_dry_b3f51c52bebc",
+  "card_id": "cg_tips_and_tricks_tip_socks_loop_dry_b3f51c52bebc",
+  "domain": "tips_and_tricks",
+  "topic": "tip_socks_loop_dry",
+  "language": "ro",
+  "title": "Uscarea sosetelor pe rucsac: trucul batranesc",
+  "body": "Știi cum e, după o zi lungă de mers, picioarele transpiră și șosetele sunt fleșcăite. Nu le lăsa așa! Prinde-le de o sfoară scurtă, legată de rucsac, și lasă-le să fluture la soare în timp ce mergi. E o metodă veche, dar incredibil de eficientă. Până ajungi la destinație, sunt uscate bocnă și gata pentru o nouă tură. Ai grijă doar să le prinzi bine, să nu le pierzi pe drum. Am pățit-o o dată cu o șosetă, și am mers restul zilei cu una uscată și una... mai puțin uscată. Nu e fun.",
+  "lead": "Învață cum să-ți usuci șosetele umede direct pe rucsac, folosind un truc vechi și eficient, pentru a avea picioare uscate și confortabile.",
+  "keywords": "sosete uscate rucsac uscare ad-hoc trucuri drumetie echipament curat picioare uscate",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să-ți usuci șosetele umede direct pe rucsac, folosind un truc vechi și eficient, pentru a avea picioare uscate și confortabile.",
+    "seed_topic": "Șosete legate de o sfoară pe rucsac la soare — uscare ad-hoc",
+    "seed_topic_slug": "tip_socks_loop_dry"
+  }
+}

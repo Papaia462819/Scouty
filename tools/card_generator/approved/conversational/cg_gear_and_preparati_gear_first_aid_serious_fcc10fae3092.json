@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_first_aid_serious_fcc10fae3092",
+  "card_id": "cg_gear_and_preparati_gear_first_aid_serious_fcc10fae3092",
+  "domain": "gear_and_preparation",
+  "topic": "gear_first_aid_serious",
+  "language": "ro",
+  "title": "Trusa esențială pentru ture multi-zi fără semnal",
+  "body": "Când pleci în ture de mai multe zile, mai ales unde nu-i semnal, trusa ta trebuie să fie pe măsură. Pe lângă clasicele bandaje și dezinfectant, gândește-te la un fluier de semnalizare – te ajută să te găsești dacă te-ai rătăcit de grup. O folie de supraviețuire e musai, te salvează de hipotermie dacă te prinde noaptea nepregătit. Nu uita un briceag multifuncțional, cu el poți de la a tăia o sfoară la a deschide o conservă. O lanternă frontală cu baterii de rezervă e mai utilă decât crezi, chiar și ziua, dacă intri într-o peșteră sau te prinde ceața. Și, cel mai important, un power bank încărcat la maxim pentru telefon, chiar dacă n-ai semnal, GPS-ul tot merge. E mai bine să ai și să nu-ți trebuiască, decât să-ți trebuiască și să n-ai, nu? Am pățit-o o dată, am rămas fără lumină la cort, și a fost o aventură să găsesc chibriturile. De atunci, am două frontale.",
+  "lead": "Pregătește-ți o trusă de urgență completă pentru turele lungi, mai ales în zone izolate.",
+  "keywords": "trusa urgenta multi-zi fara semnal echipament munte supravietuire siguranta",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Pregătește-ți o trusă de urgență completă pentru turele lungi, mai ales în zone izolate.",
+    "seed_topic": "Trusă serioasă pentru ture multi-zi în zone fără semnal",
+    "seed_topic_slug": "gear_first_aid_serious"
+  }
+}

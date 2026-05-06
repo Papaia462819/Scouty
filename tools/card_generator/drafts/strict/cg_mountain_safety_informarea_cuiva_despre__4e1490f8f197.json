@@ -1,0 +1,36 @@
+{
+  "chunk_id": "cg_mountain_safety_informarea_cuiva_despre__4e1490f8f197",
+  "card_id": "cg_mountain_safety_informarea_cuiva_despre__4e1490f8f197",
+  "domain": "mountain_safety",
+  "topic": "informarea_cuiva_despre_planul_tau_de_tura",
+  "language": "ro",
+  "title": "Comunicarea planului de tură",
+  "body": "Înainte de a pleca în drumeție, lăsați un plan detaliat al turei. Scrieți un itinerar care să includă detalii despre zona în care veți face drumeția, informații de contact, ora la care intenționați să plecați și să vă întoarceți, precum și numele persoanelor care vă însoțesc. Partajați aceste informații cu un prieten de încredere sau un membru al familiei care nu participă la tură. Rugați-i să contacteze serviciile de urgență (112 / Salvamont: 0SALVAMONT) dacă nu vă întoarceți într-un interval de timp rezonabil. Această măsură este crucială pentru siguranța dumneavoastră în zonele montane, unde riscurile sunt inerente și salvarea nu este o certitudine.",
+  "lead": "Lăsați un plan detaliat al turei unei persoane de încredere pentru a asigura intervenția în caz de urgență.",
+  "keywords": "plan de tură siguranță drumeție itinerar montan contact de urgență comunicare tură pregătire drumeție salvamont 112",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Hiking Safety",
+  "source_url": "https://www.nps.gov/grsm/planyourvisit/hikingsafety.htm",
+  "publisher": "National Park Service",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "trip_planning",
+    "emergency_contact",
+    "hiking_safety",
+    "pre_hike_preparation"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Lăsați un plan detaliat al turei unei persoane de încredere pentru a asigura intervenția în caz de urgență.",
+    "evidence_confidence": "high",
+    "source_quote": "Leave a trip plan. Write down an itinerary with details about where you will be hiking, contact information, when you plan to arrive and return, and who is with you. Share this information with a trusted friend or family member who is not going with you. Have them contact the park if you do not return within a reasonable timeframe.",
+    "source_id": "nps_hiking_safety"
+  }
+}

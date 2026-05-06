@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_hypothermia_pre_1841c0805b3b",
+  "card_id": "cg_survival_basics_survival_hypothermia_pre_1841c0805b3b",
+  "domain": "survival_basics",
+  "topic": "survival_hypothermia_prevent",
+  "language": "ro",
+  "title": "Fii pregatit: Prevenirea hipotermiei usoare",
+  "body": "Băi, știi cum e, muntele nu glumește. Ca să nu te trezești tremurând ca piftia, secretul e să fii mereu uscat și izolat. Îmbracă-te în straturi: un prim strat sintetic care elimină transpirația, un fleece pentru izolație și o geacă impermeabilă/windstopper pe deasupra. Evită bumbacul, că odată ud, te răcește instant. Ia mereu cu tine o pereche de mănuși de rezervă și o căciulă, chiar și vara. Odată am prins o ploaie rece în iulie pe Călimani, și fără o căciulă în rucsac, eram bocnă. Și nu uita de gustări energizante, că și ele ajută corpul să-și mențină temperatura. Hidratează-te, dar evită alcoolul, că dilată vasele de sânge și te face să pierzi căldură mai repede. Nu vrei să ajungi să te întrebi dacă ai lăsat aragazul pornit acasă, de la confuzia aia mică. Fii deștept, nu te juca cu frigul!",
+  "lead": "Află cum să previi hipotermia ușoară pe munte, menținându-te uscat și cald cu echipamentul potrivit și strategii simple.",
+  "keywords": "hipotermie prevenire echipament straturi frig munte siguranta",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să previi hipotermia ușoară pe munte, menținându-te uscat și cald cu echipamentul potrivit și strategii simple.",
+    "seed_topic": "Cum previi hipotermia ușoară (NU cum o tratezi)",
+    "seed_topic_slug": "survival_hypothermia_prevent"
+  }
+}

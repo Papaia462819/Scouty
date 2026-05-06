@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_morning_grumpy_eee54d800b4f",
+  "card_id": "cg_motivation_and_mor_morale_morning_grumpy_eee54d800b4f",
+  "domain": "motivation_and_morale",
+  "topic": "morale_morning_grumpy",
+  "language": "ro",
+  "title": "Dimineata mohorata in cort: cum te pui in miscare",
+  "body": "Te trezești, plouă mărunt sau e ceață de nu vezi la doi metri. Cortul e rece, umed. Nu-i bai! Primul pas: nu te grăbi. Pregătește-ți un ceai cald sau o cafea instant, chiar în cort, cu un arzător mic. Asta te încălzește și-ți dă un boost. Apoi, organizează-ți rucsacul pe dinăuntru. Pune echipamentul de ploaie la îndemână – pelerina, husa de rucsac. Îmbracă-te în straturi: un prim strat termic, apoi un polar și, la final, o geacă impermeabilă. Nu uita de mănuși și căciulă, chiar dacă nu pare frig. Odată ce ești echipat, ploaia nu mai e așa rea. Și gândește-te la ciorba caldă de la cabană! Funcționează mereu.",
+  "lead": "Sfaturi practice pentru a te mobiliza într-o dimineață rece și umedă petrecută în cort, înainte de a porni pe traseu.",
+  "keywords": "motivatie dimineata cort ploaie echipament strategie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Sfaturi practice pentru a te mobiliza într-o dimineață rece și umedă petrecută în cort, înainte de a porni pe traseu.",
+    "seed_topic": "Dimineața mohorâtă în cort — cum te clintești",
+    "seed_topic_slug": "morale_morning_grumpy"
+  }
+}

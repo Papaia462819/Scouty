@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_water_filter_choice_1098e2d18780",
+  "card_id": "cg_gear_and_preparati_gear_water_filter_choice_1098e2d18780",
+  "domain": "gear_and_preparation",
+  "topic": "gear_water_filter_choice",
+  "language": "ro",
+  "title": "Apa in munti: Filtru, pastile sau fierbere?",
+  "body": "Salut, prietene! Când vine vorba de apă în munții noștri, e bine să fii pregătit. Eu, după atâția ani, zic așa: filtrul e sfânt. Îl folosesc cel mai des, mai ales cel cu pompă sau cel prin gravitație. E rapid și eficient. Pastilele de purificare sunt bune ca rezervă sau pentru urgențe, dar lasă un gust ciudat, ca de piscină. Fierberea e cea mai sigură metodă, dar cine are timp să fiarbă un litru de apă când e rupt de oboseală? Plus că ai nevoie de combustibil. Deci, un filtru bun e investiția principală, iar pastilele le ții în rucsac pentru \"doamne ferește\". Nu uita, hidratarea e cheia!",
+  "lead": "Alegerea metodei potrivite pentru purificarea apei în drumețiile montane din România, explicată de un drumeț cu experiență.",
+  "keywords": "filtrare apa purificare apa pastile purificare apa munte echipament drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Alegerea metodei potrivite pentru purificarea apei în drumețiile montane din România, explicată de un drumeț cu experiență.",
+    "seed_topic": "Filtru, pastile, fierbere — alegerea pentru Romania",
+    "seed_topic_slug": "gear_water_filter_choice"
+  }
+}

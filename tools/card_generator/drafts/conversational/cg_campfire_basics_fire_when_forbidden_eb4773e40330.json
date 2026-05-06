@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_when_forbidden_eb4773e40330",
+  "card_id": "cg_campfire_basics_fire_when_forbidden_eb4773e40330",
+  "domain": "campfire_basics",
+  "topic": "fire_when_forbidden",
+  "language": "ro",
+  "title": "Focul de tabara: cand e interzis in Romania?",
+  "body": "Băi, știi cum e, focul de tabără e fain, dar trebuie să știi când și unde. În parcurile naționale și naturale, de obicei, e interzis cu desăvârșire să faci foc în afara locurilor special amenajate. Și chiar și acolo, trebuie să fii super atent. Vara, mai ales când e secetă, riscul de incendiu e uriaș. Un vânt brusc, o scânteie rătăcită și ai făcut o belea cât un munte. Gândește-te că o pădure arde în câteva ore. Așa că, dacă vezi avertizări de secetă sau ești într-o zonă protejată, lasă focul pentru acasă. Nu merită riscul. Mai bine te bucuri de stele fără fum.",
+  "lead": "Află când și unde este interzis să faci foc de tabără în munții României, mai ales în parcurile naționale și pe timp de secetă.",
+  "keywords": "foc interzis parc national vara uscata risc incendiu reguli munte protectia mediului",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află când și unde este interzis să faci foc de tabără în munții României, mai ales în parcurile naționale și pe timp de secetă.",
+    "seed_topic": "Când focul este interzis în Romania — parc național, vară uscată",
+    "seed_topic_slug": "fire_when_forbidden"
+  }
+}

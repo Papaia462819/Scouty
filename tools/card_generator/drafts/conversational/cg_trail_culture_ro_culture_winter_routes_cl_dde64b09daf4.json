@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_winter_routes_cl_dde64b09daf4",
+  "card_id": "cg_trail_culture_ro_culture_winter_routes_cl_dde64b09daf4",
+  "domain": "trail_culture_ro",
+  "topic": "culture_winter_routes_classic",
+  "language": "ro",
+  "title": "Trasee clasice de iarnă: Povești din munți",
+  "body": "Băi, iarna munții sunt altă poveste! Când zici \"clasic de iarnă\", te gândești imediat la creasta Făgărașului, dar aia e pentru avansați. Pentru început, îți recomand cu drag o tură prin Bucegi, pe la Piatra Arsă și Sfinx. E mai accesibil, cu peisaje de te lasă mască, și poți să te bucuri de zăpadă fără stres. Altă opțiune faină e prin Piatra Craiului, pe la Cabana Curmătura. E o drumeție mai scurtă, dar cu o urcare solicitantă, perfectă să-ți testezi echipamentul de iarnă. Nu uita de colțari și piolet, chiar dacă pare ușor! Și un termos cu ceai fierbinte face minuni când ești pe vârf. Am o poveste cu un prieten care a uitat mănușile și a trebuit să ne întoarcem... de atunci nu mai pleacă fără ele. Siguranța pe primul loc, întotdeauna!",
+  "lead": "Descoperă trasee clasice de iarnă din Carpați, de la Bucegi la Piatra Craiului, cu sfaturi practice pentru echipament și siguranță.",
+  "keywords": "trasee iarnă bucegi piatra craiului echipament iarnă siguranță munte drumeție iarnă povești munți",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă trasee clasice de iarnă din Carpați, de la Bucegi la Piatra Craiului, cu sfaturi practice pentru echipament și siguranță.",
+    "seed_topic": "Trasee clasice de iarnă în memoria comunității",
+    "seed_topic_slug": "culture_winter_routes_classic"
+  }
+}

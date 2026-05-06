@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_winter_basics_48ffd8d9c9a1",
+  "card_id": "cg_gear_and_preparati_gear_winter_basics_48ffd8d9c9a1",
+  "domain": "gear_and_preparation",
+  "topic": "gear_winter_basics",
+  "language": "ro",
+  "title": "Echipament minim pentru iarnă pe creastă",
+  "body": "Băi, iarna pe creastă nu-i de joacă, știi asta. Pe lângă straturile clasice (termic, polar gros, geacă impermeabilă și puf), nu uita de parazăpezi – zăpada-i adâncă și nu vrei să-ți intre-n bocanci. Clăparii sunt buni, dar dacă nu ai, niște bocanci de iarnă rigizi sunt musai. Colțarii și pioletul sunt esențiali, chiar și pe o pantă mică, gheața te poate surprinde. Ochelarii de soare sunt vitali, reflexia zăpezii e puternică. Și nu uita termosul cu ceai fierbinte, te salvează când ești înghețat. O frontală cu baterii de rezervă e mereu utilă, chiar dacă pleci dimineața. Mai bine să ai și să nu-ți trebuiască, decât invers.",
+  "lead": "Află ce echipament esențial ai nevoie pentru o tură de iarnă sigură și confortabilă pe crestele montane.",
+  "keywords": "echipament iarnă creastă colțari piolet parazăpezi bocanci iarnă ochelari soare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce echipament esențial ai nevoie pentru o tură de iarnă sigură și confortabilă pe crestele montane.",
+    "seed_topic": "Echipament minim pentru iarnă pe creastă",
+    "seed_topic_slug": "gear_winter_basics"
+  }
+}

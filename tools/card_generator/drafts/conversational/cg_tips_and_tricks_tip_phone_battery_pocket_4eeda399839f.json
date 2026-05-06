@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_phone_battery_pocket_4eeda399839f",
+  "card_id": "cg_tips_and_tricks_tip_phone_battery_pocket_4eeda399839f",
+  "domain": "tips_and_tricks",
+  "topic": "tip_phone_battery_pocket",
+  "language": "ro",
+  "title": "Bateria la cald, prietena ta de munte",
+  "body": "Știi cum e, pleci dimineața cu telefonul full, dar la prânz, după câteva poze și verificat harta, vezi că bateria e pe duc. Frigul e cel mai mare dușman al acumulatorilor, îi descarcă mult mai repede. De aia, ține telefonul sau bateria externă în buzunarul interior al gecii, aproape de corp. Căldura ta le menține la o temperatură optimă și le prelungește viața. Am pățit-o de prea multe ori să rămân fără curent fix când aveam nevoie de GPS sau să anunț că am ajuns. Un mic truc, dar face o mare diferență când ești pe creastă și fiecare procent contează.",
+  "lead": "Frigul descarcă rapid bateriile; ține-le în buzunarul interior al gecii pentru a le prelungi autonomia în drumeții.",
+  "keywords": "baterie telefon frig munte durabilitate baterie buzunar interior sfaturi drumeție încărcare telefon echipament munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Frigul descarcă rapid bateriile; ține-le în buzunarul interior al gecii pentru a le prelungi autonomia în drumeții.",
+    "seed_topic": "Bateria în buzunarul interior — cald = durabilitate",
+    "seed_topic_slug": "tip_phone_battery_pocket"
+  }
+}

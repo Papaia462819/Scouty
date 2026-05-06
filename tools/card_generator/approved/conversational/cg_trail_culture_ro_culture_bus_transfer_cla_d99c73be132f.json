@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_bus_transfer_cla_d99c73be132f",
+  "card_id": "cg_trail_culture_ro_culture_bus_transfer_cla_d99c73be132f",
+  "domain": "trail_culture_ro",
+  "topic": "culture_bus_transfer_classics",
+  "language": "ro",
+  "title": "Transportul la munte: tren, microbuz, autostop",
+  "body": "Hai să vorbim despre cum ajungem la traseu fără mașina personală. Trenul e super pentru distanțe lungi, te lasă odihnit și poți admira peisajul. Verifică mereu mersul trenurilor, că la noi se mai schimbă. De la gară, de multe ori ai microbuze locale care te duc spre sate montane. Întreabă șoferii, sunt de obicei amabili. Și autostopul? E o tradiție veche la munte, dar fii responsabil: caută mașini cu familii sau grupuri, nu urca niciodată singur într-o mașină cu un singur bărbat, mai ales dacă e seară. Și nu uita să oferi o mică contribuție la combustibil, e un gest frumos. Am mers de nenumărate ori așa, e o modalitate bună să cunoști oameni și să asculți povești de la localnici.",
+  "lead": "Descoperă cum să ajungi la munte folosind trenul, microbuzul și autostopul responsabil, pentru o experiență autentică și fără griji.",
+  "keywords": "tren microbuz autostop transport munte logistica",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă cum să ajungi la munte folosind trenul, microbuzul și autostopul responsabil, pentru o experiență autentică și fără griji.",
+    "seed_topic": "Logistica clasică: trenuri, microbuze, autostop responsabil",
+    "seed_topic_slug": "culture_bus_transfer_classics"
+  }
+}

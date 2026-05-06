@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_stratificare_haine_exemp_5add1574bf6a",
+  "card_id": "cg_gear_and_preparati_stratificare_haine_exemp_5add1574bf6a",
+  "domain": "gear_and_preparation",
+  "topic": "stratificare_haine_exemple",
+  "language": "ro",
+  "title": "Stratificarea hainelor: trei straturi cu exemple concrete",
+  "body": "Regula simplă: trei straturi care fac trei lucruri diferite. Stratul de bază duce transpirația de pe piele — un tricou tehnic din material sintetic sau lână Merino subțire. Bumbacul rămâne ud și te răcește; pe munte, e o capcană. Stratul de izolație ține căldura — un polar subțire pentru ture de vară reci, un polar gros sau o vestă de puf pentru iarnă. Două straturi subțiri sunt mai versatile decât unul gros pentru că le poți combina după nevoie. Stratul exterior te apără de vânt și ploaie — o geacă șell impermeabilă cu fermoare de ventilație la subraț. Pentru picioare, principiu identic: chilot de bază tehnic, pantalon de tură, pantalon de ploaie peste când plouă. La urcări lungi, scoți stratul de izolație înainte să transpiri ud; la coborâre sau pauză, îl pui din nou înainte să-ți fie frig. Schimbarea straturilor se face în pauza de cinci minute, nu pe mers.",
+  "lead": "Trei straturi: bază tehnic, izolație polar, șell impermeabil; schimbări în pauză, nu pe mers.",
+  "keywords": "stratificare straturi haine merino polar shell impermeabil ventilatie",
+  "card_family": "DEFINITION",
+  "priority": 75,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": ["tip", "clothing"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Trei straturi: bază tehnic, izolație polar, șell impermeabil; schimbări în pauză, nu pe mers.",
+    "seed_topic": "Stratificarea hainelor: bază, izolație, șell — exemple concrete",
+    "seed_topic_slug": "gear_layers_basics"
+  }
+}

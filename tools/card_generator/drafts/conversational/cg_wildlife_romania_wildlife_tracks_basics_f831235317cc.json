@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_tracks_basics_f831235317cc",
+  "card_id": "cg_wildlife_romania_wildlife_tracks_basics_f831235317cc",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_tracks_basics",
+  "language": "ro",
+  "title": "Urme de animale iarna in Carpati",
+  "body": "Salut, prietene! Iarna, munții sunt o carte deschisă pentru cine știe să citească urmele. Pe zăpadă, o să vezi des urme de vulpe, ca niște șiruri de perle, mai înguste decât la câine. Urmele de căprioară sau cerb sunt inconfundabile, cu cele două copite despicate, ca o inimă. Dacă ești norocos, poți da de urme de urs, deși iarna sunt mai rare – labe mari, cu cinci degete și gheare vizibile. Jderul lasă urme mici, rotunde, în perechi, adesea lângă copaci. Și nu uita de iepure, care are labele din spate mult mai mari și le așează în fața celor din față când sare. E o adevărată vânătoare de comori!",
+  "lead": "Descoperă cele mai comune 5 urme de animale pe care le poți întâlni în Carpați, pe zăpadă, și învață să le recunoști ușor.",
+  "keywords": "urme animale iarna carpati vulpe caprioara urs jder iepure",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă cele mai comune 5 urme de animale pe care le poți întâlni în Carpați, pe zăpadă, și învață să le recunoști ușor.",
+    "seed_topic": "Top 5 urme pe care le vezi pe Carpați iarna",
+    "seed_topic_slug": "wildlife_tracks_basics"
+  }
+}

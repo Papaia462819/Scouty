@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_repair_kit_4621417928c0",
+  "card_id": "cg_gear_and_preparati_gear_repair_kit_4621417928c0",
+  "domain": "gear_and_preparation",
+  "topic": "gear_repair_kit",
+  "language": "ro",
+  "title": "Kit de reparatii rapide: Sa nu te prinda ploaia cu cortul spart!",
+  "body": "Băi, știi cum e, ești în mijlocul pustietății și pac! Fermoarul de la sacul de dormit cedează, sau rucsacul se agață într-o creangă. Nu-i bai! Un kit de reparații rapide e aur curat. Pune în el așa: bandă adezivă rezistentă la apă (gen duct tape, dar aia bună), câteva bucăți de material autoadeziv pentru cort (patch-uri), ace și ață groasă, niște sârmă subțire și, neapărat, un briceag multifuncțional. Cu astea, repari un cort găurit, un fermoar stricat sau o bretea ruptă la rucsac. Mai bine să ai și să nu-ți trebuiască, decât să-ți trebuiască și să n-ai, nu-i așa?",
+  "lead": "Află ce trebuie să conțină un kit de reparații rapide pentru a te descurca în situații neprevăzute pe munte.",
+  "keywords": "kit reparatii cort rucsac sac dormit improvizatii echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce trebuie să conțină un kit de reparații rapide pentru a te descurca în situații neprevăzute pe munte.",
+    "seed_topic": "Kit de reparații rapide pentru cort, sac, rucsac",
+    "seed_topic_slug": "gear_repair_kit"
+  }
+}

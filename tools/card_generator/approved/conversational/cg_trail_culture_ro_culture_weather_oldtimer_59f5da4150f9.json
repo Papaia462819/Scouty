@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_weather_oldtimer_59f5da4150f9",
+  "card_id": "cg_trail_culture_ro_culture_weather_oldtimer_59f5da4150f9",
+  "domain": "trail_culture_ro",
+  "topic": "culture_weather_oldtimers",
+  "language": "ro",
+  "title": "Cum citeau batranii vremea fara telefon",
+  "body": "Noi, ăștia mai vechi, n-aveam aplicații, dar știam să citim semnele naturii. Uită-te la cer dimineața: dacă e roșu-aprins la răsărit, s-ar putea să ai parte de ploaie mai târziu. \"Roșu-n cer, ploaie-n șer\" zicea bunica. Dacă vezi nori lenticulari, ăia în formă de farfurie zburătoare, pe creste, să știi că vine vânt puternic. Și nu uita de comportamentul animalelor: oile care se adună grămadă sau păsările care zboară jos sunt semne că se strică vremea. Nu-i o știință exactă, dar te ajută să te pregătești mental. Și să ai mereu o pelerină la tine, că muntele e imprevizibil, indiferent de prognoză!",
+  "lead": "Află cum interpretau drumeții vechi semnele naturii pentru a prezice vremea pe munte, fără tehnologie modernă.",
+  "keywords": "prognoza meteo traditionala semne natura vreme munte nor lenticular comportament animale",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum interpretau drumeții vechi semnele naturii pentru a prezice vremea pe munte, fără tehnologie modernă.",
+    "seed_topic": "Cum citeau bătrânii vremea fără telefon",
+    "seed_topic_slug": "culture_weather_oldtimers"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_old_huts_disappe_d6d9c69dabff",
+  "card_id": "cg_trail_culture_ro_culture_old_huts_disappe_d6d9c69dabff",
+  "domain": "trail_culture_ro",
+  "topic": "culture_old_huts_disappearing",
+  "language": "ro",
+  "title": "Cabane disparute: Lectii pentru drumeții de azi",
+  "body": "Am prins vremuri când multe cabane erau sufletul muntelui, acum sunt doar ruine sau locuri părăsite. Gândește-te la Cabana Postăvaru veche, arsă, sau la Mălăiești, care a avut și ea momente grele. Ce învățăm de aici? Nu te baza niciodată 100% că vei găsi cazare sau mâncare. Întotdeauna ai la tine o trusă de prim ajutor, o folie de supraviețuire și suficientă apă și mâncare pentru cel puțin o zi. Chiar dacă planul include o cabană, fii pregătit pentru neprevăzut. E mai bine să ai un rucsac un pic mai greu decât să te trezești în frig, la propriu și la figurat. Am văzut destui care au învățat asta pe pielea lor, sper să nu fii și tu unul dintre ei.",
+  "lead": "Cabanele vechi ne arată importanța pregătirii pentru orice situație, chiar și când crezi că ai un acoperiș deasupra capului.",
+  "keywords": "cabane istorie pregatire siguranta munte echipament planificare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Cabanele vechi ne arată importanța pregătirii pentru orice situație, chiar și când crezi că ai un acoperiș deasupra capului.",
+    "seed_topic": "Cabane care nu mai sunt — și ce putem învăța din ele",
+    "seed_topic_slug": "culture_old_huts_disappearing"
+  }
+}

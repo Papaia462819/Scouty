@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_no_paper_aeb9512aaf5b",
+  "card_id": "cg_campfire_basics_fire_no_paper_aeb9512aaf5b",
+  "domain": "campfire_basics",
+  "topic": "fire_no_paper",
+  "language": "ro",
+  "title": "Foc fara hartie: trucuri din natura",
+  "body": "Ai uitat ziarul acasă sau e ud? Nu-i bai! Pădurea e plină de alternative pentru a aprinde focul. Caută mușchi uscat, cel de pe stânci e adesea perfect. Scoarța subțire de mesteacăn, chiar și umedă, arde surprinzător de bine. Nu uita de conurile de brad uscate, sunt ca niște mini-torțe naturale. Și, desigur, penele de lemn, rase cu briceagul dintr-o bucată mai groasă, funcționează de minune. Secretul e să le ai cât mai mici și uscate. Odată am aprins focul cu niște iarbă uscată de pe marginea potecii, după o ploaie torențială. Nu te da bătut, natura are mereu o soluție!",
+  "lead": "Descoperă cum să aprinzi focul în pădure folosind materiale naturale, chiar și când hârtia lipsește sau e udă.",
+  "keywords": "aprindere foc alternative naturale muschi uscat scoarta mesteacan conuri brad pene lemn foc padure",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă cum să aprinzi focul în pădure folosind materiale naturale, chiar și când hârtia lipsește sau e udă.",
+    "seed_topic": "Aprindere fără hârtie: alternative naturale găsite în pădure",
+    "seed_topic_slug": "fire_no_paper"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_log_cabin_0c83c5345cb9",
+  "card_id": "cg_campfire_basics_fire_log_cabin_0c83c5345cb9",
+  "domain": "campfire_basics",
+  "topic": "fire_log_cabin",
+  "language": "ro",
+  "title": "Cum sa faci un foc 'log cabin' pentru jar de durata",
+  "body": "Vrei un foc care să nu se stingă după o oră și să-ți lase un pat de jar numai bun de gătit? Hai să-ți arăt metoda 'log cabin' sau 'cabana de bușteni'. E simplă și eficientă. Începi cu un mic 'cort' (teepee) din iască, scoarță de mesteacăn și vreascuri foarte subțiri în centru. Asta va fi amorsa. Apoi, de-o parte și de alta a acestui nucleu, așezi doi bușteni mai groși, paraleli. Peste ei, pui alți doi, perpendicular, formând un pătrat în jurul amorsei. Continui să clădești așa, ca la un joc de lego, micșorând treptat pătratul pe măsură ce urci. Dai foc la centrul de jos. Flăcările vor urca, iar structura va arde lent, din interior spre exterior, prăbușindu-se în sine și creând un pat de jar concentrat și durabil. E focul perfect pentru o noapte lungă la cort.",
+  "lead": "Învață să construiești un foc tip 'log cabin', o structură stabilă care arde lent și produce un pat de jar ideal pentru gătit sau căldură.",
+  "keywords": "foc de tabără log cabin jar tehnică foc supraviețuire camping",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață să construiești un foc tip 'log cabin', o structură stabilă care arde lent și produce un pat de jar ideal pentru gătit sau căldură.",
+    "seed_topic": "Cum construiești un foc 'log cabin' pentru jar lung",
+    "seed_topic_slug": "fire_log_cabin"
+  }
+}

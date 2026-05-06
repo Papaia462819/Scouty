@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_wet_boots_paper_2ea123d3d465",
+  "card_id": "cg_tips_and_tricks_tip_wet_boots_paper_2ea123d3d465",
+  "domain": "tips_and_tricks",
+  "topic": "tip_wet_boots_paper",
+  "language": "ro",
+  "title": "Ziarul, prietenul bocancilor uzi",
+  "body": "Bocancii uzi sunt coșmarul oricărui drumeț, dar am un truc vechi, de pe vremea când nu existau uscătoare sofisticate. Ia câteva foi de ziar, mototolește-le bine și îndesă-le în bocanci. Hârtia absoarbe umezeala ca un burete. Schimbă ziarul o dată la câteva ore sau când simți că s-a umezit. Vei fi uimit cât de repede se usucă, mai ales dacă ești într-o cabană unde poți lăsa bocancii lângă o sursă de căldură. E mult mai eficient decât să-i pui direct lângă foc, riscând să-i arzi sau să-i deformezi. Am salvat multe perechi de bocanci așa!",
+  "lead": "Află cum să-ți usuci rapid bocancii uzi peste noapte folosind un truc simplu cu hârtie de ziar.",
+  "keywords": "uscare bocanci trucuri munte echipament ud hârtie ziar îngrijire bocanci",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți usuci rapid bocancii uzi peste noapte folosind un truc simplu cu hârtie de ziar.",
+    "seed_topic": "Hârtia de ziar usucă bocancii peste noapte",
+    "seed_topic_slug": "tip_wet_boots_paper"
+  }
+}

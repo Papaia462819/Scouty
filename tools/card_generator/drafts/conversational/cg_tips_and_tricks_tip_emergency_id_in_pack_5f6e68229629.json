@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_emergency_id_in_pack_5f6e68229629",
+  "card_id": "cg_tips_and_tricks_tip_emergency_id_in_pack_5f6e68229629",
+  "domain": "tips_and_tricks",
+  "topic": "tip_emergency_id_in_pack",
+  "language": "ro",
+  "title": "Acte importante: la siguranta in rucsac!",
+  "body": "Băi, știi ce-am pățit odată? Am alunecat pe o potecă udă și mi-am pierdut portofelul. Noroc că aveam o copie a buletinului și asigurarea medicală, ambele într-o pungă ziplock, bine ascunse în rucsac, nu în buzunarul de la pantaloni. E o regulă de aur: actele importante (CI, permis, asigurare) nu le ții niciodată în buzunarul exterior sau în portofelul pe care-l poți pierde ușor. Pune-le într-un compartiment interior al rucsacului, într-o pungă etanșă. Chiar și o poză pe telefon e bună, dar nu te baza doar pe ea, că rămâi fără baterie. Gândește-te la un scenariu nasol și pregătește-te. Mai bine previi decât să cauți buletinul prin șanț, crede-mă pe cuvânt!",
+  "lead": "Păstrează actele importante (CI, asigurare) într-un compartiment interior al rucsacului, într-o pungă etanșă, pentru a evita pierderea.",
+  "keywords": "acte rucsac siguranta acte copie buletin asigurare munte prevenire pierdere",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Păstrează actele importante (CI, asigurare) într-un compartiment interior al rucsacului, într-o pungă etanșă, pentru a evita pierderea.",
+    "seed_topic": "CI și asigurare în rucsac, nu în portofel",
+    "seed_topic_slug": "tip_emergency_id_in_pack"
+  }
+}

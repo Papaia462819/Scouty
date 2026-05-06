@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_food_protein_balance_fe2613a01ac9",
+  "card_id": "cg_tips_and_tricks_tip_food_protein_balance_fe2613a01ac9",
+  "domain": "tips_and_tricks",
+  "topic": "tip_food_protein_balance",
+  "language": "ro",
+  "title": "Combustibil pentru ture lungi: Proteine și Carbohidrați",
+  "body": "Când ești pe munte o zi întreagă, corpul tău arde calorii ca o sobă veche. Ai nevoie de un mix bun de carbohidrați pentru energie rapidă și proteine pentru refacere. Dimineața, un terci de ovăz cu nuci și fructe uscate e aur curat. Pe parcursul zilei, batoane energizante, fructe uscate sau chiar niște covrigei sărați sunt perfecți pentru a-ți menține nivelul de zahăr în sânge. Nu uita de proteine: o bucată de brânză tare sau niște carne uscată te ajută să nu te simți ca o cârpă la final. Eu, de exemplu, mereu am la mine niște salam uscat de Sibiu. Nu e lux, e necesitate! Hidratarea e la fel de importantă, dar despre asta vorbim altă dată.",
+  "lead": "Află cum să-ți alimentezi corpul corect pe turele lungi de munte, combinând carbohidrați pentru energie și proteine pentru refacere.",
+  "keywords": "nutritie munte carbohidrati proteine energie drumetie alimentatie tura lunga sfaturi nutritie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți alimentezi corpul corect pe turele lungi de munte, combinând carbohidrați pentru energie și proteine pentru refacere.",
+    "seed_topic": "Echilibrul proteine/carbohidrați pe ture lungi",
+    "seed_topic_slug": "tip_food_protein_balance"
+  }
+}

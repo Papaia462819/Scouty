@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_layers_basics_d11c736abb46",
+  "card_id": "cg_gear_and_preparati_gear_layers_basics_d11c736abb46",
+  "domain": "gear_and_preparation",
+  "topic": "gear_layers_basics",
+  "language": "ro",
+  "title": "Hainele pe straturi: Bază, Izolație, Shell",
+  "body": "Salutare, prietene! Când vine vorba de echipament, stratificarea e sfântă. Gândește-te la ce ai pe tine ca la trei straturi esențiale. Primul, stratul de bază, e cel direct pe piele. Aici vrei ceva sintetic sau lână merinos, care să ducă transpirația departe de corp. Uită de bumbac, că te lasă ud și-ți ține de frig. Al doilea e stratul de izolație: fleece sau o jachetă subțire cu puf/sintetic. Asta te ține de cald. Și al treilea, stratul exterior sau 'shell', e o jachetă impermeabilă și rezistentă la vânt. Chiar dacă e soare la plecare, vremea se schimbă repede la munte. Nu vrei să te prindă ploaia fără o protecție bună, am pățit-o. E mai bine să ai și să nu folosești, decât să-ți lipsească.",
+  "lead": "Învață cum să te îmbraci corect în straturi pentru orice vreme la munte, folosind materiale potrivite.",
+  "keywords": "stratificare haine echipament munte strat bază izolație shell",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să te îmbraci corect în straturi pentru orice vreme la munte, folosind materiale potrivite.",
+    "seed_topic": "Stratificarea hainelor: bază, izolație, șell — exemple concrete",
+    "seed_topic_slug": "gear_layers_basics"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_ce_faci_daca_ratacesti_p_3a4f4f66b2ce",
+  "card_id": "cg_mountain_safety_ce_faci_daca_ratacesti_p_3a4f4f66b2ce",
+  "domain": "mountain_safety",
+  "topic": "ce_faci_daca_ratacesti_poteca",
+  "language": "ro",
+  "title": "Rătăcire pe munte — pași esențiali",
+  "body": "În caz de rătăcire pe munte, este crucial să păstrați unitatea grupului. Rămâneți treji și conștienți, iar pentru a preveni hipotermia, mișcați-vă pe loc. Nu consumați alcool. Anunțați imediat Salvamont-ul. La apel, specificați clar ce s-a întâmplat, câte persoane au nevoie de ajutor, când s-a produs accidentul și locul exact unde vă aflați. Apelați Dispeceratul Național Salvamont la 0SALVAMONT (0725826668) sau SNAU 112. Este recomandat să priviți periodic ecranul telefonului mobil pentru a urmări prezența sau absența semnalului și să rețineți locul unde ați avut ultima dată semnal. Economisiți acumulatorul telefonului sau asigurați-vă că aveți un acumulator de rezervă în rucsac.",
+  "lead": "Aflați ce pași trebuie să urmați imediat dacă vă rătăciți pe munte, de la menținerea unității grupului la contactarea Salvamontului.",
+  "keywords": "rătăcire munte salvamont urgență grup hipotermie semnal telefon siguranță apel",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Recomandari pentru turistul montan",
+  "source_url": "https://www.salvamontromania.ro/recomandari-turist-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-05",
+  "source_trust": 5,
+  "safety_tags": [
+    "lost_on_trail",
+    "mountain_safety",
+    "emergency_protocol",
+    "hypothermia_prevention",
+    "communication"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați ce pași trebuie să urmați imediat dacă vă rătăciți pe munte, de la menținerea unității grupului la contactarea Salvamontului.",
+    "evidence_confidence": "high",
+    "source_quote": "In caz de ratacire, pastrati unitatea grupului. Ramaneti treji si constienti. Miscati-va pe loc pentru a preveni hipotermia. Nu consumati alcool. Anuntati Salvamont-ul.",
+    "source_id": "salvamont_turist_montan"
+  }
+}

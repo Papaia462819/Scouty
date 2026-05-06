@@ -1,0 +1,29 @@
+{
+  "chunk_id": "cg_medical_emergency_hipotermie_usoara_semne_d50f1a822d23",
+  "card_id": "cg_medical_emergency_hipotermie_usoara_semne_d50f1a822d23",
+  "domain": "medical_emergency",
+  "topic": "hipotermie_usoara_semne",
+  "language": "ro",
+  "title": "Hipotermie ușoară: semne timpurii și pași inițiali",
+  "body": "Hipotermia ușoară apare atunci când temperatura centrală scade sub 35 grade Celsius. Semnele de avertizare includ tremurat puternic și incontrolabil, mâini reci și puțin amorțite, gândire mai lentă și vorbire ușor împleticită, precum și pași nesiguri. Dacă observați aceste semne la dumneavoastră sau la un coleg, opriți activitatea și luați măsuri imediat. Mutați persoana din vânt și de pe suprafețe reci. Înlocuiți rapid hainele ude cu haine uscate, inclusiv șosetele, și acoperiți capul, gâtul și trunchiul cu straturi suplimentare. Oferiți băuturi calde și dulci, dar numai dacă persoana este conștientă și poate înghiți în siguranță; nu dați alcool. Evitați frecția viguroasă a brațelor și a picioarelor, deoarece poate forța sângele rece către inimă. Mențineți persoana orizontală și calmă pentru cel puțin 30 de minute. Dacă tremuratul nu se oprește, dacă starea de conștiență scade, dacă vorbirea devine confuză sau dacă temperatura nu se redresează în 30-60 de minute, este o urgență: sunați 0SALVAMONT (apel: 0SALVAMONT) sau 112 și solicitați evacuare. Hipotermia se poate agrava rapid; nu așteptați să apară simptomele moderate înainte de a chema ajutor.",
+  "keywords": "hipotermie frig tremurat haine ude salvamont prim ajutor",
+  "card_family": "SCENARIO",
+  "priority": 90,
+  "tier": "A",
+  "source_title": "Recomandari pentru turistul montan",
+  "source_url": "https://www.salvamontromania.ro/recomandari-turist-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-03",
+  "source_trust": 5,
+  "safety_tags": ["hypothermia", "cold_exposure", "first_aid", "life_threatening"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Hipotermia ușoară începe cu tremurat și gândire lentă; mutați persoana din frig, schimbați-i hainele ude și sunați 0SALVAMONT dacă nu se redresează în 30-60 minute.",
+    "evidence_confidence": "high",
+    "source_id": "salvamont_turist_montan"
+  }
+}

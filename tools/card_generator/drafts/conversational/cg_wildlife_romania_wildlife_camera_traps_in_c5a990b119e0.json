@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_camera_traps_in_c5a990b119e0",
+  "card_id": "cg_wildlife_romania_wildlife_camera_traps_in_c5a990b119e0",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_camera_traps_intro",
+  "language": "ro",
+  "title": "Capcane foto: Ferestre spre viata salbatica",
+  "body": "Băi, știi ce e mișto la capcanele foto? Ne arată ce se întâmplă în pădure când noi nu suntem pe-acolo. Am pus odată una lângă o scorbură și, surpriză, am prins un ursuleț curios care se juca cu o creangă! E o metodă super să înveți despre ritmurile animalelor. Le montezi pe poteci folosite, lângă surse de apă sau la marginea luminișurilor. Asigură-te că le camuflezi bine, să nu le găsească nici animalele, nici alți \"exploratori\". Verifică-le periodic, dar nu prea des, să nu deranjezi. Vei fi uimit ce \"vecini\" ai prin munți!",
+  "lead": "Află cum camerele foto-capcană te pot ajuta să descoperi secretele faunei sălbatice din Carpați, fără să le deranjezi.",
+  "keywords": "camere foto-capcana observare fauna wildlife munti romania echipament drumetie ursi lupi",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum camerele foto-capcană te pot ajuta să descoperi secretele faunei sălbatice din Carpați, fără să le deranjezi.",
+    "seed_topic": "Camere foto-trap și ce ne învață despre faună",
+    "seed_topic_slug": "wildlife_camera_traps_intro"
+  }
+}

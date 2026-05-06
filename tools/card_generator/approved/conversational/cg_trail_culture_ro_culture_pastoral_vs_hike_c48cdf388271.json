@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_pastoral_vs_hike_c48cdf388271",
+  "card_id": "cg_trail_culture_ro_culture_pastoral_vs_hike_c48cdf388271",
+  "domain": "trail_culture_ro",
+  "topic": "culture_pastoral_vs_hiker",
+  "language": "ro",
+  "title": "Drumețul și ciobanul: respect pe poteci",
+  "body": "Când dai de ciobani și stâne, e bine să știi câteva lucruri. Salută-i, sunt oameni ai muntelui, ca și tine. Dacă vezi câini, nu te panica, dar fii vigilent. Mergi cu pas hotărât, fără mișcări bruște, și nu te apropia de oi. De obicei, câinii își fac treaba și te latră, dar nu atacă dacă nu te simt o amenințare. Am pățit-o de multe ori, un \"Bună ziua!\" spus tare și calm face minuni. Nu te juca cu bețe sau pietre în preajma lor. Și, cel mai important, nu lăsa gunoaie. Respectă munca lor și natura. Ei sunt acolo de sute de ani, noi suntem doar în vizită.",
+  "lead": "Află cum să te comporți respectuos când întâlnești ciobani și câini de stână pe potecile montane.",
+  "keywords": "ciobani stâne câini de stână respect munte coexistență",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te comporți respectuos când întâlnești ciobani și câini de stână pe potecile montane.",
+    "seed_topic": "Drumețul vs ciobanul — o coexistență respectuoasă",
+    "seed_topic_slug": "culture_pastoral_vs_hiker"
+  }
+}

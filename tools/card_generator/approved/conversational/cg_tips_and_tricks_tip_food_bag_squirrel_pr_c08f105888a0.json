@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_food_bag_squirrel_pr_c08f105888a0",
+  "card_id": "cg_tips_and_tricks_tip_food_bag_squirrel_pr_c08f105888a0",
+  "domain": "tips_and_tricks",
+  "topic": "tip_food_bag_squirrel_proof",
+  "language": "ro",
+  "title": "Mancarea sus, departe de cort - si vara",
+  "body": "Chiar și pe vară, animalele sălbatice sunt atrase de mirosul mâncării. Nu vrei să te trezești cu un urs curios la cort, căutat de mirosul de salam. Întotdeauna, dar absolut întotdeauna, depozitează mâncarea și orice miroase (inclusiv pasta de dinți!) la cel puțin 50-100 de metri de cort. Poți folosi un sac etanș agățat de o creangă solidă sau, dacă ești într-o zonă mai expusă, un recipient rezistent la animale. E un mic efort, dar îți garantează un somn liniștit și o experiență fără incidente neplăcute. Am văzut odată un bursuc care a încercat să fure o pungă de covrigei, nu e de glumit cu asta!",
+  "lead": "Depozitează mâncarea și produsele parfumate departe de cort, chiar și vara, pentru a evita animalele sălbatice.",
+  "keywords": "mancare munte depozitare mancare animale salbatice siguranta cort ursi munte sfaturi camping",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Depozitează mâncarea și produsele parfumate departe de cort, chiar și vara, pentru a evita animalele sălbatice.",
+    "seed_topic": "Mâncarea sus, departe de cort — chiar și pe vară",
+    "seed_topic_slug": "tip_food_bag_squirrel_proof"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_seasonal_huts_op_f2d6338cf02f",
+  "card_id": "cg_weather_and_season_weather_seasonal_huts_op_f2d6338cf02f",
+  "domain": "weather_and_season",
+  "topic": "weather_seasonal_huts_open",
+  "language": "ro",
+  "title": "Cabane deschise iarna: Unde te poți adăposti?",
+  "body": "Iarna la munte e magică, dar și serioasă. Nu toate cabanele sunt deschise non-stop. Verifică mereu înainte de a pleca! Multe cabane montane, mai ales cele izolate, își închid porțile sau funcționează cu program redus. Sună la cabanier, caută informații pe site-uri de specialitate sau pe grupurile de drumeți. E mai bine să știi dinainte unde poți găsi un ceai cald și un pat, decât să te trezești în frig. Unele au camere de iarnă, neîncălzite, dar deschise pentru adăpost de urgență. Nu te baza pe ele pentru confort. Planificarea e cheia, altfel s-ar putea să dormi sub brad, și nu e la fel de romantic pe cât sună iarna.",
+  "lead": "Află cum să verifici care cabane sunt deschise pe timp de iarnă pentru a evita surprizele neplăcute.",
+  "keywords": "cabane iarna adapost munte planificare iarna siguranta munte informatii cabane",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să verifici care cabane sunt deschise pe timp de iarnă pentru a evita surprizele neplăcute.",
+    "seed_topic": "Cabanele care sunt deschise pe timp de iarnă",
+    "seed_topic_slug": "weather_seasonal_huts_open"
+  }
+}

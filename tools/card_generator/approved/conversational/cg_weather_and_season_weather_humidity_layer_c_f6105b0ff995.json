@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_humidity_layer_c_f6105b0ff995",
+  "card_id": "cg_weather_and_season_weather_humidity_layer_c_f6105b0ff995",
+  "domain": "weather_and_season",
+  "topic": "weather_humidity_layer_choice",
+  "language": "ro",
+  "title": "Umiditate si stratul tehnic: ce alegi?",
+  "body": "Salut, prietene! Când vine vorba de stratul tehnic, cel de lângă piele, umiditatea face toată diferența. Dacă e aer uscat, cum găsești adesea la altitudini mari, un merino subțire e aur curat. Respiră, te ține cald și nu miroase nici după câteva zile (testat personal, nu judeca!). Pe de altă parte, dacă ești pe Valea Cerbului într-o zi cețoasă de toamnă, cu aerul tăiat de umezeală, mergi pe sintetic. Poliesterul sau polipropilena elimină transpirația rapid și se usucă la fel de repede. Merino absoarbe umezeala și, când e ud, te răcește. Gândește-te la asta înainte să pleci!",
+  "lead": "Alegerea stratului tehnic potrivit depinde crucial de umiditatea aerului: merino pentru uscat, sintetic pentru umed.",
+  "keywords": "strat tehnic merino sintetic umiditate aer uscat transpiratie echipament munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Alegerea stratului tehnic potrivit depinde crucial de umiditatea aerului: merino pentru uscat, sintetic pentru umed.",
+    "seed_topic": "Aer umed vs uscat — alegerea stratului tehnic",
+    "seed_topic_slug": "weather_humidity_layer_choice"
+  }
+}

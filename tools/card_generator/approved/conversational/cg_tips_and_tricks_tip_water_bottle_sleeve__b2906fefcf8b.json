@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_water_bottle_sleeve__b2906fefcf8b",
+  "card_id": "cg_tips_and_tricks_tip_water_bottle_sleeve__b2906fefcf8b",
+  "domain": "tips_and_tricks",
+  "topic": "tip_water_bottle_sleeve_winter",
+  "language": "ro",
+  "title": "Husa termică: apă lichidă la -10°C",
+  "body": "Știi cum e, pleci dimineața cu apă, și la prânz ai un sloi? Am pățit-o de prea multe ori. O husă termică pentru sticla de apă e sfântă iarna. Nu trebuie să fie una super-sofisticată, chiar și una de neopren pentru sticle de vin e bună. Ideea e să izoleze. Eu mai bag și o șosetă groasă pe deasupra, pentru un strat în plus. Și un truc: dacă apa e caldă când o pui în sticlă, o să rămână lichidă mult mai mult timp. E un mic efort, dar merită fiecare picătură de apă neînghețată când ți-e sete bocnă pe creastă.",
+  "lead": "Păstrează-ți apa lichidă la temperaturi scăzute folosind o husă termică și câteva trucuri simple.",
+  "keywords": "husa termica apa iarna evita inghet hidratare frig trucuri munte echipament iarna",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Păstrează-ți apa lichidă la temperaturi scăzute folosind o husă termică și câteva trucuri simple.",
+    "seed_topic": "Husa termică pentru sticlă — apă lichidă la -10°C",
+    "seed_topic_slug": "tip_water_bottle_sleeve_winter"
+  }
+}

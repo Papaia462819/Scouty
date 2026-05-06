@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_used_gear_check_5bafe29ddf2a",
+  "card_id": "cg_gear_and_preparati_gear_used_gear_check_5bafe29ddf2a",
+  "domain": "gear_and_preparation",
+  "topic": "gear_used_gear_check",
+  "language": "ro",
+  "title": "Echipament second-hand: ce verifici inainte sa cumperi",
+  "body": "Când iei echipament la mâna a doua, fii atent la detalii. La rucsac, verifică toate cusăturile, în special cele de la bretele și centura lombară – să nu fie desfăcute sau roase. Fermoarele trebuie să meargă lin, fără să agațe. La bocanci, inspectează talpa: aderența e crucială, iar crampoanele tocite nu te ajută pe teren alunecos. Verifică și integritatea membranei impermeabile, dacă există. La corturi, caută rupturi mici în pânză, mai ales la colțuri și pe la bețe. Un mic defect poate deveni o mare problemă la prima ploaie. Nu te grăbi, examinează totul cu atenție, ca un detectiv pe urmele unei comori. Mai bine previi decât să regreți în vârf de munte.",
+  "lead": "Află ce detalii importante să verifici la rucsac, bocanci și corturi second-hand înainte de a le cumpăra, pentru a evita surprizele neplăcute pe munte.",
+  "keywords": "echipament second-hand verificare rucsac bocanci uzati cort defect sfaturi cumparare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce detalii importante să verifici la rucsac, bocanci și corturi second-hand înainte de a le cumpăra, pentru a evita surprizele neplăcute pe munte.",
+    "seed_topic": "Cum verifici echipament second-hand înainte să cumperi",
+    "seed_topic_slug": "gear_used_gear_check"
+  }
+}

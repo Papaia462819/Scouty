@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_anvil_clouds_war_5da7cf075820",
+  "card_id": "cg_weather_and_season_weather_anvil_clouds_war_5da7cf075820",
+  "domain": "weather_and_season",
+  "topic": "weather_anvil_clouds_warning",
+  "language": "ro",
+  "title": "Norii nicovală: Semn de furtună, nu de stat la pozat",
+  "body": "Băi, dacă vezi pe cer nori de tip cumulonimbus, ăia cu forma de nicovală, nu sta pe gânduri: e semn clar de furtună puternică, cu fulgere și grindină. Nu e momentul să admiri peisajul, ci să te miști rapid! Caută cel mai scurt drum spre vale sau spre un adăpost sigur. Pe creste ești o țintă perfectă pentru fulgere. Am pățit-o o dată, am crezut că am timp să ajung la refugiu și m-a prins ploaia torențială. Noroc că am avut pelerina la mine și am găsit un brad mai des sub care să mă adăpostesc. Nu te juca cu așa ceva, siguranța e pe primul loc.",
+  "lead": "Norii nicovală indică furtuni puternice; oprește-te imediat și coboară de pe creste pentru a te adăposti.",
+  "keywords": "nori nicovală cumulonimbus furtună munte siguranță fulgere coborâre rapidă grindină",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Norii nicovală indică furtuni puternice; oprește-te imediat și coboară de pe creste pentru a te adăposti.",
+    "seed_topic": "Norii de tip nicovală — de ce te oprești și cobori",
+    "seed_topic_slug": "weather_anvil_clouds_warning"
+  }
+}

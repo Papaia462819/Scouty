@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_food_rationing_b1e38f61431b",
+  "card_id": "cg_survival_basics_survival_food_rationing_b1e38f61431b",
+  "domain": "survival_basics",
+  "topic": "survival_food_rationing",
+  "language": "ro",
+  "title": "Hrana pentru 48 de ore neașteptate",
+  "body": "Băi, știi cum e, nu-i bine să te bazezi pe noroc. Dacă te prinde o situație neprevăzută în munți, cu mâncarea, e bine să știi să raționalizezi. Pentru 48 de ore, nu te panica. Împarte-ți porțiile zilnice în două. Mănâncă jumătate dimineața și jumătate seara. Evită gustările inutile, chiar dacă simți nevoia. Bea apă, te ajută să te simți mai plin. Dacă ai ceva dulce, o ciocolată, păstreaz-o pentru momentele când simți că-ți scade energia serios, nu o ronțăi aiurea. Nu uita, scopul nu e să te saturi, ci să-ți menții energia și luciditatea până la salvare. E mai greu cu stomacul gol, dar mintea limpede e aur curat la munte. Am pățit-o o dată, am crezut că ajung la cabană, dar o ceață deasă m-a ținut pe loc. Două batoane de cereale m-au scos din impas, întinse bine-bine.",
+  "lead": "Află cum să-ți gestionezi hrana eficient dacă ești prins într-o situație neprevăzută în munți pentru 48 de ore.",
+  "keywords": "raționalizare hrană urgență munte supraviețuire 48h energie munte sfaturi hrană planificare urgență",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți gestionezi hrana eficient dacă ești prins într-o situație neprevăzută în munți pentru 48 de ore.",
+    "seed_topic": "Rationalizare hrană pentru 48 ore neașteptate",
+    "seed_topic_slug": "survival_food_rationing"
+  }
+}

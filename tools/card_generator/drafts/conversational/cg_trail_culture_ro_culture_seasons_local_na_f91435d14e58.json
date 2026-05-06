@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_seasons_local_na_f91435d14e58",
+  "card_id": "cg_trail_culture_ro_culture_seasons_local_na_f91435d14e58",
+  "domain": "trail_culture_ro",
+  "topic": "culture_seasons_local_names",
+  "language": "ro",
+  "title": "Numele lunilor si ce ne spun despre munte",
+  "body": "Bătrânii noștri aveau nume faine pentru luni, care ne zic multe despre cum era muntele atunci. De exemplu, Februarie e și Făurar, de la fierărit, că-i frig de crapă pietrele și stai mai mult pe lângă foc. Martie e Mărțișor, când natura se trezește timid, dar nu te baza pe asta la altitudine! Mai sus, încă e iarnă. Iunie e Cireșar, perfect pentru ture lungi, dar cu atenție la furtunile de vară care vin repede. Septembrie e Răpciune, de la răceală, semn că toamna își intră în drepturi și trebuie să ai la tine straturi groase. Aceste denumiri sunt un memento că muntele are propriul său calendar, iar respectul față de el e cheia oricărei ture reușite.",
+  "lead": "Numele populare ale lunilor ne oferă indicii prețioase despre condițiile meteo și specificul fiecărui anotimp la munte.",
+  "keywords": "nume luni calendar munte traditii romanesti sfaturi drumetie fenomene meteo",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Numele populare ale lunilor ne oferă indicii prețioase despre condițiile meteo și specificul fiecărui anotimp la munte.",
+    "seed_topic": "Numele populare ale lunilor și ce ne spun despre munte",
+    "seed_topic_slug": "culture_seasons_local_names"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_fatwood_cab094b575ff",
+  "card_id": "cg_campfire_basics_fire_fatwood_cab094b575ff",
+  "domain": "campfire_basics",
+  "topic": "fire_fatwood",
+  "language": "ro",
+  "title": "Lemnul rășinos (fatwood): Prietenul tău când totul e ud",
+  "body": "Uite un secret pe care l-am învățat pe pielea mea, într-o ploaie deasă în Apuseni. Când totul în jur e leoarcă și ai nevoie de foc, caută lemn rășinos, cunoscut și ca 'fatwood'. Îl găsești de obicei la baza trunchiurilor de conifere moarte, în special la rădăcină sau unde s-au rupt crengile de jos. Lemnul e mai închis la culoare, aproape roșiatic sau auriu, și miroase puternic a terebentină. De ce arde ud? Simplu: e plin de rășină, care e practic combustibil pur. Apa stă la suprafață, dar rășina din interior se aprinde și arde suficient de puternic încât să evapore umezeala și să aprindă restul lemnului. Razuiește câțiva așchii fine cu cuțitul și o să vezi cum se aprind de la o singură scânteie, chiar dacă picură pe tine. E micul tău truc de supraviețuire.",
+  "lead": "Când plouă și totul e ud, caută lemn rășinos la baza brazilor uscați; rășina din el îl face să ardă ca o torță, chiar și umed.",
+  "keywords": "fatwood lemn rășinos aprindere foc supraviețuire tehnici umezeală conifere",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Când plouă și totul e ud, caută lemn rășinos la baza brazilor uscați; rășina din el îl face să ardă ca o torță, chiar și umed.",
+    "seed_topic": "Lemnul rășinos (fatwood) — cum îl recunoști și de ce arde ud",
+    "seed_topic_slug": "fire_fatwood"
+  }
+}

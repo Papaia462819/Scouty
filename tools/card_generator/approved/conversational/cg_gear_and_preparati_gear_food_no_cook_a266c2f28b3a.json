@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_food_no_cook_a266c2f28b3a",
+  "card_id": "cg_gear_and_preparati_gear_food_no_cook_a266c2f28b3a",
+  "domain": "gear_and_preparation",
+  "topic": "gear_food_no_cook",
+  "language": "ro",
+  "title": "Gustări rapide pentru ture scurte",
+  "body": "Când ești pe fugă și nu vrei să pierzi timp cu focul, gândește-te la ce poți mânca direct din rucsac. Eu, de exemplu, iau mereu batoane energizante, că-s ușoare și te țin. Nucile și mixurile de fructe uscate sunt aur curat, îți dau energie rapidă și nu ocupă mult loc. Un sandviș cu unt de arahide și dulceață e clasic și bun, dar atenție să nu se turtească. Brânza tare, gen cașcaval, merge și ea, tăiată cubulețe, cu niște covrigei. Și nu uita de ciocolată, e un boost moral și caloric excelent, mai ales când e frig. Evită chestiile care se strică repede sau care necesită preparare. Simplu și eficient, ăsta-i secretul.",
+  "lead": "Află ce gustări rapide și nutritive poți lua în turele tale montane, fără să ai nevoie de gătit.",
+  "keywords": "mancare tura gustari munte fara gatit energie rapida echipament tura alimentatie drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce gustări rapide și nutritive poți lua în turele tale montane, fără să ai nevoie de gătit.",
+    "seed_topic": "Mâncare fără gătit pentru ture rapide",
+    "seed_topic_slug": "gear_food_no_cook"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_huts_advice_book_e24b10a50f00",
+  "card_id": "cg_trail_culture_ro_culture_huts_advice_book_e24b10a50f00",
+  "domain": "trail_culture_ro",
+  "topic": "culture_huts_advice_book",
+  "language": "ro",
+  "title": "Jurnalul cabanei: o tradiție românească",
+  "body": "Băi, știi că la multe cabane de la noi, mai ales cele mai vechi, găsești un jurnal de impresii? E o tradiție faină, zic eu. Înainte să pleci, mai ales dacă ești la prima ta tură pe acolo, ia cinci minute și citește câteva pagini. Vezi ce au scris alții, ce trasee au mai făcut, cum a fost vremea, poate chiar și niște ponturi despre starea potecilor sau a cabanei. E ca un fel de istorie vie a locului, scrisă de drumeți pentru drumeți. Uneori, mai găsești și câte o poezie sau o glumă bună. Și, dacă te simți inspirat, lasă și tu un gând. Poți să scrii despre cum a fost traseul, ce ai văzut, sau pur și simplu o urare. E o amintire faină, și pentru tine, și pentru cei care vin după. Cine știe, poate peste ani o să-ți regăsești numele!",
+  "lead": "Descoperă tradiția jurnalelor de cabană din munții României și cum te pot ajuta să te conectezi cu istoria locurilor și a altor drumeți.",
+  "keywords": "jurnal cabana traditie montana sfaturi drumeti cultura carpatilor impresii cabana",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă tradiția jurnalelor de cabană din munții României și cum te pot ajuta să te conectezi cu istoria locurilor și a altor drumeți.",
+    "seed_topic": "Cartea de impresii — încă o citești înainte să pleci",
+    "seed_topic_slug": "culture_huts_advice_book"
+  }
+}

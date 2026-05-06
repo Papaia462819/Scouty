@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_boots_drying_field_6de94f248355",
+  "card_id": "cg_gear_and_preparati_gear_boots_drying_field_6de94f248355",
+  "domain": "gear_and_preparation",
+  "topic": "gear_boots_drying_field",
+  "language": "ro",
+  "title": "Uscarea bocancilor pe traseu: sfaturi de la un veteran",
+  "body": "Așa-i că nu-i nimic mai enervant decât să te trezești cu bocancii leoarcă după o ploaie zdravănă sau o băltoacă neprevăzută? Nu-i panica! Pe traseu, dacă ai noroc de soare, scoate branțurile și limba bocancilor, apoi pune-i la aerisit, cu talpa în sus, pe o stâncă sau un buștean. Evită expunerea directă și prelungită la soare puternic, mai ales dacă sunt din piele, ca să nu se crape. Dacă plouă, umple-i cu hârtie de ziar mototolită – absoarbe umezeala de minune. Schimbă ziarul des. Nu-i pune niciodată lângă foc, riști să lipești talpa sau să distrugi materialul. Am văzut odată un tip care a topit talpa la bocanci noi-nouți încercând să-i usuce lângă un foc de tabără. Nu fi acel tip!",
+  "lead": "Învață cum să-ți usuci eficient bocancii pe traseu, fără să-i deteriorezi, folosind metode simple și testate.",
+  "keywords": "uscare bocanci îngrijire echipament traseu umed sfaturi drumeție bocanci piele evitare deteriorare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să-ți usuci eficient bocancii pe traseu, fără să-i deteriorezi, folosind metode simple și testate.",
+    "seed_topic": "Cum usuci bocancii pe traseu fără să-i strici",
+    "seed_topic_slug": "gear_boots_drying_field"
+  }
+}

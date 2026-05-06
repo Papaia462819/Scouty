@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_id_eagle_b9059f690035",
+  "card_id": "cg_wildlife_romania_wildlife_id_eagle_b9059f690035",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_id_eagle",
+  "language": "ro",
+  "title": "Acvila de munte vs. Șorecar în zbor",
+  "body": "Salut, prietene! Când ești pe creste și vezi o pasăre mare planând, cum îți dai seama dacă e acvilă sau șorecar? E simplu, acvila de munte are aripile ținute într-un V foarte deschis, aproape orizontal, și le mișcă rar, cu bătăi ample și puternice. Pare că plutește fără efort. Șorecarul, în schimb, are aripile mai scurte, le ține într-un V mai pronunțat și bate din ele mult mai des, mai agitat. Pare că se chinuie un pic mai mult să se mențină în aer. Acvila e și mult mai mare, desigur, dar asta se vede mai greu de la distanță. Odată am stat o oră să mă uit la o acvilă cum vâna deasupra Pietrei Craiului, o priveliște de neuitat!",
+  "lead": "Învață să distingi acvila de munte de șorecar în zbor, observând forma aripilor și frecvența bătăilor.",
+  "keywords": "acvila de munte șorecar diferențe zbor identificare păsări observare wildlife păsări de pradă",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață să distingi acvila de munte de șorecar în zbor, observând forma aripilor și frecvența bătăilor.",
+    "seed_topic": "Acvila de munte vs șorecar — diferențe în zbor",
+    "seed_topic_slug": "wildlife_id_eagle"
+  }
+}

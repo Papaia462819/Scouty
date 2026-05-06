@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_route_intelligence_route_one_day_hard_route_89bf04b860f6",
+  "card_id": "cg_route_intelligence_route_one_day_hard_route_89bf04b860f6",
+  "domain": "route_intelligence_romania",
+  "topic": "route_one_day_hard_routes",
+  "language": "ro",
+  "title": "Trasee de o zi subestimate in Carpati",
+  "body": "Salut, prietene! Știi, mulți se înghesuie pe Valea Cerbului, dar Carpații ascund și trasee de o zi care te lasă mască, fără aglomerație. De exemplu, în Piatra Craiului, urcă pe la Cabana Curmătura și apoi spre Vârful Piatra Mică. E o bucurie de traseu, cu păduri vechi și priveliști spre creastă, dar mai puțin bătut decât cele clasice. Sau, în Bucegi, în loc de Jepii Mici, încearcă o tură prin Valea Ialomiței până la Peștera Ialomicioara și apoi spre Cascada Obârșiei. Vei descoperi o altă față a muntelui, mai sălbatică. E ca și cum ai găsi o ciupercă bună într-un loc unde nimeni nu s-ar fi gândit să caute. Ia-ți bocancii și hai să explorăm!",
+  "lead": "Descoperă trasee de o zi în Carpați care oferă priveliști spectaculoase și liniște, departe de aglomerația rutelor populare.",
+  "keywords": "trasee subestimate piatra craiului bucegi drumeții de o zi explorare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă trasee de o zi în Carpați care oferă priveliști spectaculoase și liniște, departe de aglomerația rutelor populare.",
+    "seed_topic": "Trasee de o zi care surprind oamenii — sub-evaluate",
+    "seed_topic_slug": "route_one_day_hard_routes"
+  }
+}

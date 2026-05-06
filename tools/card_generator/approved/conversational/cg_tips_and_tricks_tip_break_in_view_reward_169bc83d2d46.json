@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_break_in_view_reward_169bc83d2d46",
+  "card_id": "cg_tips_and_tricks_tip_break_in_view_reward_169bc83d2d46",
+  "domain": "tips_and_tricks",
+  "topic": "tip_break_in_view_reward",
+  "language": "ro",
+  "title": "Pauza la priveliște: Reward și ritm natural",
+  "body": "Băi, știi cum e? Munții nu-s o cursă. Când ajungi la o poiană cu priveliște faină, oprește-te! Nu doar ca să-ți tragi sufletul, ci ca să te bucuri, pur și simplu. E un reward mental, o mică victorie. Scoate rucsacul, bea o gură de apă, ronțăie ceva și lasă-ți ochii să se plimbe. O să vezi că după 10-15 minute de admirat, picioarele tale se simt mai ușoare și mintea mai limpede. E ritmul natural al muntelui, nu te grăbi. Am învățat asta după ce am alergat de-a lungul anilor și am realizat că am ratat jumătate din frumusețe. Acum, fiecare priveliște e o scurtă meditație.",
+  "lead": "Oprește-te și bucură-te de priveliște; e un reward mental care te ajută să-ți găsești ritmul natural în drumeție.",
+  "keywords": "pauza, priveliște, ritm, reward, relaxare, munte, drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Oprește-te și bucură-te de priveliște; e un reward mental care te ajută să-ți găsești ritmul natural în drumeție.",
+    "seed_topic": "Pauza la priveliște ca reward mental — ritmul natural",
+    "seed_topic_slug": "tip_break_in_view_reward"
+  }
+}

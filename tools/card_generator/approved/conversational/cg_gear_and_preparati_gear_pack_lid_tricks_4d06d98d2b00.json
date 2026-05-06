@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_pack_lid_tricks_4d06d98d2b00",
+  "card_id": "cg_gear_and_preparati_gear_pack_lid_tricks_4d06d98d2b00",
+  "domain": "gear_and_preparation",
+  "topic": "gear_pack_lid_tricks",
+  "language": "ro",
+  "title": "Capacul rucsacului: ce pui la îndemână",
+  "body": "Băi, știi buzunarul ăla mare de deasupra rucsacului, capacul? E aur curat pentru chestii la care vrei acces rapid, fără să scotocești prin tot rucsacul. Eu pun acolo harta și busola – e vital să le ai la mână. Lanterna frontală, ochelarii de soare și o cremă de protecție solară își găsesc și ele locul. Nu uita de un pachet de șervețele și de o mică trusă de prim ajutor (doar strictul necesar: plasturi, dezinfectant, folie de supraviețuire). Un baton energizant sau două și un mic briceag sunt și ele utile. Evită să îndesi prea mult, să nu-ți atârne rucsacul ciudat. Gândește-te la ce ai nevoie în 30 de secunde. Restul, la baza rucsacului!",
+  "lead": "Află ce obiecte esențiale ar trebui să păstrezi în capacul rucsacului pentru acces rapid în timpul drumeției.",
+  "keywords": "capac rucsac organizare rucsac echipament esential acces rapid drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce obiecte esențiale ar trebui să păstrezi în capacul rucsacului pentru acces rapid în timpul drumeției.",
+    "seed_topic": "Capacul rucsacului ca buzunar de zi — ce pui acolo",
+    "seed_topic_slug": "gear_pack_lid_tricks"
+  }
+}

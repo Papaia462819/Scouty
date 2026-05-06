@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_morning_dew_sock_f278829d9647",
+  "card_id": "cg_weather_and_season_weather_morning_dew_sock_f278829d9647",
+  "domain": "weather_and_season",
+  "topic": "weather_morning_dew_socks",
+  "language": "ro",
+  "title": "Roua matinala si sosetele ude: cum le eviti",
+  "body": "Auzi, știi cum e, pleci dimineață la drum, iar iarba e plină de rouă. Până să te dezmeticești, ai șosetele fleșcăite. Nu-i deloc plăcut! Ca să eviți asta, poți folosi parazăpeți. Nu, nu sunt doar pentru zăpadă, sunt excelenți și împotriva umezelii din iarbă înaltă. Alternativ, ia în calcul o pereche de pantaloni impermeabili ușori, pe care să-i pui peste cei de drumeție, mai ales la primele ore. Și un sfat de la un moșneag: dacă știi că vei merge prin iarbă udă, ia o pereche de șosete de rezervă. Nu strică niciodată să ai o pereche uscată la îndemână. Picioarele uscate înseamnă o zi mai bună pe munte!",
+  "lead": "Protejează-ți picioarele de roua matinală cu parazăpeți sau pantaloni impermeabili și ai mereu șosete de rezervă.",
+  "keywords": "roua sosete ude parazapeți pantaloni impermeabili echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Protejează-ți picioarele de roua matinală cu parazăpeți sau pantaloni impermeabili și ai mereu șosete de rezervă.",
+    "seed_topic": "Roua de dimineață și șosetele tale — strategia de protecție",
+    "seed_topic_slug": "weather_morning_dew_socks"
+  }
+}

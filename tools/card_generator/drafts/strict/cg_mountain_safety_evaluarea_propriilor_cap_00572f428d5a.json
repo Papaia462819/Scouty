@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_evaluarea_propriilor_cap_00572f428d5a",
+  "card_id": "cg_mountain_safety_evaluarea_propriilor_cap_00572f428d5a",
+  "domain": "mountain_safety",
+  "topic": "evaluarea_propriilor_capacitati_inainte_de_tura",
+  "language": "ro",
+  "title": "Alegeți traseul potrivit: evaluare înainte de drumeție",
+  "body": "Sunteți responsabil pentru propria siguranță în drumețiile montane, iar călătoriile în zonele sălbatice implică riscuri inerente. Salvarea nu este o certitudine, de aceea este crucial să manifestați întotdeauna o judecată bună.\n\nÎnainte de a pleca, documentați-vă temeinic. Aflați dificultatea traseului (pe baza kilometrajului, diferenței de nivel, terenului și condițiilor meteo) și verificați pericolele actuale, avertismentele sau închiderile. Alegeți traseul potrivit pentru dumneavoastră și grupul dumneavoastră, asigurându-vă că este adecvat abilităților tuturor participanților. Lăsați drumețul cel mai lent să conducă și rămâneți întotdeauna împreună pe traseele marcate.\n\nFiți pregătiți pentru vreme. Verificați prognoza meteo și fiți pregătiți pentru schimbări rapide ale condițiilor. Dacă vremea nu este potrivită pentru drumeție, aveți un „Plan B” pregătit. Dacă nu vă simțiți confortabil să vă planificați drumeția folosind informațiile disponibile, cereți recomandări unui ranger.\n\nÎn caz de urgență, apelați 112 sau 0SALVAMONT. Comunicați clar locația și natura urgenței. Dacă nu aveți semnal la telefon, trimiteți pe cineva după ajutor.",
+  "lead": "Asumați-vă responsabilitatea pentru siguranța personală, evaluând cu atenție dificultatea traseului și capacitățile grupului înainte de a porni în drumeție.",
+  "keywords": "siguranță montană planificare drumeție evaluare traseu abilități grup responsabilitate personală condiții meteo urgență montană alegere traseu pregătire drumeție riscuri drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Hiking Safety",
+  "source_url": "https://www.nps.gov/grsm/planyourvisit/hikingsafety.htm",
+  "publisher": "National Park Service",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "hiking_safety",
+    "trip_planning",
+    "risk_assessment",
+    "group_management",
+    "personal_responsibility"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Asumați-vă responsabilitatea pentru siguranța personală, evaluând cu atenție dificultatea traseului și capacitățile grupului înainte de a porni în drumeție.",
+    "evidence_confidence": "high",
+    "source_quote": "You are responsible for your own safety! Backcountry travel has inherent risks and hikers assume complete responsibility for their own safety. Rescue is not a certainty. Always practice good judgement. Before You Go Do your research. Know the difficulty of a hike before attempting it and be sure to check out the current trail hazards, warnings, or closures. Choose the right trail for you and your group. Ensure that the trail you choose is suitable for the skills of your group.",
+    "source_id": "nps_hiking_safety"
+  }
+}

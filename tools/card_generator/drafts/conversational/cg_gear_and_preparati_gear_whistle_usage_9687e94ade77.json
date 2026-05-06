@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_whistle_usage_9687e94ade77",
+  "card_id": "cg_gear_and_preparati_gear_whistle_usage_9687e94ade77",
+  "domain": "gear_and_preparation",
+  "topic": "gear_whistle_usage",
+  "language": "ro",
+  "title": "Fluierul de semnalizare și codurile internaționale",
+  "body": "Băi, fluierul ăsta mic e un salvator, nu o jucărie. Uite cum îl folosești: trei fluierături scurte înseamnă „Ajutor! Sunt în pericol și am nevoie de ajutor imediat!”. Aștepți un minut, apoi repeți. Două fluierături scurte înseamnă „Vino la mine!” sau „Unde ești?”. E un apel de localizare, nu de urgență. O fluierătură scurtă e pentru „Ok, am înțeles” sau „Sunt bine”. E esențial să știi codurile astea, mai ales când ceața e deasă și nu vezi la doi pași. Am avut o dată un amic care a fluierat de trei ori, crezând că e o glumă. Nu era. L-am găsit cu glezna sucită. Deci, nu te juca cu ele!",
+  "lead": "Învață codurile internaționale pentru fluierul de semnalizare ca să comunici eficient și să ceri ajutor în situații de urgență pe munte.",
+  "keywords": "fluier semnalizare coduri internationale urgenta munte echipament siguranta comunicare munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață codurile internaționale pentru fluierul de semnalizare ca să comunici eficient și să ceri ajutor în situații de urgență pe munte.",
+    "seed_topic": "Fluierul de semnalizare — codurile internaționale",
+    "seed_topic_slug": "gear_whistle_usage"
+  }
+}

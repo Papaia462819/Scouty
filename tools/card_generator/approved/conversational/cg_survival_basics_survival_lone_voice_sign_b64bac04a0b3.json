@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_lone_voice_sign_b64bac04a0b3",
+  "card_id": "cg_survival_basics_survival_lone_voice_sign_b64bac04a0b3",
+  "domain": "survival_basics",
+  "topic": "survival_lone_voice_signal",
+  "language": "ro",
+  "title": "Strigi dupa ajutor fara fluier - tehnici eficiente",
+  "body": "N-ai fluier și te-ai rătăcit? Nu-i bai, se întâmplă și la case mai mari. Secretul e să strigi inteligent, nu să-ți rupi plămânii aiurea. Începe cu trei strigăte scurte și puternice, urmate de o pauză de un minut. Repetă ciclul. Asta e convenția internațională de semnalizare a primejdiei și le dă timp salvatorilor să localizeze direcția. Dacă ești într-o zonă cu ecou, folosește-l în avantajul tău. Strigă spre o stâncă sau o vale pentru a amplifica sunetul. Și nu uita, economisește-ți vocea! Nu urla continuu, te vei epuiza repede. Mai bine rar și puternic, decât des și șoptit. Mult succes, sper să nu ai nevoie de sfatul ăsta!",
+  "lead": "Află cum să strigi eficient după ajutor în munți când nu ai un fluier, folosind tehnici de semnalizare recunoscute.",
+  "keywords": "strigat ajutor fara fluier semnalizare urgenta tehnici survival economisire voce munti",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să strigi eficient după ajutor în munți când nu ai un fluier, folosind tehnici de semnalizare recunoscute.",
+    "seed_topic": "Strigi după ajutor când n-ai fluier — tehnica eficientă",
+    "seed_topic_slug": "survival_lone_voice_signal"
+  }
+}

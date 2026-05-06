@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_in_snow_c79c8d528419",
+  "card_id": "cg_campfire_basics_fire_in_snow_c79c8d528419",
+  "domain": "campfire_basics",
+  "topic": "fire_in_snow",
+  "language": "ro",
+  "title": "Foc pe zapada: cum sa nu-ti ineci jarul",
+  "body": "Deci vrei să faci foc pe zăpadă. Super idee, dar ai grijă la o chestie: zăpada de sub foc se topește. Focul tău o să coboare încet-încet într-o groapă de apă și noroi, până se stinge de tot. E un fenomen numit drenaj termic, adică zăpada îți fură toată căldura. Ca să eviți asta, trebuie să-i faci o platformă. Găsește niște lemne mai groase, de preferat verzi sau ude, și așază-le una lângă alta, ca o plută. Focul îl faci deasupra. Lemnele alea se vor carboniza, dar nu vor arde complet prea curând și vor izola jarul de zăpadă. Dacă găsești pietre plate sub zăpadă, e și mai bine. Faci o vatră din ele și ai rezolvat problema. Am văzut destui care s-au trezit cu focul stins într-o baltă fix când le era lumea mai dragă.",
+  "lead": "Nu face focul direct pe zăpadă! Căldura topește tot și riști să-ți stingi jarul. Iată cum să construiești o platformă izolatoare.",
+  "keywords": "foc de tabără iarnă zăpadă supraviețuire tehnică vatră platformă foc",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Nu face focul direct pe zăpadă! Căldura topește tot și riști să-ți stingi jarul. Iată cum să construiești o platformă izolatoare.",
+    "seed_topic": "Foc pe zăpadă: bază de lemne sau pietre, drenaj termic",
+    "seed_topic_slug": "fire_in_snow"
+  }
+}

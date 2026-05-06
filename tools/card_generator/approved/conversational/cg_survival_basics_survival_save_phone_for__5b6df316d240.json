@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_save_phone_for__5b6df316d240",
+  "card_id": "cg_survival_basics_survival_save_phone_for__5b6df316d240",
+  "domain": "survival_basics",
+  "topic": "survival_save_phone_for_call",
+  "language": "ro",
+  "title": "Bateria telefonului: Ultima șansă",
+  "body": "Știu că vrei să faci poze cu peisajele, dar în munți, telefonul e linia ta de salvare. Când bateria e pe ducă, activează modul avion imediat. Oprește datele mobile, Wi-Fi-ul, Bluetooth-ul și GPS-ul. Redu luminozitatea ecranului la minimum. Închide aplicațiile din fundal. Dacă ai power bank, folosește-l cu înțelepciune. Nu-l lăsa să se descarce complet, mai ales pe vreme rece. Odată, am avut un amic care a rămas fără baterie la -10 grade, doar pentru că a ascultat muzică. A învățat pe pielea lui că o baterie rece moare mai repede. Păstrează telefonul aproape de corp, într-un buzunar interior, ca să-l ții cald. Fiecare procent contează pentru un apel vital.",
+  "lead": "Află cum să prelungești viața bateriei telefonului tău în situații critice, pentru a putea apela serviciile de urgență.",
+  "keywords": "baterie telefon mod avion economisire energie apel urgență salvamont supraviețuire sfaturi munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să prelungești viața bateriei telefonului tău în situații critice, pentru a putea apela serviciile de urgență.",
+    "seed_topic": "Salvează bateria telefonului pentru un singur apel către 112",
+    "seed_topic_slug": "survival_save_phone_for_call"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "chunk_id": "cg_medical_emergency_insolatie_semne_pasi_4a1a618e558b",
+  "card_id": "cg_medical_emergency_insolatie_semne_pasi_4a1a618e558b",
+  "domain": "medical_emergency",
+  "topic": "insolatie_semne_pasi",
+  "language": "ro",
+  "title": "Insolație: semne timpurii vs lovitură de căldură",
+  "body": "Pe Carpați, în zilele călduroase de vară, insolația (epuizarea termică) și lovitura de căldură sunt riscuri reale. Insolația ușoară se manifestă prin transpirație abundentă, slăbiciune, dureri de cap, amețeală, greață, crampe musculare și piele umedă, palidă. Pașii inițiali: mutați persoana imediat la umbră sau într-un loc răcoros; așezați-o jos și ridicați-i picioarele aproximativ 30 cm; deschideți sau scoateți hainele exterioare; răciți pielea cu apă (împachetări umede pe gât, axilă, încheieturi); oferiți apă rece în înghițituri mici, dacă persoana este conștientă și poate înghiți. Lovitura de căldură este o urgență vitală; semnele includ temperatură foarte ridicată, piele uscată și fierbinte (sau dimpotrivă, transpirație abundentă urmată de oprire), confuzie, agitație, vorbire incoerentă, convulsii sau pierderea conștienței. În acest caz, sunați imediat 0SALVAMONT (apel: 0SALVAMONT) sau 112, continuați răcirea agresivă cu apă și aer și pregătiți evacuarea. Nu dați aspirină sau ibuprofen pentru reducerea febrei. Monitorizați respirația. Reluarea efortului în aceeași zi este interzisă; coborârea este obligatorie.",
+  "keywords": "insolatie lovitura caldura epuizare termica racire umbra hidratare",
+  "card_family": "SCENARIO",
+  "priority": 86,
+  "tier": "A",
+  "source_title": "Heat-related illnesses",
+  "source_url": "https://www.cdc.gov/niosh/heat-stress/about/illnesses.html",
+  "publisher": "CDC / NIOSH",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 5,
+  "safety_tags": ["heat_illness", "heatstroke", "first_aid", "life_threatening"],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Insolația ușoară: umbră, repaus, hidratare, răcire externă; lovitură de căldură (confuzie, piele uscată, febră): apel imediat la 0SALVAMONT/112 și răcire agresivă.",
+    "evidence_confidence": "high",
+    "source_id": "cdc_heat_illnesses"
+  }
+}

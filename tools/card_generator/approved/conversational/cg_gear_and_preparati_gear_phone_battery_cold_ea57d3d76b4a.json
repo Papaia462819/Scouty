@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_phone_battery_cold_ea57d3d76b4a",
+  "card_id": "cg_gear_and_preparati_gear_phone_battery_cold_ea57d3d76b4a",
+  "domain": "gear_and_preparation",
+  "topic": "gear_phone_battery_cold",
+  "language": "ro",
+  "title": "Bateria telefonului pe frig: sfaturi utile",
+  "body": "Frigul e dușmanul bateriei, știi asta. Ca să nu te trezești fără telefon exact când ai nevoie de el, ține-l cât mai aproape de corp, într-un buzunar interior, la piept. Căldura corpului îl ajută enorm. Folosește-l doar când e strict necesar și activează modul avion sau cel de economisire a energiei. O baterie externă e bună la casa omului, dar și pe ea ține-o la căldură, nu o lăsa să înghețe în rucsac. Am pățit-o o dată, am crezut că e moartă, dar de fapt era doar înghețată bocnă. Ai grijă și de cablul de încărcare, să nu se rupă la temperaturi scăzute.",
+  "lead": "Află cum să prelungești viața bateriei telefonului tău când ești pe munte, în condiții de frig extrem.",
+  "keywords": "baterie telefon frig economisire energie echipament iarna baterie externa",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să prelungești viața bateriei telefonului tău când ești pe munte, în condiții de frig extrem.",
+    "seed_topic": "Cum salvezi bateria telefonului pe frig",
+    "seed_topic_slug": "gear_phone_battery_cold"
+  }
+}

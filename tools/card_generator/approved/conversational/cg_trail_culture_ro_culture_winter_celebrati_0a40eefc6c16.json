@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_winter_celebrati_0a40eefc6c16",
+  "card_id": "cg_trail_culture_ro_culture_winter_celebrati_0a40eefc6c16",
+  "domain": "trail_culture_ro",
+  "topic": "culture_winter_celebrations",
+  "language": "ro",
+  "title": "Sarbatori de iarna pe creasta: traditii discrete",
+  "body": "Sărbătorile pe creastă, iarna, sunt altfel. Nu e ca acasă, dar au farmecul lor. Unii își iau o ciocolată caldă la termos, alții un cozonac micuț de la mama, să-l împartă cu grupul. Eu am un prieten care, de Crăciun, își pune o mică instalație cu LED-uri pe rucsac, zice că e bradul lui mobil. E haios! Nu uita să ai la tine o lanternă frontală bună, că ziua e scurtă. Și neapărat o folie de supraviețuire, nu știi niciodată când ai nevoie de un adăpost rapid, mai ales dacă vrei să vezi răsăritul de Anul Nou de sus. E o experiență unică, dar cere respect maxim pentru munte. Nu lăsa gunoi în urmă, nici măcar firimituri de cozonac. Muntele e casa noastră, să-l păstrăm curat.",
+  "lead": "Descoperă cum să te bucuri de sărbătorile de iarnă pe creastă, respectând muntele și având la tine echipamentul esențial.",
+  "keywords": "sarbatori iarna creasta traditii munte echipament iarna respect munte lanterna frontala folie supravietuire",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă cum să te bucuri de sărbătorile de iarnă pe creastă, respectând muntele și având la tine echipamentul esențial.",
+    "seed_topic": "Sărbători de iarnă pe creastă — tradiții discrete",
+    "seed_topic_slug": "culture_winter_celebrations"
+  }
+}

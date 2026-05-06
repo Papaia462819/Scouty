@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_emergency_shelt_e4c23741c98b",
+  "card_id": "cg_survival_basics_survival_emergency_shelt_e4c23741c98b",
+  "domain": "survival_basics",
+  "topic": "survival_emergency_shelter_kit",
+  "language": "ro",
+  "title": "Adăpost de urgență, ușor ca un fulg",
+  "body": "Niciodată să nu pleci la drum fără un kit minim de adăpost. Nu știi când te prinde vremea rea sau o accidentare minoră te obligă să rămâi pe loc. Eu am mereu la mine o folie de supraviețuire, aia argintie, tip pătură. O poți folosi ca pelerină improvizată, ca izolație sub tine sau chiar ca un mic bivuac dacă ai o sfoară subțire. Cântărește sub 50 de grame și face minuni. Mai adaugă o folie de cort, un sac de gunoi mai mare și rezistent, sau o husă de rucsac pe post de adăpost temporar. Nu uita o bucată de sfoară de 5-10 metri. Toate astea nu depășesc 200 de grame și îți pot salva pielea. Mai bine să o ai și să nu-ți trebuiască, decât invers.",
+  "lead": "Află ce elemente esențiale să incluzi într-un kit de adăpost de urgență sub 200g, pentru a fi pregătit în orice situație neprevăzută pe munte.",
+  "keywords": "adăpost de urgență folie supraviețuire kit minim echipament ușor bivuac",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce elemente esențiale să incluzi într-un kit de adăpost de urgență sub 200g, pentru a fi pregătit în orice situație neprevăzută pe munte.",
+    "seed_topic": "Kit minim de adăpost de urgență (sub 200 g)",
+    "seed_topic_slug": "survival_emergency_shelter_kit"
+  }
+}

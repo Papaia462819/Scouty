@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_first_aid_pride_28b02a39b080",
+  "card_id": "cg_trail_culture_ro_culture_first_aid_pride_28b02a39b080",
+  "domain": "trail_culture_ro",
+  "topic": "culture_first_aid_pride",
+  "language": "ro",
+  "title": "Kit-ul mic, dar bun: moștenire de la părinți",
+  "body": "Bătrânii noștri știau una și bună: în munți, mai puțin înseamnă mai mult, dar esențialul trebuie să fie de calitate. Nu e vorba de a cara după tine o farmacie, ci de a avea strictul necesar, dar de încredere. Gândește-te la o brățară de prim ajutor compactă, cu câteva plasturi, dezinfectant mic și o folie de supraviețuire. Un fluier e obligatoriu, la fel și o frontală mică, chiar dacă pleci dimineața. Nu uita un briceag multifuncțional, că nu știi niciodată când ai nevoie să tai o sfoară sau să deschizi o conservă. Și, bineînțeles, o hartă printată și busolă, chiar dacă ai GPS pe telefon. Bateria se descarcă, dar munții rămân la locul lor. E o chestie de respect față de munte și față de tine însuți.",
+  "lead": "Află cum să-ți pregătești un kit esențial pentru munte, inspirat de înțelepciunea generațiilor trecute, punând accent pe calitate și necesitate.",
+  "keywords": "kit esențial tradiție montană echipament minim siguranță munte sfaturi drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți pregătești un kit esențial pentru munte, inspirat de înțelepciunea generațiilor trecute, punând accent pe calitate și necesitate.",
+    "seed_topic": "Tradiția 'kit-ul mic dar bun' — moștenire din generația părinților",
+    "seed_topic_slug": "culture_first_aid_pride"
+  }
+}

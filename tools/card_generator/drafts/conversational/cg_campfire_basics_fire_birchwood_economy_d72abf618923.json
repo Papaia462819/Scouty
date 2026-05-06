@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_birchwood_economy_d72abf618923",
+  "card_id": "cg_campfire_basics_fire_birchwood_economy_d72abf618923",
+  "domain": "campfire_basics",
+  "topic": "fire_birchwood_economy",
+  "language": "ro",
+  "title": "Economia mesteacanului: cat consumi pentru ce castigi",
+  "body": "Coaja de mesteacăn e aur curat pentru aprins focul, mai ales pe vreme umedă. Arde ca o torță, chiar și udă, datorită uleiurilor din ea. Dar nu te baza doar pe ea. Gândește-te la ea ca la chibritul tău de lux, nu ca la combustibil. Iei câteva fâșii subțiri, de pe copaci căzuți dacă se poate, fără să rănești copacul viu. O bucată cât palma ta e de ajuns să aprindă o grămăjoară de vreascuri subțiri și uscate, care la rândul lor vor aprinde lemne mai groase. Nu te apuca să jupoi un mesteacăn întreg pentru un ceai. E ca și cum ai demola o casă ca să faci foc cu parchetul. Ineficient și păgubos pentru pădure. Am văzut odată un tip care a adunat un braț de coajă și a făcut un foc de tabără de 10 minute. Apoi a rămas fără și se uita la lemnele ude. Fii deștept, folosește-o ca scânteie, nu ca lemn de foc.",
+  "lead": "Coaja de mesteacăn este excelentă pentru a porni un foc, dar trebuie folosită inteligent, ca o scânteie, nu ca principalul combustibil.",
+  "keywords": "foc de tabără mesteacăn iască supraviețuire aprinderea focului lemn umed",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Coaja de mesteacăn este excelentă pentru a porni un foc, dar trebuie folosită inteligent, ca o scânteie, nu ca principalul combustibil.",
+    "seed_topic": "Economia mesteacănului: cât consumi pentru ce câștigi",
+    "seed_topic_slug": "fire_birchwood_economy"
+  }
+}

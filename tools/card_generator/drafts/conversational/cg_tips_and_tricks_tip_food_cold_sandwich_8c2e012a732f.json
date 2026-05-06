@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_food_cold_sandwich_8c2e012a732f",
+  "card_id": "cg_tips_and_tricks_tip_food_cold_sandwich_8c2e012a732f",
+  "domain": "tips_and_tricks",
+  "topic": "tip_food_cold_sandwich",
+  "language": "ro",
+  "title": "Sandvișul rece iarna: gustarea care-ți salvează timpul",
+  "body": "Știu, sună ciudat să iei un sandviș rece pe frig, dar ascultă-mă. Când e viscol sau ger de crapă pietrele, ultimul lucru pe care vrei să-l faci e să scoți aragazul și să fierbi apă pentru o supă. Pierzi timp prețios, te răcești, și riști să-ți înghețe butelia. Un sandviș consistent, cu brânză grasă, salam uscat sau chiar o bucată de slănină, îți oferă calorii rapide și te ține în priză. Îl scoți, îl mănânci în 5 minute și ești gata de drum. Nu subestima puterea unei mese rapide și reci când fiecare minut contează. E un truc vechi, moștenit de la bunicul, care a bătut munții în toate anotimpurile. Pune-l la încercare și o să vezi că am dreptate!",
+  "lead": "Află de ce un sandviș rece poate fi cea mai bună opțiune de gustare rapidă și eficientă în condiții de iarnă geroasă la munte.",
+  "keywords": "sandviș iarnă mâncare rapidă munte calorii rapide sfaturi iarnă gustare rece",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce un sandviș rece poate fi cea mai bună opțiune de gustare rapidă și eficientă în condiții de iarnă geroasă la munte.",
+    "seed_topic": "Sandviș rece în iarnă: gustarea care îți cumpără 30 min",
+    "seed_topic_slug": "tip_food_cold_sandwich"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_navigation_no_c_4d37a4e4ae19",
+  "card_id": "cg_survival_basics_survival_navigation_no_c_4d37a4e4ae19",
+  "domain": "survival_basics",
+  "topic": "survival_navigation_no_compass",
+  "language": "ro",
+  "title": "Orientare fara busola: Soare, Stele, Muschi",
+  "body": "Am pățit-o și eu, să uit busola acasă. Nu-i bai, natura îți dă indicii! Ziua, soarele răsare la est și apune la vest. Prinzi un băț, îl înfigi în pământ și marchezi vârful umbrei. Aștepți 15 minute, marchezi din nou. Prima marcă e vest, a doua e est. Noaptea, dacă e senin, caută Carul Mare. Cele două stele din capătul \"oalei\" te duc la Steaua Polară, care indică nordul. Cu mușchiul e mai tricky: crește preponderent pe partea nordică a copacilor, dar nu te baza 100% pe asta, mai ales în păduri dese. E mai mult un indiciu suplimentar. Cel mai bine e să combini metodele. Și data viitoare, nu uita busola!",
+  "lead": "Învață cum să te orientezi în natură folosind soarele, stelele și mușchiul de pe copaci, chiar și fără busolă.",
+  "keywords": "orientare busola soare stele muschi nord sud est vest",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să te orientezi în natură folosind soarele, stelele și mușchiul de pe copaci, chiar și fără busolă.",
+    "seed_topic": "Orientare fără busolă: soare, stele, mușchi (cu nuanțe)",
+    "seed_topic_slug": "survival_navigation_no_compass"
+  }
+}

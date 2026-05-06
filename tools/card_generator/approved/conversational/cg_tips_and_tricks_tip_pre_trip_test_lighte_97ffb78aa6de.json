@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_pre_trip_test_lighte_97ffb78aa6de",
+  "card_id": "cg_tips_and_tricks_tip_pre_trip_test_lighte_97ffb78aa6de",
+  "domain": "tips_and_tricks",
+  "topic": "tip_pre_trip_test_lighter",
+  "language": "ro",
+  "title": "Testul brichetei la plecare",
+  "body": "Înainte să pornești la drum, mai ales toamna târziu sau iarna, fă un test simplu: ieși afară și stai 5 minute, îmbrăcat exact cum te-ai echipa pentru traseu. Scoate o brichetă și încearcă să o aprinzi. Dacă degetele îți sunt prea amorțite să faci asta, înseamnă că ești sub-echipat. Mai pune un strat, poate o pereche de mănuși mai groase. Nu vrei să te prindă frigul pe creastă, unde vântul bate altfel. Mai bine să ai un strat în plus pe care să-l dai jos, decât să-ți tremure mustața de frig. E un bobârnac scurt, dar eficient, ca să nu te trezești cu surprize neplăcute. Munții nu iartă neglijența, știi cum e.",
+  "lead": "Verifică-ți echipamentul de iarnă cu un test simplu al brichetei înainte de a pleca pe traseu.",
+  "keywords": "echipament iarna test bricheta frig munte siguranta traseu sfaturi drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Verifică-ți echipamentul de iarnă cu un test simplu al brichetei înainte de a pleca pe traseu.",
+    "seed_topic": "Testul brichetei la plecare — un bobârnac, atât",
+    "seed_topic_slug": "tip_pre_trip_test_lighter"
+  }
+}

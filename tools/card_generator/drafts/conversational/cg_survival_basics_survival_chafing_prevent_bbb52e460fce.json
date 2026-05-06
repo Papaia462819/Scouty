@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_chafing_prevent_bbb52e460fce",
+  "card_id": "cg_survival_basics_survival_chafing_prevent_bbb52e460fce",
+  "domain": "survival_basics",
+  "topic": "survival_chafing_prevent",
+  "language": "ro",
+  "title": "Frecarea coapselor: Scapă de ea pe trasee lungi",
+  "body": "Aoleu, frecarea coapselor! E un clasic, mai ales la turele lungi. Soluția mea, testată pe mii de kilometri: colanți sub pantaloni. Da, ai auzit bine! Un strat subțire, sintetic, care să respire, face minuni. Nu bumbac, că ăla reține umezeala și te irită și mai tare. Poți folosi și creme speciale anti-frecare, gen cele pentru cicliști, dar colanții sunt baza. Și nu uita de hidratare, pielea uscată e mai predispusă la iritații. Oprește-te din când în când să te aerisești, mai ales dacă e cald. Până și un șervețel umed te poate salva pe moment. Nu lăsa o banală frecare să-ți strice plăcerea muntelui!",
+  "lead": "Află cum să previi iritația coapselor pe trasee lungi, folosind trucuri simple și echipament adecvat.",
+  "keywords": "frecare coapse iritatie piele prevenire iritatii colanti drumetie trasee lungi echipament drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să previi iritația coapselor pe trasee lungi, folosind trucuri simple și echipament adecvat.",
+    "seed_topic": "Iritația interioară a coapselor — prevenție pe trasee lungi",
+    "seed_topic_slug": "survival_chafing_prevent"
+  }
+}

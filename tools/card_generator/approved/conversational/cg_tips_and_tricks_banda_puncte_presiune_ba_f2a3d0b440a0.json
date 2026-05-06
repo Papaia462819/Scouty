@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_banda_puncte_presiune_ba_f2a3d0b440a0",
+  "card_id": "cg_tips_and_tricks_banda_puncte_presiune_ba_f2a3d0b440a0",
+  "domain": "tips_and_tricks",
+  "topic": "banda_puncte_presiune_basici",
+  "language": "ro",
+  "title": "Bandă pe puncte de presiune înainte să apară bășici",
+  "body": "Trucul ăsta îți schimbă turele lungi. Bășicile încep de la o frecare repetată; în momentul în care simți o ușoară iritație, e deja prea târziu — pielea e roșie și a doua zi va fi un balon. Strategia mea: pe pauza de dimineață, înainte să-mi trag bocancii, pun bandă chirurgicală microporoasă pe punctele de presiune cunoscute. La mine sunt călcâiele și degetul mic. Bandă, nu plasture — banda e subțire, se mulează pe piele și nu se desprinde nici la transpirație. O bucată de 4-5 cm e suficientă. Dacă simți căldura unui punct nou la o pauză, oprește-te imediat și pune bandă peste; nu aștepta. La sfârșitul turei, banda se dezlipește singură când îți speli picioarele. Pentru cine începe — bocancii noi cer 30-40 de kilometri de port acasă/parc înainte de prima tură serioasă. Pielea se mulează și ea, nu doar bocancul.",
+  "lead": "Pune bandă chirurgicală pe călcâie și degete înainte să simți frecarea; oprește-te imediat ce simți căldură pe un punct nou.",
+  "keywords": "basici prevenire banda calcaie bocanci frecare picior",
+  "card_family": "SCENARIO",
+  "priority": 70,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": ["tip", "comfort"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Pune bandă chirurgicală pe călcâie și degete înainte să simți frecarea; oprește-te imediat ce simți căldură pe un punct nou.",
+    "seed_topic": "Bandă pe puncte de presiune înainte să apară bășici",
+    "seed_topic_slug": "tip_blister_tape_preempt"
+  }
+}

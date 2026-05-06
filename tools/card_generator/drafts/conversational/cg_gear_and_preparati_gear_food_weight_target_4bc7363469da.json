@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_food_weight_target_4bc7363469da",
+  "card_id": "cg_gear_and_preparati_gear_food_weight_target_4bc7363469da",
+  "domain": "gear_and_preparation",
+  "topic": "gear_food_weight_target",
+  "language": "ro",
+  "title": "Câtă mâncare iei cu tine la munte?",
+  "body": "Băi, prietene, la mâncare e simplu: 1 kg pe zi e un bun punct de plecare pentru o tură serioasă. Asta include tot: mic dejun, prânz, cină și gustări. Gândește-te la o dimineață cu ovăz instant și nuci, la prânz niște lipii cu pateu vegetal sau brânză topită și o cină cu paste deshidratate sau couscous. Nu uita de batoane energizante, fructe uscate și ciocolată. Dacă ești gurmand sau știi că vei arde mult, poți urca la 1.2-1.3 kg. E mai bine să ai un pic în plus decât să te uiți lung la rucsacul gol. Am pățit-o, nu-i fain deloc.",
+  "lead": "Află cum să estimezi corect greutatea mâncării necesare pentru o drumeție, cu exemple concrete de alimente.",
+  "keywords": "greutate mâncare rație zilnică planificare masă echipament drumeție nutriție munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să estimezi corect greutatea mâncării necesare pentru o drumeție, cu exemple concrete de alimente.",
+    "seed_topic": "Țintă realistă: cât kg de mâncare per zi",
+    "seed_topic_slug": "gear_food_weight_target"
+  }
+}

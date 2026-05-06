@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_cooking_smoke_food_a4c7ab3c8708",
+  "card_id": "cg_campfire_basics_fire_cooking_smoke_food_a4c7ab3c8708",
+  "domain": "campfire_basics",
+  "topic": "fire_cooking_smoke_food",
+  "language": "ro",
+  "title": "Gătit la foc de tabără fără fum în mâncare",
+  "body": "Salut, prietene! Știi cum e, vrei să te bucuri de o ciorbă caldă sau o mămăligă la ceaun, nu de o afumătură. Fumul nu doar că strică gustul, dar îți și face ochii roșii și hainele mirositoare. Secretul e un foc \"curat\". Folosește lemne uscate, nu verzi sau putrede, că alea scot fum de te-nvăluie. Construiește focul inteligent: nu-l sufoca cu prea multe lemne deodată. Lasă-l să respire și să ardă cu flacără, nu mocnit. Când pui ceaunul, asigură-te că flacăra ajunge la el, nu doar fumul. Dacă vezi fum gros, mai aranjează lemnele sau adaugă unele mai uscate. E o artă, dar merită efortul pentru o masă delicioasă și fără tuse!",
+  "lead": "Află cum să gătești la foc de tabără fără să-ți umpli mâncarea de fum și să-ți iriti ochii.",
+  "keywords": "foc de tabără gătit fără fum lemne uscate ceaun sfaturi foc",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să gătești la foc de tabără fără să-ți umpli mâncarea de fum și să-ți iriti ochii.",
+    "seed_topic": "De ce nu vrei fum în mâncare și cum eviți",
+    "seed_topic_slug": "fire_cooking_smoke_food"
+  }
+}

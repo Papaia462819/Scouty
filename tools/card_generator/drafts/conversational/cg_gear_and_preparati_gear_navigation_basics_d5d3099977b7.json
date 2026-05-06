@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_navigation_basics_d5d3099977b7",
+  "card_id": "cg_gear_and_preparati_gear_navigation_basics_d5d3099977b7",
+  "domain": "gear_and_preparation",
+  "topic": "gear_navigation_basics",
+  "language": "ro",
+  "title": "Navigatie pe munte: Harta, busola si GPS",
+  "body": "Băi, prietene, pe munte nu te bazezi doar pe telefon. Bateria se duce repede, semnalul e o loterie. O hartă tipărită și o busolă sunt esențiale. Învață să le folosești, să orientezi harta, să iei azimut. E o abilitate care te scoate din belele. GPS-ul dedicat e bun pentru precizie și când e ceață de nu vezi la doi pași, dar și ăsta are nevoie de baterii. Telefonul e bun ca backup, pentru poze și, la nevoie, să suni la Salvamont. Gândește-te la ele ca la straturi de siguranță: hartă și busolă mereu, GPS pe lângă, telefonul la final. Am avut un prieten care s-a rătăcit pe Ceahlău, bazându-se doar pe telefon. L-am găsit cu harta, după vreo 3 ore de căutări. Nu fi ca el!",
+  "lead": "Află de ce harta, busola și GPS-ul sunt indispensabile pe munte, iar telefonul doar un backup.",
+  "keywords": "harta busola gps navigatie siguranta munte echipament",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce harta, busola și GPS-ul sunt indispensabile pe munte, iar telefonul doar un backup.",
+    "seed_topic": "Hartă, busolă, GPS — care când și de ce nu doar telefonul",
+    "seed_topic_slug": "gear_navigation_basics"
+  }
+}

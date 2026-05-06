@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_humble_summit_701f55f5abd4",
+  "card_id": "cg_trail_culture_ro_culture_humble_summit_701f55f5abd4",
+  "domain": "trail_culture_ro",
+  "topic": "culture_humble_summit",
+  "language": "ro",
+  "title": "Vârful nu e premiul — povestea de jos contează mai mult",
+  "body": "Salut, prieten drag! De 20 de ani bat Carpații și am învățat un lucru esențial: vârful e doar un punct pe hartă. Adevărata poveste, frumusețea și amintirile se construiesc pe traseu, pas cu pas. Nu te grăbi, savurează fiecare cotitură, fiecare pârâu, fiecare copac. Odată, în Făgăraș, am ratat vârful din cauza unei furtuni bruște, dar coborârea prin pădure, cu ploaia bătând în frunze, a fost magică. Am văzut căprioare, am râs de noroiul de pe bocanci și am simțit o conexiune reală cu muntele. Nu e despre cucerire, e despre trăire. Bucură-te de drum, de companie, de aerul curat și de liniște. Vârful te așteaptă și altă dată, dar experiența de acum e unică. E ca la sarmale: procesul de a le face e la fel de bun ca și gustul lor.",
+  "lead": "Află de ce adevărata bucurie a drumeției nu stă în atingerea vârfului, ci în fiecare pas parcurs pe traseu.",
+  "keywords": "cultura muntelui bucuria drumului experienta traseu fara graba conectare natura carpati",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce adevărata bucurie a drumeției nu stă în atingerea vârfului, ci în fiecare pas parcurs pe traseu.",
+    "seed_topic": "Vârful nu e premiul — povestea de jos contează mai mult",
+    "seed_topic_slug": "culture_humble_summit"
+  }
+}

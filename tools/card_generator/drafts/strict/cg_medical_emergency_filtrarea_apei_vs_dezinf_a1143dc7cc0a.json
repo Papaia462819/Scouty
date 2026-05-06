@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_filtrarea_apei_vs_dezinf_a1143dc7cc0a",
+  "card_id": "cg_medical_emergency_filtrarea_apei_vs_dezinf_a1143dc7cc0a",
+  "domain": "medical_emergency",
+  "topic": "filtrarea_apei_vs_dezinfectia_chimica",
+  "language": "ro",
+  "title": "Dezinfecția apei: Metode chimice și filtrarea prealabilă",
+  "body": "Dezinfecția apei este mai puțin eficientă atunci când apa este tulbure sau colorată. Dacă apa este tulbure, lăsați-o să se așeze. Apoi, filtrați apa printr-o cârpă curată, un prosop de hârtie sau un filtru de cafea. Depozitați apa decantată și filtrată în recipiente curate, acoperite.\n\nPentru dezinfecția chimică, puteți folosi: \n\n1.  **Înălbitor lichid (8.25% hipoclorit de sodiu):** Adăugați 2 picături la fiecare litru de apă. Dublați cantitatea de înălbitor dacă apa este tulbure, colorată sau foarte rece. Amestecați și lăsați să stea 30 de minute. Apa ar trebui să aibă un ușor miros de clor. Dacă nu, repetați dozajul și lăsați să stea încă 15 minute înainte de utilizare. Dacă gustul de clor este prea puternic, turnați apa dintr-un recipient curat în altul și lăsați-o să stea câteva ore înainte de utilizare.\n2.  **Iod (tinctură de iod 2%):** Adăugați 5 picături la fiecare litru de apă. Dacă apa este tulbure sau colorată, adăugați 10 picături de iod. Amestecați și lăsați apa să stea cel puțin 30 de minute înainte de utilizare.\n3.  **Tablete de dezinfecție a apei:** Acestea pot conține clor, iod, dioxid de clor sau alți agenți dezinfectanți. Urmați instrucțiunile de pe eticheta produsului, deoarece fiecare produs poate avea o concentrație diferită.\n4.  **Hipoclorit de calciu granular (HTH):** Preparați o soluție adăugând o linguriță plină (aprox. 7g) de HTH la 2 galoane (aprox. 7.5 litri) de apă și amestecați. Pentru a dezinfecta apa, adăugați o parte din soluția de clor la fiecare 100 de părți de apă pe care o tratați (aprox. 1 halbă la 12.5 galoane). ATENȚIE: HTH este un oxidant puternic. Urmați instrucțiunile de pe etichetă pentru manipularea și depozitarea în siguranță a acestei substanțe chimice.",
+  "lead": "Aflați cum să filtrați și să dezinfectați apa folosind metode chimice pentru a o face potabilă, mai ales când este tulbure.",
+  "keywords": "dezinfecția apei filtrarea apei înălbitor iod tablete de dezinfecție hipoclorit de calciu apă potabilă urgență supraviețuire purificarea apei",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Emergency Disinfection of Drinking Water",
+  "source_url": "https://www.epa.gov/ground-water-and-drinking-water/emergency-disinfection-drinking-water",
+  "publisher": "EPA",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "water_purification",
+    "chemical_disinfection",
+    "water_filtration",
+    "emergency_preparedness",
+    "drinking_water_safety"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați cum să filtrați și să dezinfectați apa folosind metode chimice pentru a o face potabilă, mai ales când este tulbure.",
+    "evidence_confidence": "high",
+    "source_quote": "Disinfection does not work as well when water is cloudy or colored. If water is cloudy, let it settle. Then filter the water through a clean cloth, paper towel, or coffee filter. Store the settled and filtered water in clean containers with covers.",
+    "source_id": "epa_water_disinfection"
+  }
+}

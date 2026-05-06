@@ -1,0 +1,38 @@
+{
+  "chunk_id": "cg_medical_emergency_decizia_de_coborare_imed_e0df0a39d62f",
+  "card_id": "cg_medical_emergency_decizia_de_coborare_imed_e0df0a39d62f",
+  "domain": "medical_emergency",
+  "topic": "decizia_de_coborare_imediata",
+  "language": "ro",
+  "title": "Rău de altitudine sever — când coborâți imediat",
+  "body": "Decizia de coborâre imediată la o altitudine mai mică este crucială în cazurile severe de rău de altitudine. Dacă simptomele răului acut de munte (AMS), precum durerea de cap, oboseala, lipsa poftei de mâncare, greața sau vărsăturile, se agravează în timpul repausului, persoana afectată trebuie să coboare pentru a preveni complicații grave sau decesul.\n\nCoborârea imediată este obligatorie în cazul edemului cerebral de altitudine (HACE), o formă mai gravă de AMS, care poate fi fatală. Simptomele HACE includ oboseală extremă, somnolență, confuzie și pierderea coordonării. Persoana trebuie mutată imediat la o altitudine inferioară.\n\nDe asemenea, edemul pulmonar de altitudine (HAPE) este o afecțiune care poate deveni rapid fatală și necesită coborâre imediată. Simptomele HAPE sunt dificultăți de respirație, slăbiciune și tuse. Persoana cu aceste simptome trebuie mutată imediat la o altitudine mai mică și, cel mai probabil, va necesita tratament cu oxigen.\n\nÎn toate aceste situații grave, apelați 112 sau 0SALVAMONT pentru asistență.",
+  "lead": "Aflați când este absolut necesară coborârea imediată la o altitudine mai mică în cazul răului de altitudine sever, precum HACE sau HAPE.",
+  "keywords": "rău de altitudine hace hape coborâre imediată urgență medicală altitudine mare simptome salvamont 112",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Travel to High Altitudes",
+  "source_url": "https://wwwnc.cdc.gov/travel/page/travel-to-high-altitudes",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "altitude_sickness",
+    "hace",
+    "hape",
+    "immediate_descent",
+    "medical_emergency",
+    "life_threatening"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați când este absolut necesară coborârea imediată la o altitudine mai mică în cazul răului de altitudine sever, precum HACE sau HAPE.",
+    "evidence_confidence": "high",
+    "source_quote": "A person whose symptoms get worse while resting should travel to a lower elevation to avoid becoming seriously ill or dying. If [HACE] develops, the person must immediately move, or be moved, to a lower elevation. A person with [HAPE] symptoms must immediately move, or be moved, to a lower elevation.",
+    "source_id": "cdc_high_altitude"
+  }
+}

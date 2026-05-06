@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_re_locate_strat_c3f1e60831e9",
+  "card_id": "cg_survival_basics_survival_re_locate_strat_c3f1e60831e9",
+  "domain": "survival_basics",
+  "topic": "survival_re_locate_strategy",
+  "language": "ro",
+  "title": "Ai pierdut traseul? Iata ce faci!",
+  "body": "Pățesc și eu, nu-i bai. Primul lucru: oprește-te! Nu alerga bezmetic. Scoate harta și busola (sau telefonul cu GPS, dacă ai semnal și baterie). Încearcă să identifici un reper clar pe hartă și în teren – un vârf, o vale, un drum. Dacă nu reușești, încearcă să te întorci pe ultimul loc unde erai sigur de traseu. Mergi încet, cu ochii pe urmele tale. Nu te aventura pe scurtături sau prin zone necunoscute. Mai bine pierzi o oră întorcându-te decât o zi întreagă rătăcit. Și nu uita, marcajele sunt prietenii tăi, dar nu sunt infailibile.",
+  "lead": "Află cum să te reorientezi eficient și în siguranță dacă ai pierdut marcajele traseului pe munte.",
+  "keywords": "rătăcit busolă hartă reorientare traseu pierdut siguranță munte drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te reorientezi eficient și în siguranță dacă ai pierdut marcajele traseului pe munte.",
+    "seed_topic": "Cum te 're-localizezi' când ai pierdut traseul ștampilat",
+    "seed_topic_slug": "survival_re_locate_strategy"
+  }
+}

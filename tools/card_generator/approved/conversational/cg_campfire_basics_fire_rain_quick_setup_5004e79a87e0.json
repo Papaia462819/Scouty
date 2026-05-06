@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_rain_quick_setup_5004e79a87e0",
+  "card_id": "cg_campfire_basics_fire_rain_quick_setup_5004e79a87e0",
+  "domain": "campfire_basics",
+  "topic": "fire_rain_quick_setup",
+  "language": "ro",
+  "title": "Focul de urgență pe ploaie: 20 de minute câștigate",
+  "body": "Te-a prins ploaia torențială și ești ud leoarcă? Nu te panica. Primul pas e să găsești un adăpost, chiar și sub un brad des. Apoi, dacă ai un briceag, caută crengi uscate, chiar și sub copaci, sau scoarță de mesteacăn. Aprinde un foc mic, cât să-ți ofere căldură și să-ți usuci un pic echipamentul. Nu-i nevoie de un rug imens, ci de o flacără constantă. Un foc de urgență, chiar și modest, îți poate cumpăra 20 de minute prețioase să te reorganizezi, să-ți pui o haină uscată sau să-ți faci un plan. Am pățit-o pe Vârful Omu, m-a prins o ploaie cu grindină. Focul ăla mic, sub o stâncă, mi-a salvat ziua.",
+  "lead": "Află cum un foc mic, aprins rapid pe ploaie, îți poate oferi timp prețios să te regrupezi și să te usuci.",
+  "keywords": "foc de urgență ploaie munte adăpost rapid echipament ud supraviețuire munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum un foc mic, aprins rapid pe ploaie, îți poate oferi timp prețios să te regrupezi și să te usuci.",
+    "seed_topic": "Ploaie surprinde — focul care îți cumpără 20 de minute",
+    "seed_topic_slug": "fire_rain_quick_setup"
+  }
+}

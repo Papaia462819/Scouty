@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_phone_offline_maps_96bb9e0a73b1",
+  "card_id": "cg_gear_and_preparati_gear_phone_offline_maps_96bb9e0a73b1",
+  "domain": "gear_and_preparation",
+  "topic": "gear_phone_offline_maps",
+  "language": "ro",
+  "title": "Harti offline pe telefon: ce descarci inainte de plecare",
+  "body": "Băi, nu te baza pe semnal în munți, că te lasă exact când îți e lumea mai dragă. Înainte să pleci de acasă, descarcă harta zonei pe care o vei explora. Eu folosesc de obicei aplicații care îmi permit să descarc porțiuni mari de hartă, inclusiv contururi de nivel și marcaje turistice. Verifică de două ori că ai descărcat harta corect și că e accesibilă fără internet. E ca și cum ți-ai pune o pâine în rucsac: știi că e acolo, chiar dacă nu o mănânci imediat. Și nu uita o baterie externă, că telefonul consumă mult cu GPS-ul pornit. Nu vrei să rămâi fără hartă și fără poze cu peisajele alea mișto!",
+  "lead": "Înainte de a pleca în drumeție, asigură-te că ai hărți offline descărcate pe telefon și o baterie externă pentru a nu rămâne fără orientare.",
+  "keywords": "harti offline telefon pregatire gps baterie externa siguranta navigatie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Înainte de a pleca în drumeție, asigură-te că ai hărți offline descărcate pe telefon și o baterie externă pentru a nu rămâne fără orientare.",
+    "seed_topic": "Hărți offline pe telefon: ce descarci înainte de plecare",
+    "seed_topic_slug": "gear_phone_offline_maps"
+  }
+}

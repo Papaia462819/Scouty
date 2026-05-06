@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_id_butterflies__cc07070426cc",
+  "card_id": "cg_wildlife_romania_wildlife_id_butterflies__cc07070426cc",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_id_butterflies_alpine",
+  "language": "ro",
+  "title": "Fluturi alpini: unde-i vezi si cum ii admiri",
+  "body": "Băi, știi că și fluturii au munții lor? Pe la peste 1800 de metri, prin golurile alpine, mai ales vara, o să vezi niște minuni. Caută-i prin zonele cu flori de munte, gen rododendron sau gențiană. Unii sunt minusculi, alții mai mari, cu modele superbe. Nu uita să iei un binoclu mic, te ajută să-i admiri de la distanță fără să-i deranjezi. E o chestie mișto să te oprești un pic și să-i privești cum se joacă printre flori. Am văzut odată un 'Apollon' (Parnassius apollo) pe Piatra Craiului, o splendoare de fluture alb cu pete roșii. Fii atent la detalii, sunt adevărate bijuterii ale naturii noastre. Și nu uita, doar privește, nu atinge!",
+  "lead": "Descoperă unde și cum poți admira fluturii alpini în Carpați, folosind un binoclu și respectând natura.",
+  "keywords": "fluturi alpini wildlife carpati observare natura flori de munte binoclu",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă unde și cum poți admira fluturii alpini în Carpați, folosind un binoclu și respectând natura.",
+    "seed_topic": "Fluturi alpini interesanți și unde îi vezi",
+    "seed_topic_slug": "wildlife_id_butterflies_alpine"
+  }
+}

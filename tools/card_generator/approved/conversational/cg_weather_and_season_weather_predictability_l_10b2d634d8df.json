@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_predictability_l_10b2d634d8df",
+  "card_id": "cg_weather_and_season_weather_predictability_l_10b2d634d8df",
+  "domain": "weather_and_season",
+  "topic": "weather_predictability_local",
+  "language": "ro",
+  "title": "Meteo locala vs. aplicatii globale: ce sa alegi?",
+  "body": "Salut, prietene! Ai observat vreodată că prognoza de pe telefon nu prea se pupă cu ce găsești pe munte? E o chestie veche, știi. Aplicațiile globale sunt bune pentru oraș, dar pe creste, unde microclimatele sunt la ele acasă, e altă poveste. Munții noștri sunt plini de surprize: o vale poate fi uscată, în timp ce pe vârful de lângă plouă cu găleata. De-asta, eu mă uit mereu pe site-urile locale, alea care folosesc stații meteo montane sau chiar rapoarte de la cabanieri. Sunt mult mai precise și te ajută să nu te trezești cu o furtună din senin. Odată, am prins o zăpadă de-un cot în iulie, deși aplicația zicea \"soare blând\". Fii pe fază și verifică sursele locale înainte de plecare!",
+  "lead": "Află de ce prognozele meteo locale sunt mult mai fiabile pentru munte decât aplicațiile globale și cum să te pregătești mai bine.",
+  "keywords": "meteo locala prognoza munte microclimat statii meteo montane siguranta munte planificare traseu",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce prognozele meteo locale sunt mult mai fiabile pentru munte decât aplicațiile globale și cum să te pregătești mai bine.",
+    "seed_topic": "De ce previziunile locale bat aplicațiile globale",
+    "seed_topic_slug": "weather_predictability_local"
+  }
+}

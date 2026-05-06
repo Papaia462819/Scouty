@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_cabane_strat_istorie_308cf5faefe2",
+  "card_id": "cg_trail_culture_ro_cabane_strat_istorie_308cf5faefe2",
+  "domain": "trail_culture_ro",
+  "topic": "cabane_strat_istorie",
+  "language": "ro",
+  "title": "Cabanele românești — un strat de istorie pe care nu-l vezi",
+  "body": "Cabanele de pe Carpați nu sunt pensiuni — sunt o tradiție de aproape un secol. Multe dintre ele au fost construite în interbelic de cluburile alpine ale vremii, refăcute după război, dărâmate, refăcute din nou. Cabana Mălăiești, cabana Caraiman, cabana Costila, Bâlea Lac, Curmătura — fiecare are o poveste pe care o afli dacă întrebi cabanierul la o cană de ceai. Sunt locuri unde s-au scris primele ghiduri de munte din România, unde s-au făcut primele cursuri de salvare alpină, unde generații întregi de drumeți s-au antrenat. Când intri într-o cabană veche, observă lucruri mici: cartea de impresii, fotografiile vechi de pe pereți, ștampila de la recepție. Toate alea sunt straturi de timp. La cabane noi, cele construite în ultimii 15 ani, atmosfera e altfel — mai aseptică, mai turistică. Nu e neapărat rău, doar diferit. Ce nu se schimbă: drumețul care intră ud, frânt și flămând și e primit cu o supă caldă. Asta e identitatea cabanei.",
+  "lead": "Cabanele de pe Carpați sunt construite pe straturi de istorie alpină românească — întreabă cabanierul, observă cartea de impresii, vei vedea altă față a turei.",
+  "keywords": "cabane istorie tradiție alpini interbelic carte impresii cabanier",
+  "card_family": "DEFINITION",
+  "priority": 50,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": ["culture", "etiquette"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Cabanele de pe Carpați sunt construite pe straturi de istorie alpină românească — întreabă cabanierul, observă cartea de impresii, vei vedea altă față a turei.",
+    "seed_topic": "Cabanele românești — un strat de istorie pe care nu-l vezi",
+    "seed_topic_slug": "culture_huts_history"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_eat_to_feel_cfad1a7ac160",
+  "card_id": "cg_motivation_and_mor_morale_eat_to_feel_cfad1a7ac160",
+  "domain": "motivation_and_morale",
+  "topic": "morale_eat_to_feel",
+  "language": "ro",
+  "title": "Mâncarea: Secretul unei stări de spirit bune pe creastă",
+  "body": "Băi, știi vorba aia, \"omul flămând e om rău\"? Ei bine, pe munte e valabilă de două ori! Am văzut eu cum o ciocolată sau o bucată de slănină cu ceapă pot schimba radical atmosfera într-un grup obosit. Nu e doar despre energie, e și despre moral. Ia cu tine chestii care-ți plac cu adevărat și care-s ușor de mâncat. Nu uita de o sursă rapidă de zahăr, gen bomboane sau geluri energizante, pentru momentele alea când simți că ți se taie picioarele. Și o gustare sărată, gen covrigei sau alune, merge de minune după un efort susținut. Hidratarea e la fel de importantă, dar despre asta vorbim altădată. Pune-ți în rucsac nu doar calorii, ci și bucurie!",
+  "lead": "O gustare bună pe munte nu e doar combustibil, ci și un impuls moral care te ajută să treci peste momentele dificile.",
+  "keywords": "mâncare munte moral drumeție gustări creastă energie traseu hidratare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "O gustare bună pe munte nu e doar combustibil, ci și un impuls moral care te ajută să treci peste momentele dificile.",
+    "seed_topic": "Mâncarea schimbă starea de spirit — chiar și pe creastă",
+    "seed_topic_slug": "morale_eat_to_feel"
+  }
+}

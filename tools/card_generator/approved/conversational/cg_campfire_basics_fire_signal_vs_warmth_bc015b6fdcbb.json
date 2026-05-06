@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_signal_vs_warmth_bc015b6fdcbb",
+  "card_id": "cg_campfire_basics_fire_signal_vs_warmth_bc015b6fdcbb",
+  "domain": "campfire_basics",
+  "topic": "fire_signal_vs_warmth",
+  "language": "ro",
+  "title": "Focul: sa te vada sau sa te incalzeasca?",
+  "body": "Imaginează-ți situația: ești rătăcit, se lasă seara și trebuie să decizi repede. Ce foc faci? Dacă scopul principal este să fii găsit, ai nevoie de un foc de semnalizare. Asta înseamnă fum mult și vizibil. Peste un foc mic, deja aprins, arunci frunze verzi, crengi umede, orice produce fum gros și alb. Scopul lui nu e să te încălzească, ci să creeze o coloană de fum pe care s-o vadă cineva de la distanță. Pe de altă parte, dacă ai adăpost și vrei doar să treci noaptea, faci un foc de încălzit. Aici cauți lemn uscat, care arde constant, cu jar și flacără curată, fără mult fum. Acesta dă căldură, te ajută să usuci haine și să fierbi o cană de ceai. Unul te face vizibil, celălalt te ține în viață. Alege înțelept.",
+  "lead": "Când ai nevoie de ajutor, fumul gros e prietenul tău; când vrei doar să te usuci, vrei căldură, nu să afumi tot versantul.",
+  "keywords": "foc de tabără supraviețuire semnalizare foc de încălzit tehnici de bază drumeție",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Când ai nevoie de ajutor, fumul gros e prietenul tău; când vrei doar să te usuci, vrei căldură, nu să afumi tot versantul.",
+    "seed_topic": "Foc de semnalizare vs foc de încălzit — alegi în 30 secunde",
+    "seed_topic_slug": "fire_signal_vs_warmth"
+  }
+}

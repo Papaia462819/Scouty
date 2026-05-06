@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_trail_culture_ro_culture_summer_dawn_star_3d3cc343a9d5",
+  "card_id": "cg_trail_culture_ro_culture_summer_dawn_star_3d3cc343a9d5",
+  "domain": "trail_culture_ro",
+  "topic": "culture_summer_dawn_starts",
+  "language": "ro",
+  "title": "De ce plecam la 4 dimineata vara",
+  "body": "Auzi des de veterani care pleacă la 4 dimineața pe traseu vara, nu? Nu-i moft, e strategie! În primul rând, scapi de arșița miezului zilei. Pe crestele expuse, soarele te topește, iar apa se duce rapid. Plecând devreme, prindeți răcoarea dimineții și ajungeți sus înainte să bată soarele-n cap. Apoi, furtunile de vară. Ele apar de obicei după-amiaza. Dacă ești deja pe coborâre sau chiar la bază până la ora 14-15, ești în siguranță. Am prins odată o ploaie torențială pe Vârful Omu, și crede-mă, nu vrei să fii acolo sus când se-ntunecă cerul. În plus, lumina dimineții e magică pentru poze, și ai șanse mai mari să vezi animale sălbatice. E un pic de efort să te trezești, dar merită fiecare minut.",
+  "lead": "Află de ce plecările matinale pe munte vara nu sunt un moft, ci o strategie inteligentă pentru a evita pericolele și a te bucura de traseu.",
+  "keywords": "plecare devreme calm furtuni vara racoare siguranta munte rasarit",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce plecările matinale pe munte vara nu sunt un moft, ci o strategie inteligentă pentru a evita pericolele și a te bucura de traseu.",
+    "seed_topic": "Plecările de la 4 dimineața vara — de ce le respectă veteranii",
+    "seed_topic_slug": "culture_summer_dawn_starts"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_quick_warming_265603053d20",
+  "card_id": "cg_campfire_basics_fire_quick_warming_265603053d20",
+  "domain": "campfire_basics",
+  "topic": "fire_quick_warming",
+  "language": "ro",
+  "title": "Foc rapid sau foc de noapte?",
+  "body": "Uite care-i treaba cu focul. Ai două scenarii principale. Primul: ești în pauză, înghețat, și vrei să fierbi o cană de ceai și să-ți dezmorțești mâinile. Atunci faci un foc rapid, în formă de cort sau „tipi”. Aduni multe vreascuri subțiri și uscate, le aprinzi și gata. Arde repede, cu flacără mare și dă multă căldură imediat, dar se și stinge la fel de repede cum l-ai făcut. E perfect pentru 20 de minute. Al doilea scenariu: vrei căldură constantă peste noapte, lângă cort sau refugiu. Aici îți trebuie un foc mocnit, de anduranță. Faci o bază de jăratec și apoi pui peste ea bușteni mai groși, de preferat lemn de esență tare. Ăsta nu face flacără mare, dar radiază căldură ore în șir fără să-l tot alimentezi. Așa dormi și tu liniștit, nu stai de pază la flacără.",
+  "lead": "Vrei să te încălzești rapid sau să ai căldură toată noaptea? Fiecare situație cere un alt tip de foc și o altă tehnică de construcție.",
+  "keywords": "foc de tabără încălzire supraviețuire tehnică camping lemne de foc",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Vrei să te încălzești rapid sau să ai căldură toată noaptea? Fiecare situație cere un alt tip de foc și o altă tehnică de construcție.",
+    "seed_topic": "Foc rapid pentru încălzire scurtă vs foc lung de noapte",
+    "seed_topic_slug": "fire_quick_warming"
+  }
+}

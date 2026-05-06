@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_signaling_audio_9d5ff0474998",
+  "card_id": "cg_survival_basics_survival_signaling_audio_9d5ff0474998",
+  "domain": "survival_basics",
+  "topic": "survival_signaling_audio",
+  "language": "ro",
+  "title": "Semnalizare sonora: Fluieraturi si Regula de 3",
+  "body": "Salut, prietene! Știi, în munți, un fluier e uneori mai valoros decât un smartphone cu baterie plină. Dacă te-ai rătăcit sau ai nevoie de ajutor, regula de bază e 6 fluierături scurte, repetate la intervale regulate. Aștepți un minut, apoi iar 6. E semnalul internațional de primejdie. Răspunsul? 3 fluierături scurte. Asta înseamnă că cineva te-a auzit și vine spre tine sau a înțeles situația. E vital să știi asta. Și nu uita de \"regula de 3\" din survival: poți supraviețui 3 minute fără aer, 3 ore fără adăpost în condiții extreme, 3 zile fără apă și 3 săptămâni fără mâncare. Prioritizarea e cheia, mai ales când ești singur. Fii atent la detalii, ele fac diferența!",
+  "lead": "Află cum să folosești fluierul pentru semnalizare în caz de urgență și reține \"regula de 3\" pentru priorități în situații critice.",
+  "keywords": "fluierat primejdie semnalizare sonora regula de 3 survival munte ajutor munte rătăcit",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să folosești fluierul pentru semnalizare în caz de urgență și reține \"regula de 3\" pentru priorități în situații critice.",
+    "seed_topic": "Semnalizare sonoră: 6 fluierături, regula de 3",
+    "seed_topic_slug": "survival_signaling_audio"
+  }
+}

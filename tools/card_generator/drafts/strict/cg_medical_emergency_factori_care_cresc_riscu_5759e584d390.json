@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_factori_care_cresc_riscu_5759e584d390",
+  "card_id": "cg_medical_emergency_factori_care_cresc_riscu_5759e584d390",
+  "domain": "medical_emergency",
+  "topic": "factori_care_cresc_riscul_de_altitude_illness",
+  "language": "ro",
+  "title": "Maladia de altitudine — factori de risc",
+  "body": "Riscul de a dezvolta maladia de altitudine crește odată cu ascensiunea la altitudini de peste 2.400 de metri (8.000 de picioare) din cauza nivelului scăzut de oxigen din aer. Anumiți factori pot crește acest risc:\n\n*   **Ascensiunea rapidă:** Evitați să călătoriți de la o altitudine joasă la una de peste 2.750 de metri (9.000 de picioare) într-o singură zi. Odată ajunși la peste 2.750 de metri, nu creșteți altitudinea de dormit cu mai mult de 490 de metri (1.600 de picioare) pe zi. Pentru fiecare 1.000 de metri (3.300 de picioare) ascensiune, petreceți o zi suplimentară la acea altitudine fără a urca mai mult.\n*   **Lipsa aclimatizării:** Nu petrecerea câtorva zile la 2.400-2.750 de metri înainte de a urca mai sus, sau lipsa expunerii recente la altitudine mare (peste 2.750 m pentru 2 nopți sau mai mult, în 30 de zile înainte de călătorie).\n*   **Consumul de alcool sau efortul fizic intens:** În primele 48 de ore după sosirea la o altitudine de peste 2.400 de metri.\n*   **Condiții medicale preexistente:** Persoanele cu afecțiuni cardiace, pulmonare sau diabet ar trebui să discute cu un medic familiarizat cu medicina de altitudine înainte de călătorie. Femeile însărcinate ar trebui, de asemenea, să consulte un medic.\n\nÎn caz de agravare a simptomelor, coborâți imediat la o altitudine mai joasă și apelați 112 / 0SALVAMONT.",
+  "lead": "Identificați factorii care cresc riscul de a dezvolta maladia de altitudine pentru a o preveni eficient.",
+  "keywords": "maladia de altitudine risc altitudine mare ascensiune rapidă aclimatizare alcool efort fizic condiții medicale salvamont urgență",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Travel to High Altitudes",
+  "source_url": "https://wwwnc.cdc.gov/travel/page/travel-to-high-altitudes",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "altitude_illness",
+    "risk_factors",
+    "high_altitude",
+    "prevention",
+    "medical_conditions"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Identificați factorii care cresc riscul de a dezvolta maladia de altitudine pentru a o preveni eficient.",
+    "evidence_confidence": "high",
+    "source_quote": "If you plan to travel to an elevation higher than 8,000 feet above sea level or higher, you may be at risk for altitude illness, which is caused by low oxygen levels in the air.",
+    "source_id": "cdc_high_altitude"
+  }
+}

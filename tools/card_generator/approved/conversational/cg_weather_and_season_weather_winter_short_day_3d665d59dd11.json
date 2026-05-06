@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_winter_short_day_3d665d59dd11",
+  "card_id": "cg_weather_and_season_weather_winter_short_day_3d665d59dd11",
+  "domain": "weather_and_season",
+  "topic": "weather_winter_short_days",
+  "language": "ro",
+  "title": "Planificare iarna: lumina putina, drum lung",
+  "body": "Iarna, când ziua e scurtă, planificarea e cheia. Dacă știi că ai doar 8 ore de lumină, nu te aventura pe trasee de 10-12 ore. E o greșeală clasică, am pățit-o și eu la început. Pleacă devreme, odată cu răsăritul, și estimează-ți timpul de mers cu o marjă serioasă, cel puțin 20-30% în plus față de vară. Zăpada, gheața și frigul te încetinesc. Nu uita o lanternă frontală bună și baterii de rezervă, chiar dacă planul e să te întorci pe lumină. Mai bine să o ai și să n-o folosești, decât invers. Și un termos cu ceai cald, face minuni când te prinde frigul.",
+  "lead": "Planifică-ți traseele de iarnă cu atenție, ținând cont de orele puține de lumină și de condițiile meteo schimbătoare.",
+  "keywords": "planificare iarna lumina scurta trasee de iarna echipament iarna siguranta munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Planifică-ți traseele de iarnă cu atenție, ținând cont de orele puține de lumină și de condițiile meteo schimbătoare.",
+    "seed_topic": "Plănuirea iarna când lumina ține 8 ore",
+    "seed_topic_slug": "weather_winter_short_days"
+  }
+}

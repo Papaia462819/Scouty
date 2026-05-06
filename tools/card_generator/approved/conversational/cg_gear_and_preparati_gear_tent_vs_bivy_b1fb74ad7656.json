@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_tent_vs_bivy_b1fb74ad7656",
+  "card_id": "cg_gear_and_preparati_gear_tent_vs_bivy_b1fb74ad7656",
+  "domain": "gear_and_preparation",
+  "topic": "gear_tent_vs_bivy",
+  "language": "ro",
+  "title": "Cort, tarp sau sac de bivuac? Alegerea potrivită în Carpați",
+  "body": "Salut, prietene! Când vine vorba de dormit sub cerul liber în Carpați, ai trei opțiuni principale. Cortul e regele confortului și al protecției, mai ales dacă ești cu un grup sau vrei să stai mai multe zile în același loc. Gândește-te la un cort ușor, de 3 sezoane, cu o folie de sol bună. Sacul de bivuac e pentru minimaliști și aventurieri solo, când vrei să fii ultra-ușor și să te miști rapid. Te protejează de vânt și ploaie, dar nu ai spațiu deloc. Tarp-ul e o soluție flexibilă, între cele două: mai ușor decât cortul, dar oferă mai mult spațiu decât un sac de bivuac. E perfect pentru drumeții scurte, când știi că vremea nu se strică rău și vrei să te bucuri de priveliște. Eu am un cort ușor pentru ture lungi, dar am și un tarp în rucsac pentru nopțile de vară. Alege ce ți se potrivește cel mai bine, în funcție de tură și prognoză.",
+  "lead": "Află când să alegi un cort, un tarp sau un sac de bivuac pentru nopțile petrecute în Carpați.",
+  "keywords": "cort tarp sac bivuac adăpost munte echipament campare dormit în natură",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află când să alegi un cort, un tarp sau un sac de bivuac pentru nopțile petrecute în Carpați.",
+    "seed_topic": "Cort, tarp, sac de bivuac — pe ce te bazezi în Carpați",
+    "seed_topic_slug": "gear_tent_vs_bivy"
+  }
+}

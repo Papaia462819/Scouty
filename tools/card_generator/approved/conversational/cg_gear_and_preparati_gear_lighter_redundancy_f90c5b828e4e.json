@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_lighter_redundancy_f90c5b828e4e",
+  "card_id": "cg_gear_and_preparati_gear_lighter_redundancy_f90c5b828e4e",
+  "domain": "gear_and_preparation",
+  "topic": "gear_lighter_redundancy",
+  "language": "ro",
+  "title": "Focul: trei surse, niciodată două!",
+  "body": "Băi, știi vorba aia cu 'mai bine să ai și să nu-ți trebuiască, decât să-ți trebuiască și să n-ai'? La foc, e literă de lege! Eu car mereu două brichete și o cutie de chibrituri rezistente la apă. De ce? Păi, una poate să se ude, alta poate să se strice, iar a treia... a treia e planul de rezervă al planului de rezervă. Am pățit să-mi cadă bricheta în râu și să moară subit. Altă dată, s-a terminat gazul când îmi era lumea mai dragă. Chibriturile sunt bune, dar se udă ușor dacă nu sunt protejate. Așa, ai mereu o șansă să-ți aprinzi focul pentru ceai, mâncare sau, Doamne ferește, pentru semnalizare. Nu te zgârci la un spațiu mic în rucsac, că focul poate face diferența între o noapte 'aventuroasă' și una 'de coșmar'.",
+  "lead": "Află de ce e crucial să ai la tine cel puțin trei surse de foc când ești pe munte, pentru orice eventualitate.",
+  "keywords": "foc brichete chibrituri siguranță echipament urgență",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce e crucial să ai la tine cel puțin trei surse de foc când ești pe munte, pentru orice eventualitate.",
+    "seed_topic": "Două brichete + chibrituri — de ce trei surse de foc",
+    "seed_topic_slug": "gear_lighter_redundancy"
+  }
+}

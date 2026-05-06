@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_safety_kids_e5e2df77000c",
+  "card_id": "cg_campfire_basics_fire_safety_kids_e5e2df77000c",
+  "domain": "campfire_basics",
+  "topic": "fire_safety_kids",
+  "language": "ro",
+  "title": "Foc de tabara cu copii: Siguranta pe primul loc!",
+  "body": "Salut, prietene! Când faci foc de tabără cu cei mici, siguranța e esențială. Primul pas: delimitează clar o zonă de siguranță în jurul focului, la cel puțin 2-3 metri. Poți folosi pietre sau crengi mai groase. Explică-le copiilor, clar și răspicat, că nu au voie să treacă de acea linie. Fii mereu cu ochii pe ei! Apoi, nu lăsa niciodată focul nesupravegheat, nici măcar o secundă. Chiar și un tăciune mic poate face necazuri. Înainte de a pleca, stinge focul complet cu apă, amestecă cenușa și asigură-te că e rece la atingere. Nu uita, un foc bine gestionat e o amintire frumoasă, nu o problemă!",
+  "lead": "Află cum să faci un foc de tabără sigur și plăcut atunci când ai copii în preajmă, cu reguli simple și eficiente.",
+  "keywords": "foc tabara copii siguranta foc reguli foc supraveghere copii stingere foc",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să faci un foc de tabără sigur și plăcut atunci când ai copii în preajmă, cu reguli simple și eficiente.",
+    "seed_topic": "Foc cu copii pe lângă: reguli simple care merg",
+    "seed_topic_slug": "fire_safety_kids"
+  }
+}

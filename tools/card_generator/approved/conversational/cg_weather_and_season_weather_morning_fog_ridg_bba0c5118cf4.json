@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_weather_and_season_weather_morning_fog_ridg_bba0c5118cf4",
+  "card_id": "cg_weather_and_season_weather_morning_fog_ridg_bba0c5118cf4",
+  "domain": "weather_and_season",
+  "topic": "weather_morning_fog_ridge",
+  "language": "ro",
+  "title": "Ceata pe creasta: pastreaza-ti calmul si orienteaza-te lent",
+  "body": "Băi, am pățit-o de zeci de ori. Te trezești dimineața, e senin, și până să-ți bei cafeaua, creasta e înghițită de ceață. Panica e cel mai mare dușman! Oprește-te, scoate harta și busola – sau GPS-ul, dacă ești mai modern. Verifică ultima poziție clară pe care o știi. Mergi încet, pas cu pas, și caută repere. O stâncă mai mare, o jnepeniș, o potecă abia vizibilă. Nu te baza doar pe potecă, uneori se pierde. Încearcă să auzi sunete, poate un pârâu sau clopote de oi. Fii atent la vânt, îți poate spune direcția crestei. Și nu uita, ceața se mai ridică. Răbdarea e cheia. Am stat odată trei ore sub o stâncă, jucând șah cu degetele, până s-a curățat. Mai bine în siguranță decât să te rătăcești aiurea.",
+  "lead": "Află cum să te orientezi eficient și în siguranță când ceața te surprinde pe creastă, folosind repere și răbdare.",
+  "keywords": "ceata orientare creasta busola harta siguranta rabdare",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să te orientezi eficient și în siguranță când ceața te surprinde pe creastă, folosind repere și răbdare.",
+    "seed_topic": "Ceața de dimineață pe creastă — orientează-te lent",
+    "seed_topic_slug": "weather_morning_fog_ridge"
+  }
+}

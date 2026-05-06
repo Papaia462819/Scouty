@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_ce_eviti_sa_mananci_inai_7962de50c239",
+  "card_id": "cg_medical_emergency_ce_eviti_sa_mananci_inai_7962de50c239",
+  "domain": "medical_emergency",
+  "topic": "ce_eviti_sa_mananci_inainte_de_efort",
+  "language": "ro",
+  "title": "Alimentația înainte de efort susținut în drumeție",
+  "body": "Înainte de a pleca în drumeții pe zone care necesită efort susținut, este contraindicat să porniți imediat după o masă principală. Masa principală pe munte se va consuma, de preferință, după terminarea unui efort susținut, dar nu chiar imediat. Micul dejun ar trebui să asigure energia necesară pentru prima parte a zilei, fără a crea o senzație de încărcare și sațietate. De asemenea, se vor evita băuturile alcoolice. Cantitatea de alimente se va calcula în funcție de lungimea și dificultatea traseului, iar alimentele de preferat sunt cele care nu se deteriorează la temperaturi ridicate și au un conținut redus de sare, pentru a nu provoca sete.",
+  "lead": "Evitați să începeți efortul susținut imediat după o masă principală și consumul de băuturi alcoolice înainte de drumeție.",
+  "keywords": "alimentație hidratare efort drumeție mâncare alcool mic dejun sare salvamont",
+  "card_family": "CONSTRAINT",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Alimentatia si hidratarea in muntii Romaniei",
+  "source_url": "https://www.salvamontromania.ro/alimentatia-hidratarea.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "nutrition",
+    "hydration",
+    "pre_hike_meal",
+    "alcohol_avoidance",
+    "strenuous_effort"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Evitați să începeți efortul susținut imediat după o masă principală și consumul de băuturi alcoolice înainte de drumeție.",
+    "evidence_confidence": "high",
+    "source_quote": "Este contraindicat ca imediat dupa masa sa se plece in drumetii, pe zone care necesita efort sustinut. Se vor evita bauturile alcoolice.",
+    "source_id": "salvamont_alimentatie_hidratare"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_ce_faci_daca_cineva_e_lo_000c43e1f5d5",
+  "card_id": "cg_mountain_safety_ce_faci_daca_cineva_e_lo_000c43e1f5d5",
+  "domain": "mountain_safety",
+  "topic": "ce_faci_daca_cineva_e_lovit_de_fulger",
+  "language": "ro",
+  "title": "Victimă Lovită de Fulger — Prim Ajutor",
+  "body": "Dacă o persoană a fost lovită de fulger, acționați imediat. Apelați 112 (sau 0SALVAMONT pentru Salvamont) fără întârziere. Este sigur să folosiți telefonul mobil în timpul furtunii. Furnizați locația exactă și informații despre victimă: câte persoane au fost lovite, unde au fost lovite și dacă furtuna continuă.\n\nEvaluați situația, siguranța fiind prioritară. Fiți conștienți de pericolul continuu al fulgerelor pentru victimă și pentru dumneavoastră. Dacă vă aflați într-o zonă cu risc ridicat (ex: lângă un copac izolat sau într-un câmp deschis), mutați-vă într-o locație mai sigură. Dacă este sigur să o faceți, mutați victima pentru a reduce riscul expunerii ulterioare la fulgere. Nu mișcați victimele care sângerează sau par să aibă oase rupte. Persoanele lovite de fulger NU poartă o sarcină electrică și pot fi atinse în siguranță.\n\nVerificați dacă persoana respiră și are puls (la artera carotidă în gât sau femurală în zona inghinală). Fulgerul poate provoca adesea un atac de cord. Dacă victima respiră normal, căutați alte posibile leziuni, cum ar fi arsuri, șoc sau traumatisme contondente, și acordați primul ajutor de bază până la sosirea ajutoarelor. Dacă zona este rece și umedă, așezați un strat protector (ex: jachetă, pătură) între victimă și sol pentru a reduce hipotermia.\n\nDacă persoana nu respiră, începeți imediat respirația gură la gură. Dacă nu are puls, începeți și compresiile toracice (CPR). Continuați eforturile de resuscitare până la sosirea ajutoarelor medicale.",
+  "lead": "Aflați pașii esențiali de prim ajutor pentru o persoană lovită de fulger, de la apelul de urgență la resuscitare, asigurând siguranța salvatorului.",
+  "keywords": "fulger prim ajutor lovit de fulger resuscitare salvamont urgență siguranță furtună atac de cord cpr hipotermie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Lightning Safety",
+  "source_url": "https://www.cdc.gov/lightning/safety/index.html",
+  "publisher": "CDC",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "lightning_strike",
+    "first_aid",
+    "emergency_response",
+    "cpr",
+    "mountain_safety"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați pașii esențiali de prim ajutor pentru o persoană lovită de fulger, de la apelul de urgență la resuscitare, asigurând siguranța salvatorului.",
+    "evidence_confidence": "high",
+    "source_quote": "If a person has been struck by lightning, call for help, assess the situation, respond, and resuscitate. Giving first aid to a person who has been struck by lightning while waiting for professional medical attention can save their life.",
+    "source_id": "cdc_lightning_safety"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_birch_bark_1af6578d2893",
+  "card_id": "cg_campfire_basics_fire_birch_bark_1af6578d2893",
+  "domain": "campfire_basics",
+  "topic": "fire_birch_bark",
+  "language": "ro",
+  "title": "Mesteacanul, bricheta padurii",
+  "body": "Vezi copacul ăsta cu scoarța albă, ca de hârtie? E mesteacăn, și e cel mai bun prieten al tău când vrei să aprinzi focul. Coaja lui e plină de uleiuri inflamabile și arde incredibil de bine, chiar și când e udă pe afară. Secretul e să nu rănești copacul. Nu te apuca să-l jupoi ca pe un cartof! Caută pe jos bucăți căzute sau desprinde cu grijă doar fâșiile acelea subțiri, aproape transparente, care se exfoliază singure. Fă un ghemotoc aerisit din câteva fâșii, dă-i o scânteie de la amnar sau o flamă de la brichetă și o să vezi cum se aprinde instant. Apoi doar adaugi treptat surcele subțiri și uscate deasupra. E mai eficient decât ziarul ud pe care l-ai cărat în rucsac.",
+  "lead": "Învață cum să folosești coaja de mesteacăn, cea mai bună iască naturală, pentru a aprinde focul rapid, chiar și când totul în jur e ud.",
+  "keywords": "foc de tabara iasca supravietuire mesteacan coaja de mesteacan aprinderea focului",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să folosești coaja de mesteacăn, cea mai bună iască naturală, pentru a aprinde focul rapid, chiar și când totul în jur e ud.",
+    "seed_topic": "Coaja de mesteacăn — cea mai bună iască naturală pe Carpați",
+    "seed_topic_slug": "fire_birch_bark"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_medical_emergency_imobilizarea_membrului_m_d2c9bb90fdef",
+  "card_id": "cg_medical_emergency_imobilizarea_membrului_m_d2c9bb90fdef",
+  "domain": "medical_emergency",
+  "topic": "imobilizarea_membrului_muscat",
+  "language": "ro",
+  "title": "Mușcătura de șarpe: Primul ajutor și imobilizare",
+  "body": "În cazul unei mușcături de șarpe, imobilizați complet persoana și transportați-o la o unitate medicală cât mai curând posibil. Aplicarea presiunii la locul mușcăturii cu un bandaj compresiv poate fi potrivită în unele cazuri. Evitați metodele tradiționale de prim ajutor sau remediile pe bază de plante. Paracetamolul poate fi administrat pentru durerea locală, care poate fi severă. Deoarece pot apărea vărsături, așezați persoana pe partea stângă, în poziția de siguranță. Monitorizați îndeaproape căile respiratorii și respirația și fiți pregătit să resuscitați dacă este necesar. Apelați de urgență 112 sau Salvamont (0SALVAMONT).",
+  "lead": "Imobilizați complet persoana mușcată de șarpe, transportați-o la spital și monitorizați funcțiile vitale, evitând remediile tradiționale.",
+  "keywords": "mușcătură de șarpe prim ajutor imobilizare transport medical bandaj compresiv poziție de siguranță resuscitare urgență",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "Snakebite envenoming - The facts",
+  "source_url": "https://www.who.int/health-topics/snakebite/snakebite-envenoming---the-facts",
+  "publisher": "WHO",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "snakebite",
+    "first_aid",
+    "immobilization",
+    "emergency_transport",
+    "life_threatening"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Imobilizați complet persoana mușcată de șarpe, transportați-o la spital și monitorizați funcțiile vitale, evitând remediile tradiționale.",
+    "evidence_confidence": "high",
+    "source_quote": "Immobilize the person completely and transport the person to a health facility as soon as possible Applying pressure at the bite site with a pressure pad may be suitable in some cases.",
+    "source_id": "who_snakebite_facts"
+  }
+}

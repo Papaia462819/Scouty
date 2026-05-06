@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_solo_redundancy_98a8378f35b7",
+  "card_id": "cg_gear_and_preparati_gear_solo_redundancy_98a8378f35b7",
+  "domain": "gear_and_preparation",
+  "topic": "gear_solo_redundancy",
+  "language": "ro",
+  "title": "Solo vs grup: ce dublezi cand mergi singur",
+  "body": "Când pleci singur pe munte, ești propria ta plasă de siguranță. Pe lângă trusa de prim ajutor, pe care sper că o ai oricum, gândește-te la un briceag multifuncțional de rezervă – nu vrei să rămâi fără el când ai nevoie. O lanternă frontală mică, de urgență, în rucsacul de top, pe lângă cea principală, e aur. Și o baterie externă mică, dedicată doar telefonului de urgență. Nu uita de o pereche de șosete uscate în plus, chiar și pentru o tură de o zi; picioarele fericite te duc mai departe. Un fluier e bun de dublat, poate ai unul la rucsac, dar și unul la gât. Nu uita, prevenția e jumătate din distracție!",
+  "lead": "Află ce echipament esențial ar trebui să dublezi când pleci singur pe munte, pentru o siguranță sporită.",
+  "keywords": "drumetie solo echipament dublat siguranta munte pregatire tura lanterna baterie externa sosete",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află ce echipament esențial ar trebui să dublezi când pleci singur pe munte, pentru o siguranță sporită.",
+    "seed_topic": "Solo vs grup: ce dublezi când mergi singur",
+    "seed_topic_slug": "gear_solo_redundancy"
+  }
+}

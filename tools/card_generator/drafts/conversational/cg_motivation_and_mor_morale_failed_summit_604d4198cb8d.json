@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_motivation_and_mor_morale_failed_summit_604d4198cb8d",
+  "card_id": "cg_motivation_and_mor_morale_failed_summit_604d4198cb8d",
+  "domain": "motivation_and_morale",
+  "topic": "morale_failed_summit",
+  "language": "ro",
+  "title": "Cand sa te intorci din drum: o reusita!",
+  "body": "Salut, prietene! Știu, sună ciudat, dar uneori cea mai mare reușită e să te întorci din drum înainte de vârf. Am pățit-o de zeci de ori. Țin minte o dată în Făgăraș, vremea s-a stricat brusc, ceață densă, vânt tăios. Puteam să forțez, dar riscam mult. Am întors grupul și am coborât în siguranță. O decizie bună înseamnă să evaluezi constant condițiile: vremea, starea ta fizică, echipamentul. Dacă simți că ceva nu e în regulă, că riscurile sunt prea mari, renunță fără ezitare. Muntele te așteaptă și mâine, și poimâine. E mai important să te bucuri de el în siguranță decât să bifezi un vârf cu orice preț. Nu e o înfrângere, e înțelepciune. Ne vedem pe cărare!",
+  "lead": "Află de ce a te întoarce din drum, înainte de a atinge vârful, poate fi cea mai bună decizie și o dovadă de înțelepciune pe munte.",
+  "keywords": "siguranta munte decizii intelepte renuntare varf evaluare risc experienta drumetie",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află de ce a te întoarce din drum, înainte de a atinge vârful, poate fi cea mai bună decizie și o dovadă de înțelepciune pe munte.",
+    "seed_topic": "Te întorci fără vârf — de ce este o reușită",
+    "seed_topic_slug": "morale_failed_summit"
+  }
+}

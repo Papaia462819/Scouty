@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_clove_hitch_on_pole_1a2792c04b35",
+  "card_id": "cg_tips_and_tricks_tip_clove_hitch_on_pole_1a2792c04b35",
+  "domain": "tips_and_tricks",
+  "topic": "tip_clove_hitch_on_pole",
+  "language": "ro",
+  "title": "Nodul jumătate de gură de pește la bățul de trekking",
+  "body": "Salut, prietene! Știi, la prima mea tură pe Retezat, am învățat pe pielea mea cât de util e un nod bun. Când ai nevoie să fixezi ceva rapid de bățul de trekking – poate o folie de supraviețuire ca să faci un adăpost improvizat, sau să legi o creangă ruptă – nodul jumătate de gură de pește e salvarea. E simplu: înfășori coarda de două ori în jurul bățului, treci capătul liber pe sub ambele bucle și apoi pe deasupra, strângând bine. E un nod de frecare, deci cu cât tragi mai tare, cu atât se strânge mai bine. Îl desfacere la fel de ușor, chiar și cu mâinile înghețate. Nu uita să exersezi acasă, să nu te prindă nepregătit pe munte!",
+  "lead": "Învață nodul jumătate de gură de pește pentru a fixa rapid obiecte de bățul tău de trekking în situații neprevăzute.",
+  "keywords": "noduri montane băț trekking tehnici supraviețuire fixare rapidă echipament munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață nodul jumătate de gură de pește pentru a fixa rapid obiecte de bățul tău de trekking în situații neprevăzute.",
+    "seed_topic": "Nodul jumătate de gură de pește pe un băț de trekking",
+    "seed_topic_slug": "tip_clove_hitch_on_pole"
+  }
+}

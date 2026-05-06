@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_resin_pickup_43050efd38de",
+  "card_id": "cg_campfire_basics_fire_resin_pickup_43050efd38de",
+  "domain": "campfire_basics",
+  "topic": "fire_resin_pickup",
+  "language": "ro",
+  "title": "Rasina de brad: cum o recoltezi fara sa ranesti copacul",
+  "body": "Salut, prietene! Știu că rășina e bună la multe, de la aprins focul la mici reparații, dar trebuie să fim blânzi cu brazii. Caută copaci care au deja răni vechi, unde rășina curge natural. Nu te apuca să tai sau să zgârii scoarța unui brad sănătos, că-l stresezi degeaba. Ia doar rășina uscată, cristalizată, care se desprinde ușor. Cât? Cât îți încape într-o cutiuță mică, de chibrituri, nu mai mult. Gândește-te că e ca și cum ai lua o bomboană dintr-o pungă mare, nu toata punga. E suficient pentru ce-ți trebuie și nu lași bradul săracit. Lasă-i și lui, să se vindece singur. E o resursă prețioasă, nu un depozit personal. Spor la foc, dar cu respect!",
+  "lead": "Află cum să recoltezi rășina de brad în mod sustenabil, fără a răni copacii, și cât de mult este suficient pentru nevoile tale.",
+  "keywords": "rasina brad recoltare foc sustenabil natura munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să recoltezi rășina de brad în mod sustenabil, fără a răni copacii, și cât de mult este suficient pentru nevoile tale.",
+    "seed_topic": "Recoltarea rășinii — unde și cât (fără să rănești copacul)",
+    "seed_topic_slug": "fire_resin_pickup"
+  }
+}

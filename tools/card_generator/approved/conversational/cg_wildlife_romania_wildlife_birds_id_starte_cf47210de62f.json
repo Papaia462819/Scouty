@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_birds_id_starte_cf47210de62f",
+  "card_id": "cg_wildlife_romania_wildlife_birds_id_starte_cf47210de62f",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_birds_id_starter",
+  "language": "ro",
+  "title": "Birdwatching pentru incepatori: 8 pasari comune in Carpati",
+  "body": "Salut, începătorule! Vrei să te apuci de birdwatching? E fain, dar nu te aștepta să vezi acvila de munte din prima. Începe cu ce e mai la îndemână. În Carpați, o să dai des de pițigoiul mare, cu căciulița lui neagră și burtica galbenă. Cinteza e și ea peste tot, masculul are un roșu-cărămiziu pe piept. Mierla e ușor de recunoscut după penajul negru și ciocul portocaliu. Nu uita de vrabie, desigur! Mai ai coțofana, cu penajul ei alb-negru lucitor, și gaița, o frumusețe zgomotoasă. Sturzul cântător o să-ți încânte auzul, iar ciocănitoarea pestriță mare o vezi des pe trunchiuri. Ia-ți un binoclu bun și multă răbdare, asta e secretul. Și nu uita, respectă natura!",
+  "lead": "Descoperă 8 specii comune de păsări pe care le poți observa ușor în Carpați, perfecte pentru drumeții începători la birdwatching.",
+  "keywords": "birdwatching pasari carpati incepatori wildlife pitigoi mierla cinteza",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Descoperă 8 specii comune de păsări pe care le poți observa ușor în Carpați, perfecte pentru drumeții începători la birdwatching.",
+    "seed_topic": "Începător la birdwatching pe Carpați: 8 specii frecvente",
+    "seed_topic_slug": "wildlife_birds_id_starter"
+  }
+}

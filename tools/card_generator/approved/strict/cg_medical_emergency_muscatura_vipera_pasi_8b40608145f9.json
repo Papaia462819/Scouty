@@ -1,0 +1,29 @@
+{
+  "chunk_id": "cg_medical_emergency_muscatura_vipera_pasi_8b40608145f9",
+  "card_id": "cg_medical_emergency_muscatura_vipera_pasi_8b40608145f9",
+  "domain": "medical_emergency",
+  "topic": "muscatura_vipera_pasi",
+  "language": "ro",
+  "title": "Mușcătură de viperă: pași imediați și ce nu se face",
+  "body": "Pe Carpați, vipera comună (Vipera berus) este principala specie veninoasă. Mușcătura provoacă durere imediată, două puncte de mușcătură, umflătură progresivă și eritem. Considerați orice mușcătură ca fiind o urgență medicală, indiferent cât de ușoară pare. Mențineți persoana calmă; agitația accelerează răspândirea veninului. Așezați-o jos și imobilizați membrul mușcat la nivelul inimii sau ușor sub acesta. Scoateți inelele, ceasul, încălțămintea strânsă și hainele restrictive de pe membrul afectat înainte ca umflătura să se instaleze. Curățați ușor cu apă, fără să frecați. Marcați cu un pix conturul roșeții și notați ora pentru a urmări evoluția. Sunați imediat 0SALVAMONT (apel: 0SALVAMONT) sau 112 și solicitați evacuare către spital pentru ser antiviperin. Ce să NU faceți: nu sugeți rana, nu o tăiați, nu aplicați garou, nu aplicați gheață direct pe rană, nu dați alcool și nu dați medicamente pe cont propriu. Mențineți victima caldă și hidratată cu apă în înghițituri mici doar dacă este conștientă. Transportați-o cu mișcări minime; ideal, evacuare aeriană sau cu targă.",
+  "keywords": "vipera muscatura sarpe veninos prim ajutor salvamont ser antiviperin",
+  "card_family": "SCENARIO",
+  "priority": 88,
+  "tier": "A",
+  "source_title": "Snakebite envenoming - The facts",
+  "source_url": "https://www.who.int/health-topics/snakebite/snakebite-envenoming---the-facts",
+  "publisher": "WHO",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 5,
+  "safety_tags": ["snakebite", "envenomation", "first_aid", "life_threatening"],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Imobilizați membrul, scoateți obiecte strânse, sunați imediat 0SALVAMONT/112; nu sugeți, nu tăiați, nu aplicați garou.",
+    "evidence_confidence": "high",
+    "source_id": "who_snakebite_facts"
+  }
+}

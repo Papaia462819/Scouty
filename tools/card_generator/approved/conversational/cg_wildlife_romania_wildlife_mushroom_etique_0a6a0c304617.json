@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_wildlife_romania_wildlife_mushroom_etique_0a6a0c304617",
+  "card_id": "cg_wildlife_romania_wildlife_mushroom_etique_0a6a0c304617",
+  "domain": "wildlife_romania",
+  "topic": "wildlife_mushroom_etiquette",
+  "language": "ro",
+  "title": "Culesul ciupercilor: eticheta pe potecă",
+  "body": "Băi, știi cum e cu ciupercile? E o bucurie să le găsești, dar hai să fim civilizați. Când dai de un petic bun, nu-l rade complet. Lasă și pentru alții, și mai ales, lasă exemplare mature să-și împrăștie sporii. E ca la pescuit, dai drumul la peștii mici. Folosește un coș de nuiele sau o plasă, nu o pungă de plastic, ca să le permită sporilor să cadă pe drum. Și nu uita, nu distruge ciupercile pe care nu le cunoști sau nu le vrei. Sunt parte din ecosistem. Respectă natura, și ea te va răsplăti. Am văzut odată un nene care a tăiat o ciupercă veninoasă doar ca să se asigure că n-o ia nimeni. Nu face asta, e inutil și dăunător.",
+  "lead": "Sfaturi practice pentru culesul responsabil de ciuperci în munții României, respectând natura și ceilalți drumeți.",
+  "keywords": "ciuperci culegere eticheta munte natura respect",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Sfaturi practice pentru culesul responsabil de ciuperci în munții României, respectând natura și ceilalți drumeți.",
+    "seed_topic": "Eticheta de cules ciuperci în Romania — fără identificare medicală",
+    "seed_topic_slug": "wildlife_mushroom_etiquette"
+  }
+}

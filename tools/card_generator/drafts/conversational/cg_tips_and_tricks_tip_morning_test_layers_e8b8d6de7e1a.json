@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_tips_and_tricks_tip_morning_test_layers_e8b8d6de7e1a",
+  "card_id": "cg_tips_and_tricks_tip_morning_test_layers_e8b8d6de7e1a",
+  "domain": "tips_and_tricks",
+  "topic": "tip_morning_test_layers",
+  "language": "ro",
+  "title": "Test rapid: stai 2 minute fara sa te misti",
+  "body": "Uite un truc simplu, dar eficient, pe care l-am învățat în zecile de ture pe munți. Când ești pe potecă și simți că-ți e bine, că ești confortabil, oprește-te brusc. Stai nemișcat 2 minute. Fără să te miști, fără să te ajustezi. Doar stai. Vezi ce simți. Îți e frig la mâini? Îți amorțesc picioarele? Simți că-ți e prea cald sub geacă? De multe ori, în mișcare, nu simți disconfortul minor care, în repaus, se transformă rapid în problemă. Așa poți ajusta echipamentul din timp, înainte să te ia frigul cu adevărat sau să transpiri excesiv și să riști să te răcești. E mai bine să previi, decât să tremuri ca varga la prima pauză mai lungă. Încearcă, o să vezi că e util!",
+  "lead": "Oprește-te brusc pe potecă și stai nemișcat 2 minute pentru a-ți evalua real confortul termic și a ajusta echipamentul din timp.",
+  "keywords": "test rapid echipament confort termic prevenire pauza",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Oprește-te brusc pe potecă și stai nemișcat 2 minute pentru a-ți evalua real confortul termic și a ajusta echipamentul din timp.",
+    "seed_topic": "Test rapid: stai 2 minute fără să te miști, vezi ce simți",
+    "seed_topic_slug": "tip_morning_test_layers"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_gear_and_preparati_gear_one_test_hike_3f84f05cb96b",
+  "card_id": "cg_gear_and_preparati_gear_one_test_hike_3f84f05cb96b",
+  "domain": "gear_and_preparation",
+  "topic": "gear_one_test_hike",
+  "language": "ro",
+  "title": "Nu sari peste tura de test cu echipamentul nou!",
+  "body": "Băi, știu, ești entuziasmat cu bocancii ăia noi sau rucsacul ăla ultra-ușor. Dar înainte să te avânți pe creste, ia-le la o tură scurtă, de o zi, pe un traseu mai ușor. Nu vrei să descoperi la 2000 de metri că bocancii te rod sau că rucsacul te taie la umeri după primele ore. Îmi amintesc o dată când am plecat cu o jachetă nouă, cică impermeabilă, și m-a prins o ploaie torențială. Am ajuns la cabană fleșcăit, de parcă înotasem. Mai bine afli din timp ce nu merge, decât să ai surprize neplăcute în mijlocul pustietății. Verifică-ți și cortul, dacă e nou: montează-l o dată în curte, să vezi că ai toate bețele și că știi cum se face. E o investiție mică de timp care te scutește de multe bătăi de cap.",
+  "lead": "Nu sări peste tura de test cu echipamentul nou; verifică-l pe un traseu ușor înainte de a pleca în ture lungi.",
+  "keywords": "echipament nou tură test pregătire bocanci rucsac cort",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Nu sări peste tura de test cu echipamentul nou; verifică-l pe un traseu ușor înainte de a pleca în ture lungi.",
+    "seed_topic": "Tura de test cu noul echipament — de ce nu sărim peste",
+    "seed_topic_slug": "gear_one_test_hike"
+  }
+}

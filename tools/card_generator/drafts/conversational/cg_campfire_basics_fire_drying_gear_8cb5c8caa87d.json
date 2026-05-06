@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_drying_gear_8cb5c8caa87d",
+  "card_id": "cg_campfire_basics_fire_drying_gear_8cb5c8caa87d",
+  "domain": "campfire_basics",
+  "topic": "fire_drying_gear",
+  "language": "ro",
+  "title": "Cum usuci echipamentul langa foc fara sa-l arzi",
+  "body": "Știu, e tentant să-ți bagi bocancii aproape de foc după o zi ploioasă, dar crede-mă, am văzut prea multe găuri în echipament. Secretul e distanța și răbdarea. Nu le pune direct în bătaia flăcărilor! Găsește o zonă unde simți căldura, dar nu arde. De obicei, la 1-2 metri de foc e ideal. Întoarce-le des, ca pe niște mici mititei, să se usuce uniform. Pentru ciorapi sau haine mici, poți folosi o creangă verde, proaspăt tăiată, pe post de uscător improvizat. Nu uita, materialele sintetice se topesc mai repede decât crezi. Mai bine să le ai umede decât arse, nu? Și nu lăsa niciodată echipamentul nesupravegheat lângă foc, mai ales noaptea, că dimineața s-ar putea să te trezești cu o surpriză carbonizată.",
+  "lead": "Află cum să-ți usuci hainele și încălțămintea lângă focul de tabără în siguranță, evitând distrugerea echipamentului.",
+  "keywords": "uscare echipament foc tabara sfaturi drumetie echipament munte bocanci umezi haine ude siguranta foc",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să-ți usuci hainele și încălțămintea lângă focul de tabără în siguranță, evitând distrugerea echipamentului.",
+    "seed_topic": "Uscat hainele și încălțămintea lângă foc fără să le arzi",
+    "seed_topic_slug": "fire_drying_gear"
+  }
+}

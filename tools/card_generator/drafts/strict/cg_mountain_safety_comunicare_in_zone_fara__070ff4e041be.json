@@ -1,0 +1,37 @@
+{
+  "chunk_id": "cg_mountain_safety_comunicare_in_zone_fara__070ff4e041be",
+  "card_id": "cg_mountain_safety_comunicare_in_zone_fara__070ff4e041be",
+  "domain": "mountain_safety",
+  "topic": "comunicare_in_zone_fara_semnal",
+  "language": "ro",
+  "title": "Semnalizare pentru ajutor fără semnal GSM",
+  "body": "Dacă v-ați rătăcit și nu aveți semnal la telefon pentru a apela 112 / Salvamont (0SALVAMONT), este crucial să semnalizați pentru a fi găsit. Ajutorul poate dura ore sau zile, în funcție de locație, vreme și resurse. Rămâneți pe loc; schimbarea locației va îngreuna găsirea dumneavoastră de către autorități. Deplasați-vă doar dacă există o amenințare imediată la viața dumneavoastră. Folosiți următoarele metode de semnalizare pentru a ajuta echipele de căutare și salvare să vă localizeze:\n\n1.  **Fluierul:** Suflați fluierul de trei ori, faceți o pauză, apoi suflați din nou de trei ori. Repetați această secvență des. Această metodă economisește energie comparativ cu strigatul.\n2.  **Oglinda:** Folosiți o oglindă pentru a reflecta lumina soarelui către cer sau în direcția unde bănuiți că ar putea fi salvatori. Oglinzile nu necesită baterii și pot fi foarte eficiente pe timp de zi.\n3.  **Lanterna:** Pe timp de noapte, folosiți lanterna pentru a trimite semnale luminoase. Flash-urile repetate pot atrage atenția. Asigurați-vă că aveți baterii de rezervă.",
+  "lead": "Aflați cum să semnalizați eficient pentru ajutor atunci când sunteți rătăcit și nu aveți semnal la telefon.",
+  "keywords": "semnalizare fără semnal rătăcit salvamont prim ajutor fluier oglindă lanternă",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "A",
+  "source_title": "NPS Outdoor Emergency Plan",
+  "source_url": "https://www.nps.gov/subjects/healthandsafety/upload/NPS-Outdoor-Emergency-Plan-508c.pdf",
+  "publisher": "National Park Service",
+  "source_language": "en",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-06",
+  "source_trust": 5,
+  "safety_tags": [
+    "lost_hiker",
+    "no_signal",
+    "signaling_for_help",
+    "mountain_safety",
+    "emergency_communication"
+  ],
+  "country_scope": "global",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "Aflați cum să semnalizați eficient pentru ajutor atunci când sunteți rătăcit și nu aveți semnal la telefon.",
+    "evidence_confidence": "high",
+    "source_quote": "If you do not have a cellphone or cell reception to call 911: Signal for help – Use the following signals to help search and rescue authorities find you. Blow your whistle often – Blow your whistle three times, take a break, and blow three times again. Flash your flashlight – F. Pack a mirror – Flashing your mirror helps signal people if you become lost and mirrors don’t run out of battery.",
+    "source_id": "nps_outdoor_emergency_plan"
+  }
+}

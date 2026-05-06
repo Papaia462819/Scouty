@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_survival_basics_survival_bathroom_practi_5df9aba73e07",
+  "card_id": "cg_survival_basics_survival_bathroom_practi_5df9aba73e07",
+  "domain": "survival_basics",
+  "topic": "survival_bathroom_practical",
+  "language": "ro",
+  "title": "Igiena pe traseu: Wag bag și groapa de pisică",
+  "body": "Salut, prietene! Știu, nu e cel mai glamorous subiect, dar e crucial pentru a lăsa muntele curat. Când vine vorba de nevoi mari, ideal e să folosești un wag bag, mai ales în zonele alpine sau foarte circulate. E un sac special care sigilează totul și-l iei cu tine până la primul coș de gunoi din civilizație. Dacă nu ai, sapă o groapă de pisică la cel puțin 60 de metri de orice sursă de apă, potecă sau tabără. Groapa să aibă vreo 15-20 cm adâncime și, după ce termini, acoper-o bine cu pământ și frunze. Nu lăsa hârtie igienică la vedere, ia-o cu tine într-un săculeț separat. Respectăm muntele, ne respectăm și pe noi!",
+  "lead": "Află cum să gestionezi igiena personală în natură pentru a proteja mediul montan, folosind wag bag sau groapa de pisică.",
+  "keywords": "igiena montana wag bag groapa de pisica lasa fara urme ecologie munte deseuri biologice",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Află cum să gestionezi igiena personală în natură pentru a proteja mediul montan, folosind wag bag sau groapa de pisică.",
+    "seed_topic": "Igiena minimă pe tură — wag bag și gropi de cat",
+    "seed_topic_slug": "survival_bathroom_practical"
+  }
+}

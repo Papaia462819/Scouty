@@ -1,0 +1,30 @@
+{
+  "chunk_id": "cg_campfire_basics_fire_cotton_vaseline_60c75d3d2e6c",
+  "card_id": "cg_campfire_basics_fire_cotton_vaseline_60c75d3d2e6c",
+  "domain": "campfire_basics",
+  "topic": "fire_cotton_vaseline",
+  "language": "ro",
+  "title": "Iasca DIY: Vată cu Vaselină",
+  "body": "Salut, prietene! Vrei să aprinzi focul ușor, chiar și pe ploaie? Uite un truc vechi: vată cu vaselină. E simplu de făcut acasă. Iei niște vată, o rupi bucățele și o amesteci bine cu vaselină, până e îmbibată complet. Pune-o într-o punguță etanșă. Avantajul major e că arde mult mai mult decât vata simplă, oferindu-ți timp să aprinzi vreascurile umede. E ca un mic combustibil solid. Am avut odată o situație pe Retezat, ploua de rupea și cu vată din asta am reușit să fac focul. E ușor, ieftin și te salvează când ești la ananghie. Nu uita să ai și un amnar bun!",
+  "lead": "Învață cum să-ți prepari acasă iască din vată și vaselină pentru a aprinde focul ușor în orice condiții.",
+  "keywords": "iască diy vată vaselină aprins foc echipament foc trucuri munte",
+  "card_family": "SCENARIO",
+  "priority": 0,
+  "tier": "B",
+  "source_title": "Generated",
+  "source_url": null,
+  "publisher": "Scouty Knowledge Team",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-05-04",
+  "source_trust": 2,
+  "safety_tags": [],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": false,
+    "tone": "conversational",
+    "lead": "Învață cum să-ți prepari acasă iască din vată și vaselină pentru a aprinde focul ușor în orice condiții.",
+    "seed_topic": "Iască DIY: vată cu vaselină — pregătire și avantaje",
+    "seed_topic_slug": "fire_cotton_vaseline"
+  }
+}
