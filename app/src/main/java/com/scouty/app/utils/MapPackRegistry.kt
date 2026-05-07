@@ -197,8 +197,7 @@ object MapPackRegistryManager {
                 "0-255.pbf",
                 "256-511.pbf",
                 "512-767.pbf",
-                "768-1023.pbf",
-                "1024-1279.pbf"
+                "768-1023.pbf"
             )
             listOf("Open Sans Regular", "Open Sans Semibold").all { fontStack ->
                 val availableRanges = context.assets.list("glyphs/$fontStack").orEmpty().toSet()
