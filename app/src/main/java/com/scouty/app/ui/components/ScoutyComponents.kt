@@ -189,9 +189,9 @@ enum class DifficultyLevel { EASY, MEDIUM, HARD }
 @Composable
 fun DifficultyBadge(level: DifficultyLevel, modifier: Modifier = Modifier) {
     val (color, text) = when (level) {
-        DifficultyLevel.EASY -> AccentGreen to "EASY"
-        DifficultyLevel.MEDIUM -> Warning to "MEDIUM"
-        DifficultyLevel.HARD -> Danger to "HARD"
+        DifficultyLevel.EASY -> AccentGreen to "UȘOR"
+        DifficultyLevel.MEDIUM -> Warning to "MEDIU"
+        DifficultyLevel.HARD -> Danger to "GREU"
     }
     Box(
         modifier = modifier

@@ -24,8 +24,8 @@
 
     <string name="action_sos">SOS</string>
     <string name="action_compass">Compass</string>
-    <string name="action_shelter">Shelter</string>
-    <string name="action_water">Water</string>
+    <string name="action_shelter">Adăpost</string>
+    <string name="action_water">Apă</string>
 
     <string name="map_section_title">Navigation and Terrain</string>
     <string name="map_placeholder">MapLibre map placeholder</string>
@@ -54,7 +54,7 @@
 
     <string name="chat_hint">Ask anything...</string>
     <string name="chat_prompt_ankle">I twisted my ankle</string>
-    <string name="chat_prompt_water">How can I purify water?</string>
+    <string name="chat_prompt_water">Cum pot purifica apa?</string>
     <string name="chat_prompt_bear">Bear signs nearby, what do I do?</string>
 
     <string name="sos_title">EMERGENCY</string>
@@ -76,7 +76,7 @@
 
     <!-- Legacy strings for compatibility during cleanup -->
     <string name="assistant_prompt_ankle">I twisted my ankle</string>
-    <string name="assistant_prompt_water">How can I purify water?</string>
+    <string name="assistant_prompt_water">Cum pot purifica apa?</string>
     <string name="assistant_prompt_bear">Bear signs nearby, what should I do?</string>
     <string name="assistant_section_title">Assistant</string>
     <string name="assistant_hint">Describe your situation...</string>

@@ -1254,14 +1254,14 @@ private fun MapLayersPanel(
             )
             if (onReset != null) {
                 Text(
-                    text = "Reset",
+                    text = "Resetează",
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Medium,
                     color = AccentGreen,
                     modifier = Modifier.clickable(onClick = onReset)
                 )
             } else {
-                Text(text = "Reset", fontSize = 11.sp, color = TextMuted)
+                Text(text = "Resetează", fontSize = 11.sp, color = TextMuted)
             }
         }
     }
@@ -1506,7 +1506,7 @@ private fun PlannedTrailActions(
             .padding(12.dp)
     ) {
         PrimaryButton(
-            text = "Start trail",
+            text = "Pornește traseul",
             onClick = onStartTrail,
             icon = Lucide.Route,
             modifier = Modifier.fillMaxWidth()
@@ -1522,7 +1522,7 @@ private fun SubtleMapRecenterButton(
     SubtleMapActionButton(
         modifier = modifier,
         icon = Lucide.Crosshair,
-        contentDescription = "Recenter",
+        contentDescription = "Recentrează",
         onClick = onClick
     )
 }
@@ -1567,13 +1567,13 @@ private fun ActiveTrailMapActions(
     ) {
         SubtleMapActionButton(
             icon = Lucide.Droplet,
-            contentDescription = "Find nearest water",
+            contentDescription = "Găsește apa cea mai apropiată",
             tint = NearbyGuideType.WATER.accentColor(),
             onClick = onWaterClick
         )
         SubtleMapActionButton(
             icon = Lucide.House,
-            contentDescription = "Find nearest shelter",
+            contentDescription = "Găsește adăpostul cel mai apropiat",
             tint = NearbyGuideType.SHELTER.accentColor(),
             onClick = onShelterClick
         )
@@ -1606,9 +1606,9 @@ private fun NearbyGuidePendingCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = if (gpsReady) {
-                        "Finding nearest ${type.label()}"
+                        "Caut cel mai apropiat punct: ${type.label()}"
                     } else {
-                        "Waiting for GPS"
+                        "Aștept GPS-ul"
                     },
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Medium
@@ -1616,9 +1616,9 @@ private fun NearbyGuidePendingCard(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = if (gpsReady) {
-                        "Looking through the points already loaded on the map."
+                        "Caut în punctele deja încărcate pe hartă."
                     } else {
-                        "Scouty needs a location fix before it can point you to the closest ${type.label()}."
+                        "Scouty are nevoie de poziție GPS înainte să indice cel mai apropiat punct: ${type.label()}."
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -1627,7 +1627,7 @@ private fun NearbyGuidePendingCard(
             IconButton(onClick = onDismiss) {
                 Icon(
                     imageVector = Lucide.X,
-                    contentDescription = "Close guide",
+                    contentDescription = "Închide ghidajul",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -1693,7 +1693,7 @@ private fun NearbyGuideCard(
             IconButton(onClick = onDismiss) {
                 Icon(
                     imageVector = Lucide.X,
-                    contentDescription = "Close guide",
+                    contentDescription = "Închide ghidajul",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -3291,14 +3291,14 @@ private fun Double.formatDistanceLabel(): String =
 
 private fun NearbyGuideType.label(): String =
     when (this) {
-        NearbyGuideType.WATER -> "water"
-        NearbyGuideType.SHELTER -> "shelter"
+        NearbyGuideType.WATER -> "apă"
+        NearbyGuideType.SHELTER -> "adăpost"
     }
 
 private fun NearbyGuideType.chipLabel(): String =
     when (this) {
-        NearbyGuideType.WATER -> "Closest water"
-        NearbyGuideType.SHELTER -> "Closest shelter"
+        NearbyGuideType.WATER -> "Cea mai apropiată apă"
+        NearbyGuideType.SHELTER -> "Cel mai apropiat adăpost"
     }
 
 private fun NearbyGuideType.accentColor(): Color =
@@ -3705,40 +3705,40 @@ private fun buildNearbyGuideCandidate(
 
     val defaultTitle = when (type) {
         NearbyGuideType.WATER -> when {
-            natural == "spring" && shelter == "yes" -> "Sheltered spring"
-            natural == "spring" -> "Spring"
-            else -> "Water source"
+            natural == "spring" && shelter == "yes" -> "Izvor adăpostit"
+            natural == "spring" -> "Izvor"
+            else -> "Sursă de apă"
         }
 
         NearbyGuideType.SHELTER -> when {
-            amenity == "shelter" -> "Shelter"
-            tourism == "camp_site" -> "Camp site"
-            natural == "spring" -> "Sheltered spring"
-            else -> "Shelter point"
+            amenity == "shelter" -> "Adăpost"
+            tourism == "camp_site" -> "Loc de campare"
+            natural == "spring" -> "Izvor adăpostit"
+            else -> "Punct de adăpost"
         }
     }
 
     val subtitle = when (type) {
         NearbyGuideType.WATER -> listOfNotNull(
-            if (natural == "spring") "Spring" else null,
-            if (amenity == "drinking_water" || drinkingWater == "yes") "Drinkable" else null,
+            if (natural == "spring") "Izvor" else null,
+            if (amenity == "drinking_water" || drinkingWater == "yes") "Potabilă" else null,
             description?.takeIf { it.isNotBlank() }
         )
 
         NearbyGuideType.SHELTER -> listOfNotNull(
             when {
-                amenity == "shelter" -> "Shelter"
-                tourism == "camp_site" -> "Camp site"
-                shelter == "yes" -> "Shelter nearby"
+                amenity == "shelter" -> "Adăpost"
+                tourism == "camp_site" -> "Loc de campare"
+                shelter == "yes" -> "Adăpost în apropiere"
                 else -> null
             },
-            if (natural == "spring") "Water nearby" else null,
+            if (natural == "spring") "Apă în apropiere" else null,
             description?.takeIf { it.isNotBlank() }
         )
     }.joinToString(" · ").ifBlank {
         when (type) {
-            NearbyGuideType.WATER -> "Closest mapped water point"
-            NearbyGuideType.SHELTER -> "Closest mapped shelter point"
+            NearbyGuideType.WATER -> "Cel mai apropiat punct de apă mapat"
+            NearbyGuideType.SHELTER -> "Cel mai apropiat adăpost mapat"
         }
     }
 
