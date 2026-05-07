@@ -58,6 +58,7 @@ import com.scouty.app.ui.components.RouteRemoteImage
 import com.scouty.app.ui.components.ScoutyCard
 import com.scouty.app.ui.components.ScoutySectionHeader
 import com.scouty.app.ui.components.StatusPill
+import com.scouty.app.ui.components.TrailListItem
 import com.scouty.app.ui.models.ActiveTrail
 import com.scouty.app.ui.models.ActiveTrailState
 import com.scouty.app.ui.models.HomeStatus
@@ -143,7 +144,21 @@ fun HomeScreen(
             EmptyTrailCard(message = "Alege cateva preferinte in profil sau asteapta un GPS fix pentru recomandari.")
         } else {
             status.routeRecommendations.forEachIndexed { index, recommendation ->
-                RecommendedTrailCard(recommendation = recommendation)
+                TrailListItem(
+                    title = recommendation.title,
+                    region = listOfNotNull(
+                        recommendation.region?.takeIf { it.isNotBlank() },
+                        recommendation.markerLabel?.takeIf { it.isNotBlank() }
+                    ).joinToString(" · ").takeIf { it.isNotBlank() },
+                    durationLabel = recommendation.durationText.takeIf { it.isNotBlank() && it != "--" },
+                    distanceLabel = recommendation.distanceKm.takeIf { it > 0.0 }?.let(::formatDistance),
+                    elevationLabel = recommendation.elevationGain.takeIf { it > 0 }?.let { "+$it m" },
+                    distanceAwayLabel = recommendation.proximityKm?.let {
+                        String.format(Locale.getDefault(), "%.0f km", it)
+                    },
+                    difficulty = difficultyLevel(recommendation.difficulty.name),
+                    onClick = {}
+                )
                 if (index != status.routeRecommendations.lastIndex) {
                     Spacer(Modifier.height(8.dp))
                 }
