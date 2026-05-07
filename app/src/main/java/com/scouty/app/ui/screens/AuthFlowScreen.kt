@@ -2,6 +2,17 @@
 
 package com.scouty.app.ui.screens
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -17,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -24,6 +36,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.heightIn
@@ -41,6 +54,11 @@ import com.composables.icons.lucide.ChevronDown
 import com.composables.icons.lucide.ChevronRight
 import com.composables.icons.lucide.CircleCheck
 import com.composables.icons.lucide.Compass
+import com.composables.icons.lucide.Eye
+import com.composables.icons.lucide.EyeOff
+import com.composables.icons.lucide.Info as InfoIcon
+import com.composables.icons.lucide.LogIn
+import com.composables.icons.lucide.Mail
 import com.composables.icons.lucide.Lock
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Map
@@ -48,6 +66,7 @@ import com.composables.icons.lucide.Mountain
 import com.composables.icons.lucide.Route
 import com.composables.icons.lucide.Sparkles
 import com.composables.icons.lucide.Star
+import com.composables.icons.lucide.UserPlus
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -71,14 +90,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
@@ -96,6 +120,7 @@ import com.scouty.app.ui.theme.PrimaryGreen
 import com.scouty.app.ui.theme.AccentGreen
 import com.scouty.app.ui.theme.AccentGreenBg
 import com.scouty.app.ui.theme.AccentGreenOnSurface
+import com.scouty.app.ui.theme.BgPrimary
 import com.scouty.app.ui.theme.BgSurfaceRaised
 import com.scouty.app.ui.theme.BorderDefault
 import com.scouty.app.ui.theme.Danger
@@ -158,152 +183,360 @@ fun AuthScreen(
         onClearMessage()
     }
 
-    ScoutyBackdrop {
+    val accent by animateColorAsState(
+        targetValue = if (mode == AuthMode.LOGIN) AccentGreen else Warning,
+        animationSpec = tween(300, easing = FastOutSlowInEasing),
+        label = "authAccent"
+    )
+    val onAccent = if (mode == AuthMode.LOGIN) AccentGreenOnSurface else Color(0xFF2A1A05)
+
+    ScoutyBackdrop(mode = mode) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
+                .navigationBarsPadding()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 22.dp, vertical = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
+                .padding(horizontal = 22.dp, vertical = 18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Scouty",
-                style = MaterialTheme.typography.displaySmall,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "Build a real hiker profile before you hit the trail. Local account, smart starter tier, cleaner profile data.",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                lineHeight = 24.sp
-            )
+            Spacer(modifier = Modifier.height(24.dp))
+            AuthHero(mode = mode, accent = accent)
+            Spacer(modifier = Modifier.height(22.dp))
 
-            Surface(
-                shape = RoundedCornerShape(30.dp),
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
-                border = androidx.compose.foundation.BorderStroke(
-                    1.dp,
-                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.78f)
-                )
+            ScoutyCard(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(18.dp),
+                contentPadding = PaddingValues(6.dp)
             ) {
                 Column(
-                    modifier = Modifier.padding(horizontal = 18.dp, vertical = 20.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp)
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(18.dp))
-                            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.92f))
-                            .padding(4.dp)
-                    ) {
-                        AuthMode.entries.forEach { authMode ->
-                            val selected = mode == authMode
-                            Surface(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .clip(RoundedCornerShape(14.dp))
-                                    .clickable { mode = authMode },
-                                color = if (selected) MaterialTheme.colorScheme.primary.copy(alpha = 0.18f) else Color.Transparent
-                            ) {
-                                Text(
-                                    text = if (authMode == AuthMode.LOGIN) "Login" else "Register",
-                                    modifier = Modifier.padding(vertical = 12.dp),
-                                    textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.labelLarge,
-                                    fontWeight = FontWeight.Bold,
-                                    color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                                )
+                    AuthModeTabs(
+                        mode = mode,
+                        onModeChange = { mode = it }
+                    )
+                    Spacer(Modifier.height(16.dp))
+
+                    AnimatedContent(
+                        targetState = mode,
+                        transitionSpec = {
+                            val direction = if (targetState == AuthMode.REGISTER) {
+                                AnimatedContentTransitionScope.SlideDirection.Left
+                            } else {
+                                AnimatedContentTransitionScope.SlideDirection.Right
                             }
-                        }
-                    }
-
-                    Text(
-                        text = when {
-                            mode == AuthMode.REGISTER && accountExists ->
-                                "Registering here replaces the single local account stored on this device."
-                            mode == AuthMode.REGISTER ->
-                                "Register creates the local account and launches the profile builder right away."
-                            else ->
-                                "Login opens the app with the profile already stored on this device."
+                            (slideIntoContainer(direction, animationSpec = tween(320, easing = FastOutSlowInEasing)) + fadeIn(tween(200)))
+                                .togetherWith(slideOutOfContainer(direction, animationSpec = tween(320, easing = FastOutSlowInEasing)) + fadeOut(tween(180)))
                         },
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        lineHeight = 22.sp
-                    )
-
-                    AuthTextField(
-                        value = email,
-                        onValueChange = {
-                            email = it
-                            localMessage = null
-                            onClearMessage()
-                        },
-                        label = "Email",
-                        keyboardType = KeyboardType.Email
-                    )
-
-                    AuthTextField(
-                        value = password,
-                        onValueChange = {
-                            password = it
-                            localMessage = null
-                            onClearMessage()
-                        },
-                        label = "Password",
-                        keyboardType = KeyboardType.Password,
-                        password = true
-                    )
-
-                    if (mode == AuthMode.REGISTER) {
-                        AuthTextField(
-                            value = confirmPassword,
-                            onValueChange = {
+                        label = "authForm"
+                    ) { formMode ->
+                        AuthFormContent(
+                            mode = formMode,
+                            accountExists = accountExists,
+                            email = email,
+                            password = password,
+                            confirmPassword = confirmPassword,
+                            message = localMessage ?: authMessage,
+                            accent = if (formMode == AuthMode.LOGIN) AccentGreen else Warning,
+                            onAccent = if (formMode == AuthMode.LOGIN) AccentGreenOnSurface else Color(0xFF2A1A05),
+                            onEmailChange = {
+                                email = it
+                                localMessage = null
+                                onClearMessage()
+                            },
+                            onPasswordChange = {
+                                password = it
+                                localMessage = null
+                                onClearMessage()
+                            },
+                            onConfirmPasswordChange = {
                                 confirmPassword = it
                                 localMessage = null
                             },
-                            label = "Confirm password",
-                            keyboardType = KeyboardType.Password,
-                            password = true
-                        )
-                    }
-
-                    val message = localMessage ?: authMessage
-                    if (message != null) {
-                        MessageBanner(message = message)
-                    }
-
-                    Button(
-                        onClick = {
-                            localMessage = when {
-                                email.isBlank() || password.isBlank() -> "Fill in both email and password."
-                                mode == AuthMode.REGISTER && password != confirmPassword ->
-                                    "Passwords need to match before profile setup starts."
-                                else -> null
-                            }
-                            if (localMessage == null) {
-                                if (mode == AuthMode.LOGIN) {
-                                    onLogin(email, password)
-                                } else {
-                                    onRegister(email, password)
+                            onSubmit = {
+                                localMessage = when {
+                                    email.isBlank() || password.isBlank() -> "Completează emailul și parola."
+                                    formMode == AuthMode.REGISTER && password != confirmPassword ->
+                                        "Parolele trebuie să coincidă înainte de configurarea profilului."
+                                    else -> null
+                                }
+                                if (localMessage == null) {
+                                    if (formMode == AuthMode.LOGIN) {
+                                        onLogin(email, password)
+                                    } else {
+                                        onRegister(email, password)
+                                    }
                                 }
                             }
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(20.dp),
-                        contentPadding = PaddingValues(vertical = 16.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                    ) {
-                        Text(
-                            text = if (mode == AuthMode.LOGIN) "Enter Scouty" else "Build my profile",
-                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "v1.0.0 · Conturile sunt stocate local",
+                fontSize = 10.sp,
+                color = TextMuted,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(bottom = 14.dp)
+            )
         }
+    }
+}
+
+@Composable
+private fun AuthHero(mode: AuthMode, accent: Color) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .size(56.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(accent.copy(alpha = 0.12f))
+                .border(0.5.dp, accent.copy(alpha = 0.25f), RoundedCornerShape(16.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(Lucide.Mountain, contentDescription = null, tint = accent, modifier = Modifier.size(28.dp))
+        }
+        Spacer(Modifier.height(14.dp))
+        Crossfade(targetState = mode, animationSpec = tween(200), label = "authTitle") { currentMode ->
+            Text(
+                text = if (currentMode == AuthMode.LOGIN) "Bine ai revenit în Scouty" else "Începe aventura",
+                fontSize = 24.sp,
+                lineHeight = 28.sp,
+                fontWeight = FontWeight.Medium,
+                letterSpacing = (-0.5).sp,
+                color = TextPrimary,
+                textAlign = TextAlign.Center
+            )
+        }
+        Spacer(Modifier.height(6.dp))
+        Crossfade(targetState = mode, animationSpec = tween(200), label = "authSubtitle") { currentMode ->
+            Text(
+                text = if (currentMode == AuthMode.LOGIN) {
+                    "Intră în profilul tău local înainte să pornești pe traseu."
+                } else {
+                    "Creează profilul local de drumeț în câțiva pași."
+                },
+                fontSize = 12.sp,
+                lineHeight = 18.sp,
+                color = TextSecondary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.widthIn(max = 280.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun AuthModeTabs(mode: AuthMode, onModeChange: (AuthMode) -> Unit) {
+    androidx.compose.foundation.layout.BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.Black.copy(alpha = 0.3f))
+            .padding(3.dp)
+    ) {
+        val tabWidth = (maxWidth - 6.dp) / 2
+        val indicatorOffset by animateDpAsState(
+            targetValue = if (mode == AuthMode.LOGIN) 0.dp else tabWidth,
+            animationSpec = tween(280, easing = FastOutSlowInEasing),
+            label = "authTabOffset"
+        )
+        val indicatorColor by animateColorAsState(
+            targetValue = if (mode == AuthMode.LOGIN) AccentGreen.copy(alpha = 0.18f) else Warning.copy(alpha = 0.18f),
+            animationSpec = tween(300, easing = FastOutSlowInEasing),
+            label = "authTabColor"
+        )
+        Box(
+            modifier = Modifier
+                .offset(x = indicatorOffset)
+                .width(tabWidth)
+                .height(38.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(indicatorColor)
+        )
+        Row(modifier = Modifier.fillMaxWidth()) {
+            AuthTab(
+                selected = mode == AuthMode.LOGIN,
+                icon = Lucide.LogIn,
+                label = "Login",
+                activeColor = AccentGreen,
+                modifier = Modifier.weight(1f),
+                onClick = { onModeChange(AuthMode.LOGIN) }
+            )
+            AuthTab(
+                selected = mode == AuthMode.REGISTER,
+                icon = Lucide.UserPlus,
+                label = "Register",
+                activeColor = Warning,
+                modifier = Modifier.weight(1f),
+                onClick = { onModeChange(AuthMode.REGISTER) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun AuthTab(
+    selected: Boolean,
+    icon: ImageVector,
+    label: String,
+    activeColor: Color,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    val contentColor = if (selected) activeColor else TextSecondary
+    Row(
+        modifier = modifier
+            .height(38.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .clickable(onClick = onClick),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(icon, contentDescription = null, tint = contentColor, modifier = Modifier.size(13.dp))
+        Spacer(Modifier.width(6.dp))
+        Text(text = label, fontSize = 13.sp, fontWeight = FontWeight.Medium, color = contentColor)
+    }
+}
+
+@Composable
+private fun AuthFormContent(
+    mode: AuthMode,
+    accountExists: Boolean,
+    email: String,
+    password: String,
+    confirmPassword: String,
+    message: String?,
+    accent: Color,
+    onAccent: Color,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    onSubmit: () -> Unit
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        AuthHelperRow(mode = mode, accountExists = accountExists, accent = accent)
+        Spacer(Modifier.height(14.dp))
+        AuthTextField(
+            value = email,
+            onValueChange = onEmailChange,
+            label = "EMAIL",
+            placeholder = "nume@email.com",
+            icon = Lucide.Mail,
+            accent = accent,
+            keyboardType = KeyboardType.Email
+        )
+        Spacer(Modifier.height(12.dp))
+        AuthTextField(
+            value = password,
+            onValueChange = onPasswordChange,
+            label = "PAROLĂ",
+            placeholder = "Parola ta",
+            icon = Lucide.Lock,
+            accent = accent,
+            keyboardType = KeyboardType.Password,
+            password = true
+        )
+        if (mode == AuthMode.REGISTER) {
+            PasswordStrengthMeter(password = password)
+            Spacer(Modifier.height(12.dp))
+            AuthTextField(
+                value = confirmPassword,
+                onValueChange = onConfirmPasswordChange,
+                label = "CONFIRMĂ PAROLA",
+                placeholder = "Repetă parola",
+                icon = Lucide.Lock,
+                accent = accent,
+                keyboardType = KeyboardType.Password,
+                password = true
+            )
+        }
+        message?.let {
+            Spacer(Modifier.height(12.dp))
+            MessageBanner(message = it)
+        }
+        Spacer(Modifier.height(16.dp))
+        AuthPrimaryButton(mode = mode, accent = accent, onAccent = onAccent, onClick = onSubmit)
+        Spacer(Modifier.height(10.dp))
+        if (mode == AuthMode.LOGIN) {
+            Text(
+                text = "Ai uitat parola?",
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium,
+                color = AccentGreen,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        } else {
+            Text(
+                text = buildAnnotatedString {
+                    append("Continuând, ești de acord cu ")
+                    withStyle(SpanStyle(color = Warning, fontWeight = FontWeight.Medium)) { append("termenii") }
+                },
+                fontSize = 10.sp,
+                color = TextTertiary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
+
+@Composable
+private fun AuthHelperRow(mode: AuthMode, accountExists: Boolean, accent: Color) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .background(accent.copy(alpha = 0.05f))
+            .border(0.5.dp, accent.copy(alpha = 0.15f), RoundedCornerShape(10.dp))
+            .padding(horizontal = 10.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.Top
+    ) {
+        Icon(Lucide.InfoIcon, contentDescription = null, tint = accent, modifier = Modifier.size(13.dp))
+        Text(
+            text = when {
+                mode == AuthMode.REGISTER && accountExists ->
+                    "Register înlocuiește contul local stocat pe acest dispozitiv."
+                mode == AuthMode.REGISTER ->
+                    "După creare, configurăm profilul în 11 pași rapizi."
+                else ->
+                    "Bine ai revenit. Deschidem profilul local existent."
+            },
+            fontSize = 10.sp,
+            lineHeight = 14.sp,
+            color = TextPrimary.copy(alpha = 0.75f),
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
+private fun AuthPrimaryButton(mode: AuthMode, accent: Color, onAccent: Color, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(accent)
+            .clickable(onClick = onClick)
+            .padding(vertical = 12.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = if (mode == AuthMode.LOGIN) "Intră în Scouty" else "Creează profilul",
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+            color = onAccent
+        )
+        Spacer(Modifier.width(8.dp))
+        Icon(Lucide.ChevronRight, contentDescription = null, tint = onAccent, modifier = Modifier.size(13.dp))
     }
 }
 
@@ -1324,79 +1557,217 @@ private fun AuthTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
+    placeholder: String,
+    icon: ImageVector,
+    accent: Color,
     keyboardType: KeyboardType = KeyboardType.Text,
     password: Boolean = false
 ) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        modifier = Modifier.fillMaxWidth(),
-        singleLine = true,
-        shape = RoundedCornerShape(18.dp),
-        visualTransformation = if (password) PasswordVisualTransformation() else androidx.compose.ui.text.input.VisualTransformation.None,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.92f),
-            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.92f),
-            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
-            focusedLabelColor = MaterialTheme.colorScheme.primary,
-            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            cursorColor = MaterialTheme.colorScheme.primary
-        )
+    var focused by remember { mutableStateOf(false) }
+    var revealPassword by rememberSaveable { mutableStateOf(false) }
+    val borderColor by animateColorAsState(
+        targetValue = if (focused) accent else BorderDefault,
+        animationSpec = tween(180, easing = FastOutSlowInEasing),
+        label = "authFieldBorder"
     )
+    val bgColor by animateColorAsState(
+        targetValue = if (focused) accent.copy(alpha = 0.04f) else BgSurfaceRaised,
+        animationSpec = tween(180, easing = FastOutSlowInEasing),
+        label = "authFieldBg"
+    )
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = label,
+            fontSize = 9.sp,
+            fontWeight = FontWeight.Medium,
+            letterSpacing = 0.5.sp,
+            color = TextSecondary
+        )
+        Spacer(Modifier.height(5.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(
+                    if (focused) {
+                        Modifier.border(4.dp, accent.copy(alpha = 0.08f), RoundedCornerShape(15.dp))
+                    } else {
+                        Modifier
+                    }
+                )
+                .clip(RoundedCornerShape(12.dp))
+                .background(bgColor)
+                .border(if (focused) 1.dp else 0.5.dp, borderColor, RoundedCornerShape(12.dp))
+                .padding(horizontal = 12.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(9.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = if (focused) accent else TextTertiary,
+                modifier = Modifier.size(13.dp)
+            )
+            Box(modifier = Modifier.weight(1f)) {
+                if (value.isBlank()) {
+                    Text(text = placeholder, fontSize = 13.sp, color = TextTertiary, maxLines = 1)
+                }
+                BasicTextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged { focused = it.isFocused },
+                    singleLine = true,
+                    textStyle = androidx.compose.ui.text.TextStyle(
+                        color = TextPrimary,
+                        fontSize = 13.sp,
+                        lineHeight = 17.sp
+                    ),
+                    visualTransformation = if (password && !revealPassword) PasswordVisualTransformation() else VisualTransformation.None,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = keyboardType,
+                        imeAction = ImeAction.Next
+                    ),
+                    cursorBrush = SolidColor(accent)
+                )
+            }
+            if (password) {
+                Icon(
+                    imageVector = if (revealPassword) Lucide.EyeOff else Lucide.Eye,
+                    contentDescription = if (revealPassword) "Ascunde parola" else "Arată parola",
+                    tint = TextSecondary,
+                    modifier = Modifier
+                        .size(15.dp)
+                        .clickable { revealPassword = !revealPassword }
+                )
+            }
+        }
+    }
 }
 
 @Composable
-private fun ScoutyBackdrop(content: @Composable () -> Unit) {
+private fun PasswordStrengthMeter(password: String) {
+    val score = passwordStrengthScore(password)
+    if (password.isBlank()) {
+        Spacer(Modifier.height(10.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth()) {
+            repeat(4) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(3.dp)
+                        .clip(RoundedCornerShape(2.dp))
+                        .background(Color(0xFFFFFFFF).copy(alpha = 0.08f))
+                )
+            }
+        }
+        return
+    }
+    val color = when (score) {
+        1 -> Danger
+        2, 3 -> Warning
+        else -> AccentGreen
+    }
+    val label = when (score) {
+        1 -> "Prea slabă"
+        2 -> "Acceptabilă"
+        3 -> "Bună"
+        else -> "Puternică"
+    }
+    Spacer(Modifier.height(10.dp))
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth()) {
+        repeat(4) { index ->
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(3.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(if (index < score) color else Color(0xFFFFFFFF).copy(alpha = 0.08f))
+            )
+        }
+    }
+    Spacer(Modifier.height(5.dp))
+    Text(text = label, fontSize = 10.sp, color = TextTertiary)
+}
+
+private fun passwordStrengthScore(password: String): Int {
+    if (password.isBlank()) return 0
+    var score = 1
+    if (password.length >= 8) score += 1
+    if (password.any(Char::isDigit) && password.any(Char::isLetter)) score += 1
+    if (password.any { !it.isLetterOrDigit() }) score += 1
+    return score.coerceIn(1, 4)
+}
+
+@Composable
+private fun ScoutyBackdrop(mode: AuthMode, content: @Composable () -> Unit) {
+    val glowColor by animateColorAsState(
+        targetValue = if (mode == AuthMode.LOGIN) AccentGreen.copy(alpha = 0.06f) else Warning.copy(alpha = 0.07f),
+        animationSpec = tween(300, easing = FastOutSlowInEasing),
+        label = "authGlow"
+    )
+    val glowOffset by animateFloatAsState(
+        targetValue = if (mode == AuthMode.LOGIN) 0f else 1f,
+        animationSpec = tween(300, easing = FastOutSlowInEasing),
+        label = "authGlowOffset"
+    )
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF081109),
-                        Color(0xFF0B160D),
-                        Color(0xFF071008)
-                    )
-                )
-            )
+            .background(BgPrimary)
     ) {
         Box(
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 42.dp, end = 22.dp)
-                .size(180.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f))
-        )
-        Box(
-            modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(top = 140.dp, start = 8.dp)
-                .size(120.dp)
-                .clip(CircleShape)
-                .background(StatusBlue.copy(alpha = 0.08f))
-        )
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 54.dp)
-                .fillMaxWidth(0.86f)
-                .height(140.dp)
-                .clip(RoundedCornerShape(100.dp))
-                .border(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.18f), RoundedCornerShape(100.dp))
+                .offset(x = (-50).dp + (170.dp * glowOffset), y = (-100).dp)
+                .size(220.dp)
                 .background(
-                    Brush.horizontalGradient(
-                        listOf(
-                            PrimaryGreen.copy(alpha = 0.05f),
-                            StatusOrange.copy(alpha = 0.03f),
-                            CardDarkAlt.copy(alpha = 0.02f)
-                        )
+                    Brush.radialGradient(
+                        colors = listOf(glowColor, Color.Transparent),
+                        radius = 220f
                     )
                 )
         )
+        PineTreeline(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(280.dp)
+                .align(Alignment.BottomCenter)
+        )
         content()
+    }
+}
+
+@Composable
+private fun PineTreeline(modifier: Modifier = Modifier) {
+    Canvas(modifier = modifier) {
+        val width = size.width
+        val height = size.height
+        fun addTree(path: Path, centerX: Float, baseY: Float, baseWidth: Float, treeHeight: Float) {
+            path.moveTo(centerX, baseY - treeHeight)
+            path.lineTo(centerX - baseWidth / 2f, baseY)
+            path.lineTo(centerX + baseWidth / 2f, baseY)
+            path.close()
+        }
+        val back = Path()
+        repeat(7) { index ->
+            val center = width * ((index + 0.35f) / 7f)
+            addTree(back, center, height, 34.dp.toPx(), (52 + (index % 3) * 7).dp.toPx())
+        }
+        val front = Path()
+        repeat(13) { index ->
+            val center = width * ((index + 0.2f) / 13f)
+            addTree(front, center, height, (20 + (index % 4) * 2).dp.toPx(), (82 + (index % 5) * 12).dp.toPx())
+        }
+        drawPath(back, color = Color(0xFF0F2614).copy(alpha = 0.28f))
+        drawPath(front, color = Color(0xFF1A3A1F).copy(alpha = 0.5f))
+        drawRect(
+            brush = Brush.verticalGradient(
+                0f to BgPrimary.copy(alpha = 0.0f),
+                0.45f to BgPrimary.copy(alpha = 0.25f),
+                1f to BgPrimary.copy(alpha = 0.0f)
+            )
+        )
     }
 }
