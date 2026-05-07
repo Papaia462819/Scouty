@@ -32,7 +32,7 @@
     <string name="map_demo_pack_title">Detaliul Bucegi este opțional</string>
     <string name="map_demo_pack_body">Importă pack-ul Bucegi ca să obții zoom mai clar în zona principală de demo.</string>
     <string name="map_runtime_error_title">Eroare pack hartă</string>
-    <string name="map_search_placeholder">Caută vârfuri, refugii, trasee...</string>
+    <string name="map_search_placeholder">Caută trasee...</string>
 
     <string name="assistant_section_title">Asistent medical și supraviețuire</string>
     <string name="assistant_hint">Descrie situația...</string>

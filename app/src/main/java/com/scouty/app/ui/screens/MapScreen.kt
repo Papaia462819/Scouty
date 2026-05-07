@@ -13,31 +13,49 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import com.composables.icons.lucide.ArrowUpRight
 import com.composables.icons.lucide.CalendarDays
 import com.composables.icons.lucide.Check
@@ -53,13 +71,17 @@ import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Info
 import com.composables.icons.lucide.Layers
 import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.MapPin
 import com.composables.icons.lucide.Minus
+import com.composables.icons.lucide.Mountain
 import com.composables.icons.lucide.Plus
 import com.composables.icons.lucide.Route
 import com.composables.icons.lucide.Search
 import com.composables.icons.lucide.Smile
 import com.composables.icons.lucide.Square
+import com.composables.icons.lucide.Star
 import com.composables.icons.lucide.TrendingUp
+import com.composables.icons.lucide.TriangleAlert
 import com.composables.icons.lucide.User
 import com.composables.icons.lucide.X
 import androidx.compose.material3.BottomSheetDefaults
@@ -101,16 +123,25 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
@@ -139,6 +170,9 @@ import com.scouty.app.ui.components.SecondaryButton
 import com.scouty.app.ui.components.StatTile
 import com.scouty.app.ui.components.StatusChip
 import com.scouty.app.ui.components.StatusPill
+import com.scouty.app.ui.components.DifficultyLevel
+import com.scouty.app.ui.components.TrailListItem
+import com.scouty.app.ui.components.TrailThumbnail
 import com.scouty.app.ui.theme.AccentGreen
 import com.scouty.app.ui.theme.AccentGreenBg
 import com.scouty.app.ui.theme.AccentGreenOnSurface
@@ -314,9 +348,29 @@ fun MapScreen(
     var searchText by rememberSaveable { mutableStateOf("") }
     var isSearchExpanded by rememberSaveable { mutableStateOf(false) }
     val searchHistory = remember {
-        mutableStateListOf("Vârful Caraiman", "Cabana Omu", "Cascada Urlătoarea", "Creasta Cocoșului")
+        mutableStateListOf("Bucegi", "Piatra Craiului", "Făgăraș", "Postăvaru")
     }
     var liveSuggestions by remember { mutableStateOf<List<RouteSearchSuggestion>>(emptyList()) }
+    val recentHistorySnapshot = searchHistory.toList()
+    val recentTrailSuggestions = remember(recentHistorySnapshot, routeCatalog) {
+        recentHistorySnapshot.mapNotNull { historyItem ->
+            RouteEnrichmentRepository.search(routeCatalog, historyItem, limit = 1).firstOrNull()
+        }
+    }
+    val suggestedTrailSuggestions = remember(routeCatalog) {
+        routeCatalog.routesByLocalCode.values
+            .asSequence()
+            .filter { !it.displayTitle.isNullOrBlank() || !it.title.isNullOrBlank() || !it.localCode.isNullOrBlank() }
+            .take(4)
+            .mapIndexed { index, entry ->
+                RouteSearchSuggestion(
+                    localCode = entry.localCode ?: entry.canonicalLocalCode ?: "route-$index",
+                    entry = entry,
+                    score = 0
+                )
+            }
+            .toList()
+    }
     var pendingImportPackId by remember { mutableStateOf<MapPackId?>(null) }
     var importInProgressPackId by remember { mutableStateOf<MapPackId?>(null) }
     var importErrorMessage by remember { mutableStateOf<String?>(null) }
@@ -576,138 +630,82 @@ fun MapScreen(
                     modifier = Modifier.fillMaxSize()
                 )
 
-                if (!isActiveTrailMode && !hasNearbyGuideOverlay) {
-                    SearchBar(
-                        inputField = {
-                            SearchBarDefaults.InputField(
-                                query = searchText,
-                                onQueryChange = { searchText = it },
-                                onSearch = { query ->
-                                    liveSuggestions.firstOrNull()?.let(::selectSuggestion)
-                                        ?: run {
-                                            if (query.isNotBlank() && !searchHistory.contains(query)) {
-                                                searchHistory.add(0, query)
-                                            }
-                                            isSearchExpanded = false
-                                        }
-                                },
-                                expanded = isSearchExpanded,
-                                onExpandedChange = { isSearchExpanded = it },
-                                placeholder = {
-                                    Text(
-                                        text = stringResource(R.string.map_search_placeholder),
-                                        color = TextMuted,
-                                    )
-                                },
-                                leadingIcon = {
-                                    Icon(
-                                        Lucide.Search,
-                                        contentDescription = null,
-                                        tint = if (isSearchExpanded) AccentGreen else TextTertiary,
-                                    )
-                                },
-                                trailingIcon = {
-                                    if (isSearchExpanded) {
-                                        IconButton(onClick = {
-                                            if (searchText.isNotEmpty()) searchText = "" else isSearchExpanded = false
-                                        }) {
-                                            Icon(Lucide.X, contentDescription = null, tint = TextSecondary)
-                                        }
-                                    } else {
-                                        IconButton(onClick = { showLayerMenu = !showLayerMenu }) {
-                                            Icon(
-                                                Lucide.Layers,
-                                                contentDescription = null,
-                                                tint = AccentGreen,
-                                            )
-                                        }
-                                    }
-                                },
-                                colors = SearchBarDefaults.inputFieldColors(
-                                    focusedTextColor = TextPrimary,
-                                    unfocusedTextColor = TextPrimary,
-                                    cursorColor = AccentGreen,
-                                    focusedPlaceholderColor = TextMuted,
-                                    unfocusedPlaceholderColor = TextMuted,
-                                    focusedLeadingIconColor = AccentGreen,
-                                    unfocusedLeadingIconColor = TextTertiary,
-                                    focusedTrailingIconColor = TextSecondary,
-                                    unfocusedTrailingIconColor = AccentGreen,
-                                ),
-                            )
+                if (!isSearchExpanded && !isActiveTrailMode && !hasNearbyGuideOverlay) {
+                    MapTopHeader(
+                        modifier = Modifier.align(Alignment.TopCenter),
+                        isLayerMenuOpen = showLayerMenu,
+                        onSearchClick = {
+                            showLayerMenu = false
+                            isSearchExpanded = true
                         },
-                        expanded = isSearchExpanded,
-                        onExpandedChange = { isSearchExpanded = it },
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .padding(top = if (isSearchExpanded) 0.dp else 16.dp)
-                            .fillMaxWidth(if (isSearchExpanded) 1f else 0.92f),
-                        colors = SearchBarDefaults.colors(
-                            containerColor = if (isSearchExpanded) BgPrimary.copy(alpha = 0.98f) else BgSurfaceRaised.copy(alpha = 0.94f),
-                            dividerColor = BorderSubtle,
-                        )
-                    ) {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            if (searchText.length >= 2) {
-                                items(liveSuggestions) { suggestion ->
-                                    RouteSuggestionItem(
-                                        suggestion = suggestion,
-                                        onClick = { selectSuggestion(suggestion) },
-                                        showPreviewImage = false
-                                    )
-                                }
-                            } else {
-                                items(searchHistory) { historyItem ->
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .clickable {
-                                                searchText = historyItem
-                                            },
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Icon(
-                                            Lucide.History,
-                                            contentDescription = null,
-                                            tint = TextTertiary,
-                                        )
-                                        Spacer(modifier = Modifier.width(16.dp))
-                                        Text(text = historyItem, color = TextSecondary)
-                                    }
-                                }
-                            }
+                        onLayersClick = { showLayerMenu = !showLayerMenu },
+                        onCompassClick = viewModel::focusActiveTrailOnMap
+                    )
 
-                            if (searchText.length >= 2 && liveSuggestions.isEmpty()) {
-                                item {
-                                    Text(
-                                        text = "Nu am gasit trasee pentru \"$searchText\".",
-                                        color = TextSecondary,
-                                    )
+                    MapShortcutStack(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 14.dp, bottom = if (readyMapDataConfig.hasDemoPack) 106.dp else 156.dp),
+                        onWaterClick = { viewModel.requestNearbyGuide(NearbyGuideType.WATER) },
+                        onShelterClick = { viewModel.requestNearbyGuide(NearbyGuideType.SHELTER) },
+                        onLocateClick = viewModel::focusActiveTrailOnMap
+                    )
+                }
+
+                if (isSearchExpanded && !isActiveTrailMode && !hasNearbyGuideOverlay) {
+                    MapSearchOverlay(
+                        searchText = searchText,
+                        liveSuggestions = liveSuggestions,
+                        recentSuggestions = recentTrailSuggestions,
+                        suggestedSuggestions = suggestedTrailSuggestions,
+                        onQueryChange = { searchText = it },
+                        onSubmit = { query ->
+                            liveSuggestions.firstOrNull()?.let(::selectSuggestion)
+                                ?: run {
+                                    if (query.isNotBlank() && !searchHistory.contains(query)) {
+                                        searchHistory.add(0, query)
+                                    }
+                                    isSearchExpanded = false
                                 }
-                            }
-                        }
-                    }
+                        },
+                        onCancel = {
+                            isSearchExpanded = false
+                            showLayerMenu = false
+                        },
+                        onClearQuery = { searchText = "" },
+                        onClearRecents = { searchHistory.clear() },
+                        onSuggestionClick = ::selectSuggestion
+                    )
                 }
 
                 if (showLayerMenu && !isSearchExpanded && !isActiveTrailMode && !hasNearbyGuideOverlay) {
-                    Card(
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .background(Color.Black.copy(alpha = 0.3f))
+                            .clickable { showLayerMenu = false }
+                    )
+                    AnimatedVisibility(
+                        visible = showLayerMenu,
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .padding(top = 80.dp, end = 16.dp)
-                            .width(220.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = BgSurfaceRaised.copy(alpha = 0.96f))
+                            .windowInsetsPadding(WindowInsets.statusBars)
+                            .padding(top = 68.dp, end = 14.dp),
+                        enter = scaleIn(
+                            initialScale = 0.92f,
+                            transformOrigin = TransformOrigin(1f, 0f),
+                            animationSpec = tween(180, easing = FastOutSlowInEasing)
+                        ) + fadeIn(tween(180)),
+                        exit = scaleOut(
+                            targetScale = 0.92f,
+                            transformOrigin = TransformOrigin(1f, 0f),
+                            animationSpec = tween(140, easing = FastOutSlowInEasing)
+                        ) + fadeOut(tween(140))
                     ) {
-                        Column(modifier = Modifier.padding(8.dp)) {
-                            toggleItems.forEach { toggle ->
-                                LayerToggleRow(toggle.label, toggle.checked, toggle.onCheckedChange)
-                            }
-                        }
+                        MapLayersPanel(
+                            toggleItems = toggleItems,
+                            onReset = null
+                        )
                     }
                 }
 
@@ -804,6 +802,466 @@ fun MapScreen(
                         message = errorMessage
                     )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MapTopHeader(
+    modifier: Modifier = Modifier,
+    isLayerMenuOpen: Boolean,
+    onSearchClick: () -> Unit,
+    onLayersClick: () -> Unit,
+    onCompassClick: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .windowInsetsPadding(WindowInsets.statusBars)
+            .padding(top = 14.dp, start = 14.dp, end = 14.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .shadow(6.dp, RoundedCornerShape(14.dp), ambientColor = Color.Black.copy(alpha = 0.15f))
+                .clip(RoundedCornerShape(14.dp))
+                .background(BgPrimary.copy(alpha = 0.85f))
+                .border(0.5.dp, Color(0xFFFFFFFF).copy(alpha = 0.1f), RoundedCornerShape(14.dp))
+                .clickable(onClick = onSearchClick)
+                .padding(horizontal = 14.dp, vertical = 11.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Lucide.Search,
+                contentDescription = null,
+                tint = AccentGreen,
+                modifier = Modifier.size(16.dp)
+            )
+            Text(
+                text = stringResource(R.string.map_search_placeholder),
+                fontSize = 13.sp,
+                color = TextTertiary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+
+        MapHeaderIconButton(
+            active = isLayerMenuOpen,
+            icon = Lucide.Layers,
+            contentDescription = "Straturi hartă",
+            onClick = onLayersClick
+        )
+        Box(
+            modifier = Modifier
+                .size(44.dp)
+                .shadow(6.dp, RoundedCornerShape(14.dp), ambientColor = Color.Black.copy(alpha = 0.15f))
+                .clip(RoundedCornerShape(14.dp))
+                .background(Color(0xFF1A1A1A))
+                .border(0.5.dp, Color(0xFFFFFFFF).copy(alpha = 0.1f), RoundedCornerShape(14.dp))
+                .clickable(onClick = onCompassClick),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Lucide.Crosshair,
+                contentDescription = "Orientează harta",
+                tint = AccentGreen,
+                modifier = Modifier.size(18.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun MapHeaderIconButton(
+    active: Boolean,
+    icon: ImageVector,
+    contentDescription: String,
+    onClick: () -> Unit
+) {
+    val bg by animateColorAsState(
+        targetValue = if (active) AccentGreen else BgPrimary.copy(alpha = 0.85f),
+        label = "mapHeaderIconBg"
+    )
+    val tint by animateColorAsState(
+        targetValue = if (active) AccentGreenOnSurface else AccentGreen,
+        label = "mapHeaderIconTint"
+    )
+    Box(
+        modifier = Modifier
+            .size(44.dp)
+            .shadow(6.dp, RoundedCornerShape(14.dp), ambientColor = Color.Black.copy(alpha = 0.15f))
+            .clip(RoundedCornerShape(14.dp))
+            .background(bg)
+            .border(0.5.dp, Color(0xFFFFFFFF).copy(alpha = 0.1f), RoundedCornerShape(14.dp))
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            tint = tint,
+            modifier = Modifier.size(18.dp)
+        )
+    }
+}
+
+@Composable
+private fun MapShortcutStack(
+    modifier: Modifier = Modifier,
+    onWaterClick: () -> Unit,
+    onShelterClick: () -> Unit,
+    onLocateClick: () -> Unit
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.End
+    ) {
+        MapShortcutButton(
+            icon = Lucide.Droplet,
+            contentDescription = "Apă în apropiere",
+            background = Water,
+            tint = Color(0xFFFFFFFF),
+            onClick = onWaterClick
+        )
+        MapShortcutButton(
+            icon = Lucide.House,
+            contentDescription = "Adăpost în apropiere",
+            background = Warning,
+            tint = Color(0xFFFFFFFF),
+            onClick = onShelterClick
+        )
+        MapShortcutButton(
+            icon = Lucide.Crosshair,
+            contentDescription = "Localizează-mă",
+            background = BgPrimary.copy(alpha = 0.85f),
+            tint = AccentGreen,
+            onClick = onLocateClick
+        )
+    }
+}
+
+@Composable
+private fun MapShortcutButton(
+    icon: ImageVector,
+    contentDescription: String,
+    background: Color,
+    tint: Color,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(44.dp)
+            .shadow(4.dp, RoundedCornerShape(12.dp), ambientColor = Color.Black.copy(alpha = 0.18f))
+            .clip(RoundedCornerShape(12.dp))
+            .background(background)
+            .border(0.5.dp, Color(0xFFFFFFFF).copy(alpha = 0.1f), RoundedCornerShape(12.dp))
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            tint = tint,
+            modifier = Modifier.size(18.dp)
+        )
+    }
+}
+
+@Composable
+private fun MapSearchOverlay(
+    searchText: String,
+    liveSuggestions: List<RouteSearchSuggestion>,
+    recentSuggestions: List<RouteSearchSuggestion>,
+    suggestedSuggestions: List<RouteSearchSuggestion>,
+    onQueryChange: (String) -> Unit,
+    onSubmit: (String) -> Unit,
+    onCancel: () -> Unit,
+    onClearQuery: () -> Unit,
+    onClearRecents: () -> Unit,
+    onSuggestionClick: (RouteSearchSuggestion) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(BgPrimary)
+            .windowInsetsPadding(WindowInsets.statusBars)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 14.dp, start = 14.dp, end = 14.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .border(4.dp, AccentGreen.copy(alpha = 0.08f), RoundedCornerShape(17.dp))
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(AccentGreen.copy(alpha = 0.04f))
+                    .border(1.dp, AccentGreen, RoundedCornerShape(14.dp))
+                    .padding(horizontal = 14.dp, vertical = 11.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Lucide.Search,
+                    contentDescription = null,
+                    tint = AccentGreen,
+                    modifier = Modifier.size(16.dp)
+                )
+                Box(modifier = Modifier.weight(1f)) {
+                    if (searchText.isBlank()) {
+                        Text(
+                            text = stringResource(R.string.map_search_placeholder),
+                            fontSize = 13.sp,
+                            color = TextTertiary,
+                            maxLines = 1
+                        )
+                    }
+                    BasicTextField(
+                        value = searchText,
+                        onValueChange = onQueryChange,
+                        textStyle = TextStyle(
+                            color = TextPrimary,
+                            fontSize = 13.sp,
+                            lineHeight = 17.sp
+                        ),
+                        singleLine = true,
+                        cursorBrush = SolidColor(AccentGreen),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                        keyboardActions = KeyboardActions(onSearch = { onSubmit(searchText) }),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                if (searchText.isNotBlank()) {
+                    Box(
+                        modifier = Modifier
+                            .size(18.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFFFFFFFF).copy(alpha = 0.08f))
+                            .clickable(onClick = onClearQuery),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Lucide.X,
+                            contentDescription = "Șterge",
+                            tint = TextSecondary,
+                            modifier = Modifier.size(10.dp)
+                        )
+                    }
+                }
+            }
+            Text(
+                text = "Anulează",
+                fontSize = 13.sp,
+                color = TextSecondary,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable(onClick = onCancel)
+                    .padding(horizontal = 4.dp, vertical = 8.dp)
+            )
+        }
+
+        if (searchText.trim().length >= 2 && liveSuggestions.isEmpty()) {
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .padding(horizontal = 14.dp),
+                color = AccentGreen,
+                trackColor = Color.Transparent
+            )
+        }
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp),
+            contentPadding = PaddingValues(top = 22.dp, bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            if (searchText.trim().length >= 2) {
+                if (liveSuggestions.isEmpty()) {
+                    item {
+                        EmptyTrailSearchState(query = searchText)
+                    }
+                } else {
+                    item {
+                        ScoutySectionHeader(title = "REZULTATE · ${liveSuggestions.size} TRASEE")
+                    }
+                    items(liveSuggestions) { suggestion ->
+                        RouteSuggestionItem(
+                            suggestion = suggestion,
+                            onClick = { onSuggestionClick(suggestion) },
+                            highlightQuery = searchText
+                        )
+                    }
+                }
+            } else {
+                if (recentSuggestions.isNotEmpty()) {
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "RECENTE",
+                                fontSize = 10.sp,
+                                letterSpacing = 1.5.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = TextSecondary
+                            )
+                            Text(
+                                text = "Șterge",
+                                fontSize = 11.sp,
+                                color = TextTertiary,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .clickable(onClick = onClearRecents)
+                                    .padding(horizontal = 6.dp, vertical = 4.dp)
+                            )
+                        }
+                    }
+                    itemsIndexed(recentSuggestions) { index, suggestion ->
+                        RouteSuggestionItem(
+                            suggestion = suggestion,
+                            onClick = { onSuggestionClick(suggestion) },
+                            timeAgoLabel = when (index) {
+                                0 -> "2z"
+                                1 -> "5z"
+                                else -> "1s"
+                            }
+                        )
+                    }
+                    item { Spacer(Modifier.height(14.dp)) }
+                }
+
+                item {
+                    Text(
+                        text = "SUGESTII APROAPE DE TINE",
+                        fontSize = 10.sp,
+                        letterSpacing = 1.5.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = TextSecondary,
+                        modifier = Modifier.padding(bottom = 2.dp)
+                    )
+                }
+                items(suggestedSuggestions) { suggestion ->
+                    RouteSuggestionItem(
+                        suggestion = suggestion,
+                        onClick = { onSuggestionClick(suggestion) }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EmptyTrailSearchState(query: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 60.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(56.dp)
+                .clip(CircleShape)
+                .background(Warning.copy(alpha = 0.1f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Lucide.Search,
+                contentDescription = null,
+                tint = Warning,
+                modifier = Modifier.size(28.dp)
+            )
+        }
+        Spacer(Modifier.height(16.dp))
+        Text(
+            text = "Nu există trasee pentru \"$query\"",
+            style = MaterialTheme.typography.headlineMedium,
+            color = TextPrimary,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = "Încearcă o altă scriere sau verifică dacă traseul este în pack-ul offline.",
+            fontSize = 13.sp,
+            lineHeight = 18.sp,
+            color = TextSecondary,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            modifier = Modifier.widthIn(max = 240.dp)
+        )
+    }
+}
+
+@Composable
+private fun MapLayersPanel(
+    toggleItems: List<LayerToggleSpec>,
+    onReset: (() -> Unit)?
+) {
+    Column(
+        modifier = Modifier
+            .width(240.dp)
+            .shadow(16.dp, RoundedCornerShape(16.dp), ambientColor = Color.Black.copy(alpha = 0.4f))
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFF141A14))
+            .border(0.5.dp, Color(0xFFFFFFFF).copy(alpha = 0.08f), RoundedCornerShape(16.dp))
+            .padding(6.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(0.5.dp, Color(0xFFFFFFFF).copy(alpha = 0.06f), RoundedCornerShape(10.dp))
+                .padding(horizontal = 10.dp, vertical = 10.dp)
+        ) {
+            Text(
+                text = "STRATURI HARTĂ",
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium,
+                letterSpacing = 1.5.sp,
+                color = TextSecondary
+            )
+        }
+        Spacer(Modifier.height(6.dp))
+        toggleItems.forEach { toggle ->
+            LayerToggleRow(toggle.label, toggle.checked, toggle.onCheckedChange)
+        }
+        Spacer(Modifier.height(6.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(0.5.dp, Color(0xFFFFFFFF).copy(alpha = 0.06f), RoundedCornerShape(10.dp))
+                .padding(horizontal = 12.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "${toggleItems.count { it.checked }} din ${toggleItems.size} active",
+                fontSize = 11.sp,
+                color = TextSecondary
+            )
+            if (onReset != null) {
+                Text(
+                    text = "Reset",
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = AccentGreen,
+                    modifier = Modifier.clickable(onClick = onReset)
+                )
+            } else {
+                Text(text = "Reset", fontSize = 11.sp, color = TextMuted)
             }
         }
     }
@@ -2030,101 +2488,37 @@ private fun formatTrailSetupWeekday(epochMillis: Long): String =
 private fun RouteSuggestionItem(
     suggestion: RouteSearchSuggestion,
     onClick: () -> Unit,
-    showPreviewImage: Boolean = true
+    showPreviewImage: Boolean = true,
+    highlightQuery: String? = null,
+    timeAgoLabel: String? = null
 ) {
     val entry = suggestion.entry
-    val distance = entry.mnData?.distanceKm?.let(::formatDistance).orEmpty()
-    val duration = entry.mnData?.durationText.orEmpty()
-    val metadata = listOfNotNull(
-        entry.region?.takeIf { it.isNotBlank() },
-        suggestion.localCode
-    ).joinToString(" · ")
-    val stats = listOf(duration, distance).filter { it.isNotBlank() }.joinToString(" · ")
     val difficulty = resolveDifficulty(
         feature = null,
         lengthKm = entry.mnData?.distanceKm ?: 0.0,
         elevationGain = entry.mnData?.ascentM ?: 0,
         difficultyLabel = entry.mnData?.difficultyLabel
     )
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(22.dp))
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = BgSurfaceRaised.copy(alpha = 0.96f)
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val suggestionImage = preferredSuggestionImageUrl(entry.image)
-            if (showPreviewImage && suggestionImage != null) {
-                RouteRemoteImage(
-                    imageUrl = suggestionImage,
-                    contentDescription = entry.displayTitle ?: suggestion.localCode,
-                    modifier = Modifier
-                        .width(76.dp)
-                        .height(76.dp)
-                        .clip(RoundedCornerShape(18.dp)),
-                    contentScale = ContentScale.Crop
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .width(if (showPreviewImage) 76.dp else 44.dp)
-                        .height(if (showPreviewImage) 76.dp else 44.dp)
-                        .clip(RoundedCornerShape(18.dp))
-                        .background(AccentGreen.copy(alpha = 0.16f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Lucide.Route,
-                        contentDescription = null,
-                        tint = AccentGreen
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Text(
-                    text = entry.displayTitle ?: suggestion.localCode,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = TextPrimary,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                if (metadata.isNotBlank()) {
-                    Text(
-                        text = metadata,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = TextTertiary,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                if (stats.isNotBlank()) {
-                    Text(
-                        text = stats,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = AccentGreen
-                    )
-                }
-            }
-
-            DifficultyBadge(difficulty = difficulty)
-        }
-    }
+    TrailListItem(
+        title = entry.displayTitle ?: entry.title ?: suggestion.localCode,
+        region = listOfNotNull(
+            entry.region?.takeIf { it.isNotBlank() },
+            TrailMetadataFormatter.formatTrailMarkers(entry.symbols)
+        ).joinToString(" · ").takeIf { it.isNotBlank() },
+        durationLabel = entry.mnData?.durationText?.takeIf { it.isNotBlank() },
+        distanceLabel = entry.mnData?.distanceKm?.let(::formatDistance),
+        elevationLabel = entry.mnData?.ascentM?.takeIf { it > 0 }?.let { "+$it m" },
+        difficulty = difficulty.toDifficultyLevel(),
+        thumbnail = when {
+            !showPreviewImage -> TrailThumbnail.Mountain
+            "zăpad" in (entry.bestDescriptionRo() ?: "").lowercase(Locale.getDefault()) -> TrailThumbnail.Snow
+            "pădur" in (entry.bestDescriptionRo() ?: "").lowercase(Locale.getDefault()) -> TrailThumbnail.Forest
+            else -> TrailThumbnail.Mountain
+        },
+        timeAgoLabel = timeAgoLabel,
+        highlightQuery = highlightQuery,
+        onClick = onClick
+    )
 }
 
 @Composable
@@ -2149,33 +2543,118 @@ private fun DifficultyBadge(difficulty: TrailDifficulty) {
     }
 }
 
+private fun TrailDifficulty.toDifficultyLevel(): DifficultyLevel =
+    when (this) {
+        TrailDifficulty.EASY -> DifficultyLevel.EASY
+        TrailDifficulty.MEDIUM -> DifficultyLevel.MEDIUM
+        TrailDifficulty.HARD,
+        TrailDifficulty.EXPERT -> DifficultyLevel.HARD
+    }
+
 private fun compactDurationChipLabel(duration: String): String =
     duration.trim().replace("\\s+h$".toRegex(RegexOption.IGNORE_CASE), "")
 
 @Composable
 private fun LayerToggleRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    val visuals = layerVisuals(label)
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
             .clickable { onCheckedChange(!checked) }
-            .padding(8.dp),
+            .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelMedium,
-            color = TextSecondary,
-        )
-        Checkbox(
+        Box(
+            modifier = Modifier
+                .size(28.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(visuals.color.copy(alpha = 0.12f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = visuals.icon,
+                contentDescription = null,
+                tint = visuals.color,
+                modifier = Modifier.size(14.dp)
+            )
+        }
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = label,
+                fontSize = 13.sp,
+                lineHeight = 16.sp,
+                color = TextPrimary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            visuals.secondary?.let { secondary ->
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text = secondary,
+                    fontSize = 10.sp,
+                    lineHeight = 12.sp,
+                    color = TextTertiary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+        LayerToggleSwitch(
             checked = checked,
-            onCheckedChange = onCheckedChange,
-            colors = CheckboxDefaults.colors(
-                checkedColor = AccentGreen,
-                uncheckedColor = TextTertiary,
-                checkmarkColor = AccentGreenOnSurface,
-            ),
+            onClick = { onCheckedChange(!checked) }
         )
+    }
+}
+
+@Composable
+private fun LayerToggleSwitch(checked: Boolean, onClick: () -> Unit) {
+    val thumbOffset by animateDpAsState(
+        targetValue = if (checked) 16.dp else 0.dp,
+        animationSpec = tween(180, easing = FastOutSlowInEasing),
+        label = "layerThumb"
+    )
+    Box(
+        modifier = Modifier
+            .size(width = 36.dp, height = 20.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(if (checked) AccentGreen else Color(0xFFFFFFFF).copy(alpha = 0.1f))
+            .clickable(onClick = onClick)
+            .padding(2.dp),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Box(
+            modifier = Modifier
+                .offset(x = thumbOffset)
+                .size(16.dp)
+                .clip(CircleShape)
+                .background(if (checked) Color(0xFFFFFFFF) else TextTertiary)
+        )
+    }
+}
+
+private data class LayerVisuals(
+    val icon: ImageVector,
+    val color: Color,
+    val secondary: String? = null
+)
+
+private fun layerVisuals(label: String): LayerVisuals {
+    val normalized = label.lowercase(Locale.getDefault())
+    return when {
+        "vârf" in normalized || "varf" in normalized || "peak" in normalized ->
+            LayerVisuals(Lucide.Star, InfoBlue)
+        "apă" in normalized || "apa" in normalized || "water" in normalized || "râuri" in normalized ->
+            LayerVisuals(Lucide.Droplet, Water)
+        "faun" in normalized || "wildlife" in normalized ->
+            LayerVisuals(Lucide.TriangleAlert, Danger, "Urși și lupi")
+        "atrac" in normalized || "attraction" in normalized ->
+            LayerVisuals(Lucide.MapPin, Warning)
+        "local" in normalized || "settlement" in normalized ->
+            LayerVisuals(Lucide.MapPin, InfoBlue)
+        else ->
+            LayerVisuals(Lucide.Mountain, AccentGreen)
     }
 }
 
@@ -2861,7 +3340,7 @@ private fun formatElevation(elevationGain: Int): String =
 private fun trailDifficultyChipColors(difficulty: String): Pair<Color, Color> =
     when (difficulty.uppercase(Locale.getDefault())) {
         "EXPERT" -> Color(0xFF8E1C2B).copy(alpha = 0.88f) to Color(0xFFFFD5D5)
-        "HARD" -> Color(0xFF3E6B2D).copy(alpha = 0.9f) to Color.White
+        "HARD" -> Color(0xFF3E6B2D).copy(alpha = 0.9f) to Color(0xFFFFFFFF)
         "MEDIUM" -> Color(0xFF7D4C12).copy(alpha = 0.88f) to Color(0xFFFFCC80)
         else -> Color(0xFF195B3B).copy(alpha = 0.9f) to Color(0xFFCFF7DE)
     }

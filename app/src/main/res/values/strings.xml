@@ -38,19 +38,19 @@
     <string name="map_demo_pack_title">Bucegi high detail is optional</string>
     <string name="map_demo_pack_body">Import the Bucegi demo pack to unlock sharper zoom in the core demo area.</string>
     <string name="map_runtime_error_title">Map pack error</string>
-    <string name="map_search_placeholder">Search peaks, huts, trails...</string>
+    <string name="map_search_placeholder">Caută trasee...</string>
     <string name="map_topo">Topo</string>
     <string name="map_satellite">Satellite</string>
     <string name="map_trail">Trail</string>
     <string name="overlay_terrain">Terrain shading</string>
     <string name="overlay_protected_areas">Protected areas</string>
-    <string name="overlay_wildlife_risk">Wildlife risk zones</string>
-    <string name="overlay_trails">Mountain trails</string>
+    <string name="overlay_wildlife_risk">Zone risc faună</string>
+    <string name="overlay_trails">Trasee montane</string>
     <string name="overlay_difficulty">Trail difficulty</string>
-    <string name="overlay_peaks">Peak labels</string>
-    <string name="overlay_places">Settlements</string>
-    <string name="overlay_water_points">Water and rivers</string>
-    <string name="overlay_attractions">Attractions</string>
+    <string name="overlay_peaks">Etichete vârfuri</string>
+    <string name="overlay_places">Localități</string>
+    <string name="overlay_water_points">Apă și râuri</string>
+    <string name="overlay_attractions">Atracții</string>
 
     <string name="chat_hint">Ask anything...</string>
     <string name="chat_prompt_ankle">I twisted my ankle</string>
