@@ -426,6 +426,7 @@ private fun ScannerScrimAndViewfinder(
     }
 }
 
+
 @Composable
 private fun ScannerBrackets(modifier: Modifier = Modifier) {
     Canvas(modifier = modifier) {

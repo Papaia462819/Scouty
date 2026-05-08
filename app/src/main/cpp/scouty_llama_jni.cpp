@@ -116,6 +116,17 @@ bool startsWithTokens(
            std::equal(prefix.begin(), prefix.end(), tokens.begin());
 }
 
+void addSampler(
+    llama_sampler * chain,
+    llama_sampler * sampler,
+    const char * label
+) {
+    if (sampler == nullptr) {
+        throw std::runtime_error(std::string("llama sampler init failed: ") + label);
+    }
+    llama_sampler_chain_add(chain, sampler);
+}
+
 std::unique_ptr<llama_sampler, decltype(&llama_sampler_free)> buildSampler(
     const llama_vocab * vocab,
     const std::string & grammar,
@@ -135,23 +146,24 @@ std::unique_ptr<llama_sampler, decltype(&llama_sampler_free)> buildSampler(
     }
 
     if (!grammar.empty()) {
-        llama_sampler_chain_add(
+        addSampler(
             sampler.get(),
-            llama_sampler_init_grammar(vocab, grammar.c_str(), "root")
+            llama_sampler_init_grammar(vocab, grammar.c_str(), "root"),
+            "grammar"
         );
     }
 
     if (temperature <= 0.0f) {
-        llama_sampler_chain_add(sampler.get(), llama_sampler_init_greedy());
+        addSampler(sampler.get(), llama_sampler_init_greedy(), "greedy");
     } else {
         if (topK > 0) {
-            llama_sampler_chain_add(sampler.get(), llama_sampler_init_top_k(topK));
+            addSampler(sampler.get(), llama_sampler_init_top_k(topK), "top_k");
         }
         if (topP > 0.0f && topP < 1.0f) {
-            llama_sampler_chain_add(sampler.get(), llama_sampler_init_top_p(topP, 1));
+            addSampler(sampler.get(), llama_sampler_init_top_p(topP, 1), "top_p");
         }
-        llama_sampler_chain_add(sampler.get(), llama_sampler_init_temp(temperature));
-        llama_sampler_chain_add(sampler.get(), llama_sampler_init_dist(seed));
+        addSampler(sampler.get(), llama_sampler_init_temp(temperature), "temperature");
+        addSampler(sampler.get(), llama_sampler_init_dist(seed), "dist");
     }
 
     return sampler;

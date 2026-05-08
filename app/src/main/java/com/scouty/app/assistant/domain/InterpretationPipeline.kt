@@ -739,6 +739,10 @@ interface GroundedWordingEngine {
     suspend fun rephrase(request: GroundedWordingRequest): GroundedWordingResult?
 }
 
+object DisabledGroundedWordingEngine : GroundedWordingEngine {
+    override suspend fun rephrase(request: GroundedWordingRequest): GroundedWordingResult? = null
+}
+
 class OnDeviceGroundedWordingEngine(
     private val modelManager: ModelManager,
     private val json: Json = Json { ignoreUnknownKeys = true; explicitNulls = false }

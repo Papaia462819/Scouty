@@ -19,8 +19,9 @@ data class RuntimeFeatureFlags(
     val useConversationMemory: Boolean = true,
     val useLlmSummarizer: Boolean = true,
     val useQwenDefault: Boolean = true,
-    val useCardParaphraseExpression: Boolean = true,
-    val useGrammarToolCalling: Boolean = true,
+    val useCardParaphraseExpression: Boolean = false,
+    val useGroundedWording: Boolean = false,
+    val useGrammarToolCalling: Boolean = false,
     val useLegacyInterpreter: Boolean = false
 )
 
@@ -86,6 +87,11 @@ class AssistantRuntimeGraph private constructor(
         retrievalEngine = retrievalEngine,
         promptBuilder = promptBuilder,
         modelManager = modelManager,
+        groundedWordingEngine = if (featureFlags.useGroundedWording) {
+            OnDeviceGroundedWordingEngine(modelManager)
+        } else {
+            DisabledGroundedWordingEngine
+        },
         generationEngine = generationEngine,
         medicalSafetyPolicy = safetyPolicy,
         trailContextEngine = trailContextEngine,
