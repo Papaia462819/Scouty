@@ -69,4 +69,16 @@ class QueryAnalyzerTest {
         assertEquals(CardFamily.CONSTRAINT, analysis.targetFamily)
         assertTrue(analysis.isFollowUp)
     }
+
+    @Test
+    fun genericWarmthQuestion_onActiveCampfireCanAbstainFromCampfire() {
+        val analysis = analyzer.analyze(
+            query = "cum tin de cald",
+            context = DeviceContextSnapshot(localeTag = "ro-RO"),
+            conversationState = AssistantConversationState(activeTopic = "campfire")
+        )
+
+        assertEquals(ConversationLane.STANDARD, analysis.knowledgeLane)
+        assertEquals(null, analysis.resolvedTopic)
+    }
 }

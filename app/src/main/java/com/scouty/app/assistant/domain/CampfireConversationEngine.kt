@@ -63,7 +63,9 @@ class CampfireConversationEngine(
             normalizedQuery = normalizedQuery,
             embeddingStore = embeddingStore
         )
-        val baselineScoredCards = scoreAllCards(
+        val baselineScoredCards = applyIntentVetoes(
+            normalizedQuery = normalizedQuery,
+            scoredCards = scoreAllCards(
             cards = cards,
             normalizedQuery = normalizedQuery,
             facts = facts,
@@ -72,6 +74,7 @@ class CampfireConversationEngine(
             cardById = cardById,
             embeddingStore = embeddingStore,
             semanticQueryContext = semanticQueryContext
+            )
         )
         val scoredCards = applyCrossEncoderReranker(
             query = retrievalQuery,
@@ -159,7 +162,7 @@ class CampfireConversationEngine(
         scoredCards: List<ScoredCampfireCard>
     ): List<ScoredCampfireCard> {
         val reranker = crossEncoderReranker ?: return scoredCards
-        val candidates = scoredCards.take(RerankCandidateLimit)
+        val candidates = buildRerankCandidateUnion(scoredCards)
         if (candidates.size < 2) {
             return scoredCards
         }
@@ -211,6 +214,85 @@ class CampfireConversationEngine(
             )
             scoredCards
         }
+    }
+
+    private fun buildRerankCandidateUnion(scoredCards: List<ScoredCampfireCard>): List<ScoredCampfireCard> {
+        val byId = linkedMapOf<String, ScoredCampfireCard>()
+        fun add(candidates: List<ScoredCampfireCard>) {
+            candidates.forEach { candidate ->
+                byId.putIfAbsent(candidate.card.chunk.chunkId, candidate)
+            }
+        }
+        add(scoredCards.take(6))
+        add(scoredCards.sortedByDescending { it.semanticSimilarity }.take(6))
+        add(scoredCards.sortedByDescending { it.lexicalHints }.take(4))
+        add(scoredCards.sortedByDescending { it.slotCompatibility }.take(4))
+        return byId.values
+            .filter { it.finalScore > IntentVetoScore / 2.0 }
+            .take(RerankCandidateLimit)
+    }
+
+    private fun applyIntentVetoes(
+        normalizedQuery: String,
+        scoredCards: List<ScoredCampfireCard>
+    ): List<ScoredCampfireCard> {
+        val lightingIntent = isLightingQuery(normalizedQuery)
+        val extinguishIntent = isExtinguishQuery(normalizedQuery)
+        if (lightingIntent == extinguishIntent) {
+            return scoredCards
+        }
+        return scoredCards.map { candidate ->
+            when {
+                lightingIntent && isExtinguishCard(candidate.card) ->
+                    candidate.copy(finalScore = IntentVetoScore)
+                extinguishIntent && isLightingCard(candidate.card) ->
+                    candidate.copy(finalScore = IntentVetoScore)
+                else -> candidate
+            }
+        }.sortedByDescending { it.finalScore }
+    }
+
+    private fun isLightingQuery(normalizedQuery: String): Boolean =
+        containsAny(
+            normalizedQuery,
+            "aprind", "aprinde", "aprins", "aprindere", "fac foc", "face foc",
+            "pornesc foc", "porni foc", "nu se aprinde", "nu reusesc sa aprind",
+            "light fire", "start fire"
+        )
+
+    private fun isExtinguishQuery(normalizedQuery: String): Boolean =
+        containsAny(
+            normalizedQuery,
+            "sting", "stinge", "stingere", "stins", "opresc foc", "cenusa", "jar",
+            "extinguish", "put out"
+        ) && !isLightingQuery(normalizedQuery)
+
+    private fun isExtinguishCard(card: CampfireCard): Boolean {
+        val text = normalize(
+            listOf(
+                card.chunk.chunkId,
+                card.chunk.title,
+                card.chunk.body,
+                card.payload.term.orEmpty(),
+                card.payload.intentGroup.joinToString(" "),
+                card.payload.userPhrasings.joinToString(" ")
+            ).joinToString(" ")
+        )
+        return containsAny(text, "extinguish", "sting", "stinge", "stingere", "stins", "cenusa", "jar rece")
+    }
+
+    private fun isLightingCard(card: CampfireCard): Boolean {
+        val text = normalize(
+            listOf(
+                card.chunk.chunkId,
+                card.chunk.title,
+                card.chunk.body,
+                card.payload.term.orEmpty(),
+                card.payload.intentGroup.joinToString(" "),
+                card.payload.userPhrasings.joinToString(" ")
+            ).joinToString(" ")
+        )
+        return containsAny(text, "aprind", "aprinde", "aprindere", "lighting", "light", "start fire", "wet fuel", "lemne ude", "nu se aprinde")
     }
 
     private suspend fun loadCards(language: String): List<CampfireCard> =
@@ -942,7 +1024,11 @@ class CampfireConversationEngine(
         }
 
         when {
-            containsAny(normalized, "totul e ud", "tot e ud", "plouat", "ploua", "ud leoarca", "lemn ud") ->
+            containsAny(
+                normalized,
+                "totul e ud", "tot e ud", "daca e ud", "e ud", "plouat", "ploua",
+                "dupa ploaie", "ud leoarca", "lemn ud", "lemne ude", "lemnele sunt ude"
+            ) ->
                 facts["fuel_condition"] = "wet"
             containsAny(normalized, "umed", "umezeala", "cam ud") ->
                 facts["fuel_condition"] = "damp"
@@ -1599,7 +1685,8 @@ class CampfireConversationEngine(
         private const val GeneralScenarioId = "campfire_general_entry"
         private const val OverrideConstraintMode = "override"
         private const val MaxSemanticPhraseCandidates = 5
-        private const val RerankCandidateLimit = 3
+        private const val RerankCandidateLimit = 12
+        private const val IntentVetoScore = -1_000.0
         private const val DeterministicScoreBlendWeight = 0.8
         private const val RerankerScoreBlendWeight = 20.0
         private const val SemanticLookupThreshold = 0.18

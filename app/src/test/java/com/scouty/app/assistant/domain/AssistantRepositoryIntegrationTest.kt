@@ -1,5 +1,6 @@
 package com.scouty.app.assistant.domain
 
+import com.scouty.app.assistant.data.ChatActionHandler
 import com.scouty.app.assistant.data.KnowledgeChunkStore
 import com.scouty.app.assistant.data.KnowledgePackStatusProvider
 import com.scouty.app.assistant.domain.expression.CardParaphraseEngine
@@ -7,7 +8,14 @@ import com.scouty.app.assistant.domain.expression.CardParaphraseModel
 import com.scouty.app.assistant.domain.tools.GrammarToolCallPlanner
 import com.scouty.app.assistant.domain.tools.ToolCallModel
 import com.scouty.app.assistant.domain.tools.ToolDispatcher
+import com.scouty.app.assistant.model.AssistantAction
+import com.scouty.app.assistant.model.AssistantWeatherRequest
+import com.scouty.app.assistant.model.AssistantWeatherResult
 import com.scouty.app.assistant.model.DeviceContextSnapshot
+import com.scouty.app.assistant.model.GearContextItem
+import com.scouty.app.assistant.model.GearItemDraft
+import com.scouty.app.assistant.model.GearItemUpdate
+import com.scouty.app.assistant.model.AssistantHourlyWeather
 import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.assistant.model.KnowledgeChunkRecord
 import com.scouty.app.assistant.model.KnowledgePackStatus
@@ -192,6 +200,176 @@ class AssistantRepositoryIntegrationTest {
         assertEquals("ignition_source", response.conversationState.openQuestion?.targetSlot)
     }
 
+    @Test
+    fun gearInteraction_addsCustomItem() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+
+        val response = repository.answer(
+            query = "adauga manusi",
+            context = DeviceContextSnapshot(localeTag = "ro")
+        )
+
+        val action = response.actions.single() as AssistantAction.AddGearItems
+        assertEquals("Manusi", action.items.single().name)
+        assertFalse(action.items.single().packed)
+        assertTrue(response.answerText.contains("adaugat", ignoreCase = true))
+    }
+
+    @Test
+    fun gearInteraction_marksExistingItemPacked() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+
+        val response = repository.answer(
+            query = "am pus apa",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                gearItems = listOf(
+                    GearContextItem(id = "water", name = "Apa", necessity = "MANDATORY", isPacked = false)
+                )
+            )
+        )
+
+        val action = response.actions.single() as AssistantAction.ToggleGearPacked
+        assertEquals(listOf("water"), action.itemIds)
+        assertTrue(action.packed)
+    }
+
+    @Test
+    fun gearInteraction_ambiguousItemAsksClarification() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+
+        val response = repository.answer(
+            query = "bifeaza apa",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                gearItems = listOf(
+                    GearContextItem(id = "water-bottle", name = "Apa", necessity = "MANDATORY", isPacked = false),
+                    GearContextItem(id = "waterproof-cover", name = "Husa de apa", necessity = "RECOMMENDED", isPacked = false)
+                )
+            )
+        )
+
+        assertTrue(response.actions.isEmpty())
+        assertTrue(response.structuredOutput.followUpQuestions.size >= 2)
+        assertTrue(response.answerText.contains("mai multe", ignoreCase = true))
+    }
+
+    @Test
+    fun gearInteraction_removingMandatoryItemWarns() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+
+        val response = repository.answer(
+            query = "scoate frontala",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                gearItems = listOf(
+                    GearContextItem(id = "headlamp", name = "Frontala", necessity = "MANDATORY", isPacked = false)
+                )
+            )
+        )
+
+        val action = response.actions.single() as AssistantAction.RemoveGearItems
+        assertEquals(listOf("headlamp"), action.itemIds)
+        assertTrue(response.answerText.contains("obligatoriu", ignoreCase = true))
+    }
+
+    @Test
+    fun weatherInteraction_usesLiveWeatherHandlerForHourlyRequest() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+        val handler = FakeChatActionHandler(
+            weatherResult = AssistantWeatherResult(
+                available = true,
+                isLive = true,
+                locationLabel = "Sinaia",
+                summary = "12.0°C, ploaie 60%",
+                hourly = AssistantHourlyWeather(
+                    time = "2026-05-10 13:00",
+                    temperatureC = 12.0,
+                    precipitationProbability = 60
+                )
+            )
+        )
+
+        val response = repository.answer(
+            query = "cum va fi vremea in 2 ore",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                isOnline = true,
+                trail = TrailContextSnapshot(
+                    name = "Sinaia",
+                    latitude = 45.35,
+                    longitude = 25.55
+                )
+            ),
+            interactionHandler = handler
+        )
+
+        assertEquals(2, handler.weatherRequests.single().offsetHours)
+        assertTrue(response.answerText.contains("12.0"))
+        assertTrue(response.answerText.contains("Sinaia"))
+    }
+
+    @Test
+    fun weatherInteraction_unavailableLiveWeatherDoesNotHallucinate() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+        val handler = FakeChatActionHandler(
+            weatherResult = AssistantWeatherResult(
+                available = false,
+                isLive = false,
+                locationLabel = "Sinaia",
+                summary = "Nu pot verifica vremea live fara conexiune.",
+                errorMessage = "offline"
+            )
+        )
+
+        val response = repository.answer(
+            query = "ploua peste 3 ore?",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                trail = TrailContextSnapshot(
+                    name = "Sinaia",
+                    latitude = 45.35,
+                    longitude = 25.55
+                )
+            ),
+            interactionHandler = handler
+        )
+
+        assertEquals(SafetyOutcome.CAUTION, response.safetyOutcome)
+        assertTrue(response.answerText.contains("Nu pot verifica", ignoreCase = true))
+        assertFalse(response.answerText.contains("va ploua sigur", ignoreCase = true))
+    }
+
     private fun createRepository(modelManager: ModelManager): AssistantRepository {
         val knowledgePackStatus = KnowledgePackStatus(
             available = true,
@@ -307,4 +485,39 @@ private class FakeToolCallModel(
 ) : ToolCallModel {
     override suspend fun generate(prompt: String, grammar: String, promptCacheHint: LocalLlmPromptCacheHint?): String =
         response
+}
+
+private class FakeChatActionHandler(
+    private val weatherResult: AssistantWeatherResult = AssistantWeatherResult(
+        available = false,
+        isLive = false,
+        summary = "weather unavailable"
+    )
+) : ChatActionHandler {
+    val weatherRequests = mutableListOf<AssistantWeatherRequest>()
+    val addedGear = mutableListOf<GearItemDraft>()
+    val removedGearIds = mutableListOf<String>()
+    val updatedGear = mutableListOf<GearItemUpdate>()
+    val toggledGear = mutableListOf<Pair<List<String>, Boolean>>()
+
+    override fun toggleGearPacked(itemIds: List<String>, packed: Boolean) {
+        toggledGear += itemIds to packed
+    }
+
+    override fun addGearItems(items: List<GearItemDraft>) {
+        addedGear += items
+    }
+
+    override fun removeGearItems(itemIds: List<String>) {
+        removedGearIds += itemIds
+    }
+
+    override fun updateGearItems(updates: List<GearItemUpdate>) {
+        updatedGear += updates
+    }
+
+    override suspend fun queryWeather(request: AssistantWeatherRequest): AssistantWeatherResult {
+        weatherRequests += request
+        return weatherResult
+    }
 }

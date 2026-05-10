@@ -199,6 +199,8 @@ fun HomeStatus.toDeviceContextSnapshot(): DeviceContextSnapshot =
         trail = activeTrail?.let { trail ->
             TrailContextSnapshot(
                 name = trail.name,
+                latitude = trail.latitude,
+                longitude = trail.longitude,
                 localCode = trail.localCode,
                 region = trail.region,
                 fromName = trail.fromName,

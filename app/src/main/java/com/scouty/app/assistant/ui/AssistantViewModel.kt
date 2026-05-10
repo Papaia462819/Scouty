@@ -114,7 +114,8 @@ class AssistantViewModel(
                     repository.answer(
                         query = query,
                         context = deviceContextProvider.deviceContext.value,
-                        conversationState = conversationState
+                        conversationState = conversationState,
+                        interactionHandler = chatActionHandler
                     )
                 }
             }.onSuccess { response ->
@@ -210,6 +211,15 @@ class AssistantViewModel(
             when (action) {
                 is AssistantAction.ToggleGearPacked -> {
                     chatActionHandler?.toggleGearPacked(action.itemIds, action.packed)
+                }
+                is AssistantAction.AddGearItems -> {
+                    chatActionHandler?.addGearItems(action.items)
+                }
+                is AssistantAction.RemoveGearItems -> {
+                    chatActionHandler?.removeGearItems(action.itemIds)
+                }
+                is AssistantAction.UpdateGearItems -> {
+                    chatActionHandler?.updateGearItems(action.updates)
                 }
             }
         }

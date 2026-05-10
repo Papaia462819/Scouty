@@ -2,6 +2,7 @@ package com.scouty.app.assistant.domain
 
 import android.content.Context
 import com.scouty.app.assistant.diagnostics.AssistantDiagnostics
+import com.scouty.app.assistant.data.ChatActionHandler
 import com.scouty.app.assistant.data.ConversationRole
 import com.scouty.app.assistant.data.ConversationStore
 import com.scouty.app.assistant.data.KnowledgeChunkStore
@@ -23,11 +24,18 @@ import com.scouty.app.assistant.domain.tools.ToolDispatchResult
 import com.scouty.app.assistant.domain.tools.ToolDispatcher
 import com.scouty.app.assistant.model.AssistantConversationState
 import com.scouty.app.assistant.model.AssistantCitation
+import com.scouty.app.assistant.model.AssistantAction
+import com.scouty.app.assistant.model.AssistantOpenQuestion
 import com.scouty.app.assistant.model.AssistantResponse
+import com.scouty.app.assistant.model.AssistantWeatherRequest
+import com.scouty.app.assistant.model.AssistantWeatherResult
 import com.scouty.app.assistant.model.CardFamily
 import com.scouty.app.assistant.model.ConversationLane
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.DomainHint
+import com.scouty.app.assistant.model.GearContextItem
+import com.scouty.app.assistant.model.GearItemDraft
+import com.scouty.app.assistant.model.GearItemUpdate
 import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.assistant.model.KnowledgeChunkRecord
 import com.scouty.app.assistant.model.KnowledgePackStatus
@@ -40,11 +48,16 @@ import com.scouty.app.assistant.model.SafetyOutcome
 import com.scouty.app.assistant.model.StructuredAssistantOutput
 import com.scouty.app.assistant.model.StructuredResponseSection
 import com.scouty.app.assistant.model.TrailContextIntent
+import com.scouty.app.assistant.model.WeatherHazard
+import com.scouty.app.assistant.model.WeatherInteractionIntent
 import java.text.Normalizer
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.Year
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import java.util.UUID
+import kotlin.math.abs
 import kotlin.math.min
 
 data class RetrievedChunk(
@@ -114,17 +127,13 @@ class QueryAnalyzer {
         val campfireTopicQuery = tokens.any { it in CampfireTokens } ||
             containsAny(normalizedQuery, "foc", "campfire", "iasca", "amnar", "bricheta", "chibrit")
         val wildlifeBreakout = tokens.any { it in WildlifeBreakoutTokens }
-        val campfireFollowUp = conversationState.activeTopic == "campfire" && !wildlifeBreakout && (
-            tokens.size <= 4 ||
-                conversationState.openQuestion != null ||
-                campfireDefinitionQuery ||
-                campfireConstraintQuery ||
-                normalizedQuery.startsWith("cum") ||
-                normalizedQuery.startsWith("si daca") ||
-                normalizedQuery.startsWith("dar") ||
-                normalizedQuery.startsWith("iar") ||
-                normalizedQuery.startsWith("ce e") ||
-                normalizedQuery.startsWith("ce inseamna")
+        val campfireFollowUp = conversationState.activeTopic == "campfire" && !wildlifeBreakout &&
+            isCampfireFollowUpSignal(
+                normalizedQuery = normalizedQuery,
+                tokens = tokens,
+                conversationState = conversationState,
+                campfireDefinitionQuery = campfireDefinitionQuery,
+                campfireConstraintQuery = campfireConstraintQuery
             )
         val campfireLane = campfireTopicQuery || campfireFollowUp
 
@@ -394,6 +403,37 @@ class QueryAnalyzer {
                 "actualizeaza", "update", "tot ca impachetat", "all packed",
                 "obligatoriu", "mandatory")
 
+    private fun isCampfireFollowUpSignal(
+        normalizedQuery: String,
+        tokens: List<String>,
+        conversationState: AssistantConversationState,
+        campfireDefinitionQuery: Boolean,
+        campfireConstraintQuery: Boolean
+    ): Boolean {
+        if (conversationState.openQuestion != null) {
+            return true
+        }
+        if (campfireDefinitionQuery || campfireConstraintQuery) {
+            return true
+        }
+        if (normalizedQuery.startsWith("si daca") || normalizedQuery.startsWith("dar") || normalizedQuery.startsWith("iar")) {
+            return true
+        }
+        if (containsAny(
+                normalizedQuery,
+                "aprind", "aprinde", "aprindere", "sting", "stinge", "stins", "jar", "cenusa",
+                "amnar", "bricheta", "chibrit", "iasca", "surcele", "vreascuri", "scanteie",
+                "totul e ud", "daca e ud", "lemne ude", "plouat", "vant", "foc"
+            )
+        ) {
+            return true
+        }
+        if (tokens.size <= 4 && tokens.any { it in CampfireFollowUpTokens }) {
+            return true
+        }
+        return false
+    }
+
     private fun extractWeatherDate(normalizedQuery: String): String? {
         val today = LocalDate.now()
         val formatter = DateTimeFormatter.ISO_LOCAL_DATE
@@ -521,6 +561,10 @@ class QueryAnalyzer {
             "foc", "focul", "campfire", "iasca", "amnar", "ferro", "bricheta",
             "brichete", "chibrit", "chibrite", "surcele", "vreascuri", "jar", "vatr"
         )
+        private val CampfireFollowUpTokens = setOf(
+            "ud", "umed", "plouat", "vant", "amnar", "ferro", "bricheta", "chibrit",
+            "iasca", "surcele", "vreascuri", "jar", "cenusa", "aprind", "sting"
+        )
         private val RomanianMarkers = setOf(
             "am", "si", "sa", "traseu", "glezna", "entorsa", "durere", "rana", "arsura", "urs",
             "sarpe", "marcaj", "cum", "ce", "care", "cand", "unde", "munte", "fac", "facut",
@@ -559,12 +603,23 @@ class RetrievalEngine(
         queryAnalysis: QueryAnalysis,
         limit: Int = 4
     ): List<RetrievedChunk> {
-        val candidates = knowledgeStore.searchCandidates(
+        val hintedCandidates = knowledgeStore.searchCandidates(
             query = query,
             preferredLanguages = listOf(queryAnalysis.preferredLanguage),
             domainHints = queryAnalysis.domainHints.map { it.domain },
             limit = limit * 6
         )
+        val broadCandidates = if (queryAnalysis.domainHints.isNotEmpty()) {
+            knowledgeStore.searchCandidates(
+                query = query,
+                preferredLanguages = listOf(queryAnalysis.preferredLanguage),
+                domainHints = emptyList(),
+                limit = limit * 6
+            )
+        } else {
+            emptyList()
+        }
+        val candidates = (hintedCandidates + broadCandidates).distinctBy { it.chunkId }
 
         val scoredCandidates = candidates.map { candidate ->
             RetrievedChunk(
@@ -1033,6 +1088,763 @@ class TemplateGenerationEngine : GenerationEngine {
     }
 }
 
+private class DeterministicInteractionEngine {
+    suspend fun answer(
+        query: String,
+        context: DeviceContextSnapshot,
+        queryAnalysis: QueryAnalysis,
+        conversationState: AssistantConversationState,
+        packStatus: KnowledgePackStatus,
+        interactionHandler: ChatActionHandler?
+    ): AssistantResponse? {
+        val normalized = normalize(query)
+        detectGearIntent(normalized, context)?.let { intent ->
+            return answerGear(
+                intent = intent,
+                query = query,
+                normalized = normalized,
+                context = context,
+                queryAnalysis = queryAnalysis,
+                conversationState = conversationState,
+                packStatus = packStatus
+            )
+        }
+        detectWeatherIntent(normalized)?.let { intent ->
+            return answerWeather(
+                intent = intent,
+                context = context,
+                queryAnalysis = queryAnalysis,
+                conversationState = conversationState,
+                packStatus = packStatus,
+                interactionHandler = interactionHandler
+            )
+        }
+        return null
+    }
+
+    private fun detectGearIntent(normalized: String, context: DeviceContextSnapshot): GearInteractionIntent? {
+        val mentionsGearList = containsAny(normalized, "echipament", "gear", "rucsac", "lista", "checklist")
+        val mentionsKnownGear = context.gearItems.any { item ->
+            gearTextMatches(normalized, item) || gearAliasesFor(item).any { alias -> alias in normalized }
+        }
+        val objectText = extractGearObject(normalized)
+        val hasAdd = containsAny(normalized, "adauga", "adaug", "pune ", "trece ", "add ")
+        val hasRemove = containsAny(normalized, "scoate", "sterge", "elimina", "remove", "delete")
+        val hasUpdate = containsAny(normalized, "obligator", "recomandat", "recomandata", "optional", "conditionat")
+        val hasPacked = containsAny(normalized, "bifeaza", "am pus", "am luat", "am impachetat", "impachetat", "packed", "mark")
+        val hasUnpacked = containsAny(normalized, "debifeaza", "nu am", "n am", "nu iau", "unpacked", "unmark")
+        val showList = containsAny(normalized, "arata lista", "lista echipament", "show gear", "gear list")
+        val missing = containsAny(normalized, "ce imi lipseste", "ce lipseste", "ce mai lipseste", "missing")
+        val weatherAdvice = mentionsGearList && containsAny(normalized, "ploua", "ploaie", "furtuna", "frig", "cald", "ninsoare", "zapada", "vreme")
+        val campfireContext = containsAny(normalized, "foc", "aprind", "aprindere", "amnar", "bricheta", "chibrit", "iasca")
+        if (campfireContext && !mentionsGearList && !hasAdd && !hasRemove && !hasUpdate && !showList && !missing) {
+            return null
+        }
+
+        return when {
+            showList -> GearInteractionIntent.SHOW_LIST
+            missing -> GearInteractionIntent.MISSING_ITEMS
+            weatherAdvice -> GearInteractionIntent.WEATHER_BASED_ADVICE
+            hasRemove -> GearInteractionIntent.REMOVE_ITEM
+            hasAdd -> GearInteractionIntent.ADD_ITEM
+            hasUpdate && (mentionsGearList || mentionsKnownGear) -> GearInteractionIntent.UPDATE_ITEM
+            hasUnpacked && (mentionsKnownGear || mentionsGearList) -> GearInteractionIntent.MARK_UNPACKED
+            hasPacked && (mentionsKnownGear || mentionsGearList || objectText.isNotBlank()) -> GearInteractionIntent.MARK_PACKED
+            else -> null
+        }
+    }
+
+    private fun answerGear(
+        intent: GearInteractionIntent,
+        query: String,
+        normalized: String,
+        context: DeviceContextSnapshot,
+        queryAnalysis: QueryAnalysis,
+        conversationState: AssistantConversationState,
+        packStatus: KnowledgePackStatus
+    ): AssistantResponse {
+        val isRomanian = queryAnalysis.preferredLanguage == "ro"
+        val objectText = extractGearObject(normalized)
+        val match = matchGearItem(objectText, context.gearItems)
+        val actions = mutableListOf<AssistantAction>()
+        val sections = mutableListOf<StructuredResponseSection>()
+        val followUps = mutableListOf<String>()
+        var summary: String
+
+        when (intent) {
+            GearInteractionIntent.SHOW_LIST -> {
+                val packed = context.gearItems.count { it.isPacked }
+                summary = if (isRomanian) {
+                    "Lista are $packed din ${context.gearItems.size} articole bifate."
+                } else {
+                    "The list has $packed of ${context.gearItems.size} items packed."
+                }
+                sections += StructuredResponseSection(
+                    title = if (isRomanian) "Echipament" else "Gear",
+                    body = context.gearItems.ifEmpty { emptyList() }.joinToString("\n") { item ->
+                        val status = if (item.isPacked) {
+                            if (isRomanian) "impachetat" else "packed"
+                        } else {
+                            if (isRomanian) "neimpachetat" else "not packed"
+                        }
+                        "- ${item.name} ($status)"
+                    }.ifBlank {
+                        if (isRomanian) "Nu ai articole in lista." else "There are no items in the list."
+                    },
+                    style = ResponseSectionStyle.ACTIONS
+                )
+            }
+
+            GearInteractionIntent.MISSING_ITEMS -> {
+                val missing = context.gearItems.filter { !it.isPacked }
+                val mandatory = missing.filter { it.necessity.equals("MANDATORY", ignoreCase = true) }
+                summary = if (mandatory.isNotEmpty()) {
+                    if (isRomanian) {
+                        "Iti lipsesc ${mandatory.size} articole obligatorii."
+                    } else {
+                        "You are missing ${mandatory.size} mandatory items."
+                    }
+                } else if (missing.isNotEmpty()) {
+                    if (isRomanian) {
+                        "Obligatoriul pare acoperit, dar mai ai ${missing.size} articole nebifate."
+                    } else {
+                        "Mandatory gear looks covered, but ${missing.size} items are still unchecked."
+                    }
+                } else {
+                    if (isRomanian) "Lista este bifata complet." else "The list is fully checked."
+                }
+                if (missing.isNotEmpty()) {
+                    sections += StructuredResponseSection(
+                        title = if (isRomanian) "Nebifate" else "Unchecked",
+                        body = missing.joinToString("\n") { "- ${it.name}" },
+                        style = ResponseSectionStyle.ACTIONS
+                    )
+                }
+            }
+
+            GearInteractionIntent.WEATHER_BASED_ADVICE -> {
+                val weather = context.trail?.weatherForecast.orEmpty()
+                val rainItems = context.gearItems.filter { item ->
+                    val text = normalize("${item.name} ${item.note}")
+                    containsAny(text, "ploaie", "impermeabil", "pelerina", "jacheta", "husa", "poncho", "rain", "waterproof")
+                }
+                summary = if (weather.isNotBlank()) {
+                    if (isRomanian) "Pentru vremea estimata ($weather), protejeaza-te de conditii meteo." else
+                        "For the expected weather ($weather), prioritize weather protection."
+                } else {
+                    if (isRomanian) "Nu am o prognoza clara in context, dar pot verifica lista pentru protectie meteo." else
+                        "I do not have a clear forecast in context, but I can check the list for weather protection."
+                }
+                sections += StructuredResponseSection(
+                    title = if (isRomanian) "Prioritar" else "Priority",
+                    body = rainItems.takeIf { it.isNotEmpty() }?.joinToString("\n") { "- ${it.name}" }
+                        ?: if (isRomanian) "Adauga protectie de ploaie/vant daca prognoza se inrautateste." else
+                            "Add rain/wind protection if the forecast worsens.",
+                    style = ResponseSectionStyle.GUIDANCE
+                )
+            }
+
+            GearInteractionIntent.ADD_ITEM -> {
+                when (match) {
+                    is GearItemMatch.Single -> {
+                        if (containsAny(normalized, "am pus", "am luat", "impachetat", "packed")) {
+                            actions += AssistantAction.ToggleGearPacked(listOf(match.item.id), true)
+                            summary = if (isRomanian) {
+                                "Am marcat ${match.item.name} ca impachetat."
+                            } else {
+                                "I marked ${match.item.name} as packed."
+                            }
+                        } else {
+                            summary = if (isRomanian) {
+                                "${match.item.name} este deja in lista."
+                            } else {
+                                "${match.item.name} is already in the list."
+                            }
+                        }
+                    }
+                    is GearItemMatch.Ambiguous -> return ambiguousGearResponse(match.items, queryAnalysis, conversationState, packStatus)
+                    GearItemMatch.None -> {
+                        val name = displayGearName(objectText.ifBlank { "articol" })
+                        val draft = GearItemDraft(
+                            id = customGearId(name),
+                            name = name,
+                            packed = containsAny(normalized, "am pus", "am luat", "impachetat", "packed")
+                        )
+                        actions += AssistantAction.AddGearItems(listOf(draft))
+                        summary = if (isRomanian) {
+                            "Am adaugat $name in lista${if (draft.packed) " si l-am bifat" else ""}."
+                        } else {
+                            "I added $name to the list${if (draft.packed) " and marked it packed" else ""}."
+                        }
+                    }
+                }
+            }
+
+            GearInteractionIntent.REMOVE_ITEM -> {
+                when (match) {
+                    is GearItemMatch.Single -> {
+                        actions += AssistantAction.RemoveGearItems(listOf(match.item.id))
+                        summary = if (isRomanian) {
+                            "Am scos ${match.item.name} din lista."
+                        } else {
+                            "I removed ${match.item.name} from the list."
+                        }
+                        if (match.item.necessity.equals("MANDATORY", ignoreCase = true)) {
+                            sections += StructuredResponseSection(
+                                title = if (isRomanian) "Atentie" else "Note",
+                                body = if (isRomanian) {
+                                    "Era marcat ca obligatoriu pentru traseu; verifica daca ai o alternativa inainte sa pleci."
+                                } else {
+                                    "It was marked mandatory for the trail; check that you have an alternative before leaving."
+                                },
+                                style = ResponseSectionStyle.IMPORTANT
+                            )
+                        }
+                    }
+                    is GearItemMatch.Ambiguous -> return ambiguousGearResponse(match.items, queryAnalysis, conversationState, packStatus)
+                    GearItemMatch.None -> {
+                        summary = if (isRomanian) "Nu am gasit articolul in lista." else "I could not find that item in the list."
+                    }
+                }
+            }
+
+            GearInteractionIntent.MARK_PACKED,
+            GearInteractionIntent.MARK_UNPACKED -> {
+                val packed = intent == GearInteractionIntent.MARK_PACKED
+                when (match) {
+                    is GearItemMatch.Single -> {
+                        actions += AssistantAction.ToggleGearPacked(listOf(match.item.id), packed)
+                        summary = if (packed) {
+                            if (isRomanian) "Am bifat ${match.item.name} ca impachetat." else "I marked ${match.item.name} as packed."
+                        } else {
+                            if (isRomanian) "Am debifat ${match.item.name}." else "I marked ${match.item.name} as not packed."
+                        }
+                    }
+                    is GearItemMatch.Ambiguous -> return ambiguousGearResponse(match.items, queryAnalysis, conversationState, packStatus)
+                    GearItemMatch.None -> {
+                        if (intent == GearInteractionIntent.MARK_PACKED && objectText.isNotBlank()) {
+                            val name = displayGearName(objectText)
+                            actions += AssistantAction.AddGearItems(
+                                listOf(GearItemDraft(id = customGearId(name), name = name, packed = true))
+                            )
+                            summary = if (isRomanian) "Nu era in lista, asa ca am adaugat $name si l-am bifat." else
+                                "It was not in the list, so I added $name and marked it packed."
+                        } else {
+                            summary = if (isRomanian) "Nu am gasit articolul in lista." else "I could not find that item in the list."
+                        }
+                    }
+                }
+            }
+
+            GearInteractionIntent.UPDATE_ITEM -> {
+                val necessity = detectNecessity(normalized)
+                when (match) {
+                    is GearItemMatch.Single -> {
+                        actions += AssistantAction.UpdateGearItems(
+                            listOf(GearItemUpdate(itemId = match.item.id, necessity = necessity))
+                        )
+                        summary = if (isRomanian) {
+                            "Am actualizat ${match.item.name} la ${necessityLabel(necessity, true)}."
+                        } else {
+                            "I updated ${match.item.name} to ${necessityLabel(necessity, false)}."
+                        }
+                    }
+                    is GearItemMatch.Ambiguous -> return ambiguousGearResponse(match.items, queryAnalysis, conversationState, packStatus)
+                    GearItemMatch.None -> {
+                        summary = if (isRomanian) "Nu am gasit articolul de actualizat." else "I could not find the item to update."
+                    }
+                }
+            }
+        }
+
+        if (followUps.isEmpty()) {
+            followUps += if (isRomanian) listOf("Arata-mi lista", "Ce imi lipseste?") else listOf("Show me the list", "What is missing?")
+        }
+        return structuredInteractionResponse(
+            summary = summary,
+            sections = sections,
+            followUps = followUps,
+            reasoningType = ReasoningType.GEAR_ADVICE,
+            queryAnalysis = queryAnalysis,
+            conversationState = conversationState.copy(
+                activeTopic = null,
+                pendingGearAction = null,
+                lastTrailContextIntent = "GEAR_${intent.name}"
+            ),
+            packStatus = packStatus,
+            actions = actions
+        )
+    }
+
+    private suspend fun answerWeather(
+        intent: WeatherInteraction,
+        context: DeviceContextSnapshot,
+        queryAnalysis: QueryAnalysis,
+        conversationState: AssistantConversationState,
+        packStatus: KnowledgePackStatus,
+        interactionHandler: ChatActionHandler?
+    ): AssistantResponse {
+        val isRomanian = queryAnalysis.preferredLanguage == "ro"
+        val trail = context.trail
+        val lat = trail?.latitude ?: context.latitude
+        val lon = trail?.longitude ?: context.longitude
+        val locationLabel = when {
+            trail?.latitude != null && trail.longitude != null -> trail.name
+            context.gpsFixed -> if (isRomanian) "locatia curenta" else "current location"
+            else -> trail?.name
+        }
+        if (lat == null || lon == null) {
+            val cached = trail?.weatherForecast?.takeIf { it.isNotBlank() }
+            val summary = cached?.let {
+                if (isRomanian) "Nu am coordonate pentru verificare live. Ultima prognoza din traseu: $it." else
+                    "I do not have coordinates for a live check. Last trail forecast: $it."
+            } ?: if (isRomanian) {
+                "Nu pot verifica vremea live fara traseu activ sau pozitie GPS."
+            } else {
+                "I cannot check live weather without an active trail or GPS position."
+            }
+            return structuredInteractionResponse(
+                summary = summary,
+                sections = emptyList(),
+                followUps = emptyList(),
+                reasoningType = ReasoningType.WEATHER_CONTEXT,
+                queryAnalysis = queryAnalysis,
+                conversationState = conversationState.copy(lastTrailContextIntent = "WEATHER_FORECAST"),
+                packStatus = packStatus,
+                safetyOutcome = SafetyOutcome.CAUTION
+            )
+        }
+
+        val request = AssistantWeatherRequest(
+            latitude = lat,
+            longitude = lon,
+            altitudeMeters = context.altitude?.toInt(),
+            locationLabel = locationLabel,
+            intent = intent.intent,
+            offsetHours = intent.offsetHours,
+            targetDate = intent.targetDate,
+            targetHour = intent.targetHour,
+            hazard = intent.hazard,
+            preferredLanguage = queryAnalysis.preferredLanguage
+        )
+        val result = interactionHandler?.queryWeather(request)
+            ?: cachedWeatherResult(context, request)
+        val sections = mutableListOf<StructuredResponseSection>()
+        result.hourly?.let { hourly ->
+            sections += StructuredResponseSection(
+                title = if (isRomanian) "Detalii" else "Details",
+                body = hourlyDetails(hourly, isRomanian),
+                style = ResponseSectionStyle.CONTEXT
+            )
+        }
+        if (intent.hazard != null) {
+            sections += StructuredResponseSection(
+                title = if (isRomanian) "Interpretare" else "Interpretation",
+                body = hazardAdvice(intent.hazard, result, isRomanian),
+                style = ResponseSectionStyle.GUIDANCE
+            )
+        }
+        return structuredInteractionResponse(
+            summary = weatherSummary(result, intent, isRomanian),
+            sections = sections,
+            followUps = if (isRomanian) listOf("Ce echipament imi trebuie?", "Verifica peste 3 ore") else
+                listOf("What gear do I need?", "Check in 3 hours"),
+            reasoningType = ReasoningType.WEATHER_CONTEXT,
+            queryAnalysis = queryAnalysis,
+            conversationState = conversationState.copy(
+                activeTopic = null,
+                lastTrailContextIntent = "WEATHER_FORECAST"
+            ),
+            packStatus = packStatus,
+            safetyOutcome = if (result.available) SafetyOutcome.NORMAL else SafetyOutcome.CAUTION
+        )
+    }
+
+    private fun detectWeatherIntent(normalized: String): WeatherInteraction? {
+        val hazard = detectWeatherHazard(normalized)
+        val mentionsWeather = containsAny(
+            normalized,
+            "vreme", "meteo", "weather", "forecast", "prognoza", "ploua", "ploaie",
+            "furtuna", "fulger", "frig", "cald", "ceata", "vant", "ninge", "zapada"
+        )
+        val directWeatherAsk = containsAny(
+            normalized,
+            "vreme", "meteo", "weather", "forecast", "prognoza", "cum va fi",
+            "ploua peste", "ploua in", "va ploua", "o sa ploua", "e risc", "risc de",
+            "cat de frig va fi", "cat de cald va fi", "e furtuna", "sunt fulgere"
+        ) || normalized.startsWith("ploua ") ||
+            normalized.startsWith("ninge ") ||
+            normalized.startsWith("e frig") ||
+            normalized.startsWith("e cald")
+        if ((!mentionsWeather && hazard == null) || !directWeatherAsk) {
+            return null
+        }
+        val offsetHours = Regex("""(?:peste|in|în)\s+(\d{1,2})\s+(?:ore|ora|hours?|h)\b""")
+            .find(normalized)
+            ?.groupValues
+            ?.getOrNull(1)
+            ?.toIntOrNull()
+        val targetHour = Regex("""(?:la\s+ora|ora)\s+(\d{1,2})""")
+            .find(normalized)
+            ?.groupValues
+            ?.getOrNull(1)
+            ?.toIntOrNull()
+            ?.takeIf { it in 0..23 }
+        val targetDate = when {
+            containsAny(normalized, "maine", "miine", "tomorrow") -> LocalDate.now().plusDays(1).toString()
+            containsAny(normalized, "poimaine") -> LocalDate.now().plusDays(2).toString()
+            else -> LocalDate.now().toString()
+        }
+        val intent = when {
+            hazard != null -> WeatherInteractionIntent.HAZARD_CHECK
+            offsetHours != null || targetHour != null || containsAny(normalized, "diseara", "seara") -> WeatherInteractionIntent.HOURLY_OFFSET
+            containsAny(normalized, "maine", "miine", "poimaine", "tomorrow") -> WeatherInteractionIntent.DAILY_FORECAST
+            else -> WeatherInteractionIntent.CURRENT
+        }
+        val resolvedHour = targetHour ?: if (containsAny(normalized, "diseara", "seara")) 18 else null
+        return WeatherInteraction(
+            intent = intent,
+            offsetHours = offsetHours,
+            targetDate = targetDate,
+            targetHour = resolvedHour,
+            hazard = hazard
+        )
+    }
+
+    private fun detectWeatherHazard(normalized: String): WeatherHazard? =
+        when {
+            containsAny(normalized, "fulger", "fulgere", "traznet", "furtuna", "thunder", "lightning", "storm") ->
+                WeatherHazard.THUNDERSTORM
+            containsAny(normalized, "ploua", "ploaie", "precipitatii", "rain") -> WeatherHazard.RAIN
+            containsAny(normalized, "frig", "rece", "inghet", "cold", "freez") -> WeatherHazard.COLD
+            containsAny(normalized, "cald", "canicula", "heat", "hot") -> WeatherHazard.HEAT
+            containsAny(normalized, "ninsoare", "zapada", "snow", "ice", "gheata") -> WeatherHazard.SNOW
+            containsAny(normalized, "ceata", "vizibilitate", "fog", "visibility") -> WeatherHazard.FOG
+            containsAny(normalized, "vant", "vijelie", "wind") -> WeatherHazard.WIND
+            else -> null
+        }
+
+    private fun cachedWeatherResult(
+        context: DeviceContextSnapshot,
+        request: AssistantWeatherRequest
+    ): AssistantWeatherResult {
+        val cached = context.trail?.weatherForecast?.takeIf { it.isNotBlank() }
+        val isRomanian = request.preferredLanguage == "ro"
+        return AssistantWeatherResult(
+            available = cached != null,
+            isLive = false,
+            locationLabel = request.locationLabel,
+            summary = cached?.let {
+                if (isRomanian) "Nu am putut face apel live; ultima prognoza salvata este: $it." else
+                    "I could not make a live call; the last saved forecast is: $it."
+            } ?: if (isRomanian) {
+                "Nu am date meteo live disponibile acum."
+            } else {
+                "I do not have live weather data available now."
+            },
+            hazard = request.hazard,
+            errorMessage = "weather_handler_missing"
+        )
+    }
+
+    private fun weatherSummary(
+        result: AssistantWeatherResult,
+        intent: WeatherInteraction,
+        isRomanian: Boolean
+    ): String {
+        if (!result.available) {
+            return result.summary
+        }
+        val place = result.locationLabel?.let { if (isRomanian) " pentru $it" else " for $it" }.orEmpty()
+        val time = result.hourly?.time?.let { if (isRomanian) " la $it" else " at $it" }.orEmpty()
+        val prefix = when (intent.intent) {
+            WeatherInteractionIntent.CURRENT -> if (isRomanian) "Vremea acum$place" else "Weather now$place"
+            WeatherInteractionIntent.HOURLY_OFFSET -> if (isRomanian) "Prognoza$place$time" else "Forecast$place$time"
+            WeatherInteractionIntent.DAILY_FORECAST -> if (isRomanian) "Prognoza pe zi$place" else "Daily forecast$place"
+            WeatherInteractionIntent.HAZARD_CHECK -> if (isRomanian) "Verificare risc meteo$place$time" else "Weather hazard check$place$time"
+        }
+        return "$prefix: ${result.summary}."
+    }
+
+    private fun hourlyDetails(hourly: com.scouty.app.assistant.model.AssistantHourlyWeather, isRomanian: Boolean): String {
+        val details = mutableListOf<String>()
+        hourly.temperatureC?.let { details += String.format(Locale.getDefault(), "%.1f°C", it) }
+        hourly.precipitationProbability?.let {
+            details += if (isRomanian) "probabilitate precipitatii $it%" else "precipitation probability $it%"
+        }
+        hourly.precipitationMm?.let {
+            details += String.format(Locale.getDefault(), if (isRomanian) "precipitatii %.1f mm" else "precipitation %.1f mm", it)
+        }
+        hourly.visibilityKm?.let {
+            details += String.format(Locale.getDefault(), if (isRomanian) "vizibilitate %.1f km" else "visibility %.1f km", it)
+        }
+        hourly.windSpeedKmh?.let {
+            details += String.format(Locale.getDefault(), if (isRomanian) "vant %.0f km/h" else "wind %.0f km/h", it)
+        }
+        return details.ifEmpty { listOf(if (isRomanian) "Nu sunt disponibile detalii orare suplimentare." else "No extra hourly details available.") }
+            .joinToString("; ")
+    }
+
+    private fun hazardAdvice(hazard: WeatherHazard, result: AssistantWeatherResult, isRomanian: Boolean): String {
+        val hourly = result.hourly
+        val risk = when (hazard) {
+            WeatherHazard.THUNDERSTORM -> hourly?.pictocode == 14
+            WeatherHazard.RAIN -> (hourly?.precipitationProbability ?: 0) >= 50 || (hourly?.precipitationMm ?: 0.0) > 0.2
+            WeatherHazard.COLD -> (hourly?.temperatureC ?: 99.0) <= 5.0
+            WeatherHazard.HEAT -> (hourly?.temperatureC ?: -99.0) >= 28.0
+            WeatherHazard.SNOW -> (hourly?.temperatureC ?: 99.0) <= 2.0 && ((hourly?.precipitationProbability ?: 0) >= 40)
+            WeatherHazard.FOG -> hourly?.pictocode == 5 || (hourly?.visibilityKm ?: 99.0) <= 5.0
+            WeatherHazard.WIND -> (hourly?.windSpeedKmh ?: 0.0) >= 35.0
+        }
+        return if (risk) {
+            when (hazard) {
+                WeatherHazard.THUNDERSTORM -> if (isRomanian) "Exista semnal de furtuna: evita crestele, zonele expuse si copacii izolati." else "There is a storm signal: avoid ridges, exposed areas, and isolated trees."
+                WeatherHazard.RAIN -> if (isRomanian) "Ia protectie de ploaie si trateaza poteca drept alunecoasa." else "Carry rain protection and treat the trail as slippery."
+                WeatherHazard.COLD -> if (isRomanian) "Pregateste strat termic si protectie de vant; pauzele lungi pot raci rapid corpul." else "Prepare insulation and wind protection; long stops can cool you quickly."
+                WeatherHazard.HEAT -> if (isRomanian) "Mareste rezerva de apa, redu ritmul si evita orele expuse." else "Increase water, reduce pace, and avoid exposed hours."
+                WeatherHazard.SNOW -> if (isRomanian) "Ia in calcul gheata/zapada si verifica daca traseul ramane potrivit." else "Plan for snow/ice and check that the route remains suitable."
+                WeatherHazard.FOG -> if (isRomanian) "Navigatia poate deveni dificila; tine marcajul si harta offline la indemana." else "Navigation may get difficult; keep markers and the offline map close."
+                WeatherHazard.WIND -> if (isRomanian) "Evita muchiile expuse si ajusteaza straturile pentru vant." else "Avoid exposed ridges and adjust layers for wind."
+            }
+        } else if (result.available) {
+            if (isRomanian) "Nu vad un semnal puternic pentru acest risc in datele disponibile, dar verifica din nou daca vremea se schimba." else
+                "I do not see a strong signal for that risk in the available data, but check again if conditions change."
+        } else {
+            result.summary
+        }
+    }
+
+    private fun ambiguousGearResponse(
+        items: List<GearContextItem>,
+        queryAnalysis: QueryAnalysis,
+        conversationState: AssistantConversationState,
+        packStatus: KnowledgePackStatus
+    ): AssistantResponse {
+        val isRomanian = queryAnalysis.preferredLanguage == "ro"
+        val names = items.take(3).map { it.name }
+        return structuredInteractionResponse(
+            summary = if (isRomanian) "Am gasit mai multe articole posibile. Pe care il modific?" else
+                "I found multiple possible items. Which one should I change?",
+            sections = emptyList(),
+            followUps = names,
+            reasoningType = ReasoningType.GEAR_ADVICE,
+            queryAnalysis = queryAnalysis,
+            conversationState = conversationState.copy(lastTrailContextIntent = "GEAR_CLARIFY"),
+            packStatus = packStatus
+        )
+    }
+
+    private fun structuredInteractionResponse(
+        summary: String,
+        sections: List<StructuredResponseSection>,
+        followUps: List<String>,
+        reasoningType: ReasoningType,
+        queryAnalysis: QueryAnalysis,
+        conversationState: AssistantConversationState,
+        packStatus: KnowledgePackStatus,
+        actions: List<AssistantAction> = emptyList(),
+        safetyOutcome: SafetyOutcome = SafetyOutcome.NORMAL
+    ): AssistantResponse {
+        val output = StructuredAssistantOutput(
+            summary = summary,
+            sections = sections,
+            generationMode = GenerationMode.FALLBACK_STRUCTURED,
+            reasoningType = reasoningType,
+            followUpQuestions = followUps,
+            knowledgePackVersion = packStatus.packVersion
+        )
+        return AssistantResponse(
+            answerText = renderInteractionOutput(output),
+            structuredOutput = output,
+            citations = emptyList(),
+            safetyOutcome = safetyOutcome,
+            generationMode = output.generationMode,
+            reasoningType = reasoningType,
+            conversationState = conversationState,
+            knowledgePackVersion = output.knowledgePackVersion,
+            usedFallback = true,
+            actions = actions
+        )
+    }
+
+    private fun renderInteractionOutput(output: StructuredAssistantOutput): String =
+        buildString {
+            append(output.summary.trim())
+            output.sections
+                .filter { it.body.isNotBlank() }
+                .take(2)
+                .forEach { section ->
+                    appendLine()
+                    appendLine()
+                    append(section.body.trim())
+                }
+        }.trim()
+
+    private fun matchGearItem(objectText: String, items: List<GearContextItem>): GearItemMatch {
+        if (objectText.isBlank() || items.isEmpty()) {
+            return GearItemMatch.None
+        }
+        val normalizedObject = normalize(objectText)
+        val objectTokens = normalizedObject.split(" ").filter { it.isNotBlank() }.map(::stemGearToken).toSet()
+        val scored = items.mapNotNull { item ->
+            val score = gearMatchScore(normalizedObject, objectTokens, item)
+            if (score >= 0.45) item to score else null
+        }.sortedByDescending { it.second }
+        val top = scored.firstOrNull() ?: return GearItemMatch.None
+        val tied = scored.filter { top.second - it.second <= 0.08 }
+        return if (tied.size > 1) {
+            GearItemMatch.Ambiguous(tied.map { it.first })
+        } else {
+            GearItemMatch.Single(top.first)
+        }
+    }
+
+    private fun gearMatchScore(
+        normalizedObject: String,
+        objectTokens: Set<String>,
+        item: GearContextItem
+    ): Double {
+        val variants = gearAliasesFor(item)
+        if (variants.any { it == normalizedObject }) {
+            return 1.0
+        }
+        if (variants.any { it.contains(normalizedObject) || normalizedObject.contains(it) }) {
+            return 0.85
+        }
+        val variantTokens = variants.flatMap { variant ->
+            variant.split(" ").filter { it.isNotBlank() }.map(::stemGearToken)
+        }.toSet()
+        val overlap = objectTokens.intersect(variantTokens).size
+        if (overlap == 0) {
+            return 0.0
+        }
+        return overlap.toDouble() / objectTokens.size.coerceAtLeast(1).toDouble()
+    }
+
+    private fun gearTextMatches(normalized: String, item: GearContextItem): Boolean =
+        gearAliasesFor(item).any { alias -> alias in normalized }
+
+    private fun gearAliasesFor(item: GearContextItem): Set<String> {
+        val base = setOf(item.id, item.name).map(::normalize).filter { it.isNotBlank() }.toMutableSet()
+        val text = base.joinToString(" ")
+        GearAliasGroups.forEach { aliases ->
+            if (aliases.any { alias -> alias in text }) {
+                base += aliases
+            }
+        }
+        return base
+    }
+
+    private fun extractGearObject(normalized: String): String {
+        var text = normalized
+        listOf(
+            "adauga", "adaug", "pune in lista", "pune pe lista", "trece pe lista", "bifeaza",
+            "pune", "trece", "debifeaza", "am pus", "am luat", "am impachetat", "scoate", "sterge", "elimina",
+            "fa", "schimba", "marcheaza", "din lista", "in lista", "pe lista", "ca", "la",
+            "obligatorie", "obligatoriu", "recomandata", "recomandat", "optional", "conditionat"
+        ).forEach { phrase ->
+            text = text.replace(phrase, " ")
+        }
+        val stopwords = setOf("te", "rog", "imi", "mi", "si", "lista", "echipament", "gear", "rucsac", "un", "o", "ul")
+        return text.split(" ")
+            .map { it.trim() }
+            .filter { it.isNotBlank() && it !in stopwords }
+            .joinToString(" ")
+            .trim()
+    }
+
+    private fun detectNecessity(normalized: String): String =
+        when {
+            containsAny(normalized, "obligator") -> "MANDATORY"
+            containsAny(normalized, "optional", "conditionat") -> "CONDITIONAL"
+            else -> "RECOMMENDED"
+        }
+
+    private fun necessityLabel(value: String, isRomanian: Boolean): String =
+        when (value) {
+            "MANDATORY" -> if (isRomanian) "obligatoriu" else "mandatory"
+            "CONDITIONAL" -> if (isRomanian) "optional" else "conditional"
+            else -> if (isRomanian) "recomandat" else "recommended"
+        }
+
+    private fun customGearId(name: String): String {
+        val slug = normalize(name).replace(" ", "_").ifBlank { "item" }.take(32)
+        val suffix = abs(name.lowercase(Locale.ROOT).hashCode()).toString(36)
+        return "custom_${slug}_$suffix"
+    }
+
+    private fun displayGearName(value: String): String =
+        normalize(value)
+            .split(" ")
+            .filter { it.isNotBlank() }
+            .joinToString(" ") { token -> token.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() } }
+            .ifBlank { "Articol" }
+
+    private fun stemGearToken(raw: String): String {
+        var token = raw
+        token = when {
+            token.endsWith("ului") && token.length > 6 -> token.dropLast(5)
+            token.endsWith("ilor") && token.length > 6 -> token.dropLast(4)
+            token.endsWith("elor") && token.length > 6 -> token.dropLast(4)
+            token.endsWith("lor") && token.length > 5 -> token.dropLast(3)
+            token.endsWith("ele") && token.length > 5 -> token.dropLast(2)
+            token.endsWith("le") && token.length > 4 -> token.dropLast(2)
+            token.endsWith("ul") && token.length > 4 -> token.dropLast(2)
+            else -> token
+        }
+        return token
+    }
+
+    private fun containsAny(value: String, vararg needles: String): Boolean =
+        needles.any { it in value }
+
+    private fun normalize(value: String): String =
+        Normalizer.normalize(value.lowercase(Locale.ROOT), Normalizer.Form.NFD)
+            .replace("\\p{Mn}+".toRegex(), "")
+            .replace("[^a-z0-9 ]".toRegex(), " ")
+            .replace("\\s+".toRegex(), " ")
+            .trim()
+
+    private companion object {
+        private val GearAliasGroups = listOf(
+            setOf("frontala", "lanterna frontala", "headlamp"),
+            setOf("apa", "water", "sticla apa", "bidon"),
+            setOf("pelerina", "poncho", "geaca ploaie", "jacheta ploaie", "rain jacket", "waterproof"),
+            setOf("bete", "betele", "bete trekking", "trekking poles"),
+            setOf("spray", "spray urs", "bear spray"),
+            setOf("manusi", "gloves"),
+            setOf("harta", "map"),
+            setOf("telefon", "phone"),
+            setOf("trusa", "first aid", "prim ajutor")
+        )
+    }
+}
+
+private enum class GearInteractionIntent {
+    MARK_PACKED,
+    MARK_UNPACKED,
+    ADD_ITEM,
+    REMOVE_ITEM,
+    UPDATE_ITEM,
+    SHOW_LIST,
+    MISSING_ITEMS,
+    WEATHER_BASED_ADVICE
+}
+
+private data class WeatherInteraction(
+    val intent: WeatherInteractionIntent,
+    val offsetHours: Int? = null,
+    val targetDate: String? = null,
+    val targetHour: Int? = null,
+    val hazard: WeatherHazard? = null
+)
+
+private sealed class GearItemMatch {
+    data class Single(val item: GearContextItem) : GearItemMatch()
+    data class Ambiguous(val items: List<GearContextItem>) : GearItemMatch()
+    object None : GearItemMatch()
+}
+
 class AssistantRepository(
     context: Context? = null,
     private val knowledgePackManager: KnowledgePackStatusProvider = context?.let(::KnowledgePackManager)
@@ -1104,11 +1916,13 @@ class AssistantRepository(
     private val useLegacyInterpreter: Boolean = featureFlags.useLegacyInterpreter
 ) {
     private var sessionConversationId: String = "session:${UUID.randomUUID()}"
+    private val interactionEngine = DeterministicInteractionEngine()
 
     suspend fun answer(
         query: String,
         context: DeviceContextSnapshot,
-        conversationState: AssistantConversationState = AssistantConversationState()
+        conversationState: AssistantConversationState = AssistantConversationState(),
+        interactionHandler: ChatActionHandler? = null
     ): AssistantResponse {
         val memorySession = prepareConversationMemory(
             query = query,
@@ -1118,6 +1932,16 @@ class AssistantRepository(
         val queryAnalysis = queryAnalyzer.analyze(query, context, conversationState)
         val preprocessing = deterministicPreprocessor.preprocess(query, conversationState, queryAnalysis)
         val packStatus = knowledgePackManager.ensureReady()
+        interactionEngine.answer(
+            query = query,
+            context = context,
+            queryAnalysis = queryAnalysis,
+            conversationState = conversationState,
+            packStatus = packStatus,
+            interactionHandler = interactionHandler
+        )?.let { interactionResponse ->
+            return persistAssistantTurn(memorySession, interactionResponse)
+        }
 
         val response = if (queryAnalysis.trailContextIntent != TrailContextIntent.NONE && context.trail != null) {
             val trailResult = trailContextEngine.answer(

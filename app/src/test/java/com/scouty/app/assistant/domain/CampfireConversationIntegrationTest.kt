@@ -72,6 +72,35 @@ class CampfireConversationIntegrationTest {
     }
 
     @Test
+    fun wetLightingQuery_selectsWetFuelAndNotExtinguishing() = runBlocking {
+        val repository = createRepository()
+        val context = DeviceContextSnapshot(localeTag = "ro")
+
+        val response = repository.answer(
+            query = "cum aprind focul daca e ud",
+            context = context
+        )
+
+        assertEquals("wet", response.conversationState.facts["fuel_condition"])
+        assertEquals("campfire_wet_fuel", response.conversationState.lastCardId)
+        assertFalse(response.answerText.contains("stins doar cand", ignoreCase = true))
+    }
+
+    @Test
+    fun extinguishQuery_canSelectExtinguishingCard() = runBlocking {
+        val repository = createRepository()
+        val context = DeviceContextSnapshot(localeTag = "ro")
+
+        val response = repository.answer(
+            query = "cum sting focul complet",
+            context = context
+        )
+
+        assertEquals("campfire_extinguish_completely", response.conversationState.lastCardId)
+        assertEquals(CardFamily.SCENARIO, response.structuredOutput.resolvedFamily)
+    }
+
+    @Test
     fun noDirectIgnition_movesToAlternativesInsteadOfDeadEndAbort() = runBlocking {
         val repository = createRepository()
         val context = DeviceContextSnapshot(localeTag = "ro")
@@ -483,6 +512,17 @@ class CampfireConversationIntegrationTest {
                 constraintMode = "override"
             ),
             campfireCard(
+                id = "campfire_extinguish_completely",
+                family = CardFamily.SCENARIO,
+                priority = 130,
+                title = "Stingerea completă a focului",
+                lead = "Focul este stins doar când cenușa și resturile sunt reci la atingere, nu doar când flacăra a dispărut.",
+                keywords = listOf("sting focul", "foc stins", "cenusa rece", "jar"),
+                userPhrasings = listOf("cum sting focul", "cum stingi focul complet", "focul e stins"),
+                actionsNow = listOf("împrăștie resturile", "stropește sau acoperă treptat", "verifică dacă mai există puncte fierbinți"),
+                followUps = listOf("Ai apă la îndemână sau trebuie să stingi mecanic?")
+            ),
+            campfireCard(
                 id = "campfire_no_direct_ignition",
                 family = CardFamily.CONSTRAINT,
                 priority = 122,
@@ -534,6 +574,7 @@ class CampfireConversationIntegrationTest {
                 modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
                 runtimeAdapter = FakeRuntimeAdapter()
             ),
+            featureFlags = RuntimeFeatureFlags(useCardParaphraseExpression = false),
             slmInterpreterEngine = slmInterpreterEngine,
             groundedWordingEngine = groundedWordingEngine,
             generationEngine = LocalLlmGenerationEngine(

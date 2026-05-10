@@ -19,7 +19,7 @@ data class RuntimeFeatureFlags(
     val useConversationMemory: Boolean = true,
     val useLlmSummarizer: Boolean = true,
     val useQwenDefault: Boolean = true,
-    val useCardParaphraseExpression: Boolean = false,
+    val useCardParaphraseExpression: Boolean = true,
     val useGroundedWording: Boolean = false,
     val useGrammarToolCalling: Boolean = false,
     val useLegacyInterpreter: Boolean = false

@@ -14,6 +14,8 @@ enum class SafetyOutcome {
 
 data class TrailContextSnapshot(
     val name: String,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
     val localCode: String? = null,
     val region: String? = null,
     val fromName: String? = null,
@@ -85,6 +87,75 @@ data class PendingGearAction(
     val unpackItemIds: List<String> = emptyList()
 )
 
+data class GearItemDraft(
+    val id: String,
+    val name: String,
+    val category: String = "Custom",
+    val necessity: String = "RECOMMENDED",
+    val note: String = "",
+    val packed: Boolean = false
+)
+
+data class GearItemUpdate(
+    val itemId: String,
+    val name: String? = null,
+    val category: String? = null,
+    val necessity: String? = null,
+    val note: String? = null,
+    val packed: Boolean? = null
+)
+
+enum class WeatherInteractionIntent {
+    CURRENT,
+    HOURLY_OFFSET,
+    DAILY_FORECAST,
+    HAZARD_CHECK
+}
+
+enum class WeatherHazard {
+    RAIN,
+    THUNDERSTORM,
+    COLD,
+    HEAT,
+    SNOW,
+    FOG,
+    WIND
+}
+
+data class AssistantWeatherRequest(
+    val latitude: Double,
+    val longitude: Double,
+    val altitudeMeters: Int? = null,
+    val locationLabel: String? = null,
+    val intent: WeatherInteractionIntent = WeatherInteractionIntent.CURRENT,
+    val offsetHours: Int? = null,
+    val targetDate: String? = null,
+    val targetHour: Int? = null,
+    val hazard: WeatherHazard? = null,
+    val preferredLanguage: String = "ro"
+)
+
+data class AssistantHourlyWeather(
+    val time: String,
+    val temperatureC: Double? = null,
+    val precipitationMm: Double? = null,
+    val precipitationProbability: Int? = null,
+    val pictocode: Int? = null,
+    val visibilityKm: Double? = null,
+    val windSpeedKmh: Double? = null
+)
+
+data class AssistantWeatherResult(
+    val available: Boolean,
+    val isLive: Boolean,
+    val locationLabel: String? = null,
+    val summary: String,
+    val hourly: AssistantHourlyWeather? = null,
+    val daily: DailyForecastEntry? = null,
+    val hazard: WeatherHazard? = null,
+    val errorMessage: String? = null
+)
+
 data class AssistantConversationState(
     val activeTopic: String? = null,
     val lastCardId: String? = null,
@@ -138,6 +209,18 @@ sealed class AssistantAction {
     data class ToggleGearPacked(
         val itemIds: List<String>,
         val packed: Boolean
+    ) : AssistantAction()
+
+    data class AddGearItems(
+        val items: List<GearItemDraft>
+    ) : AssistantAction()
+
+    data class RemoveGearItems(
+        val itemIds: List<String>
+    ) : AssistantAction()
+
+    data class UpdateGearItems(
+        val updates: List<GearItemUpdate>
     ) : AssistantAction()
 }
 

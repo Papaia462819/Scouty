@@ -22,8 +22,13 @@ import com.scouty.app.assistant.domain.AssistantRuntimeGraph
 import com.scouty.app.assistant.model.DailyForecastEntry
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.AssistantRuntimeDebugInfo
+import com.scouty.app.assistant.model.AssistantHourlyWeather
+import com.scouty.app.assistant.model.AssistantWeatherRequest
+import com.scouty.app.assistant.model.AssistantWeatherResult
 import com.scouty.app.assistant.domain.ModelManager
 import com.scouty.app.assistant.model.GenerationMode
+import com.scouty.app.assistant.model.GearItemDraft
+import com.scouty.app.assistant.model.GearItemUpdate
 import com.scouty.app.BuildConfig
 import com.google.android.gms.location.*
 import com.scouty.app.api.MeteoblueLocationResult
@@ -38,6 +43,7 @@ import com.scouty.app.api.MeteoblueService
 import com.scouty.app.ui.models.ActiveTrail
 import com.scouty.app.ui.models.ActiveTrailState
 import com.scouty.app.ui.models.CompletedTrailSnapshot
+import com.scouty.app.ui.models.GearItem
 import com.scouty.app.ui.models.GearNecessity
 import com.scouty.app.ui.models.GearRecommendationEngine
 import com.scouty.app.ui.models.HomeStatus
@@ -67,6 +73,10 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.*
@@ -196,6 +206,60 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             currentState.copy(gearList = newList)
         }
     }
+
+    override fun addGearItems(items: List<GearItemDraft>) {
+        if (items.isEmpty()) return
+        updateUiState { currentState ->
+            val existingIds = currentState.gearList.map { it.id }.toSet()
+            val additions = items
+                .filterNot { it.id in existingIds }
+                .map { draft ->
+                    GearItem(
+                        id = draft.id,
+                        name = draft.name,
+                        weight = "",
+                        category = draft.category.ifBlank { "Custom" },
+                        necessity = parseGearNecessity(draft.necessity),
+                        note = draft.note,
+                        isPacked = draft.packed
+                    )
+                }
+            currentState.copy(gearList = currentState.gearList + additions)
+        }
+    }
+
+    override fun removeGearItems(itemIds: List<String>) {
+        if (itemIds.isEmpty()) return
+        updateUiState { currentState ->
+            val ids = itemIds.toSet()
+            currentState.copy(gearList = currentState.gearList.filterNot { it.id in ids })
+        }
+    }
+
+    override fun updateGearItems(updates: List<GearItemUpdate>) {
+        if (updates.isEmpty()) return
+        updateUiState { currentState ->
+            val byId = updates.associateBy { it.itemId }
+            val updated = currentState.gearList.map { item ->
+                val update = byId[item.id] ?: return@map item
+                item.copy(
+                    name = update.name ?: item.name,
+                    category = update.category ?: item.category,
+                    necessity = update.necessity?.let(::parseGearNecessity) ?: item.necessity,
+                    note = update.note ?: item.note,
+                    isPacked = update.packed ?: item.isPacked
+                )
+            }
+            currentState.copy(gearList = updated)
+        }
+    }
+
+    private fun parseGearNecessity(raw: String): GearNecessity =
+        when (raw.uppercase(Locale.ROOT)) {
+            "MANDATORY", "OBLIGATORIU" -> GearNecessity.MANDATORY
+            "CONDITIONAL", "OPTIONAL" -> GearNecessity.CONDITIONAL
+            else -> GearNecessity.RECOMMENDED
+        }
 
     fun updateUserProfile(profile: UserTrailProfile) {
         userTrailProfileStore.save(profile)
@@ -858,6 +922,72 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         )
     }
 
+    override suspend fun queryWeather(request: AssistantWeatherRequest): AssistantWeatherResult {
+        if (!isInternetAvailable()) {
+            return AssistantWeatherResult(
+                available = false,
+                isLive = false,
+                locationLabel = request.locationLabel,
+                summary = if (request.preferredLanguage == "ro") {
+                    "Nu pot verifica vremea live fara conexiune la internet."
+                } else {
+                    "I cannot check live weather without an internet connection."
+                },
+                errorMessage = "offline"
+            )
+        }
+        if (meteoblueApiKey.isBlank()) {
+            return AssistantWeatherResult(
+                available = false,
+                isLive = false,
+                locationLabel = request.locationLabel,
+                summary = if (request.preferredLanguage == "ro") {
+                    "Nu pot verifica vremea live fara cheia Meteoblue configurata."
+                } else {
+                    "I cannot check live weather because Meteoblue is not configured."
+                },
+                errorMessage = "missing_api_key"
+            )
+        }
+
+        val lookup = loadForecastWithFallbacks(
+            lat = request.latitude,
+            lon = request.longitude,
+            asl = request.altitudeMeters
+        )
+        val response = lookup.response
+        if (!response.hasForecastData()) {
+            return AssistantWeatherResult(
+                available = false,
+                isLive = true,
+                locationLabel = request.locationLabel,
+                summary = if (request.preferredLanguage == "ro") {
+                    "Am incercat sa verific vremea live, dar prognoza nu are date utile pentru locatia ceruta."
+                } else {
+                    "I tried to check live weather, but the forecast has no usable data for that location."
+                },
+                errorMessage = "empty_forecast"
+            )
+        }
+
+        val hourly = selectHourlyWeather(response, request)
+        val daily = selectDailyWeather(response, request)
+        val locationSuffix = when {
+            lookup.usedFallbackLocation && !lookup.fallbackLocation?.name.isNullOrBlank() ->
+                lookup.fallbackLocation?.name
+            else -> request.locationLabel
+        }
+        return AssistantWeatherResult(
+            available = true,
+            isLive = true,
+            locationLabel = locationSuffix,
+            summary = buildAssistantWeatherSummary(hourly, daily, request),
+            hourly = hourly,
+            daily = daily,
+            hazard = request.hazard
+        )
+    }
+
     private suspend fun requestForecast(lat: Double, lon: Double, asl: Int?): MeteoblueResponse? {
         if (meteoblueApiKey.isBlank()) {
             return null
@@ -879,6 +1009,117 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 response.body()
             }
         }
+    }
+
+    private fun selectHourlyWeather(
+        response: MeteoblueResponse?,
+        request: AssistantWeatherRequest
+    ): AssistantHourlyWeather? {
+        val hourly = response?.data1h ?: return response?.current?.let { current ->
+            AssistantHourlyWeather(
+                time = current.time,
+                temperatureC = current.temperature,
+                pictocode = current.pictocode,
+                windSpeedKmh = current.windspeed
+            )
+        }
+        val times = hourly.time
+        if (times.isEmpty()) {
+            return null
+        }
+        val index = resolveHourlyIndex(times, request)
+        return AssistantHourlyWeather(
+            time = times.getOrNull(index).orEmpty(),
+            temperatureC = hourly.temperature?.getOrNull(index),
+            precipitationMm = hourly.precipitation?.getOrNull(index),
+            precipitationProbability = hourly.precipitationProbability?.getOrNull(index),
+            pictocode = hourly.pictocode?.getOrNull(index),
+            visibilityKm = hourly.visibility?.getOrNull(index),
+            windSpeedKmh = if (index == 0) response.current?.windspeed else null
+        )
+    }
+
+    private fun selectDailyWeather(
+        response: MeteoblueResponse?,
+        request: AssistantWeatherRequest
+    ): DailyForecastEntry? {
+        val daily = buildDailyForecast(response)
+        if (daily.isEmpty()) {
+            return null
+        }
+        request.targetDate?.let { date ->
+            return daily.firstOrNull { it.date == date } ?: daily.firstOrNull()
+        }
+        return daily.firstOrNull()
+    }
+
+    private fun resolveHourlyIndex(times: List<String>, request: AssistantWeatherRequest): Int {
+        val fallbackIndex = request.offsetHours?.coerceAtLeast(0)?.coerceAtMost(times.lastIndex) ?: 0
+        val target = when {
+            request.targetDate != null && request.targetHour != null -> runCatching {
+                LocalDate.parse(request.targetDate).atTime(request.targetHour, 0)
+            }.getOrNull()
+            request.offsetHours != null -> LocalDateTime.now().plusHours(request.offsetHours.toLong())
+            else -> LocalDateTime.now()
+        } ?: return fallbackIndex
+
+        val indexedTimes = times.mapIndexedNotNull { index, raw ->
+            parseForecastTime(raw)?.let { parsed -> index to parsed }
+        }
+        if (indexedTimes.isEmpty()) {
+            return fallbackIndex
+        }
+        return indexedTimes.minByOrNull { (_, parsed) ->
+            kotlin.math.abs(Duration.between(target, parsed).toMinutes())
+        }?.first ?: fallbackIndex
+    }
+
+    private fun parseForecastTime(raw: String): LocalDateTime? {
+        val value = raw.trim()
+        val normalized = value.replace("T", " ").substringBefore("+").substringBefore("Z")
+        val patterns = listOf(
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        )
+        patterns.forEach { formatter ->
+            runCatching { LocalDateTime.parse(normalized, formatter) }.getOrNull()?.let { return it }
+        }
+        return runCatching { LocalDateTime.parse(value) }.getOrNull()
+    }
+
+    private fun buildAssistantWeatherSummary(
+        hourly: AssistantHourlyWeather?,
+        daily: DailyForecastEntry?,
+        request: AssistantWeatherRequest
+    ): String {
+        val isRomanian = request.preferredLanguage == "ro"
+        val pieces = mutableListOf<String>()
+        hourly?.temperatureC?.let { pieces += formatForecastTemperature(it) }
+        hourly?.pictocode?.let { pieces += getPictocodeDescription(it) }
+        hourly?.precipitationProbability?.let {
+            pieces += if (isRomanian) "precipitatii $it%" else "precipitation $it%"
+        }
+        hourly?.precipitationMm?.takeIf { it > 0.0 }?.let {
+            pieces += if (isRomanian) {
+                String.format(Locale.getDefault(), "ploaie %.1f mm", it)
+            } else {
+                String.format(Locale.getDefault(), "rain %.1f mm", it)
+            }
+        }
+        hourly?.windSpeedKmh?.let {
+            pieces += String.format(Locale.getDefault(), "vant %.0f km/h", it)
+        }
+        if (pieces.isEmpty() && daily != null) {
+            daily.temperatureMin?.let { pieces += formatForecastTemperature(it) }
+            daily.temperatureMax?.let { pieces += formatForecastTemperature(it) }
+            daily.precipitationProbability?.let {
+                pieces += if (isRomanian) "precipitatii $it%" else "precipitation $it%"
+            }
+            pieces += daily.description
+        }
+        return pieces.ifEmpty {
+            listOf(if (isRomanian) "prognoza live disponibila" else "live forecast available")
+        }.joinToString(", ")
     }
 
     private suspend fun searchNearbyWeatherLocations(lat: Double, lon: Double): List<MeteoblueLocationResult> {
