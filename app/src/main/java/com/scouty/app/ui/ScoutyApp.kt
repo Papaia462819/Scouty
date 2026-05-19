@@ -173,7 +173,11 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                     onSend = assistantViewModel::sendCurrentDraft,
                     onPromptSelected = assistantViewModel::sendPrompt
                 )
-                ROUTE_SOS -> SosScreen(contentPadding = innerPadding)
+                ROUTE_SOS -> SosScreen(
+                    contentPadding = innerPadding,
+                    status = uiState,
+                    profile = currentProfile
+                )
                 ROUTE_GEAR -> GearScreen(
                     status = uiState,
                     onToggleItem = { mainViewModel.toggleGearItem(it) },
