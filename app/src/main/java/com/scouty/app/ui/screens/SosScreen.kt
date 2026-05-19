@@ -14,6 +14,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -35,10 +36,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,6 +51,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -80,6 +85,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.Lifecycle
@@ -881,6 +887,7 @@ private fun SosSettingsDialog(
 ) {
     val context = LocalContext.current
     var draft by remember(settings) { mutableStateOf(settings) }
+    var selectedTab by rememberSaveable { mutableStateOf(SosSettingsTab.Trigger) }
     val contactPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -894,21 +901,28 @@ private fun SosSettingsDialog(
             }
         }
     }
+    val canSave = !draft.action.includesText || draft.smsRecipients.isNotEmpty()
 
-    Dialog(onDismissRequest = onDismiss) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .widthIn(max = 340.dp)
+                .heightIn(max = 640.dp)
                 .clip(RoundedCornerShape(20.dp))
-                .background(BgPrimary)
-                .border(0.5.dp, BorderSubtle, RoundedCornerShape(20.dp))
-                .padding(horizontal = 20.dp, vertical = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .background(Color(0xFF141A14))
+                .border(0.5.dp, BorderDefault, RoundedCornerShape(20.dp))
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(0.5.dp, Color.Transparent, RoundedCornerShape(0.dp))
+                    .padding(start = 18.dp, end = 18.dp, top = 18.dp, bottom = 14.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -919,7 +933,7 @@ private fun SosSettingsDialog(
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(
-                        text = "Configureaza hold-ul si actiunea directa.",
+                        text = selectedTab.subtitle,
                         style = MaterialTheme.typography.bodySmall,
                         color = TextSecondary
                     )
@@ -941,177 +955,74 @@ private fun SosSettingsDialog(
                 }
             }
 
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(470.dp)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                    .height(0.5.dp)
+                    .background(BorderSubtle)
+            )
+
+            SettingsTabs(
+                selectedTab = selectedTab,
+                onSelect = { selectedTab = it }
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f, fill = false)
             ) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    ScoutySectionHeader(title = "HOLD DURATION")
-                    ScoutyCard(contentPadding = PaddingValues(12.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                CategoryIconTile(icon = Lucide.Clock, color = Warning, size = 34.dp, iconSize = 16.dp)
-                                Spacer(Modifier.width(10.dp))
-                                Column {
-                                    Text(
-                                        text = "${draft.holdSeconds} seconds",
-                                        style = MaterialTheme.typography.labelLarge,
-                                        color = TextPrimary
-                                    )
-                                    Text(
-                                        text = "Long enough to avoid accidental activation.",
-                                        fontSize = 11.sp,
-                                        color = TextTertiary
-                                    )
-                                }
+                androidx.compose.animation.AnimatedContent(
+                    targetState = selectedTab,
+                    transitionSpec = {
+                        val direction = if (targetState.ordinal > initialState.ordinal) 1 else -1
+                        (androidx.compose.animation.slideInHorizontally(
+                            animationSpec = tween(240, easing = FastOutSlowInEasing),
+                            initialOffsetX = { it * direction }
+                        ) + fadeIn(animationSpec = tween(180))) togetherWith
+                            (androidx.compose.animation.slideOutHorizontally(
+                                animationSpec = tween(220, easing = FastOutSlowInEasing),
+                                targetOffsetX = { -it * direction }
+                            ) + fadeOut(animationSpec = tween(160)))
+                    },
+                    label = "sosSettingsTab"
+                ) { tab ->
+                    when (tab) {
+                        SosSettingsTab.Trigger -> TriggerSettingsTab(
+                            draft = draft,
+                            onDraftChange = { draft = it },
+                            onNeedContacts = { selectedTab = SosSettingsTab.Contacts }
+                        )
+                        SosSettingsTab.Contacts -> ContactsSettingsTab(
+                            draft = draft,
+                            onDraftChange = { draft = it },
+                            onAddContact = {
+                                contactPicker.launch(
+                                    Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI)
+                                )
                             }
-                            QuantityStepper(
-                                value = draft.holdSeconds,
-                                minValue = SosSettings.MinHoldSeconds,
-                                maxValue = SosSettings.MaxHoldSeconds,
-                                onDecrement = { draft = draft.copy(holdSeconds = (draft.holdSeconds - 1).coerceAtLeast(SosSettings.MinHoldSeconds)) },
-                                onIncrement = { draft = draft.copy(holdSeconds = (draft.holdSeconds + 1).coerceAtMost(SosSettings.MaxHoldSeconds)) },
-                                accent = Warning
-                            )
-                        }
-                    }
-                }
-
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    ScoutySectionHeader(title = "ACTION AFTER HOLD")
-                    SettingsSwitchRow(
-                        title = "Send SOS text",
-                        subtitle = "Opens SMS with selected contacts and rescue packet.",
-                        iconColor = AccentGreen,
-                        icon = Lucide.MessageSquare,
-                        checked = draft.action.includesText,
-                        onCheckedChange = { checked ->
-                            val callTarget = draft.action.callTarget()
-                            draft = draft.copy(
-                                action = actionFromSwitches(
-                                    sendText = checked,
-                                    callTarget = if (!checked && callTarget == null) SosCallTarget.Emergency else callTarget
-                                )
-                            )
-                        }
-                    )
-                    SettingsSwitchRow(
-                        title = "Call 112",
-                        subtitle = "Mutually exclusive with Salvamont call.",
-                        iconColor = Danger,
-                        icon = Lucide.Phone,
-                        checked = draft.action.callTarget() == SosCallTarget.Emergency,
-                        onCheckedChange = { checked ->
-                            draft = draft.copy(
-                                action = actionFromSwitches(
-                                    sendText = draft.action.includesText || (!checked && draft.action.callTarget() == SosCallTarget.Emergency),
-                                    callTarget = if (checked) SosCallTarget.Emergency else null
-                                )
-                            )
-                        }
-                    )
-                    SettingsSwitchRow(
-                        title = "Call Salvamont",
-                        subtitle = "Uses 0SALVAMONT dial number.",
-                        iconColor = Warning,
-                        icon = Lucide.ShieldPlus,
-                        checked = draft.action.callTarget() == SosCallTarget.Salvamont,
-                        onCheckedChange = { checked ->
-                            draft = draft.copy(
-                                action = actionFromSwitches(
-                                    sendText = draft.action.includesText || (!checked && draft.action.callTarget() == SosCallTarget.Salvamont),
-                                    callTarget = if (checked) SosCallTarget.Salvamont else null
-                                )
-                            )
-                        }
-                    )
-                }
-
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    ScoutySectionHeader(title = "SMS RECIPIENTS")
-                    ContactRecipientsCard(
-                        contacts = draft.contacts,
-                        onAddContact = {
-                            contactPicker.launch(Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI))
-                        },
-                        onToggleContact = { contactId, enabled ->
-                            draft = draft.copy(
-                                contacts = draft.contacts.map { contact ->
-                                    if (contact.id == contactId) contact.copy(enabled = enabled) else contact
-                                }
-                            )
-                        },
-                        onRemoveContact = { contactId ->
-                            draft = draft.copy(contacts = draft.contacts.filterNot { it.id == contactId })
-                        }
-                    )
-                }
-
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    ScoutySectionHeader(title = "MESSAGE IDENTITY")
-                    SosTextField(
-                        label = "Name in SOS message",
-                        value = draft.senderName,
-                        onValueChange = { draft = draft.copy(senderName = it) },
-                        placeholder = profile.displayName.ifBlank { "Your name" },
-                        helper = "If empty, Scouty uses your profile name."
-                    )
-                    SosTextField(
-                        label = "Blood type",
-                        value = draft.bloodType,
-                        onValueChange = { draft = draft.copy(bloodType = it) },
-                        placeholder = "O+, A-, unknown",
-                        helper = "Optional medical detail."
-                    )
-                    SosTextField(
-                        label = "Medical notes",
-                        value = draft.medicalNotes,
-                        onValueChange = { draft = draft.copy(medicalNotes = it) },
-                        placeholder = "Allergies, medication, conditions",
-                        helper = "Keep this short. It will be included only if enabled.",
-                        minLines = 2
-                    )
-                    ScoutyCard(contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
-                                CategoryIconTile(icon = Lucide.ShieldPlus, color = AccentGreen, size = 32.dp, iconSize = 15.dp)
-                                Spacer(Modifier.width(10.dp))
-                                Column {
-                                    Text(
-                                        text = "Include medical details",
-                                        style = MaterialTheme.typography.labelLarge,
-                                        color = TextPrimary
-                                    )
-                                    Text(
-                                        text = "Blood type and notes stay local until SMS/share.",
-                                        fontSize = 11.sp,
-                                        color = TextTertiary
-                                    )
-                                }
-                            }
-                            Switch(
-                                checked = draft.includeMedicalDetails,
-                                onCheckedChange = { draft = draft.copy(includeMedicalDetails = it) }
-                            )
-                        }
+                        )
+                        SosSettingsTab.Identity -> IdentitySettingsTab(
+                            draft = draft,
+                            profile = profile,
+                            onDraftChange = { draft = it }
+                        )
                     }
                 }
             }
 
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(0.5.dp)
+                    .background(BorderSubtle)
+            )
+
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp, vertical = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 SecondaryButton(
                     text = "Cancel",
@@ -1122,10 +1033,550 @@ private fun SosSettingsDialog(
                     text = "Save",
                     onClick = { onSave(draft) },
                     icon = Lucide.Check,
-                    modifier = Modifier.weight(1f)
+                    enabled = canSave,
+                    modifier = Modifier.weight(1.5f)
                 )
             }
         }
+    }
+}
+
+private enum class SosSettingsTab(val label: String, val subtitle: String) {
+    Trigger("Trigger", "Configureaza hold-ul si actiunea"),
+    Contacts("Contacts", "Cui i se trimite rescue packet-ul"),
+    Identity("Identity", "Datele incluse in rescue packet")
+}
+
+@Composable
+private fun SettingsTabs(
+    selectedTab: SosSettingsTab,
+    onSelect: (SosSettingsTab) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        SosSettingsTab.entries.forEach { tab ->
+            val active = tab == selectedTab
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(if (active) AccentGreen.copy(alpha = 0.15f) else Color.Transparent)
+                    .clickable { onSelect(tab) }
+                    .padding(vertical = 8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = tab.label,
+                    fontSize = 11.sp,
+                    fontWeight = if (active) FontWeight.Medium else FontWeight.Normal,
+                    color = if (active) AccentGreen else TextSecondary
+                )
+            }
+        }
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(0.5.dp)
+            .background(BorderSubtle)
+    )
+}
+
+@Composable
+private fun TriggerSettingsTab(
+    draft: SosSettings,
+    onDraftChange: (SosSettings) -> Unit,
+    onNeedContacts: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
+    ) {
+        SettingsSectionLabel("HOLD DURATION")
+        ScoutyCard(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(14.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                CategoryIconTile(icon = Lucide.Clock, color = Warning, size = 28.dp, iconSize = 14.dp)
+                Column {
+                    Text(
+                        text = "${draft.holdSeconds} seconds",
+                        color = TextPrimary,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        letterSpacing = (-0.2).sp
+                    )
+                    Text(
+                        text = "Evita activarea accidentala",
+                        color = TextTertiary,
+                        fontSize = 10.sp
+                    )
+                }
+            }
+            Spacer(Modifier.height(16.dp))
+            Slider(
+                value = draft.holdSeconds.toFloat(),
+                onValueChange = { value ->
+                    onDraftChange(draft.copy(holdSeconds = value.roundToInt().coerceIn(SosSettings.MinHoldSeconds, SosSettings.MaxHoldSeconds)))
+                },
+                valueRange = SosSettings.MinHoldSeconds.toFloat()..SosSettings.MaxHoldSeconds.toFloat(),
+                steps = SosSettings.MaxHoldSeconds - SosSettings.MinHoldSeconds - 1,
+                colors = SliderDefaults.colors(
+                    thumbColor = Warning,
+                    activeTrackColor = Warning,
+                    inactiveTrackColor = BorderSubtle
+                )
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("2s", color = TextTertiary, fontSize = 9.sp)
+                Text("10s", color = TextTertiary, fontSize = 9.sp)
+            }
+        }
+
+        Spacer(Modifier.height(18.dp))
+        SettingsSectionLabel("ACTION AFTER HOLD")
+        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            val hasContacts = draft.smsRecipients.isNotEmpty()
+            ActionChoiceCard(
+                title = "SMS to contacts",
+                subtitle = "Trimite rescue packet",
+                semantic = Info,
+                icon = Lucide.MessageSquare,
+                selected = draft.action == SosAction.TEXT_ONLY,
+                enabled = hasContacts,
+                disabledPill = "0 contacts",
+                onDisabledClick = onNeedContacts,
+                onSelect = { onDraftChange(draft.copy(action = SosAction.TEXT_ONLY)) }
+            )
+            ActionChoiceCard(
+                title = "Call 112",
+                subtitle = "Apel direct, fara meniu",
+                semantic = Danger,
+                icon = Lucide.Phone,
+                selected = draft.action == SosAction.CALL_112 || draft.action == SosAction.TEXT_THEN_CALL_112,
+                onSelect = { onDraftChange(draft.copy(action = SosAction.CALL_112)) }
+            )
+            ActionChoiceCard(
+                title = "Call Salvamont",
+                subtitle = "0SALVAMONT",
+                semantic = Warning,
+                icon = Lucide.ShieldPlus,
+                selected = draft.action == SosAction.CALL_SALVAMONT || draft.action == SosAction.TEXT_THEN_CALL_SALVAMONT,
+                onSelect = { onDraftChange(draft.copy(action = SosAction.CALL_SALVAMONT)) }
+            )
+        }
+        Spacer(Modifier.height(12.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .background(Warning.copy(alpha = 0.06f))
+                .border(0.5.dp, Warning.copy(alpha = 0.15f), RoundedCornerShape(8.dp))
+                .padding(horizontal = 10.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Icon(Lucide.Info, contentDescription = null, tint = Warning, modifier = Modifier.size(11.dp))
+            Text(
+                text = "Doar o singura actiune principala poate fi activa",
+                color = TextPrimary.copy(alpha = 0.75f),
+                fontSize = 10.sp,
+                lineHeight = 14.sp
+            )
+        }
+    }
+}
+
+@Composable
+private fun ActionChoiceCard(
+    title: String,
+    subtitle: String,
+    semantic: Color,
+    icon: ImageVector,
+    selected: Boolean,
+    enabled: Boolean = true,
+    disabledPill: String? = null,
+    onDisabledClick: (() -> Unit)? = null,
+    onSelect: () -> Unit
+) {
+    val shape = RoundedCornerShape(14.dp)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(if (selected) Modifier.border(3.dp, semantic.copy(alpha = 0.08f), shape) else Modifier)
+            .clip(shape)
+            .background(if (selected) semantic.copy(alpha = 0.06f) else BgSurface)
+            .border(if (selected) 1.dp else 0.5.dp, if (selected) semantic else BorderSubtle, shape)
+            .clickable { if (enabled) onSelect() else onDisabledClick?.invoke() }
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        CategoryIconTile(icon = icon, color = semantic, size = 28.dp, iconSize = 14.dp)
+        Column(modifier = Modifier.weight(1f)) {
+            Text(title, color = if (selected) semantic else TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+            Text(subtitle, color = TextSecondary, fontSize = 10.sp, lineHeight = 13.sp)
+        }
+        if (!enabled && disabledPill != null) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Warning.copy(alpha = 0.12f))
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            ) {
+                Text(disabledPill, color = Warning, fontSize = 10.sp, fontWeight = FontWeight.Medium)
+            }
+        } else {
+            MiniSwitch(checked = selected, color = semantic, onClick = onSelect)
+        }
+    }
+}
+
+@Composable
+private fun MiniSwitch(
+    checked: Boolean,
+    color: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .size(width = 32.dp, height = 18.dp)
+            .clip(CircleShape)
+            .background(if (checked) color else TextSecondary.copy(alpha = 0.18f))
+            .clickable(onClick = onClick)
+            .padding(3.dp),
+        contentAlignment = if (checked) Alignment.CenterEnd else Alignment.CenterStart
+    ) {
+        Box(
+            modifier = Modifier
+                .size(12.dp)
+                .clip(CircleShape)
+                .background(if (checked) TextPrimary else TextTertiary)
+        )
+    }
+}
+
+@Composable
+private fun ContactsSettingsTab(
+    draft: SosSettings,
+    onDraftChange: (SosSettings) -> Unit,
+    onAddContact: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
+    ) {
+        SettingsSectionLabel("EMERGENCY CONTACTS")
+        ScoutyCard(semantic = AccentGreen, contentPadding = PaddingValues(12.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                    CategoryIconTile(icon = Lucide.MessageSquare, color = AccentGreen, size = 32.dp, iconSize = 15.dp)
+                    Spacer(Modifier.width(10.dp))
+                    Column {
+                        Text("Emergency contacts", color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                        Text(
+                            text = if (draft.contacts.isEmpty()) "Pick from your contacts" else "${draft.contacts.size} contacts picked",
+                            color = TextSecondary,
+                            fontSize = 10.sp
+                        )
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .border(0.5.dp, BorderDefault, RoundedCornerShape(10.dp))
+                        .clickable(onClick = onAddContact)
+                        .padding(horizontal = 9.dp, vertical = 7.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    Icon(Lucide.MessageSquare, contentDescription = null, tint = AccentGreen, modifier = Modifier.size(11.dp))
+                    Text("Add", color = AccentGreen, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                }
+            }
+        }
+        Spacer(Modifier.height(12.dp))
+        Box(modifier = Modifier.fillMaxWidth().height(0.5.dp).background(BorderSubtle))
+        Spacer(Modifier.height(12.dp))
+        if (draft.contacts.isEmpty()) {
+            Text(
+                text = "No contact is stored until you pick one from the Android contact picker.",
+                color = TextTertiary,
+                fontSize = 12.sp,
+                lineHeight = 17.sp,
+                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+            )
+        } else {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                draft.contacts.forEach { contact ->
+                    ContactListRow(
+                        contact = contact,
+                        onToggle = {
+                            onDraftChange(
+                                draft.copy(
+                                    contacts = draft.contacts.map {
+                                        if (it.id == contact.id) it.copy(enabled = !it.enabled) else it
+                                    }
+                                )
+                            )
+                        },
+                        onRemove = {
+                            onDraftChange(draft.copy(contacts = draft.contacts.filterNot { it.id == contact.id }))
+                        }
+                    )
+                }
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
+        ScoutyCard(contentPadding = PaddingValues(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                CategoryIconTile(icon = Lucide.ShieldPlus, color = Warning, size = 32.dp, iconSize = 15.dp)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("Send to Salvamont too", color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                    Text("Notifies the Romanian rescue dispatch", color = TextSecondary, fontSize = 10.sp)
+                }
+                MiniSwitch(
+                    checked = draft.action == SosAction.TEXT_THEN_CALL_SALVAMONT,
+                    color = Warning,
+                    onClick = {
+                        onDraftChange(
+                            draft.copy(
+                                action = if (draft.action == SosAction.TEXT_THEN_CALL_SALVAMONT) {
+                                    SosAction.TEXT_ONLY
+                                } else {
+                                    SosAction.TEXT_THEN_CALL_SALVAMONT
+                                }
+                            )
+                        )
+                    },
+                    modifier = Modifier.size(width = 36.dp, height = 20.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ContactListRow(
+    contact: SosContact,
+    onToggle: () -> Unit,
+    onRemove: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(BgSurfaceRaised)
+            .alpha(if (contact.enabled) 1f else 0.55f)
+            .clickable(onClick = onToggle)
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .background(AccentGreenBg),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(contact.initials(), color = AccentGreen, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+        }
+        Column(modifier = Modifier.weight(1f)) {
+            Text(contact.name.ifBlank { "Emergency contact" }, color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+            Text(contact.phone, color = TextTertiary, fontSize = 10.sp, fontFamily = JetBrainsMonoFamily)
+        }
+        Box(
+            modifier = Modifier
+                .size(28.dp)
+                .clip(CircleShape)
+                .background(Danger.copy(alpha = 0.1f))
+                .clickable(onClick = onRemove),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(Lucide.X, contentDescription = "Remove contact", tint = Danger, modifier = Modifier.size(12.dp))
+        }
+    }
+}
+
+@Composable
+private fun IdentitySettingsTab(
+    draft: SosSettings,
+    profile: UserProfile,
+    onDraftChange: (SosSettings) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
+    ) {
+        SettingsSectionLabel("NAME IN SOS MESSAGE")
+        SosTextField(
+            label = "",
+            value = draft.senderName,
+            onValueChange = { onDraftChange(draft.copy(senderName = it)) },
+            placeholder = profile.displayName.ifBlank { "Your name here" },
+            helper = "Lasa gol pentru a folosi numele din profil"
+        )
+        Spacer(Modifier.height(14.dp))
+        ScoutyCard(semantic = AccentGreen, contentPadding = PaddingValues(12.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                    CategoryIconTile(icon = Lucide.ShieldPlus, color = AccentGreen, size = 32.dp, iconSize = 15.dp)
+                    Spacer(Modifier.width(10.dp))
+                    Column {
+                        Text(
+                            text = "Include detalii medicale",
+                            color = if (draft.includeMedicalDetails) AccentGreen else TextPrimary,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text("Stocate local, trimise doar la SOS", color = TextSecondary, fontSize = 10.sp)
+                    }
+                }
+                MiniSwitch(
+                    checked = draft.includeMedicalDetails,
+                    color = AccentGreen,
+                    onClick = { onDraftChange(draft.copy(includeMedicalDetails = !draft.includeMedicalDetails)) },
+                    modifier = Modifier.size(width = 36.dp, height = 20.dp)
+                )
+            }
+        }
+        AnimatedVisibility(
+            visible = draft.includeMedicalDetails,
+            enter = expandVertically(animationSpec = tween(280, easing = FastOutSlowInEasing)) + fadeIn(),
+            exit = shrinkVertically(animationSpec = tween(220, easing = FastOutSlowInEasing)) + fadeOut()
+        ) {
+            Column {
+                Spacer(Modifier.height(16.dp))
+                SettingsSectionLabel("BLOOD TYPE")
+                BloodTypeGrid(
+                    selected = draft.bloodType,
+                    onSelect = { onDraftChange(draft.copy(bloodType = it)) }
+                )
+                Spacer(Modifier.height(16.dp))
+                MedicalNotesField(
+                    value = draft.medicalNotes,
+                    onValueChange = { onDraftChange(draft.copy(medicalNotes = it)) }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun BloodTypeGrid(selected: String, onSelect: (String) -> Unit) {
+    val items = listOf("O+", "A-", "B+", "AB+", "O-", "A+", "B-", "?")
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        items.chunked(4).forEach { row ->
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+                row.forEach { item ->
+                    val active = selected == item
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(if (active) AccentGreen.copy(alpha = 0.15f) else BgSurfaceRaised)
+                            .border(if (active) 1.dp else 0.5.dp, if (active) AccentGreen else BorderDefault, RoundedCornerShape(10.dp))
+                            .clickable { onSelect(item) }
+                            .padding(vertical = 8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = item,
+                            color = if (active) AccentGreen else TextSecondary,
+                            fontSize = 11.sp,
+                            fontWeight = if (active) FontWeight.Medium else FontWeight.Normal
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MedicalNotesField(value: String, onValueChange: (String) -> Unit) {
+    val overLimit = value.length > 120
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        SettingsSectionLabel("MEDICAL NOTES", bottom = 0.dp)
+        Text(
+            text = "${value.length} / 120",
+            color = if (overLimit) Danger else TextTertiary,
+            fontSize = 10.sp,
+            lineHeight = 12.sp
+        )
+    }
+    Spacer(Modifier.height(8.dp))
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 60.dp)
+            .background(BgSurfaceRaised, RoundedCornerShape(12.dp)),
+        minLines = 3,
+        maxLines = 4,
+        placeholder = { Text("Alergii, medicatie, conditii…", color = TextTertiary, fontSize = 12.sp) },
+        textStyle = MaterialTheme.typography.bodyMedium.copy(
+            color = TextPrimary,
+            fontSize = 12.sp,
+            lineHeight = 17.sp
+        ),
+        shape = RoundedCornerShape(12.dp),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = BgSurfaceRaised,
+            unfocusedContainerColor = BgSurfaceRaised,
+            disabledContainerColor = BgSurfaceRaised,
+            focusedIndicatorColor = if (overLimit) Danger else AccentGreen,
+            unfocusedIndicatorColor = if (overLimit) Danger else BorderDefault,
+            cursorColor = AccentGreen,
+        )
+    )
+    Spacer(Modifier.height(4.dp))
+    Text(
+        text = "Scurt si concret. Inclus doar daca toggle-ul e activ.",
+        color = TextTertiary,
+        fontSize = 9.sp
+    )
+}
+
+@Composable
+private fun SettingsSectionLabel(text: String, bottom: Dp = 8.dp) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp, letterSpacing = 1.5.sp),
+        color = TextSecondary
+    )
+    if (bottom > 0.dp) {
+        Spacer(Modifier.height(bottom))
     }
 }
 
@@ -1484,6 +1935,16 @@ private fun upsertSosContact(existing: List<SosContact>, contact: SosContact): L
     val key = contact.dedupeKey
     val withoutDuplicate = existing.filterNot { it.dedupeKey == key || it.id == contact.id }
     return withoutDuplicate + contact.copy(enabled = true)
+}
+
+private fun SosContact.initials(): String {
+    val source = name.ifBlank { phone }
+    return source
+        .split(' ', '-', '_')
+        .filter { it.isNotBlank() }
+        .take(2)
+        .joinToString("") { it.first().uppercaseChar().toString() }
+        .ifBlank { "?" }
 }
 
 private fun openDialer(context: Context, number: String): Boolean {
