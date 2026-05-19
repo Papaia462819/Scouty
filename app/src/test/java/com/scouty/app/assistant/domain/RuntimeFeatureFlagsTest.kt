@@ -6,7 +6,7 @@ import org.junit.Test
 
 class RuntimeFeatureFlagsTest {
     @Test
-    fun defaultsEnableFastQwenRuntimePath() {
+    fun defaultsEnableQwenValidationPath() {
         val flags = RuntimeFeatureFlags()
 
         assertTrue(flags.useCrossEncoderReranker)
@@ -14,7 +14,7 @@ class RuntimeFeatureFlagsTest {
         assertTrue(flags.useConversationMemory)
         assertTrue(flags.useLlmSummarizer)
         assertTrue(flags.useQwenDefault)
-        assertFalse(flags.useCardParaphraseExpression)
+        assertTrue(flags.useCardParaphraseExpression)
         assertFalse(flags.useGroundedWording)
         assertFalse(flags.useGrammarToolCalling)
         assertFalse(flags.useLegacyInterpreter)

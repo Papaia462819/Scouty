@@ -31,6 +31,7 @@ import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,6 +39,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -75,6 +77,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
@@ -124,12 +127,12 @@ import com.scouty.app.ui.components.StatusPill
 import com.scouty.app.ui.models.HomeStatus
 import com.scouty.app.ui.theme.AccentGreen
 import com.scouty.app.ui.theme.AccentGreenBg
-import com.scouty.app.ui.theme.BgPrimary
 import com.scouty.app.ui.theme.BgSurface
 import com.scouty.app.ui.theme.BgSurfaceRaised
 import com.scouty.app.ui.theme.BorderDefault
 import com.scouty.app.ui.theme.BorderSubtle
 import com.scouty.app.ui.theme.Danger
+import com.scouty.app.ui.theme.DangerSoft
 import com.scouty.app.ui.theme.Info
 import com.scouty.app.ui.theme.JetBrainsMonoFamily
 import com.scouty.app.ui.theme.TextPrimary
@@ -142,6 +145,8 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.roundToInt
+
+private val SosScreenBackground = Color(0xFF0C0808)
 
 @Composable
 fun SosScreen(
@@ -190,107 +195,177 @@ fun SosScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(BgPrimary)
-            .padding(contentPadding)
+            .background(SosScreenBackground)
     ) {
-        Column(
+        SosAmbientBackground()
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .then(if (showSettings) Modifier.blur(8.dp) else Modifier)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 14.dp, vertical = 4.dp),
-            verticalArrangement = Arrangement.spacedBy(0.dp),
+                .padding(contentPadding)
         ) {
-            SosHeader(
-                settings = settings,
-                onSettingsClick = { showSettings = true }
-            )
-            SosHoldButton(
-                holdSeconds = settings.holdSeconds,
-                action = settings.action,
-                onActivated = {
-                    val message = SosMessageBuilder.build(
-                        input = status.toSosMessageInput(profile.displayName, System.currentTimeMillis()),
-                        settings = settings
-                    )
-                    val launchedText = if (settings.action.includesText) {
-                        val recipients = settings.smsRecipients
-                        if (recipients.isEmpty()) {
-                            statusMessage = "Adauga contacte SMS in setarile SOS."
-                            if (settings.action.callNumber == null) {
-                                showSettings = true
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .then(if (showSettings) Modifier.blur(8.dp) else Modifier)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 14.dp, vertical = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(0.dp),
+            ) {
+                SosHeader(
+                    settings = settings,
+                    onSettingsClick = { showSettings = true }
+                )
+                SosHoldButton(
+                    holdSeconds = settings.holdSeconds,
+                    action = settings.action,
+                    onActivated = {
+                        val message = SosMessageBuilder.build(
+                            input = status.toSosMessageInput(profile.displayName, System.currentTimeMillis()),
+                            settings = settings
+                        )
+                        val launchedText = if (settings.action.includesText) {
+                            val recipients = settings.smsRecipients
+                            if (recipients.isEmpty()) {
+                                statusMessage = "Adauga contacte SMS in setarile SOS."
+                                if (settings.action.callNumber == null) {
+                                    showSettings = true
+                                }
+                                false
+                            } else {
+                                openSmsComposer(context, recipients, message).also { launched ->
+                                    statusMessage = if (launched) {
+                                        "Mesaj SOS pregatit pentru ${recipients.size} contact(e)."
+                                    } else {
+                                        "Nu am gasit o aplicatie SMS disponibila."
+                                    }
+                                }
                             }
-                            false
                         } else {
-                            openSmsComposer(context, recipients, message).also { launched ->
-                                statusMessage = if (launched) {
-                                    "Mesaj SOS pregatit pentru ${recipients.size} contact(e)."
+                            false
+                        }
+
+                        val callNumber = settings.action.callNumber
+                        when {
+                            launchedText && callNumber != null -> {
+                                pendingFollowUpCall = callNumber
+                                waitingForExternalReturn = true
+                                externalLaunchAt = SystemClock.elapsedRealtime()
+                            }
+                            !settings.action.includesText && callNumber != null -> {
+                                if (openDialer(context, callNumber)) {
+                                    statusMessage = "Dialer pregatit pentru ${displayDialNumber(callNumber)}."
                                 } else {
-                                    "Nu am gasit o aplicatie SMS disponibila."
+                                    statusMessage = "Nu am putut deschide dialer-ul."
+                                }
+                            }
+                            settings.action.includesText && !launchedText && callNumber != null -> {
+                                if (openDialer(context, callNumber)) {
+                                    statusMessage = "SMS indisponibil. Dialer pregatit pentru ${displayDialNumber(callNumber)}."
                                 }
                             }
                         }
-                    } else {
-                        false
                     }
-
-                    val callNumber = settings.action.callNumber
-                    when {
-                        launchedText && callNumber != null -> {
-                            pendingFollowUpCall = callNumber
-                            waitingForExternalReturn = true
-                            externalLaunchAt = SystemClock.elapsedRealtime()
-                        }
-                        !settings.action.includesText && callNumber != null -> {
-                            if (openDialer(context, callNumber)) {
-                                statusMessage = "Dialer pregatit pentru ${displayDialNumber(callNumber)}."
-                            } else {
-                                statusMessage = "Nu am putut deschide dialer-ul."
-                            }
-                        }
-                        settings.action.includesText && !launchedText && callNumber != null -> {
-                            if (openDialer(context, callNumber)) {
-                                statusMessage = "SMS indisponibil. Dialer pregatit pentru ${displayDialNumber(callNumber)}."
-                            }
-                        }
-                    }
+                )
+                statusMessage?.let { message ->
+                    StatusNotice(message = message, onDismiss = { statusMessage = null })
                 }
-            )
-            statusMessage?.let { message ->
-                StatusNotice(message = message, onDismiss = { statusMessage = null })
+                YourLocationCard(status = status)
+                Spacer(Modifier.height(10.dp))
+                MessagePreviewCard(
+                    message = previewMessage,
+                    onCopy = {
+                        clipboard.setText(AnnotatedString(previewMessage))
+                        statusMessage = "Mesaj SOS copiat."
+                    }
+                )
+                Spacer(Modifier.height(8.dp))
             }
-            YourLocationCard(status = status)
-            Spacer(Modifier.height(10.dp))
-            MessagePreviewCard(
-                message = previewMessage,
-                onCopy = {
-                    clipboard.setText(AnnotatedString(previewMessage))
-                    statusMessage = "Mesaj SOS copiat."
-                }
-            )
-            Spacer(Modifier.height(8.dp))
-        }
 
-        if (showSettings) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.34f))
-            )
-            SosSettingsDialog(
-                settings = settings,
-                profile = profile,
-                onDismiss = { showSettings = false },
-                onSave = { updated ->
-                    val normalized = updated.normalized()
-                    repository.save(normalized)
-                    settings = normalized
-                    showSettings = false
-                    statusMessage = "Setarile SOS au fost salvate."
-                }
-            )
+            if (showSettings) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.34f))
+                )
+                SosSettingsDialog(
+                    settings = settings,
+                    profile = profile,
+                    onDismiss = { showSettings = false },
+                    onSave = { updated ->
+                        val normalized = updated.normalized()
+                        repository.save(normalized)
+                        settings = normalized
+                        showSettings = false
+                        statusMessage = "Setarile SOS au fost salvate."
+                    }
+                )
+            }
         }
     }
+}
+
+@Composable
+private fun SosAmbientBackground() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        0f to Danger.copy(alpha = 0.04f),
+                        0.3f to Color.Transparent,
+                        0.7f to Color.Transparent,
+                        1f to Danger.copy(alpha = 0.03f),
+                    )
+                )
+        )
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .offset(x = 100.dp, y = (-140).dp)
+                .size(360.dp)
+                .background(
+                    brush = Brush.radialGradient(
+                        0f to Danger.copy(alpha = 0.12f),
+                        0.4f to Danger.copy(alpha = 0.04f),
+                        0.7f to Color.Transparent,
+                        1f to Color.Transparent,
+                    ),
+                    shape = CircleShape
+                )
+        )
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .offset(x = (-80).dp, y = 100.dp)
+                .size(280.dp)
+                .background(
+                    brush = Brush.radialGradient(
+                        0f to Danger.copy(alpha = 0.06f),
+                        0.7f to Color.Transparent,
+                        1f to Color.Transparent,
+                    ),
+                    shape = CircleShape
+                )
+            )
+    }
+}
+
+@Composable
+private fun SosUrgencyCard(
+    modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(14.dp),
+    contentPadding: PaddingValues = PaddingValues(14.dp),
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Column(
+        modifier = modifier
+            .clip(shape)
+            .background(Danger.copy(alpha = 0.04f), shape)
+            .border(0.5.dp, Danger.copy(alpha = 0.15f), shape)
+            .padding(contentPadding),
+        content = content
+    )
 }
 
 @Composable
@@ -313,7 +388,8 @@ private fun SosHeader(
                 modifier = Modifier
                     .size(36.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(Danger.copy(alpha = 0.12f)),
+                    .background(Danger.copy(alpha = 0.18f))
+                    .border(0.5.dp, Danger.copy(alpha = 0.3f), RoundedCornerShape(10.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -342,8 +418,8 @@ private fun SosHeader(
             modifier = Modifier
                 .size(32.dp)
                 .clip(RoundedCornerShape(10.dp))
-                .border(0.5.dp, BorderDefault, RoundedCornerShape(10.dp))
-                .background(BgSurface)
+                .background(Danger.copy(alpha = 0.05f))
+                .border(0.5.dp, Danger.copy(alpha = 0.2f), RoundedCornerShape(10.dp))
                 .clickable(onClick = onSettingsClick),
             contentAlignment = Alignment.Center,
         ) {
@@ -425,7 +501,7 @@ private fun SosHoldButton(
                     .shadow(
                         elevation = 16.dp,
                         shape = CircleShape,
-                        spotColor = Danger.copy(alpha = 0.5f)
+                        spotColor = Danger.copy(alpha = 0.35f)
                     )
                     .clip(CircleShape)
                     .background(
@@ -563,7 +639,7 @@ private fun StatusNotice(message: String, onDismiss: () -> Unit) {
 @Composable
 private fun YourLocationCard(status: HomeStatus) {
     val gpsState = locationPillState(status)
-    ScoutyCard(
+    SosUrgencyCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 0.dp),
@@ -709,7 +785,7 @@ private fun MessagePreviewCard(message: String, onCopy: () -> Unit) {
         }
     }
 
-    ScoutyCard(
+    SosUrgencyCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         contentPadding = PaddingValues(0.dp)
@@ -726,13 +802,13 @@ private fun MessagePreviewCard(message: String, onCopy: () -> Unit) {
                     modifier = Modifier
                         .size(28.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(AccentGreen.copy(alpha = 0.12f)),
+                        .background(Danger.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Lucide.MessageSquare,
                         contentDescription = null,
-                        tint = AccentGreen,
+                        tint = DangerSoft,
                         modifier = Modifier.size(13.dp)
                     )
                 }
@@ -750,7 +826,7 @@ private fun MessagePreviewCard(message: String, onCopy: () -> Unit) {
                     Text(
                         text = "SMS pregatit · ${message.length} char",
                         fontSize = 10.sp,
-                        color = TextSecondary
+                        color = TextPrimary.copy(alpha = 0.6f)
                     )
                 }
             }
@@ -768,8 +844,8 @@ private fun MessagePreviewCard(message: String, onCopy: () -> Unit) {
                     modifier = Modifier
                         .height(30.dp)
                         .clip(RoundedCornerShape(9.dp))
-                        .background(BgSurfaceRaised)
-                        .border(0.5.dp, BorderDefault, RoundedCornerShape(9.dp))
+                        .background(Danger.copy(alpha = 0.06f))
+                        .border(0.5.dp, Danger.copy(alpha = 0.2f), RoundedCornerShape(9.dp))
                         .clickable { expanded = !expanded }
                         .padding(horizontal = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -814,7 +890,7 @@ private fun MessagePreviewCard(message: String, onCopy: () -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(0.5.dp)
-                        .background(BorderSubtle)
+                        .background(Danger.copy(alpha = 0.15f))
                 )
                 Text(
                     text = message,
@@ -824,7 +900,7 @@ private fun MessagePreviewCard(message: String, onCopy: () -> Unit) {
                     fontFamily = JetBrainsMonoFamily,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(BgSurface)
+                        .background(Danger.copy(alpha = 0.025f))
                         .padding(14.dp)
                 )
             }
@@ -843,8 +919,8 @@ private fun PacketIconButton(
         modifier = Modifier
             .size(30.dp)
             .clip(RoundedCornerShape(9.dp))
-            .background(BgSurfaceRaised)
-            .border(0.5.dp, BorderDefault, RoundedCornerShape(9.dp))
+            .background(Danger.copy(alpha = 0.06f))
+            .border(0.5.dp, Danger.copy(alpha = 0.2f), RoundedCornerShape(9.dp))
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -866,7 +942,7 @@ private fun PacketSummaryRow(text: String) {
         Icon(
             imageVector = Lucide.Check,
             contentDescription = null,
-            tint = AccentGreen,
+            tint = DangerSoft,
             modifier = Modifier.size(10.dp)
         )
         Text(

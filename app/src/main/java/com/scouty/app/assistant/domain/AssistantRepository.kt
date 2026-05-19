@@ -920,14 +920,6 @@ class TemplateGenerationEngine : GenerationEngine {
             )
         }
 
-        input.retrievedChunks.drop(1).take(2).takeIf { it.isNotEmpty() }?.let { extras ->
-            sections += StructuredResponseSection(
-                title = if (isRomanian) "Detalii utile" else "Useful details",
-                body = extras.joinToString(" ") { it.body },
-                style = ResponseSectionStyle.GUIDANCE
-            )
-        }
-
         buildMissingGroundingSection(input, isRomanian)?.let { sections += it }
         buildTrailContextSection(input, isRomanian)?.let { sections += it }
         buildActionSection(input, isRomanian)?.let { sections += it }
@@ -2187,6 +2179,25 @@ class AssistantRepository(
             initial
         }
 
+        if (finalCampfire.retrievedChunks.isEmpty()) {
+            AssistantDiagnostics.logCampfireFallback(
+                query = query,
+                reason = "no_field_know_how_chunks"
+            )
+            return answerStandard(
+                query = query,
+                context = context,
+                conversationState = conversationState,
+                initialAnalysis = queryAnalysis.copy(
+                    knowledgeLane = ConversationLane.STANDARD,
+                    resolvedTopic = null
+                ),
+                preprocessing = preprocessing,
+                packStatus = packStatus,
+                conversationHistory = conversationHistory
+            )
+        }
+
         val expressionResult = maybeBuildExpressionResult(
             query = query,
             context = context,
@@ -2194,14 +2205,6 @@ class AssistantRepository(
             retrievedChunks = finalCampfire.retrievedChunks,
             confidence = finalCampfire.retrievalConfidence,
             knowledgePackStatus = packStatus,
-            conversationHistory = conversationHistory
-        ) ?: maybeBuildCampfireTierBExpressionResult(
-            query = query,
-            context = context,
-            queryAnalysis = queryAnalysis,
-            conversationState = conversationState,
-            preprocessing = preprocessing,
-            packStatus = packStatus,
             conversationHistory = conversationHistory
         )
         val responseRetrievedChunks = expressionResult?.retrievedChunks ?: finalCampfire.retrievedChunks
@@ -2431,9 +2434,27 @@ class AssistantRepository(
     ): ExpressionLayerResult? {
         val engine = cardParaphraseEngine ?: return null
         if (!useCardParaphraseExpression) {
+            AssistantDiagnostics.logExpressionLayer(
+                chunkId = "",
+                invocationCount = 0,
+                fallbackCount = 0,
+                tokenLatencyMs = 0,
+                reason = "feature_disabled"
+            )
             return null
         }
-        val primary = retrievedChunks.firstOrNull() ?: return null
+        if (retrievedChunks.isEmpty()) {
+            AssistantDiagnostics.logExpressionLayer(
+                chunkId = "",
+                invocationCount = 0,
+                fallbackCount = 0,
+                tokenLatencyMs = 0,
+                reason = "no_primary_chunk"
+            )
+            return null
+        }
+        val primary = retrievedChunks.firstOrNull { engine.isEligibleForParaphrase(it) }
+            ?: retrievedChunks.first()
         val paraphrased = engine.maybeParaphrase(
             CardParaphraseRequest(
                 featureEnabled = useCardParaphraseExpression,
@@ -2441,7 +2462,8 @@ class AssistantRepository(
                 userQuery = query,
                 confidenceTier = confidence.tier,
                 deviceContext = context,
-                conversationHistory = conversationHistory
+                conversationHistory = conversationHistory,
+                preferredLanguage = analysis.preferredLanguage
             )
         ) ?: return null
         val modelStatus = modelManager.currentStatus()
@@ -2459,51 +2481,6 @@ class AssistantRepository(
                 knowledgePackVersion = knowledgePackStatus.packVersion ?: primary.packVersion
             ),
             retrievedChunks = retrievedChunks
-        )
-    }
-
-    private suspend fun maybeBuildCampfireTierBExpressionResult(
-        query: String,
-        context: DeviceContextSnapshot,
-        queryAnalysis: QueryAnalysis,
-        conversationState: AssistantConversationState,
-        preprocessing: DeterministicPreprocessingResult,
-        packStatus: KnowledgePackStatus,
-        conversationHistory: ConversationHistory?
-    ): ExpressionLayerResult? {
-        if (!useCardParaphraseExpression || cardParaphraseEngine == null) {
-            return null
-        }
-        val expressionAnalysis = queryAnalysis.copy(
-            domainHints = (
-                listOf(DomainHint("campfire_basics", 5.0)) +
-                    queryAnalysis.domainHints.filterNot { it.domain == "field_know_how" || it.domain == "campfire_basics" }
-                ).take(3),
-            knowledgeLane = ConversationLane.STANDARD,
-            resolvedTopic = null,
-            targetFamily = null
-        )
-        val retrieved = retrievalEngine.retrieve(
-            query = query,
-            context = context,
-            queryAnalysis = expressionAnalysis,
-            limit = 4
-        )
-        val assessment = retrievalConfidencePolicy.assessStandard(
-            query = query,
-            queryAnalysis = expressionAnalysis,
-            conversationState = conversationState,
-            retrieved = retrieved,
-            preprocessing = preprocessing
-        )
-        return maybeBuildExpressionResult(
-            query = query,
-            context = context,
-            analysis = expressionAnalysis,
-            retrievedChunks = retrieved,
-            confidence = assessment,
-            knowledgePackStatus = packStatus,
-            conversationHistory = conversationHistory
         )
     }
 

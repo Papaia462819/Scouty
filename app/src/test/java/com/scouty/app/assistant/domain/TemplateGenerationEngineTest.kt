@@ -95,25 +95,34 @@ class TemplateGenerationEngineTest {
     }
 
     @Test
-    fun multipleChunks_showsAdditionally() = runBlocking {
+    fun multipleChunks_rendersOnlyTopChunk() = runBlocking {
         val chunks = listOf(
             defaultChunk("Primul pas este presiunea directă."),
             defaultChunk("Ridică membrul afectat deasupra inimii.")
         )
         val result = engine.generate(makeInput(chunks = chunks, localeTag = "ro"))
-        assertTrue(result.sections.any { it.title == "Detalii utile" })
-        assertTrue(result.renderText().contains("Ridică membrul"))
+        assertFalse(
+            "structured fallback must not concatenate extra chunks",
+            result.sections.any { it.title == "Detalii utile" }
+        )
+        assertTrue(result.renderText().contains("Primul pas"))
+        assertFalse(result.renderText().contains("Ridică membrul"))
     }
 
     @Test
-    fun threeChunks_showsNote() = runBlocking {
+    fun threeChunks_rendersOnlyTopChunk() = runBlocking {
         val chunks = listOf(
             defaultChunk("Primul pas."),
             defaultChunk("Al doilea pas."),
             defaultChunk("Al treilea pas cu informații suplimentare.")
         )
         val result = engine.generate(makeInput(chunks = chunks, localeTag = "ro"))
-        assertTrue(result.sections.any { it.title == "Detalii utile" })
+        assertFalse(
+            "structured fallback must not concatenate extra chunks",
+            result.sections.any { it.title == "Detalii utile" }
+        )
+        assertTrue(result.renderText().contains("Primul pas"))
+        assertFalse(result.renderText().contains("Al treilea pas"))
     }
 
     @Test

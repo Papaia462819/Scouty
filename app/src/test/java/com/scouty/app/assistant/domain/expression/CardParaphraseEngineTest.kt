@@ -6,19 +6,48 @@ import com.scouty.app.assistant.domain.RetrievedChunk
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CardParaphraseEngineTest {
     @Test
-    fun tierA_skipsWithoutCallingModel() = runBlocking {
-        val model = FakeParaphraseModel("nu contează")
+    fun tierA_invokesModelAndReturnsRephrase() = runBlocking {
+        val model = FakeParaphraseModel(
+            "Aragazul portabil este mai sigur în zona alpină decât focul deschis la 2000 m."
+        )
         val engine = CardParaphraseEngine(model)
 
         val result = engine.maybeParaphrase(
             request(tier = "A", confidence = RetrievalConfidenceTier.HIGH)
         )
+
+        assertNotNull(result)
+        assertEquals(model.response, result?.text)
+        assertEquals(1, model.calls)
+    }
+
+    @Test
+    fun tierB_invokesModel() = runBlocking {
+        val model = FakeParaphraseModel(
+            "Aragazul portabil este mai sigur în zona alpină decât focul deschis la 2000 m."
+        )
+        val engine = CardParaphraseEngine(model)
+
+        val result = engine.maybeParaphrase(request(tier = "B"))
+
+        assertNotNull(result)
+        assertEquals(1, model.calls)
+    }
+
+    @Test
+    fun missingTier_skipsWithoutCallingModel() = runBlocking {
+        val model = FakeParaphraseModel("nu contează")
+        val engine = CardParaphraseEngine(model)
+
+        val result = engine.maybeParaphrase(requestWithoutTier())
 
         assertNull(result)
         assertEquals(0, model.calls)
@@ -49,13 +78,43 @@ class CardParaphraseEngineTest {
     }
 
     @Test
-    fun unfaithfulOutput_isRejected() = runBlocking {
-        val model = FakeParaphraseModel("Ia o lanternă și pornește spre cabană.")
+    fun outputWithUnknownNumber_isRejected() = runBlocking {
+        // Source mentions 2000 m. Model invents 1500 m → must be rejected.
+        val model = FakeParaphraseModel(
+            "Aragazul portabil este mai sigur în zona alpină decât focul deschis la 1500 m."
+        )
         val engine = CardParaphraseEngine(model)
 
         val result = engine.maybeParaphrase(request())
 
         assertNull(result)
+        assertEquals(1, model.calls)
+    }
+
+    @Test
+    fun outputWithUnknownProperNoun_isRejected() = runBlocking {
+        // Model invents a proper noun ("Bucegi") not in source/lead/query/context.
+        val model = FakeParaphraseModel(
+            "Folosește aragazul portabil în masivul Bucegi pentru gătit sigur."
+        )
+        val engine = CardParaphraseEngine(model)
+
+        val result = engine.maybeParaphrase(request())
+
+        assertNull(result)
+        assertEquals(1, model.calls)
+    }
+
+    @Test
+    fun paraphraseDroppingMostSourceWords_isAccepted() = runBlocking {
+        // Old coverage rule would reject this; new rule accepts because no
+        // new numbers or proper nouns are introduced.
+        val model = FakeParaphraseModel("Mai bine cu aragaz decât cu foc deschis sus.")
+        val engine = CardParaphraseEngine(model)
+
+        val result = engine.maybeParaphrase(request())
+
+        assertNotNull(result)
         assertEquals(1, model.calls)
     }
 
@@ -70,28 +129,50 @@ class CardParaphraseEngineTest {
 
         assertEquals(model.response, result?.text)
         assertEquals(1, model.calls)
-        assertEquals(180, model.lastOptions?.sampler?.maxTokens)
-        assertEquals(0.4f, model.lastOptions?.sampler?.temperature)
+        assertEquals(110, model.lastOptions?.sampler?.maxTokens)
+        assertEquals(0.25f, model.lastOptions?.sampler?.temperature)
         assertEquals(0.9f, model.lastOptions?.sampler?.topP)
     }
 
     @Test
-    fun keyFactCoverage_usesNumbersCapitalizedWordsAndLeadTokens() {
-        val engine = CardParaphraseEngine(FakeParaphraseModel(""))
-
-        val facts = engine.keyFactTokens(
-            source = DefaultBody,
-            lead = DefaultLead
+    fun cacheHit_avoidsSecondModelCall() = runBlocking {
+        val model = FakeParaphraseModel(
+            "Aragazul portabil este mai sigur în zona alpină decât focul deschis la 2000 m."
         )
+        val engine = CardParaphraseEngine(model)
 
-        assertTrue("expected numeric fact", "2000" in facts)
-        assertTrue("expected lead token", "aragazul" in facts)
+        val first = engine.maybeParaphrase(request())
+        val second = engine.maybeParaphrase(request())
+
+        assertNotNull(first)
+        assertNotNull(second)
+        assertEquals(first?.text, second?.text)
+        assertEquals(1, model.calls)
+        assertEquals(0L, second?.latencyMs)
+    }
+
+    @Test
+    fun introducesUnknownFacts_detectsHallucinatedNumber() {
+        val engine = CardParaphraseEngine(FakeParaphraseModel(""))
+        val sources = listOf(DefaultBody, DefaultLead, "", "")
+
         assertTrue(
-            engine.isFaithful(
-                source = DefaultBody,
-                lead = DefaultLead,
-                response = "Aragazul portabil este mai sigur în zona alpină decât focul deschis la 2000 m."
-            )
+            engine.introducesUnknownFacts(sources, "Folosește aragazul la 3500 m altitudine.")
+        )
+        assertFalse(
+            engine.introducesUnknownFacts(sources, "Folosește aragazul la 2000 m altitudine.")
+        )
+    }
+
+    @Test
+    fun introducesUnknownFacts_ignoresSentenceInitialCapitals() {
+        val engine = CardParaphraseEngine(FakeParaphraseModel(""))
+        val sources = listOf(DefaultBody, DefaultLead, "", "")
+
+        // "Aragazul" appears at sentence start in response — must NOT be
+        // treated as an unknown proper noun even if absent from source.
+        assertFalse(
+            engine.introducesUnknownFacts(sources, "Aragazul ajută la gătit sigur.")
         )
     }
 
@@ -114,7 +195,28 @@ class CardParaphraseEngineTest {
             userQuery = "Pot face foc în golul alpin?",
             confidenceTier = confidence,
             deviceContext = DeviceContextSnapshot(localeTag = "ro"),
-            conversationHistory = null
+            conversationHistory = null,
+            preferredLanguage = "ro"
+        )
+
+    private fun requestWithoutTier(): CardParaphraseRequest =
+        CardParaphraseRequest(
+            featureEnabled = true,
+            chunk = RetrievedChunk(
+                topic = "fire_alpine_stove_alt",
+                sourceTitle = "Scouty",
+                sectionTitle = "Aragaz în zona alpină",
+                body = DefaultBody,
+                score = 85,
+                chunkId = "cg-campfire",
+                domain = "campfire_basics",
+                metadataJson = """{"tone":"conversational"}"""
+            ),
+            userQuery = "Pot face foc în golul alpin?",
+            confidenceTier = RetrievalConfidenceTier.HIGH,
+            deviceContext = DeviceContextSnapshot(localeTag = "ro"),
+            conversationHistory = null,
+            preferredLanguage = "ro"
         )
 
     private class FakeParaphraseModel(

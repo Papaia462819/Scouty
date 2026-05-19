@@ -12,9 +12,9 @@ class AssistantStorageBootstrapTest {
     @Test
     fun ensureModelDirectoriesExist() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        File(context.noBackupFilesDir, "models/gemma-3-1b").mkdirs()
+        File(context.noBackupFilesDir, "models/qwen-2.5-1.5b").mkdirs()
         context.getExternalFilesDir(null)?.let { externalRoot ->
-            File(externalRoot, "models/gemma-3-1b").mkdirs()
+            File(externalRoot, "models/qwen-2.5-1.5b").mkdirs()
         }
     }
 }

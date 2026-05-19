@@ -90,16 +90,32 @@ object AssistantDiagnostics {
         invocationCount: Int,
         fallbackCount: Int,
         tokenLatencyMs: Long,
-        skippedTierACount: Int,
-        reason: String
+        reason: String,
+        rawLength: Int = 0,
+        rawPrefix: String = ""
     ) {
-        debug(
-            "CardParaphraseEngine chunkId=$chunkId " +
-                "expression_invocation_count=$invocationCount " +
-                "expression_fallback_count=$fallbackCount " +
-                "expression_token_latency_ms=$tokenLatencyMs " +
-                "expression_skipped_tier_a_count=$skippedTierACount " +
-                "reason=$reason"
+        val sanitizedPrefix = rawPrefix
+            .take(60)
+            .replace("\n", "\\n")
+            .replace("\r", "\\r")
+        val message = "CardParaphraseEngine chunkId=$chunkId " +
+            "expression_invocation_count=$invocationCount " +
+            "expression_fallback_count=$fallbackCount " +
+            "expression_token_latency_ms=$tokenLatencyMs " +
+            "raw_length=$rawLength " +
+            "raw_prefix=\"$sanitizedPrefix\" " +
+            "reason=$reason"
+        if (reason == "ok" || reason == "cache_hit") {
+            debug(message)
+        } else {
+            warn(message)
+        }
+    }
+
+    fun logCampfireFallback(query: String, reason: String) {
+        warn(
+            "CampfireConversationEngine.fallback query=\"$query\" reason=$reason " +
+                "delegating_to=answerStandard"
         )
     }
 
@@ -155,6 +171,12 @@ object AssistantDiagnostics {
             runCatching {
                 Log.d(LogTag, message)
             }
+        }
+    }
+
+    private fun warn(message: String) {
+        runCatching {
+            Log.w(LogTag, message)
         }
     }
 

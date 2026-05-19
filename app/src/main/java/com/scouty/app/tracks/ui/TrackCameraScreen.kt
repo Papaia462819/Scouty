@@ -169,6 +169,11 @@ fun TrackCameraScreen(
         analyzing = true
         error = null
         result = null
+        capture.flashMode = if (flashEnabled) {
+            ImageCapture.FLASH_MODE_ON
+        } else {
+            ImageCapture.FLASH_MODE_OFF
+        }
         captureTrackImage(
             context = context,
             imageCapture = capture,

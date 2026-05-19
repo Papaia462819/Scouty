@@ -43,7 +43,6 @@ from common import (
 
 
 REQUIRED_DOMAINS = {
-    "field_know_how",
     "medical_emergency",
     "mountain_safety",
     "survival_basics",

@@ -20,7 +20,8 @@ data class CardParaphraseRequest(
     val userQuery: String,
     val confidenceTier: RetrievalConfidenceTier,
     val deviceContext: DeviceContextSnapshot,
-    val conversationHistory: ConversationHistory?
+    val conversationHistory: ConversationHistory?,
+    val preferredLanguage: String? = null
 )
 
 data class ParaphrasedResponse(
@@ -43,28 +44,57 @@ class CardParaphraseEngine(
     private val model: CardParaphraseModel,
     private val json: Json = Json { ignoreUnknownKeys = true; explicitNulls = false }
 ) {
+    private val cache = object : LinkedHashMap<String, String>(16, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, String>): Boolean =
+            size > MaxCacheEntries
+    }
+    private val cacheLock = Any()
+
+    fun isEligibleForParaphrase(chunk: RetrievedChunk): Boolean =
+        metadataText(chunk, "tier") != null
+
     suspend fun maybeParaphrase(request: CardParaphraseRequest): ParaphrasedResponse? {
         if (!request.featureEnabled) {
+            log(
+                chunkId = request.chunk.chunkId,
+                invoked = false,
+                rejected = false,
+                reason = "feature_disabled"
+            )
             return null
         }
 
         val tier = metadataText(request.chunk, "tier")
-        if (tier == "A") {
-            AssistantDiagnostics.logExpressionLayer(
+        if (tier == null) {
+            log(
                 chunkId = request.chunk.chunkId,
-                invocationCount = 0,
-                fallbackCount = 0,
-                tokenLatencyMs = 0,
-                skippedTierACount = 1,
-                reason = "tier_a_skip"
+                invoked = false,
+                rejected = false,
+                reason = "missing_tier"
             )
             return null
         }
-        if (tier != "B") {
+        if (request.confidenceTier == RetrievalConfidenceTier.LOW) {
+            log(
+                chunkId = request.chunk.chunkId,
+                invoked = false,
+                rejected = false,
+                reason = "low_confidence"
+            )
             return null
         }
-        if (request.confidenceTier == RetrievalConfidenceTier.LOW) {
-            return null
+
+        val cacheKey = cacheKey(request)
+        cachedText(cacheKey)?.let { cached ->
+            log(
+                chunkId = request.chunk.chunkId,
+                invoked = false,
+                rejected = false,
+                reason = "cache_hit",
+                rawLength = cached.length,
+                rawPrefix = cached
+            )
+            return ParaphrasedResponse(text = cached, latencyMs = 0)
         }
 
         val prompt = buildPrompt(request)
@@ -74,8 +104,8 @@ class CardParaphraseEngine(
                 prompt = prompt,
                 options = LocalLlmGenerationOptions(
                     sampler = LocalLlmSamplerParams(
-                        maxTokens = 180,
-                        temperature = 0.4f,
+                        maxTokens = 110,
+                        temperature = 0.25f,
                         topK = 40,
                         topP = 0.9f,
                         randomSeed = 13
@@ -84,14 +114,12 @@ class CardParaphraseEngine(
                 )
             )
         }.getOrElse {
-            val elapsedMs = elapsedMsSince(startedAt)
-            AssistantDiagnostics.logExpressionLayer(
+            log(
                 chunkId = request.chunk.chunkId,
-                invocationCount = 1,
-                fallbackCount = 1,
-                tokenLatencyMs = elapsedMs,
-                skippedTierACount = 0,
-                reason = "generation_error"
+                invoked = true,
+                rejected = true,
+                reason = "generation_error",
+                latencyMs = elapsedMsSince(startedAt)
             )
             return null
         }
@@ -99,70 +127,65 @@ class CardParaphraseEngine(
         val elapsedMs = elapsedMsSince(startedAt)
         val sanitized = sanitize(raw, request.chunk.body)
         if (sanitized == null) {
-            AssistantDiagnostics.logExpressionLayer(
+            log(
                 chunkId = request.chunk.chunkId,
-                invocationCount = 1,
-                fallbackCount = 1,
-                tokenLatencyMs = elapsedMs,
-                skippedTierACount = 0,
-                reason = "sanitization_rejected"
+                invoked = true,
+                rejected = true,
+                reason = "sanitization_rejected",
+                latencyMs = elapsedMs,
+                rawLength = raw.length,
+                rawPrefix = raw
             )
             return null
         }
 
-        if (!isFaithful(source = request.chunk.body, lead = metadataText(request.chunk, "lead"), response = sanitized)) {
-            AssistantDiagnostics.logExpressionLayer(
+        val allowedSources = listOf(
+            request.chunk.body,
+            metadataText(request.chunk, "lead").orEmpty(),
+            request.userQuery,
+            buildDeviceContext(request.deviceContext)
+        )
+        if (introducesUnknownFacts(allowedSources, sanitized)) {
+            log(
                 chunkId = request.chunk.chunkId,
-                invocationCount = 1,
-                fallbackCount = 1,
-                tokenLatencyMs = elapsedMs,
-                skippedTierACount = 0,
-                reason = "faithfulness_rejected"
+                invoked = true,
+                rejected = true,
+                reason = "faithfulness_rejected",
+                latencyMs = elapsedMs,
+                rawLength = raw.length,
+                rawPrefix = raw
             )
             return null
         }
 
-        AssistantDiagnostics.logExpressionLayer(
+        cachePut(cacheKey, sanitized)
+        log(
             chunkId = request.chunk.chunkId,
-            invocationCount = 1,
-            fallbackCount = 0,
-            tokenLatencyMs = elapsedMs,
-            skippedTierACount = 0,
-            reason = "ok"
+            invoked = true,
+            rejected = false,
+            reason = "ok",
+            latencyMs = elapsedMs,
+            rawLength = sanitized.length,
+            rawPrefix = sanitized
         )
         return ParaphrasedResponse(text = sanitized, latencyMs = elapsedMs)
     }
 
     private fun buildPrompt(request: CardParaphraseRequest): String =
         buildString {
-            request.conversationHistory?.contextBlock?.takeIf { it.isNotBlank() }?.let { history ->
-                appendLine("CONTEXT CONVERSAȚIE:")
-                appendLine("```text")
-                appendLine(history.take(MaxHistoryCharacters))
-                appendLine("```")
-                appendLine()
-            } ?: run {
-                appendLine("Ești Scouty, asistentul offline pentru drumeții în România.")
-                appendLine("Răspunzi scurt, natural și prudent, în română.")
-                appendLine()
-            }
-            appendLine("CONTEXT DISPOZITIV:")
-            appendLine("```text")
-            appendLine(buildDeviceContext(request.deviceContext))
-            appendLine("```")
+            appendLine("Reformulează cardul de mai jos într-un singur paragraf scurt, natural, în română, fidel faptelor din card.")
+            appendLine("Nu inventa numere, locuri sau sfaturi noi. Nu folosi markdown, JSON sau explicații despre prompt.")
             appendLine()
-            appendLine("CARD SURSĂ DE ADEVĂR:")
-            appendLine("```text")
+            appendLine("CARD:")
             appendLine(request.chunk.body.trim())
-            appendLine("```")
             appendLine()
-            appendLine("ÎNTREBAREA UTILIZATORULUI:")
-            appendLine("```text")
+            appendLine("ÎNTREBARE UTILIZATOR:")
             appendLine(request.userQuery.trim())
-            appendLine("```")
             appendLine()
-            appendLine("Reformulează cardul de mai sus într-un răspuns conversațional, fidel faptelor, fără să inventezi informații noi.")
-            appendLine("Răspunsul trebuie să fie doar textul final pentru utilizator, fără markdown, fără JSON și fără explicații despre prompt.")
+            appendLine("CONTEXT DISPOZITIV (folosește doar dacă e relevant):")
+            appendLine(buildDeviceContext(request.deviceContext))
+            appendLine()
+            append("Răspunde acum cu o singură formulare conversațională a cardului, fără să repeți întrebarea.")
         }
 
     private fun buildDeviceContext(context: DeviceContextSnapshot): String {
@@ -192,29 +215,59 @@ class CardParaphraseEngine(
         return cleaned.takeIf { it.length <= maxLength }
     }
 
-    internal fun isFaithful(source: String, lead: String?, response: String): Boolean {
-        val facts = keyFactTokens(source, lead)
-        if (facts.isEmpty()) {
+    internal fun introducesUnknownFacts(allowedSources: List<String>, response: String): Boolean {
+        val allowedNumbers = linkedSetOf<String>()
+        val allowedNouns = linkedSetOf<String>()
+        for (source in allowedSources) {
+            if (source.isBlank()) continue
+            NumberRegex.findAll(source).mapTo(allowedNumbers) { normalize(it.value) }
+            collectProperNouns(source).mapTo(allowedNouns) { normalize(it) }
+        }
+        val responseNumbers = NumberRegex.findAll(response).map { normalize(it.value) }
+        if (responseNumbers.any { it !in allowedNumbers }) {
             return true
         }
-        val responseTokens = normalizedTokens(response).toSet()
-        val normalizedResponse = normalize(response)
-        val covered = facts.count { fact ->
-            fact in responseTokens || normalizedResponse.contains(fact)
+        val responseNouns = collectProperNouns(response).map { normalize(it) }
+        if (responseNouns.any { token -> token !in allowedNouns && token !in StopWords && token.length >= 3 }) {
+            return true
         }
-        return covered.toDouble() / facts.size.toDouble() >= MinKeyFactCoverage
+        return false
     }
 
-    internal fun keyFactTokens(source: String, lead: String?): Set<String> {
-        val facts = linkedSetOf<String>()
-        NumberRegex.findAll(source).mapTo(facts) { normalize(it.value) }
-        CapitalizedWordRegex.findAll(source).mapTo(facts) { normalize(it.value) }
-        normalizedTokens(lead.orEmpty()).forEach { token ->
-            if (token.length >= 4 && token !in StopWords) {
-                facts += token
-            }
+    private fun collectProperNouns(text: String): List<String> {
+        if (text.isBlank()) return emptyList()
+        val result = mutableListOf<String>()
+        for (match in CapitalizedWordRegex.findAll(text)) {
+            val start = match.range.first
+            if (isSentenceInitial(text, start)) continue
+            result += match.value
         }
-        return facts.filterTo(linkedSetOf()) { it.length >= 2 && it !in StopWords }
+        return result
+    }
+
+    private fun isSentenceInitial(text: String, index: Int): Boolean {
+        var i = index - 1
+        while (i >= 0 && text[i].isWhitespace()) {
+            i--
+        }
+        if (i < 0) return true
+        val prev = text[i]
+        return prev == '.' || prev == '!' || prev == '?' || prev == '\n' || prev == ':'
+    }
+
+    private fun cacheKey(request: CardParaphraseRequest): String {
+        val language = request.preferredLanguage?.takeIf { it.isNotBlank() } ?: "ro"
+        return request.chunk.chunkId + "|" + normalize(request.userQuery) + "|" + language
+    }
+
+    private fun cachedText(key: String): String? = synchronized(cacheLock) {
+        cache[key]
+    }
+
+    private fun cachePut(key: String, value: String) {
+        synchronized(cacheLock) {
+            cache[key] = value
+        }
     }
 
     private fun normalizedTokens(value: String): List<String> =
@@ -249,18 +302,37 @@ class CardParaphraseEngine(
     private fun elapsedMsSince(startedAtNanos: Long): Long =
         (System.nanoTime() - startedAtNanos) / 1_000_000
 
+    private fun log(
+        chunkId: String,
+        invoked: Boolean,
+        rejected: Boolean,
+        reason: String,
+        latencyMs: Long = 0,
+        rawLength: Int = 0,
+        rawPrefix: String = ""
+    ) {
+        AssistantDiagnostics.logExpressionLayer(
+            chunkId = chunkId,
+            invocationCount = if (invoked) 1 else 0,
+            fallbackCount = if (rejected) 1 else 0,
+            tokenLatencyMs = latencyMs,
+            reason = reason,
+            rawLength = rawLength,
+            rawPrefix = rawPrefix
+        )
+    }
+
     private companion object {
-        private const val MaxHistoryCharacters = 6_000
         private const val MaxResponseToCardRatio = 2.5
         private const val MinResponseCharacters = 120
-        private const val MinKeyFactCoverage = 0.70
+        private const val MaxCacheEntries = 64
         private val NumberRegex = Regex("\\b\\d+(?:[.,:/-]\\d+)*\\b")
         private val CapitalizedWordRegex = Regex("\\b\\p{Lu}[\\p{L}0-9-]{2,}\\b")
         private val StopWords = setOf(
             "acest", "aceasta", "aceste", "acolo", "adica", "apoi", "asa", "asadar",
             "cand", "care", "catre", "daca", "deci", "despre", "este", "fara", "foarte",
             "iata", "intr", "intre", "mai", "mult", "nici", "pentru", "peste", "prin",
-            "sau", "sunt", "trebuie", "unui", "unei", "unde", "este", "scouty"
+            "sau", "sunt", "trebuie", "unui", "unei", "unde", "scouty"
         )
     }
 }

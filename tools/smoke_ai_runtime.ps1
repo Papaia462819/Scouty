@@ -5,13 +5,14 @@ param(
     [string]$Serial,
     [string]$ModelPath,
     [switch]$DownloadIfMissing,
-    [switch]$SkipBuild
+    [switch]$SkipBuild,
+    [switch]$RunChatUi
 )
 
 $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
-$pushScript = Join-Path $PSScriptRoot "push_model_to_device.ps1"
+$pushScript = Join-Path $PSScriptRoot "push_qwen_to_device.ps1"
 $reinstallScript = Join-Path $PSScriptRoot "reinstall_debug_with_assets.ps1"
 $adbArgs = @()
 if ($Serial) {
@@ -19,7 +20,7 @@ if ($Serial) {
 }
 
 if (!(Test-Path $pushScript)) {
-    throw "Missing model push script '$pushScript'."
+    throw "Missing Qwen push script '$pushScript'."
 }
 if (!(Test-Path $reinstallScript)) {
     throw "Missing reinstall script '$reinstallScript'."
@@ -42,7 +43,7 @@ if (-not $SkipBuild) {
 } else {
     & $pushScript -PackageName $PackageName -Serial $Serial -ModelPath $ModelPath -DownloadIfMissing:$DownloadIfMissing
     if ($LASTEXITCODE -ne 0) {
-        throw "Model push failed."
+        throw "Qwen model push failed."
     }
 }
 
@@ -62,7 +63,7 @@ Invoke-Adb -CommandArgs @(
     "-w",
     "-e",
     "class",
-    "com.scouty.app.assistant.AssistantRuntimeDebugTest",
+    "com.scouty.app.assistant.LlamaCppRuntimeDebugTest",
     "$PackageName.test/androidx.test.runner.AndroidJUnitRunner"
 )
 Invoke-Adb -CommandArgs @(
@@ -72,9 +73,21 @@ Invoke-Adb -CommandArgs @(
     "-w",
     "-e",
     "class",
-    "com.scouty.app.assistant.AssistantChatRuntimeTest",
+    "com.scouty.app.assistant.AssistantRuntimeDebugTest",
     "$PackageName.test/androidx.test.runner.AndroidJUnitRunner"
 )
+if ($RunChatUi) {
+    Invoke-Adb -CommandArgs @(
+        "shell",
+        "am",
+        "instrument",
+        "-w",
+        "-e",
+        "class",
+        "com.scouty.app.assistant.AssistantChatRuntimeTest",
+        "$PackageName.test/androidx.test.runner.AndroidJUnitRunner"
+    )
+}
 
 $pullTarget = Join-Path $repoRoot "scratch\emulator_knowledge_pack.sqlite"
 $remotePullTarget = "/sdcard/Download/$PackageName-knowledge_pack.sqlite"

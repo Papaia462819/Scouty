@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.scouty.app.assistant.data.KnowledgePackManager
 import com.scouty.app.assistant.domain.ModelManager
+import com.scouty.app.assistant.domain.RuntimeFeatureFlags
 import java.io.File
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
@@ -65,7 +66,7 @@ class AssistantRuntimeDebugTest {
                 }
             }
 
-            val internalModelDir = File(context.noBackupFilesDir, "models/gemma-3-1b")
+            val internalModelDir = File(context.noBackupFilesDir, "models/qwen-2.5-1.5b")
             val internalDirListing = internalModelDir.listFiles()?.map { file ->
                 "${file.name}:${file.length()}:${file.canRead()}"
             }
@@ -76,7 +77,7 @@ class AssistantRuntimeDebugTest {
                     "listing=$internalDirListing"
             )
 
-            val externalModelDir = context.getExternalFilesDir(null)?.let { File(it, "models/gemma-3-1b") }
+            val externalModelDir = context.getExternalFilesDir(null)?.let { File(it, "models/qwen-2.5-1.5b") }
             val externalDirListing = externalModelDir?.listFiles()?.map { file ->
                 "${file.name}:${file.length()}:${file.canRead()}"
             }
@@ -95,7 +96,7 @@ class AssistantRuntimeDebugTest {
             }
             Log.d(LogTag, "preferredModelPaths=$preferredPaths")
 
-            val modelManager = ModelManager(context)
+            val modelManager = ModelManager(context, RuntimeFeatureFlags(useLlamaCpp = true))
             val modelStatus = modelManager.refreshStatus()
             Log.d(LogTag, "modelStatus=$modelStatus generationMode=${modelManager.currentGenerationMode()}")
             if (modelStatus.availableOnDisk) {
@@ -108,18 +109,10 @@ class AssistantRuntimeDebugTest {
     private companion object {
         private const val LogTag = "ScoutyRuntimeTest"
         private val PreferredModelNames = listOf(
-            "gemma-3-1b-it-int4.task",
-            "gemma3-1b-it-int4.task",
-            "gemma-3-1b-it.task",
-            "gemma3-1b-it.task",
-            "gemma-3-1b.task",
-            "gemma3-1b.task",
-            "gemma-3-1b-it-int4.litertlm",
-            "gemma3-1b-it-int4.litertlm",
-            "gemma-3-1b-it.litertlm",
-            "gemma3-1b-it.litertlm",
-            "gemma-3-1b.litertlm",
-            "gemma3-1b.litertlm"
+            "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+            "qwen2_5-1.5b-instruct-q4_k_m.gguf",
+            "qwen2.5-1.5b-instruct.gguf",
+            "qwen2-5-1.5b-instruct-q4_k_m.gguf"
         )
     }
 }

@@ -14,7 +14,7 @@ $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $appApk = Join-Path $repoRoot "app\build\outputs\apk\debug\app-debug.apk"
 $testApk = Join-Path $repoRoot "app\build\outputs\apk\androidTest\debug\app-debug-androidTest.apk"
-$pushModelScript = Join-Path $PSScriptRoot "push_model_to_device.ps1"
+$pushQwenScript = Join-Path $PSScriptRoot "push_qwen_to_device.ps1"
 $pushMapsScript = Join-Path $PSScriptRoot "push_map_packs_to_device.ps1"
 
 function Get-AdbCommand {
@@ -103,8 +103,8 @@ if (-not $SkipBuild) {
     }
 }
 
-if (!(Test-Path $pushModelScript)) {
-    throw "Missing model push script '$pushModelScript'."
+if (!(Test-Path $pushQwenScript)) {
+    throw "Missing Qwen push script '$pushQwenScript'."
 }
 if (!(Test-Path $pushMapsScript)) {
     throw "Missing map push script '$pushMapsScript'."
@@ -128,9 +128,9 @@ foreach ($permission in @(
 }
 
 if (-not $SkipModel) {
-    & $pushModelScript -PackageName $PackageName -Serial $Serial -ModelPath $ModelPath -DownloadIfMissing:$DownloadIfMissing
+    & $pushQwenScript -PackageName $PackageName -Serial $Serial -ModelPath $ModelPath -DownloadIfMissing:$DownloadIfMissing
     if ($LASTEXITCODE -ne 0) {
-        throw "Model push failed."
+        throw "Qwen model push failed."
     }
 }
 
@@ -146,7 +146,7 @@ $apkPathLine = Invoke-Adb -CommandArgs @("shell", "pm", "path", $PackageName) -C
     Select-Object -First 1
 $apkDevicePath = ($apkPathLine -replace "^package:", "").Trim()
 $apkStat = Invoke-Adb -CommandArgs @("shell", "ls", "-l", $apkDevicePath) -CaptureOutput
-$modelStat = Invoke-Adb -CommandArgs @("shell", "run-as", $PackageName, "ls", "-ln", "no_backup/models/gemma-3-1b") -CaptureOutput -IgnoreExitCode
+$modelStat = Invoke-Adb -CommandArgs @("shell", "run-as", $PackageName, "ls", "-ln", "no_backup/models/qwen-2.5-1.5b") -CaptureOutput -IgnoreExitCode
 $mapsStat = Invoke-Adb -CommandArgs @("shell", "run-as", $PackageName, "ls", "-ln", "files/maps") -CaptureOutput -IgnoreExitCode
 
 Write-Host ""
