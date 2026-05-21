@@ -29,6 +29,12 @@ class UserTrailProfileStore(context: Context) {
             .apply()
     }
 
+    fun clear() {
+        sharedPreferences.edit()
+            .remove(ProfileKey)
+            .apply()
+    }
+
     private companion object {
         private const val PreferencesName = "scouty_user_profile"
         private const val ProfileKey = "profile_json"

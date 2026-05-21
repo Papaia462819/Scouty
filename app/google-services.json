@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "649346329464",
+    "project_id": "scouty-77fd4",
+    "storage_bucket": "scouty-77fd4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649346329464:android:ea2d78a7aaac8f792ab68d",
+        "android_client_info": {
+          "package_name": "com.nego.scouty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649346329464-hh90krrc19fh4csjuoktkchvte3gouf4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCS6TzQnUvTXeBQkGRjkfyjMJPYAIisd-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649346329464-hh90krrc19fh4csjuoktkchvte3gouf4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

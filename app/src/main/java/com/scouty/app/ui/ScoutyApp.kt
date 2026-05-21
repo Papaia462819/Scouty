@@ -43,6 +43,7 @@ import com.scouty.app.ui.screens.ProfileOnboardingScreen
 import com.scouty.app.ui.screens.ProfileScreen
 import com.scouty.app.ui.screens.SosScreen
 import com.scouty.app.tracks.ui.TrackCameraScreen
+import kotlinx.coroutines.flow.collect
 
 private const val ROUTE_HOME = "home"
 private const val ROUTE_MAP = "map"
@@ -56,16 +57,19 @@ private const val ROUTE_TRACKS = "tracks"
 fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
     val profileViewModel: ProfileViewModel = viewModel()
     val profileUiState by profileViewModel.uiState.collectAsState()
+    val context = LocalContext.current
     var editingProfile by rememberSaveable { mutableStateOf(false) }
 
     when (profileUiState.stage) {
         SessionStage.AUTH -> {
             AuthScreen(
                 accountExists = profileUiState.accountExists,
+                isLoading = profileUiState.isLoading,
                 authMessage = profileUiState.authMessage,
                 onClearMessage = profileViewModel::clearAuthMessage,
                 onLogin = profileViewModel::login,
-                onRegister = profileViewModel::startRegistration
+                onRegister = profileViewModel::startRegistration,
+                onGoogleSignIn = { profileViewModel.signInWithGoogle(context) }
             )
             return
         }
@@ -99,7 +103,7 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
         return
     }
 
-    val application = LocalContext.current.applicationContext as Application
+    val application = context.applicationContext as Application
     val assistantViewModel: AssistantViewModel = viewModel(
         factory = remember(mainViewModel, application) {
             AssistantViewModel.Factory(
@@ -113,6 +117,18 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
     val uiState by mainViewModel.uiState.collectAsState()
     val mapSessionState by mainViewModel.mapSessionState.collectAsState()
     val assistantUiState by assistantViewModel.uiState.collectAsState()
+
+    LaunchedEffect(profileUiState.uid, profileUiState.routePreferences) {
+        if (profileUiState.stage == SessionStage.APP) {
+            mainViewModel.replaceUserProfileFromFirebase(profileUiState.routePreferences)
+        }
+    }
+
+    LaunchedEffect(mainViewModel, profileViewModel) {
+        mainViewModel.userTrailProfileEvents.collect { routePreferences ->
+            profileViewModel.updateRoutePreferences(routePreferences)
+        }
+    }
 
     LaunchedEffect(mapSessionState.lastCompletedTrail?.id) {
         mapSessionState.lastCompletedTrail?.let { completedTrail ->

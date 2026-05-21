@@ -64,9 +64,12 @@ import com.scouty.app.ui.models.toDeviceContextSnapshot
 import com.scouty.app.utils.MapPackRegistryManager
 import com.scouty.app.utils.SolarCalculator
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -112,6 +115,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
 
     private val _uiState = MutableStateFlow(HomeStatus(userProfile = userTrailProfileStore.load()))
     val uiState: StateFlow<HomeStatus> = _uiState.asStateFlow()
+    private val _userTrailProfileEvents = MutableSharedFlow<UserTrailProfile>(extraBufferCapacity = 1)
+    val userTrailProfileEvents: SharedFlow<UserTrailProfile> = _userTrailProfileEvents.asSharedFlow()
     private val _mapSessionState = MutableStateFlow(MapSessionState())
     val mapSessionState: StateFlow<MapSessionState> = _mapSessionState.asStateFlow()
     private val _deviceContext = MutableStateFlow(_uiState.value.toDeviceContextSnapshot())
@@ -262,7 +267,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         }
 
     fun updateUserProfile(profile: UserTrailProfile) {
-        userTrailProfileStore.save(profile)
+        saveUserTrailProfile(profile, notifyFirebase = true)
         updateUiState { currentState ->
             currentState.copy(
                 userProfile = profile,
@@ -274,6 +279,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             )
         }
         maybeRefreshRouteRecommendations(force = true)
+    }
+
+    fun replaceUserProfileFromFirebase(profile: UserTrailProfile) {
+        saveUserTrailProfile(profile, notifyFirebase = false)
+        updateUiState { currentState ->
+            currentState.copy(
+                userProfile = profile,
+                gearList = buildGearList(
+                    trail = currentState.activeTrail,
+                    profile = profile,
+                    previousItems = currentState.gearList
+                )
+            )
+        }
+        maybeRefreshRouteRecommendations(force = true)
+    }
+
+    private fun saveUserTrailProfile(profile: UserTrailProfile, notifyFirebase: Boolean) {
+        userTrailProfileStore.save(profile)
+        if (notifyFirebase) {
+            _userTrailProfileEvents.tryEmit(profile)
+        }
     }
 
     fun selectMapTrail(selection: TrailSelectionSnapshot, showBottomSheet: Boolean = true) {
@@ -1402,7 +1429,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
 
             val profileForTrail = if (recordSelection) {
                 _uiState.value.userProfile.adaptToTrail(trail).also { adaptedProfile ->
-                    userTrailProfileStore.save(adaptedProfile)
+                    saveUserTrailProfile(adaptedProfile, notifyFirebase = true)
                 }
             } else {
                 _uiState.value.userProfile

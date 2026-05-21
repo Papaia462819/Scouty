@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Scouty"
+     xmlns="http://www.topografix.com/GPX/1/1"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.topografix.com/GPX/1/1 https://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <name>Scouty - Brasov Tampa trail start</name>
+    <desc>Start pentru traseul Brasov centru - Treptele lui Gabony - Vf. Tampa.</desc>
+  </metadata>
+
+  <wpt lat="45.643151" lon="25.5978566">
+    <ele>600</ele>
+    <name>Start traseu Brasov Tampa</name>
+    <desc>Coordonata de start folosita pentru testarea GPS in emulator.</desc>
+  </wpt>
+
+  <trk>
+    <name>Scouty GPS test - Brasov Tampa start</name>
+    <desc>Bucla scurta pentru Android Emulator Location playback.</desc>
+    <trkseg>
+      <trkpt lat="45.643151" lon="25.5978566"><ele>600</ele><time>2026-05-20T16:30:00Z</time></trkpt>
+      <trkpt lat="45.643083" lon="25.5979243"><ele>602</ele><time>2026-05-20T16:30:05Z</time></trkpt>
+      <trkpt lat="45.642996" lon="25.5980060"><ele>604</ele><time>2026-05-20T16:30:10Z</time></trkpt>
+      <trkpt lat="45.642910" lon="25.5980810"><ele>606</ele><time>2026-05-20T16:30:15Z</time></trkpt>
+      <trkpt lat="45.642996" lon="25.5980060"><ele>604</ele><time>2026-05-20T16:30:20Z</time></trkpt>
+      <trkpt lat="45.643083" lon="25.5979243"><ele>602</ele><time>2026-05-20T16:30:25Z</time></trkpt>
+      <trkpt lat="45.643151" lon="25.5978566"><ele>600</ele><time>2026-05-20T16:30:30Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

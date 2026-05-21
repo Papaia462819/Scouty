@@ -165,10 +165,12 @@ private val profileAvatars = listOf(
 @Composable
 fun AuthScreen(
     accountExists: Boolean,
+    isLoading: Boolean,
     authMessage: String?,
     onClearMessage: () -> Unit,
     onLogin: (String, String) -> Unit,
-    onRegister: (String, String) -> Unit
+    onRegister: (String, String) -> Unit,
+    onGoogleSignIn: () -> Unit
 ) {
     var mode by rememberSaveable(accountExists) {
         mutableStateOf(if (accountExists) AuthMode.LOGIN else AuthMode.REGISTER)
@@ -239,7 +241,8 @@ fun AuthScreen(
                             email = email,
                             password = password,
                             confirmPassword = confirmPassword,
-                            message = localMessage ?: authMessage,
+                            message = if (isLoading) "Se conectează la Firebase..." else localMessage ?: authMessage,
+                            isLoading = isLoading,
                             accent = if (formMode == AuthMode.LOGIN) AccentGreen else Warning,
                             onAccent = if (formMode == AuthMode.LOGIN) AccentGreenOnSurface else Color(0xFF2A1A05),
                             onEmailChange = {
@@ -257,6 +260,7 @@ fun AuthScreen(
                                 localMessage = null
                             },
                             onSubmit = {
+                                if (isLoading) return@AuthFormContent
                                 localMessage = when {
                                     email.isBlank() || password.isBlank() -> "Completează emailul și parola."
                                     formMode == AuthMode.REGISTER && password != confirmPassword ->
@@ -270,6 +274,11 @@ fun AuthScreen(
                                         onRegister(email, password)
                                     }
                                 }
+                            },
+                            onGoogleSignIn = {
+                                if (!isLoading) {
+                                    onGoogleSignIn()
+                                }
                             }
                         )
                     }
@@ -278,7 +287,7 @@ fun AuthScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
             Text(
-                text = "v1.0.0 · Conturile sunt stocate local",
+                text = "v1.0.0 · Firebase Auth + Firestore",
                 fontSize = 10.sp,
                 color = TextMuted,
                 textAlign = TextAlign.Center,
@@ -317,9 +326,9 @@ private fun AuthHero(mode: AuthMode, accent: Color) {
         Crossfade(targetState = mode, animationSpec = tween(200), label = "authSubtitle") { currentMode ->
             Text(
                 text = if (currentMode == AuthMode.LOGIN) {
-                    "Intră în profilul tău local înainte să pornești pe traseu."
+                    "Intră în profilul tău Scouty înainte să pornești pe traseu."
                 } else {
-                    "Creează profilul local de drumeț în câțiva pași."
+                    "Creează contul și profilul de drumeț în câțiva pași."
                 },
                 fontSize = 12.sp,
                 lineHeight = 18.sp,
@@ -412,12 +421,14 @@ private fun AuthFormContent(
     password: String,
     confirmPassword: String,
     message: String?,
+    isLoading: Boolean,
     accent: Color,
     onAccent: Color,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
-    onSubmit: () -> Unit
+    onSubmit: () -> Unit,
+    onGoogleSignIn: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         AuthHelperRow(mode = mode, accountExists = accountExists, accent = accent)
@@ -461,7 +472,15 @@ private fun AuthFormContent(
             MessageBanner(message = it)
         }
         Spacer(Modifier.height(16.dp))
-        AuthPrimaryButton(mode = mode, accent = accent, onAccent = onAccent, onClick = onSubmit)
+        AuthPrimaryButton(
+            mode = mode,
+            accent = accent,
+            onAccent = onAccent,
+            enabled = !isLoading,
+            onClick = onSubmit
+        )
+        Spacer(Modifier.height(10.dp))
+        GoogleAuthButton(enabled = !isLoading, onClick = onGoogleSignIn)
         Spacer(Modifier.height(10.dp))
         if (mode == AuthMode.LOGIN) {
             Text(
@@ -503,11 +522,11 @@ private fun AuthHelperRow(mode: AuthMode, accountExists: Boolean, accent: Color)
         Text(
             text = when {
                 mode == AuthMode.REGISTER && accountExists ->
-                    "Register înlocuiește contul local stocat pe acest dispozitiv."
+                    "Register creează un cont Firebase nou pentru acest dispozitiv."
                 mode == AuthMode.REGISTER ->
-                    "După creare, configurăm profilul în 11 pași rapizi."
+                    "După creare, configurăm profilul și îl salvăm în Firestore."
                 else ->
-                    "Bine ai revenit. Deschidem profilul local existent."
+                    "Bine ai revenit. Încărcăm profilul din Firebase."
             },
             fontSize = 10.sp,
             lineHeight = 14.sp,
@@ -518,13 +537,19 @@ private fun AuthHelperRow(mode: AuthMode, accountExists: Boolean, accent: Color)
 }
 
 @Composable
-private fun AuthPrimaryButton(mode: AuthMode, accent: Color, onAccent: Color, onClick: () -> Unit) {
+private fun AuthPrimaryButton(
+    mode: AuthMode,
+    accent: Color,
+    onAccent: Color,
+    enabled: Boolean,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(accent)
-            .clickable(onClick = onClick)
+            .background(if (enabled) accent else accent.copy(alpha = 0.45f))
+            .clickable(enabled = enabled, onClick = onClick)
             .padding(vertical = 12.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -537,6 +562,35 @@ private fun AuthPrimaryButton(mode: AuthMode, accent: Color, onAccent: Color, on
         )
         Spacer(Modifier.width(8.dp))
         Icon(Lucide.ChevronRight, contentDescription = null, tint = onAccent, modifier = Modifier.size(13.dp))
+    }
+}
+
+@Composable
+private fun GoogleAuthButton(enabled: Boolean, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.White.copy(alpha = if (enabled) 0.08f else 0.04f))
+            .border(0.5.dp, Color.White.copy(alpha = 0.16f), RoundedCornerShape(12.dp))
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(vertical = 12.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "G",
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Bold,
+            color = if (enabled) TextPrimary else TextTertiary
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(
+            text = "Continuă cu Google",
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+            color = if (enabled) TextPrimary else TextTertiary
+        )
     }
 }
 
@@ -691,7 +745,7 @@ private fun ProfileConfigStep(
             )
             Spacer(Modifier.width(8.dp))
             Text(
-                text = email.ifBlank { "email local" },
+                text = email.ifBlank { "email Firebase" },
                 color = TextSecondary,
                 fontSize = 11.sp,
                 maxLines = 1,
@@ -1094,7 +1148,7 @@ private fun ResultStep(
                     TierPill(level = currentLevel)
                     Spacer(Modifier.height(6.dp))
                     Text(
-                        text = "${email.ifBlank { "email local" }} · ${homeRegion.ifBlank { "regiune nealeasa" }}",
+                        text = "${email.ifBlank { "email Firebase" }} · ${homeRegion.ifBlank { "regiune nealeasa" }}",
                         color = TextTertiary,
                         fontSize = 10.sp,
                         maxLines = 1,

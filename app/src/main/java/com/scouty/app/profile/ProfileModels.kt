@@ -1,5 +1,6 @@
 package com.scouty.app.profile
 
+import com.scouty.app.ui.models.UserTrailProfile
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -63,14 +64,6 @@ data class ProfileTrailRecord(
     val earnedPoints: Int = 0
 )
 
-@Serializable
-data class LocalAccountRecord(
-    val email: String,
-    val passwordHash: String,
-    val isAuthenticated: Boolean,
-    val profile: UserProfile? = null
-)
-
 data class OnboardingDraft(
     val displayName: String = "",
     val avatarId: String = "summit",
@@ -112,10 +105,13 @@ enum class SessionStage {
 
 data class ProfileSessionUiState(
     val stage: SessionStage = SessionStage.AUTH,
+    val isLoading: Boolean = false,
+    val uid: String? = null,
     val accountExists: Boolean = false,
     val accountEmail: String? = null,
     val pendingRegistrationEmail: String? = null,
     val profile: UserProfile? = null,
+    val routePreferences: UserTrailProfile = UserTrailProfile(),
     val authMessage: String? = null
 )
 

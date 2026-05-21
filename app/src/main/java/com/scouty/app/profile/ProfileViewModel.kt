@@ -1,26 +1,40 @@
 package com.scouty.app.profile
 
 import android.app.Application
+import android.content.Context
+import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuthException
+import com.scouty.app.R
+import com.scouty.app.data.UserTrailProfileStore
+import com.scouty.app.ui.models.CompletedTrailSnapshot
+import com.scouty.app.ui.models.TrailCompletionStatus
+import com.scouty.app.ui.models.UserTrailProfile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.security.MessageDigest
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
-
-import com.scouty.app.ui.models.CompletedTrailSnapshot
-import com.scouty.app.ui.models.TrailCompletionStatus
 
 class ProfileViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = LocalAccountRepository(application)
+    private val repository = FirebaseProfileRepository()
+    private val userTrailProfileStore = UserTrailProfileStore(application)
 
-    private var pendingRegistrationEmail: String? = null
-    private var pendingRegistrationHash: String? = null
-
-    private val _uiState = MutableStateFlow(loadInitialState())
+    private val _uiState = MutableStateFlow(ProfileSessionUiState(isLoading = true))
     val uiState: StateFlow<ProfileSessionUiState> = _uiState.asStateFlow()
+
+    init {
+        refreshFirebaseSession()
+    }
 
     fun clearAuthMessage() {
         _uiState.update { it.copy(authMessage = null) }
@@ -28,38 +42,25 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     fun login(email: String, password: String) {
         val normalizedEmail = email.trim()
-        val record = repository.load()
         when {
             normalizedEmail.isBlank() || password.isBlank() -> {
-                _uiState.update { it.copy(authMessage = "Fill in both email and password.") }
-            }
-
-            record == null -> {
-                _uiState.update {
-                    it.copy(
-                        authMessage = "No local account found yet. Start with Register."
-                    )
-                }
-            }
-
-            !normalizedEmail.equals(record.email, ignoreCase = true) || hashPassword(password) != record.passwordHash -> {
-                _uiState.update { it.copy(authMessage = "That email and password pair does not match the local account.") }
-            }
-
-            record.profile == null -> {
-                _uiState.value = ProfileSessionUiState(
-                    stage = SessionStage.ONBOARDING,
-                    accountExists = true,
-                    accountEmail = record.email,
-                    pendingRegistrationEmail = record.email,
-                    authMessage = null
-                )
+                _uiState.update { it.copy(authMessage = "Completează emailul și parola.") }
             }
 
             else -> {
-                val authenticated = record.copy(isAuthenticated = true)
-                repository.save(authenticated)
-                _uiState.value = buildAuthenticatedState(authenticated)
+                _uiState.update { it.copy(isLoading = true, authMessage = null) }
+                viewModelScope.launch {
+                    runCatching {
+                        val user = repository.signInWithEmail(normalizedEmail, password)
+                        clearLegacyLocalState()
+                        loadSessionForUser(user.uid, user.email.orEmpty(), user.displayName)
+                    }.onFailure { error ->
+                        _uiState.value = ProfileSessionUiState(
+                            stage = SessionStage.AUTH,
+                            authMessage = error.toUserMessage("Nu am putut face login.")
+                        )
+                    }
+                }
             }
         }
     }
@@ -68,73 +69,148 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         val normalizedEmail = email.trim()
         when {
             normalizedEmail.isBlank() || !normalizedEmail.contains("@") -> {
-                _uiState.update { it.copy(authMessage = "Use a valid email address to create the local account.") }
+                _uiState.update { it.copy(authMessage = "Folosește o adresă de email validă.") }
             }
 
             password.length < 6 -> {
-                _uiState.update { it.copy(authMessage = "Use a password with at least 6 characters.") }
+                _uiState.update { it.copy(authMessage = "Parola trebuie să aibă cel puțin 6 caractere.") }
             }
 
             else -> {
-                pendingRegistrationEmail = normalizedEmail
-                pendingRegistrationHash = hashPassword(password)
+                _uiState.update { it.copy(isLoading = true, authMessage = null) }
+                viewModelScope.launch {
+                    runCatching {
+                        val user = repository.registerWithEmail(normalizedEmail, password)
+                        clearLegacyLocalState()
+                        startOnboardingForUser(user.uid, user.email.orEmpty(), user.displayName)
+                    }.onFailure { error ->
+                        _uiState.value = ProfileSessionUiState(
+                            stage = SessionStage.AUTH,
+                            authMessage = error.toUserMessage("Nu am putut crea contul.")
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun signInWithGoogle(context: Context) {
+        _uiState.update { it.copy(isLoading = true, authMessage = null) }
+        viewModelScope.launch {
+            runCatching {
+                val credentialManager = CredentialManager.create(context)
+                val request = GetCredentialRequest.Builder()
+                    .addCredentialOption(
+                        GetGoogleIdOption.Builder()
+                            .setFilterByAuthorizedAccounts(false)
+                            .setServerClientId(getApplication<Application>().getString(R.string.default_web_client_id))
+                            .build()
+                    )
+                    .build()
+                val credential = credentialManager.getCredential(
+                    context = context,
+                    request = request
+                ).credential
+                val googleCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                val user = repository.signInWithGoogle(googleCredential.idToken)
+                clearLegacyLocalState()
+                loadSessionForUser(user.uid, user.email.orEmpty(), user.displayName)
+            }.onFailure { error ->
                 _uiState.value = ProfileSessionUiState(
-                    stage = SessionStage.ONBOARDING,
-                    accountExists = repository.load() != null,
-                    accountEmail = repository.load()?.email,
-                    pendingRegistrationEmail = normalizedEmail,
-                    authMessage = null
+                    stage = SessionStage.AUTH,
+                    authMessage = error.toUserMessage("Nu am putut face login cu Google.")
                 )
             }
         }
     }
 
     fun cancelRegistration() {
-        pendingRegistrationEmail = null
-        pendingRegistrationHash = null
-        _uiState.value = loadInitialState()
+        viewModelScope.launch {
+            repository.signOut()
+            clearCredentialState()
+            _uiState.value = ProfileSessionUiState()
+        }
     }
 
     fun completeRegistration(draft: OnboardingDraft) {
-        val email = pendingRegistrationEmail ?: return
-        val hash = pendingRegistrationHash ?: return
+        val uid = _uiState.value.uid ?: repository.currentUser?.uid ?: return
+        val email = _uiState.value.pendingRegistrationEmail
+            ?: repository.currentUser?.email
+            ?: return
+        val displayName = draft.displayName.ifBlank {
+            repository.currentUser?.displayName.orEmpty()
+        }
         val profile = ProfileAssessmentEngine.buildProfile(
             email = email,
-            draft = draft,
+            draft = draft.copy(displayName = displayName),
             createdAtEpochMillis = System.currentTimeMillis()
         )
-        val record = LocalAccountRecord(
-            email = email,
-            passwordHash = hash,
-            isAuthenticated = true,
-            profile = profile
-        )
-        repository.save(record)
-        pendingRegistrationEmail = null
-        pendingRegistrationHash = null
-        _uiState.value = buildAuthenticatedState(record)
+        val routePreferences = UserTrailProfile()
+        _uiState.update { it.copy(isLoading = true, authMessage = null) }
+        viewModelScope.launch {
+            runCatching {
+                repository.saveProfile(uid, profile, routePreferences)
+                userTrailProfileStore.save(routePreferences)
+                _uiState.value = buildAuthenticatedState(uid, profile, routePreferences)
+            }.onFailure { error ->
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        authMessage = error.toUserMessage("Profilul nu a putut fi salvat.")
+                    )
+                }
+            }
+        }
     }
 
     fun updateProfile(draft: OnboardingDraft) {
-        val record = repository.load() ?: return
-        val currentProfile = record.profile ?: return
+        val uid = _uiState.value.uid ?: return
+        val currentProfile = _uiState.value.profile ?: return
+        val routePreferences = _uiState.value.routePreferences
         val updatedProfile = ProfileAssessmentEngine.buildProfile(
-            email = record.email,
+            email = currentProfile.email,
             draft = draft,
             createdAtEpochMillis = System.currentTimeMillis(),
             previousProfile = currentProfile
         )
-        val updatedRecord = record.copy(
-            isAuthenticated = true,
-            profile = updatedProfile
-        )
-        repository.save(updatedRecord)
-        _uiState.value = buildAuthenticatedState(updatedRecord)
+        _uiState.update { it.copy(isLoading = true, authMessage = null) }
+        viewModelScope.launch {
+            runCatching {
+                repository.saveProfile(uid, updatedProfile, routePreferences)
+                _uiState.value = buildAuthenticatedState(uid, updatedProfile, routePreferences)
+            }.onFailure { error ->
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        authMessage = error.toUserMessage("Profilul nu a putut fi actualizat.")
+                    )
+                }
+            }
+        }
+    }
+
+    fun updateRoutePreferences(routePreferences: UserTrailProfile) {
+        val uid = _uiState.value.uid ?: return
+        val profile = _uiState.value.profile ?: return
+        if (_uiState.value.routePreferences == routePreferences) {
+            return
+        }
+        _uiState.update { it.copy(routePreferences = routePreferences) }
+        viewModelScope.launch {
+            runCatching {
+                repository.saveProfile(uid, profile.copy(updatedAtEpochMillis = System.currentTimeMillis()), routePreferences)
+            }.onFailure { error ->
+                _uiState.update {
+                    it.copy(authMessage = error.toUserMessage("Preferințele de traseu nu au putut fi sincronizate."))
+                }
+            }
+        }
     }
 
     fun recordTrailCompletion(snapshot: CompletedTrailSnapshot) {
-        val record = repository.load() ?: return
-        val currentProfile = record.profile ?: return
+        val uid = _uiState.value.uid ?: return
+        val currentProfile = _uiState.value.profile ?: return
+        val routePreferences = _uiState.value.routePreferences
         if (currentProfile.trailHistory.any { it.id == snapshot.id }) {
             return
         }
@@ -160,6 +236,19 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             ProfileProgressionEngine.effectiveExperience(currentProfile)
         }
         val updatedLevel = ProfileProgressionEngine.levelForExperience(updatedExperience)
+        val newRecord = ProfileTrailRecord(
+            id = snapshot.id,
+            name = snapshot.name,
+            region = snapshot.region,
+            completedAtEpochMillis = snapshot.completedAtEpochMillis,
+            distanceKm = snapshot.distanceKm,
+            elevationGainM = snapshot.elevationGainM,
+            durationText = snapshot.durationText,
+            difficulty = snapshot.difficulty,
+            imageUrl = snapshot.imageUrl,
+            outcome = outcome,
+            earnedPoints = earnedPoints
+        )
         val updatedProfile = currentProfile.copy(
             levelNumber = updatedLevel.number,
             levelTitle = updatedLevel.title,
@@ -175,68 +264,135 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             } else {
                 0
             },
-            trailHistory = listOf(
-                ProfileTrailRecord(
-                    id = snapshot.id,
-                    name = snapshot.name,
-                    region = snapshot.region,
-                    completedAtEpochMillis = snapshot.completedAtEpochMillis,
-                    distanceKm = snapshot.distanceKm,
-                    elevationGainM = snapshot.elevationGainM,
-                    durationText = snapshot.durationText,
-                    difficulty = snapshot.difficulty,
-                    imageUrl = snapshot.imageUrl,
-                    outcome = outcome,
-                    earnedPoints = earnedPoints
-                )
-            ) + currentProfile.trailHistory,
+            trailHistory = listOf(newRecord) + currentProfile.trailHistory,
             updatedAtEpochMillis = snapshot.completedAtEpochMillis
         )
-        val updatedRecord = record.copy(profile = updatedProfile)
-        repository.save(updatedRecord)
-        _uiState.value = if (updatedRecord.isAuthenticated) {
-            buildAuthenticatedState(updatedRecord)
-        } else {
-            _uiState.value.copy(profile = updatedProfile)
+
+        _uiState.value = buildAuthenticatedState(uid, updatedProfile, routePreferences)
+        viewModelScope.launch {
+            runCatching {
+                repository.saveTrailCompletion(uid, updatedProfile, routePreferences, newRecord)
+            }.onFailure { error ->
+                _uiState.update {
+                    it.copy(authMessage = error.toUserMessage("Tura a fost salvată local în sesiune, dar nu a ajuns încă în Firestore."))
+                }
+            }
         }
     }
 
     fun signOut() {
-        val record = repository.load() ?: run {
-            _uiState.value = loadInitialState()
+        viewModelScope.launch {
+            repository.signOut()
+            clearCredentialState()
+            _uiState.value = ProfileSessionUiState()
+        }
+    }
+
+    private fun refreshFirebaseSession() {
+        val user = repository.currentUser
+        if (user == null) {
+            _uiState.value = ProfileSessionUiState()
             return
         }
-        val updated = record.copy(isAuthenticated = false)
-        repository.save(updated)
-        _uiState.value = loadInitialState()
-    }
-
-    private fun loadInitialState(): ProfileSessionUiState {
-        val record = repository.load()
-        return when {
-            record == null -> ProfileSessionUiState()
-            record.isAuthenticated && record.profile != null -> buildAuthenticatedState(record)
-            else -> ProfileSessionUiState(
-                stage = SessionStage.AUTH,
-                accountExists = true,
-                accountEmail = record.email,
-                profile = record.profile
-            )
+        viewModelScope.launch {
+            runCatching {
+                clearLegacyLocalState()
+                loadSessionForUser(user.uid, user.email.orEmpty(), user.displayName)
+            }.onFailure { error ->
+                repository.signOut()
+                _uiState.value = ProfileSessionUiState(
+                    authMessage = error.toUserMessage("Sesiunea Firebase nu a putut fi încărcată.")
+                )
+            }
         }
     }
 
-    private fun buildAuthenticatedState(record: LocalAccountRecord): ProfileSessionUiState =
+    private suspend fun loadSessionForUser(uid: String, email: String, displayName: String?) {
+        val bundle = repository.loadProfile(uid)
+        if (bundle == null) {
+            startOnboardingForUser(uid, email, displayName)
+            return
+        }
+        userTrailProfileStore.save(bundle.routePreferences)
+        _uiState.value = buildAuthenticatedState(uid, bundle.profile, bundle.routePreferences)
+    }
+
+    private fun startOnboardingForUser(uid: String, email: String, displayName: String?) {
+        _uiState.value = ProfileSessionUiState(
+            stage = SessionStage.ONBOARDING,
+            isLoading = false,
+            uid = uid,
+            accountExists = true,
+            accountEmail = email,
+            pendingRegistrationEmail = email,
+            profile = displayName
+                ?.takeIf { it.isNotBlank() }
+                ?.let {
+                    UserProfile(
+                        email = email,
+                        displayName = it,
+                        avatarId = "summit",
+                        homeRegion = "",
+                        levelNumber = ScoutyLevel.LEVEL_1.number,
+                        levelTitle = ScoutyLevel.LEVEL_1.title,
+                        onboardingScore = 0,
+                        createdAtEpochMillis = System.currentTimeMillis(),
+                        updatedAtEpochMillis = System.currentTimeMillis()
+                    )
+                },
+            routePreferences = UserTrailProfile()
+        )
+    }
+
+    private fun buildAuthenticatedState(
+        uid: String,
+        profile: UserProfile,
+        routePreferences: UserTrailProfile
+    ): ProfileSessionUiState =
         ProfileSessionUiState(
             stage = SessionStage.APP,
+            isLoading = false,
+            uid = uid,
             accountExists = true,
-            accountEmail = record.email,
-            profile = record.profile
+            accountEmail = profile.email,
+            profile = profile,
+            routePreferences = routePreferences
         )
 
-    private fun hashPassword(password: String): String {
-        val bytes = MessageDigest.getInstance("SHA-256").digest(password.toByteArray())
-        return buildString(bytes.size * 2) {
-            bytes.forEach { byte -> append("%02x".format(byte)) }
+    private fun clearLegacyLocalState() {
+        getApplication<Application>()
+            .getSharedPreferences(LegacyProfilePreferencesName, Context.MODE_PRIVATE)
+            .edit()
+            .remove(LegacyAccountKey)
+            .apply()
+        userTrailProfileStore.clear()
+    }
+
+    private suspend fun clearCredentialState() {
+        runCatching {
+            CredentialManager.create(getApplication<Application>())
+                .clearCredentialState(ClearCredentialStateRequest())
         }
+    }
+
+    private fun Throwable.toUserMessage(fallback: String): String =
+        when (this) {
+            is FirebaseNetworkException -> "Verifică conexiunea la internet și încearcă din nou."
+            is FirebaseAuthException -> when (errorCode) {
+                "ERROR_EMAIL_ALREADY_IN_USE" -> "Există deja un cont Firebase pentru acest email."
+                "ERROR_INVALID_EMAIL" -> "Adresa de email nu este validă."
+                "ERROR_INVALID_CREDENTIAL",
+                "ERROR_WRONG_PASSWORD",
+                "ERROR_USER_NOT_FOUND" -> "Emailul sau parola nu sunt corecte."
+                "ERROR_WEAK_PASSWORD" -> "Parola este prea slabă."
+                else -> localizedMessage ?: fallback
+            }
+            is GetCredentialException -> "Autentificarea Google a fost anulată sau nu este disponibilă."
+            else -> localizedMessage ?: fallback
+        }
+
+    private companion object {
+        const val LegacyProfilePreferencesName = "scouty_profile_store"
+        const val LegacyAccountKey = "local_account_json"
     }
 }
