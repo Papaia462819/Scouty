@@ -14,7 +14,7 @@ import org.junit.Test
 
 class CardParaphraseEngineTest {
     @Test
-    fun tierA_invokesModelAndReturnsRephrase() = runBlocking {
+    fun tierA_skipsWithoutCallingModel() = runBlocking {
         val model = FakeParaphraseModel(
             "Aragazul portabil este mai sigur în zona alpină decât focul deschis la 2000 m."
         )
@@ -24,9 +24,8 @@ class CardParaphraseEngineTest {
             request(tier = "A", confidence = RetrievalConfidenceTier.HIGH)
         )
 
-        assertNotNull(result)
-        assertEquals(model.response, result?.text)
-        assertEquals(1, model.calls)
+        assertNull(result)
+        assertEquals(0, model.calls)
     }
 
     @Test
@@ -60,6 +59,19 @@ class CardParaphraseEngineTest {
 
         val result = engine.maybeParaphrase(
             request(tier = "B", confidence = RetrievalConfidenceTier.LOW)
+        )
+
+        assertNull(result)
+        assertEquals(0, model.calls)
+    }
+
+    @Test
+    fun mediumConfidence_skipsWithoutCallingModel() = runBlocking {
+        val model = FakeParaphraseModel("nu contează")
+        val engine = CardParaphraseEngine(model)
+
+        val result = engine.maybeParaphrase(
+            request(tier = "B", confidence = RetrievalConfidenceTier.MEDIUM)
         )
 
         assertNull(result)
@@ -129,9 +141,11 @@ class CardParaphraseEngineTest {
 
         assertEquals(model.response, result?.text)
         assertEquals(1, model.calls)
-        assertEquals(110, model.lastOptions?.sampler?.maxTokens)
+        assertEquals(72, model.lastOptions?.sampler?.maxTokens)
         assertEquals(0.25f, model.lastOptions?.sampler?.temperature)
         assertEquals(0.9f, model.lastOptions?.sampler?.topP)
+        assertNull(model.lastOptions?.promptCacheHint)
+        assertEquals(listOf("\n\n"), model.lastOptions?.stopSequences)
     }
 
     @Test

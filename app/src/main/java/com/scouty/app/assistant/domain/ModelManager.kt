@@ -41,7 +41,8 @@ data class LocalLlmPromptCacheHint(
 data class LocalLlmGenerationOptions(
     val grammar: String? = null,
     val sampler: LocalLlmSamplerParams = LocalLlmSamplerParams(),
-    val promptCacheHint: LocalLlmPromptCacheHint? = null
+    val promptCacheHint: LocalLlmPromptCacheHint? = null,
+    val stopSequences: List<String> = emptyList()
 )
 
 data class LocalLlmGenerationResult(

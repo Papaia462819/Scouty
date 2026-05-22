@@ -113,7 +113,7 @@ class LlamaCppLoadedModel internal constructor(
             randomSeed = sampler.randomSeed,
             promptCacheKey = formatted.promptCacheHint?.key,
             promptCachePrefix = formatted.promptCacheHint?.cacheablePrefix
-        )
+        ).trimAtStopSequence(options.stopSequences)
     }
 
     suspend fun release() {
@@ -217,4 +217,14 @@ class LlamaCppNativeBridge {
     ): String
 
     external fun release(handle: Long)
+}
+
+private fun String.trimAtStopSequence(stopSequences: List<String>): String {
+    val stopIndex = stopSequences
+        .asSequence()
+        .filter { it.isNotEmpty() }
+        .mapNotNull { stop -> indexOf(stop).takeIf { it >= 0 } }
+        .minOrNull()
+        ?: return this
+    return substring(0, stopIndex)
 }

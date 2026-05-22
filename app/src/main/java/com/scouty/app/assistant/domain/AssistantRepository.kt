@@ -50,6 +50,10 @@ import com.scouty.app.assistant.model.StructuredResponseSection
 import com.scouty.app.assistant.model.TrailContextIntent
 import com.scouty.app.assistant.model.WeatherHazard
 import com.scouty.app.assistant.model.WeatherInteractionIntent
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.jsonObject
 import java.text.Normalizer
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -109,7 +113,9 @@ private data class ExpressionLayerResult(
     val retrievedChunks: List<RetrievedChunk>
 )
 
-class QueryAnalyzer {
+class QueryAnalyzer(
+    private val useCampfireLane: Boolean = false
+) {
     fun analyze(
         query: String,
         context: DeviceContextSnapshot,
@@ -135,7 +141,7 @@ class QueryAnalyzer {
                 campfireDefinitionQuery = campfireDefinitionQuery,
                 campfireConstraintQuery = campfireConstraintQuery
             )
-        val campfireLane = campfireTopicQuery || campfireFollowUp
+        val campfireLane = useCampfireLane && (campfireTopicQuery || campfireFollowUp)
 
         val domainHints = DomainKeywordMap.mapNotNull { (domain, keywords) ->
             val matches = tokens.count { token -> keywords.any { keyword -> keyword.startsWith(token) || token.startsWith(keyword) || token in keyword } }
@@ -158,7 +164,7 @@ class QueryAnalyzer {
             }
 
         val reasoningType = when {
-            campfireLane -> ReasoningType.KNOW_HOW
+            campfireLane || domainHints.firstOrNull()?.domain == CampfireDomain -> ReasoningType.KNOW_HOW
             routeContextQuery -> ReasoningType.ROUTE_CONTEXT
             gearQuery -> ReasoningType.GEAR_ADVICE
             domainHints.firstOrNull()?.domain == "weather_and_season" -> ReasoningType.WEATHER_CONTEXT
@@ -311,6 +317,10 @@ class QueryAnalyzer {
         context: DeviceContextSnapshot,
         conversationState: AssistantConversationState
     ): TrailContextDetection {
+        if (hasPerformanceHistoryTokens(normalizedQuery, tokens)) {
+            return TrailContextDetection(intent = TrailContextIntent.PERFORMANCE_HISTORY)
+        }
+
         if (context.trail == null) return TrailContextDetection()
 
         if (conversationState.pendingGearAction != null) {
@@ -394,6 +404,33 @@ class QueryAnalyzer {
                 "de unde porneste", "where does it start", "unde ajunge", "where does it end",
                 "cat de lung", "how far", "ce distanta", "diferenta de nivel",
                 "la ce ora apune", "what time sunset")
+
+    private fun hasPerformanceHistoryTokens(normalizedQuery: String, tokens: List<String>): Boolean =
+        containsAny(
+            normalizedQuery,
+            "ce performante am avut",
+            "performantele mele",
+            "istoric trasee",
+            "istoricul traseelor",
+            "trail history",
+            "hiking history",
+            "cat mi a luat",
+            "cat timp mi a luat",
+            "cat am facut traseul",
+            "ce trasee am facut",
+            "trasee am facut",
+            "trasee terminate",
+            "cate trasee am terminat",
+            "distanta totala",
+            "cati km am facut",
+            "kilometri am facut",
+            "ultima tura",
+            "ultimul traseu"
+        ) ||
+            (tokens.any { it in setOf("performante", "istoric", "history") } &&
+                tokens.any { it in setOf("trasee", "traseu", "trail", "hike", "ture") }) ||
+            (containsAny(normalizedQuery, "cat", "cati", "cate", "durata", "timp") &&
+                containsAny(normalizedQuery, "am facut", "am terminat", "mi a luat"))
 
     private fun isGearConfirmation(normalizedQuery: String): Boolean =
         normalizedQuery.trim() in setOf("da", "yes", "ok", "sigur", "sure", "bine", "hai",
@@ -536,7 +573,7 @@ class QueryAnalyzer {
     }
 
     private companion object {
-        private const val CampfireDomain = "field_know_how"
+        private const val CampfireDomain = "campfire_basics"
         private const val RouteDomain = "route_intelligence_romania"
         private const val GearDomain = "gear_and_preparation"
         private val SafetyDomains = setOf(
@@ -578,21 +615,27 @@ class QueryAnalyzer {
             "ploaie", "rain", "ninge", "snow", "precipitat", "furtuna", "storm"
         )
         private val DomainKeywordMap = mapOf(
-            "field_know_how" to setOf("foc", "focul", "campfire", "iasca", "amnar", "bricheta", "chibrit"),
-            "medical_emergency" to setOf("glezna", "fractura", "bleeding", "sangerare", "altitude", "heat", "trauma", "accident"),
-            "mountain_safety" to setOf("salvamont", "112", "lost", "ratacit", "plan", "rescue"),
-            "survival_basics" to setOf("apa", "water", "purifica", "purify", "campfire", "foc"),
-            "wildlife_romania" to setOf("urs", "bear", "snake", "sarpe"),
-            "weather_and_season" to setOf("weather", "vreme", "fulger", "lightning", "avalansa", "avalanche"),
-            "route_intelligence_romania" to setOf("traseu", "route", "marcaj", "marker", "durata", "distance", "distanta"),
-            "gear_and_preparation" to setOf("gear", "echipament", "headlamp", "frontala", "water", "apa", "kit")
+            "campfire_basics" to setOf("foc", "focul", "campfire", "iasca", "amnar", "bricheta", "chibrit", "jar", "surcele", "vreascuri"),
+            "gear_and_preparation" to setOf("gear", "echipament", "headlamp", "frontala", "water", "apa", "kit", "rucsac", "bocanci", "jacheta"),
+            "wildlife_romania" to setOf("urs", "ursi", "bear", "bears", "snake", "sarpe", "lup", "wolf", "urme", "animal"),
+            "weather_and_season" to setOf("weather", "vreme", "meteo", "fulger", "lightning", "avalansa", "avalanche", "ploaie", "vant", "ninsoare"),
+            "route_intelligence_romania" to setOf("traseu", "route", "marcaj", "marker", "durata", "distance", "distanta", "refugiu", "cabana"),
+            "survival_basics" to setOf("apa", "water", "purifica", "purify", "adapost", "shelter", "supravietuire"),
+            "tips_and_tricks" to setOf("sfat", "truc", "tip", "tips", "trick", "practic", "rapid"),
+            "trail_culture_ro" to setOf("cabana", "cultura", "obicei", "refugiu", "salvamont", "eticheta"),
+            "motivation_and_morale" to setOf("moral", "motivatie", "frica", "oboseala", "renunt", "continui"),
+            "medical_emergency" to setOf("glezna", "fractura", "bleeding", "sangerare", "altitude", "heat", "trauma", "accident", "vipera", "hipotermie"),
+            "mountain_safety" to setOf("salvamont", "112", "lost", "ratacit", "plan", "rescue", "siguranta", "furtuna")
         )
     }
 }
 
 class RetrievalEngine(
     private val knowledgeStore: KnowledgeChunkStore,
-    private val queryAnalyzer: QueryAnalyzer = QueryAnalyzer()
+    private val queryAnalyzer: QueryAnalyzer = QueryAnalyzer(),
+    private val crossEncoderReranker: CrossEncoderReranker? = null,
+    private val useGeneralPathReranker: Boolean = true,
+    private val json: Json = Json { ignoreUnknownKeys = true; explicitNulls = false }
 ) {
     fun analyze(query: String, context: DeviceContextSnapshot): QueryAnalysis =
         queryAnalyzer.analyze(query, context)
@@ -621,24 +664,19 @@ class RetrievalEngine(
         }
         val candidates = (hintedCandidates + broadCandidates).distinctBy { it.chunkId }
 
-        val scoredCandidates = candidates.map { candidate ->
-            RetrievedChunk(
-                topic = candidate.topic,
-                sourceTitle = candidate.sourceTitle,
-                sectionTitle = candidate.title,
-                body = candidate.body,
-                score = rerankScore(queryAnalysis, candidate, context),
-                chunkId = candidate.chunkId,
-                domain = candidate.domain,
-                sourceUrl = candidate.sourceUrl,
-                publisher = candidate.publisher,
-                language = candidate.language,
-                sourceTrust = candidate.sourceTrust,
-                publishOrReviewDate = candidate.publishOrReviewDate,
-                safetyTags = candidate.safetyTags,
-                packVersion = candidate.packVersion,
-                cardFamily = candidate.cardFamily,
-                metadataJson = candidate.metadataJson
+        val startedAtNanos = System.nanoTime()
+        val lexicalScores = candidates.associateTo(mutableMapOf()) { candidate ->
+            candidate.chunkId to rerankScore(queryAnalysis, candidate, context)
+        }
+        val rankedCandidates = applyCrossEncoderReranker(
+            query = query,
+            candidates = candidates,
+            lexicalScores = lexicalScores
+        )
+        val scoredCandidates = rankedCandidates.map { candidate ->
+            toRetrievedChunk(
+                candidate = candidate,
+                score = lexicalScores.getValue(candidate.chunkId)
             )
         }.sortedByDescending { it.score }
 
@@ -646,10 +684,93 @@ class RetrievalEngine(
             AssistantDiagnostics.logRetrieval(
                 query = query,
                 selected = selected,
-                scoredCandidates = scoredCandidates
+                scoredCandidates = scoredCandidates,
+                elapsedMs = elapsedMsSince(startedAtNanos)
             )
         }
     }
+
+    private suspend fun applyCrossEncoderReranker(
+        query: String,
+        candidates: List<KnowledgeChunkRecord>,
+        lexicalScores: MutableMap<String, Int>
+    ): List<KnowledgeChunkRecord> {
+        val reranker = crossEncoderReranker ?: return candidates.sortedByDescending { lexicalScores.getValue(it.chunkId) }
+        if (!useGeneralPathReranker || candidates.size < 2) {
+            return candidates.sortedByDescending { lexicalScores.getValue(it.chunkId) }
+        }
+
+        val lexicalRanked = candidates.sortedByDescending { lexicalScores.getValue(it.chunkId) }
+        val startedAtNanos = System.nanoTime()
+        return runCatching {
+            val byId = candidates.associateBy { it.chunkId }
+            val reranked = reranker.rerank(
+                query = query,
+                candidates = lexicalRanked,
+                topK = lexicalRanked.size
+            )
+            if (reranked.isEmpty()) {
+                return lexicalRanked
+            }
+
+            val finalScores = lexicalScores.toMutableMap()
+            reranked.forEach { result ->
+                val lexical = lexicalScores[result.chunk.chunkId]?.toDouble() ?: 0.0
+                finalScores[result.chunk.chunkId] = ((lexical * DeterministicScoreBlendWeight) +
+                    (result.score * RerankerScoreBlendWeight)).toInt()
+            }
+            val top1 = reranked.firstOrNull()
+            val top1Delta = top1?.let { result ->
+                result.score - ((lexicalScores[result.chunk.chunkId] ?: 0).toDouble() / 100.0).coerceIn(0.0, 1.0)
+            } ?: 0.0
+            AssistantDiagnostics.logReranker(
+                query = query,
+                candidateCount = lexicalRanked.size,
+                elapsedMs = elapsedMsSince(startedAtNanos),
+                top1ScoreDeltaVsLexical = top1Delta,
+                error = null
+            )
+
+            finalScores.forEach { (chunkId, score) ->
+                if (chunkId in lexicalScores) {
+                    lexicalScores[chunkId] = score
+                }
+            }
+            finalScores.entries.sortedByDescending { it.value }.mapNotNull { byId[it.key] }
+        }.getOrElse { error ->
+            AssistantDiagnostics.logReranker(
+                query = query,
+                candidateCount = lexicalRanked.size,
+                elapsedMs = elapsedMsSince(startedAtNanos),
+                top1ScoreDeltaVsLexical = 0.0,
+                error = error.message ?: error::class.java.simpleName
+            )
+            lexicalRanked
+        }
+    }
+
+    private fun toRetrievedChunk(
+        candidate: KnowledgeChunkRecord,
+        score: Int
+    ): RetrievedChunk =
+        RetrievedChunk(
+            topic = candidate.topic,
+            sourceTitle = candidate.sourceTitle,
+            sectionTitle = candidate.title,
+            body = candidate.body,
+            score = score,
+            chunkId = candidate.chunkId,
+            domain = candidate.domain,
+            sourceUrl = candidate.sourceUrl,
+            publisher = candidate.publisher,
+            language = candidate.language,
+            sourceTrust = candidate.sourceTrust,
+            publishOrReviewDate = candidate.publishOrReviewDate,
+            safetyTags = candidate.safetyTags,
+            packVersion = candidate.packVersion,
+            cardFamily = candidate.cardFamily,
+            metadataJson = candidate.metadataJson
+        )
 
     private fun rerankScore(
         queryAnalysis: QueryAnalysis,
@@ -661,6 +782,7 @@ class RetrievalEngine(
         val normalizedTopic = normalize(candidate.topic)
         val normalizedKeywords = normalize(candidate.keywords)
         val normalizedSource = normalize(candidate.sourceTitle)
+        val normalizedLead = normalize(metadataText(candidate, "lead").orEmpty())
 
         var lexicalScore = 0.0
         var matchedTokens = 0
@@ -668,6 +790,7 @@ class RetrievalEngine(
             val tokenScore = when {
                 normalizedTitle.contains(token) -> 16.0
                 normalizedTopic.contains(token) -> 14.0
+                normalizedLead.contains(token) -> 13.0
                 normalizedKeywords.contains(token) -> 11.0
                 normalizedBody.contains(token) -> min(8.0, countOccurrences(normalizedBody, token) * 2.5)
                 normalizedSource.contains(token) -> 4.0
@@ -767,11 +890,34 @@ class RetrievalEngine(
         return count
     }
 
+    private fun metadataText(candidate: KnowledgeChunkRecord, key: String): String? =
+        metadata(candidate)?.get(key)
+            ?.let { value ->
+                when (value) {
+                    is JsonPrimitive -> value.toString().trim('"')
+                    else -> value.toString().trim('"')
+                }
+            }
+            ?.takeIf { it.isNotBlank() }
+
+    private fun metadata(candidate: KnowledgeChunkRecord): JsonObject? =
+        candidate.metadataJson
+            ?.takeIf { it.isNotBlank() }
+            ?.let { raw -> runCatching { json.parseToJsonElement(raw).jsonObject }.getOrNull() }
+
+    private fun elapsedMsSince(startedAtNanos: Long): Long =
+        (System.nanoTime() - startedAtNanos) / 1_000_000
+
     private fun normalize(value: String): String =
         Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD)
             .replace("\\p{Mn}+".toRegex(), "")
             .replace("[^a-z0-9 ]".toRegex(), " ")
             .trim()
+
+    private companion object {
+        private const val DeterministicScoreBlendWeight = 0.8
+        private const val RerankerScoreBlendWeight = 20.0
+    }
 }
 
 class PromptBuilder {
@@ -1935,7 +2081,7 @@ class AssistantRepository(
             return persistAssistantTurn(memorySession, interactionResponse)
         }
 
-        val response = if (queryAnalysis.trailContextIntent != TrailContextIntent.NONE && context.trail != null) {
+        val response = if (queryAnalysis.trailContextIntent != TrailContextIntent.NONE) {
             val trailResult = trailContextEngine.answer(
                 query = query,
                 context = context,
@@ -1944,7 +2090,7 @@ class AssistantRepository(
             )
             if (trailResult != null) {
                 answerFromTrailContext(trailResult, queryAnalysis)
-            } else if (queryAnalysis.knowledgeLane == ConversationLane.FIELD_KNOW_HOW && queryAnalysis.resolvedTopic == "campfire") {
+            } else if (shouldUseCampfireLane(queryAnalysis)) {
                 answerCampfire(
                     query = query,
                     context = context,
@@ -1965,7 +2111,7 @@ class AssistantRepository(
                     conversationHistory = memorySession?.history
                 )
             }
-        } else if (queryAnalysis.knowledgeLane == ConversationLane.FIELD_KNOW_HOW && queryAnalysis.resolvedTopic == "campfire") {
+        } else if (shouldUseCampfireLane(queryAnalysis)) {
             answerCampfire(
                 query = query,
                 context = context,
@@ -1989,6 +2135,11 @@ class AssistantRepository(
 
         return persistAssistantTurn(memorySession, response)
     }
+
+    private fun shouldUseCampfireLane(queryAnalysis: QueryAnalysis): Boolean =
+        featureFlags.useCampfireLane &&
+            queryAnalysis.knowledgeLane == ConversationLane.FIELD_KNOW_HOW &&
+            queryAnalysis.resolvedTopic == "campfire"
 
     suspend fun resetConversation(context: DeviceContextSnapshot) {
         val store = conversationStore ?: return
@@ -2260,6 +2411,7 @@ class AssistantRepository(
         packStatus: KnowledgePackStatus,
         conversationHistory: ConversationHistory? = null
     ): AssistantResponse {
+        val answerStartedAtNanos = System.nanoTime()
         val modelStatus = modelManager.refreshStatus()
         val generationMode = generationModeForAttempt(modelStatus)
         AssistantDiagnostics.logAnswerStart(
@@ -2396,7 +2548,8 @@ class AssistantRepository(
             modelStatus = finalModelStatus,
             generationMode = structuredOutput.generationMode,
             safetyOutcome = safetyOutcome,
-            retrievedChunks = finalRetrieved
+            retrievedChunks = finalRetrieved,
+            totalElapsedMs = elapsedMsSince(answerStartedAtNanos)
         )
 
         return AssistantResponse(

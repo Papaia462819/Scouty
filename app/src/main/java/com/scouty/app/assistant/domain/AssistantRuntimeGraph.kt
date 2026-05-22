@@ -15,6 +15,8 @@ import com.scouty.app.assistant.domain.tools.ToolDispatcher
 
 data class RuntimeFeatureFlags(
     val useCrossEncoderReranker: Boolean = true,
+    val useGeneralPathReranker: Boolean = true,
+    val useCampfireLane: Boolean = false,
     val useLlamaCpp: Boolean = true,
     val useConversationMemory: Boolean = true,
     val useLlmSummarizer: Boolean = true,
@@ -32,7 +34,7 @@ class AssistantRuntimeGraph private constructor(
     val knowledgePackManager = KnowledgePackManager(context)
     val modelManager = ModelManager(context, featureFlags)
 
-    private val queryAnalyzer = QueryAnalyzer()
+    private val queryAnalyzer = QueryAnalyzer(useCampfireLane = featureFlags.useCampfireLane)
     private val knowledgeStore = SqliteKnowledgeChunkStore(knowledgePackManager)
     private val crossEncoderReranker = if (featureFlags.useCrossEncoderReranker) {
         CrossEncoderReranker(context)
@@ -51,7 +53,12 @@ class AssistantRuntimeGraph private constructor(
             useLlmSummarizer = featureFlags.useLlmSummarizer
         )
     }
-    private val retrievalEngine = RetrievalEngine(knowledgeStore, queryAnalyzer)
+    private val retrievalEngine = RetrievalEngine(
+        knowledgeStore = knowledgeStore,
+        queryAnalyzer = queryAnalyzer,
+        crossEncoderReranker = crossEncoderReranker,
+        useGeneralPathReranker = featureFlags.useGeneralPathReranker
+    )
     private val promptBuilder = PromptBuilder()
     private val safetyPolicy = MedicalSafetyPolicy()
     private val fallbackEngine = TemplateGenerationEngine()

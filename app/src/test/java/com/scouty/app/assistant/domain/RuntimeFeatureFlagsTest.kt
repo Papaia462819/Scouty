@@ -10,6 +10,8 @@ class RuntimeFeatureFlagsTest {
         val flags = RuntimeFeatureFlags()
 
         assertTrue(flags.useCrossEncoderReranker)
+        assertTrue(flags.useGeneralPathReranker)
+        assertFalse(flags.useCampfireLane)
         assertTrue(flags.useLlamaCpp)
         assertTrue(flags.useConversationMemory)
         assertTrue(flags.useLlmSummarizer)

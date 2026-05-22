@@ -700,5 +700,9 @@ private val SearchStopWords = setOf(
     "a", "ai", "ale", "am", "as", "at", "au", "ca", "care", "cand", "ce", "cum",
     "cu", "de", "despre", "din", "do", "este", "fac", "for", "how", "i", "in",
     "is", "la", "mai", "mi", "my", "or", "pe", "sa", "si", "sunt", "the", "to",
-    "un", "una", "unde", "what", "when", "where"
+    "un", "una", "unde", "what", "when", "where",
+    "imi", "iti", "ti", "isi", "ar", "vrea", "vreau", "vrem", "iau", "ia",
+    "cat", "cate", "cati", "trebuie", "trebui", "pana", "dupa", "inainte",
+    "apoi", "asta", "astea", "astia", "acest", "aceasta", "selectat",
+    "selectata", "vreo", "niste", "foarte", "doar", "chiar", "oare", "deja"
 )

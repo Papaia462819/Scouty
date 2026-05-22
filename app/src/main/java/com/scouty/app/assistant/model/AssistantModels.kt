@@ -52,6 +52,17 @@ data class GearContextItem(
     val note: String = ""
 )
 
+data class TrailHistoryEntry(
+    val name: String,
+    val region: String,
+    val completedAtEpochMillis: Long,
+    val distanceKm: Double,
+    val elevationGainM: Int,
+    val durationText: String,
+    val difficulty: String,
+    val outcome: String
+)
+
 data class DeviceContextSnapshot(
     val latitude: Double? = null,
     val longitude: Double? = null,
@@ -64,6 +75,7 @@ data class DeviceContextSnapshot(
     val trail: TrailContextSnapshot? = null,
     val recommendedGear: List<String> = emptyList(),
     val gearItems: List<GearContextItem> = emptyList(),
+    val trailHistory: List<TrailHistoryEntry> = emptyList(),
     val localeTag: String = assistantDefaultLocale().toLanguageTag()
 )
 

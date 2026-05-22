@@ -16,8 +16,11 @@ import com.scouty.app.assistant.model.StructuredAssistantOutput
 import com.scouty.app.assistant.model.StructuredResponseSection
 import com.scouty.app.assistant.model.TrailContextIntent
 import com.scouty.app.assistant.model.TrailContextSnapshot
+import com.scouty.app.assistant.model.TrailHistoryEntry
 import java.text.Normalizer
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
@@ -38,11 +41,15 @@ class TrailContextEngine {
         queryAnalysis: QueryAnalysis,
         conversationState: AssistantConversationState
     ): TrailContextResult? {
-        val trail = context.trail ?: return null
         val intent = queryAnalysis.trailContextIntent
         if (intent == TrailContextIntent.NONE) return null
 
         val isRomanian = queryAnalysis.preferredLanguage == "ro"
+        if (intent == TrailContextIntent.PERFORMANCE_HISTORY) {
+            return answerPerformanceHistory(query, context, isRomanian)
+        }
+
+        val trail = context.trail ?: return null
 
         return when (intent) {
             TrailContextIntent.TRAIL_INFO -> answerTrailInfo(query, trail, context, queryAnalysis, isRomanian)
@@ -52,8 +59,96 @@ class TrailContextEngine {
             TrailContextIntent.DURATION_ESTIMATE -> answerDuration(query, trail, isRomanian)
             TrailContextIntent.GEAR_REVIEW -> answerGearReview(trail, context, conversationState, isRomanian)
             TrailContextIntent.GEAR_UPDATE_CONFIRM -> processGearConfirmation(query, conversationState, isRomanian)
+            TrailContextIntent.PERFORMANCE_HISTORY -> answerPerformanceHistory(query, context, isRomanian)
             TrailContextIntent.NONE -> null
         }
+    }
+
+    private fun answerPerformanceHistory(
+        query: String,
+        context: DeviceContextSnapshot,
+        isRomanian: Boolean
+    ): TrailContextResult {
+        val history = context.trailHistory.sortedByDescending { it.completedAtEpochMillis }
+        if (history.isEmpty()) {
+            return buildResult(
+                summary = if (isRomanian) {
+                    "Nu am inca trasee in istoricul tau de performanta."
+                } else {
+                    "I do not have any trails in your performance history yet."
+                },
+                sections = emptyList(),
+                followUps = emptyList(),
+                reasoningType = ReasoningType.ROUTE_CONTEXT,
+                conversationState = AssistantConversationState(
+                    lastUserMessage = query,
+                    lastTrailContextIntent = "PERFORMANCE_HISTORY"
+                )
+            )
+        }
+
+        val matchedTrail = findHistoryTrail(query, history)
+        if (matchedTrail != null) {
+            val summary = if (isRomanian) {
+                "${matchedTrail.name}: ${matchedTrail.durationText}, ${formatKm(matchedTrail.distanceKm)} km, +${matchedTrail.elevationGainM} m, ${formatHistoryDate(matchedTrail.completedAtEpochMillis)}."
+            } else {
+                "${matchedTrail.name}: ${matchedTrail.durationText}, ${formatKm(matchedTrail.distanceKm)} km, +${matchedTrail.elevationGainM} m, ${formatHistoryDate(matchedTrail.completedAtEpochMillis)}."
+            }
+            val section = StructuredResponseSection(
+                title = if (isRomanian) "Detalii traseu" else "Trail details",
+                body = buildString {
+                    append(if (isRomanian) "Rezultat: " else "Outcome: ")
+                    append(outcomeLabel(matchedTrail.outcome, isRomanian))
+                    matchedTrail.region.takeIf { it.isNotBlank() }?.let {
+                        append(if (isRomanian) "\nRegiune: " else "\nRegion: ")
+                        append(it)
+                    }
+                    append(if (isRomanian) "\nDificultate: " else "\nDifficulty: ")
+                    append(difficultyLabel(matchedTrail.difficulty, isRomanian))
+                },
+                style = ResponseSectionStyle.CONTEXT
+            )
+            return buildResult(
+                summary = summary,
+                sections = listOf(section),
+                followUps = emptyList(),
+                reasoningType = ReasoningType.ROUTE_CONTEXT,
+                conversationState = AssistantConversationState(
+                    lastUserMessage = query,
+                    lastTrailContextIntent = "PERFORMANCE_HISTORY"
+                )
+            )
+        }
+
+        val completed = history.filter { it.outcome.equals("COMPLETED", ignoreCase = true) }
+        val summaryBase = completed.takeIf { it.isNotEmpty() } ?: history
+        val totalDistance = summaryBase.sumOf { it.distanceKm }
+        val totalElevation = summaryBase.sumOf { it.elevationGainM }
+        val latestLines = history.take(3).joinToString("\n") { entry ->
+            "- ${entry.name}: ${entry.durationText}, ${formatKm(entry.distanceKm)} km, ${formatHistoryDate(entry.completedAtEpochMillis)}"
+        }
+        val summary = if (isRomanian) {
+            "Ai ${history.size} trasee in istoric, dintre care ${completed.size} terminate: ${formatKm(totalDistance)} km si +$totalElevation m diferenta de nivel."
+        } else {
+            "You have ${history.size} trails in history, ${completed.size} completed: ${formatKm(totalDistance)} km and +$totalElevation m elevation gain."
+        }
+        val sections = listOf(
+            StructuredResponseSection(
+                title = if (isRomanian) "Ultimele trasee" else "Latest trails",
+                body = latestLines,
+                style = ResponseSectionStyle.CONTEXT
+            )
+        )
+        return buildResult(
+            summary = summary,
+            sections = sections,
+            followUps = emptyList(),
+            reasoningType = ReasoningType.ROUTE_CONTEXT,
+            conversationState = AssistantConversationState(
+                lastUserMessage = query,
+                lastTrailContextIntent = "PERFORMANCE_HISTORY"
+            )
+        )
     }
 
     // ── Trail Info ──────────────────────────────────────────────────────
@@ -1367,6 +1462,59 @@ class TrailContextEngine {
         }
     }
 
+    private fun findHistoryTrail(
+        query: String,
+        history: List<TrailHistoryEntry>
+    ): TrailHistoryEntry? {
+        val normalizedQuery = normalize(query)
+        val queryTokens = normalizedQuery
+            .split(" ")
+            .filter { it.length >= 3 && it !in HistoryQueryStopWords }
+            .toSet()
+        if (queryTokens.isEmpty()) {
+            return null
+        }
+        return history
+            .map { entry -> entry to historyMatchScore(entry, normalizedQuery, queryTokens) }
+            .filter { (_, score) -> score >= 0.45 }
+            .maxByOrNull { (_, score) -> score }
+            ?.first
+    }
+
+    private fun historyMatchScore(
+        entry: TrailHistoryEntry,
+        normalizedQuery: String,
+        queryTokens: Set<String>
+    ): Double {
+        val name = normalize(entry.name)
+        if (name.isNotBlank() && name in normalizedQuery) {
+            return 1.0
+        }
+        val nameTokens = name
+            .split(" ")
+            .filter { it.length >= 3 && it !in HistoryQueryStopWords }
+            .toSet()
+        if (nameTokens.isEmpty()) {
+            return 0.0
+        }
+        val overlap = queryTokens.intersect(nameTokens).size.toDouble() / nameTokens.size.toDouble()
+        val regionBoost = entry.region
+            .takeIf { it.isNotBlank() }
+            ?.let { region -> if (normalize(region) in normalizedQuery) 0.15 else 0.0 }
+            ?: 0.0
+        return (overlap + regionBoost).coerceIn(0.0, 1.0)
+    }
+
+    private fun outcomeLabel(outcome: String, isRomanian: Boolean): String {
+        val normalized = outcome.lowercase(Locale.ROOT)
+        return when {
+            "ended" in normalized || "early" in normalized ->
+                if (isRomanian) "incheiat mai devreme" else "ended early"
+            "completed" in normalized -> if (isRomanian) "terminat" else "completed"
+            else -> outcome
+        }
+    }
+
     private fun parseDurationHours(raw: String?): Double? {
         if (raw.isNullOrBlank()) return null
         val cleaned = raw.lowercase(Locale.ROOT)
@@ -1416,6 +1564,12 @@ class TrailContextEngine {
 
     private fun formatPercent(pct: Double): String = String.format(Locale.US, "%.1f", pct)
 
+    private fun formatHistoryDate(epochMillis: Long): String =
+        Instant.ofEpochMilli(epochMillis)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+            .format(HistoryDateFormatter)
+
     private fun formatDateForDisplay(isoDate: String, isRomanian: Boolean): String {
         return try {
             val date = LocalDate.parse(isoDate, DateTimeFormatter.ISO_LOCAL_DATE)
@@ -1439,5 +1593,14 @@ class TrailContextEngine {
         } catch (_: Exception) {
             isoDate
         }
+    }
+
+    private companion object {
+        private val HistoryDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        private val HistoryQueryStopWords = setOf(
+            "cat", "cate", "cati", "timp", "durata", "traseu", "traseul", "trasee",
+            "facut", "terminat", "luat", "avut", "performante", "istoric", "ultimul",
+            "ultima", "tura", "hike", "trail", "history", "completed"
+        )
     }
 }

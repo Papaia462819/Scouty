@@ -46,10 +46,12 @@ object AssistantDiagnostics {
     fun logRetrieval(
         query: String,
         selected: List<RetrievedChunk>,
-        scoredCandidates: List<RetrievedChunk>
+        scoredCandidates: List<RetrievedChunk>,
+        elapsedMs: Long
     ) {
         debug(
-            "RetrievalEngine.retrieve query=\"$query\" scoredCandidates=${formatRetrievedChunks(scoredCandidates)} " +
+            "RetrievalEngine.retrieve query=\"$query\" retrieval_latency_ms=$elapsedMs " +
+                "scoredCandidates=${formatRetrievedChunks(scoredCandidates)} " +
                 "selected=${formatRetrievedChunks(selected)}"
         )
     }
@@ -156,10 +158,12 @@ object AssistantDiagnostics {
         modelStatus: ModelStatus,
         generationMode: GenerationMode,
         safetyOutcome: SafetyOutcome,
-        retrievedChunks: List<RetrievedChunk>
+        retrievedChunks: List<RetrievedChunk>,
+        totalElapsedMs: Long
     ) {
         debug(
             "AssistantRepository.answer:end query=\"$query\" generationMode=${generationMode.name} " +
+                "assistant_total_latency_ms=$totalElapsedMs " +
                 "safetyOutcome=${safetyOutcome.name} packStatus.isReady=${packStatus.isReady} " +
                 "modelState=${modelStatus.state.name} modelVersion=${modelStatus.modelVersion} " +
                 "retrieved=${formatRetrievedChunks(retrievedChunks)}"

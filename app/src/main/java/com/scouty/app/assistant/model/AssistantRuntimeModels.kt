@@ -31,6 +31,7 @@ enum class TrailContextIntent {
     DURATION_ESTIMATE,
     GEAR_REVIEW,
     GEAR_UPDATE_CONFIRM,
+    PERFORMANCE_HISTORY,
     NONE
 }
 

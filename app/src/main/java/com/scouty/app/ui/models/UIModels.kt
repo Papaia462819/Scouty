@@ -3,6 +3,7 @@ package com.scouty.app.ui.models
 import com.scouty.app.assistant.model.DailyForecastEntry
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.GearContextItem
+import com.scouty.app.assistant.model.TrailHistoryEntry
 import com.scouty.app.assistant.model.TrailContextSnapshot
 import com.scouty.app.assistant.model.AssistantRuntimeDebugInfo
 import com.scouty.app.data.RouteBounds
@@ -181,6 +182,7 @@ data class HomeStatus(
     val locationName: String = "Waiting for fix...",
     val activeTrail: ActiveTrail? = null,
     val gearList: List<GearItem> = emptyList(),
+    val trailHistory: List<TrailHistoryEntry> = emptyList(),
     val userProfile: UserTrailProfile = UserTrailProfile(),
     val routeRecommendations: List<RouteRecommendation> = emptyList(),
     val assistantRuntime: AssistantRuntimeDebugInfo = AssistantRuntimeDebugInfo()
@@ -231,5 +233,6 @@ fun HomeStatus.toDeviceContextSnapshot(): DeviceContextSnapshot =
                 isPacked = item.isPacked,
                 note = item.note
             )
-        }
+        },
+        trailHistory = trailHistory
     )

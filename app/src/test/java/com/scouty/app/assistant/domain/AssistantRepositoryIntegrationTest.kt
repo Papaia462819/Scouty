@@ -23,6 +23,7 @@ import com.scouty.app.assistant.model.ModelRuntimeState
 import com.scouty.app.assistant.model.QueryAnalysis
 import com.scouty.app.assistant.model.ResponseSectionStyle
 import com.scouty.app.assistant.model.SafetyOutcome
+import com.scouty.app.assistant.model.TrailHistoryEntry
 import com.scouty.app.assistant.model.TrailContextSnapshot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -152,6 +153,40 @@ class AssistantRepositoryIntegrationTest {
         assertFalse(response.answerText == body)
         assertTrue(response.answerText.contains("frontala", ignoreCase = true))
         assertTrue(response.answerText.contains("baterii", ignoreCase = true))
+    }
+
+    @Test
+    fun performanceHistory_answersWithoutActiveTrail() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+
+        val response = repository.answer(
+            query = "Cât mi-a luat să fac traseul Sinaia Padina?",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                trailHistory = listOf(
+                    TrailHistoryEntry(
+                        name = "Sinaia - Cabana Padina",
+                        region = "Bucegi",
+                        completedAtEpochMillis = 1_768_780_800_000L,
+                        distanceKm = 12.4,
+                        elevationGainM = 980,
+                        durationText = "5h 20min",
+                        difficulty = "MEDIUM",
+                        outcome = "COMPLETED"
+                    )
+                )
+            )
+        )
+
+        assertEquals(GenerationMode.CARD_DIRECT, response.generationMode)
+        assertTrue(response.answerText.contains("5h 20min"))
+        assertTrue(response.answerText.contains("12.4 km"))
+        assertTrue(response.citations.isEmpty())
     }
 
     @Test

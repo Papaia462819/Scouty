@@ -29,6 +29,7 @@ import com.scouty.app.assistant.domain.ModelManager
 import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.assistant.model.GearItemDraft
 import com.scouty.app.assistant.model.GearItemUpdate
+import com.scouty.app.assistant.model.TrailHistoryEntry
 import com.scouty.app.BuildConfig
 import com.google.android.gms.location.*
 import com.scouty.app.api.MeteoblueLocationResult
@@ -61,6 +62,7 @@ import com.scouty.app.ui.models.TrailMetadataFormatter
 import com.scouty.app.ui.models.UserTrailProfile
 import com.scouty.app.ui.models.adaptToTrail
 import com.scouty.app.ui.models.toDeviceContextSnapshot
+import com.scouty.app.profile.ProfileTrailRecord
 import com.scouty.app.utils.MapPackRegistryManager
 import com.scouty.app.utils.SolarCalculator
 import kotlinx.coroutines.Dispatchers
@@ -294,6 +296,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             )
         }
         maybeRefreshRouteRecommendations(force = true)
+    }
+
+    fun updateTrailHistory(history: List<ProfileTrailRecord>) {
+        val mappedHistory = history.map { record ->
+            TrailHistoryEntry(
+                name = record.name,
+                region = record.region,
+                completedAtEpochMillis = record.completedAtEpochMillis,
+                distanceKm = record.distanceKm,
+                elevationGainM = record.elevationGainM,
+                durationText = record.durationText,
+                difficulty = record.difficulty,
+                outcome = record.outcome.name
+            )
+        }
+        updateUiState { it.copy(trailHistory = mappedHistory) }
     }
 
     private fun saveUserTrailProfile(profile: UserTrailProfile, notifyFirebase: Boolean) {

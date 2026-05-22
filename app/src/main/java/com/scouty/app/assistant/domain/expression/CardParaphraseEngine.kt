@@ -8,6 +8,8 @@ import com.scouty.app.assistant.domain.RetrievalConfidenceTier
 import com.scouty.app.assistant.domain.RetrievedChunk
 import com.scouty.app.assistant.domain.memory.ConversationHistory
 import com.scouty.app.assistant.model.DeviceContextSnapshot
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -51,7 +53,7 @@ class CardParaphraseEngine(
     private val cacheLock = Any()
 
     fun isEligibleForParaphrase(chunk: RetrievedChunk): Boolean =
-        metadataText(chunk, "tier") != null
+        metadataText(chunk, "tier")?.equals("B", ignoreCase = true) == true
 
     suspend fun maybeParaphrase(request: CardParaphraseRequest): ParaphrasedResponse? {
         if (!request.featureEnabled) {
@@ -74,12 +76,21 @@ class CardParaphraseEngine(
             )
             return null
         }
-        if (request.confidenceTier == RetrievalConfidenceTier.LOW) {
+        if (!tier.equals("B", ignoreCase = true)) {
             log(
                 chunkId = request.chunk.chunkId,
                 invoked = false,
                 rejected = false,
-                reason = "low_confidence"
+                reason = "tier_not_b"
+            )
+            return null
+        }
+        if (request.confidenceTier != RetrievalConfidenceTier.HIGH) {
+            log(
+                chunkId = request.chunk.chunkId,
+                invoked = false,
+                rejected = false,
+                reason = "not_high_confidence"
             )
             return null
         }
@@ -100,25 +111,33 @@ class CardParaphraseEngine(
         val prompt = buildPrompt(request)
         val startedAt = System.nanoTime()
         val raw = runCatching {
-            model.generate(
-                prompt = prompt,
-                options = LocalLlmGenerationOptions(
-                    sampler = LocalLlmSamplerParams(
-                        maxTokens = 110,
-                        temperature = 0.25f,
-                        topK = 40,
-                        topP = 0.9f,
-                        randomSeed = 13
-                    ),
-                    promptCacheHint = request.conversationHistory?.promptCacheHint
+            withTimeout(QwenParaphraseTimeoutMs) {
+                model.generate(
+                    prompt = prompt,
+                    options = LocalLlmGenerationOptions(
+                        sampler = LocalLlmSamplerParams(
+                            maxTokens = QwenParaphraseMaxTokens,
+                            temperature = 0.25f,
+                            topK = 40,
+                            topP = 0.9f,
+                            randomSeed = 13
+                        ),
+                        promptCacheHint = null,
+                        stopSequences = listOf("\n\n")
+                    )
                 )
-            )
+            }
         }.getOrElse {
+            val reason = if (it is TimeoutCancellationException) {
+                "timeout"
+            } else {
+                "generation_error"
+            }
             log(
                 chunkId = request.chunk.chunkId,
                 invoked = true,
                 rejected = true,
-                reason = "generation_error",
+                reason = reason,
                 latencyMs = elapsedMsSince(startedAt)
             )
             return null
@@ -326,6 +345,8 @@ class CardParaphraseEngine(
         private const val MaxResponseToCardRatio = 2.5
         private const val MinResponseCharacters = 120
         private const val MaxCacheEntries = 64
+        private const val QwenParaphraseTimeoutMs = 2_000L
+        private const val QwenParaphraseMaxTokens = 72
         private val NumberRegex = Regex("\\b\\d+(?:[.,:/-]\\d+)*\\b")
         private val CapitalizedWordRegex = Regex("\\b\\p{Lu}[\\p{L}0-9-]{2,}\\b")
         private val StopWords = setOf(

@@ -124,6 +124,12 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
         }
     }
 
+    LaunchedEffect(profileUiState.uid, profileUiState.profile?.trailHistory) {
+        if (profileUiState.stage == SessionStage.APP) {
+            mainViewModel.updateTrailHistory(profileUiState.profile?.trailHistory.orEmpty())
+        }
+    }
+
     LaunchedEffect(mainViewModel, profileViewModel) {
         mainViewModel.userTrailProfileEvents.collect { routePreferences ->
             profileViewModel.updateRoutePreferences(routePreferences)

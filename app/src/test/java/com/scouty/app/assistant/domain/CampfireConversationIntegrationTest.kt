@@ -562,19 +562,23 @@ class CampfireConversationIntegrationTest {
             )
         )
         val knowledgeStore = TestCampfireStore(cards, packStatus, embeddingStore)
+        val queryAnalyzer = QueryAnalyzer(useCampfireLane = true)
 
         return AssistantRepository(
             context = null,
             knowledgePackManager = TestPackStatusProvider(packStatus),
             knowledgeStore = knowledgeStore,
-            queryAnalyzer = QueryAnalyzer(),
-            retrievalEngine = RetrievalEngine(knowledgeStore),
+            queryAnalyzer = queryAnalyzer,
+            retrievalEngine = RetrievalEngine(knowledgeStore, queryAnalyzer),
             promptBuilder = PromptBuilder(),
             modelManager = ModelManager(
                 modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
                 runtimeAdapter = FakeRuntimeAdapter()
             ),
-            featureFlags = RuntimeFeatureFlags(useCardParaphraseExpression = false),
+            featureFlags = RuntimeFeatureFlags(
+                useCardParaphraseExpression = false,
+                useCampfireLane = true
+            ),
             slmInterpreterEngine = slmInterpreterEngine,
             groundedWordingEngine = groundedWordingEngine,
             generationEngine = LocalLlmGenerationEngine(

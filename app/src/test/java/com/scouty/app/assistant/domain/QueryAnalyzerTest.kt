@@ -32,8 +32,22 @@ class QueryAnalyzerTest {
     }
 
     @Test
-    fun campfireQuery_routesToKnowHowScenarioLane() {
+    fun campfireQuery_usesStandardLaneByDefault() {
         val analysis = analyzer.analyze(
+            query = "Cum fac focul?",
+            context = DeviceContextSnapshot(localeTag = "ro-RO")
+        )
+
+        assertEquals(ConversationLane.STANDARD, analysis.knowledgeLane)
+        assertEquals(null, analysis.resolvedTopic)
+        assertEquals(null, analysis.targetFamily)
+        assertEquals("campfire_basics", analysis.domainHints.first().domain)
+        assertEquals("ro", analysis.preferredLanguage)
+    }
+
+    @Test
+    fun campfireQuery_routesToKnowHowScenarioLaneWhenFlagEnabled() {
+        val analysis = QueryAnalyzer(useCampfireLane = true).analyze(
             query = "Cum fac focul?",
             context = DeviceContextSnapshot(localeTag = "ro-RO")
         )
@@ -46,7 +60,7 @@ class QueryAnalyzerTest {
 
     @Test
     fun campfireDefinitionDetour_routesToDefinitionFamily() {
-        val analysis = analyzer.analyze(
+        val analysis = QueryAnalyzer(useCampfireLane = true).analyze(
             query = "Ce e tinder?",
             context = DeviceContextSnapshot(localeTag = "ro-RO"),
             conversationState = AssistantConversationState(activeTopic = "campfire")
@@ -59,7 +73,7 @@ class QueryAnalyzerTest {
 
     @Test
     fun shortWetFollowUp_onActiveCampfireRoutesToConstraint() {
-        val analysis = analyzer.analyze(
+        val analysis = QueryAnalyzer(useCampfireLane = true).analyze(
             query = "Totul e ud",
             context = DeviceContextSnapshot(localeTag = "ro-RO"),
             conversationState = AssistantConversationState(activeTopic = "campfire")
@@ -72,7 +86,7 @@ class QueryAnalyzerTest {
 
     @Test
     fun genericWarmthQuestion_onActiveCampfireCanAbstainFromCampfire() {
-        val analysis = analyzer.analyze(
+        val analysis = QueryAnalyzer(useCampfireLane = true).analyze(
             query = "cum tin de cald",
             context = DeviceContextSnapshot(localeTag = "ro-RO"),
             conversationState = AssistantConversationState(activeTopic = "campfire")
