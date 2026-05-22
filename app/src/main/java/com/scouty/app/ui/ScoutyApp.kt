@@ -114,6 +114,7 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
         }
     )
     var selectedRoute by rememberSaveable { mutableStateOf(ROUTE_HOME) }
+    var trackReturnRoute by rememberSaveable { mutableStateOf(ROUTE_HOME) }
     val uiState by mainViewModel.uiState.collectAsState()
     val mapSessionState by mainViewModel.mapSessionState.collectAsState()
     val assistantUiState by assistantViewModel.uiState.collectAsState()
@@ -181,7 +182,10 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                         mainViewModel.requestNearbyGuide(NearbyGuideType.WATER)
                         selectedRoute = ROUTE_MAP
                     },
-                    onTrackClick = { selectedRoute = ROUTE_TRACKS }
+                    onTrackClick = {
+                        trackReturnRoute = ROUTE_HOME
+                        selectedRoute = ROUTE_TRACKS
+                    }
                 )
                 ROUTE_MAP -> MapScreen(
                     status = uiState,
@@ -193,7 +197,11 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                     contentPadding = innerPadding,
                     onInputChange = assistantViewModel::updateDraft,
                     onSend = assistantViewModel::sendCurrentDraft,
-                    onPromptSelected = assistantViewModel::sendPrompt
+                    onPromptSelected = assistantViewModel::sendPrompt,
+                    onPhotoClick = {
+                        trackReturnRoute = ROUTE_CHAT
+                        selectedRoute = ROUTE_TRACKS
+                    }
                 )
                 ROUTE_SOS -> SosScreen(
                     contentPadding = innerPadding,
@@ -217,7 +225,7 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                 )
                 ROUTE_TRACKS -> TrackCameraScreen(
                     contentPadding = innerPadding,
-                    onBack = { selectedRoute = ROUTE_HOME },
+                    onBack = { selectedRoute = trackReturnRoute },
                 )
             }
         }

@@ -91,6 +91,7 @@ fun ChatScreen(
     onInputChange: (String) -> Unit,
     onSend: () -> Unit,
     onPromptSelected: (String) -> Unit,
+    onPhotoClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -154,6 +155,7 @@ fun ChatScreen(
             value = uiState.draft,
             onValueChange = onInputChange,
             onSend = onSend,
+            onPhotoClick = onPhotoClick,
             sendEnabled = uiState.draft.isNotBlank() && !uiState.isResponding,
         )
     }
@@ -374,6 +376,7 @@ private fun ChatInputBar(
     value: String,
     onValueChange: (String) -> Unit,
     onSend: () -> Unit,
+    onPhotoClick: () -> Unit,
     sendEnabled: Boolean,
 ) {
     Row(
@@ -393,12 +396,12 @@ private fun ChatInputBar(
                 .size(30.dp)
                 .clip(CircleShape)
                 .background(AccentGreenBg)
-                .clickable { },
+                .clickable(onClick = onPhotoClick),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = Lucide.Camera,
-                contentDescription = "Vision",
+                contentDescription = "Deschide TrackScanner",
                 tint = AccentGreen,
                 modifier = Modifier.size(14.dp),
             )

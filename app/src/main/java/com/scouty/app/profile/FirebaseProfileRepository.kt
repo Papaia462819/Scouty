@@ -28,16 +28,16 @@ class FirebaseProfileRepository(
 
     suspend fun registerWithEmail(email: String, password: String): FirebaseUser =
         auth.createUserWithEmailAndPassword(email, password).await().user
-            ?: error("Firebase did not return a user after registration.")
+            ?: error("Contul nu a putut fi pregătit după înregistrare.")
 
     suspend fun signInWithEmail(email: String, password: String): FirebaseUser =
         auth.signInWithEmailAndPassword(email, password).await().user
-            ?: error("Firebase did not return a user after login.")
+            ?: error("Contul nu a putut fi pregătit după login.")
 
     suspend fun signInWithGoogle(idToken: String): FirebaseUser {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         return auth.signInWithCredential(credential).await().user
-            ?: error("Firebase did not return a user after Google login.")
+            ?: error("Contul nu a putut fi pregătit după login cu Google.")
     }
 
     fun signOut() {

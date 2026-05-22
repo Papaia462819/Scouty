@@ -52,6 +52,7 @@ import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.Check
 import com.composables.icons.lucide.ChevronDown
 import com.composables.icons.lucide.ChevronRight
+import com.composables.icons.lucide.ChevronUp
 import com.composables.icons.lucide.CircleCheck
 import com.composables.icons.lucide.Compass
 import com.composables.icons.lucide.Eye
@@ -135,6 +136,7 @@ import com.scouty.app.ui.theme.TextSecondary
 import com.scouty.app.ui.theme.TextTertiary
 import com.scouty.app.ui.theme.Water
 import com.scouty.app.ui.theme.Warning
+import java.util.Locale
 
 private enum class AuthMode {
     LOGIN,
@@ -160,6 +162,30 @@ private val profileAvatars = listOf(
     AvatarOption("atlas", "Atlas", Lucide.Map, Water),
     AvatarOption("spark", "Scanteie", Lucide.Sparkles, AccentGreen),
     AvatarOption("star", "Stea", Lucide.Star, Danger)
+)
+
+private val homeRegionOptions = listOf(
+    "Bucegi",
+    "Brasov",
+    "Piatra Craiului",
+    "Fagaras",
+    "Retezat",
+    "Apuseni",
+    "Parang",
+    "Ceahlau",
+    "Ciucas",
+    "Baiului",
+    "Postavaru",
+    "Rodnei",
+    "Maramures",
+    "Calimani",
+    "Siriu",
+    "Leaota",
+    "Cozia",
+    "Macin",
+    "Carpatii Orientali",
+    "Carpatii Meridionali",
+    "Carpatii Occidentali"
 )
 
 @Composable
@@ -241,7 +267,7 @@ fun AuthScreen(
                             email = email,
                             password = password,
                             confirmPassword = confirmPassword,
-                            message = if (isLoading) "Se conectează la Firebase..." else localMessage ?: authMessage,
+                            message = if (isLoading) null else localMessage ?: authMessage,
                             isLoading = isLoading,
                             accent = if (formMode == AuthMode.LOGIN) AccentGreen else Warning,
                             onAccent = if (formMode == AuthMode.LOGIN) AccentGreenOnSurface else Color(0xFF2A1A05),
@@ -287,7 +313,7 @@ fun AuthScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
             Text(
-                text = "v1.0.0 · Firebase Auth + Firestore",
+                text = "v1.0.0",
                 fontSize = 10.sp,
                 color = TextMuted,
                 textAlign = TextAlign.Center,
@@ -522,11 +548,11 @@ private fun AuthHelperRow(mode: AuthMode, accountExists: Boolean, accent: Color)
         Text(
             text = when {
                 mode == AuthMode.REGISTER && accountExists ->
-                    "Register creează un cont Firebase nou pentru acest dispozitiv."
+                    "Register creează un cont nou pentru acest dispozitiv."
                 mode == AuthMode.REGISTER ->
-                    "După creare, configurăm profilul și îl salvăm în Firestore."
+                    "După creare, configurăm profilul și îl sincronizăm în siguranță."
                 else ->
-                    "Bine ai revenit. Încărcăm profilul din Firebase."
+                    "Bine ai revenit. Încărcăm profilul tău."
             },
             fontSize = 10.sp,
             lineHeight = 14.sp,
@@ -745,7 +771,7 @@ private fun ProfileConfigStep(
             )
             Spacer(Modifier.width(8.dp))
             Text(
-                text = email.ifBlank { "email Firebase" },
+                text = email.ifBlank { "email cont" },
                 color = TextSecondary,
                 fontSize = 11.sp,
                 maxLines = 1,
@@ -762,21 +788,10 @@ private fun ProfileConfigStep(
             isError = displayName.isNotBlank() && displayName.trim().length < 2,
         )
 
-        LabeledOnboardingTextField(
-            label = "REGIUNE DE ACASA",
+        HomeRegionDropdownField(
             value = homeRegion,
             onValueChange = onHomeRegionChange,
-            placeholder = "Alege sau scrie regiunea...",
-            helper = "Exemplu: Carpati, Bucegi, Brasov",
             isError = homeRegion.isNotBlank() && homeRegion.trim().length < 2,
-            trailing = {
-                Icon(
-                    imageVector = Lucide.ChevronDown,
-                    contentDescription = null,
-                    tint = TextSecondary,
-                    modifier = Modifier.size(14.dp),
-                )
-            },
         )
 
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -801,6 +816,152 @@ private fun ProfileConfigStep(
         }
     }
 }
+
+@Composable
+private fun HomeRegionDropdownField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    isError: Boolean,
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val query = value.trim()
+    val options = remember(query) {
+        val normalizedQuery = normalizeRegionQuery(query)
+        val matches = if (normalizedQuery.isBlank()) {
+            homeRegionOptions
+        } else {
+            homeRegionOptions.filter { normalizeRegionQuery(it).contains(normalizedQuery) }
+        }
+        matches.take(7)
+    }
+
+    Column {
+        FieldLabel("REGIUNE DE ACASA")
+        Spacer(Modifier.height(6.dp))
+        OutlinedTextField(
+            value = value,
+            onValueChange = {
+                onValueChange(it)
+                expanded = true
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(if (value.isNotBlank()) 3.dp else 0.dp, RoundedCornerShape(12.dp))
+                .background(BgSurfaceRaised, RoundedCornerShape(12.dp))
+                .onFocusChanged { focusState ->
+                    if (focusState.isFocused) {
+                        expanded = true
+                    }
+                },
+            singleLine = true,
+            placeholder = {
+                Text(
+                    text = "Cauta sau alege regiunea...",
+                    color = TextTertiary,
+                    fontSize = 14.sp,
+                )
+            },
+            trailingIcon = {
+                Icon(
+                    imageVector = if (expanded) Lucide.ChevronUp else Lucide.ChevronDown,
+                    contentDescription = if (expanded) "Inchide lista" else "Deschide lista",
+                    tint = TextSecondary,
+                    modifier = Modifier
+                        .size(16.dp)
+                        .clickable { expanded = !expanded },
+                )
+            },
+            textStyle = MaterialTheme.typography.bodyLarge.copy(
+                color = TextPrimary,
+                fontSize = 14.sp,
+            ),
+            shape = RoundedCornerShape(12.dp),
+            isError = isError,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = BgSurfaceRaised,
+                unfocusedContainerColor = BgSurfaceRaised,
+                disabledContainerColor = BgSurfaceRaised,
+                errorContainerColor = BgSurfaceRaised,
+                focusedIndicatorColor = AccentGreen,
+                unfocusedIndicatorColor = BorderDefault,
+                errorIndicatorColor = Danger,
+                cursorColor = AccentGreen,
+            )
+        )
+        if (expanded && options.isNotEmpty()) {
+            Spacer(Modifier.height(6.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(BgSurfaceRaised)
+                    .border(0.5.dp, BorderDefault, RoundedCornerShape(12.dp))
+                    .padding(vertical = 4.dp)
+            ) {
+                options.forEach { option ->
+                    RegionDropdownOption(
+                        label = option,
+                        selected = option.equals(value.trim(), ignoreCase = true),
+                        onClick = {
+                            onValueChange(option)
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
+        Spacer(Modifier.height(4.dp))
+        Text(
+            text = if (isError) "Alege sau scrie cel putin 2 caractere." else "Poti selecta din lista sau cauta prin tastare.",
+            color = if (isError) Danger else TextTertiary,
+            fontSize = 10.sp,
+            lineHeight = 13.sp,
+        )
+    }
+}
+
+@Composable
+private fun RegionDropdownOption(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .background(if (selected) AccentGreen.copy(alpha = 0.1f) else Color.Transparent)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = label,
+            color = if (selected) AccentGreen else TextPrimary,
+            fontSize = 13.sp,
+            fontWeight = if (selected) FontWeight.Medium else FontWeight.Normal,
+        )
+        if (selected) {
+            Icon(
+                imageVector = Lucide.Check,
+                contentDescription = null,
+                tint = AccentGreen,
+                modifier = Modifier.size(13.dp),
+            )
+        }
+    }
+}
+
+private fun normalizeRegionQuery(value: String): String =
+    value
+        .lowercase(Locale.ROOT)
+        .replace("ă", "a")
+        .replace("â", "a")
+        .replace("î", "i")
+        .replace("ș", "s")
+        .replace("ş", "s")
+        .replace("ț", "t")
+        .replace("ţ", "t")
 
 @Composable
 private fun LabeledOnboardingTextField(
@@ -1148,7 +1309,7 @@ private fun ResultStep(
                     TierPill(level = currentLevel)
                     Spacer(Modifier.height(6.dp))
                     Text(
-                        text = "${email.ifBlank { "email Firebase" }} · ${homeRegion.ifBlank { "regiune nealeasa" }}",
+                        text = "${email.ifBlank { "email cont" }} · ${homeRegion.ifBlank { "regiune nealeasa" }}",
                         color = TextTertiary,
                         fontSize = 10.sp,
                         maxLines = 1,

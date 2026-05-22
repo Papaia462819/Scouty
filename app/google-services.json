@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "649346329464-f75qnictre6al2iesoqcjc72qu6r0jmt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nego.scouty",
+            "certificate_hash": "bd024b9e030f47cabb274c5d713d0e7e8ffb3314"
+          }
+        },
+        {
           "client_id": "649346329464-hh90krrc19fh4csjuoktkchvte3gouf4.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -95,8 +95,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.composables.icons.lucide.Check
-import com.composables.icons.lucide.BatteryFull
-import com.composables.icons.lucide.BatteryLow
 import com.composables.icons.lucide.ChevronDown
 import com.composables.icons.lucide.ChevronUp
 import com.composables.icons.lucide.Clock
@@ -115,6 +113,7 @@ import com.scouty.app.sos.SosAction
 import com.scouty.app.sos.SosContact
 import com.scouty.app.sos.SosMessageBuilder
 import com.scouty.app.sos.SosMessageInput
+import com.scouty.app.sos.SosMessageLanguage
 import com.scouty.app.sos.SosSettings
 import com.scouty.app.sos.SosSettingsRepository
 import com.scouty.app.ui.components.CategoryIconTile
@@ -163,11 +162,13 @@ fun SosScreen(
     var pendingFollowUpCall by rememberSaveable { mutableStateOf<String?>(null) }
     var waitingForExternalReturn by rememberSaveable { mutableStateOf(false) }
     var externalLaunchAt by rememberSaveable { mutableLongStateOf(0L) }
+    var previewLanguage by rememberSaveable { mutableStateOf(SosMessageLanguage.Romanian) }
 
-    val previewMessage = remember(status, profile, settings) {
+    val previewMessage = remember(status, profile, settings, previewLanguage) {
         SosMessageBuilder.build(
             input = status.toSosMessageInput(profile.displayName),
-            settings = settings
+            settings = settings,
+            language = previewLanguage
         )
     }
 
@@ -212,15 +213,14 @@ fun SosScreen(
                 verticalArrangement = Arrangement.spacedBy(0.dp),
             ) {
                 SosHeader(
-                    settings = settings,
                     onSettingsClick = { showSettings = true }
                 )
                 SosHoldButton(
                     holdSeconds = settings.holdSeconds,
-                    action = settings.action,
                     onActivated = {
-                        val message = SosMessageBuilder.build(
-                            input = status.toSosMessageInput(profile.displayName, System.currentTimeMillis()),
+                        val messageInput = status.toSosMessageInput(profile.displayName, System.currentTimeMillis())
+                        val bilingualMessage = SosMessageBuilder.buildBilingual(
+                            input = messageInput,
                             settings = settings
                         )
                         val launchedText = if (settings.action.includesText) {
@@ -232,7 +232,7 @@ fun SosScreen(
                                 }
                                 false
                             } else {
-                                openSmsComposer(context, recipients, message).also { launched ->
+                                openSmsComposer(context, recipients, bilingualMessage).also { launched ->
                                     statusMessage = if (launched) {
                                         "Mesaj SOS pregatit pentru ${recipients.size} contact(e)."
                                     } else {
@@ -273,6 +273,14 @@ fun SosScreen(
                 Spacer(Modifier.height(10.dp))
                 MessagePreviewCard(
                     message = previewMessage,
+                    language = previewLanguage,
+                    onToggleLanguage = {
+                        previewLanguage = if (previewLanguage == SosMessageLanguage.Romanian) {
+                            SosMessageLanguage.English
+                        } else {
+                            SosMessageLanguage.Romanian
+                        }
+                    },
                     onCopy = {
                         clipboard.setText(AnnotatedString(previewMessage))
                         statusMessage = "Mesaj SOS copiat."
@@ -370,52 +378,40 @@ private fun SosUrgencyCard(
 
 @Composable
 private fun SosHeader(
-    settings: SosSettings,
     onSettingsClick: () -> Unit
 ) {
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 4.dp, bottom = 18.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(Danger.copy(alpha = 0.18f))
-                    .border(0.5.dp, Danger.copy(alpha = 0.3f), RoundedCornerShape(10.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Lucide.TriangleAlert,
-                    contentDescription = null,
-                    tint = Danger,
-                    modifier = Modifier.size(18.dp)
-                )
-            }
-            Column {
-                Text(
-                    text = "EMERGENCY",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = Danger,
-                    letterSpacing = 0.3.sp,
-                    fontWeight = FontWeight.Medium,
-                )
-                Text(
-                    text = topBarActionLabel(settings),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = TextTertiary,
-                )
-            }
-        }
         Box(
             modifier = Modifier
+                .align(Alignment.CenterStart)
+                .size(36.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(Danger.copy(alpha = 0.18f))
+                .border(0.5.dp, Danger.copy(alpha = 0.3f), RoundedCornerShape(10.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Lucide.TriangleAlert,
+                contentDescription = null,
+                tint = Danger,
+                modifier = Modifier.size(18.dp)
+            )
+        }
+        Text(
+            text = "EMERGENCY",
+            modifier = Modifier.align(Alignment.Center),
+            style = MaterialTheme.typography.headlineMedium,
+            color = Danger,
+            letterSpacing = 0.3.sp,
+            fontWeight = FontWeight.Medium,
+        )
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
                 .size(32.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(Danger.copy(alpha = 0.05f))
@@ -436,7 +432,6 @@ private fun SosHeader(
 @Composable
 private fun SosHoldButton(
     holdSeconds: Int,
-    action: SosAction,
     onActivated: () -> Unit
 ) {
     var isHolding by remember { mutableStateOf(false) }
@@ -582,7 +577,7 @@ private fun SosHoldButton(
             }
         }
         Text(
-            text = holdHelperText(action),
+            text = holdHelperText(),
             style = MaterialTheme.typography.bodySmall,
             color = TextSecondary,
             fontSize = 11.sp,
@@ -709,31 +704,6 @@ private fun YourLocationCard(status: HomeStatus) {
                 secondaryDimmed = true
             )
         }
-
-        Spacer(Modifier.height(8.dp))
-
-        val batteryColor = if (status.batteryPercent < 30) Warning else AccentGreen
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
-                .background(batteryColor.copy(alpha = 0.08f))
-                .padding(horizontal = 10.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = if (status.batteryPercent < 30) Lucide.BatteryLow else Lucide.BatteryFull,
-                contentDescription = null,
-                tint = batteryColor,
-                modifier = Modifier.size(11.dp),
-            )
-            Spacer(Modifier.width(8.dp))
-            Text(
-                text = "Battery ${status.batteryPercent}% incluse in rescue packet",
-                fontSize = 10.sp,
-                color = batteryColor,
-            )
-        }
     }
 }
 
@@ -774,7 +744,12 @@ private fun LocationPairCell(
 }
 
 @Composable
-private fun MessagePreviewCard(message: String, onCopy: () -> Unit) {
+private fun MessagePreviewCard(
+    message: String,
+    language: SosMessageLanguage,
+    onToggleLanguage: () -> Unit,
+    onCopy: () -> Unit
+) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     var copied by remember { mutableStateOf(false) }
 
@@ -815,7 +790,7 @@ private fun MessagePreviewCard(message: String, onCopy: () -> Unit) {
                 Spacer(Modifier.width(8.dp))
                 Column {
                     Text(
-                        text = "RESCUE PACKET",
+                        text = "PACHET SALVARE",
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontSize = 10.sp,
                             letterSpacing = 0.2.sp
@@ -824,13 +799,20 @@ private fun MessagePreviewCard(message: String, onCopy: () -> Unit) {
                         color = TextPrimary
                     )
                     Text(
-                        text = "SMS pregatit · ${message.length} char",
+                        text = "SMS pregatit · ${message.length} caractere",
                         fontSize = 10.sp,
                         color = TextPrimary.copy(alpha = 0.6f)
                     )
                 }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                PacketTextButton(
+                    text = when (language) {
+                        SosMessageLanguage.Romanian -> "RO"
+                        SosMessageLanguage.English -> "EN"
+                    },
+                    onClick = onToggleLanguage
+                )
                 PacketIconButton(
                     icon = if (copied) Lucide.Check else Lucide.Copy,
                     tint = if (copied) AccentGreen else TextPrimary,
@@ -875,8 +857,8 @@ private fun MessagePreviewCard(message: String, onCopy: () -> Unit) {
                 modifier = Modifier.padding(start = 14.dp, end = 14.dp, bottom = 14.dp),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                PacketSummaryRow("Nume · Locatie · Altitudine · GPS accuracy")
-                PacketSummaryRow("Maps link · Battery · Timestamp")
+                PacketSummaryRow("Nume · Locatie · Altitudine · Precizie GPS")
+                PacketSummaryRow("Harta · Baterie · Ora")
             }
         }
 
@@ -905,6 +887,30 @@ private fun MessagePreviewCard(message: String, onCopy: () -> Unit) {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun PacketTextButton(
+    text: String,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .height(30.dp)
+            .width(34.dp)
+            .clip(RoundedCornerShape(9.dp))
+            .background(Danger.copy(alpha = 0.06f))
+            .border(0.5.dp, Danger.copy(alpha = 0.2f), RoundedCornerShape(9.dp))
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            color = TextPrimary,
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Medium
+        )
     }
 }
 
@@ -1938,26 +1944,8 @@ private fun locationPillState(status: HomeStatus): LocationPillState =
         else -> LocationPillState("GPS FIX", AccentGreen)
     }
 
-private fun topBarActionLabel(settings: SosSettings): String =
-    "Hold ${settings.holdSeconds}s · ${shortActionLabel(settings.action)}"
-
-private fun shortActionLabel(action: SosAction): String =
-    when (action) {
-        SosAction.CALL_112 -> "Call 112"
-        SosAction.CALL_SALVAMONT -> "Call Salvamont"
-        SosAction.TEXT_ONLY -> "SMS contacts"
-        SosAction.TEXT_THEN_CALL_112 -> "SMS + Call 112"
-        SosAction.TEXT_THEN_CALL_SALVAMONT -> "SMS + Salvamont"
-    }
-
-private fun holdHelperText(action: SosAction): String =
-    when (action) {
-        SosAction.CALL_112 -> "Hold pentru call 112. Fara meniu intermediar."
-        SosAction.CALL_SALVAMONT -> "Hold pentru call Salvamont. Fara meniu intermediar."
-        SosAction.TEXT_ONLY -> "Hold pentru SMS catre contacte. Fara meniu intermediar."
-        SosAction.TEXT_THEN_CALL_112 -> "Hold pentru SMS, apoi call 112. Fara meniu intermediar."
-        SosAction.TEXT_THEN_CALL_SALVAMONT -> "Hold pentru SMS, apoi call Salvamont. Fara meniu intermediar."
-    }
+private fun holdHelperText(): String =
+    "tine apasat pentru ajutor"
 
 private fun openSmsComposer(context: Context, recipients: List<String>, message: String): Boolean {
     if (recipients.isEmpty()) return false

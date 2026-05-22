@@ -3,12 +3,13 @@ package com.scouty.app.profile
 import android.app.Application
 import android.content.Context
 import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.CustomCredential
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthException
@@ -101,9 +102,9 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                 val credentialManager = CredentialManager.create(context)
                 val request = GetCredentialRequest.Builder()
                     .addCredentialOption(
-                        GetGoogleIdOption.Builder()
-                            .setFilterByAuthorizedAccounts(false)
-                            .setServerClientId(getApplication<Application>().getString(R.string.default_web_client_id))
+                        GetSignInWithGoogleOption.Builder(
+                            serverClientId = getApplication<Application>().getString(R.string.default_web_client_id)
+                        )
                             .build()
                     )
                     .build()
@@ -111,7 +112,13 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                     context = context,
                     request = request
                 ).credential
-                val googleCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                val googleCredential = when {
+                    credential is CustomCredential &&
+                        credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL ->
+                        GoogleIdTokenCredential.createFrom(credential.data)
+
+                    else -> error("Credential Manager did not return a Google ID token.")
+                }
                 val user = repository.signInWithGoogle(googleCredential.idToken)
                 clearLegacyLocalState()
                 loadSessionForUser(user.uid, user.email.orEmpty(), user.displayName)
@@ -274,7 +281,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                 repository.saveTrailCompletion(uid, updatedProfile, routePreferences, newRecord)
             }.onFailure { error ->
                 _uiState.update {
-                    it.copy(authMessage = error.toUserMessage("Tura a fost salvată local în sesiune, dar nu a ajuns încă în Firestore."))
+                    it.copy(authMessage = error.toUserMessage("Tura a fost salvată local în sesiune, dar nu a fost sincronizată încă."))
                 }
             }
         }
@@ -301,7 +308,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             }.onFailure { error ->
                 repository.signOut()
                 _uiState.value = ProfileSessionUiState(
-                    authMessage = error.toUserMessage("Sesiunea Firebase nu a putut fi încărcată.")
+                    authMessage = error.toUserMessage("Sesiunea nu a putut fi încărcată.")
                 )
             }
         }
@@ -379,13 +386,13 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         when (this) {
             is FirebaseNetworkException -> "Verifică conexiunea la internet și încearcă din nou."
             is FirebaseAuthException -> when (errorCode) {
-                "ERROR_EMAIL_ALREADY_IN_USE" -> "Există deja un cont Firebase pentru acest email."
+                "ERROR_EMAIL_ALREADY_IN_USE" -> "Există deja un cont pentru acest email."
                 "ERROR_INVALID_EMAIL" -> "Adresa de email nu este validă."
                 "ERROR_INVALID_CREDENTIAL",
                 "ERROR_WRONG_PASSWORD",
                 "ERROR_USER_NOT_FOUND" -> "Emailul sau parola nu sunt corecte."
                 "ERROR_WEAK_PASSWORD" -> "Parola este prea slabă."
-                else -> localizedMessage ?: fallback
+                else -> fallback
             }
             is GetCredentialException -> "Autentificarea Google a fost anulată sau nu este disponibilă."
             else -> localizedMessage ?: fallback
