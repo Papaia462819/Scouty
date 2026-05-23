@@ -156,6 +156,78 @@ class AssistantRepositoryIntegrationTest {
     }
 
     @Test
+    fun onlineGemini_skipsLocalParaphraseAndUsesRemoteAnswer() = runBlocking {
+        val knowledgePackStatus = KnowledgePackStatus(
+            available = true,
+            packVersion = "pack-1",
+            hashValid = true,
+            integrityValid = true
+        )
+        val body = "Frontala cu baterii de rezerva este critica pe traseu; pastreaz-o la indemana cand se intuneca."
+        val chunks = listOf(
+            KnowledgeChunkRecord(
+                chunkId = "cg_gear_frontala",
+                domain = "gear_and_preparation",
+                topic = "headlamp_dark",
+                language = "ro",
+                title = "Frontala pe intuneric",
+                body = body,
+                sourceTitle = "Scouty",
+                publisher = "Scouty",
+                sourceLanguage = "ro",
+                adaptedLanguage = "ro",
+                sourceTrust = 5,
+                packVersion = "pack-1",
+                keywords = "frontala baterii intuneric traseu",
+                metadataJson = """{"tier":"B","tone":"conversational"}"""
+            )
+        )
+        val store = FakeSearchKnowledgeStore(chunks, knowledgePackStatus)
+        val client = FakeGeminiContentClient(
+            response = geminiResponse(
+                """{"summary":"Raspuns remote Gemini.","warning":"","guidance":"Tine frontala la indemana si verifica bateriile inainte de plecare.","sections":[]}"""
+            )
+        )
+        val modelManager = ModelManager(
+            modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+            runtimeAdapter = FakeRuntimeAdapter()
+        )
+        val repository = AssistantRepository(
+            context = null,
+            knowledgePackManager = FakeKnowledgePackStatusProvider(knowledgePackStatus),
+            knowledgeStore = store,
+            queryAnalyzer = QueryAnalyzer(),
+            retrievalEngine = RetrievalEngine(store),
+            promptBuilder = PromptBuilder(),
+            modelManager = modelManager,
+            generationEngine = GeminiRemoteGenerationEngine(
+                fallbackEngine = TemplateGenerationEngine(),
+                config = GeminiRemoteConfig(apiKey = "test-key", modelName = "gemini-test"),
+                client = client
+            ),
+            medicalSafetyPolicy = MedicalSafetyPolicy(),
+            cardParaphraseEngine = CardParaphraseEngine(FakeCardParaphraseModel("Paraphrase local care nu trebuie folosit.")),
+            useCardParaphraseExpression = true
+        )
+
+        val response = repository.answer(
+            query = "Ce fac cu frontala daca se intuneca?",
+            context = DeviceContextSnapshot(
+                batteryPercent = 73,
+                gpsFixed = true,
+                isOnline = true,
+                localeTag = "ro"
+            )
+        )
+
+        assertEquals(1, client.calls)
+        assertEquals(GenerationMode.GEMINI_API, response.generationMode)
+        assertEquals("gemini-test", response.modelVersion)
+        assertTrue(response.answerText.contains("remote Gemini", ignoreCase = true))
+        assertFalse(response.answerText.contains("Paraphrase local", ignoreCase = true))
+    }
+
+    @Test
     fun performanceHistory_answersWithoutActiveTrail() = runBlocking {
         val repository = createRepository(
             modelManager = ModelManager(

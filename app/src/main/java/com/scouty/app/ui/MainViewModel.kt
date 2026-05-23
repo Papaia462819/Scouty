@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.location.Location
 import android.net.ConnectivityManager
+import android.net.Network
 import android.net.NetworkCapabilities
 import android.os.BatteryManager
 import android.os.Build
@@ -110,6 +111,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     )
 
     private val meteoblueApiKey = BuildConfig.METEOBLUE_API_KEY
+    private val connectivityManager =
+        application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private val userTrailProfileStore = UserTrailProfileStore(application)
     private val assistantRuntimeGraph = AssistantRuntimeGraph.get(application)
     private val knowledgePackManager: KnowledgePackManager = assistantRuntimeGraph.knowledgePackManager
@@ -159,6 +162,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             }
         }
     }
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            refreshOnlineState()
+        }
+
+        override fun onLost(network: Network) {
+            refreshOnlineState()
+        }
+
+        override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+            refreshOnlineState()
+        }
+    }
+    private var networkCallbackRegistered = false
 
     init {
         val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
@@ -169,6 +186,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         }
         startLocationUpdates()
         loadDefaultGear()
+        registerNetworkCallback()
         refreshOnlineState()
         observeAssistantRuntime()
         refreshAssistantRuntimeStatus()
@@ -1570,15 +1588,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     }
 
     private fun isInternetAvailable(): Boolean {
-        val connectivityManager = getApplication<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false
         val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-        return when {
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            else -> false
-        }
+        return activeNetwork.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+            activeNetwork.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
     }
 
     private fun calculateAverageInclinePercent(distanceKm: Double, elevationGain: Int): Double {
@@ -1591,6 +1604,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private fun refreshOnlineState() {
         val online = isInternetAvailable()
         updateUiState { it.copy(isOnline = online) }
+    }
+
+    private fun registerNetworkCallback() {
+        runCatching {
+            connectivityManager.registerDefaultNetworkCallback(networkCallback)
+            networkCallbackRegistered = true
+        }.onFailure { error ->
+            Log.w("ScoutyNetwork", "Could not register network callback", error)
+        }
     }
 
     private fun refreshAssistantRuntimeStatus() {
@@ -1713,5 +1735,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         try {
             getApplication<Application>().unregisterReceiver(batteryReceiver)
         } catch (e: Exception) { }
+        if (networkCallbackRegistered) {
+            runCatching {
+                connectivityManager.unregisterNetworkCallback(networkCallback)
+            }
+        }
     }
 }

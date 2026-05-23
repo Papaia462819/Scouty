@@ -2055,6 +2055,7 @@ class AssistantRepository(
 ) {
     private var sessionConversationId: String = "session:${UUID.randomUUID()}"
     private val interactionEngine = DeterministicInteractionEngine()
+    private val onlineGenerationPolicy = generationEngine as? OnlineGenerationPolicy
 
     suspend fun answer(
         query: String,
@@ -2413,7 +2414,7 @@ class AssistantRepository(
     ): AssistantResponse {
         val answerStartedAtNanos = System.nanoTime()
         val modelStatus = modelManager.refreshStatus()
-        val generationMode = generationModeForAttempt(modelStatus)
+        val generationMode = generationModeForAttempt(modelStatus, context)
         AssistantDiagnostics.logAnswerStart(
             query = query,
             packStatus = packStatus,
@@ -2513,15 +2514,19 @@ class AssistantRepository(
             queryAnalysis = finalAnalysis
         )
         val safetyOutcome = medicalSafetyPolicy.evaluate(query, finalRetrieved, context)
-        val expressionResult = maybeBuildExpressionResult(
-            query = query,
-            context = context,
-            analysis = finalAnalysis,
-            retrievedChunks = finalRetrieved,
-            confidence = finalAssessment,
-            knowledgePackStatus = packStatus,
-            conversationHistory = conversationHistory
-        )
+        val expressionResult = if (shouldUseOnlineGeneration(context)) {
+            null
+        } else {
+            maybeBuildExpressionResult(
+                query = query,
+                context = context,
+                analysis = finalAnalysis,
+                retrievedChunks = finalRetrieved,
+                confidence = finalAssessment,
+                knowledgePackStatus = packStatus,
+                conversationHistory = conversationHistory
+            )
+        }
         val structuredOutput = medicalSafetyPolicy.applyFinalGuardrails(
             output = expressionResult?.output
                 ?: generationEngine.generate(
@@ -2566,7 +2571,7 @@ class AssistantRepository(
                 retrieved = finalRetrieved,
                 acceptedInterpretation = acceptedInterpretation
             ),
-            modelVersion = finalModelStatus.modelVersion.takeIf {
+            modelVersion = structuredOutput.modelVersion ?: finalModelStatus.modelVersion.takeIf {
                 finalModelStatus.availableOnDisk || finalModelStatus.state != ModelRuntimeState.MISSING
             },
             modelRuntimeState = finalModelStatus.state,
@@ -2783,7 +2788,7 @@ class AssistantRepository(
         conversationHistory: ConversationHistory?
     ): AssistantResponse {
         val modelStatus = modelManager.refreshStatus()
-        val generationMode = generationModeForAttempt(modelStatus)
+        val generationMode = generationModeForAttempt(modelStatus, context)
         val prompt = promptBuilder.build(
             query = query,
             context = context,
@@ -2791,15 +2796,19 @@ class AssistantRepository(
             queryAnalysis = analysis
         )
         val safetyOutcome = medicalSafetyPolicy.evaluate(query, retrievedChunks, context)
-        val expressionResult = maybeBuildExpressionResult(
-            query = query,
-            context = context,
-            analysis = analysis,
-            retrievedChunks = retrievedChunks,
-            confidence = confidence,
-            knowledgePackStatus = packStatus,
-            conversationHistory = conversationHistory
-        )
+        val expressionResult = if (shouldUseOnlineGeneration(context)) {
+            null
+        } else {
+            maybeBuildExpressionResult(
+                query = query,
+                context = context,
+                analysis = analysis,
+                retrievedChunks = retrievedChunks,
+                confidence = confidence,
+                knowledgePackStatus = packStatus,
+                conversationHistory = conversationHistory
+            )
+        }
         val output = medicalSafetyPolicy.applyFinalGuardrails(
             output = expressionResult?.output ?: generationEngine.generate(
                 GenerationInput(
@@ -2833,7 +2842,7 @@ class AssistantRepository(
                 retrieved = retrievedChunks,
                 acceptedInterpretation = null
             ),
-            modelVersion = finalModelStatus.modelVersion.takeIf {
+            modelVersion = output.modelVersion ?: finalModelStatus.modelVersion.takeIf {
                 finalModelStatus.availableOnDisk || finalModelStatus.state != ModelRuntimeState.MISSING
             },
             modelRuntimeState = finalModelStatus.state,
@@ -3027,8 +3036,12 @@ class AssistantRepository(
             .replace("\\s+".toRegex(), " ")
             .trim()
 
-    private fun generationModeForAttempt(modelStatus: ModelStatus): GenerationMode =
+    private fun shouldUseOnlineGeneration(context: DeviceContextSnapshot): Boolean =
+        onlineGenerationPolicy?.shouldAttemptRemote(context) == true
+
+    private fun generationModeForAttempt(modelStatus: ModelStatus, context: DeviceContextSnapshot): GenerationMode =
         when {
+            shouldUseOnlineGeneration(context) -> GenerationMode.GEMINI_API
             modelStatus.state == ModelRuntimeState.LOADED -> GenerationMode.LOCAL_LLM
             modelStatus.availableOnDisk && modelStatus.state in setOf(
                 ModelRuntimeState.UNLOADED,

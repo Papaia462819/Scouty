@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 enum class GenerationMode(val label: String) {
     FALLBACK_STRUCTURED("Fallback structured"),
+    GEMINI_API("Gemini API"),
     LOCAL_LLM("Local LLM"),
     CARD_DIRECT("Structured card")
 }

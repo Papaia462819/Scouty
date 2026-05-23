@@ -16,6 +16,7 @@ class RuntimeFeatureFlagsTest {
         assertTrue(flags.useConversationMemory)
         assertTrue(flags.useLlmSummarizer)
         assertTrue(flags.useQwenDefault)
+        assertTrue(flags.useGeminiApi)
         assertTrue(flags.useCardParaphraseExpression)
         assertFalse(flags.useGroundedWording)
         assertFalse(flags.useGrammarToolCalling)

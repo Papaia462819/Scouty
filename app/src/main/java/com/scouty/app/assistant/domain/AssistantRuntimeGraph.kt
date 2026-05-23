@@ -21,6 +21,7 @@ data class RuntimeFeatureFlags(
     val useConversationMemory: Boolean = true,
     val useLlmSummarizer: Boolean = true,
     val useQwenDefault: Boolean = true,
+    val useGeminiApi: Boolean = true,
     val useCardParaphraseExpression: Boolean = true,
     val useGroundedWording: Boolean = false,
     val useGrammarToolCalling: Boolean = false,
@@ -62,10 +63,18 @@ class AssistantRuntimeGraph private constructor(
     private val promptBuilder = PromptBuilder()
     private val safetyPolicy = MedicalSafetyPolicy()
     private val fallbackEngine = TemplateGenerationEngine()
-    private val generationEngine = LocalLlmGenerationEngine(
+    private val localGenerationEngine = LocalLlmGenerationEngine(
         modelManager = modelManager,
         fallbackEngine = fallbackEngine
     )
+    private val generationEngine: GenerationEngine =
+        if (featureFlags.useGeminiApi) {
+            GeminiRemoteGenerationEngine(
+                fallbackEngine = localGenerationEngine
+            )
+        } else {
+            localGenerationEngine
+        }
     private val cardParaphraseEngine = if (featureFlags.useCardParaphraseExpression) {
         CardParaphraseEngine(ModelManagerCardParaphraseModel(modelManager))
     } else {

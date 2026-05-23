@@ -23,8 +23,12 @@ val localProperties = Properties().apply {
 fun propertyOrEnv(name: String, envName: String = name.replace('.', '_').uppercase()): String =
     (localProperties.getProperty(name) ?: System.getenv(envName) ?: "").trim()
 
-fun escapedBuildConfigString(name: String, defaultValue: String = ""): String =
-    (propertyOrEnv(name).ifBlank { defaultValue })
+fun escapedBuildConfigString(
+    name: String,
+    defaultValue: String = "",
+    envName: String = name.replace('.', '_').uppercase()
+): String =
+    (propertyOrEnv(name, envName).ifBlank { defaultValue })
         .replace("\\", "\\\\")
         .replace("\"", "\\\"")
 
@@ -42,6 +46,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "METEOBLUE_API_KEY", "\"${escapedBuildConfigString("meteoblue.apiKey")}\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"${escapedBuildConfigString("gemini.apiKey", envName = "GEMINI_API_KEY")}\"")
+        buildConfigField("String", "GEMINI_MODEL", "\"${escapedBuildConfigString("gemini.model", "gemini-2.5-flash", envName = "GEMINI_MODEL")}\"")
     }
 
     buildTypes {
