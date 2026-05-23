@@ -38,6 +38,7 @@ data class UserProfile(
     val totalDistanceKm: Double = 0.0,
     val totalElevationGainM: Int = 0,
     val trailHistory: List<ProfileTrailRecord> = emptyList(),
+    val unlockedAchievements: List<UnlockedAchievementRecord> = emptyList(),
     val createdAtEpochMillis: Long,
     val updatedAtEpochMillis: Long,
     val answers: Map<String, String> = emptyMap()
@@ -61,7 +62,17 @@ data class ProfileTrailRecord(
     val difficulty: String,
     val imageUrl: String? = null,
     val outcome: ProfileTrailOutcome = ProfileTrailOutcome.COMPLETED,
-    val earnedPoints: Int = 0
+    val earnedPoints: Int = 0,
+    val gearReady: Boolean = false,
+    val unlockedAchievementIds: List<String> = emptyList()
+)
+
+@Serializable
+data class UnlockedAchievementRecord(
+    val id: String,
+    val title: String,
+    val unlockedAtEpochMillis: Long,
+    val earnedPoints: Int
 )
 
 data class OnboardingDraft(

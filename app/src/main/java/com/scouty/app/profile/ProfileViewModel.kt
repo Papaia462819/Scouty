@@ -226,7 +226,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             TrailCompletionStatus.COMPLETED -> ProfileTrailOutcome.COMPLETED
             TrailCompletionStatus.ENDED_EARLY -> ProfileTrailOutcome.ENDED_EARLY
         }
-        val earnedPoints = ProfileProgressionEngine.calculateTrailReward(
+        val trailXp = ProfileProgressionEngine.calculateTrailXp(
             input = TrailRewardInput(
                 distanceKm = snapshot.distanceKm,
                 elevationGainM = snapshot.elevationGainM,
@@ -234,16 +234,9 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                 region = snapshot.region,
                 gearReady = snapshot.gearReady,
                 outcome = outcome
-            ),
-            profile = currentProfile
+            )
         )
-        val updatedExperience = if (outcome == ProfileTrailOutcome.COMPLETED) {
-            ProfileProgressionEngine.effectiveExperience(currentProfile) + earnedPoints
-        } else {
-            ProfileProgressionEngine.effectiveExperience(currentProfile)
-        }
-        val updatedLevel = ProfileProgressionEngine.levelForExperience(updatedExperience)
-        val newRecord = ProfileTrailRecord(
+        val baseRecord = ProfileTrailRecord(
             id = snapshot.id,
             name = snapshot.name,
             region = snapshot.region,
@@ -254,12 +247,9 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             difficulty = snapshot.difficulty,
             imageUrl = snapshot.imageUrl,
             outcome = outcome,
-            earnedPoints = earnedPoints
+            gearReady = snapshot.gearReady
         )
-        val updatedProfile = currentProfile.copy(
-            levelNumber = updatedLevel.number,
-            levelTitle = updatedLevel.title,
-            experiencePoints = updatedExperience,
+        val profileAfterTrailStats = currentProfile.copy(
             completedHikes = currentProfile.completedHikes + if (outcome == ProfileTrailOutcome.COMPLETED) 1 else 0,
             totalDistanceKm = if (outcome == ProfileTrailOutcome.COMPLETED) {
                 ((currentProfile.totalDistanceKm + snapshot.distanceKm) * 10.0).roundToInt() / 10.0
@@ -271,8 +261,36 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             } else {
                 0
             },
-            trailHistory = listOf(newRecord) + currentProfile.trailHistory,
+            trailHistory = listOf(baseRecord) + currentProfile.trailHistory,
             updatedAtEpochMillis = snapshot.completedAtEpochMillis
+        )
+        val newAchievements = if (outcome == ProfileTrailOutcome.COMPLETED) {
+            ProfileProgressionEngine.evaluateNewAchievements(
+                profile = profileAfterTrailStats,
+                previousUnlockedIds = currentProfile.unlockedAchievements.mapTo(mutableSetOf()) { it.id },
+                unlockedAtEpochMillis = snapshot.completedAtEpochMillis
+            )
+        } else {
+            emptyList()
+        }
+        val achievementXp = newAchievements.sumOf { it.earnedPoints }
+        val earnedPoints = trailXp + achievementXp
+        val updatedExperience = if (outcome == ProfileTrailOutcome.COMPLETED) {
+            ProfileProgressionEngine.effectiveExperience(currentProfile) + earnedPoints
+        } else {
+            ProfileProgressionEngine.effectiveExperience(currentProfile)
+        }
+        val updatedLevel = ProfileProgressionEngine.levelForExperience(updatedExperience)
+        val newRecord = baseRecord.copy(
+            earnedPoints = earnedPoints,
+            unlockedAchievementIds = newAchievements.map { it.id }
+        )
+        val updatedProfile = profileAfterTrailStats.copy(
+            levelNumber = updatedLevel.number,
+            levelTitle = updatedLevel.title,
+            experiencePoints = updatedExperience,
+            trailHistory = listOf(newRecord) + currentProfile.trailHistory,
+            unlockedAchievements = currentProfile.unlockedAchievements + newAchievements
         )
 
         _uiState.value = buildAuthenticatedState(uid, updatedProfile, routePreferences)

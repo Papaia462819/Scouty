@@ -107,10 +107,18 @@ class FirebaseProfileRepository(
         "completedHikes" to completedHikes,
         "totalDistanceKm" to totalDistanceKm,
         "totalElevationGainM" to totalElevationGainM,
+        "unlockedAchievements" to unlockedAchievements.map { it.toFirestoreMap() },
         "answers" to answers,
         "routePreferences" to routePreferences.toFirestoreMap(),
         "createdAtEpochMillis" to createdAtEpochMillis,
         "updatedAtEpochMillis" to updatedAtEpochMillis
+    )
+
+    private fun UnlockedAchievementRecord.toFirestoreMap(): Map<String, Any?> = mapOf(
+        "id" to id,
+        "title" to title,
+        "unlockedAtEpochMillis" to unlockedAtEpochMillis,
+        "earnedPoints" to earnedPoints
     )
 
     private fun ProfileTrailRecord.toFirestoreTrailDocument(): Map<String, Any?> = mapOf(
@@ -124,7 +132,9 @@ class FirebaseProfileRepository(
         "difficulty" to difficulty,
         "imageUrl" to imageUrl,
         "outcome" to outcome.name,
-        "earnedPoints" to earnedPoints
+        "earnedPoints" to earnedPoints,
+        "gearReady" to gearReady,
+        "unlockedAchievementIds" to unlockedAchievementIds
     )
 
     private fun UserTrailProfile.toFirestoreMap(): Map<String, Any> = mapOf(
@@ -150,6 +160,7 @@ class FirebaseProfileRepository(
             totalDistanceKm = getDouble("totalDistanceKm") ?: 0.0,
             totalElevationGainM = getLong("totalElevationGainM")?.toInt() ?: 0,
             trailHistory = history,
+            unlockedAchievements = getUnlockedAchievements(),
             createdAtEpochMillis = getLong("createdAtEpochMillis") ?: System.currentTimeMillis(),
             updatedAtEpochMillis = getLong("updatedAtEpochMillis") ?: System.currentTimeMillis(),
             answers = getStringMap("answers")
@@ -169,7 +180,9 @@ class FirebaseProfileRepository(
             difficulty = getString("difficulty").orEmpty(),
             imageUrl = getString("imageUrl"),
             outcome = parseEnum(getString("outcome"), ProfileTrailOutcome.COMPLETED),
-            earnedPoints = getLong("earnedPoints")?.toInt() ?: 0
+            earnedPoints = getLong("earnedPoints")?.toInt() ?: 0,
+            gearReady = getBoolean("gearReady") ?: false,
+            unlockedAchievementIds = getStringList("unlockedAchievementIds")
         )
     }
 
@@ -193,6 +206,26 @@ class FirebaseProfileRepository(
                 stringKey to stringValue
             }
             ?.toMap()
+            .orEmpty()
+
+    private fun DocumentSnapshot.getStringList(field: String): List<String> =
+        (get(field) as? List<*>)
+            ?.mapNotNull { it as? String }
+            .orEmpty()
+
+    private fun DocumentSnapshot.getUnlockedAchievements(): List<UnlockedAchievementRecord> =
+        (get("unlockedAchievements") as? List<*>)
+            ?.mapNotNull { raw ->
+                val map = raw as? Map<*, *> ?: return@mapNotNull null
+                val id = map["id"] as? String ?: return@mapNotNull null
+                val title = map["title"] as? String ?: return@mapNotNull null
+                UnlockedAchievementRecord(
+                    id = id,
+                    title = title,
+                    unlockedAtEpochMillis = (map["unlockedAtEpochMillis"] as? Number)?.toLong() ?: 0L,
+                    earnedPoints = (map["earnedPoints"] as? Number)?.toInt() ?: 0
+                )
+            }
             .orEmpty()
 
     private inline fun <reified T : Enum<T>> parseEnum(raw: String?, default: T): T =

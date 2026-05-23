@@ -37,15 +37,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import com.scouty.app.profile.AchievementCategory
+import com.scouty.app.profile.AchievementProgress
 import com.composables.icons.lucide.ChevronLeft
 import com.composables.icons.lucide.ChevronRight
-import com.composables.icons.lucide.Cloud
 import com.composables.icons.lucide.Compass
 import com.composables.icons.lucide.ListChecks
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Mountain
 import com.composables.icons.lucide.Route
-import com.composables.icons.lucide.ShieldPlus
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -97,8 +97,6 @@ import com.scouty.app.ui.theme.TextSecondary
 import com.scouty.app.ui.theme.TextTertiary
 import com.scouty.app.ui.theme.Warning
 import androidx.compose.foundation.border
-import androidx.compose.foundation.BorderStroke
-import com.composables.icons.lucide.Lock
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -118,7 +116,7 @@ fun ProfileScreen(
     val levelProgress = ProfileProgressionEngine.progress(profile)
     val memberSince = formatMonthYear(profile.createdAtEpochMillis)
     val historyEntries = profile.trailHistory.sortedByDescending(ProfileTrailRecord::completedAtEpochMillis)
-    val achievements = buildAchievements(profile, profileStats)
+    val achievements = ProfileProgressionEngine.achievementProgress(profile).map { it.toAchievementUi() }
     var performancePeriod by rememberSaveable { mutableStateOf(ProfileChartPeriod.DAY) }
     var performanceMetric by rememberSaveable { mutableStateOf(ProfileChartMetric.KILOMETERS) }
     var performanceOffset by rememberSaveable { mutableIntStateOf(0) }
@@ -232,9 +230,9 @@ fun ProfileScreen(
             ) {
                 Text(
                     text = if (levelProgress.pointsRequired > 0) {
-                        "${levelProgress.currentPoints} / ${levelProgress.pointsRequired} pts"
+                        "${levelProgress.currentPoints} / ${levelProgress.pointsRequired} XP"
                     } else {
-                        "${levelProgress.totalPoints} pts"
+                        "${levelProgress.totalPoints} XP"
                     },
                     style = MaterialTheme.typography.labelSmall,
                     color = TextSecondary
@@ -310,7 +308,7 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        ScoutySectionHeader(title = "ACHIEVEMENTS")
+        ScoutySectionHeader(title = "REALIZĂRI")
         Spacer(modifier = Modifier.height(12.dp))
         MiniTileCarousel(
             modifier = Modifier.fillMaxWidth(),
@@ -969,7 +967,7 @@ private fun HistoryEntryContent(entry: ProfileTrailRecord) {
             }
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = if (entry.earnedPoints > 0) "+${entry.earnedPoints} pts" else "No XP",
+                text = if (entry.earnedPoints > 0) "+${entry.earnedPoints} XP" else "Fără XP",
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Medium,
                 color = if (entry.earnedPoints > 0) {
@@ -995,9 +993,6 @@ private fun MiniTileCarousel(
         items(tiles) { tile ->
             CompactProfileTile(tile = tile)
         }
-        item {
-            LockedAchievementTile()
-        }
     }
 }
 
@@ -1007,29 +1002,39 @@ private fun CompactProfileTile(tile: ProfileMiniTileUi) {
     val border = if (tile.isHighlighted) tile.accentColor.copy(alpha = 0.22f) else BorderSubtle
     Column(
         modifier = Modifier
-            .width(112.dp)
-            .height(128.dp)
+            .width(152.dp)
+            .height(142.dp)
             .clip(RoundedCornerShape(14.dp))
             .background(bg)
             .border(0.5.dp, border, RoundedCornerShape(14.dp))
             .padding(horizontal = 12.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Box(
-            modifier = Modifier
-                .size(34.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(tile.accentColor.copy(alpha = if (tile.isHighlighted) 0.18f else 0.08f)),
-            contentAlignment = Alignment.Center
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = tile.icon,
-                contentDescription = null,
-                tint = if (tile.isHighlighted) tile.accentColor else tile.accentColor.copy(alpha = 0.45f),
-                modifier = Modifier.size(16.dp)
+            Box(
+                modifier = Modifier
+                    .size(34.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(tile.accentColor.copy(alpha = if (tile.isHighlighted) 0.18f else 0.08f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = tile.icon,
+                    contentDescription = null,
+                    tint = if (tile.isHighlighted) tile.accentColor else tile.accentColor.copy(alpha = 0.45f),
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+            AchievementTileChip(
+                text = tile.categoryLabel,
+                containerColor = tile.accentColor.copy(alpha = if (tile.isHighlighted) 0.16f else 0.08f),
+                contentColor = if (tile.isHighlighted) tile.accentColor else TextTertiary
             )
         }
-        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
                 text = tile.title,
                 style = MaterialTheme.typography.labelMedium,
@@ -1038,65 +1043,53 @@ private fun CompactProfileTile(tile: ProfileMiniTileUi) {
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
-            Text(
-                text = tile.subtitle.uppercase(Locale.ENGLISH),
-                style = MaterialTheme.typography.labelSmall,
-                color = if (tile.isHighlighted) tile.accentColor else TextTertiary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                AchievementTileChip(
+                    text = tile.statusLabel,
+                    containerColor = if (tile.isHighlighted) AccentGreen.copy(alpha = 0.14f) else TextTertiary.copy(alpha = 0.08f),
+                    contentColor = if (tile.isHighlighted) AccentGreen else TextTertiary
+                )
+                AchievementTileChip(
+                    text = tile.xpLabel,
+                    containerColor = Color.White.copy(alpha = if (tile.isHighlighted) 0.12f else 0.06f),
+                    contentColor = if (tile.isHighlighted) TextPrimary else TextTertiary
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun LockedAchievementTile() {
-    Column(
+private fun AchievementTileChip(
+    text: String,
+    containerColor: Color,
+    contentColor: Color
+) {
+    Box(
         modifier = Modifier
-            .width(112.dp)
-            .height(128.dp)
-            .clip(RoundedCornerShape(14.dp))
-            .background(BgSurfaceRaised)
-            .border(
-                BorderStroke(0.5.dp, BorderSubtle),
-                RoundedCornerShape(14.dp)
-            )
-            .padding(horizontal = 12.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.SpaceBetween
+            .clip(RoundedCornerShape(999.dp))
+            .background(containerColor)
+            .padding(horizontal = 8.dp, vertical = 3.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .size(34.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(TextTertiary.copy(alpha = 0.08f)),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Lucide.Lock,
-                contentDescription = null,
-                tint = TextTertiary,
-                modifier = Modifier.size(16.dp)
-            )
-        }
-        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(
-                text = "More soon",
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Medium,
-                color = TextSecondary
-            )
-            Text(
-                text = "LOCKED",
-                style = MaterialTheme.typography.labelSmall,
-                color = TextTertiary
-            )
-        }
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Medium,
+            color = contentColor,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 
 private data class ProfileMiniTileUi(
     val title: String,
-    val subtitle: String,
+    val categoryLabel: String,
+    val statusLabel: String,
+    val xpLabel: String,
     val icon: ImageVector,
     val accentColor: Color,
     val isHighlighted: Boolean = true
@@ -1104,7 +1097,9 @@ private data class ProfileMiniTileUi(
 
 private data class ProfileAchievementUi(
     val title: String,
-    val subtitle: String,
+    val categoryLabel: String,
+    val statusLabel: String,
+    val xpLabel: String,
     val unlocked: Boolean,
     val icon: ImageVector,
     val accentColor: Color
@@ -1194,11 +1189,56 @@ private enum class ProfileChartMetric(
 private fun ProfileAchievementUi.toMiniTile(): ProfileMiniTileUi =
     ProfileMiniTileUi(
         title = title,
-        subtitle = subtitle,
+        categoryLabel = categoryLabel,
+        statusLabel = statusLabel,
+        xpLabel = xpLabel,
         icon = icon,
         accentColor = accentColor,
         isHighlighted = unlocked
     )
+
+private fun AchievementProgress.toAchievementUi(): ProfileAchievementUi {
+    val unlocked = unlockedRecord != null
+    return ProfileAchievementUi(
+        title = definition.title,
+        categoryLabel = definition.category.achievementLabel(),
+        statusLabel = if (unlocked) "Deblocat" else "Blocat",
+        xpLabel = if (unlocked) "+${unlockedRecord.earnedPoints} XP" else "${definition.points} XP",
+        unlocked = unlocked,
+        icon = definition.category.achievementIcon(),
+        accentColor = definition.category.achievementColor()
+    )
+}
+
+private fun AchievementCategory.achievementIcon(): ImageVector =
+    when (this) {
+        AchievementCategory.COMPLETION -> Lucide.Route
+        AchievementCategory.DISTANCE -> Lucide.Route
+        AchievementCategory.ELEVATION -> Lucide.Mountain
+        AchievementCategory.DIFFICULTY -> Lucide.Mountain
+        AchievementCategory.EXPLORATION -> Lucide.Compass
+        AchievementCategory.PREP -> Lucide.ListChecks
+    }
+
+private fun AchievementCategory.achievementColor(): Color =
+    when (this) {
+        AchievementCategory.COMPLETION -> AccentGreen
+        AchievementCategory.DISTANCE -> Info
+        AchievementCategory.ELEVATION -> Warning
+        AchievementCategory.DIFFICULTY -> Warning
+        AchievementCategory.EXPLORATION -> Info
+        AchievementCategory.PREP -> AccentGreen
+    }
+
+private fun AchievementCategory.achievementLabel(): String =
+    when (this) {
+        AchievementCategory.COMPLETION -> "Finalizări"
+        AchievementCategory.DISTANCE -> "Distanță"
+        AchievementCategory.ELEVATION -> "Urcare"
+        AchievementCategory.DIFFICULTY -> "Dificultate"
+        AchievementCategory.EXPLORATION -> "Explorare"
+        AchievementCategory.PREP -> "Pregătire"
+    }
 
 private fun buildPerformanceSnapshot(
     entries: List<ProfileTrailRecord>,
@@ -1378,76 +1418,6 @@ private fun performanceIntervalLabel(
         ProfileChartPeriod.MONTH -> SimpleDateFormat("MMMM yyyy", Locale.ENGLISH).format(start.time)
         ProfileChartPeriod.YEAR -> SimpleDateFormat("yyyy", Locale.ENGLISH).format(start.time)
     }
-
-private fun buildAchievements(
-    profile: UserProfile,
-    stats: TrailStatsSummary
-): List<ProfileAchievementUi> {
-    val firstAidAnswer = profile.answers["first_aid"]
-    val navigationAnswer = profile.answers["navigation"]
-    val conditionsAnswer = profile.answers["conditions"]
-    val gearAnswer = profile.answers["gear_setup"]
-    val terrainAnswer = profile.answers["terrain"]
-
-    return listOf(
-        ProfileAchievementUi(
-            title = "Route Brain",
-            subtitle = "Unlocked",
-            unlocked = navigationAnswer == "map_gps" || navigationAnswer == "independent",
-            icon = Lucide.Compass,
-            accentColor = Info
-        ),
-        ProfileAchievementUi(
-            title = "First Aid Ready",
-            subtitle = "Unlocked",
-            unlocked = firstAidAnswer == "common_issues" || firstAidAnswer == "confident",
-            icon = Lucide.ShieldPlus,
-            accentColor = AccentGreen
-        ),
-        ProfileAchievementUi(
-            title = "Weatherproof",
-            subtitle = "Unlocked",
-            unlocked = conditionsAnswer == "three_season" || conditionsAnswer == "winter",
-            icon = Lucide.Cloud,
-            accentColor = Warning
-        ),
-        ProfileAchievementUi(
-            title = "Gear Ritual",
-            subtitle = "Unlocked",
-            unlocked = gearAnswer == "checklist" || gearAnswer == "route_tuned" || gearAnswer == "locked_in",
-            icon = Lucide.ListChecks,
-            accentColor = Warning
-        ),
-        ProfileAchievementUi(
-            title = "100 km Club",
-            subtitle = if (stats.totalDistanceKm >= 100.0) "Unlocked" else "In progress",
-            unlocked = stats.totalDistanceKm >= 100.0,
-            icon = Lucide.Route,
-            accentColor = Info
-        ),
-        ProfileAchievementUi(
-            title = "5K Climber",
-            subtitle = if (stats.totalElevationGainM >= 5_000) "Unlocked" else "In progress",
-            unlocked = stats.totalElevationGainM >= 5_000,
-            icon = Lucide.Mountain,
-            accentColor = Warning
-        ),
-        ProfileAchievementUi(
-            title = "Trail Ledger",
-            subtitle = if (profile.trailHistory.isNotEmpty()) "Unlocked" else "Locked",
-            unlocked = profile.trailHistory.isNotEmpty(),
-            icon = Lucide.Route,
-            accentColor = AccentGreen
-        ),
-        ProfileAchievementUi(
-            title = "Ridge Taste",
-            subtitle = if (terrainAnswer == "ridge") "Unlocked" else "Locked",
-            unlocked = terrainAnswer == "ridge",
-            icon = Lucide.Mountain,
-            accentColor = Warning
-        )
-    )
-}
 
 private fun resolveProfileStats(
     profile: UserProfile,

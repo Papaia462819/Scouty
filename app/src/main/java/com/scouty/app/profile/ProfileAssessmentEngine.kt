@@ -101,7 +101,7 @@ object ProfileAssessmentEngine {
         ProfileQuestion(
             id = "hike_style",
             title = "What kind of hikes pull you in?",
-            helper = "Preference matters, but it should not overpower your skill score.",
+            helper = "Preference matters, but it should not overpower your starter level.",
             weight = 6,
             options = listOf(
                 ProfileOption("scenic", "Short and scenic", "Easy payoff and low stress.", 0),
@@ -186,6 +186,7 @@ object ProfileAssessmentEngine {
             totalDistanceKm = previousProfile?.totalDistanceKm ?: estimatedTrailStats.totalDistanceKm,
             totalElevationGainM = previousProfile?.totalElevationGainM ?: estimatedTrailStats.totalElevationGainM,
             trailHistory = previousProfile?.trailHistory ?: emptyList(),
+            unlockedAchievements = previousProfile?.unlockedAchievements ?: emptyList(),
             createdAtEpochMillis = previousProfile?.createdAtEpochMillis ?: now,
             updatedAtEpochMillis = now,
             answers = draft.answers
