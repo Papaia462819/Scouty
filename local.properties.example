@@ -10,6 +10,8 @@ meteoblue.apiKey=
 gemini.apiKey=
 gemini.model=gemini-2.5-flash
 
-## Offline map packs are imported at runtime from the map screen:
-## - romania-base.pmtiles (required)
-## - bucegi-high.pmtiles (optional)
+## Map engine.
+## Online map source: https://maps.scouty.app/base/romania-high-detail.pmtiles by default.
+## Offline trail packs are downloaded automatically from:
+## https://maps.scouty.app/trails/{trailCode}/manifest.json
+maps.baseUrl=https://maps.scouty.app

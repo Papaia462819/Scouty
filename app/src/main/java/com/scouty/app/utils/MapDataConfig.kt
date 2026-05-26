@@ -1,30 +1,27 @@
 package com.scouty.app.utils
 
-import android.net.Uri
-
 data class MapDataConfig(
     val basePack: InstalledMapPack,
-    val bucegiDemoPack: InstalledMapPack,
-    val hasLocalGlyphs: Boolean
+    val routePack: InstalledMapPack?,
+    val hasLocalGlyphs: Boolean,
+    val activeSourceUri: String?,
+    val isOnline: Boolean
 ) {
     val isBasePackReady: Boolean
-        get() = basePack.isReady
-
-    val hasDemoPack: Boolean
-        get() = bucegiDemoPack.isReady
+        get() = !activeSourceUri.isNullOrBlank()
 
     val styleKey: String
         get() = buildString {
-            append(basePack.version)
+            append(activeSourceUri ?: "no-source")
             append(':')
-            append(bucegiDemoPack.version)
+            append(routePack?.version ?: "no-route-pack")
+            append(':')
+            append(if (isOnline) "online" else "offline")
             append(':')
             append(if (hasLocalGlyphs) "glyphs" else "no-glyphs")
         }
 
-    fun baseSourceUri(): String? = basePack.takeIf { it.isReady }?.file?.let(::pmtilesFileUri)
-
-    fun demoSourceUri(): String? = bucegiDemoPack.takeIf { it.isReady }?.file?.let(::pmtilesFileUri)
+    fun baseSourceUri(): String? = activeSourceUri
 
     fun glyphsUri(): String? =
         if (hasLocalGlyphs) {
@@ -33,15 +30,14 @@ data class MapDataConfig(
             null
         }
 
-    private fun pmtilesFileUri(file: java.io.File): String =
-        "pmtiles://${Uri.fromFile(file)}"
-
     companion object {
         fun fromRegistry(registry: MapPackRegistry): MapDataConfig =
             MapDataConfig(
                 basePack = registry.basePack(),
-                bucegiDemoPack = registry.demoPack(),
-                hasLocalGlyphs = registry.hasLocalGlyphs
+                routePack = registry.currentTrailPack,
+                hasLocalGlyphs = registry.hasLocalGlyphs,
+                activeSourceUri = registry.activeSourceUri,
+                isOnline = registry.isOnline
             )
     }
 }

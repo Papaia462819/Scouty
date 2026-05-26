@@ -58,15 +58,19 @@ Acestea sunt incluse în APK deoarece `app/build.gradle.kts` configurează expli
 
 ### `tools/generated-map-packs`
 
-Pack-urile PMTiles locale folosite de hartă:
+Output local pentru pachetele PMTiles care se publică pe serverul de hărți:
 
-- `romania-base.pmtiles`
-- `bucegi-high.pmtiles`
+- `romania-high-detail.pmtiles`
+- `trails/{trailCode}/offline.pmtiles`
+- `trails/{trailCode}/manifest.json`
 - `manifest.json`
 
 Acest director rămâne în repo și este folosit de scripturile locale:
 
-- `tools/sync_map_packs.ps1` - copiază pack-urile în `files/maps` pentru aplicația instalată
+- `tools/build_offline_map_packs.py` - generează master-ul România high-detail
+- `tools/build_route_map_packs.py` - extrage pack-uri offline per traseu din master
+- `tools/upload_map_packs_to_r2.ps1` - publică pack-urile pe R2/Cloudflare
+- `tools/sync_map_packs.ps1` - copiază pack-uri pe device pentru debug local
 - `tools/smoke_map_runtime.ps1` - rulează smoke test-ul de hartă peste pack-urile sincronizate
 
 ## `tools/knowledge_pipeline`

@@ -9,8 +9,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.animateColorAsState
@@ -114,7 +112,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -202,7 +199,7 @@ import com.scouty.app.ui.models.TrailMetadataFormatter
 import com.scouty.app.utils.MapDataConfig
 import com.scouty.app.utils.MapLifecycleManager
 import com.scouty.app.utils.MapOverlayState
-import com.scouty.app.utils.MapPackId
+import com.scouty.app.utils.MapPackStatus
 import com.scouty.app.utils.MapPackRegistry
 import com.scouty.app.utils.MapPackRegistryManager
 import com.scouty.app.utils.MapStyleConfig
@@ -311,7 +308,6 @@ fun MapScreen(
     viewModel: MainViewModel
 ) {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
     val sheetState = rememberStandardBottomSheetState(skipHiddenState = true)
     val sheetScaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
     val routeCatalog by produceState(initialValue = RouteEnrichmentCatalog(), context) {
@@ -320,13 +316,31 @@ fun MapScreen(
     val routeGeometryIndex by produceState(initialValue = RouteGeometryIndex(), context) {
         value = RouteGeometryRepository.load(context)
     }
+    val activeTrail = status.activeTrail
     var mapPackRefreshToken by remember { mutableStateOf(0) }
     val mapPackRegistry by produceState<MapPackRegistry?>(
         initialValue = null,
         context,
-        mapPackRefreshToken
+        mapPackRefreshToken,
+        activeTrail?.localCode,
+        status.isOnline
     ) {
-        value = MapPackRegistryManager.load(context)
+        var shouldPoll: Boolean
+        do {
+            val registry = MapPackRegistryManager.load(
+                context = context,
+                activeTrailCode = activeTrail?.localCode,
+                isOnline = status.isOnline
+            )
+            value = registry
+            val routeStatus = registry.currentTrailPack?.status
+            shouldPoll = routeStatus == MapPackStatus.DOWNLOADING ||
+                routeStatus == MapPackStatus.NOT_REQUESTED ||
+                routeStatus == MapPackStatus.WAITING_CONFIRMATION
+            if (shouldPoll) {
+                delay(1_500)
+            }
+        } while (shouldPoll)
     }
     val mapDataConfig = remember(mapPackRegistry) {
         mapPackRegistry?.let(MapDataConfig::fromRegistry)
@@ -338,7 +352,6 @@ fun MapScreen(
     val nearbyGuide = mapSession.nearbyGuide
     val hasNearbyGuideOverlay = nearbyGuide != null || nearbyGuideRequest != null
     val deviceHeadingDegrees = rememberDeviceHeadingDegrees(enabled = hasNearbyGuideOverlay)
-    val activeTrail = status.activeTrail
     val hasPlannedTrail = activeTrail?.trackingState == ActiveTrailState.PLANNED
     val isActiveTrailMode = mapSession.mode == MapTrailMode.ACTIVE &&
         activeTrail?.trackingState == ActiveTrailState.ACTIVE
@@ -371,41 +384,8 @@ fun MapScreen(
             }
             .toList()
     }
-    var pendingImportPackId by remember { mutableStateOf<MapPackId?>(null) }
-    var importInProgressPackId by remember { mutableStateOf<MapPackId?>(null) }
-    var importErrorMessage by remember { mutableStateOf<String?>(null) }
     var mapRuntimeError by remember { mutableStateOf<String?>(null) }
     var activeTrailPanelExpanded by rememberSaveable { mutableStateOf(true) }
-
-    val importLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument()
-    ) { selectedUri ->
-        val requestedPackId = pendingImportPackId
-        pendingImportPackId = null
-        if (requestedPackId == null || selectedUri == null) {
-            return@rememberLauncherForActivityResult
-        }
-
-        coroutineScope.launch {
-            importInProgressPackId = requestedPackId
-            importErrorMessage = null
-            runCatching {
-                withContext(Dispatchers.IO) {
-                    MapPackRegistryManager.copyImportedPack(context, requestedPackId, selectedUri)
-                }
-            }.onSuccess {
-                mapPackRefreshToken += 1
-            }.onFailure { error ->
-                importErrorMessage = error.message ?: "Nu am putut importa pack-ul selectat."
-            }
-            importInProgressPackId = null
-        }
-    }
-
-    fun requestMapPackImport(packId: MapPackId) {
-        pendingImportPackId = packId
-        importLauncher.launch(arrayOf("*/*"))
-    }
 
     LaunchedEffect(searchText, routeCatalog) {
         val query = searchText.trim()
@@ -514,12 +494,12 @@ fun MapScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Text(
-                        text = "Pregătesc pack-urile locale de hartă",
+                        text = "Pregătesc harta",
                         style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "Scouty verifică bundle-ul PMTiles din repo și îl copiază în storage-ul aplicației.",
+                        text = "Scouty verifică sursa online și pack-ul offline al traseului curent.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -540,14 +520,26 @@ fun MapScreen(
                 .padding(24.dp),
             contentAlignment = Alignment.Center
         ) {
-            MissingBaseMapPackCard(
+            OfflineMapUnavailableCard(
                 registry = readyMapPackRegistry,
-                importInProgressPackId = importInProgressPackId,
-                importErrorMessage = importErrorMessage,
-                onImportBasePack = { requestMapPackImport(MapPackId.ROMANIA_BASE) }
+                onRetry = { mapPackRefreshToken += 1 }
             )
         }
         return
+    }
+
+    val routePackForBadge = readyMapPackRegistry.currentTrailPack
+    val routePackBadgeKey = routePackForBadge?.let { pack ->
+        "${pack.trailCode.orEmpty()}:${pack.status.name}:${pack.version}"
+    }
+    var dismissedRoutePackBadgeKey by rememberSaveable { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(routePackBadgeKey, routePackForBadge?.status) {
+        if (routePackBadgeKey == null || routePackForBadge?.status != MapPackStatus.AVAILABLE) {
+            return@LaunchedEffect
+        }
+        delay(5_000)
+        dismissedRoutePackBadgeKey = routePackBadgeKey
     }
 
     Box(
@@ -645,7 +637,7 @@ fun MapScreen(
                     MapShortcutStack(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .padding(end = 14.dp, bottom = if (readyMapDataConfig.hasDemoPack) 106.dp else 156.dp),
+                            .padding(end = 14.dp, bottom = 106.dp),
                         onWaterClick = { viewModel.requestNearbyGuide(NearbyGuideType.WATER) },
                         onShelterClick = { viewModel.requestNearbyGuide(NearbyGuideType.SHELTER) },
                         onLocateClick = viewModel::focusActiveTrailOnMap
@@ -713,13 +705,13 @@ fun MapScreen(
                     SubtleMapRecenterButton(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .padding(end = 18.dp, bottom = if (mapDataConfig.hasDemoPack) 112.dp else 148.dp),
+                            .padding(end = 18.dp, bottom = 112.dp),
                         onClick = { viewModel.orientToTrail(plannedTrail.toSelectionSnapshot()) }
                     )
                     PlannedTrailActions(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
-                            .padding(horizontal = 16.dp, vertical = if (mapDataConfig.hasDemoPack) 24.dp else 114.dp),
+                            .padding(horizontal = 16.dp, vertical = 24.dp),
                         onStartTrail = viewModel::startActiveTrail
                     )
                 }
@@ -779,26 +771,38 @@ fun MapScreen(
                     SubtleMapRecenterButton(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .padding(end = 18.dp, bottom = if (mapDataConfig.hasDemoPack) 112.dp else 148.dp),
+                            .padding(end = 18.dp, bottom = 112.dp),
                         onClick = viewModel::focusNearbyGuideOnMap
                     )
                 }
 
-                if (!mapDataConfig.hasDemoPack && !isSearchExpanded && !isActiveTrailMode && !hasNearbyGuideOverlay) {
-                    OptionalDemoPackBanner(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(horizontal = 16.dp, vertical = 20.dp),
-                        importInProgressPackId = importInProgressPackId,
-                        onImportDemoPack = { requestMapPackImport(MapPackId.BUCEGI_HIGH) }
-                    )
+                routePackForBadge?.let { routePack ->
+                    if (
+                        !isSearchExpanded &&
+                        !hasNearbyGuideOverlay &&
+                        dismissedRoutePackBadgeKey != routePackBadgeKey
+                    ) {
+                        OfflineMapStatusBadge(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding(horizontal = 16.dp, vertical = 20.dp),
+                            pack = routePack,
+                            onConfirmDownload = {
+                                viewModel.confirmOfflineMapDownload()
+                                mapPackRefreshToken += 1
+                            },
+                            onDismiss = {
+                                dismissedRoutePackBadgeKey = routePackBadgeKey
+                            }
+                        )
+                    }
                 }
 
                 mapRuntimeError?.let { errorMessage ->
                     MapRuntimeErrorCard(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
-                            .padding(horizontal = 16.dp, vertical = if (mapDataConfig.hasDemoPack) 20.dp else 110.dp),
+                            .padding(horizontal = 16.dp, vertical = 110.dp),
                         message = errorMessage
                     )
                 }
@@ -1365,11 +1369,9 @@ private fun rememberDeviceHeadingDegrees(enabled: Boolean): Float? {
 }
 
 @Composable
-private fun MissingBaseMapPackCard(
+private fun OfflineMapUnavailableCard(
     registry: MapPackRegistry,
-    importInProgressPackId: MapPackId?,
-    importErrorMessage: String?,
-    onImportBasePack: () -> Unit
+    onRetry: () -> Unit
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
@@ -1380,85 +1382,104 @@ private fun MissingBaseMapPackCard(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
-                text = stringResource(R.string.map_missing_pack_title),
+                text = "Harta nu este disponibilă offline",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Medium
             )
             Text(
-                text = stringResource(R.string.map_missing_pack_body),
+                text = if (registry.currentTrailPack?.trailCode != null) {
+                    "Traseul curent nu are încă un pack offline valid. Conectează-te la internet ca Scouty să îl descarce automat."
+                } else {
+                    "Conectează-te la internet pentru harta completă sau setează un traseu curent pentru pregătirea offline."
+                },
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                text = stringResource(
-                    R.string.map_pack_target_path,
-                    registry.basePack().file.name,
-                    registry.mapsDirectory.absolutePath
-                ),
+                text = "Storage: ${registry.mapsDirectory.absolutePath}",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            importErrorMessage?.let { errorMessage ->
-                Text(
-                    text = errorMessage,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
-            Button(
-                onClick = onImportBasePack,
-                enabled = importInProgressPackId != MapPackId.ROMANIA_BASE
-            ) {
-                Text(
-                    text = if (importInProgressPackId == MapPackId.ROMANIA_BASE) {
-                        stringResource(R.string.map_pack_importing)
-                    } else {
-                        stringResource(R.string.map_import_base_pack)
-                    }
-                )
+            Button(onClick = onRetry) {
+                Text(text = "Reverifică")
             }
         }
     }
 }
 
 @Composable
-private fun OptionalDemoPackBanner(
+private fun OfflineMapStatusBadge(
     modifier: Modifier = Modifier,
-    importInProgressPackId: MapPackId?,
-    onImportDemoPack: () -> Unit
+    pack: com.scouty.app.utils.InstalledMapPack,
+    onConfirmDownload: () -> Unit,
+    onDismiss: () -> Unit
 ) {
+    val title = when (pack.status) {
+        MapPackStatus.AVAILABLE -> "Offline ready"
+        MapPackStatus.DOWNLOADING -> "Downloading ${pack.progressPercent ?: 0}%"
+        MapPackStatus.WAITING_CONFIRMATION -> "Confirmă download offline"
+        MapPackStatus.FAILED -> "Offline unavailable"
+        MapPackStatus.NOT_REQUESTED, MapPackStatus.MISSING -> "Offline queued"
+        MapPackStatus.INVALID, MapPackStatus.STALE -> "Offline needs refresh"
+    }
+    val body = pack.message ?: when (pack.status) {
+        MapPackStatus.AVAILABLE -> "Traseul curent este salvat local."
+        MapPackStatus.WAITING_CONFIRMATION -> "Pack-ul trece de 100 MB pe date mobile."
+        else -> "Scouty pregătește harta pentru traseul curent."
+    }
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(18.dp),
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
         tonalElevation = 8.dp
     ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(R.string.map_demo_pack_title),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Medium
-                )
-                Text(
-                    text = stringResource(R.string.map_demo_pack_body),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            Button(
-                onClick = onImportDemoPack,
-                enabled = importInProgressPackId != MapPackId.BUCEGI_HIGH
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Text(
-                    text = if (importInProgressPackId == MapPackId.BUCEGI_HIGH) {
-                        stringResource(R.string.map_pack_importing)
-                    } else {
-                        stringResource(R.string.map_import_demo_pack)
+                Icon(
+                    imageVector = if (pack.status == MapPackStatus.AVAILABLE) Lucide.Check else Lucide.TriangleAlert,
+                    contentDescription = null,
+                    tint = if (pack.status == MapPackStatus.AVAILABLE) AccentGreen else Warning
+                )
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Medium
+                    )
+                    Text(
+                        text = body,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                if (pack.requiresUserConfirmation) {
+                    Button(onClick = onConfirmDownload) {
+                        Text("Descarcă")
                     }
+                }
+                IconButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.size(28.dp)
+                ) {
+                    Icon(
+                        imageVector = Lucide.X,
+                        contentDescription = "Închide",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(15.dp)
+                    )
+                }
+            }
+            if (pack.status == MapPackStatus.DOWNLOADING) {
+                LinearProgressIndicator(
+                    progress = { ((pack.progressPercent ?: 0) / 100f).coerceIn(0f, 1f) },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

@@ -64,6 +64,7 @@ import com.scouty.app.ui.models.UserTrailProfile
 import com.scouty.app.ui.models.adaptToTrail
 import com.scouty.app.ui.models.toDeviceContextSnapshot
 import com.scouty.app.profile.ProfileTrailRecord
+import com.scouty.app.utils.MapPackRepository
 import com.scouty.app.utils.MapPackRegistryManager
 import com.scouty.app.utils.SolarCalculator
 import kotlinx.coroutines.Dispatchers
@@ -117,6 +118,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private val assistantRuntimeGraph = AssistantRuntimeGraph.get(application)
     private val knowledgePackManager: KnowledgePackManager = assistantRuntimeGraph.knowledgePackManager
     private val modelManager: ModelManager = assistantRuntimeGraph.modelManager
+    private val mapPackRepository = MapPackRepository.get(application)
 
     private val _uiState = MutableStateFlow(HomeStatus(userProfile = userTrailProfileStore.load()))
     val uiState: StateFlow<HomeStatus> = _uiState.asStateFlow()
@@ -165,6 +167,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             refreshOnlineState()
+            retryActiveTrailMapPack()
         }
 
         override fun onLost(network: Network) {
@@ -173,6 +176,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
 
         override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
             refreshOnlineState()
+            retryActiveTrailMapPack()
         }
     }
     private var networkCallbackRegistered = false
@@ -758,6 +762,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 lastCompletedTrail = completionSnapshot
             )
         }
+        releaseOfflineMapForCurrentTrail()
         maybeRefreshRouteRecommendations(force = true)
     }
 
@@ -1491,6 +1496,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                     focusRequestToken = System.currentTimeMillis()
                 )
             }
+            prepareOfflineMapForTrail(trail)
             maybeRefreshRouteRecommendations(force = true, latitude = lat, longitude = lon)
         }
     }
@@ -1604,6 +1610,34 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private fun refreshOnlineState() {
         val online = isInternetAvailable()
         updateUiState { it.copy(isOnline = online) }
+    }
+
+    fun confirmOfflineMapDownload() {
+        val trailCode = _uiState.value.activeTrail?.localCode?.takeIf { it.isNotBlank() } ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            mapPackRepository.markActiveTrail(trailCode)
+            mapPackRepository.enqueueDownload(trailCode, forceMetered = true)
+        }
+    }
+
+    private suspend fun prepareOfflineMapForTrail(trail: ActiveTrail) {
+        val trailCode = trail.localCode?.takeIf { it.isNotBlank() } ?: return
+        mapPackRepository.markActiveTrail(trailCode)
+        mapPackRepository.enqueueDownload(trailCode, forceMetered = false)
+    }
+
+    private fun retryActiveTrailMapPack() {
+        val trailCode = _uiState.value.activeTrail?.localCode?.takeIf { it.isNotBlank() } ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            mapPackRepository.markActiveTrail(trailCode)
+            mapPackRepository.enqueueDownload(trailCode, forceMetered = false)
+        }
+    }
+
+    private fun releaseOfflineMapForCurrentTrail() {
+        viewModelScope.launch(Dispatchers.IO) {
+            mapPackRepository.releaseCurrentTrail()
+        }
     }
 
     private fun registerNetworkCallback() {

@@ -73,7 +73,6 @@ data class MapOverlayState(
 
 object MapStyleConfig {
     const val BASE_SOURCE_ID = "romania-base-source"
-    const val BUCEGI_DEMO_SOURCE_ID = "bucegi-demo-source"
     const val REMOTE_TRAILS_SOURCE_ID = "remote-trails-source"
     const val REMOTE_WILDLIFE_SOURCE_ID = "remote-wildlife-source"
     const val REMOTE_ATTRACTIONS_SOURCE_ID = "remote-attractions-source"
@@ -82,15 +81,9 @@ object MapStyleConfig {
     const val PARK_LAYER_ID = "park-layer"
     const val WATER_FILL_LAYER_ID = "water-fill-layer"
     const val WATERWAY_LAYER_ID = "waterway-layer"
-    const val BUCEGI_WATERWAY_LAYER_ID = "waterway-layer-bucegi"
     const val WATER_LABELS_LAYER_ID = "water-labels-layer"
     const val WATER_LABELS_LINE_LAYER_ID = "water-labels-line-layer"
-    const val BUCEGI_WATER_LABELS_LAYER_ID = "water-labels-layer-bucegi"
-    const val BUCEGI_WATER_LABELS_LINE_LAYER_ID = "water-labels-line-layer-bucegi"
     const val ROAD_LAYER_ID = "road-layer"
-    const val BUCEGI_ROAD_LAYER_ID = "road-layer-bucegi"
-    const val HIKING_PATHS_LAYER_ID = "hiking-paths-layer"
-    const val BUCEGI_HIKING_PATHS_LAYER_ID = "hiking-paths-layer-bucegi"
     const val CUSTOM_TRAILS_LAYER_ID = "custom-trails-layer"
     const val WILDLIFE_LAYER_ID = "wildlife-heatmap"
     const val WILDLIFE_SYMBOL_LAYER_ID = "wildlife-symbol-layer"
@@ -98,15 +91,11 @@ object MapStyleConfig {
     const val WATER_POINT_SYMBOL_LAYER_ID = "water-point-symbol-layer"
     const val WATER_POINT_LABELS_LAYER_ID = "water-points-labels-layer"
     const val PEAK_SYMBOL_LAYER_ID = "peak-symbol-layer"
-    const val BUCEGI_PEAK_SYMBOL_LAYER_ID = "peak-symbol-layer-bucegi"
     const val PEAK_LABELS_LAYER_ID = "peak-labels-layer"
-    const val BUCEGI_PEAK_LABELS_LAYER_ID = "peak-labels-layer-bucegi"
     const val PLACE_LABELS_LAYER_ID = "place-labels-layer"
-    const val BUCEGI_PLACE_LABELS_LAYER_ID = "place-labels-layer-bucegi"
     const val BOUNDARY_LAYER_ID = "boundary-layer"
     const val ATTRACTIONS_SYMBOL_LAYER_ID = "attractions-symbol-layer"
 
-    private const val DemoMinZoom = 13.4f
     private const val OfflineTrailsAsset = "Trasee_Varfuri.geojson"
     private const val OfflineWildlifeAsset = "Pradatori.geojson"
     private const val OfflineAttractionsAsset = "Atractii.geojson"
@@ -119,13 +108,8 @@ object MapStyleConfig {
 
     private val toggleGroups = mapOf(
         "trails" to listOf(CUSTOM_TRAILS_LAYER_ID),
-        "peaks" to listOf(
-            PEAK_SYMBOL_LAYER_ID,
-            BUCEGI_PEAK_SYMBOL_LAYER_ID,
-            PEAK_LABELS_LAYER_ID,
-            BUCEGI_PEAK_LABELS_LAYER_ID
-        ),
-        "places" to listOf(PLACE_LABELS_LAYER_ID, BUCEGI_PLACE_LABELS_LAYER_ID),
+        "peaks" to listOf(PEAK_SYMBOL_LAYER_ID, PEAK_LABELS_LAYER_ID),
+        "places" to listOf(PLACE_LABELS_LAYER_ID),
         "wildlife" to listOf(WILDLIFE_LAYER_ID, WILDLIFE_SYMBOL_LAYER_ID),
         "attractions" to listOf(
             ATTRACTIONS_SYMBOL_LAYER_ID,
@@ -134,11 +118,8 @@ object MapStyleConfig {
         "water" to listOf(
             WATER_FILL_LAYER_ID,
             WATERWAY_LAYER_ID,
-            BUCEGI_WATERWAY_LAYER_ID,
             WATER_LABELS_LAYER_ID,
             WATER_LABELS_LINE_LAYER_ID,
-            BUCEGI_WATER_LABELS_LAYER_ID,
-            BUCEGI_WATER_LABELS_LINE_LAYER_ID,
             WATER_POINT_SYMBOL_LAYER_ID,
             WATER_POINT_LABELS_LAYER_ID
         )
@@ -171,7 +152,6 @@ object MapStyleConfig {
         addRemoteOverlaySources(style)
         ensurePointSymbolImages(style)
         addBaseLayers(style, mapDataConfig)
-        addDemoHighDetailLayers(style, mapDataConfig)
         addRemoteOverlayLayers(style, mapDataConfig)
     }
 
@@ -198,11 +178,6 @@ object MapStyleConfig {
         mapDataConfig.baseSourceUri()?.let { sourceUri ->
             if (style.getSource(BASE_SOURCE_ID) == null) {
                 style.addSource(VectorSource(BASE_SOURCE_ID, sourceUri))
-            }
-        }
-        mapDataConfig.demoSourceUri()?.let { sourceUri ->
-            if (style.getSource(BUCEGI_DEMO_SOURCE_ID) == null) {
-                style.addSource(VectorSource(BUCEGI_DEMO_SOURCE_ID, sourceUri))
             }
         }
     }
@@ -444,175 +419,6 @@ object MapStyleConfig {
                         textHaloWidth(1f)
                     )
                     setMinZoom(6.7f)
-                }
-            )
-        }
-    }
-
-    private fun addDemoHighDetailLayers(style: Style, mapDataConfig: MapDataConfig) {
-        if (!mapDataConfig.hasDemoPack) {
-            return
-        }
-
-        addIfMissing(
-            style,
-            LineLayer(BUCEGI_WATERWAY_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
-                sourceLayer = "waterway"
-                setProperties(
-                    lineColor(Color.parseColor("#4d93c2")),
-                    lineOpacity(0.9f),
-                    lineWidth(1.6f)
-                )
-                setMinZoom(DemoMinZoom)
-            }
-        )
-
-        if (mapDataConfig.hasLocalGlyphs) {
-            addIfMissing(
-                style,
-                SymbolLayer(BUCEGI_WATER_LABELS_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
-                    sourceLayer = "water_name"
-                    setProperties(
-                        textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
-                        textFont(arrayOf("Open Sans Regular")),
-                        textSize(
-                            interpolate(
-                                exponential(1.08f),
-                                zoom(),
-                                stop(13.5, 10.2f),
-                                stop(15, 11.1f),
-                                stop(16, 12.0f)
-                            )
-                        ),
-                        textColor(Color.parseColor("#1d4f73")),
-                        textHaloColor(Color.parseColor("#eef7fd")),
-                        textHaloWidth(1f)
-                    )
-                    setMinZoom(DemoMinZoom)
-                }
-            )
-            addIfMissing(
-                style,
-                SymbolLayer(BUCEGI_WATER_LABELS_LINE_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
-                    sourceLayer = "water_name"
-                    setProperties(
-                        textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
-                        textFont(arrayOf("Open Sans Regular")),
-                        textSize(
-                            interpolate(
-                                exponential(1.08f),
-                                zoom(),
-                                stop(13.5, 10.0f),
-                                stop(15, 10.8f),
-                                stop(16, 11.6f)
-                            )
-                        ),
-                        textColor(Color.parseColor("#25638d")),
-                        textHaloColor(Color.parseColor("#eef7fd")),
-                        textHaloWidth(1f),
-                        symbolPlacement(Property.SYMBOL_PLACEMENT_LINE)
-                    )
-                    setMinZoom(DemoMinZoom)
-                }
-            )
-        }
-
-        addIfMissing(
-            style,
-            LineLayer(BUCEGI_ROAD_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
-                sourceLayer = "transportation"
-                setFilter(
-                    any(
-                        eq(get("class"), literal("motorway")),
-                        eq(get("class"), literal("trunk")),
-                        eq(get("class"), literal("primary")),
-                        eq(get("class"), literal("secondary")),
-                        eq(get("class"), literal("tertiary"))
-                    )
-                )
-                setProperties(
-                    lineCap(Property.LINE_CAP_ROUND),
-                    lineJoin(Property.LINE_JOIN_ROUND),
-                    lineColor(Color.parseColor("#ffffff")),
-                    lineOpacity(0.62f),
-                    lineWidth(1.5f)
-                )
-                setMinZoom(DemoMinZoom)
-            }
-        )
-
-        addIfMissing(
-            style,
-            SymbolLayer(BUCEGI_PEAK_SYMBOL_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
-                sourceLayer = "mountain_peak"
-                setProperties(
-                    iconImage(PeakIconId),
-                    iconSize(
-                        interpolate(
-                            exponential(1.18f),
-                            zoom(),
-                            stop(13.5, 0.9f),
-                            stop(15, 1.04f),
-                            stop(16, 1.16f)
-                        )
-                    ),
-                    iconAllowOverlap(true),
-                    iconIgnorePlacement(true)
-                )
-                setMinZoom(DemoMinZoom)
-            }
-        )
-
-        if (mapDataConfig.hasLocalGlyphs) {
-            addIfMissing(
-                style,
-                SymbolLayer(BUCEGI_PEAK_LABELS_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
-                    sourceLayer = "mountain_peak"
-                    setProperties(
-                        textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
-                        textFont(arrayOf("Open Sans Semibold")),
-                        textSize(
-                            interpolate(
-                                exponential(1.15f),
-                                zoom(),
-                                stop(13.5, 10.7f),
-                                stop(15, 11.6f),
-                                stop(16, 12.1f)
-                            )
-                        ),
-                        textColor(Color.parseColor("#2d2b27")),
-                        textHaloColor(Color.parseColor("#f4f0e8")),
-                        textHaloWidth(1f),
-                        textHaloBlur(0.5f),
-                        textOffset(arrayOf(0f, 1.0f)),
-                        textAllowOverlap(true),
-                        textIgnorePlacement(true)
-                    )
-                    setMinZoom(DemoMinZoom)
-                }
-            )
-
-            addIfMissing(
-                style,
-                SymbolLayer(BUCEGI_PLACE_LABELS_LAYER_ID, BUCEGI_DEMO_SOURCE_ID).apply {
-                    sourceLayer = "place"
-                    setProperties(
-                        textField(coalesce(get("name:ro"), get("name"), get("name_en"))),
-                        textFont(arrayOf("Open Sans Regular")),
-                        textSize(
-                            interpolate(
-                                exponential(1.1f),
-                                zoom(),
-                                stop(13.5, 10.4f),
-                                stop(15, 11.2f),
-                                stop(16, 12f)
-                            )
-                        ),
-                        textColor(Color.parseColor("#40503d")),
-                        textHaloColor(Color.parseColor("#eef1e6")),
-                        textHaloWidth(1f)
-                    )
-                    setMinZoom(DemoMinZoom)
                 }
             )
         }

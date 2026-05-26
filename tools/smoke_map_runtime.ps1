@@ -1,6 +1,7 @@
 param(
-    [string]$PackageName = "com.scouty.app",
+    [string]$PackageName = "com.nego.scouty",
     [string]$ActivityName = ".MainActivity",
+    [string]$TrailCode,
     [int]$WaitSeconds = 8
 )
 
@@ -13,14 +14,14 @@ if (-not (Test-Path $syncScript)) {
     throw "Missing sync script '$syncScript'."
 }
 
-& $syncScript -PackageName $PackageName
+& $syncScript -PackageName $PackageName -TrailCode $TrailCode
 
 adb logcat -c | Out-Null
 adb shell am start -n "$PackageName/$ActivityName" | Out-Null
 Start-Sleep -Seconds $WaitSeconds
 
 Write-Host "Installed map files:"
-adb shell run-as $PackageName ls -lh files/maps
+adb shell ls -lh "/sdcard/Android/data/$PackageName/files/maps"
 
 Write-Host "`nRelevant logcat lines:"
 adb logcat -d | Select-String -Pattern "ScoutyMap|ScoutyMapPacks|PMTiles|AndroidRuntime|FATAL EXCEPTION"

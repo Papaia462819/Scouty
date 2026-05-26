@@ -32,7 +32,7 @@ La runtime, aplicația citește local:
 
 `KnowledgePackManager` verifică existența, versiunea, hash-ul și integritatea SQLite pentru knowledge pack-ul offline și îl copiază în storage-ul aplicației. Retrieval-ul assistant-ului nu mai depinde de un seed simplu din JSON.
 
-Pentru hartă, overlay-urile locale sunt acum în repo. Pack-urile PMTiles rămân în `tools/generated-map-packs/` și pot fi sincronizate în `files/maps` cu scripturile repo-ului (`tools/sync_map_packs.ps1`, respectiv `tools/smoke_map_runtime.ps1`) fără dependență de foldere sibling din afara `Scouty_app`.
+Pentru hartă, overlay-urile locale sunt acum în repo. Master-ul PMTiles și pack-urile per traseu se generează în `tools/generated-map-packs/`, apoi se publică pe serverul de hărți sau se pot împinge pe device pentru debug cu `tools/sync_map_packs.ps1`.
 
 ### Home
 
@@ -52,7 +52,9 @@ Pentru hartă, overlay-urile locale sunt acum în repo. Pack-urile PMTiles răm�
 Ce face acum:
 
 - randare hartă prin MapLibre
-- sincronizare predictibilă a pack-urilor `romania-base.pmtiles` și `bucegi-high.pmtiles` din repo către storage-ul aplicației pentru debug și smoke test
+- folosește master-ul online `romania-high-detail.pmtiles` când există internet
+- pregătește automat pack-ul offline `trails/{trailCode}/offline.pmtiles` pentru traseul curent+
+- păstrează local pack-ul traseului curent și ultimele 3 pack-uri recente
 - căutare locală de trasee din asset-uri
 - selectare traseu și highlight pe hartă
 - setare traseu activ
@@ -178,8 +180,8 @@ Comenzile de validare folosite în repo:
 
 ```powershell
 .\gradlew.bat :app:assembleDebug
-.\gradlew.bat testDebugUnitTest
+.\gradlew.bat :app:testDebugUnitTest
 .\gradlew.bat :app:installDebug
-adb shell am start -n com.scouty.app/.MainActivity
+adb shell am start -n com.nego.scouty/.MainActivity
 adb logcat -d
 ```

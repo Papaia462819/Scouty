@@ -1,8 +1,9 @@
 param(
-    [string]$PackageName = "com.scouty.app",
+    [string]$PackageName = "com.nego.scouty",
     [string]$PacksDir = (Join-Path $PSScriptRoot "generated-map-packs"),
+    [string]$TrailCode,
     [string]$Serial,
-    [switch]$SkipDemoPack
+    [switch]$SkipBasePack
 )
 
 $ErrorActionPreference = "Stop"
@@ -14,7 +15,7 @@ function Get-AdbCommand {
     }
 
     if ($env:ANDROID_HOME) {
-        $candidate = Join-Path $env:ANDROID_HOME "platform-tools\\adb.exe"
+        $candidate = Join-Path $env:ANDROID_HOME "platform-tools\adb.exe"
         if (Test-Path $candidate) {
             return $candidate
         }
@@ -43,34 +44,43 @@ function Invoke-Adb {
     }
 }
 
+function Get-SafePathSegment {
+    param([string]$Value)
+    $safe = ($Value.ToLowerInvariant() -replace "[^a-z0-9._-]+", "_").Trim("_")
+    if (!$safe) {
+        return "route"
+    }
+    return $safe
+}
+
 function Push-Pack {
     param(
         [string]$LocalPath,
-        [string]$PackFileName
+        [string]$RemotePath
     )
 
-    $tempRemote = "/data/local/tmp/$PackFileName"
-    Invoke-Adb -CommandArgs @("push", $LocalPath, $tempRemote)
-    Invoke-Adb -CommandArgs @("shell", "run-as", $PackageName, "mkdir", "-p", "files/maps")
-    Invoke-Adb -CommandArgs @("shell", "run-as", $PackageName, "cp", $tempRemote, "files/maps/$PackFileName")
-    Invoke-Adb -CommandArgs @("shell", "rm", "-f", $tempRemote)
+    if (!(Test-Path $LocalPath)) {
+        throw "Missing local pack: $LocalPath"
+    }
+    $remoteDir = Split-Path -Parent $RemotePath
+    Invoke-Adb -CommandArgs @("shell", "mkdir", "-p", $remoteDir)
+    Invoke-Adb -CommandArgs @("push", $LocalPath, $RemotePath)
 }
 
-$basePack = Join-Path $PacksDir "romania-base.pmtiles"
-$demoPack = Join-Path $PacksDir "bucegi-high.pmtiles"
-
-if (!(Test-Path $basePack)) {
-    throw "Missing required pack: $basePack"
-}
+$deviceMapsDir = "/sdcard/Android/data/$PackageName/files/maps"
 
 Invoke-Adb -CommandArgs @("get-state")
 Invoke-Adb -CommandArgs @("shell", "pm", "list", "packages", $PackageName)
-Push-Pack -LocalPath $basePack -PackFileName "romania-base.pmtiles"
 
-if (-not $SkipDemoPack -and (Test-Path $demoPack)) {
-    Push-Pack -LocalPath $demoPack -PackFileName "bucegi-high.pmtiles"
-} elseif (-not $SkipDemoPack) {
-    Write-Warning "Optional pack not found: $demoPack"
+if (-not $SkipBasePack) {
+    $basePack = Join-Path $PacksDir "romania-high-detail.pmtiles"
+    Push-Pack -LocalPath $basePack -RemotePath "$deviceMapsDir/romania-high-detail.pmtiles"
 }
 
-Write-Host "Map packs pushed to app-specific storage for $PackageName."
+if ($TrailCode) {
+    $safeTrailCode = Get-SafePathSegment -Value $TrailCode
+    $trailPack = Join-Path $PacksDir "trails\$safeTrailCode\offline.pmtiles"
+    Push-Pack -LocalPath $trailPack -RemotePath "$deviceMapsDir/trails/$safeTrailCode/offline.pmtiles"
+}
+
+Write-Host "Map packs pushed to app-specific external storage for $PackageName."

@@ -11,14 +11,12 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class MapPacksRuntimeTest {
     @Test
-    fun installedMapPacksAreAvailableToRuntime() = runBlocking {
+    fun onlineMapSourceIsAvailableToRuntime() = runBlocking {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val registry = MapPackRegistryManager.load(context)
+        val registry = MapPackRegistryManager.load(context, isOnline = true)
 
-        assertTrue("Romania base map pack is not ready.", registry.basePack().isReady)
-        assertTrue("Bucegi high-detail map pack is not ready.", registry.demoPack().isReady)
+        assertTrue("Remote Romania map source is not ready.", registry.basePack().isReady)
+        assertTrue("Remote PMTiles source is not configured.", registry.activeSourceUri?.startsWith("pmtiles://https://") == true)
         assertTrue("Local glyph assets are missing.", registry.hasLocalGlyphs)
-        assertTrue("Romania base map pack is empty.", registry.basePack().sizeBytes > 0L)
-        assertTrue("Bucegi high-detail map pack is empty.", registry.demoPack().sizeBytes > 0L)
     }
 }

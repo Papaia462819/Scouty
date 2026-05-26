@@ -48,6 +48,7 @@ android {
         buildConfigField("String", "METEOBLUE_API_KEY", "\"${escapedBuildConfigString("meteoblue.apiKey")}\"")
         buildConfigField("String", "GEMINI_API_KEY", "\"${escapedBuildConfigString("gemini.apiKey", envName = "GEMINI_API_KEY")}\"")
         buildConfigField("String", "GEMINI_MODEL", "\"${escapedBuildConfigString("gemini.model", "gemini-2.5-flash", envName = "GEMINI_MODEL")}\"")
+        buildConfigField("String", "MAPS_BASE_URL", "\"${escapedBuildConfigString("maps.baseUrl", "https://maps.scouty.app", envName = "MAPS_BASE_URL")}\"")
     }
 
     buildTypes {
@@ -107,6 +108,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
     implementation("androidx.activity:activity-compose:1.9.2")
     implementation("androidx.exifinterface:exifinterface:1.3.7")
     implementation("com.google.android.material:material:1.12.0")
@@ -132,6 +134,7 @@ dependencies {
 
     // Network & Serialization
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")

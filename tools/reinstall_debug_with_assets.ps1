@@ -1,6 +1,6 @@
 param(
-    [string]$PackageName = "com.scouty.app",
-    [string]$TestPackageName = "com.scouty.app.test",
+    [string]$PackageName = "com.nego.scouty",
+    [string]$TestPackageName = "com.nego.scouty.test",
     [string]$Serial,
     [string]$ModelPath,
     [switch]$DownloadIfMissing,

@@ -1,12 +1,15 @@
 package com.scouty.app.utils
 
 import android.content.Context
-import android.net.Uri
-import android.util.Log
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import android.net.ConnectivityManager
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
+import com.scouty.app.BuildConfig
 import java.io.File
-import java.io.InputStream
 
 enum class MapPackId(
     val storageName: String,
@@ -15,23 +18,28 @@ enum class MapPackId(
     val bundledAssetPath: String
 ) {
     ROMANIA_BASE(
-        storageName = "romania-base",
-        fileName = "romania-base.pmtiles",
+        storageName = "romania-high-detail",
+        fileName = "romania-high-detail.pmtiles",
         required = true,
-        bundledAssetPath = "romania-base.pmtiles"
+        bundledAssetPath = "romania-high-detail.pmtiles"
     ),
-    BUCEGI_HIGH(
-        storageName = "bucegi-high",
-        fileName = "bucegi-high.pmtiles",
+    ROUTE_OFFLINE(
+        storageName = "route-offline",
+        fileName = "offline.pmtiles",
         required = false,
-        bundledAssetPath = "bucegi-high.pmtiles"
+        bundledAssetPath = ""
     );
 }
 
 enum class MapPackStatus {
     AVAILABLE,
     MISSING,
-    INVALID
+    INVALID,
+    NOT_REQUESTED,
+    WAITING_CONFIRMATION,
+    DOWNLOADING,
+    FAILED,
+    STALE
 }
 
 data class InstalledMapPack(
@@ -39,129 +47,78 @@ data class InstalledMapPack(
     val file: File,
     val status: MapPackStatus,
     val sizeBytes: Long = 0L,
-    val version: String = "missing"
+    val version: String = "missing",
+    val sourceUri: String? = null,
+    val remoteUrl: String? = null,
+    val trailCode: String? = null,
+    val progressPercent: Int? = null,
+    val message: String? = null,
+    val requiresUserConfirmation: Boolean = false
 ) {
     val isReady: Boolean
         get() = status == MapPackStatus.AVAILABLE
+
+    val isInProgress: Boolean
+        get() = status == MapPackStatus.DOWNLOADING || status == MapPackStatus.WAITING_CONFIRMATION
 }
 
 data class MapPackRegistry(
     val mapsDirectory: File,
     val installedPacks: Map<MapPackId, InstalledMapPack>,
-    val hasLocalGlyphs: Boolean
+    val hasLocalGlyphs: Boolean,
+    val isOnline: Boolean = true,
+    val currentTrailPack: InstalledMapPack? = null,
+    val activeSourceUri: String? = null
 ) {
     fun pack(id: MapPackId): InstalledMapPack = installedPacks.getValue(id)
 
     fun basePack(): InstalledMapPack = pack(MapPackId.ROMANIA_BASE)
-
-    fun demoPack(): InstalledMapPack = pack(MapPackId.BUCEGI_HIGH)
 }
-
-private data class MapPackStorage(
-    val preferredDirectory: File,
-    val searchDirectories: List<File>
-)
 
 object MapPackRegistryManager {
     private const val MapsDirectoryName = "maps"
-    private const val LogTag = "ScoutyMapPacks"
+    private const val RecentPackRetention = 3
+    private const val MobileConfirmationThresholdBytes = 100L * 1024L * 1024L
 
-    suspend fun load(context: Context): MapPackRegistry = withContext(Dispatchers.IO) {
-        val storage = resolveStorage(context)
-        val assetSource = AndroidAssetPackSource(context)
-        val installer = BundledMapPackInstaller(assetSource)
-        MapPackId.entries.forEach { packId ->
-            if (inspectPack(storage.searchDirectories, storage.preferredDirectory, packId).isReady) {
-                return@forEach
-            }
-            runCatching {
-                installer.ensureInstalled(storage.preferredDirectory, packId)
-            }.onSuccess { copied ->
-                if (copied) {
-                    Log.i(
-                        LogTag,
-                        "Installed bundled map pack ${packId.fileName} into ${storage.preferredDirectory.absolutePath}"
-                    )
-                }
-            }.onFailure { error ->
-                Log.w(LogTag, "Failed to bootstrap bundled map pack ${packId.fileName}", error)
-            }
-        }
+    fun mapsBaseUrl(): String =
+        BuildConfig.MAPS_BASE_URL.trim().trimEnd('/').ifBlank { "https://maps.scouty.app" }
 
-        buildRegistry(
-            mapsDirectory = storage.preferredDirectory,
-            searchDirectories = storage.searchDirectories,
-            hasLocalGlyphs = hasGlyphAssets(context)
-        )
-    }
-
-    fun targetFile(context: Context, packId: MapPackId): File =
-        File(resolveStorage(context).preferredDirectory, packId.fileName)
-
-    fun copyImportedPack(
+    suspend fun load(
         context: Context,
-        packId: MapPackId,
-        sourceUri: Uri
-    ): InstalledMapPack {
-        val storage = resolveStorage(context)
-        val targetFile = File(storage.preferredDirectory, packId.fileName)
-        targetFile.parentFile?.mkdirs()
-        val tempFile = File(targetFile.parentFile, "${targetFile.name}.part")
-        context.contentResolver.openInputStream(sourceUri)?.use { input ->
-            tempFile.outputStream().use { output ->
-                input.copyTo(output)
-            }
-        } ?: error("Unable to open selected map pack.")
-
-        if (targetFile.exists() && !targetFile.delete()) {
-            error("Unable to replace existing map pack.")
-        }
-        if (!tempFile.renameTo(targetFile)) {
-            error("Unable to finalize imported map pack.")
-        }
-
-        return inspectPack(storage.searchDirectories, storage.preferredDirectory, packId)
-    }
-
-    private fun buildRegistry(
-        mapsDirectory: File,
-        searchDirectories: List<File>,
-        hasLocalGlyphs: Boolean
+        activeTrailCode: String? = null,
+        isOnline: Boolean = true
     ): MapPackRegistry {
-        val installedPacks = MapPackId.entries.associateWith { id ->
-            inspectPack(searchDirectories, mapsDirectory, id)
-        }
-        return MapPackRegistry(
-            mapsDirectory = mapsDirectory,
-            installedPacks = installedPacks,
-            hasLocalGlyphs = hasLocalGlyphs
+        val repository = MapPackRepository.get(context)
+        return repository.registryFor(
+            activeTrailCode = activeTrailCode?.takeIf { it.isNotBlank() },
+            isOnline = isOnline
         )
     }
 
-    internal fun inspectPack(
-        searchDirectories: List<File>,
-        preferredDirectory: File,
-        packId: MapPackId
-    ): InstalledMapPack {
-        val distinctDirectories = searchDirectories.distinctBy { it.absolutePath }
-        val candidates = distinctDirectories.map { inspectPack(it, packId) }
-        val availablePack = candidates
-            .filter { it.status == MapPackStatus.AVAILABLE }
-            .sortedWith(
-                compareByDescending<InstalledMapPack> { it.file.lastModified() }
-                    .thenBy { directoryPriority(it.file.parentFile, distinctDirectories) }
+    fun enqueueRoutePackDownload(
+        context: Context,
+        trailCode: String,
+        forceMetered: Boolean = false
+    ) {
+        val request = OneTimeWorkRequestBuilder<MapPackDownloadWorker>()
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
             )
-            .firstOrNull()
-        if (availablePack != null) {
-            return availablePack
-        }
+            .setInputData(
+                workDataOf(
+                    MapPackDownloadWorker.InputTrailCode to trailCode,
+                    MapPackDownloadWorker.InputForceMetered to forceMetered
+                )
+            )
+            .build()
 
-        return candidates.firstOrNull { it.status == MapPackStatus.INVALID }
-            ?: InstalledMapPack(
-                id = packId,
-                file = File(preferredDirectory, packId.fileName),
-                status = MapPackStatus.MISSING
-            )
+        WorkManager.getInstance(context.applicationContext).enqueueUniqueWork(
+            "map-pack-$trailCode",
+            ExistingWorkPolicy.REPLACE,
+            request
+        )
     }
 
     internal fun inspectPack(mapsDirectory: File, packId: MapPackId): InstalledMapPack {
@@ -187,11 +144,17 @@ object MapPackRegistryManager {
             file = targetFile,
             status = status,
             sizeBytes = sizeBytes,
-            version = version
+            version = version,
+            sourceUri = if (status == MapPackStatus.AVAILABLE) pmtilesFileUri(targetFile) else null
         )
     }
 
-    private fun hasGlyphAssets(context: Context): Boolean =
+    internal fun resolveMapsDirectory(context: Context): File {
+        val externalDirectory = context.getExternalFilesDir(null)?.let { File(it, MapsDirectoryName) }
+        return (externalDirectory ?: File(context.filesDir, MapsDirectoryName)).apply { mkdirs() }
+    }
+
+    internal fun hasGlyphAssets(context: Context): Boolean =
         runCatching {
             val requiredRanges = listOf(
                 "0-255.pbf",
@@ -205,77 +168,19 @@ object MapPackRegistryManager {
             }
         }.getOrDefault(false)
 
-    private fun resolveStorage(context: Context): MapPackStorage {
-        val internalDirectory = File(context.filesDir, MapsDirectoryName)
-        val externalDirectory = context.getExternalFilesDir(null)?.let { File(it, MapsDirectoryName) }
-        val preferredDirectory = externalDirectory ?: internalDirectory
-        val searchDirectories = buildList {
-            externalDirectory?.let(::add)
-            add(internalDirectory)
-        }.distinctBy { it.absolutePath }
+    internal fun remoteMasterUri(): String =
+        "pmtiles://${mapsBaseUrl()}/base/${MapPackId.ROMANIA_BASE.fileName}"
 
-        preferredDirectory.mkdirs()
-        return MapPackStorage(
-            preferredDirectory = preferredDirectory,
-            searchDirectories = searchDirectories
-        )
+    internal fun pmtilesFileUri(file: File): String =
+        "pmtiles://file://${file.absolutePath.replace(File.separatorChar, '/')}"
+
+    internal fun mobileConfirmationThresholdBytes(): Long = MobileConfirmationThresholdBytes
+
+    internal fun recentPackRetention(): Int = RecentPackRetention
+
+    internal fun isActiveNetworkMetered(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return connectivityManager.isActiveNetworkMetered
     }
-
-    private fun directoryPriority(directory: File?, searchDirectories: List<File>): Int =
-        directory?.let { candidate ->
-            searchDirectories.indexOfFirst { it.absolutePath == candidate.absolutePath }
-                .takeIf { it >= 0 }
-        } ?: Int.MAX_VALUE
-}
-
-internal interface MapPackAssetSource {
-    fun exists(assetPath: String): Boolean
-
-    fun open(assetPath: String): InputStream
-}
-
-internal class BundledMapPackInstaller(
-    private val assetSource: MapPackAssetSource
-) {
-    fun ensureInstalled(
-        mapsDirectory: File,
-        packId: MapPackId
-    ): Boolean {
-        val targetFile = File(mapsDirectory, packId.fileName)
-        if (targetFile.exists() && targetFile.length() > 0L) {
-            return false
-        }
-        if (!assetSource.exists(packId.bundledAssetPath)) {
-            return false
-        }
-
-        mapsDirectory.mkdirs()
-        val tempFile = File(mapsDirectory, "${packId.fileName}.part")
-        assetSource.open(packId.bundledAssetPath).use { input ->
-            tempFile.outputStream().use { output ->
-                input.copyTo(output)
-            }
-        }
-        if (targetFile.exists() && !targetFile.delete()) {
-            error("Unable to replace existing bundled map pack ${packId.fileName}.")
-        }
-        if (!tempFile.renameTo(targetFile)) {
-            tempFile.copyTo(targetFile, overwrite = true)
-            tempFile.delete()
-        }
-        return true
-    }
-}
-
-private class AndroidAssetPackSource(
-    private val context: Context
-) : MapPackAssetSource {
-    override fun exists(assetPath: String): Boolean =
-        runCatching {
-            context.assets.open(assetPath).close()
-            true
-        }.getOrDefault(false)
-
-    override fun open(assetPath: String): InputStream =
-        context.assets.open(assetPath)
 }

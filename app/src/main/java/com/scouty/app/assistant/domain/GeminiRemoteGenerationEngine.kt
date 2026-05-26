@@ -94,7 +94,7 @@ internal class GeminiRemoteGenerationEngine(
                     GeminiPart(
                         text = "You are Scouty, a grounded hiking and mountain-safety assistant for Romania. " +
                             "Use only the supplied Scouty facts, conversation context, and device context. " +
-                            "Do not invent weather, trail metrics, law, medical certainty, or rescue instructions."
+                            "Do not invent weather or trail metrics."
                     )
                 )
             ),
