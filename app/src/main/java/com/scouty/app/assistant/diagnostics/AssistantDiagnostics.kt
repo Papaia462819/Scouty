@@ -159,11 +159,18 @@ object AssistantDiagnostics {
         generationMode: GenerationMode,
         safetyOutcome: SafetyOutcome,
         retrievedChunks: List<RetrievedChunk>,
-        totalElapsedMs: Long
+        totalElapsedMs: Long,
+        firstVisibleMs: Long = -1L,
+        generationMs: Long = -1L,
+        interpreterMs: Long = 0L,
+        usedDraftFallback: Boolean = false,
+        coldStart: Boolean = false
     ) {
         debug(
             "AssistantRepository.answer:end query=\"$query\" generationMode=${generationMode.name} " +
                 "assistant_total_latency_ms=$totalElapsedMs " +
+                "first_visible_ms=$firstVisibleMs generation_ms=$generationMs interpreter_ms=$interpreterMs " +
+                "used_draft_fallback=$usedDraftFallback cold_start=$coldStart " +
                 "safetyOutcome=${safetyOutcome.name} packStatus.isReady=${packStatus.isReady} " +
                 "modelState=${modelStatus.state.name} modelVersion=${modelStatus.modelVersion} " +
                 "retrieved=${formatRetrievedChunks(retrievedChunks)}"

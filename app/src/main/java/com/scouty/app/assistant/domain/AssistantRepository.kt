@@ -54,6 +54,9 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withTimeoutOrNull
 import java.text.Normalizer
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -70,6 +73,9 @@ data class RetrievedChunk(
     val sectionTitle: String,
     val body: String,
     val score: Int,
+    val shortAnswer: String? = null,
+    val synthesizedAnswer: String? = null,
+    val safetyNote: String? = null,
     val chunkId: String = "",
     val domain: String = "",
     val sourceUrl: String? = null,
@@ -113,6 +119,18 @@ private data class ExpressionLayerResult(
     val output: StructuredAssistantOutput,
     val retrievedChunks: List<RetrievedChunk>
 )
+
+sealed class AssistantAnswerEvent {
+    data class DraftVisible(
+        val text: String,
+        val citations: List<AssistantCitation>,
+        val safetyOutcome: SafetyOutcome
+    ) : AssistantAnswerEvent()
+
+    data class Final(val response: AssistantResponse) : AssistantAnswerEvent()
+
+    data class ErrorFallback(val response: AssistantResponse) : AssistantAnswerEvent()
+}
 
 class QueryAnalyzer(
     private val useCampfireLane: Boolean = false
@@ -760,6 +778,9 @@ class RetrievalEngine(
             sectionTitle = candidate.title,
             body = candidate.body,
             score = score,
+            shortAnswer = candidate.shortAnswer,
+            synthesizedAnswer = candidate.synthesizedAnswer,
+            safetyNote = candidate.safetyNote,
             chunkId = candidate.chunkId,
             domain = candidate.domain,
             sourceUrl = candidate.sourceUrl,
@@ -1060,9 +1081,20 @@ class TemplateGenerationEngine : GenerationEngine {
         val sections = mutableListOf<StructuredResponseSection>()
 
         input.retrievedChunks.firstOrNull()?.let { chunk ->
+            chunk.safetyNote?.takeIf { it.isNotBlank() }?.let { note ->
+                sections += StructuredResponseSection(
+                    title = if (isRomanian) "Atenție" else "Caution",
+                    body = note,
+                    style = ResponseSectionStyle.IMPORTANT
+                )
+            }
             sections += StructuredResponseSection(
                 title = if (isRomanian) "Baza offline" else "Offline guidance",
-                body = chunk.body,
+                body = chunk.synthesizedAnswer
+                    ?.takeIf { it.isNotBlank() }
+                    ?: chunk.shortAnswer
+                        ?.takeIf { it.isNotBlank() }
+                    ?: chunk.body,
                 style = ResponseSectionStyle.GUIDANCE
             )
         }
@@ -1084,6 +1116,8 @@ class TemplateGenerationEngine : GenerationEngine {
                 "Nu am gasit inca un chunk suficient de apropiat in pack, asa ca raspund prudent si iti spun cum sa reformulezi pentru grounding mai bun."
             input.retrievedChunks.isEmpty() ->
                 "I did not find a close enough knowledge chunk yet, so I am answering conservatively and showing how to rephrase for better grounding."
+            input.retrievedChunks.firstOrNull()?.shortAnswer?.isNotBlank() == true ->
+                input.retrievedChunks.first().shortAnswer.orEmpty()
             isRomanian ->
                 "Am selectat cele mai relevante chunk-uri offline pentru intrebarea ta."
             else ->
@@ -2057,6 +2091,8 @@ class AssistantRepository(
     private var sessionConversationId: String = "session:${UUID.randomUUID()}"
     private val interactionEngine = DeterministicInteractionEngine()
     private val onlineGenerationPolicy = generationEngine as? OnlineGenerationPolicy
+    private val directAnswerComposer = DirectAnswerComposer()
+    private val draftPromptBuilder = DraftAuthoredPromptBuilder()
 
     fun canAttemptOnlineGeneration(context: DeviceContextSnapshot): Boolean =
         onlineGenerationPolicy?.shouldAttemptRemote(context) == true
@@ -2144,6 +2180,70 @@ class AssistantRepository(
         }
 
         return persistAssistantTurn(memorySession, response)
+    }
+
+    fun answerEvents(
+        query: String,
+        context: DeviceContextSnapshot,
+        conversationState: AssistantConversationState = AssistantConversationState(),
+        interactionHandler: ChatActionHandler? = null,
+        allowLocalModel: Boolean = false
+    ): Flow<AssistantAnswerEvent> = flow {
+        buildDraftEvent(
+            query = query,
+            context = context,
+            conversationState = conversationState
+        )?.let { emit(it) }
+
+        val response = answer(
+            query = query,
+            context = context,
+            conversationState = conversationState,
+            interactionHandler = interactionHandler,
+            allowLocalModel = allowLocalModel
+        )
+        if (response.usedFallback && response.generationMode == GenerationMode.FALLBACK_STRUCTURED) {
+            emit(AssistantAnswerEvent.ErrorFallback(response))
+        } else {
+            emit(AssistantAnswerEvent.Final(response))
+        }
+    }
+
+    private suspend fun buildDraftEvent(
+        query: String,
+        context: DeviceContextSnapshot,
+        conversationState: AssistantConversationState
+    ): AssistantAnswerEvent.DraftVisible? {
+        val queryAnalysis = queryAnalyzer.analyze(query, context, conversationState)
+        if (queryAnalysis.trailContextIntent != TrailContextIntent.NONE && context.trail != null) {
+            return null
+        }
+        val packStatus = knowledgePackManager.ensureReady()
+        if (!packStatus.isReady) {
+            return null
+        }
+        val retrieved = retrievalEngine.retrieve(
+            query = query,
+            context = context,
+            queryAnalysis = queryAnalysis,
+            limit = 1
+        )
+        val primary = retrieved.firstOrNull() ?: return null
+        val isRomanian = queryAnalysis.preferredLanguage == "ro"
+        val text = primary.shortAnswer
+            ?.takeIf { it.isNotBlank() }
+            ?: primary.synthesizedAnswer
+                ?.takeIf { it.isNotBlank() }
+            ?: draftPromptBuilder.draftFor(primary, isRomanian)
+        if (text.isBlank()) {
+            return null
+        }
+        val safetyOutcome = medicalSafetyPolicy.evaluate(query, retrieved, context)
+        return AssistantAnswerEvent.DraftVisible(
+            text = text,
+            citations = buildCitations(queryAnalysis, context, retrieved),
+            safetyOutcome = safetyOutcome
+        )
     }
 
     private fun shouldUseCampfireLane(queryAnalysis: QueryAnalysis): Boolean =
@@ -2248,6 +2348,7 @@ class AssistantRepository(
         conversationHistory: ConversationHistory? = null,
         allowLocalModel: Boolean = false
     ): AssistantResponse {
+        val answerStartedAtNanos = System.nanoTime()
         val initial = campfireConversationEngine.answer(
             query = query,
             context = context,
@@ -2363,36 +2464,44 @@ class AssistantRepository(
             )
         }
 
-        val expressionResult = maybeBuildExpressionResult(
-            query = query,
-            context = context,
-            analysis = queryAnalysis,
-            retrievedChunks = finalCampfire.retrievedChunks,
-            confidence = finalCampfire.retrievalConfidence,
-            knowledgePackStatus = packStatus,
-            conversationHistory = conversationHistory,
-            allowLocalModel = allowLocalModel
-        )
-        val responseRetrievedChunks = expressionResult?.retrievedChunks ?: finalCampfire.retrievedChunks
+        val responseRetrievedChunks = finalCampfire.retrievedChunks
         val safetyOutcome = medicalSafetyPolicy.evaluate(query, responseRetrievedChunks, context)
-        val wordedOutput = expressionResult?.output ?: applyCampfireWordingIfSafe(
-            query = query,
-            preferredLanguage = queryAnalysis.preferredLanguage,
-            structuredOutput = finalCampfire.structuredOutput,
-            retrievedChunks = finalCampfire.retrievedChunks,
-            confidence = finalCampfire.retrievalConfidence,
-            conversationHistory = conversationHistory,
-            allowLocalModel = allowLocalModel
-        )
+        val modelStatus = modelManager.refreshStatus()
+        val wordedOutput = if (!allowLocalModel && !shouldUseOnlineGeneration(context)) {
+            finalCampfire.structuredOutput
+        } else {
+            val generationMode = generationModeForAttempt(modelStatus, context, allowLocalModel)
+            val prompt = promptBuilder.build(
+                query = query,
+                context = context,
+                retrievedChunks = responseRetrievedChunks,
+                queryAnalysis = queryAnalysis
+            )
+            generateWithDeadline(
+                input = GenerationInput(
+                    query = query,
+                    prompt = prompt,
+                    queryAnalysis = queryAnalysis,
+                    retrievedChunks = responseRetrievedChunks,
+                    context = context,
+                    safetyOutcome = safetyOutcome,
+                    generationMode = generationMode,
+                    modelStatus = modelStatus,
+                    knowledgePackStatus = packStatus,
+                    conversationHistory = conversationHistory,
+                    allowLocalModel = allowLocalModel
+                ),
+                startedAtNanos = answerStartedAtNanos
+            )
+        }
         val structuredOutput = medicalSafetyPolicy.applyFinalGuardrails(
             output = wordedOutput,
             safetyOutcome = safetyOutcome,
             isRomanian = queryAnalysis.preferredLanguage == "ro"
         )
-        val modelStatus = modelManager.currentStatus()
-        val responseConversationState = expressionResult
-            ?.retrievedChunks
-            ?.firstOrNull()
+        val finalModelStatus = modelManager.currentStatus()
+        val responseConversationState = responseRetrievedChunks
+            .firstOrNull()
             ?.let { chunk ->
                 finalCampfire.conversationState.copy(
                     lastRetrievedChunkId = chunk.chunkId,
@@ -2410,11 +2519,13 @@ class AssistantRepository(
             generationMode = structuredOutput.generationMode,
             reasoningType = structuredOutput.reasoningType,
             conversationState = responseConversationState,
-            modelVersion = modelStatus.modelVersion.takeIf { modelStatus.availableOnDisk },
-            modelRuntimeState = modelStatus.state,
-            modelStatusDetails = modelStatus.details,
+            modelVersion = structuredOutput.modelVersion ?: finalModelStatus.modelVersion.takeIf {
+                finalModelStatus.availableOnDisk || finalModelStatus.state != ModelRuntimeState.MISSING
+            },
+            modelRuntimeState = finalModelStatus.state,
+            modelStatusDetails = finalModelStatus.details,
             knowledgePackVersion = structuredOutput.knowledgePackVersion,
-            usedFallback = false
+            usedFallback = structuredOutput.generationMode == GenerationMode.FALLBACK_STRUCTURED
         )
     }
 
@@ -2531,37 +2642,23 @@ class AssistantRepository(
             queryAnalysis = finalAnalysis
         )
         val safetyOutcome = medicalSafetyPolicy.evaluate(query, finalRetrieved, context)
-        val expressionResult = if (shouldUseOnlineGeneration(context) || !allowLocalModel) {
-            null
-        } else {
-            maybeBuildExpressionResult(
-                query = query,
-                context = context,
-                analysis = finalAnalysis,
-                retrievedChunks = finalRetrieved,
-                confidence = finalAssessment,
-                knowledgePackStatus = packStatus,
-                conversationHistory = conversationHistory,
-                allowLocalModel = allowLocalModel
-            )
-        }
         val structuredOutput = medicalSafetyPolicy.applyFinalGuardrails(
-            output = expressionResult?.output
-                ?: generationEngine.generate(
-                    GenerationInput(
-                        query = query,
-                        prompt = prompt,
-                        queryAnalysis = finalAnalysis,
-                        retrievedChunks = finalRetrieved,
-                        context = context,
-                        safetyOutcome = safetyOutcome,
-                        generationMode = generationMode,
-                        modelStatus = modelStatus,
-                        knowledgePackStatus = packStatus,
-                        conversationHistory = conversationHistory,
-                        allowLocalModel = allowLocalModel
-                    )
+            output = generateWithDeadline(
+                input = GenerationInput(
+                    query = query,
+                    prompt = prompt,
+                    queryAnalysis = finalAnalysis,
+                    retrievedChunks = finalRetrieved,
+                    context = context,
+                    safetyOutcome = safetyOutcome,
+                    generationMode = generationMode,
+                    modelStatus = modelStatus,
+                    knowledgePackStatus = packStatus,
+                    conversationHistory = conversationHistory,
+                    allowLocalModel = allowLocalModel
                 ),
+                startedAtNanos = answerStartedAtNanos
+            ),
             safetyOutcome = safetyOutcome,
             isRomanian = finalAnalysis.preferredLanguage == "ro"
         )
@@ -2610,59 +2707,14 @@ class AssistantRepository(
         conversationHistory: ConversationHistory?,
         allowLocalModel: Boolean
     ): ExpressionLayerResult? {
-        val engine = cardParaphraseEngine ?: return null
-        if (!allowLocalModel) {
-            return null
-        }
-        if (!useCardParaphraseExpression) {
-            AssistantDiagnostics.logExpressionLayer(
-                chunkId = "",
-                invocationCount = 0,
-                fallbackCount = 0,
-                tokenLatencyMs = 0,
-                reason = "feature_disabled"
-            )
-            return null
-        }
-        if (retrievedChunks.isEmpty()) {
-            AssistantDiagnostics.logExpressionLayer(
-                chunkId = "",
-                invocationCount = 0,
-                fallbackCount = 0,
-                tokenLatencyMs = 0,
-                reason = "no_primary_chunk"
-            )
-            return null
-        }
-        val primary = retrievedChunks.firstOrNull { engine.isEligibleForParaphrase(it) }
-            ?: retrievedChunks.first()
-        val paraphrased = engine.maybeParaphrase(
-            CardParaphraseRequest(
-                featureEnabled = useCardParaphraseExpression,
-                chunk = primary,
-                userQuery = query,
-                confidenceTier = confidence.tier,
-                deviceContext = context,
-                conversationHistory = conversationHistory,
-                preferredLanguage = analysis.preferredLanguage
-            )
-        ) ?: return null
-        val modelStatus = modelManager.currentStatus()
-        return ExpressionLayerResult(
-            output = StructuredAssistantOutput(
-                summary = paraphrased.text,
-                sections = emptyList(),
-                generationMode = GenerationMode.LOCAL_LLM,
-                reasoningType = analysis.reasoningType,
-                resolvedTopic = primary.topic,
-                resolvedFamily = primary.cardFamily,
-                modelVersion = modelStatus.modelVersion.takeIf {
-                    modelStatus.availableOnDisk || modelStatus.state != ModelRuntimeState.MISSING
-                },
-                knowledgePackVersion = knowledgePackStatus.packVersion ?: primary.packVersion
-            ),
-            retrievedChunks = retrievedChunks
+        AssistantDiagnostics.logExpressionLayer(
+            chunkId = retrievedChunks.firstOrNull()?.chunkId.orEmpty(),
+            invocationCount = 0,
+            fallbackCount = 0,
+            tokenLatencyMs = 0,
+            reason = "hot_path_disabled"
         )
+        return null
     }
 
     private suspend fun maybeDispatchToolCall(
@@ -2824,23 +2876,9 @@ class AssistantRepository(
             queryAnalysis = analysis
         )
         val safetyOutcome = medicalSafetyPolicy.evaluate(query, retrievedChunks, context)
-        val expressionResult = if (shouldUseOnlineGeneration(context) || !allowLocalModel) {
-            null
-        } else {
-            maybeBuildExpressionResult(
-                query = query,
-                context = context,
-                analysis = analysis,
-                retrievedChunks = retrievedChunks,
-                confidence = confidence,
-                knowledgePackStatus = packStatus,
-                conversationHistory = conversationHistory,
-                allowLocalModel = allowLocalModel
-            )
-        }
         val output = medicalSafetyPolicy.applyFinalGuardrails(
-            output = expressionResult?.output ?: generationEngine.generate(
-                GenerationInput(
+            output = generateWithDeadline(
+                input = GenerationInput(
                     query = query,
                     prompt = prompt,
                     queryAnalysis = analysis,
@@ -2884,6 +2922,29 @@ class AssistantRepository(
 
     private fun elapsedMsSince(startedAtNanos: Long): Long =
         (System.nanoTime() - startedAtNanos) / 1_000_000
+
+    private suspend fun generateWithDeadline(
+        input: GenerationInput,
+        startedAtNanos: Long? = null
+    ): StructuredAssistantOutput {
+        if (shouldUseOnlineGeneration(input.context) || !input.allowLocalModel) {
+            return generationEngine.generate(input)
+        }
+
+        val elapsedBeforeGeneration = startedAtNanos?.let(::elapsedMsSince) ?: 0L
+        val budgetMs = min(
+            LlmBudgetCapMs,
+            (OfflineHardDeadlineMs - elapsedBeforeGeneration - DeadlineSlackMs).coerceAtLeast(MinLlmBudgetMs)
+        )
+        return withTimeoutOrNull(budgetMs) {
+            generationEngine.generate(input)
+        } ?: directAnswerComposer.compose(
+            input = input,
+            polishedText = "",
+            modelStatus = modelManager.currentStatus(),
+            generationMode = GenerationMode.FALLBACK_STRUCTURED
+        )
+    }
 
     private suspend fun attemptValidatedInterpretation(
         query: String,
@@ -2974,10 +3035,15 @@ class AssistantRepository(
         }
         val visibleRetrieved = selectVisibleCitations(queryAnalysis, retrieved)
         citations += visibleRetrieved.map { chunk ->
+            val snippetSource = chunk.shortAnswer
+                ?.takeIf { it.isNotBlank() }
+                ?: chunk.synthesizedAnswer
+                    ?.takeIf { it.isNotBlank() }
+                ?: chunk.body
             AssistantCitation(
                 sourceTitle = chunk.sourceTitle,
                 sectionTitle = chunk.sectionTitle,
-                snippet = chunk.body.take(160).trimEnd() + if (chunk.body.length > 160) "..." else "",
+                snippet = snippetSource.take(160).trimEnd() + if (snippetSource.length > 160) "..." else "",
                 sourceUrl = chunk.sourceUrl,
                 publisher = chunk.publisher
             )
@@ -3105,6 +3171,10 @@ class AssistantRepository(
 
     private companion object {
         private const val ToolCallingConfidenceThreshold = 0.55
+        private const val OfflineHardDeadlineMs = 5_000L
+        private const val LlmBudgetCapMs = 3_500L
+        private const val MinLlmBudgetMs = 750L
+        private const val DeadlineSlackMs = 150L
 
         fun createKnowledgeStore(
             context: Context?,

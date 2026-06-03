@@ -38,7 +38,7 @@ class InterpretationPipelineTest {
     }
 
     @Test
-    fun mediumConfidenceAmbiguousFollowUp_invokesInterpreter() {
+    fun mediumConfidenceAmbiguousFollowUp_staysSinglePass() {
         val decision = gate.decide(
             assessment = RetrievalConfidenceAssessment(
                 score = 0.56,
@@ -64,7 +64,8 @@ class InterpretationPipelineTest {
             )
         )
 
-        assertTrue(decision.shouldInvoke)
+        assertFalse(decision.shouldInvoke)
+        assertEquals("open_question_single_pass", decision.reason)
     }
 
     @Test

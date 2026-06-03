@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.scouty.app.assistant.data.ChatActionHandler
 import com.scouty.app.assistant.data.DeviceContextProvider
+import com.scouty.app.assistant.domain.AssistantAnswerEvent
 import com.scouty.app.assistant.domain.AssistantRuntimeGraph
 import com.scouty.app.assistant.domain.AssistantRepository
 import com.scouty.app.assistant.domain.OfflineChatModelController
 import com.scouty.app.assistant.model.AssistantAction
 import com.scouty.app.assistant.model.AssistantConversationState
 import com.scouty.app.assistant.model.AssistantMessageUiModel
+import com.scouty.app.assistant.model.AssistantResponse
 import com.scouty.app.assistant.model.AssistantUiState
 import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.assistant.model.OfflineChatModelState
@@ -142,58 +144,44 @@ class AssistantViewModel(
         }
 
         viewModelScope.launch {
+            val provisionalId = UUID.randomUUID().toString()
+            var provisionalShown = false
             runCatching {
-                withContext(Dispatchers.Default) {
-                    repository.answer(
-                        query = query,
-                        context = deviceContextProvider.deviceContext.value,
-                        conversationState = conversationState,
-                        interactionHandler = chatActionHandler,
-                        allowLocalModel = _uiState.value.offlineChat.canUseLocalModel
-                    )
-                }
-            }.onSuccess { response ->
-                conversationState = response.conversationState
-                processActions(response.actions)
-                val assistantOnline = response.generationMode == GenerationMode.GEMINI_API
-                remoteFallbackActive = !assistantOnline &&
-                    repository.canAttemptOnlineGeneration(deviceContextProvider.deviceContext.value)
-                val assistantMessage = AssistantMessageUiModel(
-                    id = UUID.randomUUID().toString(),
-                    text = response.answerText,
-                    isUser = false,
-                    citations = response.citations,
-                    safetyOutcome = response.safetyOutcome,
-                    sections = response.structuredOutput.sections,
-                    resolvedTopic = response.structuredOutput.resolvedTopic,
-                    resolvedFamily = response.structuredOutput.resolvedFamily,
-                    generationMode = response.generationMode,
-                    reasoningType = response.reasoningType,
-                    knowledgePackVersion = response.knowledgePackVersion,
-                    modelVersion = response.modelVersion,
-                    modelRuntimeState = response.modelRuntimeState,
-                    modelStatusDetails = response.modelStatusDetails
-                )
-                val followUpMessage = buildSequentialFollowUpPrompt(response.structuredOutput.followUpQuestions)
-                    ?.let { prompt ->
-                        AssistantMessageUiModel(
-                            id = UUID.randomUUID().toString(),
-                            text = prompt.question,
-                            isUser = false,
-                            followUpReplies = prompt.suggestedReplies,
-                            resolvedTopic = response.structuredOutput.resolvedTopic,
-                            resolvedFamily = response.structuredOutput.resolvedFamily,
-                            generationMode = response.generationMode,
-                            reasoningType = response.reasoningType,
-                            knowledgePackVersion = response.knowledgePackVersion
+                repository.answerEvents(
+                    query = query,
+                    context = deviceContextProvider.deviceContext.value,
+                    conversationState = conversationState,
+                    interactionHandler = chatActionHandler,
+                    allowLocalModel = _uiState.value.offlineChat.canUseLocalModel
+                ).collect { event ->
+                    when (event) {
+                        is AssistantAnswerEvent.DraftVisible -> {
+                            provisionalShown = true
+                            val draftMessage = AssistantMessageUiModel(
+                                id = provisionalId,
+                                text = event.text,
+                                isUser = false,
+                                isProvisional = true,
+                                citations = event.citations,
+                                safetyOutcome = event.safetyOutcome
+                            )
+                            _uiState.update { state ->
+                                state.copy(messages = state.messages + draftMessage)
+                            }
+                        }
+
+                        is AssistantAnswerEvent.Final -> applyAssistantResponse(
+                            response = event.response,
+                            messageId = provisionalId,
+                            replaceExisting = provisionalShown
+                        )
+
+                        is AssistantAnswerEvent.ErrorFallback -> applyAssistantResponse(
+                            response = event.response,
+                            messageId = provisionalId,
+                            replaceExisting = provisionalShown
                         )
                     }
-                _uiState.update { state ->
-                    state.copy(
-                        isOnline = assistantOnline,
-                        isResponding = false,
-                        messages = state.messages + listOfNotNull(assistantMessage, followUpMessage)
-                    )
                 }
             }.onFailure {
                 remoteFallbackActive = repository.canAttemptOnlineGeneration(deviceContextProvider.deviceContext.value)
@@ -211,6 +199,63 @@ class AssistantViewModel(
                     )
                 }
             }
+        }
+    }
+
+    private fun applyAssistantResponse(
+        response: AssistantResponse,
+        messageId: String,
+        replaceExisting: Boolean
+    ) {
+        conversationState = response.conversationState
+        processActions(response.actions)
+        val assistantOnline = response.generationMode == GenerationMode.GEMINI_API
+        remoteFallbackActive = !assistantOnline &&
+            repository.canAttemptOnlineGeneration(deviceContextProvider.deviceContext.value)
+        val assistantMessage = AssistantMessageUiModel(
+            id = messageId,
+            text = response.answerText,
+            isUser = false,
+            isProvisional = false,
+            citations = response.citations,
+            safetyOutcome = response.safetyOutcome,
+            sections = response.structuredOutput.sections,
+            resolvedTopic = response.structuredOutput.resolvedTopic,
+            resolvedFamily = response.structuredOutput.resolvedFamily,
+            generationMode = response.generationMode,
+            reasoningType = response.reasoningType,
+            knowledgePackVersion = response.knowledgePackVersion,
+            modelVersion = response.modelVersion,
+            modelRuntimeState = response.modelRuntimeState,
+            modelStatusDetails = response.modelStatusDetails
+        )
+        val followUpMessage = buildSequentialFollowUpPrompt(response.structuredOutput.followUpQuestions)
+            ?.let { prompt ->
+                AssistantMessageUiModel(
+                    id = UUID.randomUUID().toString(),
+                    text = prompt.question,
+                    isUser = false,
+                    followUpReplies = prompt.suggestedReplies,
+                    resolvedTopic = response.structuredOutput.resolvedTopic,
+                    resolvedFamily = response.structuredOutput.resolvedFamily,
+                    generationMode = response.generationMode,
+                    reasoningType = response.reasoningType,
+                    knowledgePackVersion = response.knowledgePackVersion
+                )
+            }
+        _uiState.update { state ->
+            val messages = if (replaceExisting) {
+                state.messages.map { message ->
+                    if (message.id == messageId) assistantMessage else message
+                }
+            } else {
+                state.messages + assistantMessage
+            }
+            state.copy(
+                isOnline = assistantOnline,
+                isResponding = false,
+                messages = messages + listOfNotNull(followUpMessage)
+            )
         }
     }
 

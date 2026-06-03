@@ -1,8 +1,8 @@
 {
-  "pack_version": "2026.03.24-v1",
-  "generated_at": "2026-05-10T14:33:43+00:00",
+  "pack_version": "2026.06-v2",
+  "generated_at": "2026-06-03T12:40:49+00:00",
   "db_file_name": "knowledge_pack.sqlite",
-  "db_sha256": "d2d62befb2ac59a447a18d579bb212cda0e369eba44e8db139171c3cbd388fb9",
+  "db_sha256": "94ab6dfa546ba5b80cee66c6f8747a775c5eb0efa74d2dd6f84049a262a5d507",
   "chunk_count": 2116,
   "curated_chunk_count": 26,
   "campfire_card_count": 0,
@@ -12,7 +12,7 @@
   "campfire_phrase_embedding_count": 0,
   "route_chunk_count": 1692,
   "draft_chunk_count": 398,
-  "draft_chunk_sha256": "93756c0e9653b1d67adf30478164886108c8766e5bf4d0fe8c262c7f0bfc4407",
+  "draft_chunk_sha256": "de9e0129802c0f358749ee1936e36cabf1a4213ce8e46c7259890b04f5b0fbdb",
   "draft_domain_counts": {
     "campfire_basics": 61,
     "gear_and_preparation": 77,
@@ -100,7 +100,7 @@
         "url": "https://www.ifrc.org/document/international-first-aid-resuscitation-and-education-guidelines",
         "status": "error",
         "error": "HTTP Error 403: Forbidden",
-        "fetched_at": "2026-03-24T19:18:54+00:00"
+        "fetched_at": "2026-05-21T16:48:21+00:00"
       }
     },
     {
@@ -120,9 +120,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html; charset=utf-8",
-        "bytes": 131955,
-        "sha256": "2c2b73e419f8dee8aaed71c7a7c1c5e2a19c4519feca68246db27c1a5a5b1bba",
-        "fetched_at": "2026-03-24T19:18:54+00:00",
+        "bytes": 128304,
+        "sha256": "7fc724226fadd7dc3852ffa93804518143cd37cea0480c7ac276948521ede495",
+        "fetched_at": "2026-05-21T16:48:24+00:00",
         "raw_path": "cache/who_snakebite_facts.html",
         "normalized_path": "cache/normalized/who_snakebite_facts.txt"
       }
@@ -144,9 +144,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html",
-        "bytes": 55750,
-        "sha256": "656b50ac2b7ac6124d6407451770fea77aaf5bc8130a37b3be14baec1284250d",
-        "fetched_at": "2026-03-24T19:18:55+00:00",
+        "bytes": 55843,
+        "sha256": "42b2d32b016c944f4c00d80f2f364ca34a73fce7fbb116d90c6bd73a5a54cbe2",
+        "fetched_at": "2026-05-21T16:48:25+00:00",
         "raw_path": "cache/cdc_lightning_safety.html",
         "normalized_path": "cache/normalized/cdc_lightning_safety.txt"
       }
@@ -168,9 +168,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html; charset=utf-8",
-        "bytes": 191013,
-        "sha256": "23cb8650e2b680449b1828232c1c9dafd7c58f75a94962e3870e3d0dbdb09ef5",
-        "fetched_at": "2026-03-24T19:18:55+00:00",
+        "bytes": 190865,
+        "sha256": "19602d6d94ff75d72732bbb2817d99ee9676895829518c04c1e94f571c69fe04",
+        "fetched_at": "2026-05-21T16:48:26+00:00",
         "raw_path": "cache/cdc_high_altitude.html",
         "normalized_path": "cache/normalized/cdc_high_altitude.txt"
       }
@@ -192,9 +192,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html",
-        "bytes": 48710,
-        "sha256": "8f3875ed43258cfa3e10ff391815673606db432fb0e3fb792ee2e7a503d9abbb",
-        "fetched_at": "2026-03-24T19:18:56+00:00",
+        "bytes": 48807,
+        "sha256": "824aa2344a982755469d23d7b0479a0f275337667e7928b8ca4a4b68fc08cbd6",
+        "fetched_at": "2026-05-21T16:48:26+00:00",
         "raw_path": "cache/cdc_heat_illnesses.html",
         "normalized_path": "cache/normalized/cdc_heat_illnesses.txt"
       }
@@ -217,8 +217,8 @@
         "kind": "html",
         "content_type": "text/html; charset=UTF-8",
         "bytes": 64756,
-        "sha256": "5447052c60f327026f3d8cbbf42f929defeb323c1ca86f9e68bc8e9e13a32964",
-        "fetched_at": "2026-03-24T19:18:57+00:00",
+        "sha256": "bf041788280f00336605f57baedfaabfd9153e50c79776b464baf591dd1801b8",
+        "fetched_at": "2026-05-21T16:48:26+00:00",
         "raw_path": "cache/epa_water_disinfection.html",
         "normalized_path": "cache/normalized/epa_water_disinfection.txt"
       }
@@ -240,9 +240,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html; charset=UTF-8",
-        "bytes": 35886,
-        "sha256": "d82153df0ee7cbcde976e777b782d0730f6b579aeac2db6ae663e7e89713d1f9",
-        "fetched_at": "2026-03-24T19:18:59+00:00",
+        "bytes": 35984,
+        "sha256": "b91b4825d575f507d5630e27a3274b34b7e2c657bfdea772eafbbc45613ce7ae",
+        "fetched_at": "2026-05-21T16:48:27+00:00",
         "raw_path": "cache/salvamont_recomandari.html",
         "normalized_path": "cache/normalized/salvamont_recomandari.txt"
       }
@@ -264,9 +264,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html; charset=UTF-8",
-        "bytes": 40626,
-        "sha256": "944c50b50b685881351e17e3caed9d285040623016f739ce6b0637ea7eb8cfe0",
-        "fetched_at": "2026-03-24T19:19:00+00:00",
+        "bytes": 40724,
+        "sha256": "48e9d4947463fd5d4a529c0f30963c97bf29fed57dd228a5789fd0c1eac7d4d8",
+        "fetched_at": "2026-05-21T16:48:28+00:00",
         "raw_path": "cache/salvamont_turist_montan.html",
         "normalized_path": "cache/normalized/salvamont_turist_montan.txt"
       }
@@ -288,9 +288,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html; charset=UTF-8",
-        "bytes": 34877,
-        "sha256": "7a9bc32f181cac6df1dd390965b31f5f6ad35697e746bbe3c85e11d14516fe9c",
-        "fetched_at": "2026-03-24T19:19:00+00:00",
+        "bytes": 34975,
+        "sha256": "8338d4f57540eeacff50f857910c60c123db6e8e2156510387c520372f76daa9",
+        "fetched_at": "2026-05-21T16:48:29+00:00",
         "raw_path": "cache/salvamont_alimentatie_hidratare.html",
         "normalized_path": "cache/normalized/salvamont_alimentatie_hidratare.txt"
       }
@@ -312,9 +312,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html; charset=UTF-8",
-        "bytes": 36650,
-        "sha256": "0bd405e1a5ded5cdaccd3127a55b5f837e659186e2d4cd33e95351e1bd6c4ba0",
-        "fetched_at": "2026-03-24T19:19:01+00:00",
+        "bytes": 36748,
+        "sha256": "3491030bab64588cf3ebb9b454fe0f5d0c164e9ed0dfdf3ce4ac9ebfbb7e4088",
+        "fetched_at": "2026-05-21T16:48:30+00:00",
         "raw_path": "cache/salvamont_martor_accident.html",
         "normalized_path": "cache/normalized/salvamont_martor_accident.txt"
       }
@@ -336,9 +336,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html; charset=UTF-8",
-        "bytes": 549377,
-        "sha256": "92db6b865f715ca21816e516551aca660430334e54bbd33f9768cf9f668ff91b",
-        "fetched_at": "2026-03-24T19:19:01+00:00",
+        "bytes": 550386,
+        "sha256": "2abb549107137b1725ac0eb3eb72249e21c9a38ffcbb650c8b3c949d1d3acfde",
+        "fetched_at": "2026-05-21T16:48:30+00:00",
         "raw_path": "cache/meteoromania_home.html",
         "normalized_path": "cache/normalized/meteoromania_home.txt"
       }
@@ -360,9 +360,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html; charset=UTF-8",
-        "bytes": 505497,
-        "sha256": "025a880243af4cff701aae8ec88ff29d03098ad9bc10c567c2fea55d9d519178",
-        "fetched_at": "2026-03-24T19:19:02+00:00",
+        "bytes": 505588,
+        "sha256": "06326702e76e4fc6956af4b5fa657277f65ad7212a2dcff7f53b4db2c1ed057b",
+        "fetched_at": "2026-05-21T16:48:31+00:00",
         "raw_path": "cache/anm_nivometeorologic_buletin.html",
         "normalized_path": "cache/normalized/anm_nivometeorologic_buletin.txt"
       }
@@ -384,9 +384,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html; charset=UTF-8",
-        "bytes": 509251,
-        "sha256": "4bbf44a9cddf8bad77dda63f7536a497c41d4feea258fe8b76269ebc6267f658",
-        "fetched_at": "2026-03-24T19:19:02+00:00",
+        "bytes": 509342,
+        "sha256": "14f56e2633495273bb2d2dbeb4192b47fe73c9dbea7f4326f4bc0474b8bf7914",
+        "fetched_at": "2026-05-21T16:48:32+00:00",
         "raw_path": "cache/anm_avalanche_scale.html",
         "normalized_path": "cache/normalized/anm_avalanche_scale.txt"
       }
@@ -410,7 +410,7 @@
         "content_type": "application/pdf",
         "bytes": 590560,
         "sha256": "36b12edf242fdfffe5ca12d1d4d87f22cedf1c84a4bccc8cba201ab97cb339e4",
-        "fetched_at": "2026-03-24T19:19:03+00:00",
+        "fetched_at": "2026-05-21T16:48:32+00:00",
         "raw_path": "cache/nps_outdoor_emergency_plan.pdf",
         "normalized_path": "cache/normalized/nps_outdoor_emergency_plan.txt"
       }
@@ -432,9 +432,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html;charset=UTF-8",
-        "bytes": 54484,
-        "sha256": "6e38efef0519996bb9de7120046ee5bf4f9c15406f4aee7b54c851858b0d672a",
-        "fetched_at": "2026-03-24T19:19:03+00:00",
+        "bytes": 54523,
+        "sha256": "aba1acee2f42de7ec7051fb6ab0f77363cb8cc8703f94baa52577dee8f3d63c7",
+        "fetched_at": "2026-05-21T16:48:32+00:00",
         "raw_path": "cache/nps_hiking_safety.html",
         "normalized_path": "cache/normalized/nps_hiking_safety.txt"
       }
@@ -456,9 +456,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html;charset=UTF-8",
-        "bytes": 62600,
-        "sha256": "1289c68f7bc6eadcf12e3fbe2bc037b7dd8905385c8832a96c98cce0ab2fbd47",
-        "fetched_at": "2026-03-24T19:19:03+00:00",
+        "bytes": 63805,
+        "sha256": "4be9a9545527fdce91269913a8782d0cc022049ef3252b70ea13e4fbe7b6e091",
+        "fetched_at": "2026-05-21T16:48:33+00:00",
         "raw_path": "cache/nps_bear_safety.html",
         "normalized_path": "cache/normalized/nps_bear_safety.txt"
       }
@@ -480,9 +480,9 @@
         "status": "ok",
         "kind": "html",
         "content_type": "text/html;charset=UTF-8",
-        "bytes": 38015,
-        "sha256": "19e2a678616599b8793e65a8b58407fb2a509fcf49530b65158227273a77f8b1",
-        "fetched_at": "2026-03-24T19:19:03+00:00",
+        "bytes": 38054,
+        "sha256": "2a820694491d1b7c5cb9f19f43722cd120f2e44ab7f10916ce2d74ef985608a2",
+        "fetched_at": "2026-05-21T16:48:33+00:00",
         "raw_path": "cache/nps_campfire_guidance.html",
         "normalized_path": "cache/normalized/nps_campfire_guidance.txt"
       }

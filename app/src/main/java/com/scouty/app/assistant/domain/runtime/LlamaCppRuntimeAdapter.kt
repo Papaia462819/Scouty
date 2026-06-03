@@ -14,8 +14,8 @@ import kotlin.math.max
 import kotlin.math.min
 
 data class LlamaCppLoadParams(
-    val contextTokens: Int = 8_192,
-    val batchTokens: Int = 512,
+    val contextTokens: Int = 4_096,
+    val batchTokens: Int = defaultLlamaBatchTokens(),
     val threads: Int = defaultLlamaThreadCount(),
     val useMmap: Boolean = true,
     val useMlock: Boolean = false
@@ -32,10 +32,10 @@ class LlamaCppRuntimeAdapter(
         }
         return loadModel(
             path = artifact.preparedFile.absolutePath,
-            params = LlamaCppLoadParams(contextTokens = artifact.maxTokens),
+            params = LlamaCppLoadParams(contextTokens = 4_096),
             modelVersion = artifact.modelVersion
         )
-    }de 
+    }
 
     suspend fun loadModel(
         path: String,
@@ -71,6 +71,9 @@ class LlamaCppRuntimeAdapter(
 
 private fun defaultLlamaThreadCount(): Int =
     min(4, max(2, Runtime.getRuntime().availableProcessors() - 1))
+
+private fun defaultLlamaBatchTokens(): Int =
+    if (Runtime.getRuntime().availableProcessors() <= 4) 256 else 512
 
 class LlamaCppLoadedModel internal constructor(
     private var nativeHandle: Long,

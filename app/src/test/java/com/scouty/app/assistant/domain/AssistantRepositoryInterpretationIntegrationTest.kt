@@ -20,7 +20,7 @@ class AssistantRepositoryInterpretationIntegrationTest {
     )
 
     @Test
-    fun noisyRewrite_isAcceptedWhenRetrievalImproves() = runBlocking {
+    fun noisyRewrite_isNotRunInSinglePassPath() = runBlocking {
         val tractionChunk = chunk(
             chunkId = "traction",
             domain = "mountain_safety",
@@ -79,11 +79,8 @@ class AssistantRepositoryInterpretationIntegrationTest {
             allowLocalModel = true
         )
 
-        assertEquals(
-            "What is the best hiking footwear and technique for maintaining traction on wet rocky terrain?",
-            response.conversationState.lastStandaloneQuery
-        )
-        assertEquals("Hiking footwear and technique for maintaining traction", response.conversationState.lastRetrievedTitle)
+        assertEquals("boots slipping wet rocks", response.conversationState.lastStandaloneQuery)
+        assertEquals("Water purification", response.conversationState.lastRetrievedTitle)
     }
 
     @Test

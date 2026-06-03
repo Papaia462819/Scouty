@@ -127,7 +127,7 @@ class CrossEncoderReranker(
     }
 
     private fun encode(query: String, chunk: Chunk): EncodedPair {
-        val passage = listOf(chunk.title, chunk.body)
+        val passage = listOf(chunk.title, chunk.synthesizedAnswer?.takeIf { it.isNotBlank() } ?: chunk.body)
             .joinToString("\n")
             .replace("\\s+".toRegex(), " ")
             .trim()
@@ -154,6 +154,7 @@ class CrossEncoderReranker(
             )
             val options = OrtSession.SessionOptions().apply {
                 setOptimizationLevel(OrtSession.SessionOptions.OptLevel.ALL_OPT)
+                runCatching { addNnapi() }
             }
             return environment.createSession(model.absolutePath, options).also { sessionRef = it }
         }

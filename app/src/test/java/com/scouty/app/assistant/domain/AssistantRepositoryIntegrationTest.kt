@@ -95,7 +95,7 @@ class AssistantRepositoryIntegrationTest {
     }
 
     @Test
-    fun tierBExpressionFlag_usesParaphraseBeforeTemplate() = runBlocking {
+    fun tierBExpressionFlag_doesNotUseParaphraseOnChatPath() = runBlocking {
         val knowledgePackStatus = KnowledgePackStatus(
             available = true,
             packVersion = "pack-1",
@@ -150,9 +150,9 @@ class AssistantRepositoryIntegrationTest {
             allowLocalModel = true
         )
 
-        assertEquals(GenerationMode.LOCAL_LLM, response.generationMode)
-        assertEquals(paraphrase, response.answerText)
-        assertFalse(response.answerText == body)
+        assertEquals(GenerationMode.FALLBACK_STRUCTURED, response.generationMode)
+        assertFalse(response.answerText.contains(paraphrase))
+        assertTrue(response.answerText.contains(body))
         assertTrue(response.answerText.contains("frontala", ignoreCase = true))
         assertTrue(response.answerText.contains("baterii", ignoreCase = true))
     }

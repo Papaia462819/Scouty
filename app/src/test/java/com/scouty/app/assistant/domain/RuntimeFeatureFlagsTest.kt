@@ -17,7 +17,7 @@ class RuntimeFeatureFlagsTest {
         assertTrue(flags.useLlmSummarizer)
         assertTrue(flags.useQwenDefault)
         assertTrue(flags.useGeminiApi)
-        assertTrue(flags.useCardParaphraseExpression)
+        assertFalse(flags.useCardParaphraseExpression)
         assertFalse(flags.useGroundedWording)
         assertFalse(flags.useGrammarToolCalling)
         assertFalse(flags.useLegacyInterpreter)

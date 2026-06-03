@@ -228,6 +228,12 @@ class SqliteKnowledgeChunkStore(
     private val json = Json { ignoreUnknownKeys = true }
     private val campfireEmbeddingCache = mutableMapOf<String, CampfireEmbeddingStore>()
 
+    private data class KnowledgeChunkSchema(
+        val hasShortAnswer: Boolean,
+        val hasSynthesizedAnswer: Boolean,
+        val hasSafetyNote: Boolean
+    )
+
     override suspend fun packStatus(): KnowledgePackStatus = manager.ensureReady()
 
     override suspend fun searchCandidates(
@@ -258,17 +264,18 @@ class SqliteKnowledgeChunkStore(
 
         try {
             database = SQLiteDatabase.openDatabase(status.databasePath, null, SQLiteDatabase.OPEN_READONLY)
+            val schema = readChunkSchema(database)
             if (ftsQuery != null) {
                 if (domainWindow.isNotEmpty()) {
-                    absorb(results, queryFts(database, ftsQuery, preferredLanguages, domainWindow, limit * 3))
+                    absorb(results, queryFts(database, schema, ftsQuery, preferredLanguages, domainWindow, limit * 3))
                 }
-                absorb(results, queryFts(database, ftsQuery, preferredLanguages, emptyList(), limit * 3))
-                absorb(results, queryFts(database, ftsQuery, listOf("ro", "en"), emptyList(), limit * 4))
+                absorb(results, queryFts(database, schema, ftsQuery, preferredLanguages, emptyList(), limit * 3))
+                absorb(results, queryFts(database, schema, ftsQuery, listOf("ro", "en"), emptyList(), limit * 4))
             }
 
             if (results.size < limit * 2) {
-                absorb(results, queryRecent(database, preferredLanguages, domainWindow, limit * 2))
-                absorb(results, queryRecent(database, listOf("ro", "en"), emptyList(), limit * 2))
+                absorb(results, queryRecent(database, schema, preferredLanguages, domainWindow, limit * 2))
+                absorb(results, queryRecent(database, schema, listOf("ro", "en"), emptyList(), limit * 2))
             }
         } finally {
             database?.close()
@@ -305,9 +312,11 @@ class SqliteKnowledgeChunkStore(
         var database: SQLiteDatabase? = null
         try {
             database = SQLiteDatabase.openDatabase(status.databasePath, null, SQLiteDatabase.OPEN_READONLY)
+            val schema = readChunkSchema(database)
             if (ftsQuery != null) {
                 val matched = queryStructuredFts(
                     database = database,
+                    schema = schema,
                     ftsQuery = ftsQuery,
                     preferredLanguage = preferredLanguage,
                     domain = domain,
@@ -321,6 +330,7 @@ class SqliteKnowledgeChunkStore(
             }
             queryStructuredByTopic(
                 database = database,
+                schema = schema,
                 preferredLanguage = preferredLanguage,
                 domain = domain,
                 topic = topic,
@@ -385,6 +395,7 @@ class SqliteKnowledgeChunkStore(
 
     private fun queryFts(
         database: SQLiteDatabase,
+        schema: KnowledgeChunkSchema,
         ftsQuery: String,
         languages: List<String>,
         domains: List<String>,
@@ -393,11 +404,7 @@ class SqliteKnowledgeChunkStore(
         val sql = buildString {
             append(
                 """
-                SELECT kc.chunk_id, kc.domain, kc.topic, kc.language, kc.title, kc.body,
-                       kc.source_title, kc.source_url, kc.publisher, kc.source_language,
-                       kc.adapted_language, kc.publish_or_review_date, kc.source_trust,
-                       kc.safety_tags, kc.country_scope, kc.pack_version, kc.keywords,
-                       kc.card_family, kc.priority, kc.metadata_json
+                ${selectChunkColumns(schema)}
                 FROM knowledge_chunks kc
                 JOIN knowledge_chunks_fts fts ON kc.row_id = fts.rowid
                 WHERE knowledge_chunks_fts MATCH ?
@@ -421,6 +428,7 @@ class SqliteKnowledgeChunkStore(
 
     private fun queryRecent(
         database: SQLiteDatabase,
+        schema: KnowledgeChunkSchema,
         languages: List<String>,
         domains: List<String>,
         limit: Int
@@ -428,11 +436,7 @@ class SqliteKnowledgeChunkStore(
         val sql = buildString {
             append(
                 """
-                SELECT kc.chunk_id, kc.domain, kc.topic, kc.language, kc.title, kc.body,
-                       kc.source_title, kc.source_url, kc.publisher, kc.source_language,
-                       kc.adapted_language, kc.publish_or_review_date, kc.source_trust,
-                       kc.safety_tags, kc.country_scope, kc.pack_version, kc.keywords,
-                       kc.card_family, kc.priority, kc.metadata_json
+                ${selectChunkColumns(schema)}
                 FROM knowledge_chunks kc
                 WHERE kc.language IN (${languages.joinToString(",") { "?" }})
                 """.trimIndent()
@@ -453,6 +457,7 @@ class SqliteKnowledgeChunkStore(
 
     private fun queryStructuredFts(
         database: SQLiteDatabase,
+        schema: KnowledgeChunkSchema,
         ftsQuery: String,
         preferredLanguage: String,
         domain: String,
@@ -463,11 +468,7 @@ class SqliteKnowledgeChunkStore(
         val sql = buildString {
             append(
                 """
-                SELECT kc.chunk_id, kc.domain, kc.topic, kc.language, kc.title, kc.body,
-                       kc.source_title, kc.source_url, kc.publisher, kc.source_language,
-                       kc.adapted_language, kc.publish_or_review_date, kc.source_trust,
-                       kc.safety_tags, kc.country_scope, kc.pack_version, kc.keywords,
-                       kc.card_family, kc.priority, kc.metadata_json
+                ${selectChunkColumns(schema)}
                 FROM knowledge_chunks kc
                 JOIN knowledge_chunks_fts fts ON kc.row_id = fts.rowid
                 WHERE knowledge_chunks_fts MATCH ?
@@ -494,6 +495,7 @@ class SqliteKnowledgeChunkStore(
 
     private fun queryStructuredByTopic(
         database: SQLiteDatabase,
+        schema: KnowledgeChunkSchema,
         preferredLanguage: String,
         domain: String,
         topic: String,
@@ -503,11 +505,7 @@ class SqliteKnowledgeChunkStore(
         val sql = buildString {
             append(
                 """
-                SELECT kc.chunk_id, kc.domain, kc.topic, kc.language, kc.title, kc.body,
-                       kc.source_title, kc.source_url, kc.publisher, kc.source_language,
-                       kc.adapted_language, kc.publish_or_review_date, kc.source_trust,
-                       kc.safety_tags, kc.country_scope, kc.pack_version, kc.keywords,
-                       kc.card_family, kc.priority, kc.metadata_json
+                ${selectChunkColumns(schema)}
                 FROM knowledge_chunks kc
                 WHERE kc.domain = ?
                   AND kc.topic = ?
@@ -528,6 +526,33 @@ class SqliteKnowledgeChunkStore(
         }.toTypedArray()
         return database.rawQuery(sql, args).use { cursor -> readChunks(cursor) }
     }
+
+    private fun readChunkSchema(database: SQLiteDatabase): KnowledgeChunkSchema {
+        val columns = database.rawQuery("PRAGMA table_info(knowledge_chunks)", emptyArray()).use { cursor ->
+            buildSet {
+                while (cursor.moveToNext()) {
+                    add(cursor.getString(1))
+                }
+            }
+        }
+        return KnowledgeChunkSchema(
+            hasShortAnswer = "short_answer" in columns,
+            hasSynthesizedAnswer = "synthesized_answer" in columns,
+            hasSafetyNote = "safety_note" in columns
+        )
+    }
+
+    private fun selectChunkColumns(schema: KnowledgeChunkSchema): String =
+        """
+        SELECT kc.chunk_id, kc.domain, kc.topic, kc.language, kc.title, kc.body,
+               kc.source_title, kc.source_url, kc.publisher, kc.source_language,
+               kc.adapted_language, kc.publish_or_review_date, kc.source_trust,
+               kc.safety_tags, kc.country_scope, kc.pack_version, kc.keywords,
+               kc.card_family, kc.priority, kc.metadata_json,
+               ${if (schema.hasShortAnswer) "kc.short_answer" else "NULL"} AS short_answer,
+               ${if (schema.hasSynthesizedAnswer) "kc.synthesized_answer" else "NULL"} AS synthesized_answer,
+               ${if (schema.hasSafetyNote) "kc.safety_note" else "NULL"} AS safety_note
+        """.trimIndent()
 
     private fun queryCardEmbeddings(
         database: SQLiteDatabase,
@@ -612,11 +637,21 @@ class SqliteKnowledgeChunkStore(
                 keywords = cursor.getString(16),
                 cardFamily = parseCardFamily(cursor.getString(17)),
                 priority = cursor.getInt(18),
-                metadataJson = cursor.getString(19)
+                metadataJson = cursor.getString(19),
+                shortAnswer = cursor.getStringOrNull(20),
+                synthesizedAnswer = cursor.getStringOrNull(21),
+                safetyNote = cursor.getStringOrNull(22)
             )
         }
         return chunks
     }
+
+    private fun android.database.Cursor.getStringOrNull(index: Int): String? =
+        if (index < columnCount && !isNull(index)) {
+            getString(index)
+        } else {
+            null
+        }
 
     private fun blobToFloatArray(blob: ByteArray?): FloatArray {
         if (blob == null || blob.isEmpty() || blob.size % 4 != 0) {

@@ -13,6 +13,8 @@ import kotlinx.serialization.json.Json
 class LocalLlmGenerationEngine(
     private val modelManager: ModelManager,
     private val fallbackEngine: GenerationEngine = TemplateGenerationEngine(),
+    private val draftPromptBuilder: DraftAuthoredPromptBuilder = DraftAuthoredPromptBuilder(),
+    private val directAnswerComposer: DirectAnswerComposer = DirectAnswerComposer(),
     private val json: Json = Json { ignoreUnknownKeys = true; explicitNulls = false }
 ) : GenerationEngine {
 
@@ -32,12 +34,20 @@ class LocalLlmGenerationEngine(
         }
 
         return runCatching {
-            val prompt = buildPrompt(input, loadStatus)
+            val prompt = draftPromptBuilder.build(input, loadStatus)
             val rawResponse = modelManager.generate(
                 prompt = prompt,
-                options = input.conversationHistory?.let {
-                    LocalLlmGenerationOptions(promptCacheHint = it.promptCacheHint)
-                } ?: LocalLlmGenerationOptions()
+                options = LocalLlmGenerationOptions(
+                    sampler = LocalLlmSamplerParams(
+                        maxTokens = ChatMaxTokens,
+                        temperature = 0.2f,
+                        topK = 32,
+                        topP = 0.9f,
+                        randomSeed = 7
+                    ),
+                    promptCacheHint = input.conversationHistory?.promptCacheHint,
+                    stopSequences = listOf("\n\n", "<|im_end|>")
+                )
             )
             runCatching {
                 Log.d(
@@ -45,13 +55,23 @@ class LocalLlmGenerationEngine(
                     "Local LLM raw response=${rawResponse.text.replace("\n", "\\n").take(2000)}"
                 )
             }
-            runCatching {
-                parseStructuredOutput(
-                    rawResponse = rawResponse.text,
-                    input = input,
-                    modelStatus = rawResponse.modelStatus
-                )
-            }.getOrThrow()
+            val parsedJsonOutput = if (rawResponse.text.contains('{')) {
+                runCatching {
+                    parseStructuredOutput(
+                        rawResponse = rawResponse.text,
+                        input = input,
+                        modelStatus = rawResponse.modelStatus
+                    )
+                }.getOrNull()
+            } else {
+                null
+            }
+
+            parsedJsonOutput ?: directAnswerComposer.compose(
+                input = input,
+                polishedText = rawResponse.text,
+                modelStatus = rawResponse.modelStatus
+            )
         }.getOrElse { error ->
             runCatching {
                 Log.w(LogTag, "Local LLM response fell back to structured template", error)
@@ -346,7 +366,7 @@ class LocalLlmGenerationEngine(
         val sections = mutableListOf<StructuredResponseSection>()
         sections += StructuredResponseSection(
             title = if (isRomanian) "Baza offline" else "Grounded guidance",
-            body = sanitizeParagraph(primary.body, 320),
+            body = sanitizeParagraph(primary.synthesizedAnswer?.takeIf { it.isNotBlank() } ?: primary.body, 320),
             style = ResponseSectionStyle.GUIDANCE
         )
         input.retrievedChunks
@@ -356,7 +376,7 @@ class LocalLlmGenerationEngine(
             ?.let { chunk ->
                 sections += StructuredResponseSection(
                     title = if (isRomanian) "Detalii utile" else "Useful detail",
-                    body = sanitizeParagraph(chunk.body, 220),
+                    body = sanitizeParagraph(chunk.synthesizedAnswer?.takeIf { it.isNotBlank() } ?: chunk.body, 220),
                     style = ResponseSectionStyle.CONTEXT
                 )
             }
@@ -398,5 +418,6 @@ class LocalLlmGenerationEngine(
 
     private companion object {
         private const val LogTag = "ScoutyLocalLlm"
+        private const val ChatMaxTokens = 192
     }
 }

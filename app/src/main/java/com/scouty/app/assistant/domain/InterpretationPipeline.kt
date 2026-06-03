@@ -84,6 +84,8 @@ class DeterministicAssistantPreprocessor {
             "ignition_source" -> when {
                 containsAny(normalizedQuery, "bricheta", "lighter") ->
                     mapOf("ignition_source" to "lighter")
+                containsAny(normalizedQuery, "am una", "o am", "una in rucsac", "una la mine") ->
+                    mapOf("ignition_source" to "lighter")
                 containsAny(normalizedQuery, "chibrit", "matches", "match") ->
                     mapOf("ignition_source" to "matches")
                 containsAny(normalizedQuery, "amnar", "ferro") ->
@@ -409,24 +411,24 @@ class InterpreterGate(
         val unresolvedOpenQuestion = conversationState.openQuestion != null &&
             conversationState.openQuestion.targetSlot !in preprocessing.obviousSlotUpdates
         return when {
-            assessment.tier == RetrievalConfidenceTier.LOW ->
+            assessment.score < 0.45 ->
                 InterpreterGateDecision(
-                    shouldInvoke = true,
-                    reason = "low_confidence",
-                    requiresRewriteComparison = true
+                    shouldInvoke = false,
+                    reason = "low_confidence_single_pass",
+                    requiresRewriteComparison = false
                 )
 
-            assessment.tier == RetrievalConfidenceTier.MEDIUM && (ambiguous || unresolvedOpenQuestion) ->
+            unresolvedOpenQuestion && assessment.score < 0.70 ->
                 InterpreterGateDecision(
-                    shouldInvoke = true,
-                    reason = if (unresolvedOpenQuestion) "open_question_resolution" else "ambiguous_medium_confidence",
-                    requiresRewriteComparison = true
+                    shouldInvoke = false,
+                    reason = "open_question_single_pass",
+                    requiresRewriteComparison = false
                 )
 
-            unresolvedOpenQuestion && assessment.score < 0.86 ->
+            assessment.tier == RetrievalConfidenceTier.MEDIUM && preprocessing.isFragmented && assessment.score < 0.55 ->
                 InterpreterGateDecision(
-                    shouldInvoke = true,
-                    reason = "structured_follow_up_resolution",
+                    shouldInvoke = false,
+                    reason = "fragment_single_pass",
                     requiresRewriteComparison = false
                 )
 

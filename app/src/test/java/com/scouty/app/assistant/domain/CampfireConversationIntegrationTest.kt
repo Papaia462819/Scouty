@@ -280,7 +280,7 @@ class CampfireConversationIntegrationTest {
     }
 
     @Test
-    fun groundedWording_rephrasesSummaryWithoutChangingGroundedCard() = runBlocking {
+    fun groundedWording_isNotUsedOnChatHotPath() = runBlocking {
         val repository = createRepository(
             groundedWordingEngine = FixedGroundedWordingEngine(
                 GroundedWordingResult(summary = "Ține focul mic, pregătit și ușor de controlat.")
@@ -292,7 +292,7 @@ class CampfireConversationIntegrationTest {
 
         assertEquals("campfire_light_with_lighter", response.conversationState.lastCardId)
         assertEquals("Aprindere cu brichetă", response.conversationState.lastRetrievedTitle)
-        assertEquals("Ține focul mic, pregătit și ușor de controlat.", response.structuredOutput.summary)
+        assertFalse(response.structuredOutput.summary == "Ține focul mic, pregătit și ușor de controlat.")
         assertTrue(response.citations.any { it.sectionTitle == "Aprindere cu brichetă" })
     }
 

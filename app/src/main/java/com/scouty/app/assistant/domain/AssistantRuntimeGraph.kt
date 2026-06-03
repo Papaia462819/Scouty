@@ -22,7 +22,7 @@ data class RuntimeFeatureFlags(
     val useLlmSummarizer: Boolean = true,
     val useQwenDefault: Boolean = true,
     val useGeminiApi: Boolean = true,
-    val useCardParaphraseExpression: Boolean = true,
+    val useCardParaphraseExpression: Boolean = false,
     val useGroundedWording: Boolean = false,
     val useGrammarToolCalling: Boolean = false,
     val useLegacyInterpreter: Boolean = false

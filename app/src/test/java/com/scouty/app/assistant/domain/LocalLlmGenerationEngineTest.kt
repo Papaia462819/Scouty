@@ -35,7 +35,7 @@ class LocalLlmGenerationEngineTest {
     }
 
     @Test
-    fun invalidJson_fallsBackToTemplateEngine() = runBlocking {
+    fun plainTextResponse_usesDirectComposer() = runBlocking {
         val manager = readyModelManager(response = "nu este json valid")
         val engine = LocalLlmGenerationEngine(
             modelManager = manager,
@@ -44,8 +44,8 @@ class LocalLlmGenerationEngineTest {
 
         val result = engine.generate(testInput())
 
-        assertEquals(GenerationMode.FALLBACK_STRUCTURED, result.generationMode)
-        assertTrue(result.summary.contains("chunk-uri offline"))
+        assertEquals(GenerationMode.LOCAL_LLM, result.generationMode)
+        assertEquals("nu este json valid", result.summary)
     }
 
     @Test

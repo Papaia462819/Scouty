@@ -12,6 +12,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -97,6 +98,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -109,6 +111,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.scouty.app.R
 import com.scouty.app.profile.AssessmentResult
 import com.scouty.app.profile.OnboardingDraft
 import com.scouty.app.profile.ProfileAssessmentEngine
@@ -604,13 +607,22 @@ private fun GoogleAuthButton(enabled: Boolean, onClick: () -> Unit) {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = "G",
-            fontSize = 13.sp,
-            fontWeight = FontWeight.Bold,
-            color = if (enabled) TextPrimary else TextTertiary
-        )
-        Spacer(Modifier.width(8.dp))
+        Box(
+            modifier = Modifier
+                .size(28.dp)
+                .clip(RoundedCornerShape(7.dp))
+                .background(Color.White.copy(alpha = if (enabled) 1f else 0.55f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_google_g),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(18.dp)
+                    .alpha(if (enabled) 1f else 0.5f)
+            )
+        }
+        Spacer(Modifier.width(10.dp))
         Text(
             text = "Continuă cu Google",
             fontSize = 13.sp,

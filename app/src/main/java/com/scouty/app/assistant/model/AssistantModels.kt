@@ -196,6 +196,7 @@ data class AssistantMessageUiModel(
     val id: String,
     val text: String,
     val isUser: Boolean,
+    val isProvisional: Boolean = false,
     val citations: List<AssistantCitation> = emptyList(),
     val safetyOutcome: SafetyOutcome = SafetyOutcome.NORMAL,
     val sections: List<StructuredResponseSection> = emptyList(),

@@ -670,6 +670,8 @@ private fun ChatBubble(
         ) {
             val messageText = if (message.isUser) {
                 AnnotatedString(message.text)
+            } else if (message.isProvisional) {
+                renderAssistantMarkdown("${message.text} ...")
             } else {
                 renderAssistantMarkdown(message.text)
             }
@@ -683,7 +685,7 @@ private fun ChatBubble(
         if (!message.isUser) {
             Spacer(Modifier.height(4.dp))
             Text(
-                text = "Ghid Scouty · acum",
+                text = if (message.isProvisional) "Ghid Scouty · redactez" else "Ghid Scouty · acum",
                 fontSize = 10.sp,
                 color = TextMuted,
             )
