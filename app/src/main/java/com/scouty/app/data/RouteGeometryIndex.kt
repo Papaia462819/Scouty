@@ -47,6 +47,7 @@ data class RouteBounds(
     val maxLon: Double
 )
 
+@Serializable
 data class RouteCoordinate(
     val lat: Double,
     val lon: Double

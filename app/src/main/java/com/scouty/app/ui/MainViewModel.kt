@@ -35,6 +35,7 @@ import com.scouty.app.BuildConfig
 import com.google.android.gms.location.*
 import com.scouty.app.api.MeteoblueLocationResult
 import com.scouty.app.api.MeteoblueResponse
+import com.scouty.app.data.ActiveTrailStore
 import com.scouty.app.data.RouteEnrichmentRepository
 import com.scouty.app.data.RouteBounds
 import com.scouty.app.data.RouteCoordinate
@@ -84,6 +85,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.*
@@ -93,12 +95,34 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private companion object {
         const val TrailStartDepartureKm = 0.12
         const val TrailAutoCompleteMinElapsedMs = 90_000L
+        const val ActiveTrailProgressPersistIntervalMs = 30_000L
+        const val ForecastHorizonDays = 14L
+        const val RecentHistoryDays = 4L
+        const val WeatherDailyRefreshMs = 24 * 60 * 60 * 1000L
+        const val WeatherNearTrailRefreshMs = 30 * 60 * 1000L
+        const val WeatherSameDayRefreshMs = 60 * 60 * 1000L
+        const val WeatherTwoDayRefreshMs = 6 * 60 * 60 * 1000L
+        const val UnavailableWeatherLabel = "Indisponibil"
     }
 
     private data class WeatherLookupResult(
         val response: MeteoblueResponse? = null,
         val fallbackLocation: MeteoblueLocationResult? = null,
         val usedFallbackLocation: Boolean = false
+    )
+
+    private data class WeatherRequestWindow(
+        val targetDate: String,
+        val daysFromToday: Long,
+        val forecastDays: Int?,
+        val historyDays: Int?,
+        val canQuery: Boolean
+    )
+
+    private data class SelectedDateWeather(
+        val summary: String,
+        val sunsetTime: String?,
+        val dailyForecast: List<DailyForecastEntry>
     )
 
     private data class TrailProgressComputation(
@@ -115,6 +139,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private val connectivityManager =
         application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private val userTrailProfileStore = UserTrailProfileStore(application)
+    private val activeTrailStore = ActiveTrailStore(application)
     private val assistantRuntimeGraph = AssistantRuntimeGraph.get(application)
     private val knowledgePackManager: KnowledgePackManager = assistantRuntimeGraph.knowledgePackManager
     private val modelManager: ModelManager = assistantRuntimeGraph.modelManager
@@ -130,6 +155,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     override val deviceContext: StateFlow<DeviceContextSnapshot> = _deviceContext.asStateFlow()
     private var lastRecommendationLocation: Pair<Double, Double>? = null
     private var lastRecommendationRefreshMs: Long = 0L
+    private var lastActiveTrailPersistMs: Long = 0L
 
     private val json = Json { ignoreUnknownKeys = true }
     private val retrofit = Retrofit.Builder()
@@ -168,6 +194,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         override fun onAvailable(network: Network) {
             refreshOnlineState()
             retryActiveTrailMapPack()
+            refreshActiveTrailWeatherIfNeeded()
         }
 
         override fun onLost(network: Network) {
@@ -177,6 +204,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
             refreshOnlineState()
             retryActiveTrailMapPack()
+            refreshActiveTrailWeatherIfNeeded()
         }
     }
     private var networkCallbackRegistered = false
@@ -192,6 +220,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         loadDefaultGear()
         registerNetworkCallback()
         refreshOnlineState()
+        restoreActiveTrail()
         observeAssistantRuntime()
         refreshAssistantRuntimeStatus()
         warmMapRuntime()
@@ -216,6 +245,61 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 previousItems = previousItems
             )
         }
+
+    private fun restoreActiveTrail() {
+        val restoredTrail = activeTrailStore.load() ?: return
+        updateUiState { currentState ->
+            currentState.copy(
+                activeTrail = restoredTrail,
+                gearList = buildGearList(
+                    trail = restoredTrail,
+                    profile = currentState.userProfile,
+                    previousItems = currentState.gearList
+                )
+            )
+        }
+        _mapSessionState.update { currentState ->
+            currentState.copy(
+                selectedTrail = restoredTrail.toTrailSelectionSnapshot(),
+                mode = if (restoredTrail.trackingState == ActiveTrailState.ACTIVE) {
+                    MapTrailMode.ACTIVE
+                } else {
+                    MapTrailMode.ORIENTED
+                }
+            )
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            prepareOfflineMapForTrail(restoredTrail)
+        }
+        refreshActiveTrailWeatherIfNeeded()
+    }
+
+    private fun persistActiveTrail(trail: ActiveTrail, force: Boolean = false) {
+        val now = System.currentTimeMillis()
+        if (!force && now - lastActiveTrailPersistMs < ActiveTrailProgressPersistIntervalMs) {
+            return
+        }
+        lastActiveTrailPersistMs = now
+        activeTrailStore.save(trail)
+    }
+
+    private fun findMatchingActiveTrail(
+        name: String,
+        date: Calendar,
+        lat: Double,
+        lon: Double,
+        localCode: String?
+    ): ActiveTrail? {
+        val trail = _uiState.value.activeTrail ?: return null
+        if (trailLocalDate(trail.date) != trailLocalDate(date)) {
+            return null
+        }
+        val sameCode = !localCode.isNullOrBlank() && trail.localCode == localCode
+        val sameRoute = trail.name == name &&
+            abs(trail.latitude - lat) < 0.0001 &&
+            abs(trail.longitude - lon) < 0.0001
+        return if (sameCode || sameRoute) trail else null
+    }
 
     fun toggleGearItem(itemId: String) {
         updateUiState { currentState ->
@@ -413,20 +497,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             return
         }
 
+        var updatedTrail: ActiveTrail? = null
         updateUiState { currentState ->
             val trail = currentState.activeTrail ?: return@updateUiState currentState
+            val nextTrail = trail.copy(
+                trackingState = ActiveTrailState.ACTIVE,
+                startedAtEpochMillis = System.currentTimeMillis(),
+                progress = 0f,
+                distanceCompletedKm = 0.0,
+                remainingDistanceKm = trail.distanceKm,
+                hasLeftStartZone = false,
+                remainingRouteSegments = trail.routeSegments
+            )
+            updatedTrail = nextTrail
             currentState.copy(
-                activeTrail = trail.copy(
-                    trackingState = ActiveTrailState.ACTIVE,
-                    startedAtEpochMillis = System.currentTimeMillis(),
-                    progress = 0f,
-                    distanceCompletedKm = 0.0,
-                    remainingDistanceKm = trail.distanceKm,
-                    hasLeftStartZone = false,
-                    remainingRouteSegments = trail.routeSegments
-                )
+                activeTrail = nextTrail
             )
         }
+        updatedTrail?.let { persistActiveTrail(it, force = true) }
         _mapSessionState.update {
             it.copy(
                 mode = MapTrailMode.ACTIVE,
@@ -590,51 +678,77 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private fun checkSmartSync(currentLocation: Location) {
         val trail = _uiState.value.activeTrail ?: return
         if (!isInternetAvailable()) return
+        if (!resolveWeatherRequestWindow(trail.date).canQuery) return
 
         val now = System.currentTimeMillis()
-        val lastSync = trail.lastSyncTimestamp ?: 0L
-        
         val diffHours = (trail.date.timeInMillis - now) / (1000 * 60 * 60)
         val distanceKm = calculateDistance(
             currentLocation.latitude, currentLocation.longitude,
             trail.latitude, trail.longitude
         )
 
-        val syncIntervalMs = when {
-            distanceKm < 10 -> 30 * 60 * 1000L
-            diffHours < 12 -> 1 * 60 * 60 * 1000L
-            diffHours < 48 -> 6 * 60 * 60 * 1000L
-            else -> 24 * 60 * 60 * 1000L
+        val syncIntervalMs = weatherRefreshIntervalMs(diffHours = diffHours, distanceKm = distanceKm)
+        if (now - (trail.lastSyncTimestamp ?: 0L) > syncIntervalMs) {
+            refreshWeatherForTrail(trail)
+        }
+    }
+
+    private fun refreshActiveTrailWeatherIfNeeded(force: Boolean = false) {
+        val trail = _uiState.value.activeTrail ?: return
+        if (!force && !shouldRefreshWeather(trail)) {
+            return
+        }
+        refreshWeatherForTrail(trail)
+    }
+
+    private fun shouldRefreshWeather(trail: ActiveTrail, now: Long = System.currentTimeMillis()): Boolean {
+        if (!isInternetAvailable() || meteoblueApiKey.isBlank()) {
+            return false
+        }
+        if (!resolveWeatherRequestWindow(trail.date).canQuery) {
+            return false
+        }
+        val lastSync = trail.lastSyncTimestamp ?: return true
+        val diffHours = (trail.date.timeInMillis - now) / (1000 * 60 * 60)
+        return now - lastSync > weatherRefreshIntervalMs(diffHours = diffHours)
+    }
+
+    private fun weatherRefreshIntervalMs(diffHours: Long, distanceKm: Double? = null): Long =
+        when {
+            distanceKm != null && distanceKm < 10 -> WeatherNearTrailRefreshMs
+            diffHours < 12 -> WeatherSameDayRefreshMs
+            diffHours < 48 -> WeatherTwoDayRefreshMs
+            else -> WeatherDailyRefreshMs
         }
 
-        if (now - lastSync > syncIntervalMs) {
-            fetchWeatherData(
-                name = trail.name,
-                date = trail.date,
-                lat = trail.latitude,
-                lon = trail.longitude,
-                localCode = trail.localCode,
-                region = trail.region,
-                descriptionRo = trail.descriptionRo,
-                localDescription = trail.localDescription,
-                routeSummary = trail.routeSummary,
-                fromName = trail.fromName,
-                toName = trail.toName,
-                markingSymbols = trail.markingSymbols,
-                sourceUrls = trail.sourceUrls,
-                difficulty = trail.difficulty,
-                distanceKm = trail.distanceKm,
-                elevationGain = trail.elevationGain,
-                estimatedDuration = trail.estimatedDuration,
-                imageUrl = trail.imageUrl,
-                routeSegments = trail.routeSegments,
-                routeBounds = trail.routeBounds,
-                imageAttribution = trail.imageAttribution,
-                imageLicense = trail.imageLicense,
-                imageSourcePageUrl = trail.imageSourcePageUrl,
-                imageScope = trail.imageScope
-            )
-        }
+    private fun refreshWeatherForTrail(trail: ActiveTrail) {
+        fetchWeatherData(
+            name = trail.name,
+            date = trail.date,
+            partyComposition = trail.partyComposition,
+            lat = trail.latitude,
+            lon = trail.longitude,
+            localCode = trail.localCode,
+            region = trail.region,
+            descriptionRo = trail.descriptionRo,
+            localDescription = trail.localDescription,
+            routeSummary = trail.routeSummary,
+            fromName = trail.fromName,
+            toName = trail.toName,
+            markingSymbols = trail.markingSymbols,
+            sourceUrls = trail.sourceUrls,
+            difficulty = trail.difficulty,
+            distanceKm = trail.distanceKm,
+            elevationGain = trail.elevationGain,
+            estimatedDuration = trail.estimatedDuration,
+            imageUrl = trail.imageUrl,
+            routeSegments = trail.routeSegments,
+            routeBounds = trail.routeBounds,
+            imageAttribution = trail.imageAttribution,
+            imageLicense = trail.imageLicense,
+            imageSourcePageUrl = trail.imageSourcePageUrl,
+            imageScope = trail.imageScope
+        )
     }
 
     private fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
@@ -695,19 +809,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             activeTrail.routeSegments
         }
 
+        var updatedTrail: ActiveTrail? = null
         updateUiState { currentState ->
             val trail = currentState.activeTrail ?: return@updateUiState currentState
+            val nextTrail = trail.copy(
+                progress = stabilizedProgressFraction,
+                distanceCompletedKm = stabilizedCompletedKm,
+                remainingDistanceKm = stabilizedRemainingKm,
+                offTrailDistanceKm = progress.distanceToTrailKm,
+                hasLeftStartZone = hasLeftStartZone,
+                remainingRouteSegments = stabilizedRemainingSegments
+            )
+            updatedTrail = nextTrail
             currentState.copy(
-                activeTrail = trail.copy(
-                    progress = stabilizedProgressFraction,
-                    distanceCompletedKm = stabilizedCompletedKm,
-                    remainingDistanceKm = stabilizedRemainingKm,
-                    offTrailDistanceKm = progress.distanceToTrailKm,
-                    hasLeftStartZone = hasLeftStartZone,
-                    remainingRouteSegments = stabilizedRemainingSegments
-                )
+                activeTrail = nextTrail
             )
         }
+        updatedTrail?.let { persistActiveTrail(it) }
 
         if (shouldAutoCompleteTrail(
                 trail = activeTrail,
@@ -748,6 +866,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             endedEarly = manual,
             gearReady = isTrailGearReady(_uiState.value.gearList)
         )
+        activeTrailStore.clear()
         updateUiState { currentState ->
             currentState.copy(
                 activeTrail = null,
@@ -949,8 +1068,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         val distanceAlongRouteKm: Double
     )
 
-    private suspend fun loadForecastWithFallbacks(lat: Double, lon: Double, asl: Int?): WeatherLookupResult {
-        val directResponse = requestForecast(lat = lat, lon = lon, asl = asl)
+    private suspend fun loadForecastWithFallbacks(
+        lat: Double,
+        lon: Double,
+        asl: Int?,
+        forecastDays: Int? = null,
+        historyDays: Int? = null
+    ): WeatherLookupResult {
+        val directResponse = requestForecast(
+            lat = lat,
+            lon = lon,
+            asl = asl,
+            forecastDays = forecastDays,
+            historyDays = historyDays
+        )
         if (directResponse.hasForecastData()) {
             return WeatherLookupResult(response = directResponse)
         }
@@ -961,7 +1092,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             val fallbackResponse = requestForecast(
                 lat = location.lat,
                 lon = location.lon,
-                asl = location.asl
+                asl = location.asl,
+                forecastDays = forecastDays,
+                historyDays = historyDays
             )
             if (fallbackResponse == null) {
                 return@forEach
@@ -1018,10 +1151,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             )
         }
 
+        val requestedDateWindow = request.targetDate?.let { resolveWeatherRequestWindow(it) }
+        if (request.targetDate != null && requestedDateWindow == null) {
+            return AssistantWeatherResult(
+                available = false,
+                isLive = true,
+                locationLabel = request.locationLabel,
+                summary = unavailableWeatherSummary(request),
+                errorMessage = "invalid_target_date"
+            )
+        }
+        if (requestedDateWindow?.canQuery == false) {
+            return AssistantWeatherResult(
+                available = false,
+                isLive = true,
+                locationLabel = request.locationLabel,
+                summary = unavailableWeatherSummary(request),
+                errorMessage = "date_unavailable"
+            )
+        }
+
         val lookup = loadForecastWithFallbacks(
             lat = request.latitude,
             lon = request.longitude,
-            asl = request.altitudeMeters
+            asl = request.altitudeMeters,
+            forecastDays = requestedDateWindow?.forecastDays,
+            historyDays = requestedDateWindow?.historyDays
         )
         val response = lookup.response
         if (!response.hasForecastData()) {
@@ -1038,8 +1193,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             )
         }
 
-        val hourly = selectHourlyWeather(response, request)
+        val hourly = request.targetDate?.let { targetDate ->
+            selectHourlyWeatherForDate(response, targetDate, request.targetHour ?: 12)
+        } ?: selectHourlyWeather(response, request)
         val daily = selectDailyWeather(response, request)
+        if (request.targetDate != null && !hasUsableWeatherResult(hourly, daily)) {
+            return AssistantWeatherResult(
+                available = false,
+                isLive = true,
+                locationLabel = request.locationLabel,
+                summary = unavailableWeatherSummary(request),
+                errorMessage = "date_unavailable"
+            )
+        }
         val locationSuffix = when {
             lookup.usedFallbackLocation && !lookup.fallbackLocation?.name.isNullOrBlank() ->
                 lookup.fallbackLocation?.name
@@ -1056,7 +1222,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         )
     }
 
-    private suspend fun requestForecast(lat: Double, lon: Double, asl: Int?): MeteoblueResponse? {
+    private suspend fun requestForecast(
+        lat: Double,
+        lon: Double,
+        asl: Int?,
+        forecastDays: Int? = null,
+        historyDays: Int? = null
+    ): MeteoblueResponse? {
         if (meteoblueApiKey.isBlank()) {
             return null
         }
@@ -1065,7 +1237,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 lat = lat,
                 lon = lon,
                 asl = asl,
-                apiKey = meteoblueApiKey
+                apiKey = meteoblueApiKey,
+                forecastDays = forecastDays,
+                historyDays = historyDays
             )
         }.onFailure { error ->
             Log.e("ScoutyAPI", "Forecast request failed for $lat,$lon", error)
@@ -1116,7 +1290,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             return null
         }
         request.targetDate?.let { date ->
-            return daily.firstOrNull { it.date == date } ?: daily.firstOrNull()
+            return daily.firstOrNull { it.date == date }
         }
         return daily.firstOrNull()
     }
@@ -1190,6 +1364,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         }.joinToString(", ")
     }
 
+    private fun hasUsableWeatherResult(
+        hourly: AssistantHourlyWeather?,
+        daily: DailyForecastEntry?
+    ): Boolean =
+        hourly?.temperatureC != null ||
+            hourly?.pictocode != null ||
+            hourly?.precipitationMm != null ||
+            hourly?.precipitationProbability != null ||
+            hourly?.windSpeedKmh != null ||
+            daily?.temperatureMin != null ||
+            daily?.temperatureMax != null ||
+            daily?.precipitationProbability != null
+
+    private fun unavailableWeatherSummary(request: AssistantWeatherRequest): String =
+        if (request.preferredLanguage == "ro") {
+            "Nu am gasit date Meteoblue disponibile pentru data ceruta in locatia ceruta."
+        } else {
+            "I could not find Meteoblue data for the requested date and location."
+        }
+
     private suspend fun searchNearbyWeatherLocations(lat: Double, lon: Double): List<MeteoblueLocationResult> {
         if (meteoblueApiKey.isBlank()) {
             return emptyList()
@@ -1245,28 +1439,150 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             !dataDay?.sunset.isNullOrEmpty()
     }
 
-    private fun buildWeatherSummary(weatherLookup: WeatherLookupResult): String {
+    private fun resolveWeatherRequestWindow(date: Calendar): WeatherRequestWindow =
+        buildWeatherRequestWindow(trailLocalDate(date))
+
+    private fun resolveWeatherRequestWindow(targetDate: String): WeatherRequestWindow? =
+        runCatching { LocalDate.parse(targetDate) }
+            .getOrNull()
+            ?.let(::buildWeatherRequestWindow)
+
+    private fun buildWeatherRequestWindow(targetDate: LocalDate): WeatherRequestWindow {
+        val today = LocalDate.now()
+        val daysFromToday = ChronoUnit.DAYS.between(today, targetDate)
+        val canQuery = daysFromToday in -RecentHistoryDays..ForecastHorizonDays
+        return WeatherRequestWindow(
+            targetDate = targetDate.toString(),
+            daysFromToday = daysFromToday,
+            forecastDays = if (canQuery) {
+                if (daysFromToday >= 0) {
+                    (daysFromToday + 1).coerceAtMost(ForecastHorizonDays).toInt()
+                } else {
+                    1
+                }
+            } else {
+                null
+            },
+            historyDays = if (canQuery && daysFromToday < 0) {
+                (-daysFromToday).coerceAtMost(RecentHistoryDays).toInt()
+            } else {
+                null
+            },
+            canQuery = canQuery
+        )
+    }
+
+    private fun trailLocalDate(date: Calendar): LocalDate =
+        date.time.toInstant().atZone(date.timeZone.toZoneId()).toLocalDate()
+
+    private fun buildSelectedDateWeather(
+        weatherLookup: WeatherLookupResult,
+        targetDate: String
+    ): SelectedDateWeather {
         val response = weatherLookup.response
-        val temperature = response?.current?.temperature ?: response?.data1h?.temperature?.firstOrNull()
-        val pictocode = response?.current?.pictocode ?: response?.data1h?.pictocode?.firstOrNull()
-        val suffix = when {
+        val dailyForecast = buildDailyForecast(response)
+        val daily = dailyForecast.firstOrNull { it.date == targetDate }
+        val hourly = selectHourlyWeatherForDate(response, targetDate)
+        val summary = formatSelectedDateWeatherSummary(
+            hourly = hourly,
+            daily = daily,
+            suffix = weatherLocationSuffix(weatherLookup)
+        )
+        return SelectedDateWeather(
+            summary = summary,
+            sunsetTime = daily?.sunset?.let(::extractForecastClock),
+            dailyForecast = dailyForecast
+        )
+    }
+
+    private fun selectHourlyWeatherForDate(
+        response: MeteoblueResponse?,
+        targetDate: String,
+        preferredHour: Int = 12
+    ): AssistantHourlyWeather? {
+        val hourly = response?.data1h ?: return null
+        val target = runCatching {
+            LocalDate.parse(targetDate).atTime(preferredHour.coerceIn(0, 23), 0)
+        }.getOrNull() ?: return null
+        val candidates = hourly.time.mapIndexedNotNull { index, raw ->
+            val parsed = parseForecastTime(raw) ?: return@mapIndexedNotNull null
+            if (parsed.toLocalDate().toString() == targetDate) {
+                index to parsed
+            } else {
+                null
+            }
+        }
+        if (candidates.isEmpty()) {
+            return null
+        }
+        val index = candidates.minByOrNull { (_, parsed) ->
+            kotlin.math.abs(Duration.between(target, parsed).toMinutes())
+        }?.first ?: return null
+        return AssistantHourlyWeather(
+            time = hourly.time.getOrNull(index).orEmpty(),
+            temperatureC = hourly.temperature?.getOrNull(index),
+            precipitationMm = hourly.precipitation?.getOrNull(index),
+            precipitationProbability = hourly.precipitationProbability?.getOrNull(index),
+            pictocode = hourly.pictocode?.getOrNull(index),
+            visibilityKm = hourly.visibility?.getOrNull(index),
+            windSpeedKmh = if (index == 0) response.current?.windspeed else null
+        )
+    }
+
+    private fun formatSelectedDateWeatherSummary(
+        hourly: AssistantHourlyWeather?,
+        daily: DailyForecastEntry?,
+        suffix: String
+    ): String {
+        val pieces = mutableListOf<String>()
+        when {
+            hourly?.temperatureC != null -> pieces += formatForecastTemperature(hourly.temperatureC)
+            daily != null -> formatTemperatureRange(daily.temperatureMin, daily.temperatureMax)?.let { pieces += it }
+        }
+        val hasDailyWeatherValues = daily?.temperatureMin != null ||
+            daily?.temperatureMax != null ||
+            daily?.precipitationProbability != null
+        val description = hourly?.pictocode?.let(::getPictocodeDescription)
+            ?: daily?.description?.takeIf { hasDailyWeatherValues && it.isNotBlank() }
+        description?.let { pieces += it }
+        (hourly?.precipitationProbability ?: daily?.precipitationProbability)?.let {
+            pieces += "precipitatii $it%"
+        }
+        return pieces.ifEmpty { listOf(UnavailableWeatherLabel) }.joinToString(", ") + suffix
+    }
+
+    private fun formatTemperatureRange(minTemperature: Double?, maxTemperature: Double?): String? =
+        when {
+            minTemperature != null && maxTemperature != null ->
+                "${formatForecastTemperature(minTemperature)} / ${formatForecastTemperature(maxTemperature)}"
+            maxTemperature != null -> "max ${formatForecastTemperature(maxTemperature)}"
+            minTemperature != null -> "min ${formatForecastTemperature(minTemperature)}"
+            else -> null
+        }
+
+    private fun weatherLocationSuffix(weatherLookup: WeatherLookupResult): String =
+        when {
             weatherLookup.usedFallbackLocation && !weatherLookup.fallbackLocation?.name.isNullOrBlank() ->
                 " (${weatherLookup.fallbackLocation?.name})"
             weatherLookup.usedFallbackLocation -> " (Nearest point)"
-            temperature != null || pictocode != null -> " (Synced)"
             else -> ""
         }
 
-        return when {
-            temperature != null && pictocode != null ->
-                "${formatForecastTemperature(temperature)}, ${getPictocodeDescription(pictocode)}$suffix"
-            temperature != null ->
-                "${formatForecastTemperature(temperature)}, Forecast available$suffix"
-            pictocode != null ->
-                "N/A, ${getPictocodeDescription(pictocode)}$suffix"
-            else ->
-                "Forecast unavailable"
+    private fun normalizeForecastDate(raw: String?): String? =
+        raw?.trim()
+            ?.takeIf { it.isNotBlank() }
+            ?.substringBefore(" ")
+            ?.substringBefore("T")
+
+    private fun extractForecastClock(raw: String): String? {
+        val value = raw.trim()
+        if (value.isBlank()) {
+            return null
         }
+        parseForecastTime(value)?.let { parsed ->
+            return parsed.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"))
+        }
+        return value.substringAfter(" ", value).substringAfter("T", value).take(5)
     }
 
     private fun formatForecastTemperature(temperature: Double): String =
@@ -1383,31 +1699,52 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         recordSelection: Boolean = false
     ) {
         viewModelScope.launch {
-            var sunsetStr = "N/A"
-            var weatherInfo = "Unknown (Offline)"
-            var syncTime: Long? = null
-            var weatherResponse: com.scouty.app.api.MeteoblueResponse? = null
+            val weatherWindow = resolveWeatherRequestWindow(date)
+            val cachedTrail = findMatchingActiveTrail(
+                name = name,
+                date = date,
+                lat = lat,
+                lon = lon,
+                localCode = localCode
+            )
+            var dailyForecast = cachedTrail?.dailyForecast.orEmpty()
+            var sunsetStr = dailyForecast
+                .firstOrNull { it.date == weatherWindow.targetDate }
+                ?.sunset
+                ?.let(::extractForecastClock)
+                ?: cachedTrail?.sunsetTime
+                ?: "N/A"
+            var weatherInfo = cachedTrail?.weatherForecast?.takeIf { it.isNotBlank() } ?: UnavailableWeatherLabel
+            var syncTime: Long? = cachedTrail?.lastSyncTimestamp
             refreshOnlineState()
-            weatherInfo = if (isInternetAvailable()) "Forecast unavailable" else "Unknown (Offline)"
 
-            if (isInternetAvailable() && meteoblueApiKey.isNotBlank()) {
+            val shouldUseCachedWeather = cachedTrail != null && !shouldRefreshWeather(cachedTrail)
+            if (
+                !shouldUseCachedWeather &&
+                weatherWindow.canQuery &&
+                isInternetAvailable() &&
+                meteoblueApiKey.isNotBlank()
+            ) {
                 try {
                     val weatherLookup = loadForecastWithFallbacks(
                         lat = lat,
                         lon = lon,
-                        asl = _uiState.value.altitude?.toInt()
+                        asl = _uiState.value.altitude?.toInt(),
+                        forecastDays = weatherWindow.forecastDays,
+                        historyDays = weatherWindow.historyDays
                     )
-                    val data = weatherLookup.response
-                    weatherResponse = data
-                    weatherInfo = buildWeatherSummary(weatherLookup)
-
-                    if (data.hasForecastData()) {
-                        sunsetStr = data?.dataDay?.sunset?.firstOrNull()?.let { it.substringAfter(" ") } ?: sunsetStr
-                        syncTime = System.currentTimeMillis()
-                        Log.d("ScoutyAPI", "Weather Backup Updated for $name")
-                    }
+                    val selectedWeather = buildSelectedDateWeather(
+                        weatherLookup = weatherLookup,
+                        targetDate = weatherWindow.targetDate
+                    )
+                    weatherInfo = selectedWeather.summary
+                    dailyForecast = selectedWeather.dailyForecast
+                    sunsetStr = selectedWeather.sunsetTime ?: sunsetStr
+                    syncTime = System.currentTimeMillis()
+                    Log.d("ScoutyAPI", "Weather updated for $name on ${weatherWindow.targetDate}")
                 } catch (e: Exception) {
                     Log.e("ScoutyAPI", "Sync failed", e)
+                    syncTime = System.currentTimeMillis()
                 }
             }
 
@@ -1428,12 +1765,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 toName = toName
             )
 
-            val dailyForecast = if (weatherResponse != null) {
-                buildDailyForecast(weatherResponse)
-            } else {
-                _uiState.value.activeTrail?.dailyForecast.orEmpty()
-            }
-
             val trail = ActiveTrail(
                 name = name,
                 date = date,
@@ -1451,7 +1782,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 sourceUrls = sourceUrls,
                 sunsetTime = sunsetStr,
                 weatherForecast = weatherInfo,
-                lastSyncTimestamp = syncTime ?: _uiState.value.activeTrail?.lastSyncTimestamp,
+                lastSyncTimestamp = syncTime,
                 difficulty = difficulty,
                 distanceKm = distanceKm,
                 elevationGain = elevationGain,
@@ -1459,12 +1790,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 estimatedDuration = estimatedDuration,
                 imageUrl = imageUrl,
                 routeSegments = routeSegments,
-                remainingRouteSegments = routeSegments,
+                remainingRouteSegments = cachedTrail?.remainingRouteSegments ?: routeSegments,
                 routeBounds = routeBounds,
                 imageAttribution = imageAttribution,
                 imageLicense = imageLicense,
                 imageSourcePageUrl = imageSourcePageUrl,
                 imageScope = imageScope,
+                trackingState = cachedTrail?.trackingState ?: ActiveTrailState.PLANNED,
+                progress = cachedTrail?.progress ?: 0f,
+                distanceCompletedKm = cachedTrail?.distanceCompletedKm ?: 0.0,
+                remainingDistanceKm = cachedTrail?.remainingDistanceKm ?: distanceKm,
+                offTrailDistanceKm = cachedTrail?.offTrailDistanceKm ?: 0.0,
+                hasLeftStartZone = cachedTrail?.hasLeftStartZone ?: false,
+                startedAtEpochMillis = cachedTrail?.startedAtEpochMillis,
                 dailyForecast = dailyForecast
             )
 
@@ -1488,11 +1826,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                     userProfile = profileForTrail
                 )
             }
+            persistActiveTrail(trail, force = true)
             _mapSessionState.update { currentState ->
                 currentState.copy(
                     selectedTrail = trail.toTrailSelectionSnapshot(),
                     isBottomSheetVisible = false,
-                    mode = MapTrailMode.ORIENTED,
+                    mode = if (trail.trackingState == ActiveTrailState.ACTIVE) {
+                        MapTrailMode.ACTIVE
+                    } else {
+                        MapTrailMode.ORIENTED
+                    },
                     focusRequestToken = System.currentTimeMillis()
                 )
             }
@@ -1574,19 +1917,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         val dayData = response?.dataDay ?: return emptyList()
         val times = dayData.time
         return times.mapIndexedNotNull { index, dateStr ->
-            val pictocode = dayData.precipitationProbability?.getOrNull(index)
+            val normalizedDate = normalizeForecastDate(dateStr) ?: return@mapIndexedNotNull null
             DailyForecastEntry(
-                date = dateStr,
+                date = normalizedDate,
                 temperatureMax = dayData.temperatureMax?.getOrNull(index),
                 temperatureMin = dayData.temperatureMin?.getOrNull(index),
                 precipitationProbability = dayData.precipitationProbability?.getOrNull(index),
-                description = response.data1h?.pictocode?.let { hourly ->
-                    val dayStartIndex = index * 24
-                    val midDayCode = hourly.getOrNull(dayStartIndex + 12)
-                        ?: hourly.getOrNull(dayStartIndex + 6)
-                        ?: hourly.getOrNull(dayStartIndex)
-                    midDayCode?.let(::getPictocodeDescription)
-                } ?: getPictocodeDescription(null),
+                description = selectHourlyWeatherForDate(response, normalizedDate)
+                    ?.pictocode
+                    ?.let(::getPictocodeDescription)
+                    ?: getPictocodeDescription(null),
                 sunrise = dayData.sunrise?.getOrNull(index),
                 sunset = dayData.sunset?.getOrNull(index)
             )

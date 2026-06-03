@@ -1,5 +1,6 @@
 package com.scouty.app.assistant.model
 
+import kotlinx.serialization.Serializable
 import java.util.Locale
 
     private val AssistantDefaultLocale: Locale = Locale.forLanguageTag("ro-RO")
@@ -34,6 +35,7 @@ data class TrailContextSnapshot(
     val dailyForecast: List<DailyForecastEntry> = emptyList()
 )
 
+@Serializable
 data class DailyForecastEntry(
     val date: String,
     val temperatureMax: Double?,

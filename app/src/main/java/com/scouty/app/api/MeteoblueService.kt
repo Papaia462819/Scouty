@@ -14,6 +14,8 @@ interface MeteoblueService {
         @Query("lon") lon: Double,
         @Query("asl") asl: Int?,
         @Query("apikey") apiKey: String,
+        @Query("forecast_days") forecastDays: Int? = null,
+        @Query("history_days") historyDays: Int? = null,
         @Query("format") format: String = "json"
     ): Response<MeteoblueResponse>
 

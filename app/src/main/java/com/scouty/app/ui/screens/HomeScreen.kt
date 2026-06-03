@@ -386,7 +386,7 @@ private fun WeatherRow(status: HomeStatus, snapshot: WeatherSnapshot) {
             }
             Spacer(Modifier.height(2.dp))
             Text(
-                text = "Sunset today",
+                text = "Apus traseu",
                 style = MaterialTheme.typography.bodySmall,
                 color = TextSecondary,
             )
@@ -712,8 +712,19 @@ private data class WeatherSnapshot(
 
 private fun buildWeatherSnapshot(status: HomeStatus): WeatherSnapshot {
     val parts = status.activeTrail?.weatherForecast?.split(",", limit = 2).orEmpty()
-    val temperature = parts.getOrNull(0)?.trim().takeUnless { it.isNullOrBlank() } ?: "12°C"
-    val summary = parts.getOrNull(1)?.trim().takeUnless { it.isNullOrBlank() } ?: "Partly cloudy"
+    val firstPart = parts.getOrNull(0)?.trim().takeUnless { it.isNullOrBlank() }
+    val weatherUnavailable = firstPart.equals("Indisponibil", ignoreCase = true) ||
+        status.activeTrail?.weatherForecast.isNullOrBlank()
+    val temperature = if (weatherUnavailable) {
+        "—"
+    } else {
+        firstPart ?: "—"
+    }
+    val summary = if (weatherUnavailable) {
+        "Indisponibil"
+    } else {
+        parts.getOrNull(1)?.trim().takeUnless { it.isNullOrBlank() } ?: "Disponibil"
+    }
     val lowercaseSummary = summary.lowercase(Locale.getDefault())
 
     val icon = when {
