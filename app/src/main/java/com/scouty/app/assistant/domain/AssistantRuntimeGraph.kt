@@ -34,6 +34,7 @@ class AssistantRuntimeGraph private constructor(
 ) {
     val knowledgePackManager = KnowledgePackManager(context)
     val modelManager = ModelManager(context, featureFlags)
+    val offlineChatModelController = OfflineChatModelController(context, modelManager)
 
     private val queryAnalyzer = QueryAnalyzer(useCampfireLane = featureFlags.useCampfireLane)
     private val knowledgeStore = SqliteKnowledgeChunkStore(knowledgePackManager)

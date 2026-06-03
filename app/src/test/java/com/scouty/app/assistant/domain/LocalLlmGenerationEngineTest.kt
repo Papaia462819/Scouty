@@ -151,6 +151,7 @@ class LocalLlmGenerationEngineTest {
             packVersion = "pack-1",
             hashValid = true,
             integrityValid = true
-        )
+        ),
+        allowLocalModel = true
     )
 }

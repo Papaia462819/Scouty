@@ -35,7 +35,7 @@ class LlamaCppRuntimeAdapter(
             params = LlamaCppLoadParams(contextTokens = artifact.maxTokens),
             modelVersion = artifact.modelVersion
         )
-    }
+    }de 
 
     suspend fun loadModel(
         path: String,

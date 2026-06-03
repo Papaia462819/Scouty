@@ -1650,10 +1650,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     }
 
     private fun refreshAssistantRuntimeStatus() {
-        viewModelScope.launch {
-            knowledgePackManager.ensureReady()
-            modelManager.refreshStatus()
-            modelManager.ensureLoaded()
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                knowledgePackManager.ensureReady()
+                modelManager.refreshStatus()
+            }.onFailure { error ->
+                Log.w("ScoutyAssistant", "Failed to refresh assistant runtime status", error)
+            }
         }
     }
 

@@ -17,12 +17,12 @@ class GeminiRemoteGenerationEngineTest {
     fun onlineWithConfiguredKey_usesGeminiResponse() = runBlocking {
         val client = FakeGeminiContentClient(
             response = geminiResponse(
-                """{"summary":"Raspuns din Gemini.","warning":"","guidance":"Ramai pe traseu si verifica marcajul.","sections":[]}"""
+                "Raspuns din Gemini.\n\nRamai pe traseu si verifica marcajul."
             )
         )
         val engine = GeminiRemoteGenerationEngine(
             fallbackEngine = TemplateGenerationEngine(),
-            config = GeminiRemoteConfig(apiKey = "test-key", modelName = "gemini-test"),
+            config = GeminiRemoteConfig(apiKey = "test-key", modelName = "gemini-test", maxOutputTokens = 2048),
             client = client
         )
 
@@ -30,8 +30,13 @@ class GeminiRemoteGenerationEngineTest {
 
         assertEquals(1, client.calls)
         assertEquals(GenerationMode.GEMINI_API, result.generationMode)
-        assertEquals("Raspuns din Gemini.", result.summary)
+        assertEquals("Raspuns din Gemini.\n\nRamai pe traseu si verifica marcajul.", result.summary)
         assertEquals("gemini-test", result.modelVersion)
+        assertEquals(2048, client.lastRequest?.generationConfig?.maxOutputTokens)
+        assertTrue(
+            client.lastRequest?.contents?.firstOrNull()?.parts?.firstOrNull()?.text
+                ?.contains("JSON") == false
+        )
     }
 
     @Test
@@ -116,6 +121,8 @@ internal class FakeGeminiContentClient(
 ) : GeminiContentClient {
     var calls: Int = 0
         private set
+    var lastRequest: GeminiGenerateContentRequest? = null
+        private set
 
     override suspend fun generateContent(
         apiKey: String,
@@ -123,6 +130,7 @@ internal class FakeGeminiContentClient(
         request: GeminiGenerateContentRequest
     ): GeminiGenerateContentResponse {
         calls += 1
+        lastRequest = request
         failure?.let { throw it }
         return response ?: kotlin.error("No fake Gemini response configured")
     }

@@ -528,14 +528,54 @@ fun MapScreen(
         return
     }
 
+    val activeTrailBadgeCode = activeTrail?.localCode?.takeIf { it.isNotBlank() }
+    var hasObservedActiveTrailBadgeCode by rememberSaveable { mutableStateOf(false) }
+    var lastObservedActiveTrailBadgeCode by rememberSaveable { mutableStateOf<String?>(null) }
+    var routePackBadgeArmedCode by rememberSaveable { mutableStateOf<String?>(null) }
+    var dismissedRoutePackBadgeKey by rememberSaveable { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(activeTrailBadgeCode) {
+        if (!hasObservedActiveTrailBadgeCode) {
+            hasObservedActiveTrailBadgeCode = true
+            lastObservedActiveTrailBadgeCode = activeTrailBadgeCode
+            return@LaunchedEffect
+        }
+
+        if (activeTrailBadgeCode == null) {
+            lastObservedActiveTrailBadgeCode = null
+            routePackBadgeArmedCode = null
+            return@LaunchedEffect
+        }
+
+        if (activeTrailBadgeCode != lastObservedActiveTrailBadgeCode) {
+            routePackBadgeArmedCode = activeTrailBadgeCode
+            dismissedRoutePackBadgeKey = null
+        }
+        lastObservedActiveTrailBadgeCode = activeTrailBadgeCode
+    }
+
     val routePackForBadge = readyMapPackRegistry.currentTrailPack
+    val isRoutePackBadgeArmed = routePackForBadge?.trailCode?.let { trailCode ->
+        trailCode == routePackBadgeArmedCode
+    } == true
+    val shouldShowRoutePackBadge = routePackForBadge?.let { pack ->
+        isRoutePackBadgeArmed && when (pack.status) {
+            MapPackStatus.AVAILABLE -> !pack.sourceUri.isNullOrBlank()
+            MapPackStatus.NOT_REQUESTED,
+            MapPackStatus.MISSING,
+            MapPackStatus.DOWNLOADING,
+            MapPackStatus.WAITING_CONFIRMATION,
+            MapPackStatus.FAILED,
+            MapPackStatus.INVALID,
+            MapPackStatus.STALE -> true
+        }
+    } ?: false
     val routePackBadgeKey = routePackForBadge?.let { pack ->
         "${pack.trailCode.orEmpty()}:${pack.status.name}:${pack.version}"
     }
-    var dismissedRoutePackBadgeKey by rememberSaveable { mutableStateOf<String?>(null) }
 
-    LaunchedEffect(routePackBadgeKey, routePackForBadge?.status) {
-        if (routePackBadgeKey == null || routePackForBadge?.status != MapPackStatus.AVAILABLE) {
+    LaunchedEffect(routePackBadgeKey, routePackForBadge?.status, shouldShowRoutePackBadge) {
+        if (!shouldShowRoutePackBadge || routePackBadgeKey == null || routePackForBadge?.status != MapPackStatus.AVAILABLE) {
             return@LaunchedEffect
         }
         delay(5_000)
@@ -778,6 +818,7 @@ fun MapScreen(
 
                 routePackForBadge?.let { routePack ->
                     if (
+                        shouldShowRoutePackBadge &&
                         !isSearchExpanded &&
                         !hasNearbyGuideOverlay &&
                         dismissedRoutePackBadgeKey != routePackBadgeKey

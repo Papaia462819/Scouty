@@ -75,7 +75,8 @@ class AssistantRepositoryInterpretationIntegrationTest {
         )
         val response = repository.answer(
             query = "boots slipping wet rocks",
-            context = DeviceContextSnapshot(localeTag = "en")
+            context = DeviceContextSnapshot(localeTag = "en"),
+            allowLocalModel = true
         )
 
         assertEquals(
@@ -115,7 +116,8 @@ class AssistantRepositoryInterpretationIntegrationTest {
         )
         val response = repository.answer(
             query = "boots slipping wet rocks",
-            context = DeviceContextSnapshot(localeTag = "en")
+            context = DeviceContextSnapshot(localeTag = "en"),
+            allowLocalModel = true
         )
 
         assertEquals("boots slipping wet rocks", response.conversationState.lastStandaloneQuery)
@@ -145,7 +147,8 @@ class AssistantRepositoryInterpretationIntegrationTest {
         )
         val response = repository.answer(
             query = "Sunt ursi pe el?",
-            context = DeviceContextSnapshot(localeTag = "ro")
+            context = DeviceContextSnapshot(localeTag = "ro"),
+            allowLocalModel = true
         )
 
         assertEquals("Sunt ursi pe el?", response.conversationState.lastStandaloneQuery)
@@ -188,7 +191,8 @@ class AssistantRepositoryInterpretationIntegrationTest {
         )
         val response = repository.answer(
             query = "Sunt ursi pe el?",
-            context = DeviceContextSnapshot(localeTag = "ro")
+            context = DeviceContextSnapshot(localeTag = "ro"),
+            allowLocalModel = true
         )
 
         assertEquals("Sunt ursi pe el?", response.conversationState.lastStandaloneQuery)
@@ -211,7 +215,8 @@ class AssistantRepositoryInterpretationIntegrationTest {
         )
         val response = repository.answer(
             query = "Sunt ursi pe el?",
-            context = DeviceContextSnapshot(localeTag = "ro")
+            context = DeviceContextSnapshot(localeTag = "ro"),
+            allowLocalModel = true
         )
 
         assertEquals("Sunt ursi pe el?", response.conversationState.lastStandaloneQuery)

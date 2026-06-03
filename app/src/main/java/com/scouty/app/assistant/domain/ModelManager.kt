@@ -328,12 +328,12 @@ private class AndroidLocalModelLocator(
     private val qwenExternalDir = context.getExternalFilesDir(null)?.let { File(it, "models/qwen-2.5-1.5b") }
 
     private val searchRoots: List<ModelSearchRoot> = buildList {
-        add(ModelSearchRoot(gemmaInternalDir, LocalModelRuntime.MEDIAPIPE, "internal app storage"))
-        gemmaExternalDir?.let { add(ModelSearchRoot(it, LocalModelRuntime.MEDIAPIPE, "external app storage")) }
         if (includeLlamaCpp) {
             add(ModelSearchRoot(qwenInternalDir, LocalModelRuntime.LLAMA_CPP, "internal app storage"))
             qwenExternalDir?.let { add(ModelSearchRoot(it, LocalModelRuntime.LLAMA_CPP, "external app storage")) }
         }
+        add(ModelSearchRoot(gemmaInternalDir, LocalModelRuntime.MEDIAPIPE, "internal app storage"))
+        gemmaExternalDir?.let { add(ModelSearchRoot(it, LocalModelRuntime.MEDIAPIPE, "external app storage")) }
     }
 
     override suspend fun inspect(): LocalModelDiscovery = withContext(Dispatchers.IO) {

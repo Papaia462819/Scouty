@@ -213,6 +213,8 @@ data class AssistantMessageUiModel(
 data class AssistantUiState(
     val draft: String = "",
     val isResponding: Boolean = false,
+    val isOnline: Boolean = false,
+    val offlineChat: OfflineChatUiState = OfflineChatUiState(),
     val messages: List<AssistantMessageUiModel> = listOf(buildWelcomeMessage(assistantDefaultLocale())),
     val starterPrompts: List<String> = starterPromptsForCurrentLocale(assistantDefaultLocale())
 )

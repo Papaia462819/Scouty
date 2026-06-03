@@ -17,6 +17,10 @@ class LocalLlmGenerationEngine(
 ) : GenerationEngine {
 
     override suspend fun generate(input: GenerationInput): StructuredAssistantOutput {
+        if (!input.allowLocalModel) {
+            return fallback(input, input.modelStatus)
+        }
+
         val loadStatus = if (input.modelStatus.state == ModelRuntimeState.LOADED) {
             input.modelStatus
         } else {

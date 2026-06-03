@@ -9,6 +9,7 @@ meteoblue.apiKey=
 ## You can also set these as GEMINI_API_KEY / GEMINI_MODEL environment variables before building.
 gemini.apiKey=
 gemini.model=gemini-2.5-flash
+gemini.maxOutputTokens=2048
 
 ## Map engine.
 ## Online map source: https://maps.scouty.app/base/romania-high-detail.pmtiles by default.

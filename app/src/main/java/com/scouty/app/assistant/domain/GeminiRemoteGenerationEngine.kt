@@ -6,15 +6,9 @@ import com.scouty.app.BuildConfig
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.assistant.model.ModelRuntimeState
-import com.scouty.app.assistant.model.ResponseSectionStyle
 import com.scouty.app.assistant.model.StructuredAssistantOutput
-import com.scouty.app.assistant.model.StructuredResponseSection
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Response
@@ -32,6 +26,7 @@ internal interface OnlineGenerationPolicy {
 internal data class GeminiRemoteConfig(
     val apiKey: String = BuildConfig.GEMINI_API_KEY,
     val modelName: String = BuildConfig.GEMINI_MODEL.ifBlank { DefaultModelName },
+    val maxOutputTokens: Int = BuildConfig.GEMINI_MAX_OUTPUT_TOKENS.takeIf { it > 0 } ?: DefaultMaxOutputTokens,
     val enabled: Boolean = true
 ) {
     val isUsable: Boolean
@@ -39,20 +34,23 @@ internal data class GeminiRemoteConfig(
 
     companion object {
         const val DefaultModelName = "gemini-2.5-flash"
+        const val DefaultMaxOutputTokens = 2048
     }
 }
 
 internal class GeminiRemoteGenerationEngine(
     private val fallbackEngine: GenerationEngine,
     private val config: GeminiRemoteConfig = GeminiRemoteConfig(),
-    private val client: GeminiContentClient = RetrofitGeminiContentClient.create(),
-    private val json: Json = Json { ignoreUnknownKeys = true; explicitNulls = false }
+    private val client: GeminiContentClient = RetrofitGeminiContentClient.create()
 ) : GenerationEngine, OnlineGenerationPolicy {
 
     override fun shouldAttemptRemote(context: DeviceContextSnapshot): Boolean =
         config.isUsable && context.isOnline
 
     override suspend fun generate(input: GenerationInput): StructuredAssistantOutput {
+        if (input.generationMode != GenerationMode.GEMINI_API) {
+            return fallbackEngine.generate(input)
+        }
         if (!shouldAttemptRemote(input.context)) {
             return fallback(input)
         }
@@ -79,8 +77,8 @@ internal class GeminiRemoteGenerationEngine(
 
     private fun fallbackGenerationMode(input: GenerationInput): GenerationMode =
         when {
-            input.modelStatus.state == ModelRuntimeState.LOADED -> GenerationMode.LOCAL_LLM
-            input.modelStatus.availableOnDisk && input.modelStatus.state in setOf(
+            input.allowLocalModel && input.modelStatus.state == ModelRuntimeState.LOADED -> GenerationMode.LOCAL_LLM
+            input.allowLocalModel && input.modelStatus.availableOnDisk && input.modelStatus.state in setOf(
                 ModelRuntimeState.UNLOADED,
                 ModelRuntimeState.PREPARING
             ) -> GenerationMode.LOCAL_LLM
@@ -105,11 +103,9 @@ internal class GeminiRemoteGenerationEngine(
                 )
             ),
             generationConfig = GeminiRequestGenerationConfig(
-                temperature = 0.25,
+                temperature = 0.4,
                 topP = 0.9,
-                maxOutputTokens = 700,
-                responseMimeType = "application/json",
-                responseJsonSchema = OutputSchema
+                maxOutputTokens = config.maxOutputTokens
             )
         )
 
@@ -118,16 +114,16 @@ internal class GeminiRemoteGenerationEngine(
         val facts = buildFactBlock(input)
         val historyBlock = input.conversationHistory?.contextBlock?.takeIf { it.isNotBlank() }
         return buildString {
-            appendLine("Return exactly one JSON object with this shape:")
-            appendLine("""{"summary":"string","warning":"string","guidance":"string","sections":[{"title":"string","body":"string","style":"IMPORTANT|CONTEXT|GUIDANCE|ACTIONS"}]}""")
             appendLine("Rules:")
-            appendLine("- Answer only in ${if (isRomanian) "Romanian" else "English"}.")
-            appendLine("- summary must be one short sentence.")
-            appendLine("- warning can be empty unless there is a concrete safety caution.")
-            appendLine("- guidance must be one or two concrete sentences grounded in FACT 1.")
-            appendLine("- sections are optional; include at most two short sections.")
-            appendLine("- If facts are missing or weak, say that grounding is incomplete and stay conservative.")
-            appendLine("- Do not mention Gemini, API calls, prompts, JSON, or internal routing.")
+            appendLine("- Answer naturally in ${if (isRomanian) "Romanian" else "English"}.")
+            appendLine("- Write like a helpful in-app mountain guide.")
+            appendLine("- Use short paragraphs or bullets when they make the answer easier to scan on a phone.")
+            appendLine("- Prefer plain text; do not use Markdown emphasis markers like **bold**.")
+            appendLine("- Ground the answer in the supplied Scouty facts, conversation context, and device context.")
+            appendLine("- If the supplied facts are missing or weak, say that clearly and stay conservative.")
+            appendLine("- Do not invent weather, trail metrics, route details, live conditions, or personal data.")
+            appendLine("- For serious safety signals, prioritize 112 / SOS and immediate risk reduction.")
+            appendLine("- Do not mention Gemini, API calls, prompts, internal routing, or hidden context.")
             appendLine()
             appendLine("QUESTION:")
             appendLine(sanitize(input.query, 400))
@@ -177,57 +173,14 @@ internal class GeminiRemoteGenerationEngine(
         response: GeminiGenerateContentResponse,
         input: GenerationInput
     ): StructuredAssistantOutput {
-        val payloadText = response.text()
-        val payload = json.decodeFromString(
-            GeminiAssistantPayload.serializer(),
-            extractJsonPayload(payloadText)
-        )
-        val isRomanian = input.queryAnalysis.preferredLanguage == "ro"
-        val sections = payload.sections
-            .mapNotNull { section ->
-                val body = section.body.trim()
-                val title = section.title.trim()
-                if (body.isBlank() || title.isBlank()) {
-                    null
-                } else {
-                    StructuredResponseSection(
-                        title = title.take(80),
-                        body = body.take(500),
-                        style = section.style.toSectionStyle()
-                    )
-                }
-            }
-            .take(2)
-            .toMutableList()
-
-        payload.warning.trim().takeIf { it.isNotBlank() }?.let { warning ->
-            sections.add(
-                0,
-                StructuredResponseSection(
-                    title = if (isRomanian) "Atentie" else "Caution",
-                    body = warning.take(420),
-                    style = ResponseSectionStyle.IMPORTANT
-                )
-            )
-        }
-
-        payload.guidance.trim().takeIf { it.isNotBlank() }?.let { guidance ->
-            if (sections.none { it.style == ResponseSectionStyle.GUIDANCE }) {
-                sections += StructuredResponseSection(
-                    title = if (isRomanian) "Ghidaj" else "Guidance",
-                    body = guidance.take(500),
-                    style = ResponseSectionStyle.GUIDANCE
-                )
-            }
-        }
-
-        val summary = payload.summary.trim()
-        require(summary.isNotBlank()) { "Gemini response summary is blank" }
-        require(sections.isNotEmpty()) { "Gemini response has no usable sections" }
+        val answer = response.text()
+            .removeMarkdownFence()
+            .trim()
+        require(answer.isNotBlank()) { "Gemini response text is blank" }
 
         return StructuredAssistantOutput(
-            summary = summary.take(260),
-            sections = sections,
+            summary = answer,
+            sections = emptyList(),
             generationMode = GenerationMode.GEMINI_API,
             reasoningType = input.queryAnalysis.reasoningType,
             modelVersion = config.modelName,
@@ -242,58 +195,12 @@ internal class GeminiRemoteGenerationEngine(
             .firstOrNull()
             ?: error("Gemini response does not contain text")
 
-    private fun extractJsonPayload(rawResponse: String): String {
-        val cleaned = rawResponse
-            .replace("```json", "")
-            .replace("```", "")
+    private fun String.removeMarkdownFence(): String =
+        trim()
+            .removePrefix("```markdown")
+            .removePrefix("```")
+            .removeSuffix("```")
             .trim()
-        var start = -1
-        var depth = 0
-        var inString = false
-        var escaped = false
-
-        cleaned.forEachIndexed { index, character ->
-            if (start < 0) {
-                if (character == '{') {
-                    start = index
-                    depth = 1
-                }
-                return@forEachIndexed
-            }
-
-            if (escaped) {
-                escaped = false
-                return@forEachIndexed
-            }
-
-            when (character) {
-                '\\' -> if (inString) {
-                    escaped = true
-                }
-                '"' -> inString = !inString
-                '{' -> if (!inString) {
-                    depth += 1
-                }
-                '}' -> if (!inString) {
-                    depth -= 1
-                    if (depth == 0) {
-                        return cleaned.substring(start, index + 1)
-                    }
-                }
-            }
-        }
-
-        require(start >= 0) { "Gemini response does not contain a JSON object" }
-        error("Gemini response JSON object is incomplete")
-    }
-
-    private fun String?.toSectionStyle(): ResponseSectionStyle =
-        when (this?.trim()?.uppercase()) {
-            "IMPORTANT" -> ResponseSectionStyle.IMPORTANT
-            "CONTEXT" -> ResponseSectionStyle.CONTEXT
-            "ACTIONS" -> ResponseSectionStyle.ACTIONS
-            else -> ResponseSectionStyle.GUIDANCE
-        }
 
     private fun sanitize(value: String, maxLength: Int): String =
         value.replace('\n', ' ')
@@ -303,50 +210,6 @@ internal class GeminiRemoteGenerationEngine(
 
     private companion object {
         private const val LogTag = "ScoutyGemini"
-
-        private val OutputSchema = JsonObject(
-            mapOf(
-                "type" to JsonPrimitive("object"),
-                "properties" to JsonObject(
-                    mapOf(
-                        "summary" to JsonObject(mapOf("type" to JsonPrimitive("string"))),
-                        "warning" to JsonObject(mapOf("type" to JsonPrimitive("string"))),
-                        "guidance" to JsonObject(mapOf("type" to JsonPrimitive("string"))),
-                        "sections" to JsonObject(
-                            mapOf(
-                                "type" to JsonPrimitive("array"),
-                                "items" to JsonObject(
-                                    mapOf(
-                                        "type" to JsonPrimitive("object"),
-                                        "properties" to JsonObject(
-                                            mapOf(
-                                                "title" to JsonObject(mapOf("type" to JsonPrimitive("string"))),
-                                                "body" to JsonObject(mapOf("type" to JsonPrimitive("string"))),
-                                                "style" to JsonObject(mapOf("type" to JsonPrimitive("string")))
-                                            )
-                                        ),
-                                        "required" to JsonArray(
-                                            listOf(
-                                                JsonPrimitive("title"),
-                                                JsonPrimitive("body"),
-                                                JsonPrimitive("style")
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                ),
-                "required" to JsonArray(
-                    listOf(
-                        JsonPrimitive("summary"),
-                        JsonPrimitive("warning"),
-                        JsonPrimitive("guidance")
-                    )
-                )
-            )
-        )
     }
 }
 
@@ -416,9 +279,7 @@ internal data class GeminiGenerateContentRequest(
 internal data class GeminiRequestGenerationConfig(
     val temperature: Double? = null,
     val topP: Double? = null,
-    val maxOutputTokens: Int? = null,
-    val responseMimeType: String? = null,
-    val responseJsonSchema: JsonObject? = null
+    val maxOutputTokens: Int? = null
 )
 
 @Serializable
@@ -447,19 +308,4 @@ internal data class GeminiCandidate(
 @Serializable
 internal data class GeminiPromptFeedback(
     val blockReason: String? = null
-)
-
-@Serializable
-private data class GeminiAssistantPayload(
-    val summary: String = "",
-    val warning: String = "",
-    val guidance: String = "",
-    val sections: List<GeminiAssistantSection> = emptyList()
-)
-
-@Serializable
-private data class GeminiAssistantSection(
-    val title: String = "",
-    val body: String = "",
-    val style: String? = null
 )

@@ -100,7 +100,8 @@ data class GenerationInput(
     val generationMode: GenerationMode,
     val modelStatus: ModelStatus,
     val knowledgePackStatus: KnowledgePackStatus,
-    val conversationHistory: ConversationHistory? = null
+    val conversationHistory: ConversationHistory? = null,
+    val allowLocalModel: Boolean = false
 )
 
 private data class ConversationMemorySession(
@@ -2057,11 +2058,15 @@ class AssistantRepository(
     private val interactionEngine = DeterministicInteractionEngine()
     private val onlineGenerationPolicy = generationEngine as? OnlineGenerationPolicy
 
+    fun canAttemptOnlineGeneration(context: DeviceContextSnapshot): Boolean =
+        onlineGenerationPolicy?.shouldAttemptRemote(context) == true
+
     suspend fun answer(
         query: String,
         context: DeviceContextSnapshot,
         conversationState: AssistantConversationState = AssistantConversationState(),
-        interactionHandler: ChatActionHandler? = null
+        interactionHandler: ChatActionHandler? = null,
+        allowLocalModel: Boolean = false
     ): AssistantResponse {
         val memorySession = prepareConversationMemory(
             query = query,
@@ -2099,7 +2104,8 @@ class AssistantRepository(
                     queryAnalysis = queryAnalysis,
                     packStatus = packStatus,
                     preprocessing = preprocessing,
-                    conversationHistory = memorySession?.history
+                    conversationHistory = memorySession?.history,
+                    allowLocalModel = allowLocalModel
                 )
             } else {
                 answerStandard(
@@ -2109,7 +2115,8 @@ class AssistantRepository(
                     initialAnalysis = queryAnalysis,
                     preprocessing = preprocessing,
                     packStatus = packStatus,
-                    conversationHistory = memorySession?.history
+                    conversationHistory = memorySession?.history,
+                    allowLocalModel = allowLocalModel
                 )
             }
         } else if (shouldUseCampfireLane(queryAnalysis)) {
@@ -2120,7 +2127,8 @@ class AssistantRepository(
                 queryAnalysis = queryAnalysis,
                 packStatus = packStatus,
                 preprocessing = preprocessing,
-                conversationHistory = memorySession?.history
+                conversationHistory = memorySession?.history,
+                allowLocalModel = allowLocalModel
             )
         } else {
             answerStandard(
@@ -2130,7 +2138,8 @@ class AssistantRepository(
                 initialAnalysis = queryAnalysis,
                 preprocessing = preprocessing,
                 packStatus = packStatus,
-                conversationHistory = memorySession?.history
+                conversationHistory = memorySession?.history,
+                allowLocalModel = allowLocalModel
             )
         }
 
@@ -2236,7 +2245,8 @@ class AssistantRepository(
         queryAnalysis: QueryAnalysis,
         packStatus: KnowledgePackStatus,
         preprocessing: DeterministicPreprocessingResult,
-        conversationHistory: ConversationHistory? = null
+        conversationHistory: ConversationHistory? = null,
+        allowLocalModel: Boolean = false
     ): AssistantResponse {
         val initial = campfireConversationEngine.answer(
             query = query,
@@ -2257,7 +2267,8 @@ class AssistantRepository(
             retrievedChunks = initial.retrievedChunks,
             confidence = initial.retrievalConfidence,
             packStatus = packStatus,
-            conversationHistory = conversationHistory
+            conversationHistory = conversationHistory,
+            allowLocalModel = allowLocalModel
         )
         if (toolResult?.isTerminal == true) {
             return buildToolTerminalResponse(
@@ -2278,7 +2289,8 @@ class AssistantRepository(
                 confidence = toolResult.retrievalConfidence ?: initial.retrievalConfidence,
                 packStatus = packStatus,
                 conversationState = conversationState,
-                conversationHistory = conversationHistory
+                conversationHistory = conversationHistory,
+                allowLocalModel = allowLocalModel
             )
         }
         val gateDecision = interpreterGate.decide(
@@ -2286,7 +2298,7 @@ class AssistantRepository(
             preprocessing = preprocessing,
             conversationState = conversationState
         )
-        val interpretation = if (toolResult == null && useLegacyInterpreter && gateDecision.shouldInvoke) {
+        val interpretation = if (allowLocalModel && toolResult == null && useLegacyInterpreter && gateDecision.shouldInvoke) {
             attemptValidatedInterpretation(
                 query = query,
                 context = context,
@@ -2346,7 +2358,8 @@ class AssistantRepository(
                 ),
                 preprocessing = preprocessing,
                 packStatus = packStatus,
-                conversationHistory = conversationHistory
+                conversationHistory = conversationHistory,
+                allowLocalModel = allowLocalModel
             )
         }
 
@@ -2357,7 +2370,8 @@ class AssistantRepository(
             retrievedChunks = finalCampfire.retrievedChunks,
             confidence = finalCampfire.retrievalConfidence,
             knowledgePackStatus = packStatus,
-            conversationHistory = conversationHistory
+            conversationHistory = conversationHistory,
+            allowLocalModel = allowLocalModel
         )
         val responseRetrievedChunks = expressionResult?.retrievedChunks ?: finalCampfire.retrievedChunks
         val safetyOutcome = medicalSafetyPolicy.evaluate(query, responseRetrievedChunks, context)
@@ -2367,7 +2381,8 @@ class AssistantRepository(
             structuredOutput = finalCampfire.structuredOutput,
             retrievedChunks = finalCampfire.retrievedChunks,
             confidence = finalCampfire.retrievalConfidence,
-            conversationHistory = conversationHistory
+            conversationHistory = conversationHistory,
+            allowLocalModel = allowLocalModel
         )
         val structuredOutput = medicalSafetyPolicy.applyFinalGuardrails(
             output = wordedOutput,
@@ -2410,11 +2425,12 @@ class AssistantRepository(
         initialAnalysis: QueryAnalysis,
         preprocessing: DeterministicPreprocessingResult,
         packStatus: KnowledgePackStatus,
-        conversationHistory: ConversationHistory? = null
+        conversationHistory: ConversationHistory? = null,
+        allowLocalModel: Boolean = false
     ): AssistantResponse {
         val answerStartedAtNanos = System.nanoTime()
         val modelStatus = modelManager.refreshStatus()
-        val generationMode = generationModeForAttempt(modelStatus, context)
+        val generationMode = generationModeForAttempt(modelStatus, context, allowLocalModel)
         AssistantDiagnostics.logAnswerStart(
             query = query,
             packStatus = packStatus,
@@ -2444,7 +2460,8 @@ class AssistantRepository(
             retrievedChunks = initialRetrieved,
             confidence = initialAssessment,
             packStatus = packStatus,
-            conversationHistory = conversationHistory
+            conversationHistory = conversationHistory,
+            allowLocalModel = allowLocalModel
         )
         if (toolResult?.isTerminal == true) {
             return buildToolTerminalResponse(
@@ -2466,7 +2483,7 @@ class AssistantRepository(
         var finalRetrieved = toolResult?.retrievedChunks?.takeIf { it.isNotEmpty() } ?: initialRetrieved
         var finalAssessment = toolResult?.retrievalConfidence ?: initialAssessment
         var acceptedInterpretation: ValidatedInterpretation? = null
-        if (toolResult == null && useLegacyInterpreter && gateDecision.shouldInvoke) {
+        if (allowLocalModel && toolResult == null && useLegacyInterpreter && gateDecision.shouldInvoke) {
             val interpretation = attemptValidatedInterpretation(
                 query = query,
                 context = context,
@@ -2514,7 +2531,7 @@ class AssistantRepository(
             queryAnalysis = finalAnalysis
         )
         val safetyOutcome = medicalSafetyPolicy.evaluate(query, finalRetrieved, context)
-        val expressionResult = if (shouldUseOnlineGeneration(context)) {
+        val expressionResult = if (shouldUseOnlineGeneration(context) || !allowLocalModel) {
             null
         } else {
             maybeBuildExpressionResult(
@@ -2524,7 +2541,8 @@ class AssistantRepository(
                 retrievedChunks = finalRetrieved,
                 confidence = finalAssessment,
                 knowledgePackStatus = packStatus,
-                conversationHistory = conversationHistory
+                conversationHistory = conversationHistory,
+                allowLocalModel = allowLocalModel
             )
         }
         val structuredOutput = medicalSafetyPolicy.applyFinalGuardrails(
@@ -2540,7 +2558,8 @@ class AssistantRepository(
                         generationMode = generationMode,
                         modelStatus = modelStatus,
                         knowledgePackStatus = packStatus,
-                        conversationHistory = conversationHistory
+                        conversationHistory = conversationHistory,
+                        allowLocalModel = allowLocalModel
                     )
                 ),
             safetyOutcome = safetyOutcome,
@@ -2588,9 +2607,13 @@ class AssistantRepository(
         retrievedChunks: List<RetrievedChunk>,
         confidence: RetrievalConfidenceAssessment,
         knowledgePackStatus: KnowledgePackStatus,
-        conversationHistory: ConversationHistory?
+        conversationHistory: ConversationHistory?,
+        allowLocalModel: Boolean
     ): ExpressionLayerResult? {
         val engine = cardParaphraseEngine ?: return null
+        if (!allowLocalModel) {
+            return null
+        }
         if (!useCardParaphraseExpression) {
             AssistantDiagnostics.logExpressionLayer(
                 chunkId = "",
@@ -2651,8 +2674,12 @@ class AssistantRepository(
         retrievedChunks: List<RetrievedChunk>,
         confidence: RetrievalConfidenceAssessment,
         packStatus: KnowledgePackStatus,
-        conversationHistory: ConversationHistory?
+        conversationHistory: ConversationHistory?,
+        allowLocalModel: Boolean
     ): ToolDispatchResult? {
+        if (!allowLocalModel) {
+            return null
+        }
         if (!useGrammarToolCalling) {
             return null
         }
@@ -2785,10 +2812,11 @@ class AssistantRepository(
         confidence: RetrievalConfidenceAssessment,
         packStatus: KnowledgePackStatus,
         conversationState: AssistantConversationState,
-        conversationHistory: ConversationHistory?
+        conversationHistory: ConversationHistory?,
+        allowLocalModel: Boolean
     ): AssistantResponse {
         val modelStatus = modelManager.refreshStatus()
-        val generationMode = generationModeForAttempt(modelStatus, context)
+        val generationMode = generationModeForAttempt(modelStatus, context, allowLocalModel)
         val prompt = promptBuilder.build(
             query = query,
             context = context,
@@ -2796,7 +2824,7 @@ class AssistantRepository(
             queryAnalysis = analysis
         )
         val safetyOutcome = medicalSafetyPolicy.evaluate(query, retrievedChunks, context)
-        val expressionResult = if (shouldUseOnlineGeneration(context)) {
+        val expressionResult = if (shouldUseOnlineGeneration(context) || !allowLocalModel) {
             null
         } else {
             maybeBuildExpressionResult(
@@ -2806,7 +2834,8 @@ class AssistantRepository(
                 retrievedChunks = retrievedChunks,
                 confidence = confidence,
                 knowledgePackStatus = packStatus,
-                conversationHistory = conversationHistory
+                conversationHistory = conversationHistory,
+                allowLocalModel = allowLocalModel
             )
         }
         val output = medicalSafetyPolicy.applyFinalGuardrails(
@@ -2821,7 +2850,8 @@ class AssistantRepository(
                     generationMode = generationMode,
                     modelStatus = modelStatus,
                     knowledgePackStatus = packStatus,
-                    conversationHistory = conversationHistory
+                    conversationHistory = conversationHistory,
+                    allowLocalModel = allowLocalModel
                 )
             ),
             safetyOutcome = safetyOutcome,
@@ -2882,8 +2912,12 @@ class AssistantRepository(
         structuredOutput: StructuredAssistantOutput,
         retrievedChunks: List<RetrievedChunk>,
         confidence: RetrievalConfidenceAssessment,
-        conversationHistory: ConversationHistory? = null
+        conversationHistory: ConversationHistory? = null,
+        allowLocalModel: Boolean = false
     ): StructuredAssistantOutput {
+        if (!allowLocalModel) {
+            return structuredOutput
+        }
         if (confidence.tier == RetrievalConfidenceTier.LOW || retrievedChunks.isEmpty()) {
             return structuredOutput
         }
@@ -2975,6 +3009,21 @@ class AssistantRepository(
         output: StructuredAssistantOutput,
         safetyOutcome: SafetyOutcome
     ): String {
+        if (output.generationMode == GenerationMode.GEMINI_API) {
+            val rawAnswer = output.summary.trim()
+            val emergencyLead = if (safetyOutcome == SafetyOutcome.EMERGENCY_ESCALATION) {
+                output.sections.firstOrNull { it.style == ResponseSectionStyle.IMPORTANT }
+                    ?.body
+                    ?.trim()
+                    ?.takeIf { it.isNotBlank() && !rawAnswer.contains(it) }
+            } else {
+                null
+            }
+            return listOfNotNull(emergencyLead, rawAnswer.takeIf { it.isNotBlank() })
+                .joinToString("\n\n")
+                .trim()
+        }
+
         val summary = sanitizeDisplayText(output.summary)
         val emergencyLead = if (safetyOutcome == SafetyOutcome.EMERGENCY_ESCALATION) {
             output.sections.firstOrNull { it.style == ResponseSectionStyle.IMPORTANT }
@@ -3037,13 +3086,17 @@ class AssistantRepository(
             .trim()
 
     private fun shouldUseOnlineGeneration(context: DeviceContextSnapshot): Boolean =
-        onlineGenerationPolicy?.shouldAttemptRemote(context) == true
+        canAttemptOnlineGeneration(context)
 
-    private fun generationModeForAttempt(modelStatus: ModelStatus, context: DeviceContextSnapshot): GenerationMode =
+    private fun generationModeForAttempt(
+        modelStatus: ModelStatus,
+        context: DeviceContextSnapshot,
+        allowLocalModel: Boolean
+    ): GenerationMode =
         when {
             shouldUseOnlineGeneration(context) -> GenerationMode.GEMINI_API
-            modelStatus.state == ModelRuntimeState.LOADED -> GenerationMode.LOCAL_LLM
-            modelStatus.availableOnDisk && modelStatus.state in setOf(
+            allowLocalModel && modelStatus.state == ModelRuntimeState.LOADED -> GenerationMode.LOCAL_LLM
+            allowLocalModel && modelStatus.availableOnDisk && modelStatus.state in setOf(
                 ModelRuntimeState.UNLOADED,
                 ModelRuntimeState.PREPARING
             ) -> GenerationMode.LOCAL_LLM

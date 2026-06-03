@@ -271,7 +271,8 @@ class CampfireConversationIntegrationTest {
         val response = repository.answer(
             query = "Am una in rucsac",
             context = context,
-            conversationState = starterState
+            conversationState = starterState,
+            allowLocalModel = true
         )
 
         assertEquals("lighter", response.conversationState.facts["ignition_source"])
@@ -287,7 +288,7 @@ class CampfireConversationIntegrationTest {
         )
         val context = DeviceContextSnapshot(localeTag = "ro")
 
-        val response = repository.answer("Am bricheta", context)
+        val response = repository.answer("Am bricheta", context, allowLocalModel = true)
 
         assertEquals("campfire_light_with_lighter", response.conversationState.lastCardId)
         assertEquals("Aprindere cu brichetă", response.conversationState.lastRetrievedTitle)

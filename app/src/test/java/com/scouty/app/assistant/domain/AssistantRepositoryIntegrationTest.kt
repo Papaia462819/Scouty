@@ -83,7 +83,8 @@ class AssistantRepositoryIntegrationTest {
                 batteryPercent = 41,
                 gpsFixed = true,
                 localeTag = "ro"
-            )
+            ),
+            allowLocalModel = true
         )
 
         assertFalse(response.usedFallback)
@@ -145,7 +146,8 @@ class AssistantRepositoryIntegrationTest {
                 batteryPercent = 73,
                 gpsFixed = true,
                 localeTag = "ro"
-            )
+            ),
+            allowLocalModel = true
         )
 
         assertEquals(GenerationMode.LOCAL_LLM, response.generationMode)
@@ -185,7 +187,7 @@ class AssistantRepositoryIntegrationTest {
         val store = FakeSearchKnowledgeStore(chunks, knowledgePackStatus)
         val client = FakeGeminiContentClient(
             response = geminiResponse(
-                """{"summary":"Raspuns remote Gemini.","warning":"","guidance":"Tine frontala la indemana si verifica bateriile inainte de plecare.","sections":[]}"""
+                "Raspuns remote Gemini.\n\nTine frontala la indemana si verifica bateriile inainte de plecare."
             )
         )
         val modelManager = ModelManager(
@@ -300,7 +302,8 @@ class AssistantRepositoryIntegrationTest {
 
         val response = repository.answer(
             query = "Nu se aprinde focul",
-            context = DeviceContextSnapshot(localeTag = "ro")
+            context = DeviceContextSnapshot(localeTag = "ro"),
+            allowLocalModel = true
         )
 
         assertTrue(response.answerText.contains("Cu ce încerci"))

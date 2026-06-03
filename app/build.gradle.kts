@@ -32,6 +32,13 @@ fun escapedBuildConfigString(
         .replace("\\", "\\\\")
         .replace("\"", "\\\"")
 
+fun intBuildConfigValue(
+    name: String,
+    defaultValue: Int,
+    envName: String = name.replace('.', '_').uppercase()
+): Int =
+    propertyOrEnv(name, envName).toIntOrNull()?.takeIf { it > 0 } ?: defaultValue
+
 android {
     namespace = "com.scouty.app"
     compileSdk = 35
@@ -48,6 +55,7 @@ android {
         buildConfigField("String", "METEOBLUE_API_KEY", "\"${escapedBuildConfigString("meteoblue.apiKey")}\"")
         buildConfigField("String", "GEMINI_API_KEY", "\"${escapedBuildConfigString("gemini.apiKey", envName = "GEMINI_API_KEY")}\"")
         buildConfigField("String", "GEMINI_MODEL", "\"${escapedBuildConfigString("gemini.model", "gemini-2.5-flash", envName = "GEMINI_MODEL")}\"")
+        buildConfigField("int", "GEMINI_MAX_OUTPUT_TOKENS", "${intBuildConfigValue("gemini.maxOutputTokens", 2048, envName = "GEMINI_MAX_OUTPUT_TOKENS")}")
         buildConfigField("String", "MAPS_BASE_URL", "\"${escapedBuildConfigString("maps.baseUrl", "https://maps.scouty.app", envName = "MAPS_BASE_URL")}\"")
     }
 
