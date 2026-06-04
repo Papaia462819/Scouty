@@ -6,6 +6,7 @@ import com.scouty.app.assistant.model.GearContextItem
 import com.scouty.app.assistant.model.TrailHistoryEntry
 import com.scouty.app.assistant.model.TrailContextSnapshot
 import com.scouty.app.assistant.model.AssistantRuntimeDebugInfo
+import com.scouty.app.assistant.model.WaterSourceContextItem
 import com.scouty.app.data.RouteBounds
 import com.scouty.app.data.RouteCoordinate
 import com.scouty.app.utils.TrailDifficulty
@@ -182,6 +183,7 @@ data class HomeStatus(
     val locationName: String = "Waiting for fix...",
     val activeTrail: ActiveTrail? = null,
     val gearList: List<GearItem> = emptyList(),
+    val nearbyWaterSources: List<WaterSourceContextItem> = emptyList(),
     val trailHistory: List<TrailHistoryEntry> = emptyList(),
     val userProfile: UserTrailProfile = UserTrailProfile(),
     val routeRecommendations: List<RouteRecommendation> = emptyList(),
@@ -234,5 +236,6 @@ fun HomeStatus.toDeviceContextSnapshot(): DeviceContextSnapshot =
                 note = item.note
             )
         },
+        nearbyWaterSources = nearbyWaterSources,
         trailHistory = trailHistory
     )

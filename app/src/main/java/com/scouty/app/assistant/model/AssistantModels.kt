@@ -54,6 +54,17 @@ data class GearContextItem(
     val note: String = ""
 )
 
+data class WaterSourceContextItem(
+    val sourceId: String,
+    val title: String,
+    val subtitle: String,
+    val latitude: Double,
+    val longitude: Double,
+    val distanceKm: Double,
+    val bearingDegrees: Double,
+    val isPotable: Boolean? = null
+)
+
 data class TrailHistoryEntry(
     val name: String,
     val region: String,
@@ -77,6 +88,7 @@ data class DeviceContextSnapshot(
     val trail: TrailContextSnapshot? = null,
     val recommendedGear: List<String> = emptyList(),
     val gearItems: List<GearContextItem> = emptyList(),
+    val nearbyWaterSources: List<WaterSourceContextItem> = emptyList(),
     val trailHistory: List<TrailHistoryEntry> = emptyList(),
     val localeTag: String = assistantDefaultLocale().toLanguageTag()
 )

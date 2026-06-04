@@ -1113,7 +1113,7 @@ class TrailContextEngine {
         sections += StructuredResponseSection(
             title = if (isRomanian) "Echipament" else "Gear",
             body = gearBody,
-            style = ResponseSectionStyle.CONTEXT
+            style = ResponseSectionStyle.ACTIONS
         )
 
         buildWeatherGearSection(trail, isRomanian)?.let { sections += it }

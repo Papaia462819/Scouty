@@ -67,6 +67,7 @@ import com.scouty.app.ui.models.toDeviceContextSnapshot
 import com.scouty.app.profile.ProfileTrailRecord
 import com.scouty.app.utils.MapPackRepository
 import com.scouty.app.utils.MapPackRegistryManager
+import com.scouty.app.utils.OfflineWaterSourceRepository
 import com.scouty.app.utils.SolarCalculator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -144,6 +145,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private val knowledgePackManager: KnowledgePackManager = assistantRuntimeGraph.knowledgePackManager
     private val modelManager: ModelManager = assistantRuntimeGraph.modelManager
     private val mapPackRepository = MapPackRepository.get(application)
+    private val waterSourceRepository = OfflineWaterSourceRepository(application)
 
     private val _uiState = MutableStateFlow(HomeStatus(userProfile = userTrailProfileStore.load()))
     val uiState: StateFlow<HomeStatus> = _uiState.asStateFlow()
@@ -156,6 +158,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private var lastRecommendationLocation: Pair<Double, Double>? = null
     private var lastRecommendationRefreshMs: Long = 0L
     private var lastActiveTrailPersistMs: Long = 0L
+    private var lastWaterContextAnchor: Pair<Double, Double>? = null
 
     private val json = Json { ignoreUnknownKeys = true }
     private val retrofit = Retrofit.Builder()
@@ -225,6 +228,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         refreshAssistantRuntimeStatus()
         warmMapRuntime()
         maybeRefreshRouteRecommendations(force = true)
+        refreshNearbyWaterContextForCurrentState(force = true)
     }
 
     private fun loadDefaultGear() {
@@ -234,8 +238,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private fun buildGearList(
         trail: ActiveTrail?,
         profile: UserTrailProfile,
-        previousItems: List<com.scouty.app.ui.models.GearItem> = emptyList()
-    ): List<com.scouty.app.ui.models.GearItem> =
+        previousItems: List<GearItem> = emptyList()
+    ): List<GearItem> =
         if (trail == null) {
             emptyList()
         } else {
@@ -271,6 +275,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         viewModelScope.launch(Dispatchers.IO) {
             prepareOfflineMapForTrail(restoredTrail)
         }
+        refreshNearbyWaterContextForCurrentState(force = true)
         refreshActiveTrailWeatherIfNeeded()
     }
 
@@ -648,6 +653,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             )
         }
         refreshNearbyGuideMetrics(location)
+        refreshNearbyWaterContext(latitude = location.latitude, longitude = location.longitude)
         updateActiveTrailProgress(location)
         maybeRefreshRouteRecommendations(latitude = location.latitude, longitude = location.longitude)
     }
@@ -672,6 +678,55 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                     )
                 )
             )
+        }
+    }
+
+    private fun refreshNearbyWaterContextForCurrentState(force: Boolean = false) {
+        val state = _uiState.value
+        refreshNearbyWaterContext(
+            latitude = state.latitude ?: state.activeTrail?.latitude,
+            longitude = state.longitude ?: state.activeTrail?.longitude,
+            force = force
+        )
+    }
+
+    private fun refreshNearbyWaterContext(
+        latitude: Double?,
+        longitude: Double?,
+        force: Boolean = false
+    ) {
+        if (latitude == null || longitude == null) {
+            if (_uiState.value.nearbyWaterSources.isNotEmpty()) {
+                updateUiState { it.copy(nearbyWaterSources = emptyList()) }
+            }
+            lastWaterContextAnchor = null
+            return
+        }
+
+        val previousAnchor = lastWaterContextAnchor
+        if (!force && previousAnchor != null &&
+            calculateDistance(previousAnchor.first, previousAnchor.second, latitude, longitude) < 0.2
+        ) {
+            return
+        }
+        lastWaterContextAnchor = latitude to longitude
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val nearestSources = waterSourceRepository.nearest(
+                latitude = latitude,
+                longitude = longitude
+            )
+            updateUiState { currentState ->
+                val currentLatitude = currentState.latitude ?: currentState.activeTrail?.latitude
+                val currentLongitude = currentState.longitude ?: currentState.activeTrail?.longitude
+                if (currentLatitude == null || currentLongitude == null) {
+                    currentState.copy(nearbyWaterSources = emptyList())
+                } else if (calculateDistance(currentLatitude, currentLongitude, latitude, longitude) > 0.5) {
+                    currentState
+                } else {
+                    currentState.copy(nearbyWaterSources = nearestSources)
+                }
+            }
         }
     }
 
@@ -1827,6 +1882,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 )
             }
             persistActiveTrail(trail, force = true)
+            refreshNearbyWaterContextForCurrentState(force = true)
             _mapSessionState.update { currentState ->
                 currentState.copy(
                     selectedTrail = trail.toTrailSelectionSnapshot(),

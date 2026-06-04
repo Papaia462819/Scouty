@@ -25,6 +25,7 @@ import com.scouty.app.assistant.model.ResponseSectionStyle
 import com.scouty.app.assistant.model.SafetyOutcome
 import com.scouty.app.assistant.model.TrailHistoryEntry
 import com.scouty.app.assistant.model.TrailContextSnapshot
+import com.scouty.app.assistant.model.WaterSourceContextItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.runBlocking
@@ -401,6 +402,74 @@ class AssistantRepositoryIntegrationTest {
         val action = response.actions.single() as AssistantAction.RemoveGearItems
         assertEquals(listOf("headlamp"), action.itemIds)
         assertTrue(response.answerText.contains("obligatoriu", ignoreCase = true))
+    }
+
+    @Test
+    fun gearNeedsQuestion_usesActiveGearList() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+
+        val response = repository.answer(
+            query = "ce echipament sa-mi iau?",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                trail = TrailContextSnapshot(
+                    name = "Brasov (centru) - Drumul Serpentinelor - Vf. Tampa",
+                    difficulty = "MEDIUM"
+                ),
+                gearItems = listOf(
+                    GearContextItem(id = "water", name = "Apa 2 L", necessity = "MANDATORY", isPacked = false),
+                    GearContextItem(id = "headlamp", name = "Frontala", necessity = "MANDATORY", isPacked = true),
+                    GearContextItem(id = "snacks", name = "Gustari", necessity = "RECOMMENDED", isPacked = false)
+                )
+            )
+        )
+
+        assertTrue(response.answerText.contains("Pentru traseul", ignoreCase = true))
+        assertTrue(response.answerText.contains("Apa 2 L"))
+        assertTrue(response.answerText.contains("Frontala"))
+        assertTrue(response.answerText.contains("Gustari"))
+        assertEquals("NEEDS_CHECK", response.conversationState.lastTrailContextIntent)
+    }
+
+    @Test
+    fun waterSourceQuestion_usesNearbyWaterContext() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+
+        val response = repository.answer(
+            query = "Nu mai am apa, care e cea mai apropiata sursa si unde?",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                nearbyWaterSources = listOf(
+                    WaterSourceContextItem(
+                        sourceId = "node/test-water",
+                        title = "Izvor Tampa",
+                        subtitle = "Izvor · Potabila mapata",
+                        latitude = 45.64231,
+                        longitude = 25.59312,
+                        distanceKm = 0.45,
+                        bearingDegrees = 95.0,
+                        isPotable = true
+                    )
+                )
+            )
+        )
+
+        assertTrue(response.answerText.contains("Izvor Tampa"))
+        assertTrue(response.answerText.contains("450 m"))
+        assertTrue(response.answerText.contains("est", ignoreCase = true))
+        assertTrue(response.answerText.contains("Coordonate"))
+        assertEquals(SafetyOutcome.CAUTION, response.safetyOutcome)
+        assertEquals("WATER_SOURCE_LOOKUP", response.conversationState.lastTrailContextIntent)
     }
 
     @Test

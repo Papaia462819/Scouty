@@ -398,7 +398,9 @@ class QueryAnalyzer(
     private fun hasNeedsTokens(normalizedQuery: String): Boolean =
         containsAny(normalizedQuery, "am nevoie", "trebuie sa iau", "trebuie sa am",
             "do i need", "should i bring", "should i take", "what do i need",
-            "ce am nevoie", "ce imi trebuie", "ce sa iau", "necesar")
+            "ce am nevoie", "ce imi trebuie", "ce sa iau", "ce echipament sa iau",
+            "ce echipament sa mi iau", "ce echipament imi iau", "ce echipament am nevoie",
+            "necesar")
 
     private fun hasGearReviewTokens(normalizedQuery: String, tokens: List<String>): Boolean =
         containsAny(normalizedQuery, "lista echipament", "arata lista", "gear list",
@@ -1271,6 +1273,15 @@ private class DeterministicInteractionEngine {
         interactionHandler: ChatActionHandler?
     ): AssistantResponse? {
         val normalized = normalize(query)
+        if (detectWaterSourceIntent(normalized)) {
+            return answerWaterSource(
+                query = query,
+                context = context,
+                queryAnalysis = queryAnalysis,
+                conversationState = conversationState,
+                packStatus = packStatus
+            )
+        }
         detectGearIntent(normalized, context)?.let { intent ->
             return answerGear(
                 intent = intent,
@@ -1293,6 +1304,111 @@ private class DeterministicInteractionEngine {
             )
         }
         return null
+    }
+
+    private fun detectWaterSourceIntent(normalized: String): Boolean {
+        if (containsAny(normalized, "cat apa", "cata apa", "am pus apa", "am luat apa", "bifeaza apa")) {
+            return false
+        }
+        return containsAny(
+            normalized,
+            "nu mai am apa",
+            "am ramas fara apa",
+            "ramas fara apa",
+            "fara apa",
+            "unde gasesc apa",
+            "unde pot gasi apa",
+            "cea mai apropiata sursa",
+            "cea mai apropiata apa",
+            "sursa de apa",
+            "surse de apa",
+            "izvor",
+            "water source",
+            "nearest water",
+            "find water"
+        )
+    }
+
+    private fun answerWaterSource(
+        query: String,
+        context: DeviceContextSnapshot,
+        queryAnalysis: QueryAnalysis,
+        conversationState: AssistantConversationState,
+        packStatus: KnowledgePackStatus
+    ): AssistantResponse {
+        val isRomanian = queryAnalysis.preferredLanguage == "ro"
+        val nearest = context.nearbyWaterSources.firstOrNull()
+        val sections = mutableListOf<StructuredResponseSection>()
+        val noWaterSignal = containsAny(normalize(query), "nu mai am apa", "ramas fara apa", "fara apa", "no water")
+
+        val summary = if (nearest != null) {
+            if (isRomanian) {
+                "Cea mai apropiata sursa de apa mapata este ${nearest.title}, la ${formatDistance(nearest.distanceKm)} spre ${bearingLabel(nearest.bearingDegrees, true)}."
+            } else {
+                "The closest mapped water source is ${nearest.title}, ${formatDistance(nearest.distanceKm)} toward ${bearingLabel(nearest.bearingDegrees, false)}."
+            }
+        } else {
+            if (isRomanian) {
+                "Nu am o sursa de apa mapata in contextul curent al aplicatiei."
+            } else {
+                "I do not have a mapped water source in the current app context."
+            }
+        }
+
+        if (nearest != null) {
+            sections += StructuredResponseSection(
+                title = if (isRomanian) "Unde" else "Where",
+                body = if (isRomanian) {
+                    "${nearest.subtitle}. Coordonate: ${formatCoordinate(nearest.latitude)}, ${formatCoordinate(nearest.longitude)}."
+                } else {
+                    "${nearest.subtitle}. Coordinates: ${formatCoordinate(nearest.latitude)}, ${formatCoordinate(nearest.longitude)}."
+                },
+                style = ResponseSectionStyle.ACTIONS
+            )
+            val alternatives = context.nearbyWaterSources.drop(1).take(2)
+            if (alternatives.isNotEmpty()) {
+                sections += StructuredResponseSection(
+                    title = if (isRomanian) "Alternative" else "Alternatives",
+                    body = alternatives.joinToString("\n") { source ->
+                        "- ${source.title}: ${formatDistance(source.distanceKm)}, ${bearingLabel(source.bearingDegrees, isRomanian)}"
+                    },
+                    style = ResponseSectionStyle.GUIDANCE
+                )
+            }
+        }
+
+        sections += StructuredResponseSection(
+            title = if (isRomanian) "Siguranta" else "Safety",
+            body = if (isRomanian) {
+                if (nearest?.isPotable == true) {
+                    "Chiar daca punctul este mapat ca potabil, verifica pe teren si filtreaza/fierbe apa daca ai dubii. Daca esti deja fara apa, intoarce-te sau cauta zona locuita cea mai apropiata daca sursa pare nesigura."
+                } else {
+                    "Potabilitatea nu este confirmata. Filtreaza/fierbe apa inainte de consum si nu continua sa urci daca esti deja deshidratat."
+                }
+            } else {
+                if (nearest?.isPotable == true) {
+                    "Even if it is mapped as potable, verify on site and filter/boil if unsure. If you are already out of water, turn back or seek the closest inhabited area if the source looks unsafe."
+                } else {
+                    "Potability is not confirmed. Filter/boil before drinking and do not keep climbing if you are already dehydrated."
+                }
+            },
+            style = ResponseSectionStyle.IMPORTANT
+        )
+
+        return structuredInteractionResponse(
+            summary = summary,
+            sections = sections,
+            followUps = if (isRomanian) {
+                listOf("Cat de departe e?", "Ce fac daca sursa e seaca?")
+            } else {
+                listOf("How far is it?", "What if the source is dry?")
+            },
+            reasoningType = ReasoningType.ROUTE_CONTEXT,
+            queryAnalysis = queryAnalysis,
+            conversationState = conversationState.copy(lastTrailContextIntent = "WATER_SOURCE_LOOKUP"),
+            packStatus = packStatus,
+            safetyOutcome = if (noWaterSignal) SafetyOutcome.CAUTION else SafetyOutcome.NORMAL
+        )
     }
 
     private fun detectGearIntent(normalized: String, context: DeviceContextSnapshot): GearInteractionIntent? {
@@ -1852,6 +1968,25 @@ private class DeterministicInteractionEngine {
                     append(section.body.trim())
                 }
         }.trim()
+
+    private fun formatDistance(distanceKm: Double): String =
+        if (distanceKm < 1.0) {
+            "${(distanceKm * 1000).toInt().coerceAtLeast(1)} m"
+        } else {
+            String.format(Locale.ROOT, "%.1f km", distanceKm)
+        }
+
+    private fun formatCoordinate(value: Double): String =
+        String.format(Locale.ROOT, "%.5f", value)
+
+    private fun bearingLabel(bearingDegrees: Double, isRomanian: Boolean): String {
+        val index = (((bearingDegrees + 22.5) / 45.0).toInt() % 8).coerceIn(0, 7)
+        return if (isRomanian) {
+            listOf("nord", "nord-est", "est", "sud-est", "sud", "sud-vest", "vest", "nord-vest")[index]
+        } else {
+            listOf("north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west")[index]
+        }
+    }
 
     private fun matchGearItem(objectText: String, items: List<GearContextItem>): GearItemMatch {
         if (objectText.isBlank() || items.isEmpty()) {
@@ -3100,7 +3235,11 @@ class AssistantRepository(
             null
         }
         val visibleBodies = output.sections.asSequence()
-            .filter { it.style == ResponseSectionStyle.GUIDANCE || it.style == ResponseSectionStyle.ACTIONS }
+            .filter {
+                it.style == ResponseSectionStyle.IMPORTANT ||
+                    it.style == ResponseSectionStyle.GUIDANCE ||
+                    it.style == ResponseSectionStyle.ACTIONS
+            }
             .map { section ->
                 val body = sanitizeDisplayText(section.body)
                 if (output.generationMode == GenerationMode.CARD_DIRECT) {
