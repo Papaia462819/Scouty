@@ -141,7 +141,7 @@ class KnowledgePackManager(private val context: Context) : KnowledgePackStatusPr
                     integrityValid = integrityValid,
                     installedAtEpochMs = preferences.getLong(InstalledAtKey, 0L).takeIf { it > 0L },
                     databasePath = databaseFile.absolutePath,
-                    errorMessage = if (integrityValid) null else "Knowledge pack integrity check failed"
+                    errorMessage = if (integrityValid) null else "Verificarea integrității pachetului local a eșuat"
                 )
             }.getOrElse { error ->
                 KnowledgePackStatus(

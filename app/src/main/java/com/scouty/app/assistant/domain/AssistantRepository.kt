@@ -226,21 +226,7 @@ class QueryAnalyzer(
         rawTokens: List<String>,
         searchTokens: List<String>,
         localeTag: String
-    ): String {
-        val raw = query.lowercase()
-        if (raw.any { it in "ăâîșşțţ" }) {
-            return "ro"
-        }
-        val tokens = (rawTokens + searchTokens).distinct()
-        val romanianHits = tokens.count { it in RomanianMarkers }
-        val englishHits = tokens.count { it in EnglishMarkers }
-        return when {
-            romanianHits > englishHits -> "ro"
-            englishHits > romanianHits -> "en"
-            localeTag.startsWith("ro") -> "ro"
-            else -> "en"
-        }
-    }
+    ): String = "ro"
 
     private fun detectSafetyTags(tokens: List<String>): Set<String> {
         val tags = mutableSetOf<String>()
@@ -965,15 +951,15 @@ class PromptBuilder {
             }
         } ?: "Fără traseu activ"
 
-        val batterySummary = "Baterie ${context.batteryPercent}%${if (context.batterySafe) " / Battery Safe" else ""}"
+        val batterySummary = "Baterie ${context.batteryPercent}%${if (context.batterySafe) " / economisire activă" else ""}"
         val gpsSummary = if (context.gpsFixed && context.latitude != null && context.longitude != null) {
             "GPS fix (${String.format("%.4f", context.latitude)}, ${String.format("%.4f", context.longitude)})"
         } else {
             "GPS fără fix stabil"
         }
         val gearSummary = context.recommendedGear.takeIf { it.isNotEmpty() }?.joinToString(", ")?.let {
-            "Gear shortlist: $it"
-        } ?: "Gear shortlist indisponibil"
+            "Listă scurtă echipament: $it"
+        } ?: "Listă scurtă echipament indisponibilă"
 
         return AssistantPrompt(
             query = query,
@@ -1046,7 +1032,7 @@ open class MedicalSafetyPolicy {
         val summary = if (output.summary.isNotBlank()) {
             output.summary
         } else if (isRomanian) {
-            "Prioritizeaza 112 / SOS si apoi urmeaza pasii de baza confirmati offline."
+            "Prioritizează 112 / SOS și apoi urmează pașii de bază confirmați local."
         } else {
             "Prioritize 112 / SOS first and then follow the confirmed offline basics."
         }
@@ -1079,7 +1065,7 @@ interface GenerationEngine {
 
 class TemplateGenerationEngine : GenerationEngine {
     override suspend fun generate(input: GenerationInput): StructuredAssistantOutput {
-        val isRomanian = input.queryAnalysis.preferredLanguage == "ro"
+        val isRomanian = true
         val sections = mutableListOf<StructuredResponseSection>()
 
         input.retrievedChunks.firstOrNull()?.let { chunk ->
@@ -1091,7 +1077,7 @@ class TemplateGenerationEngine : GenerationEngine {
                 )
             }
             sections += StructuredResponseSection(
-                title = if (isRomanian) "Baza offline" else "Offline guidance",
+                title = if (isRomanian) "Baza locală" else "Baza locală",
                 body = chunk.synthesizedAnswer
                     ?.takeIf { it.isNotBlank() }
                     ?: chunk.shortAnswer
@@ -1106,24 +1092,16 @@ class TemplateGenerationEngine : GenerationEngine {
         buildActionSection(input, isRomanian)?.let { sections += it }
 
         val summary = when {
-            input.safetyOutcome == SafetyOutcome.EMERGENCY_ESCALATION && isRomanian ->
-                "Prioritatea este siguranta imediata, apoi pasii de baza verificati din knowledge pack."
             input.safetyOutcome == SafetyOutcome.EMERGENCY_ESCALATION ->
-                "Immediate safety comes first, followed by the verified basic steps from the knowledge pack."
-            input.queryAnalysis.routeContextQuery && isRomanian ->
-                "Am combinat knowledge pack-ul offline cu contextul traseului activ."
+                "Prioritatea este siguranța imediată, apoi pașii de bază verificați din pachetul local."
             input.queryAnalysis.routeContextQuery ->
-                "I combined the offline knowledge pack with the active trail context."
-            input.retrievedChunks.isEmpty() && isRomanian ->
-                "Nu am gasit inca un chunk suficient de apropiat in pack, asa ca raspund prudent si iti spun cum sa reformulezi pentru grounding mai bun."
+                "Am combinat pachetul local de cunoștințe cu contextul traseului activ."
             input.retrievedChunks.isEmpty() ->
-                "I did not find a close enough knowledge chunk yet, so I am answering conservatively and showing how to rephrase for better grounding."
+                "Nu am găsit încă un fragment suficient de apropiat în pachetul local, așa că răspund prudent și îți spun cum să reformulezi pentru o ancorare mai bună."
             input.retrievedChunks.firstOrNull()?.shortAnswer?.isNotBlank() == true ->
                 input.retrievedChunks.first().shortAnswer.orEmpty()
-            isRomanian ->
-                "Am selectat cele mai relevante chunk-uri offline pentru intrebarea ta."
             else ->
-                "I selected the most relevant offline chunks for your question."
+                "Am selectat cele mai relevante fragmente locale pentru întrebarea ta."
         }
 
         return StructuredAssistantOutput(
@@ -1145,36 +1123,24 @@ class TemplateGenerationEngine : GenerationEngine {
         }
 
         val examples = when (input.queryAnalysis.domainHints.firstOrNull()?.domain) {
-            "survival_basics" -> if (isRomanian) {
+            "survival_basics" -> {
                 "Exemple bune: \"foc de tabara in siguranta\", \"cum purific apa\", \"adapost temporar\"."
-            } else {
-                "Good examples: \"safe campfire basics\", \"how to purify water\", \"temporary shelter\"."
             }
-            "medical_emergency" -> if (isRomanian) {
+            "medical_emergency" -> {
                 "Exemple bune: \"mi-am sucit glezna\", \"sangerare puternica\", \"nu pot calca\"."
-            } else {
-                "Good examples: \"I twisted my ankle\", \"heavy bleeding\", \"I cannot walk\"."
             }
-            "wildlife_romania" -> if (isRomanian) {
+            "wildlife_romania" -> {
                 "Exemple bune: \"urs aproape de cort\", \"muscatura de sarpe\", \"urme de urs\"."
-            } else {
-                "Good examples: \"bear near tent\", \"snakebite\", \"bear tracks\"."
             }
-            else -> if (isRomanian) {
+            else -> {
                 "Exemple bune: \"cum purific apa\", \"mi-am sucit glezna\", \"ce fac daca vad urs\"."
-            } else {
-                "Good examples: \"how do I purify water\", \"I twisted my ankle\", \"what do I do if I see a bear\"."
             }
         }
 
-        val body = if (isRomanian) {
-            "Nu inventez pasi fara un chunk verificat din knowledge pack. Reformuleaza cu termeni concreti din problema ta ca sa pot ancora raspunsul mai bine. $examples"
-        } else {
-            "I do not invent steps without a verified knowledge chunk. Rephrase with concrete problem terms so I can ground the answer better. $examples"
-        }
+        val body = "Nu inventez pași fără un fragment verificat din pachetul local. Reformulează cu termeni concreți din problema ta ca să pot ancora răspunsul mai bine. $examples"
 
         return StructuredResponseSection(
-            title = if (isRomanian) "Grounding mai bun" else "Better grounding",
+            title = "Ancorare mai bună",
             body = body,
             style = ResponseSectionStyle.ACTIONS
         )
@@ -1207,13 +1173,13 @@ class TemplateGenerationEngine : GenerationEngine {
                 add(if (isRomanian) "Apus estimat: $it." else "Estimated sunset: $it.")
             }
             add(if (isRomanian) {
-                "Baterie ${input.context.batteryPercent}%${if (input.context.batterySafe) " cu Battery Safe activ" else ""}; GPS ${if (input.context.gpsFixed) "disponibil" else "fara fix stabil"}."
+                "Baterie ${input.context.batteryPercent}%${if (input.context.batterySafe) " cu economisire activă" else ""}; GPS ${if (input.context.gpsFixed) "disponibil" else "fără fix stabil"}."
             } else {
-                "Battery ${input.context.batteryPercent}%${if (input.context.batterySafe) " with Battery Safe active" else ""}; GPS ${if (input.context.gpsFixed) "available" else "without a stable fix"}."
+                "Baterie ${input.context.batteryPercent}%${if (input.context.batterySafe) " cu economisire activă" else ""}; GPS ${if (input.context.gpsFixed) "disponibil" else "fără fix stabil"}."
             })
             if (input.queryAnalysis.gearQuery && input.context.recommendedGear.isNotEmpty()) {
                 add(if (isRomanian) {
-                    "Shortlist gear curent: ${input.context.recommendedGear.joinToString(", ")}."
+                    "Listă scurtă echipament curent: ${input.context.recommendedGear.joinToString(", ")}."
                 } else {
                     "Current gear shortlist: ${input.context.recommendedGear.joinToString(", ")}."
                 })
@@ -1234,9 +1200,9 @@ class TemplateGenerationEngine : GenerationEngine {
         val actions = mutableListOf<String>()
         if (input.context.batterySafe) {
             actions += if (isRomanian) {
-                "Battery Safe este activ; pastreaza bateria pentru navigatie si apel de urgenta."
+                "Economisirea bateriei este activă; păstrează bateria pentru navigație și apel de urgență."
             } else {
-                "Battery Safe is active; preserve battery for navigation and emergency calling."
+                "Economisirea bateriei este activă; păstrează bateria pentru navigație și apel de urgență."
             }
         }
         if (input.queryAnalysis.routeContextQuery && input.context.trail?.sourceUrls?.isNotEmpty() == true) {
@@ -1255,7 +1221,7 @@ class TemplateGenerationEngine : GenerationEngine {
         }
         return actions.takeIf { it.isNotEmpty() }?.let {
             StructuredResponseSection(
-                title = if (isRomanian) "Actiuni imediate" else "Immediate actions",
+                title = if (isRomanian) "Acțiuni imediate" else "Immediate actions",
                 body = it.joinToString(" "),
                 style = ResponseSectionStyle.ACTIONS
             )
@@ -1336,7 +1302,7 @@ private class DeterministicInteractionEngine {
         conversationState: AssistantConversationState,
         packStatus: KnowledgePackStatus
     ): AssistantResponse {
-        val isRomanian = queryAnalysis.preferredLanguage == "ro"
+        val isRomanian = true
         val nearest = context.nearbyWaterSources.firstOrNull()
         val sections = mutableListOf<StructuredResponseSection>()
         val noWaterSignal = containsAny(normalize(query), "nu mai am apa", "ramas fara apa", "fara apa", "no water")
@@ -1351,7 +1317,7 @@ private class DeterministicInteractionEngine {
             if (isRomanian) {
                 "Nu am o sursa de apa mapata in contextul curent al aplicatiei."
             } else {
-                "I do not have a mapped water source in the current app context."
+                "Nu am o sursă de apă mapată în contextul curent al aplicației."
             }
         }
 
@@ -1452,7 +1418,7 @@ private class DeterministicInteractionEngine {
         conversationState: AssistantConversationState,
         packStatus: KnowledgePackStatus
     ): AssistantResponse {
-        val isRomanian = queryAnalysis.preferredLanguage == "ro"
+        val isRomanian = true
         val objectText = extractGearObject(normalized)
         val match = matchGearItem(objectText, context.gearItems)
         val actions = mutableListOf<AssistantAction>()
@@ -1466,7 +1432,7 @@ private class DeterministicInteractionEngine {
                 summary = if (isRomanian) {
                     "Lista are $packed din ${context.gearItems.size} articole bifate."
                 } else {
-                    "The list has $packed of ${context.gearItems.size} items packed."
+                    "Lista are $packed din ${context.gearItems.size} articole bifate."
                 }
                 sections += StructuredResponseSection(
                     title = if (isRomanian) "Echipament" else "Gear",
@@ -1478,7 +1444,7 @@ private class DeterministicInteractionEngine {
                         }
                         "- ${item.name} ($status)"
                     }.ifBlank {
-                        if (isRomanian) "Nu ai articole in lista." else "There are no items in the list."
+                        if (isRomanian) "Nu ai articole in lista." else "Nu ai articole în listă."
                     },
                     style = ResponseSectionStyle.ACTIONS
                 )
@@ -1491,13 +1457,13 @@ private class DeterministicInteractionEngine {
                     if (isRomanian) {
                         "Iti lipsesc ${mandatory.size} articole obligatorii."
                     } else {
-                        "You are missing ${mandatory.size} mandatory items."
+                        "Îți lipsesc ${mandatory.size} articole obligatorii."
                     }
                 } else if (missing.isNotEmpty()) {
                     if (isRomanian) {
                         "Obligatoriul pare acoperit, dar mai ai ${missing.size} articole nebifate."
                     } else {
-                        "Mandatory gear looks covered, but ${missing.size} items are still unchecked."
+                        "Echipamentul obligatoriu pare acoperit, dar mai ai ${missing.size} articole nebifate."
                     }
                 } else {
                     if (isRomanian) "Lista este bifata complet." else "The list is fully checked."
@@ -1522,13 +1488,13 @@ private class DeterministicInteractionEngine {
                         "For the expected weather ($weather), prioritize weather protection."
                 } else {
                     if (isRomanian) "Nu am o prognoza clara in context, dar pot verifica lista pentru protectie meteo." else
-                        "I do not have a clear forecast in context, but I can check the list for weather protection."
+                        "Nu am o prognoză clară în context, dar pot verifica lista pentru protecție meteo."
                 }
                 sections += StructuredResponseSection(
                     title = if (isRomanian) "Prioritar" else "Priority",
                     body = rainItems.takeIf { it.isNotEmpty() }?.joinToString("\n") { "- ${it.name}" }
                         ?: if (isRomanian) "Adauga protectie de ploaie/vant daca prognoza se inrautateste." else
-                            "Add rain/wind protection if the forecast worsens.",
+                            "Adaugă protecție de ploaie/vânt dacă prognoza se înrăutățește.",
                     style = ResponseSectionStyle.GUIDANCE
                 )
             }
@@ -1673,7 +1639,7 @@ private class DeterministicInteractionEngine {
         packStatus: KnowledgePackStatus,
         interactionHandler: ChatActionHandler?
     ): AssistantResponse {
-        val isRomanian = queryAnalysis.preferredLanguage == "ro"
+        val isRomanian = true
         val trail = context.trail
         val lat = trail?.latitude ?: context.latitude
         val lon = trail?.longitude ?: context.longitude
@@ -1686,11 +1652,11 @@ private class DeterministicInteractionEngine {
             val cached = trail?.weatherForecast?.takeIf { it.isNotBlank() }
             val summary = cached?.let {
                 if (isRomanian) "Nu am coordonate pentru verificare live. Ultima prognoza din traseu: $it." else
-                    "I do not have coordinates for a live check. Last trail forecast: $it."
+                    "Nu am coordonate pentru verificare în timp real. Ultima prognoză din traseu: $it."
             } ?: if (isRomanian) {
-                "Nu pot verifica vremea live fara traseu activ sau pozitie GPS."
+                "Nu pot verifica vremea în timp real fără traseu activ sau poziție GPS."
             } else {
-                "I cannot check live weather without an active trail or GPS position."
+                "Nu pot verifica vremea în timp real fără traseu activ sau poziție GPS."
             }
             return structuredInteractionResponse(
                 summary = summary,
@@ -1736,8 +1702,7 @@ private class DeterministicInteractionEngine {
         return structuredInteractionResponse(
             summary = weatherSummary(result, intent, isRomanian),
             sections = sections,
-            followUps = if (isRomanian) listOf("Ce echipament imi trebuie?", "Verifica peste 3 ore") else
-                listOf("What gear do I need?", "Check in 3 hours"),
+            followUps = listOf("Ce echipament îmi trebuie?", "Verifică peste 3 ore"),
             reasoningType = ReasoningType.WEATHER_CONTEXT,
             queryAnalysis = queryAnalysis,
             conversationState = conversationState.copy(
@@ -1818,18 +1783,18 @@ private class DeterministicInteractionEngine {
         request: AssistantWeatherRequest
     ): AssistantWeatherResult {
         val cached = context.trail?.weatherForecast?.takeIf { it.isNotBlank() }
-        val isRomanian = request.preferredLanguage == "ro"
+        val isRomanian = true
         return AssistantWeatherResult(
             available = cached != null,
             isLive = false,
             locationLabel = request.locationLabel,
             summary = cached?.let {
                 if (isRomanian) "Nu am putut face apel live; ultima prognoza salvata este: $it." else
-                    "I could not make a live call; the last saved forecast is: $it."
+                    "Nu am putut face verificarea în timp real; ultima prognoză salvată este: $it."
             } ?: if (isRomanian) {
                 "Nu am date meteo live disponibile acum."
             } else {
-                "I do not have live weather data available now."
+                "Nu am date meteo în timp real disponibile acum."
             },
             hazard = request.hazard,
             errorMessage = "weather_handler_missing"
@@ -1897,7 +1862,7 @@ private class DeterministicInteractionEngine {
             }
         } else if (result.available) {
             if (isRomanian) "Nu vad un semnal puternic pentru acest risc in datele disponibile, dar verifica din nou daca vremea se schimba." else
-                "I do not see a strong signal for that risk in the available data, but check again if conditions change."
+                "Nu văd un semnal puternic pentru acest risc în datele disponibile, dar verifică din nou dacă vremea se schimbă."
         } else {
             result.summary
         }
@@ -1909,7 +1874,7 @@ private class DeterministicInteractionEngine {
         conversationState: AssistantConversationState,
         packStatus: KnowledgePackStatus
     ): AssistantResponse {
-        val isRomanian = queryAnalysis.preferredLanguage == "ro"
+        val isRomanian = true
         val names = items.take(3).map { it.name }
         return structuredInteractionResponse(
             summary = if (isRomanian) "Am gasit mai multe articole posibile. Pe care il modific?" else
@@ -2364,7 +2329,7 @@ class AssistantRepository(
             limit = 1
         )
         val primary = retrieved.firstOrNull() ?: return null
-        val isRomanian = queryAnalysis.preferredLanguage == "ro"
+        val isRomanian = true
         val text = primary.shortAnswer
             ?.takeIf { it.isNotBlank() }
             ?: primary.synthesizedAnswer

@@ -44,7 +44,7 @@ class TrailContextEngine {
         val intent = queryAnalysis.trailContextIntent
         if (intent == TrailContextIntent.NONE) return null
 
-        val isRomanian = queryAnalysis.preferredLanguage == "ro"
+        val isRomanian = true
         if (intent == TrailContextIntent.PERFORMANCE_HISTORY) {
             return answerPerformanceHistory(query, context, isRomanian)
         }
@@ -75,7 +75,7 @@ class TrailContextEngine {
                 summary = if (isRomanian) {
                     "Nu am inca trasee in istoricul tau de performanta."
                 } else {
-                    "I do not have any trails in your performance history yet."
+                    "Nu am încă trasee în istoricul tău de performanță."
                 },
                 sections = emptyList(),
                 followUps = emptyList(),
@@ -95,7 +95,7 @@ class TrailContextEngine {
                 "${matchedTrail.name}: ${matchedTrail.durationText}, ${formatKm(matchedTrail.distanceKm)} km, +${matchedTrail.elevationGainM} m, ${formatHistoryDate(matchedTrail.completedAtEpochMillis)}."
             }
             val section = StructuredResponseSection(
-                title = if (isRomanian) "Detalii traseu" else "Trail details",
+                title = if (isRomanian) "Detalii traseu" else "Detalii traseu",
                 body = buildString {
                     append(if (isRomanian) "Rezultat: " else "Outcome: ")
                     append(outcomeLabel(matchedTrail.outcome, isRomanian))
@@ -134,7 +134,7 @@ class TrailContextEngine {
         }
         val sections = listOf(
             StructuredResponseSection(
-                title = if (isRomanian) "Ultimele trasee" else "Latest trails",
+                title = if (isRomanian) "Ultimele trasee" else "Ultimele trasee",
                 body = latestLines,
                 style = ResponseSectionStyle.CONTEXT
             )
@@ -438,7 +438,7 @@ class TrailContextEngine {
         }.joinToString("\n")
 
         return StructuredResponseSection(
-            title = if (isRomanian) "Detalii traseu" else "Trail details",
+            title = if (isRomanian) "Detalii traseu" else "Detalii traseu",
             body = body,
             style = ResponseSectionStyle.CONTEXT
         )
@@ -638,7 +638,7 @@ class TrailContextEngine {
 
         return advice.takeIf { it.isNotEmpty() }?.let {
             StructuredResponseSection(
-                title = if (isRomanian) "Recomandari meteo" else "Weather advice",
+                title = if (isRomanian) "Recomandări meteo" else "Recomandări meteo",
                 body = it.joinToString(" "),
                 style = ResponseSectionStyle.GUIDANCE
             )
@@ -899,7 +899,7 @@ class TrailContextEngine {
             val warningBody = if (isRomanian) {
                 "Nu ai bifat inca: ${notPackedMandatory.joinToString(", ") { it.name }}. Asigura-te ca le ai inainte de plecare."
             } else {
-                "Not yet checked: ${notPackedMandatory.joinToString(", ") { it.name }}. Make sure you have them before departure."
+                "Nu ai bifat încă: ${notPackedMandatory.joinToString(", ") { it.name }}. Asigură-te că le ai înainte de plecare."
             }
             sections += StructuredResponseSection(
                 title = if (isRomanian) "Atentie" else "Warning",
@@ -946,7 +946,7 @@ class TrailContextEngine {
             advice += if (isRomanian) {
                 "Prognoza indica ploaie. Geaca impermeabila si protectia echipamentului sunt prioritare."
             } else {
-                "Forecast indicates rain. Waterproof jacket and gear protection are priorities."
+                "Prognoza indică ploaie. Geaca impermeabilă și protecția echipamentului sunt prioritare."
             }
         }
         if (listOf("clear", "sun", "soare").any { it in weather }) {
@@ -1093,10 +1093,10 @@ class TrailContextEngine {
             }
         } else {
             buildString {
-                append("Gear list for ${trail.name}: ")
-                append("${packed.size} checked out of ${gearItems.size} total.")
+                append("Lista de echipament pentru ${trail.name}: ")
+                append("${packed.size} bifate din ${gearItems.size} total.")
                 if (mandatoryNotPacked.isNotEmpty()) {
-                    append(" Warning: ${mandatoryNotPacked.size} mandatory items unchecked!")
+                    append(" Atenție: ${mandatoryNotPacked.size} obligatorii nebifate!")
                 }
             }
         }
@@ -1128,9 +1128,9 @@ class TrailContextEngine {
                 )
             } else {
                 listOf(
-                    "Mark all as packed",
-                    "What is most important?",
-                    "I packed everything mandatory"
+                    "Bifez totul ca împachetat",
+                    "Ce e cel mai important?",
+                    "Am împachetat tot ce e obligatoriu"
                 )
             }
         }
@@ -1208,7 +1208,7 @@ class TrailContextEngine {
                     followUps = if (isRomanian) {
                         listOf("Ce echipament am nevoie?", "Spune-mi despre traseu")
                     } else {
-                        listOf("What gear do I need?", "Tell me about the trail")
+                        listOf("Ce echipament am nevoie?", "Spune-mi despre traseu")
                     },
                     reasoningType = ReasoningType.GEAR_ADVICE,
                     conversationState = AssistantConversationState(
@@ -1266,7 +1266,7 @@ class TrailContextEngine {
         isRomanian: Boolean
     ): StructuredResponseSection? {
         val weather = trail.weatherForecast?.takeIf { it.isNotBlank() } ?: return null
-        val body = if (isRomanian) "Vreme curenta: $weather." else "Current weather: $weather."
+        val body = if (isRomanian) "Vreme curentă: $weather." else "Vreme curentă: $weather."
         return StructuredResponseSection(
             title = if (isRomanian) "Context meteo" else "Weather context",
             body = body,
@@ -1313,34 +1313,34 @@ class TrailContextEngine {
         } else {
             when (aspect) {
                 TrailInfoAspect.DIFFICULTY -> listOf(
-                    "Can I do this as a beginner?",
-                    "What gear do I need?",
-                    "How long if I go slow?"
+                    "Pot face traseul ca începător?",
+                    "Ce echipament am nevoie?",
+                    "Cât durează dacă merg încet?"
                 )
                 TrailInfoAspect.DURATION -> listOf(
-                    "How long with children?",
-                    "What time is sunset?",
-                    "Do I need a headlamp?"
+                    "Cât durează cu copii?",
+                    "La ce oră apune soarele?",
+                    "Am nevoie de frontală?"
                 )
                 TrailInfoAspect.MARKERS -> listOf(
-                    "Where does the trail start?",
-                    "What is the difficulty?",
-                    "How long is the trail?"
+                    "De unde începe traseul?",
+                    "Care este dificultatea?",
+                    "Cât durează traseul?"
                 )
                 TrailInfoAspect.ENDPOINTS -> listOf(
-                    "What trail markers does it have?",
-                    "How long is it?",
-                    "Do I need transport back?"
+                    "Ce marcaje are traseul?",
+                    "Cât durează?",
+                    "Am nevoie de transport la întoarcere?"
                 )
                 TrailInfoAspect.OVERVIEW -> listOf(
-                    "Can I do this as a beginner?",
-                    "What gear do I need?",
-                    "What will the weather be like?"
+                    "Pot face traseul ca începător?",
+                    "Ce echipament am nevoie?",
+                    "Cum va fi vremea?"
                 )
                 else -> listOf(
-                    "Tell me more about the trail",
-                    "What gear do I need?",
-                    "What will the weather be like?"
+                    "Spune-mi mai multe despre traseu",
+                    "Ce echipament am nevoie?",
+                    "Cum va fi vremea?"
                 )
             }
         }
@@ -1354,9 +1354,9 @@ class TrailContextEngine {
             )
         } else {
             listOf(
-                "Do I need a rain jacket?",
-                "Is tomorrow a good day to go?",
-                "How much water should I bring?"
+                "Am nevoie de geacă impermeabilă?",
+                "E bine să merg mâine?",
+                "Câtă apă să iau?"
             )
         }
 
@@ -1369,9 +1369,9 @@ class TrailContextEngine {
             )
         } else {
             listOf(
-                "What gear do I need?",
-                "How long at my pace?",
-                "What will the weather be like?"
+                "Ce echipament am nevoie?",
+                "Cât durează în ritmul meu?",
+                "Cum va fi vremea?"
             )
         }
 

@@ -85,7 +85,7 @@ class OfflineChatModelController(
                 _state.value = OfflineChatModelState(
                     enabled = false,
                     status = OfflineChatModelStatus.DISABLED,
-                    message = "Chat offline dezactivat."
+                    message = "Chat local dezactivat."
                 )
             }
         }
@@ -98,7 +98,7 @@ class OfflineChatModelController(
             _state.value = OfflineChatModelState(
                 enabled = false,
                 status = OfflineChatModelStatus.DISABLED,
-                message = "Chat offline este oprit."
+                message = "Chat local este oprit."
             )
             return
         }
@@ -107,7 +107,7 @@ class OfflineChatModelController(
             _state.value = OfflineChatModelState(
                 enabled = false,
                 status = OfflineChatModelStatus.DISABLED,
-                message = "Modelul offline nu mai este instalat."
+                message = "Modelul local nu mai este instalat."
             )
             return
         }
@@ -136,7 +136,7 @@ class OfflineChatModelController(
                 enabled = true,
                 status = OfflineChatModelStatus.DOWNLOADING,
                 progressPercent = 0,
-                message = "Se descarcă modelul Qwen pentru chat offline."
+                message = "Se descarcă modelul Qwen pentru chat local."
             )
 
             runCatching {
@@ -147,7 +147,7 @@ class OfflineChatModelController(
                     enabled = true,
                     status = OfflineChatModelStatus.INSTALLING,
                     progressPercent = 100,
-                    message = "Se finalizează instalarea modelului offline."
+                    message = "Se finalizează instalarea modelului local."
                 )
                 loadInstalledModel(showCompletionNotice = true)
             }.getOrElse { error ->
@@ -159,7 +159,7 @@ class OfflineChatModelController(
                     enabled = true,
                     status = OfflineChatModelStatus.FAILED,
                     progressPercent = null,
-                    message = "Instalarea chatului offline a eșuat.",
+                    message = "Instalarea chatului local a eșuat.",
                     errorMessage = error.message ?: error::class.java.simpleName
                 )
             }
@@ -172,7 +172,7 @@ class OfflineChatModelController(
                 enabled = true,
                 status = OfflineChatModelStatus.LOADING,
                 progressPercent = 100,
-                message = "Se încarcă modelul offline."
+                message = "Se încarcă modelul local."
             )
         }
         val loadedStatus = modelManager.ensureLoaded()
@@ -182,7 +182,7 @@ class OfflineChatModelController(
                 enabled = true,
                 status = OfflineChatModelStatus.READY,
                 progressPercent = 100,
-                message = "Chat offline este gata.",
+                message = "Chat local este gata.",
                 completedEventId = if (showCompletionNotice) System.currentTimeMillis() else 0L
             )
         } else {
@@ -190,7 +190,7 @@ class OfflineChatModelController(
                 enabled = true,
                 status = OfflineChatModelStatus.FAILED,
                 progressPercent = null,
-                message = "Modelul offline nu a putut fi încărcat.",
+                message = "Modelul local nu a putut fi încărcat.",
                 errorMessage = loadedStatus.lastError ?: loadedStatus.details
             )
         }
@@ -244,15 +244,15 @@ class OfflineChatModelController(
 
             if (QwenSizeBytes > 0L && copiedBytes != QwenSizeBytes) {
                 tempFile.delete()
-                error("Downloaded model size mismatch.")
+                error("Dimensiunea modelului descărcat nu corespunde.")
             }
             val actualSha256 = digest.digest().joinToString("") { "%02x".format(it) }
             if (!actualSha256.equals(QwenSha256, ignoreCase = true)) {
                 tempFile.delete()
-                error("Downloaded model hash mismatch.")
+                error("Verificarea modelului descărcat nu corespunde.")
             }
             if (targetModelFile.exists() && !targetModelFile.delete()) {
-                error("Unable to replace existing offline model.")
+                error("Nu se poate înlocui modelul local existent.")
             }
             if (!tempFile.renameTo(targetModelFile)) {
                 tempFile.copyTo(targetModelFile, overwrite = true)

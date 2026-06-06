@@ -306,7 +306,7 @@ private fun ScannerTopBar(
     ) {
         GlassIconButton(
             icon = Lucide.ChevronLeft,
-            contentDescription = "Inapoi",
+            contentDescription = "Înapoi",
             onClick = onBack,
         )
         Column(
@@ -320,7 +320,7 @@ private fun ScannerTopBar(
                 fontWeight = FontWeight.Medium,
             )
             Text(
-                text = "Pentru identificare offline",
+                text = "Pentru identificare locală",
                 fontSize = 10.sp,
                 color = ScannerWhite.copy(alpha = 0.6f),
                 lineHeight = 13.sp,
@@ -328,7 +328,7 @@ private fun ScannerTopBar(
         }
         GlassIconButton(
             icon = Lucide.Info,
-            contentDescription = "Informatii",
+            contentDescription = "Informații",
             onClick = onInfo,
         )
     }
@@ -661,13 +661,13 @@ private fun CameraControlStrip(
     ) {
         ScannerToggleChip(
             icon = Lucide.Settings,
-            label = "Auto-focus",
+            label = "Focalizare auto",
             selected = autoFocusEnabled,
             onClick = onAutoFocusToggle,
         )
         ScannerToggleChip(
             icon = if (flashEnabled) Lucide.Zap else Lucide.Sun,
-            label = if (flashEnabled) "Flash on" else "Flash off",
+            label = if (flashEnabled) "Bliț pornit" else "Bliț oprit",
             selected = flashEnabled,
             onClick = onFlashToggle,
         )
@@ -735,7 +735,7 @@ private fun BottomCaptureControls(
         Spacer(Modifier.width(24.dp))
         ScannerIconAction(
             icon = Lucide.RefreshCcw,
-            label = "Reseteaza",
+            label = "Resetează",
             enabled = resetEnabled,
             onClick = onReset,
         )
@@ -824,7 +824,7 @@ private fun CaptureButton(
             } else {
                 Icon(
                     imageVector = Lucide.Camera,
-                    contentDescription = "Fotografiaza urma",
+                    contentDescription = "Fotografiază urma",
                     tint = AccentGreenOnSurface,
                     modifier = Modifier.size(26.dp),
                 )
@@ -886,7 +886,7 @@ private fun ScannerInfoSheet(
             }
             Spacer(Modifier.height(14.dp))
             Text(
-                text = "Pentru rezultate mai bune, centreaza urma, foloseste lumina buna si evita unghiurile oblice. Modelul ruleaza offline pe telefon si poate intoarce un rezultat incert.",
+                text = "Pentru rezultate mai bune, centrează urma, folosește lumină bună și evită unghiurile oblice. Modelul rulează local pe telefon și poate întoarce un rezultat incert.",
                 color = TextSecondary,
                 fontSize = 13.sp,
                 lineHeight = 19.sp,
@@ -943,7 +943,7 @@ private fun TrackSuccessSheet(
                 modifier = Modifier.weight(1f),
             )
             StatTile(
-                label = "SIGURANTA",
+                label = "SIGURANȚĂ",
                 value = result.band.labelRo,
                 accent = AccentGreen,
                 modifier = Modifier.weight(1f),
@@ -1123,7 +1123,7 @@ private fun TrackImagePreview(result: TrackIdentificationResult, topPrediction: 
     ) {
         Image(
             painter = rememberAsyncImagePainter(imageFile),
-            contentDescription = "Fotografie urma",
+            contentDescription = "Fotografie urmă",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit,
         )

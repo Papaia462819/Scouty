@@ -649,7 +649,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 longitude = location.longitude,
                 altitude = location.altitude,
                 accuracy = location.accuracy,
-                locationName = "Current Location" 
+                locationName = "Locația curentă"
             )
         }
         refreshNearbyGuideMetrics(location)
@@ -1185,11 +1185,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 isLive = false,
                 locationLabel = request.locationLabel,
                 summary = if (request.preferredLanguage == "ro") {
-                    "Nu pot verifica vremea live fara conexiune la internet."
+                    "Nu pot verifica vremea în timp real fără conexiune la internet."
                 } else {
-                    "I cannot check live weather without an internet connection."
+                    "Nu pot verifica vremea în timp real fără conexiune la internet."
                 },
-                errorMessage = "offline"
+                errorMessage = "fără internet"
             )
         }
         if (meteoblueApiKey.isBlank()) {
@@ -1198,9 +1198,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 isLive = false,
                 locationLabel = request.locationLabel,
                 summary = if (request.preferredLanguage == "ro") {
-                    "Nu pot verifica vremea live fara cheia Meteoblue configurata."
+                    "Nu pot verifica vremea în timp real fără cheia Meteoblue configurată."
                 } else {
-                    "I cannot check live weather because Meteoblue is not configured."
+                    "Nu pot verifica vremea în timp real fără cheia Meteoblue configurată."
                 },
                 errorMessage = "missing_api_key"
             )
@@ -1240,7 +1240,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 isLive = true,
                 locationLabel = request.locationLabel,
                 summary = if (request.preferredLanguage == "ro") {
-                    "Am incercat sa verific vremea live, dar prognoza nu are date utile pentru locatia ceruta."
+                    "Am încercat să verific vremea în timp real, dar prognoza nu are date utile pentru locația cerută."
                 } else {
                     "I tried to check live weather, but the forecast has no usable data for that location."
                 },
@@ -1601,7 +1601,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             ?: daily?.description?.takeIf { hasDailyWeatherValues && it.isNotBlank() }
         description?.let { pieces += it }
         (hourly?.precipitationProbability ?: daily?.precipitationProbability)?.let {
-            pieces += "precipitatii $it%"
+            pieces += "precipitații $it%"
         }
         return pieces.ifEmpty { listOf(UnavailableWeatherLabel) }.joinToString(", ") + suffix
     }
@@ -1619,7 +1619,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         when {
             weatherLookup.usedFallbackLocation && !weatherLookup.fallbackLocation?.name.isNullOrBlank() ->
                 " (${weatherLookup.fallbackLocation?.name})"
-            weatherLookup.usedFallbackLocation -> " (Nearest point)"
+            weatherLookup.usedFallbackLocation -> " (punct apropiat)"
             else -> ""
         }
 
@@ -1902,15 +1902,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
 
     private fun getPictocodeDescription(code: Int?): String {
         return when(code) {
-            1 -> "Clear sky"
-            2 -> "Mostly clear"
-            3 -> "Partly cloudy"
-            4 -> "Overcast"
-            5 -> "Fog"
-            6 -> "Drizzle"
-            11 -> "Rain"
-            14 -> "Thunderstorm"
-            else -> "Cloudy"
+            1 -> "Cer senin"
+            2 -> "Mai mult senin"
+            3 -> "Parțial noros"
+            4 -> "Acoperit"
+            5 -> "Ceață"
+            6 -> "Burniță"
+            11 -> "Ploaie"
+            14 -> "Furtună"
+            else -> "Noros"
         }
     }
 
@@ -1941,7 +1941,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         return CompletedTrailSnapshot(
             id = listOfNotNull(localCode, completedAtEpochMillis.toString()).joinToString(":"),
             name = name,
-            region = region?.takeIf { it.isNotBlank() } ?: "Unknown region",
+            region = region?.takeIf { it.isNotBlank() } ?: "Regiune necunoscută",
             localCode = localCode,
             completedAtEpochMillis = completedAtEpochMillis,
             distanceKm = recordedDistanceKm.coerceAtLeast(0.0),

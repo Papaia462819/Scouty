@@ -86,7 +86,7 @@ class MapPackRepository private constructor(
                 lastUsedAt = now,
                 updatedAt = now,
                 isCurrentTrail = true,
-                message = "Offline map pack is queued."
+                message = "Pachetul de hartă locală este în așteptare."
             )
         )
         cleanupRecentPacks()
@@ -116,7 +116,7 @@ class MapPackRepository private constructor(
                 status = MapPackStatus.DOWNLOADING.name,
                 progressPercent = 0,
                 updatedAt = now,
-                message = "Fetching route map manifest."
+                message = "Se citește manifestul hărții de traseu."
             )
         )
 
@@ -133,7 +133,7 @@ class MapPackRepository private constructor(
                     manifest = manifest,
                     status = MapPackStatus.WAITING_CONFIRMATION,
                     progressPercent = null,
-                    message = "Download is larger than 100 MB on mobile data."
+                    message = "Descărcarea depășește 100 MB pe date mobile."
                 )
                 return@withContext MapPackDownloadResult.WaitingForConfirmation
             }
@@ -149,7 +149,7 @@ class MapPackRepository private constructor(
                 expectedSha256 = manifest.sha256
             )
             if (targetFile.exists() && !targetFile.delete()) {
-                error("Unable to replace existing route map pack for $trailCode.")
+                error("Nu pot înlocui pachetul existent de hartă pentru $trailCode.")
             }
             if (!tempFile.renameTo(targetFile)) {
                 tempFile.copyTo(targetFile, overwrite = true)
@@ -161,7 +161,7 @@ class MapPackRepository private constructor(
                 status = MapPackStatus.AVAILABLE,
                 localPath = targetFile.absolutePath,
                 progressPercent = 100,
-                message = "Offline map ready."
+                message = "Harta locală este pregătită."
             )
             cleanupRecentPacks()
             MapPackDownloadResult.Ready
@@ -176,7 +176,7 @@ class MapPackRepository private constructor(
                     status = MapPackStatus.FAILED.name,
                     progressPercent = null,
                     updatedAt = System.currentTimeMillis(),
-                    message = error.message ?: "Offline map download failed."
+                    message = error.message ?: "Descărcarea hărții locale a eșuat."
                 )
             )
             MapPackDownloadResult.Failed
@@ -207,7 +207,7 @@ class MapPackRepository private constructor(
             version = "local-${file.lastModified()}",
             sourceUri = MapPackRegistryManager.pmtilesFileUri(file),
             trailCode = trailCode,
-            message = "Offline map ready."
+            message = "Harta locală este pregătită."
         )
     }
 
@@ -216,7 +216,7 @@ class MapPackRepository private constructor(
         val request = Request.Builder().url(url).build()
         httpClient.newCall(request).execute().use { response ->
             if (!response.isSuccessful) {
-                error("Manifest request failed with HTTP ${response.code}.")
+                error("Cererea manifestului a eșuat cu HTTP ${response.code}.")
             }
             val body = response.body?.string().orEmpty()
             return json.decodeFromString(RouteMapPackManifest.serializer(), body)
@@ -234,9 +234,9 @@ class MapPackRepository private constructor(
         val digest = MessageDigest.getInstance("SHA-256")
         httpClient.newCall(request).execute().use { response ->
             if (!response.isSuccessful) {
-                error("Pack request failed with HTTP ${response.code}.")
+                error("Cererea pachetului a eșuat cu HTTP ${response.code}.")
             }
-            val body = response.body ?: error("Empty route map pack response.")
+            val body = response.body ?: error("Răspuns gol pentru pachetul hărții de traseu.")
             val totalBytes = expectedSizeBytes ?: body.contentLength().takeIf { it > 0L }
             var copiedBytes = 0L
             var nextProgressUpdate = 0
@@ -262,12 +262,12 @@ class MapPackRepository private constructor(
 
             if (expectedSizeBytes != null && expectedSizeBytes > 0L && copiedBytes != expectedSizeBytes) {
                 targetFile.delete()
-                error("Downloaded size mismatch for $trailCode.")
+                error("Dimensiunea descărcată nu corespunde pentru $trailCode.")
             }
             val actualSha256 = digest.digest().joinToString("") { "%02x".format(it) }
             if (!expectedSha256.isNullOrBlank() && !actualSha256.equals(expectedSha256, ignoreCase = true)) {
                 targetFile.delete()
-                error("Downloaded hash mismatch for $trailCode.")
+                error("Verificarea descărcării nu corespunde pentru $trailCode.")
             }
         }
     }
@@ -278,7 +278,7 @@ class MapPackRepository private constructor(
             entity.copy(
                 progressPercent = progressPercent,
                 updatedAt = System.currentTimeMillis(),
-                message = "Downloading route map $progressPercent%."
+                message = "Se descarcă harta traseului $progressPercent%."
             )
         )
     }

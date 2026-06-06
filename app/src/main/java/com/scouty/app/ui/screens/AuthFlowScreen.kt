@@ -401,7 +401,7 @@ private fun AuthModeTabs(mode: AuthMode, onModeChange: (AuthMode) -> Unit) {
             AuthTab(
                 selected = mode == AuthMode.LOGIN,
                 icon = Lucide.LogIn,
-                label = "Login",
+                label = "Autentificare",
                 activeColor = AccentGreen,
                 modifier = Modifier.weight(1f),
                 onClick = { onModeChange(AuthMode.LOGIN) }
@@ -409,7 +409,7 @@ private fun AuthModeTabs(mode: AuthMode, onModeChange: (AuthMode) -> Unit) {
             AuthTab(
                 selected = mode == AuthMode.REGISTER,
                 icon = Lucide.UserPlus,
-                label = "Register",
+                label = "Înregistrare",
                 activeColor = Warning,
                 modifier = Modifier.weight(1f),
                 onClick = { onModeChange(AuthMode.REGISTER) }
@@ -465,7 +465,7 @@ private fun AuthFormContent(
         AuthTextField(
             value = email,
             onValueChange = onEmailChange,
-            label = "EMAIL",
+            label = "E-MAIL",
             placeholder = "nume@email.com",
             icon = Lucide.Mail,
             accent = accent,
@@ -551,7 +551,7 @@ private fun AuthHelperRow(mode: AuthMode, accountExists: Boolean, accent: Color)
         Text(
             text = when {
                 mode == AuthMode.REGISTER && accountExists ->
-                    "Register creează un cont nou pentru acest dispozitiv."
+                    "Înregistrarea creează un cont nou pentru acest dispozitiv."
                 mode == AuthMode.REGISTER ->
                     "După creare, configurăm profilul și îl sincronizăm în siguranță."
                 else ->
@@ -1357,7 +1357,7 @@ private fun ResultStep(
                         letterSpacing = (-0.5).sp,
                     )
                     Text(
-                        text = "SCOR FITNESS",
+                        text = "SCOR CONDIȚIE",
                         color = TextTertiary,
                         style = MaterialTheme.typography.labelSmall,
                     )
@@ -1726,14 +1726,14 @@ private val localizedOptions = mapOf(
 
     ("gear_setup" to "improvise") to LocalizedOptionText("Improvizez", "Impachetezi mai mult dupa instinct."),
     ("gear_setup" to "basics") to LocalizedOptionText("Stiu baza", "De obicei iei lucrurile esentiale."),
-    ("gear_setup" to "checklist") to LocalizedOptionText("Am checklist", "Urmaresti o structura repetabila."),
+    ("gear_setup" to "checklist") to LocalizedOptionText("Am listă", "Urmaresti o structura repetabila."),
     ("gear_setup" to "route_tuned") to LocalizedOptionText("Adaptez la traseu", "Ajustezi dupa distanta, teren si prognoza."),
     ("gear_setup" to "locked_in") to LocalizedOptionText("Kitul e stabil", "Ai deja un sistem rafinat."),
 
     ("hike_style" to "scenic") to LocalizedOptionText("Scurt si scenic", "Recompensa rapida si stres mic."),
     ("hike_style" to "classic_day") to LocalizedOptionText("Ture clasice de o zi", "Plan montan echilibrat, pe o zi intreaga."),
     ("hike_style" to "long_effort") to LocalizedOptionText("Zile lungi de efort", "Iti plac distanta si ritmul sustinut."),
-    ("hike_style" to "peaks") to LocalizedOptionText("Varfuri si creste", "Summiturile si terenul ascutit te atrag."),
+    ("hike_style" to "peaks") to LocalizedOptionText("Vârfuri și creste", "Vârfurile și terenul ascuțit te atrag."),
     ("hike_style" to "adventure") to LocalizedOptionText("Zile solicitante de aventura", "Obiectivele mari fac parte din placere."),
 
     (ProfileAssessmentEngine.AgeQuestionId to "under_18") to LocalizedOptionText("Sub 18", "Energie tanara, motor in crestere."),
@@ -1751,15 +1751,15 @@ private val localizedOptions = mapOf(
 
 private fun levelTitleRo(level: ScoutyLevel): String =
     when (level) {
-        ScoutyLevel.LEVEL_1 -> "Junior"
-        ScoutyLevel.LEVEL_2 -> "Campist incepator"
+        ScoutyLevel.LEVEL_1 -> "Începător"
+        ScoutyLevel.LEVEL_2 -> "Drumeț în formare"
         ScoutyLevel.LEVEL_3 -> "Explorator de poteci"
-        ScoutyLevel.LEVEL_4 -> "Urcator de dealuri"
+        ScoutyLevel.LEVEL_4 -> "Călător pe dealuri"
         ScoutyLevel.LEVEL_5 -> "Navigator de traseu"
-        ScoutyLevel.LEVEL_6 -> "Cautator de varfuri"
+        ScoutyLevel.LEVEL_6 -> "Căutător de vârfuri"
         ScoutyLevel.LEVEL_7 -> "Cuceritor de creste"
-        ScoutyLevel.LEVEL_8 -> "Expert de drumetie"
-        ScoutyLevel.LEVEL_9 -> "As de summit"
+        ScoutyLevel.LEVEL_8 -> "Expert în drumeții"
+        ScoutyLevel.LEVEL_9 -> "Maestru al vârfurilor"
         ScoutyLevel.LEVEL_10 -> "Maestru montan"
     }
 

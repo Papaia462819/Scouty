@@ -5,10 +5,10 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 object GearRecommendationEngine {
-    private const val CategoryCore = "Baza traseu"
-    private const val CategoryHydration = "Apa & hrana"
+    private const val CategoryCore = "Bază traseu"
+    private const val CategoryHydration = "Apă & hrană"
     private const val CategoryWeather = "Straturi & vreme"
-    private const val CategorySafety = "Siguranta & navigatie"
+    private const val CategorySafety = "Siguranță & navigație"
     private const val CategoryKids = "Copii"
 
     private val categoryOrder = mapOf(
@@ -44,18 +44,18 @@ object GearRecommendationEngine {
                     quickValue = "kit",
                     category = CategorySafety,
                     necessity = GearNecessity.MANDATORY,
-                    note = "Pentru frecare si basic blister care.",
+                    note = "Pentru frecare și îngrijirea bătăturilor.",
                     weightGrams = 20
                 )
             )
             generatedItems.register(
                 gearItem(
                     id = "trekking_poles",
-                    name = "Bete trekking",
-                    quickValue = "optional",
+                    name = "Bețe de drumeție",
+                    quickValue = "opțional",
                     category = CategorySafety,
                     necessity = GearNecessity.CONDITIONAL,
-                    note = "Mai ales daca vrei sa scazi presiunea din genunchi.",
+                    note = "Mai ales dacă vrei să scazi presiunea din genunchi.",
                     weightGrams = 420
                 )
             )
@@ -67,7 +67,7 @@ object GearRecommendationEngine {
                     quickValue = "1 buc",
                     category = CategorySafety,
                     necessity = GearNecessity.MANDATORY,
-                    note = "Ramane in rucsac chiar daca pleci dimineata.",
+                    note = "Rămâne în rucsac chiar dacă pleci dimineața.",
                     weightGrams = 95
                 )
             )
@@ -78,7 +78,7 @@ object GearRecommendationEngine {
                     quickValue = "1 buc",
                     category = CategorySafety,
                     necessity = GearNecessity.MANDATORY,
-                    note = "Mic item, mare diferenta daca te opresti fortat.",
+                    note = "Obiect mic, diferență mare dacă te oprești forțat.",
                     weightGrams = 70
                 )
             )
@@ -89,14 +89,14 @@ object GearRecommendationEngine {
                     quickValue = "1 kit",
                     category = CategorySafety,
                     necessity = GearNecessity.MANDATORY,
-                    note = "Fasa, dezinfectant, penseta capuse, plasturi.",
+                    note = "Fașă, dezinfectant, pensetă pentru căpușe, plasturi.",
                     weightGrams = 220
                 )
             )
             generatedItems.register(
                 gearItem(
                     id = "trekking_poles",
-                    name = "Bete trekking",
+                    name = "Bețe de drumeție",
                     quickValue = "opțional",
                     category = CategorySafety,
                     necessity = if (packingProfile.difficulty >= TrailDifficultyRank.HARD || packingProfile.elevationGain >= 900) {
@@ -104,7 +104,7 @@ object GearRecommendationEngine {
                     } else {
                         GearNecessity.CONDITIONAL
                     },
-                    note = "Mai utile pe coborari lungi, radacini si zone inclinate.",
+                    note = "Mai utile pe coborâri lungi, rădăcini și zone înclinate.",
                     weightGrams = 420
                 )
             )
@@ -112,10 +112,10 @@ object GearRecommendationEngine {
                 gearItem(
                     id = "bear_spray",
                     name = "Spray de urs",
-                    quickValue = "optional",
+                    quickValue = "opțional",
                     category = CategorySafety,
                     necessity = GearNecessity.CONDITIONAL,
-                    note = "Merita luat pe ture mai lungi sau retrase.",
+                    note = "Merită luat pe ture mai lungi sau retrase.",
                     weightGrams = 280
                 )
             )
@@ -129,7 +129,7 @@ object GearRecommendationEngine {
                     quickValue = "1 buc",
                     category = CategorySafety,
                     necessity = GearNecessity.MANDATORY,
-                    note = "Semnalizare rapida in ceata, padure sau accidentare.",
+                    note = "Semnalizare rapidă în ceață, pădure sau accidentare.",
                     weightGrams = 15
                 )
             )
@@ -137,10 +137,10 @@ object GearRecommendationEngine {
                 gearItem(
                     id = "water_filter",
                     name = "Filtru sau tablete apa",
-                    quickValue = "optional",
+                    quickValue = "opțional",
                     category = CategoryHydration,
                     necessity = GearNecessity.CONDITIONAL,
-                    note = "Util cand rezerva de apa devine prea grea pentru toata ziua.",
+                    note = "Util când rezerva de apă devine prea grea pentru toată ziua.",
                     weightGrams = 80
                 )
             )
@@ -151,10 +151,10 @@ object GearRecommendationEngine {
                 gearItem(
                     id = "helmet",
                     name = "Casca usoara",
-                    quickValue = "optional",
+                    quickValue = "opțional",
                     category = CategorySafety,
                     necessity = GearNecessity.CONDITIONAL,
-                    note = "Foarte utila in zone stancoase expuse.",
+                    note = "Foarte utilă în zone stâncoase expuse.",
                     weightGrams = 320
                 )
             )
@@ -166,10 +166,10 @@ object GearRecommendationEngine {
                     gearItem(
                         id = "heat_kit",
                         name = "Kit soare",
-                        quickValue = "SPF",
+                        quickValue = "soare",
                         category = CategoryWeather,
                         necessity = GearNecessity.MANDATORY,
-                        note = "Tricou tehnic, sapca, ochelari cat. 3, SPF 50.",
+                        note = "Tricou tehnic, șapcă, ochelari cat. 3 și cremă solară.",
                         weightGrams = 260
                     )
                 )
@@ -177,10 +177,10 @@ object GearRecommendationEngine {
                     gearItem(
                         id = "electrolytes",
                         name = "Electroliti",
-                        quickValue = "optional",
+                        quickValue = "opțional",
                         category = CategoryHydration,
                         necessity = GearNecessity.RECOMMENDED,
-                        note = "Ajuta cand transpiri mult si pierzi saruri.",
+                        note = "Ajută când transpiri mult și pierzi săruri.",
                         weightGrams = 40
                     )
                 )
@@ -192,7 +192,7 @@ object GearRecommendationEngine {
                             quickValue = "1 buc",
                             category = CategoryWeather,
                             necessity = GearNecessity.MANDATORY,
-                            note = "Pentru furtuna scurta sau vant tare peste creasta.",
+                            note = "Pentru furtună scurtă sau vânt tare peste creastă.",
                             weightGrams = 240
                         )
                     )
@@ -211,7 +211,7 @@ object GearRecommendationEngine {
                         } else {
                             GearNecessity.RECOMMENDED
                         },
-                        note = "Baza tehnica, polar/fleece si geaca de ploaie-vant.",
+                        note = "Bază tehnică, polar și geacă de ploaie-vânt.",
                         weightGrams = 760
                     )
                 )
@@ -219,10 +219,10 @@ object GearRecommendationEngine {
                     gearItem(
                         id = "summit_backup",
                         name = "Micro-puf compact",
-                        quickValue = "optional",
+                        quickValue = "opțional",
                         category = CategoryWeather,
                         necessity = GearNecessity.CONDITIONAL,
-                        note = "Pentru varf, pauze lungi sau vant rece.",
+                        note = "Pentru vârf, pauze lungi sau vânt rece.",
                         weightGrams = 300
                     )
                 )
@@ -230,10 +230,10 @@ object GearRecommendationEngine {
                     gearItem(
                         id = "light_beanie_gloves",
                         name = "Caciula + manusi subtiri",
-                        quickValue = "optional",
+                        quickValue = "opțional",
                         category = CategoryWeather,
                         necessity = GearNecessity.CONDITIONAL,
-                        note = "Stau in rucsac pana cand vremea se schimba.",
+                        note = "Stau în rucsac până când vremea se schimbă.",
                         weightGrams = 120
                     )
                 )
@@ -247,7 +247,7 @@ object GearRecommendationEngine {
                         quickValue = "3 straturi",
                         category = CategoryWeather,
                         necessity = GearNecessity.MANDATORY,
-                        note = "Baza tehnica, polar mai serios si shell protector.",
+                        note = "Bază tehnică, polar mai serios și geacă protectoare.",
                         weightGrams = 880
                     )
                 )
@@ -258,7 +258,7 @@ object GearRecommendationEngine {
                         quickValue = "1 buc",
                         category = CategoryWeather,
                         necessity = GearNecessity.MANDATORY,
-                        note = "Buna pentru pauze, varf si schimbari rapide de vreme.",
+                        note = "Bună pentru pauze, vârf și schimbări rapide de vreme.",
                         weightGrams = 360
                     )
                 )
@@ -269,7 +269,7 @@ object GearRecommendationEngine {
                         quickValue = "1 set",
                         category = CategoryWeather,
                         necessity = GearNecessity.MANDATORY,
-                        note = "Mic volum, dar mare castig termic.",
+                        note = "Volum mic, câștig termic mare.",
                         weightGrams = 150
                     )
                 )
@@ -280,10 +280,10 @@ object GearRecommendationEngine {
                     gearItem(
                         id = "winter_layers",
                         name = "Straturi de iarna",
-                        quickValue = "full kit",
+                        quickValue = "kit complet",
                         category = CategoryWeather,
                         necessity = GearNecessity.MANDATORY,
-                        note = "Strat tehnic, polar gros, geaca de puf si shell.",
+                        note = "Strat tehnic, polar gros, geacă de puf și geacă protectoare.",
                         weightGrams = 1250
                     )
                 )
@@ -294,7 +294,7 @@ object GearRecommendationEngine {
                         quickValue = "1 set",
                         category = CategoryWeather,
                         necessity = GearNecessity.MANDATORY,
-                        note = "Pentru frig, vant si umezeala la picior.",
+                        note = "Pentru frig, vânt și umezeală la picior.",
                         weightGrams = 520
                     )
                 )
@@ -305,7 +305,7 @@ object GearRecommendationEngine {
                         quickValue = "1 set",
                         category = CategoryWeather,
                         necessity = GearNecessity.MANDATORY,
-                        note = "Te ajuta sa ramai uscat si functional in zapada.",
+                        note = "Te ajută să rămâi uscat și funcțional în zăpadă.",
                         weightGrams = 380
                     )
                 )
@@ -316,7 +316,7 @@ object GearRecommendationEngine {
                         quickValue = "0.7 L",
                         category = CategoryHydration,
                         necessity = GearNecessity.MANDATORY,
-                        note = "Caldura rapida si hidratare mai usor de dus in frig.",
+                        note = "Căldură rapidă și hidratare mai ușor de dus în frig.",
                         weightGrams = 900
                     )
                 )
@@ -325,10 +325,10 @@ object GearRecommendationEngine {
                         gearItem(
                             id = "crampons_axe",
                             name = "Coltari + piolet",
-                            quickValue = "tech",
+                            quickValue = "tehnic",
                             category = CategorySafety,
                             necessity = GearNecessity.CONDITIONAL,
-                            note = "Pentru gheata sau pante abrupte de iarna.",
+                            note = "Pentru gheață sau pante abrupte de iarnă.",
                             weightGrams = 1250
                         )
                     )
@@ -341,7 +341,7 @@ object GearRecommendationEngine {
                             quickValue = "DVA",
                             category = CategorySafety,
                             necessity = GearNecessity.CONDITIONAL,
-                            note = "Doar pentru teren si risc real de avalansa.",
+                            note = "Doar pentru teren și risc real de avalanșă.",
                             weightGrams = 1900
                         )
                     )
@@ -357,7 +357,7 @@ object GearRecommendationEngine {
                     quickValue = "${packingProfile.children} copii",
                     category = CategoryKids,
                     necessity = GearNecessity.MANDATORY,
-                    note = "Fara tenisi pe teren accidentat.",
+                    note = "Fără teniși pe teren accidentat.",
                     weightGrams = null
                 )
             )
@@ -368,7 +368,7 @@ object GearRecommendationEngine {
                     quickValue = "${packingProfile.children} set",
                     category = CategoryKids,
                     necessity = GearNecessity.MANDATORY,
-                    note = "Inclusiv sosete si strat exterior, puse in pungi impermeabile.",
+                    note = "Inclusiv șosete și strat exterior, puse în pungi impermeabile.",
                     weightGrams = 520 * packingProfile.children
                 )
             )
@@ -379,7 +379,7 @@ object GearRecommendationEngine {
                     quickValue = "culori vii",
                     category = CategoryKids,
                     necessity = GearNecessity.MANDATORY,
-                    note = "Rosu, galben sau portocaliu ca sa-i vezi imediat.",
+                    note = "Roșu, galben sau portocaliu ca să-i vezi imediat.",
                     weightGrams = null
                 )
             )
@@ -390,7 +390,7 @@ object GearRecommendationEngine {
                     quickValue = "${packingProfile.children} buc",
                     category = CategoryKids,
                     necessity = GearNecessity.MANDATORY,
-                    note = "Prins de geaca sau de rucsacul lor.",
+                    note = "Prins de geacă sau de rucsacul lor.",
                     weightGrams = 15 * packingProfile.children
                 )
             )
@@ -412,7 +412,7 @@ object GearRecommendationEngine {
                     quickValue = "recom.",
                     category = CategoryKids,
                     necessity = GearNecessity.RECOMMENDED,
-                    note = "Antitermic, plasturi, dezinfectant bland.",
+                    note = "Antitermic, plasturi, dezinfectant blând.",
                     weightGrams = 180
                 )
             )
@@ -423,7 +423,7 @@ object GearRecommendationEngine {
                     quickValue = "recom.",
                     category = CategoryKids,
                     necessity = GearNecessity.RECOMMENDED,
-                    note = "Cateva gustari preferate tin ritmul sus.",
+                    note = "Câteva gustări preferate țin ritmul sus.",
                     weightGrams = 120 * packingProfile.children
                 )
             )
@@ -431,10 +431,10 @@ object GearRecommendationEngine {
                 gearItem(
                     id = "child_carrier",
                     name = "Optiune port-bebe",
-                    quickValue = "optional",
+                    quickValue = "opțional",
                     category = CategoryKids,
                     necessity = GearNecessity.CONDITIONAL,
-                    note = "Doar daca unul dintre copii e foarte mic.",
+                    note = "Doar dacă unul dintre copii e foarte mic.",
                     weightGrams = 2200
                 )
             )
@@ -453,14 +453,14 @@ object GearRecommendationEngine {
         gearItem(
             id = "footwear",
             name = when (profile.difficulty) {
-                TrailDifficultyRank.EASY -> "Incaltaminte trail cu talpa profilata"
-                TrailDifficultyRank.MEDIUM -> "Bocanci cu suport pentru glezna"
-                TrailDifficultyRank.HARD, TrailDifficultyRank.EXPERT -> "Bocanci tehnici cu aderenta buna"
+                TrailDifficultyRank.EASY -> "Încălțăminte de traseu cu talpă profilată"
+                TrailDifficultyRank.MEDIUM -> "Bocanci cu suport pentru gleznă"
+                TrailDifficultyRank.HARD, TrailDifficultyRank.EXPERT -> "Bocanci tehnici cu aderență bună"
             },
-            quickValue = if (profile.adults == 1) "adult" else "${profile.adults} adulti",
+            quickValue = if (profile.adults == 1) "adult" else "${profile.adults} adulți",
             category = CategoryCore,
             necessity = GearNecessity.MANDATORY,
-            note = "Modelul stabil se alege dupa dificultatea traseului.",
+            note = "Modelul stabil se alege după dificultatea traseului.",
             weightGrams = null
         )
 
@@ -483,17 +483,17 @@ object GearRecommendationEngine {
         gearItem(
             id = "phone_navigation",
             name = if (profile.difficulty >= TrailDifficultyRank.HARD) {
-                "Telefon + baterie externa + harta offline"
+                "Telefon + baterie externă + hartă locală"
             } else {
-                "Telefon incarcat 100%"
+                "Telefon încărcat 100%"
             },
-            quickValue = if (profile.difficulty >= TrailDifficultyRank.HARD) "power" else "100%",
+            quickValue = if (profile.difficulty >= TrailDifficultyRank.HARD) "energie" else "100%",
             category = CategorySafety,
             necessity = GearNecessity.MANDATORY,
             note = if (profile.difficulty >= TrailDifficultyRank.HARD) {
-                "Navigatie de baza pentru creasta, stanca sau zi lunga."
+                "Navigație de bază pentru creastă, stâncă sau zi lungă."
             } else {
-                "Ramane minimul pentru orientare si apel de urgenta."
+                "Rămâne minimul pentru orientare și apel de urgență."
             },
             weightGrams = if (profile.difficulty >= TrailDifficultyRank.HARD) 260 else 0
         )
@@ -501,22 +501,22 @@ object GearRecommendationEngine {
     private fun buildWaterItem(profile: PackingProfile): GearItem =
         gearItem(
             id = "water",
-            name = "Apa totala",
+            name = "Apă totală",
             quickValue = "${profile.totalWaterLiters.formatOneDecimal()} L",
             category = CategoryHydration,
             necessity = GearNecessity.MANDATORY,
-            note = "Calculata pentru ${profile.partySummaryRo.lowercase(Locale.ROOT)}.",
+            note = "Calculată pentru ${profile.partySummaryRo.lowercase(Locale.ROOT)}.",
             weightGrams = (profile.totalWaterLiters * 1000).roundToInt()
         )
 
     private fun buildSnackItem(profile: PackingProfile): GearItem =
         gearItem(
             id = "snacks",
-            name = "Hrana calorica",
+            name = "Hrană calorică",
             quickValue = "${profile.totalFoodGrams} g",
             category = CategoryHydration,
             necessity = GearNecessity.MANDATORY,
-            note = "Nuci, batoane, gustari dense pentru toata tura.",
+            note = "Nuci, batoane, gustări dense pentru toată tura.",
             weightGrams = profile.totalFoodGrams
         )
 

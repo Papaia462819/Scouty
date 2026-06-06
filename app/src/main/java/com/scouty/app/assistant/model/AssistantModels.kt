@@ -273,9 +273,9 @@ fun buildWelcomeMessage(locale: Locale = assistantDefaultLocale()): AssistantMes
     AssistantMessageUiModel(
         id = "welcome",
         text = if (locale.language == "ro") {
-            "Spune-mi ce problema ai pe traseu si iti raspund din knowledge pack-ul offline al aplicatiei."
+            "Spune-mi ce problemă ai pe traseu și îți răspund din pachetul local de cunoștințe al aplicației."
         } else {
-            "Tell me what happened on the trail and I will answer from the app's offline knowledge pack."
+            "Spune-mi ce problemă ai pe traseu și îți răspund din pachetul local de cunoștințe al aplicației."
         },
         isUser = false
     )
@@ -303,17 +303,17 @@ fun starterPromptsForCurrentLocale(
     } else {
         if (hasActiveTrail) {
             listOf(
-                "Tell me about the active trail",
-                "What is the trail difficulty?",
-                "What gear do I need?",
-                "What will the weather be like?"
+                "Spune-mi despre traseul activ",
+                "Care este dificultatea traseului?",
+                "De ce echipament am nevoie?",
+                "Cum va fi vremea?"
             )
         } else {
             listOf(
-                "I twisted my ankle",
-                "What is the marker for my active trail?",
-                "What gear should I keep ready now?",
-                "How do I make a fire?"
+                "Mi-am sucit glezna",
+                "Care este marcajul traseului activ?",
+                "Ce echipament să țin la îndemână acum?",
+                "Cum fac focul?"
             )
         }
     }

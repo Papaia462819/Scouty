@@ -544,7 +544,7 @@ private val LocalModelRuntime.displayName: String
 private class MediaPipeLocalLlmRuntimeAdapter(
     private val context: Context
 ) : LocalLlmRuntimeAdapter {
-    override val runtimeLabel: String = "Google AI Edge MediaPipe"
+    override val runtimeLabel: String = "Motor local Google MediaPipe"
 
     override suspend fun load(artifact: LocalModelArtifact): LocalLlmLoadedModelHandle = withContext(Dispatchers.Default) {
         val options = LlmInference.LlmInferenceOptions.builder()

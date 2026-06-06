@@ -226,8 +226,8 @@ private fun HeaderIconButton(icon: ImageVector, showDot: Boolean) {
 private fun LocationPanel(status: HomeStatus) {
     val isOnline = status.isOnline && status.latitude != null
     val statusText = when {
-        status.latitude == null -> "WAITING"
-        isOnline -> "ONLINE"
+        status.latitude == null -> "AȘTEPTARE"
+        isOnline -> "CONECTAT"
         else -> stringResource(R.string.state_offline)
     }
     val statusColor = when {
@@ -449,7 +449,7 @@ private fun ActiveTrailCard(trail: ActiveTrail, onClick: () -> Unit) {
             ) {
                 DifficultyBadge(level = difficultyLevel(trail.difficulty))
                 StatusPill(
-                    text = if (isStarted) "In progress" else "Planned",
+                    text = if (isStarted) "În desfășurare" else "Planificat",
                     color = if (isStarted) AccentGreen else TextSecondary,
                     pulsing = isStarted,
                     backdrop = Color.Black.copy(alpha = 0.5f),
@@ -468,9 +468,9 @@ private fun ActiveTrailCard(trail: ActiveTrail, onClick: () -> Unit) {
             Spacer(Modifier.height(2.dp))
             Text(
                 text = if (isStarted) {
-                    "${formatDistance(remainingDistanceKm)} remaining · ${trail.estimatedDuration} · +${trail.elevationGain} m"
+                    "${formatDistance(remainingDistanceKm)} rămași · ${trail.estimatedDuration} · +${trail.elevationGain} m"
                 } else {
-                    "Ready to start · ${trail.estimatedDuration} · +${trail.elevationGain} m"
+                    "Gata de pornire · ${trail.estimatedDuration} · +${trail.elevationGain} m"
                 },
                 fontSize = 11.sp,
                 color = Color.White.copy(alpha = 0.7f),
@@ -504,7 +504,7 @@ private fun ActiveTrailCard(trail: ActiveTrail, onClick: () -> Unit) {
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = if (isStarted) "$completionPercent% completed" else "Planned trail",
+                text = if (isStarted) "$completionPercent% finalizat" else "Traseu planificat",
                 fontSize = 10.sp,
                 color = Color.White.copy(alpha = 0.7f),
             )
@@ -538,7 +538,7 @@ private fun TranslucentChip(icon: ImageVector, text: String) {
 }
 
 @Composable
-private fun EmptyTrailCard(message: String = "No active trail. Search and set one!") {
+private fun EmptyTrailCard(message: String = "Nu ai traseu activ. Caută și setează unul.") {
     ScoutyCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
@@ -574,14 +574,14 @@ private fun QuickActionsRow(onShelter: () -> Unit, onWater: () -> Unit, onTrack:
         QuickActionTile(
             modifier = Modifier.weight(1f),
             icon = Lucide.House,
-            label = "Shelter",
+            label = "Adăpost",
             color = Warning,
             onClick = onShelter,
         )
         QuickActionTile(
             modifier = Modifier.weight(1f),
             icon = Lucide.Droplet,
-            label = "Water",
+            label = "Apă",
             color = Water,
             onClick = onWater,
         )

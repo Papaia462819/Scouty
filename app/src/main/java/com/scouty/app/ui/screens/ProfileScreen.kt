@@ -150,13 +150,13 @@ fun ProfileScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Profile",
+                text = "Profil",
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Medium,
                 color = TextPrimary
             )
             Text(
-                text = "Edit",
+                text = "Editează",
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Medium,
                 color = AccentGreen,
@@ -194,14 +194,14 @@ fun ProfileScreen(
                             overflow = TextOverflow.Ellipsis
                         )
                         Text(
-                            text = profile.homeRegion.ifBlank { "Home region not set" },
+                            text = profile.homeRegion.ifBlank { "Regiune de acasă nesetată" },
                             style = MaterialTheme.typography.bodySmall,
                             color = TextSecondary,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
                         Text(
-                            text = "Member since $memberSince",
+                            text = "Membru din $memberSince",
                             style = MaterialTheme.typography.labelSmall,
                             color = TextTertiary
                         )
@@ -238,8 +238,8 @@ fun ProfileScreen(
                     color = TextSecondary
                 )
                 Text(
-                    text = levelProgress.nextLevel?.let { "${levelProgress.pointsRemaining} to ${it.title}" }
-                        ?: "Top tier reached",
+                    text = levelProgress.nextLevel?.let { "${levelProgress.pointsRemaining} până la ${it.title}" }
+                        ?: "Nivel maxim atins",
                     style = MaterialTheme.typography.labelSmall,
                     color = AccentGreen
                 )
@@ -255,7 +255,7 @@ fun ProfileScreen(
             ProfileStatCard(
                 modifier = Modifier.weight(1f),
                 value = profileStats.completedHikes.toString(),
-                label = "Trails",
+                label = "Ture",
                 valueColor = AccentGreen
             )
             ProfileStatCard(
@@ -267,14 +267,14 @@ fun ProfileScreen(
             ProfileStatCard(
                 modifier = Modifier.weight(1f),
                 value = formatElevationStat(profileStats.totalElevationGainM),
-                label = "m gained",
+                label = "m urcați",
                 valueColor = Warning
             )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        ScoutySectionHeader(title = "PERFORMANCE")
+        ScoutySectionHeader(title = "PROGRES")
         Spacer(modifier = Modifier.height(12.dp))
         PerformanceChartCard(
             modifier = Modifier.fillMaxWidth(),
@@ -296,7 +296,7 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        ScoutySectionHeader(title = "HISTORY")
+        ScoutySectionHeader(title = "ISTORIC")
         Spacer(modifier = Modifier.height(12.dp))
         HistoryCard(
             modifier = Modifier.fillMaxWidth(),
@@ -322,12 +322,12 @@ fun ProfileScreen(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             PrimaryButton(
-                text = "Edit profile",
+                text = "Editează profilul",
                 onClick = onEditProfile,
                 modifier = Modifier.weight(1f),
             )
             DangerButton(
-                text = "Sign out",
+                text = "Deconectare",
                 onClick = onSignOut,
                 modifier = Modifier.weight(1f),
             )
@@ -601,7 +601,7 @@ private fun PerformanceChartPlot(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "No activity in this interval.",
+                text = "Nu există activitate în acest interval.",
                 style = MaterialTheme.typography.bodySmall,
                 color = TextSecondary,
                 lineHeight = 18.sp
@@ -756,7 +756,7 @@ private fun HistoryCard(
                         contentAlignment = Alignment.BottomStart
                     ) {
                         Text(
-                            text = "Trails finished from the map will land here."           ,
+                            text = "Turele finalizate din hartă vor apărea aici.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextSecondary,
                             lineHeight = 20.sp
@@ -918,7 +918,7 @@ private fun HistoryEntryContent(entry: ProfileTrailRecord) {
                     contentColor = Color.White
                 )
                 StatusChip(
-                    text = if (entry.outcome == ProfileTrailOutcome.COMPLETED) "Finished" else "Ended early",
+                    text = if (entry.outcome == ProfileTrailOutcome.COMPLETED) "Finalizat" else "Încheiat devreme",
                     containerColor = if (entry.outcome == ProfileTrailOutcome.COMPLETED) {
                         AccentGreen.copy(alpha = 0.2f)
                     } else {
@@ -1132,10 +1132,10 @@ private enum class ProfileChartPeriod(
     val title: String,
     val averageUnitName: String
 ) {
-    DAY("D", "hour"),
-    WEEK("W", "day"),
-    MONTH("M", "week"),
-    YEAR("Y", "month")
+    DAY("Z", "oră"),
+    WEEK("S", "zi"),
+    MONTH("L", "săpt."),
+    YEAR("A", "lună")
 }
 
 private enum class ProfileChartMetric(
@@ -1143,8 +1143,8 @@ private enum class ProfileChartMetric(
     val accentColor: Color
 ) {
     KILOMETERS("Km", Info),
-    TRAILS("Trails", AccentGreen),
-    ELEVATION("Elev", Warning);
+    TRAILS("Ture", AccentGreen),
+    ELEVATION("Urc.", Warning);
 
     fun valueFor(entries: List<ProfileTrailRecord>): Double =
         when (this) {
@@ -1156,7 +1156,7 @@ private enum class ProfileChartMetric(
     fun valueLabel(value: Double): String =
         when (this) {
             KILOMETERS -> "${value.formatOneDecimal()} km"
-            TRAILS -> "${value.roundToInt()} trails"
+            TRAILS -> "${value.roundToInt()} ture"
             ELEVATION -> "+${value.roundToInt()} m"
         }
 
@@ -1174,14 +1174,14 @@ private enum class ProfileChartMetric(
     fun totalLabel(value: Double): String =
         when (this) {
             KILOMETERS -> "${value.formatOneDecimal()} km"
-            TRAILS -> "${value.roundToInt()} trails"
+            TRAILS -> "${value.roundToInt()} ture"
             ELEVATION -> "+${value.roundToInt()} m"
         }
 
     fun averageLabel(value: Double): String =
         when (this) {
             KILOMETERS -> "${value.formatOneDecimal()} km"
-            TRAILS -> String.format(Locale.ENGLISH, "%.1f trails", value)
+            TRAILS -> String.format(Locale.forLanguageTag("ro"), "%.1f ture", value)
             ELEVATION -> "+${value.roundToInt()} m"
         }
 }
@@ -1262,9 +1262,9 @@ private fun buildPerformanceSnapshot(
         metric.averageLabel(average)
     }
     val summaryCaption = if (isCurrentDay) {
-        "Today total"
+        "Total azi"
     } else {
-        "${period.averageUnitName.replaceFirstChar { it.uppercase(Locale.ENGLISH) }} average"
+        "Medie pe ${period.averageUnitName}"
     }
 
     return ProfilePerformanceSnapshot(
@@ -1272,7 +1272,7 @@ private fun buildPerformanceSnapshot(
         intervalKey = "${period.name}:${interval.start.timeInMillis}:${interval.end.timeInMillis}",
         intervalStartEpochMillis = interval.start.timeInMillis,
         intervalLabel = performanceIntervalLabel(interval.start, interval.end, period, intervalOffset),
-        summaryLabel = if (isCurrentDay) "TOTAL" else "AVG",
+        summaryLabel = if (isCurrentDay) "TOTAL" else "MEDIE",
         summaryValue = summaryValue,
         summaryCaption = summaryCaption
     )
@@ -1284,7 +1284,7 @@ private data class PerformanceInterval(
 )
 
 private fun performanceInterval(period: ProfileChartPeriod, intervalOffset: Int): PerformanceInterval {
-    val now = Calendar.getInstance(Locale.ENGLISH)
+    val now = Calendar.getInstance(Locale.forLanguageTag("ro"))
     val start = when (period) {
         ProfileChartPeriod.DAY -> startOfDay(now).also { it.add(Calendar.DAY_OF_MONTH, -intervalOffset) }
         ProfileChartPeriod.WEEK -> startOfWeek(now).also { it.add(Calendar.WEEK_OF_YEAR, -intervalOffset) }
@@ -1323,7 +1323,7 @@ private fun buildPerformanceBuckets(
             val start = intervalStart.cloneCalendar().apply { add(Calendar.DAY_OF_MONTH, index) }
             val end = start.cloneCalendar().apply { add(Calendar.DAY_OF_MONTH, 1) }
             ProfilePerformancePoint(
-                label = SimpleDateFormat("E", Locale.ENGLISH).format(start.time),
+                label = SimpleDateFormat("E", Locale.forLanguageTag("ro")).format(start.time),
                 startEpochMillis = start.timeInMillis,
                 endEpochMillis = end.timeInMillis,
                 value = 0.0
@@ -1356,7 +1356,7 @@ private fun buildPerformanceBuckets(
             val start = intervalStart.cloneCalendar().apply { add(Calendar.MONTH, index) }
             val end = start.cloneCalendar().apply { add(Calendar.MONTH, 1) }
             ProfilePerformancePoint(
-                label = SimpleDateFormat("MMM", Locale.ENGLISH).format(start.time).take(1),
+                label = SimpleDateFormat("MMM", Locale.forLanguageTag("ro")).format(start.time).take(1),
                 startEpochMillis = start.timeInMillis,
                 endEpochMillis = end.timeInMillis,
                 value = 0.0
@@ -1403,20 +1403,20 @@ private fun performanceIntervalLabel(
 ): String =
     when (period) {
         ProfileChartPeriod.DAY -> if (intervalOffset == 0) {
-            "Today"
+            "Azi"
         } else {
-            SimpleDateFormat("d MMM", Locale.ENGLISH).format(start.time)
+            SimpleDateFormat("d MMM", Locale.forLanguageTag("ro")).format(start.time)
         }
 
         ProfileChartPeriod.WEEK -> {
             val endInclusive = end.cloneCalendar().apply { add(Calendar.DAY_OF_MONTH, -1) }
-            "${SimpleDateFormat("d MMM", Locale.ENGLISH).format(start.time)} - ${
-                SimpleDateFormat("d MMM", Locale.ENGLISH).format(endInclusive.time)
+            "${SimpleDateFormat("d MMM", Locale.forLanguageTag("ro")).format(start.time)} - ${
+                SimpleDateFormat("d MMM", Locale.forLanguageTag("ro")).format(endInclusive.time)
             }"
         }
 
-        ProfileChartPeriod.MONTH -> SimpleDateFormat("MMMM yyyy", Locale.ENGLISH).format(start.time)
-        ProfileChartPeriod.YEAR -> SimpleDateFormat("yyyy", Locale.ENGLISH).format(start.time)
+        ProfileChartPeriod.MONTH -> SimpleDateFormat("MMMM yyyy", Locale.forLanguageTag("ro")).format(start.time)
+        ProfileChartPeriod.YEAR -> SimpleDateFormat("yyyy", Locale.forLanguageTag("ro")).format(start.time)
     }
 
 private fun resolveProfileStats(
@@ -1430,7 +1430,7 @@ private fun resolveProfileStats(
     )
 
 private fun answerLabel(profile: UserProfile, questionId: String): String =
-    ProfileAssessmentEngine.answerLabel(questionId, profile.answers[questionId]) ?: "Not set"
+    ProfileAssessmentEngine.answerLabel(questionId, profile.answers[questionId]) ?: "Nesetat"
 
 private fun formatDistanceStat(distanceKm: Double): String =
     distanceKm.roundToInt().toString()
@@ -1439,10 +1439,10 @@ private fun formatElevationStat(elevationGainM: Int): String =
     "%,d".format(Locale.ENGLISH, elevationGainM)
 
 private fun formatMonthYear(epochMillis: Long): String =
-    SimpleDateFormat("MMMM yyyy", Locale.ENGLISH).format(Date(epochMillis))
+    SimpleDateFormat("MMMM yyyy", Locale.forLanguageTag("ro")).format(Date(epochMillis))
 
 private fun formatHistoryDate(epochMillis: Long): String =
-    SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH).format(Date(epochMillis))
+    SimpleDateFormat("dd MMM yyyy", Locale.forLanguageTag("ro")).format(Date(epochMillis))
 
 private fun difficultyColor(difficulty: String): Color =
     when (difficulty.uppercase(Locale.getDefault())) {

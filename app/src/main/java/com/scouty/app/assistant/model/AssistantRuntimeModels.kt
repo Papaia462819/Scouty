@@ -4,19 +4,19 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 enum class GenerationMode(val label: String) {
-    FALLBACK_STRUCTURED("Fallback structured"),
+    FALLBACK_STRUCTURED("Structurat de rezervă"),
     GEMINI_API("Gemini API"),
-    LOCAL_LLM("Local LLM"),
-    CARD_DIRECT("Structured card")
+    LOCAL_LLM("Model local"),
+    CARD_DIRECT("Fișă structurată")
 }
 
 enum class ReasoningType(val label: String) {
-    SAFETY_GUIDANCE("Safety guidance"),
-    ROUTE_CONTEXT("Route context"),
-    GEAR_ADVICE("Gear advice"),
-    WEATHER_CONTEXT("Weather context"),
-    KNOW_HOW("Know-how guidance"),
-    GENERAL_RETRIEVAL("General retrieval")
+    SAFETY_GUIDANCE("Ghidare de siguranță"),
+    ROUTE_CONTEXT("Context traseu"),
+    GEAR_ADVICE("Sfaturi echipament"),
+    WEATHER_CONTEXT("Context meteo"),
+    KNOW_HOW("Ghidare practică"),
+    GENERAL_RETRIEVAL("Căutare generală")
 }
 
 enum class ConversationLane {
@@ -83,18 +83,18 @@ data class StructuredAssistantOutput(
 }
 
 enum class ModelRuntimeState(val label: String) {
-    MISSING("Missing"),
-    PREPARING("Preparing"),
-    LOADED("Loaded"),
-    FAILED("Failed"),
-    UNLOADED("Unloaded")
+    MISSING("Lipsește"),
+    PREPARING("Se pregătește"),
+    LOADED("Încărcat"),
+    FAILED("Eșuat"),
+    UNLOADED("Descărcat")
 }
 
 data class ModelStatus(
-    val runtimeLabel: String = "Google AI Edge",
+    val runtimeLabel: String = "Motor local Google",
     val modelVersion: String = "gemma-3-1b-it-int4",
     val state: ModelRuntimeState = ModelRuntimeState.MISSING,
-    val details: String = "Local Gemma bundle is not available. Structured fallback remains active.",
+    val details: String = "Pachetul local Gemma nu este disponibil. Răspunsul structurat de rezervă rămâne activ.",
     val modelPath: String? = null,
     val sourcePath: String? = null,
     val availableOnDisk: Boolean = false,

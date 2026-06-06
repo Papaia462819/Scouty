@@ -499,7 +499,7 @@ fun MapScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "Scouty verifică sursa online și pack-ul offline al traseului curent.",
+                        text = "Scouty verifică sursa de pe internet și pachetul local al traseului curent.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -1241,7 +1241,7 @@ private fun EmptyTrailSearchState(query: String) {
         )
         Spacer(Modifier.height(6.dp))
         Text(
-            text = "Încearcă o altă scriere sau verifică dacă traseul este în pack-ul offline.",
+            text = "Încearcă o altă scriere sau verifică dacă traseul este în pachetul local.",
             fontSize = 13.sp,
             lineHeight = 18.sp,
             color = TextSecondary,
@@ -1423,15 +1423,15 @@ private fun OfflineMapUnavailableCard(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
-                text = "Harta nu este disponibilă offline",
+                text = "Harta nu este disponibilă local",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Medium
             )
             Text(
                 text = if (registry.currentTrailPack?.trailCode != null) {
-                    "Traseul curent nu are încă un pack offline valid. Conectează-te la internet ca Scouty să îl descarce automat."
+                    "Traseul curent nu are încă un pachet local valid. Conectează-te la internet ca Scouty să îl descarce automat."
                 } else {
-                    "Conectează-te la internet pentru harta completă sau setează un traseu curent pentru pregătirea offline."
+                    "Conectează-te la internet pentru harta completă sau setează un traseu curent pentru pregătirea locală."
                 },
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -1455,16 +1455,16 @@ private fun OfflineMapStatusBadge(
     onDismiss: () -> Unit
 ) {
     val title = when (pack.status) {
-        MapPackStatus.AVAILABLE -> "Offline ready"
-        MapPackStatus.DOWNLOADING -> "Downloading ${pack.progressPercent ?: 0}%"
-        MapPackStatus.WAITING_CONFIRMATION -> "Confirmă download offline"
-        MapPackStatus.FAILED -> "Offline unavailable"
-        MapPackStatus.NOT_REQUESTED, MapPackStatus.MISSING -> "Offline queued"
-        MapPackStatus.INVALID, MapPackStatus.STALE -> "Offline needs refresh"
+        MapPackStatus.AVAILABLE -> "Hartă locală pregătită"
+        MapPackStatus.DOWNLOADING -> "Se descarcă ${pack.progressPercent ?: 0}%"
+        MapPackStatus.WAITING_CONFIRMATION -> "Confirmă descărcarea locală"
+        MapPackStatus.FAILED -> "Harta locală nu este disponibilă"
+        MapPackStatus.NOT_REQUESTED, MapPackStatus.MISSING -> "Hartă locală în așteptare"
+        MapPackStatus.INVALID, MapPackStatus.STALE -> "Harta locală trebuie actualizată"
     }
     val body = pack.message ?: when (pack.status) {
         MapPackStatus.AVAILABLE -> "Traseul curent este salvat local."
-        MapPackStatus.WAITING_CONFIRMATION -> "Pack-ul trece de 100 MB pe date mobile."
+        MapPackStatus.WAITING_CONFIRMATION -> "Pachetul trece de 100 MB pe date mobile."
         else -> "Scouty pregătește harta pentru traseul curent."
     }
     Surface(
@@ -1817,9 +1817,9 @@ private fun ActiveTrailHud(
     val paceText = formatTrailPace(elapsedSeconds, trail.distanceCompletedKm)
     val etaText = formatTrailEta(elapsedSeconds, trail.distanceCompletedKm, trail.remainingDistanceKm)
     val offTrailText = if (trail.offTrailDistanceKm <= 0.08) {
-        "On trail"
+        "Pe traseu"
     } else {
-        "${(trail.offTrailDistanceKm * 1000).roundToInt()} m off"
+        "${(trail.offTrailDistanceKm * 1000).roundToInt()} m abatere"
     }
 
     LaunchedEffect(Unit) {
@@ -1868,7 +1868,7 @@ private fun ActiveTrailHud(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         StatusPill(
-                            text = "TRACKING",
+                            text = "URMĂRIRE",
                             color = AccentGreen,
                             pulsing = true
                         )
@@ -1888,14 +1888,14 @@ private fun ActiveTrailHud(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = "${trail.remainingDistanceKm.formatDistanceLabel()} ramasi",
+                        text = "${trail.remainingDistanceKm.formatDistanceLabel()} rămași",
                         style = MaterialTheme.typography.bodySmall,
                         color = TextSecondary
                     )
                 }
                 Icon(
                     imageVector = if (expanded) Lucide.ChevronDown else Lucide.ChevronUp,
-                    contentDescription = if (expanded) "Collapse trail panel" else "Expand trail panel",
+                    contentDescription = if (expanded) "Restrânge panoul traseului" else "Extinde panoul traseului",
                     tint = TextSecondary,
                     modifier = Modifier.size(18.dp)
                 )
@@ -1944,13 +1944,13 @@ private fun ActiveTrailHud(
                     )
                     StatTile(
                         modifier = Modifier.weight(1f),
-                        label = "RAMAS",
+                        label = "RĂMAS",
                         value = trail.remainingDistanceKm.formatDistanceLabel(),
                         accent = InfoBlue
                     )
                     StatTile(
                         modifier = Modifier.weight(1f),
-                        label = "POZITIE",
+                        label = "POZIȚIE",
                         value = offTrailText,
                         accent = if (trail.offTrailDistanceKm <= 0.08) AccentGreen else Warning
                     )
@@ -1963,7 +1963,7 @@ private fun ActiveTrailHud(
                     )
                 }
                 DangerButton(
-                    text = "End trail",
+                    text = "Încheie traseul",
                     onClick = onEndTrail,
                     icon = Lucide.Square,
                     modifier = Modifier.fillMaxWidth()
@@ -2194,7 +2194,7 @@ private fun TrailDetailContent(
                         if (description.length > 220) {
                             Spacer(Modifier.height(6.dp))
                             Text(
-                                text = if (descriptionExpanded) "Restrange descrierea" else "Citeste mai mult",
+                                text = if (descriptionExpanded) "Restrânge descrierea" else "Citește mai mult",
                                 style = MaterialTheme.typography.labelMedium,
                                 color = AccentGreen,
                                 modifier = Modifier.clickable { descriptionExpanded = !descriptionExpanded }
@@ -2287,7 +2287,7 @@ private fun TrailDetailContent(
                             showDatePicker = false
                         }
                     ) {
-                        Text("Confirm")
+                        Text("Confirmă")
                     }
                 }
             ) {
@@ -2385,7 +2385,7 @@ private fun TrailSetupDialog(
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(
-                        text = "Data si compozitie echipa",
+                        text = "Data și componența echipei",
                         style = MaterialTheme.typography.bodySmall,
                         color = TextSecondary
                     )
@@ -2400,7 +2400,7 @@ private fun TrailSetupDialog(
                 ) {
                     Icon(
                         imageVector = Lucide.X,
-                        contentDescription = "Inchide",
+                        contentDescription = "Închide",
                         tint = TextSecondary,
                         modifier = Modifier.size(16.dp)
                     )
@@ -2448,7 +2448,7 @@ private fun TrailSetupDialog(
             }
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                ScoutySectionHeader(title = "COMPOZITIE GRUP")
+                ScoutySectionHeader(title = "COMPONENȚĂ GRUP")
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -2456,7 +2456,7 @@ private fun TrailSetupDialog(
                     PartyCountCard(
                         modifier = Modifier.weight(1f),
                         icon = Lucide.User,
-                        label = "Adulti",
+                        label = "Adulți",
                         value = adultCount,
                         minValue = 1,
                         onDecrement = { onAdultCountChange((adultCount - 1).coerceAtLeast(1)) },
@@ -2475,7 +2475,7 @@ private fun TrailSetupDialog(
             }
 
             StatusPill(
-                text = "${TrailPartyComposition(adults = adultCount, children = childCount).summaryRo} · Gear calculat automat",
+                text = "${TrailPartyComposition(adults = adultCount, children = childCount).summaryRo} · Echipament calculat automat",
                 color = AccentGreen
             )
 
@@ -2484,12 +2484,12 @@ private fun TrailSetupDialog(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 SecondaryButton(
-                    text = "Cancel",
+                    text = "Anulează",
                     onClick = onDismiss,
                     modifier = Modifier.weight(1f)
                 )
                 PrimaryButton(
-                    text = "Confirm plan",
+                    text = "Confirmă planul",
                     onClick = onConfirm,
                     icon = Lucide.Check,
                     modifier = Modifier.weight(1f)
@@ -3057,8 +3057,8 @@ private fun handleMapTap(
     val duration = enrichment?.mnData?.durationText ?: estimateDuration(lengthKm, elevationGain)
     val trailName = enrichment?.displayTitle ?: featureString(feature, "name:ro", "name", "name_en", "ref")
         ?: when (featureString(feature, "class")) {
-            "path", "track" -> "Mountain trail"
-            else -> "Trail segment"
+            "path", "track" -> "Traseu montan"
+            else -> "Segment de traseu"
         }
 
     return SelectedTrailDetails(

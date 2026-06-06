@@ -141,7 +141,7 @@ fun GearScreen(
                         title = category,
                         icon = categoryIcon(category),
                         accentColor = categoryAccentColor(category),
-                        status = "$packedInCategory / $totalInCategory packed",
+                        status = "$packedInCategory / $totalInCategory pregătite",
                         countLeft = totalInCategory - packedInCategory,
                         hasMissingMandatory = missingMandatoryInCategory > 0,
                         completed = packedInCategory == totalInCategory,
@@ -168,7 +168,7 @@ private fun GearTopBar() {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = "Gear checklist",
+            text = "Listă echipament",
             style = MaterialTheme.typography.headlineLarge,
             color = TextPrimary,
             fontWeight = FontWeight.Medium,
@@ -195,7 +195,7 @@ private fun GearTopBar() {
 private fun GearSubtitle(status: HomeStatus) {
     Column {
         Text(
-            text = status.activeTrail?.name ?: "Selecteaza un traseu",
+            text = status.activeTrail?.name ?: "Selectează un traseu",
             style = MaterialTheme.typography.bodyMedium,
             color = TextSecondary,
         )
@@ -216,13 +216,13 @@ private fun EmptyGearState() {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             CategoryIconTile(icon = Lucide.Package, color = InfoBlue)
             Text(
-                text = "Gear apare doar dupa ce setezi un traseu.",
+                text = "Echipamentul apare după ce setezi un traseu.",
                 style = MaterialTheme.typography.titleMedium,
                 color = TextPrimary,
                 fontWeight = FontWeight.Medium,
             )
             Text(
-                text = "Data, vremea si grupul vor genera automat lista potrivita.",
+                text = "Data, vremea și grupul vor genera automat lista potrivită.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = TextSecondary,
             )
@@ -257,7 +257,7 @@ private fun GearSummaryCard(
                     )
                     Spacer(Modifier.width(4.dp))
                     Text(
-                        text = "/ $totalCount items",
+                        text = "/ $totalCount elemente",
                         fontSize = 14.sp,
                         color = TextSecondary,
                         modifier = Modifier.padding(bottom = 4.dp),
@@ -265,7 +265,7 @@ private fun GearSummaryCard(
                 }
                 Spacer(Modifier.height(2.dp))
                 Text(
-                    text = "READY: $readyPct%",
+                    text = "PREGĂTIT: $readyPct%",
                     style = MaterialTheme.typography.labelSmall,
                     color = TextTertiary,
                 )
@@ -289,7 +289,7 @@ private fun GearSummaryCard(
                 }
                 Spacer(Modifier.height(2.dp))
                 Text(
-                    text = "TOTAL WEIGHT",
+                    text = "GREUTATE TOTALĂ",
                     style = MaterialTheme.typography.labelSmall,
                     color = TextTertiary,
                 )
@@ -316,7 +316,7 @@ private fun GearSummaryCard(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "Calculat din traseu, data si grup",
+                text = "Calculat din traseu, dată și grup",
                 fontSize = 10.sp,
                 color = TextTertiary,
             )
@@ -328,7 +328,7 @@ private fun GearSummaryCard(
                         .padding(horizontal = 8.dp, vertical = 3.dp),
                 ) {
                     Text(
-                        text = "$missingMandatoryCount obligatorii lipsa",
+                        text = "$missingMandatoryCount obligatorii lipsă",
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Medium,
                         color = Warning,
@@ -342,7 +342,7 @@ private fun GearSummaryCard(
                         .padding(horizontal = 8.dp, vertical = 3.dp),
                 ) {
                     Text(
-                        text = "Ready",
+                        text = "Pregătit",
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Medium,
                         color = AccentGreen,
@@ -355,7 +355,7 @@ private fun GearSummaryCard(
 
 @Composable
 private fun GearFilterChips(active: String, onSelect: (String) -> Unit) {
-    val filters = listOf("Toate", "Obligatorii", "Lipsa")
+    val filters = listOf("Toate", "Obligatorii", "Lipsă")
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -435,7 +435,7 @@ private fun GearCategoryCard(
                     )
                 }
                 CountPill(
-                    text = if (countLeft > 0) "$countLeft left" else "ready",
+                    text = if (countLeft > 0) "$countLeft rămase" else "gata",
                     color = when {
                         hasMissingMandatory -> Warning
                         countLeft > 0 -> TextSecondary
@@ -600,20 +600,20 @@ private fun CountPill(text: String, color: Color, background: Color) {
 
 private fun categoryIcon(category: String): ImageVector =
     when (category) {
-        "Baza traseu" -> Lucide.Package
-        "Siguranta & navigatie" -> Lucide.ShieldPlus
+        "Bază traseu" -> Lucide.Package
+        "Siguranță & navigație" -> Lucide.ShieldPlus
         "Straturi & vreme" -> Lucide.Cloud
-        "Apa & hrana" -> Lucide.Utensils
+        "Apă & hrană" -> Lucide.Utensils
         "Copii" -> Lucide.Compass
         else -> Lucide.Package
     }
 
 private fun categoryAccentColor(category: String): Color =
     when (category) {
-        "Baza traseu" -> InfoBlue
-        "Siguranta & navigatie" -> Danger
+        "Bază traseu" -> InfoBlue
+        "Siguranță & navigație" -> Danger
         "Straturi & vreme" -> Warning
-        "Apa & hrana" -> Water
+        "Apă & hrană" -> Water
         "Copii" -> AccentGreen
         else -> TextSecondary
     }
@@ -623,7 +623,7 @@ private data class TagInfo(val label: String, val bg: Color, val fg: Color)
 private fun necessityTag(necessity: GearNecessity): TagInfo? =
     when (necessity) {
         GearNecessity.MANDATORY -> TagInfo("OBLIGATORIU", Danger.copy(alpha = 0.15f), Danger)
-        GearNecessity.CONDITIONAL -> TagInfo("OPTIONAL", Warning.copy(alpha = 0.12f), Warning)
+        GearNecessity.CONDITIONAL -> TagInfo("OPȚIONAL", Warning.copy(alpha = 0.12f), Warning)
         GearNecessity.RECOMMENDED -> null
     }
 

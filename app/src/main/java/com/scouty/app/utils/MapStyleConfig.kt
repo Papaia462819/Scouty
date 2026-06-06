@@ -130,7 +130,7 @@ object MapStyleConfig {
         val styleJson = """
             {
               "version": 8,
-              "name": "Scouty Offline",
+              "name": "Scouty Local",
               $glyphsSnippet
               "sources": {},
               "layers": [

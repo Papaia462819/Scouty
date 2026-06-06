@@ -2,77 +2,85 @@
 <resources>
     <string name="app_name">Scouty</string>
 
-    <string name="nav_home">Home</string>
-    <string name="nav_map">Map</string>
-    <string name="nav_chat">Chat</string>
+    <string name="nav_home">Acasă</string>
+    <string name="nav_map">Hartă</string>
+    <string name="nav_chat">Asistent</string>
     <string name="nav_sos">SOS</string>
-    <string name="nav_gear">Gear</string>
-    <string name="nav_profile">Profile</string>
+    <string name="nav_gear">Echipament</string>
+    <string name="nav_profile">Profil</string>
 
-    <string name="header_status">Offline-first outdoor assistant</string>
-    <string name="state_offline">OFFLINE</string>
-    <string name="state_gps_lock">GPS Lock</string>
-    <string name="state_gps_waiting">GPS: waiting for fix</string>
-    <string name="state_gps_fixed">GPS: fix available</string>
-    <string name="state_battery_ok">Battery %1$d%%</string>
-    <string name="state_battery_safe">Battery Safe ON</string>
+    <string name="header_status">Asistent montan pregătit pentru mers fără internet</string>
+    <string name="state_offline">Fără internet</string>
+    <string name="state_gps_lock">GPS fixat</string>
+    <string name="state_gps_waiting">GPS: așteaptă poziția</string>
+    <string name="state_gps_fixed">GPS: poziție disponibilă</string>
+    <string name="state_battery_ok">Baterie %1$d%%</string>
+    <string name="state_battery_safe">Economisire baterie activă</string>
 
-    <string name="home_active_trail">ACTIVE TRAIL</string>
-    <string name="home_view_all">View all \u2192</string>
-    <string name="home_quick_actions">QUICK ACTIONS</string>
-    <string name="home_nearby_trails">NEARBY TRAILS</string>
+    <string name="home_active_trail">TRASEU ACTIV</string>
+    <string name="home_view_all">Vezi tot \u2192</string>
+    <string name="home_quick_actions">ACȚIUNI RAPIDE</string>
+    <string name="home_nearby_trails">TRASEE APROPIATE</string>
 
     <string name="action_sos">SOS</string>
-    <string name="action_compass">Compass</string>
+    <string name="action_compass">Busolă</string>
     <string name="action_shelter">Adăpost</string>
     <string name="action_water">Apă</string>
 
-    <string name="map_section_title">Navigation and Terrain</string>
-    <string name="map_placeholder">MapLibre map placeholder</string>
-    <string name="map_runtime_error_title">Map pack error</string>
+    <string name="map_section_title">Navigație și teren</string>
+    <string name="map_placeholder">Previzualizare hartă MapLibre</string>
+    <string name="map_missing_pack_title">Lipsește pachetul de hartă locală</string>
+    <string name="map_missing_pack_body">Scouty încarcă harta de bază dintr-un pachet PMTiles local, stocat în aplicație. Importă pachetul România ca să folosești harta fără internet.</string>
+    <string name="map_pack_target_path">Fișier așteptat: %1$s în %2$s</string>
+    <string name="map_import_base_pack">Importă pachetul România</string>
+    <string name="map_import_demo_pack">Importă pachetul Bucegi</string>
+    <string name="map_pack_importing">Se importă…</string>
+    <string name="map_demo_pack_title">Detaliul Bucegi este opțional</string>
+    <string name="map_demo_pack_body">Importă pachetul Bucegi ca să deblochezi zoom mai clar în zona principală de demo.</string>
+    <string name="map_runtime_error_title">Eroare pachet hartă</string>
     <string name="map_search_placeholder">Caută trasee...</string>
-    <string name="map_topo">Topo</string>
-    <string name="map_satellite">Satellite</string>
-    <string name="map_trail">Trail</string>
-    <string name="overlay_terrain">Terrain shading</string>
-    <string name="overlay_protected_areas">Protected areas</string>
+    <string name="map_topo">Topografic</string>
+    <string name="map_satellite">Satelit</string>
+    <string name="map_trail">Traseu</string>
+    <string name="overlay_terrain">Umbrire relief</string>
+    <string name="overlay_protected_areas">Arii protejate</string>
     <string name="overlay_wildlife_risk">Zone risc faună</string>
     <string name="overlay_trails">Trasee montane</string>
-    <string name="overlay_difficulty">Trail difficulty</string>
+    <string name="overlay_difficulty">Dificultate traseu</string>
     <string name="overlay_peaks">Etichete vârfuri</string>
     <string name="overlay_places">Localități</string>
     <string name="overlay_water_points">Apă și râuri</string>
     <string name="overlay_attractions">Atracții</string>
 
-    <string name="chat_hint">Ask anything...</string>
-    <string name="chat_prompt_ankle">I twisted my ankle</string>
+    <string name="chat_hint">Întreabă orice...</string>
+    <string name="chat_prompt_ankle">Mi-am sucit glezna</string>
     <string name="chat_prompt_water">Cum pot purifica apa?</string>
-    <string name="chat_prompt_bear">Bear signs nearby, what do I do?</string>
+    <string name="chat_prompt_bear">Urme de urs în apropiere, ce fac?</string>
 
-    <string name="sos_title">EMERGENCY</string>
-    <string name="sos_desc">Generate a compact SOS message from GPS, time to sunset, and incident summary.</string>
-    <string name="sos_compose">Compose SOS message</string>
-    <string name="sos_preview">SOS preview: Lat/Lon; Sunset in 2h; Suspected fracture; Battery 14%.</string>
-    <string name="sos_notice">Device satellite handoff depends on OS/device support.</string>
-    <string name="sos_hold_hint">Press and hold to send GPS location to Salvamont</string>
+    <string name="sos_title">URGENȚĂ</string>
+    <string name="sos_desc">Generează un mesaj SOS compact din GPS, timpul până la apus și rezumatul incidentului.</string>
+    <string name="sos_compose">Compune mesaj SOS</string>
+    <string name="sos_preview">Previzualizare SOS: latitudine/longitudine; apus în 2h; posibilă fractură; baterie 14%%.</string>
+    <string name="sos_notice">Trimiterea prin satelit depinde de suportul sistemului și al dispozitivului.</string>
+    <string name="sos_hold_hint">Ține apăsat ca să trimiți locația GPS către Salvamont</string>
     <string name="sos_button">SOS</string>
-    <string name="sos_hold_time">HOLD 3s</string>
-    <string name="sos_your_location">Your Location</string>
-    <string name="sos_contacts">EMERGENCY CONTACTS</string>
+    <string name="sos_hold_time">ȚINE 3s</string>
+    <string name="sos_your_location">Locația ta</string>
+    <string name="sos_contacts">CONTACTE DE URGENȚĂ</string>
 
-    <string name="gear_title">Gear Checklist</string>
-    <string name="gear_items_packed">%1$d / %2$d items</string>
-    <string name="gear_critical">CRITICAL</string>
+    <string name="gear_title">Listă echipament</string>
+    <string name="gear_items_packed">%1$d / %2$d obiecte</string>
+    <string name="gear_critical">OBLIGATORIU</string>
 
-    <string name="profile_title">Profile</string>
+    <string name="profile_title">Profil</string>
 
     <!-- Legacy strings for compatibility during cleanup -->
-    <string name="assistant_prompt_ankle">I twisted my ankle</string>
+    <string name="assistant_prompt_ankle">Mi-am sucit glezna</string>
     <string name="assistant_prompt_water">Cum pot purifica apa?</string>
-    <string name="assistant_prompt_bear">Bear signs nearby, what should I do?</string>
-    <string name="assistant_section_title">Assistant</string>
-    <string name="assistant_hint">Describe your situation...</string>
-    <string name="assistant_send">Send</string>
-    <string name="assistant_disclaimer">Informational support only.</string>
-    <string name="sos_section_title">Emergency</string>
+    <string name="assistant_prompt_bear">Urme de urs în apropiere, ce ar trebui să fac?</string>
+    <string name="assistant_section_title">Asistent</string>
+    <string name="assistant_hint">Descrie situația...</string>
+    <string name="assistant_send">Trimite</string>
+    <string name="assistant_disclaimer">Doar suport informativ.</string>
+    <string name="sos_section_title">Urgență</string>
 </resources>

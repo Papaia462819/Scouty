@@ -34,18 +34,18 @@ object SosMessageBuilder {
     fun build(
         input: SosMessageInput,
         settings: SosSettings,
-        language: SosMessageLanguage = SosMessageLanguage.English
+        language: SosMessageLanguage = SosMessageLanguage.Romanian
     ): String {
         val lines = mutableListOf<String>()
         val name = settings.senderName.ifBlank { input.displayName.orEmpty() }.trim()
 
         lines += when (language) {
-            SosMessageLanguage.English -> "Help! (SOS Scouty)"
+            SosMessageLanguage.English -> "Ajutor! (SOS Scouty)"
             SosMessageLanguage.Romanian -> "Ajutor! (SOS Scouty)"
         }
         if (name.isNotBlank()) {
             lines += when (language) {
-                SosMessageLanguage.English -> "Name: $name"
+                SosMessageLanguage.English -> "Nume: $name"
                 SosMessageLanguage.Romanian -> "Nume: $name"
             }
         }
@@ -56,26 +56,26 @@ object SosMessageBuilder {
             val accuracy = input.accuracyMeters?.let { " +/-${it.toInt()}m" }.orEmpty()
             val altitude = input.altitudeMeters?.let { " alt ${it.toInt()}m" }.orEmpty()
             lines += when (language) {
-                SosMessageLanguage.English -> "Location: $lat, $lon$accuracy$altitude"
-                SosMessageLanguage.Romanian -> "Locatie: $lat, $lon$accuracy$altitude"
+                SosMessageLanguage.English -> "Locație: $lat, $lon$accuracy$altitude"
+                SosMessageLanguage.Romanian -> "Locație: $lat, $lon$accuracy$altitude"
             }
             lines += when (language) {
-                SosMessageLanguage.English -> "Map: https://maps.google.com/?q=$lat,$lon"
-                SosMessageLanguage.Romanian -> "Harta: https://maps.google.com/?q=$lat,$lon"
+                SosMessageLanguage.English -> "Hartă: https://maps.google.com/?q=$lat,$lon"
+                SosMessageLanguage.Romanian -> "Hartă: https://maps.google.com/?q=$lat,$lon"
             }
         } else {
-            val label = input.locationName.ifBlank { "no recent location label" }
+            val label = input.locationName.ifBlank { "fără etichetă recentă de locație" }
             lines += when (language) {
-                SosMessageLanguage.English -> "Location: no GPS fix ($label)"
-                SosMessageLanguage.Romanian -> "Locatie: fara fix GPS ($label)"
+                SosMessageLanguage.English -> "Locație: fără fix GPS ($label)"
+                SosMessageLanguage.Romanian -> "Locație: fără fix GPS ($label)"
             }
         }
 
         lines += when (language) {
             SosMessageLanguage.English ->
-                "Battery: ${input.batteryPercent}%${if (input.batterySafe) " / Battery Safe" else ""}"
+                "Baterie: ${input.batteryPercent}%${if (input.batterySafe) " / economisire activă" else ""}"
             SosMessageLanguage.Romanian ->
-                "Baterie: ${input.batteryPercent}%${if (input.batterySafe) " / Battery Safe activ" else ""}"
+                "Baterie: ${input.batteryPercent}%${if (input.batterySafe) " / economisire activă" else ""}"
         }
 
         val trailLine = buildTrailLine(input, language)
@@ -89,37 +89,34 @@ object SosMessageBuilder {
         }
 
         lines += when (language) {
-            SosMessageLanguage.English -> "Time: ${formatTimestamp(input.timestampEpochMillis)}"
+            SosMessageLanguage.English -> "Ora: ${formatTimestamp(input.timestampEpochMillis)}"
             SosMessageLanguage.Romanian -> "Ora: ${formatTimestamp(input.timestampEpochMillis)}"
         }
         return lines.joinToString(separator = "\n")
     }
 
     fun buildBilingual(input: SosMessageInput, settings: SosSettings): String =
-        listOf(
-            build(input, settings, SosMessageLanguage.Romanian),
-            build(input, settings, SosMessageLanguage.English)
-        ).joinToString(separator = "\n\n---\n\n")
+        build(input, settings, SosMessageLanguage.Romanian)
 
     private fun buildTrailLine(input: SosMessageInput, language: SosMessageLanguage): String? {
         val trailName = input.activeTrailName?.takeIf { it.isNotBlank() } ?: return null
         val parts = mutableListOf(
             when (language) {
-                SosMessageLanguage.English -> "Trail: $trailName"
+                SosMessageLanguage.English -> "Traseu: $trailName"
                 SosMessageLanguage.Romanian -> "Traseu: $trailName"
             }
         )
         input.activeTrailRegion?.takeIf { it.isNotBlank() }?.let { parts += it }
         input.activeTrailProgressPercent?.let {
             parts += when (language) {
-                SosMessageLanguage.English -> "progress $it%"
+                SosMessageLanguage.English -> "progres $it%"
                 SosMessageLanguage.Romanian -> "progres $it%"
             }
         }
         input.activeTrailRemainingKm?.let {
             parts += when (language) {
-                SosMessageLanguage.English -> "${String.format(Locale.US, "%.1f", it)}km left"
-                SosMessageLanguage.Romanian -> "${String.format(Locale.US, "%.1f", it)} km ramasi"
+                SosMessageLanguage.English -> "${String.format(Locale.US, "%.1f", it)} km rămași"
+                SosMessageLanguage.Romanian -> "${String.format(Locale.US, "%.1f", it)} km rămași"
             }
         }
         return parts.joinToString(" | ")
@@ -131,14 +128,14 @@ object SosMessageBuilder {
         val medicalParts = mutableListOf<String>()
         settings.bloodType.trim().takeIf { it.isNotBlank() }?.let {
             medicalParts += when (language) {
-                SosMessageLanguage.English -> "blood $it"
+                SosMessageLanguage.English -> "grupa $it"
                 SosMessageLanguage.Romanian -> "grupa $it"
             }
         }
         settings.medicalNotes.trim().takeIf { it.isNotBlank() }?.let { medicalParts += it }
         if (medicalParts.isEmpty()) return null
         return when (language) {
-            SosMessageLanguage.English -> "Medical: ${medicalParts.joinToString("; ")}"
+            SosMessageLanguage.English -> "Date medicale: ${medicalParts.joinToString("; ")}"
             SosMessageLanguage.Romanian -> "Date medicale: ${medicalParts.joinToString("; ")}"
         }
     }

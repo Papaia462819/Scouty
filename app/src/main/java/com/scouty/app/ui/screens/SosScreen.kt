@@ -421,7 +421,7 @@ private fun SosHeader(
         ) {
             Icon(
                 imageVector = Lucide.Settings,
-                contentDescription = "SOS settings",
+                contentDescription = "Setări SOS",
                 tint = TextPrimary,
                 modifier = Modifier.size(13.dp),
             )
@@ -568,7 +568,7 @@ private fun SosHoldButton(
                     )
                     Spacer(Modifier.height(6.dp))
                     Text(
-                        text = if (isHolding) "KEEP HOLDING" else "HOLD ${holdSeconds}s",
+                        text = if (isHolding) "ȚINE APĂSAT" else "ȚINE ${holdSeconds}s",
                         fontSize = 9.sp,
                         color = Color.White.copy(alpha = 0.75f),
                         letterSpacing = 1.sp,
@@ -623,7 +623,7 @@ private fun StatusNotice(message: String, onDismiss: () -> Unit) {
         ) {
             Icon(
                 imageVector = Lucide.X,
-                contentDescription = "Dismiss",
+                contentDescription = "Închide",
                 tint = TextTertiary,
                 modifier = Modifier.size(14.dp)
             )
@@ -816,7 +816,7 @@ private fun MessagePreviewCard(
                 PacketIconButton(
                     icon = if (copied) Lucide.Check else Lucide.Copy,
                     tint = if (copied) AccentGreen else TextPrimary,
-                    contentDescription = "Copy SOS message",
+                    contentDescription = "Copiază mesajul SOS",
                     onClick = {
                         onCopy()
                         copied = true
@@ -1008,7 +1008,7 @@ private fun SosSettingsDialog(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "SOS settings",
+                        text = "Setări SOS",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Medium,
                         color = TextPrimary
@@ -1030,7 +1030,7 @@ private fun SosSettingsDialog(
                 ) {
                     Icon(
                         imageVector = Lucide.X,
-                        contentDescription = "Close",
+                        contentDescription = "Închide",
                         tint = TextSecondary,
                         modifier = Modifier.size(16.dp)
                     )
@@ -1107,12 +1107,12 @@ private fun SosSettingsDialog(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 SecondaryButton(
-                    text = "Cancel",
+                    text = "Anulează",
                     onClick = onDismiss,
                     modifier = Modifier.weight(1f)
                 )
                 PrimaryButton(
-                    text = "Save",
+                    text = "Salvează",
                     onClick = { onSave(draft) },
                     icon = Lucide.Check,
                     enabled = canSave,
@@ -1124,9 +1124,9 @@ private fun SosSettingsDialog(
 }
 
 private enum class SosSettingsTab(val label: String, val subtitle: String) {
-    Trigger("Trigger", "Configureaza hold-ul si actiunea"),
-    Contacts("Contacts", "Cui i se trimite rescue packet-ul"),
-    Identity("Identity", "Datele incluse in rescue packet")
+    Trigger("Declanșare", "Configurează apăsarea lungă și acțiunea"),
+    Contacts("Contacte", "Cui i se trimite pachetul de salvare"),
+    Identity("Identitate", "Datele incluse în pachetul de salvare")
 }
 
 @Composable
@@ -1180,7 +1180,7 @@ private fun TriggerSettingsTab(
             .verticalScroll(rememberScrollState())
             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
     ) {
-        SettingsSectionLabel("HOLD DURATION")
+        SettingsSectionLabel("DURATĂ APĂSARE")
         ScoutyCard(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(14.dp)
@@ -1189,14 +1189,14 @@ private fun TriggerSettingsTab(
                 CategoryIconTile(icon = Lucide.Clock, color = Warning, size = 28.dp, iconSize = 14.dp)
                 Column {
                     Text(
-                        text = "${draft.holdSeconds} seconds",
+                        text = "${draft.holdSeconds} secunde",
                         color = TextPrimary,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         letterSpacing = (-0.2).sp
                     )
                     Text(
-                        text = "Evita activarea accidentala",
+                        text = "Evită activarea accidentală",
                         color = TextTertiary,
                         fontSize = 10.sp
                     )
@@ -1226,30 +1226,30 @@ private fun TriggerSettingsTab(
         }
 
         Spacer(Modifier.height(18.dp))
-        SettingsSectionLabel("ACTION AFTER HOLD")
+        SettingsSectionLabel("ACȚIUNE DUPĂ APĂSARE")
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             val hasContacts = draft.smsRecipients.isNotEmpty()
             ActionChoiceCard(
-                title = "SMS to contacts",
-                subtitle = "Trimite rescue packet",
+                title = "SMS către contacte",
+                subtitle = "Trimite pachetul de salvare",
                 semantic = Info,
                 icon = Lucide.MessageSquare,
                 selected = draft.action == SosAction.TEXT_ONLY,
                 enabled = hasContacts,
-                disabledPill = "0 contacts",
+                disabledPill = "0 contacte",
                 onDisabledClick = onNeedContacts,
                 onSelect = { onDraftChange(draft.copy(action = SosAction.TEXT_ONLY)) }
             )
             ActionChoiceCard(
-                title = "Call 112",
-                subtitle = "Apel direct, fara meniu",
+                title = "Sună la 112",
+                subtitle = "Apel direct, fără meniu",
                 semantic = Danger,
                 icon = Lucide.Phone,
                 selected = draft.action == SosAction.CALL_112 || draft.action == SosAction.TEXT_THEN_CALL_112,
                 onSelect = { onDraftChange(draft.copy(action = SosAction.CALL_112)) }
             )
             ActionChoiceCard(
-                title = "Call Salvamont",
+                title = "Sună la Salvamont",
                 subtitle = "0SALVAMONT",
                 semantic = Warning,
                 icon = Lucide.ShieldPlus,
@@ -1270,7 +1270,7 @@ private fun TriggerSettingsTab(
         ) {
             Icon(Lucide.Info, contentDescription = null, tint = Warning, modifier = Modifier.size(11.dp))
             Text(
-                text = "Doar o singura actiune principala poate fi activa",
+                text = "Doar o singură acțiune principală poate fi activă",
                 color = TextPrimary.copy(alpha = 0.75f),
                 fontSize = 10.sp,
                 lineHeight = 14.sp
@@ -1361,7 +1361,7 @@ private fun ContactsSettingsTab(
             .verticalScroll(rememberScrollState())
             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
     ) {
-        SettingsSectionLabel("EMERGENCY CONTACTS")
+        SettingsSectionLabel("CONTACTE DE URGENȚĂ")
         ScoutyCard(semantic = AccentGreen, contentPadding = PaddingValues(12.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -1372,9 +1372,9 @@ private fun ContactsSettingsTab(
                     CategoryIconTile(icon = Lucide.MessageSquare, color = AccentGreen, size = 32.dp, iconSize = 15.dp)
                     Spacer(Modifier.width(10.dp))
                     Column {
-                        Text("Emergency contacts", color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                        Text("Contacte de urgență", color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
                         Text(
-                            text = if (draft.contacts.isEmpty()) "Pick from your contacts" else "${draft.contacts.size} contacts picked",
+                            text = if (draft.contacts.isEmpty()) "Alege din contacte" else "${draft.contacts.size} contacte alese",
                             color = TextSecondary,
                             fontSize = 10.sp
                         )
@@ -1390,7 +1390,7 @@ private fun ContactsSettingsTab(
                     horizontalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     Icon(Lucide.MessageSquare, contentDescription = null, tint = AccentGreen, modifier = Modifier.size(11.dp))
-                    Text("Add", color = AccentGreen, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                    Text("Adaugă", color = AccentGreen, fontSize = 12.sp, fontWeight = FontWeight.Medium)
                 }
             }
         }
@@ -1399,7 +1399,7 @@ private fun ContactsSettingsTab(
         Spacer(Modifier.height(12.dp))
         if (draft.contacts.isEmpty()) {
             Text(
-                text = "No contact is stored until you pick one from the Android contact picker.",
+                text = "Niciun contact nu este stocat până când alegi unul din agenda Android.",
                 color = TextTertiary,
                 fontSize = 12.sp,
                 lineHeight = 17.sp,
@@ -1432,8 +1432,8 @@ private fun ContactsSettingsTab(
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 CategoryIconTile(icon = Lucide.ShieldPlus, color = Warning, size = 32.dp, iconSize = 15.dp)
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("Send to Salvamont too", color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
-                    Text("Notifies the Romanian rescue dispatch", color = TextSecondary, fontSize = 10.sp)
+                    Text("Trimite și la Salvamont", color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                    Text("Anunță dispeceratul român de salvare montană", color = TextSecondary, fontSize = 10.sp)
                 }
                 MiniSwitch(
                     checked = draft.action == SosAction.TEXT_THEN_CALL_SALVAMONT,
@@ -1483,7 +1483,7 @@ private fun ContactListRow(
             Text(contact.initials(), color = AccentGreen, fontSize = 12.sp, fontWeight = FontWeight.Medium)
         }
         Column(modifier = Modifier.weight(1f)) {
-            Text(contact.name.ifBlank { "Emergency contact" }, color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+            Text(contact.name.ifBlank { "Contact de urgență" }, color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
             Text(contact.phone, color = TextTertiary, fontSize = 10.sp, fontFamily = JetBrainsMonoFamily)
         }
         Box(
@@ -1494,7 +1494,7 @@ private fun ContactListRow(
                 .clickable(onClick = onRemove),
             contentAlignment = Alignment.Center
         ) {
-            Icon(Lucide.X, contentDescription = "Remove contact", tint = Danger, modifier = Modifier.size(12.dp))
+            Icon(Lucide.X, contentDescription = "Șterge contactul", tint = Danger, modifier = Modifier.size(12.dp))
         }
     }
 }
@@ -1511,13 +1511,13 @@ private fun IdentitySettingsTab(
             .verticalScroll(rememberScrollState())
             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
     ) {
-        SettingsSectionLabel("NAME IN SOS MESSAGE")
+        SettingsSectionLabel("NUME ÎN MESAJUL SOS")
         SosTextField(
             label = "",
             value = draft.senderName,
             onValueChange = { onDraftChange(draft.copy(senderName = it)) },
-            placeholder = profile.displayName.ifBlank { "Your name here" },
-            helper = "Lasa gol pentru a folosi numele din profil"
+            placeholder = profile.displayName.ifBlank { "Numele tău aici" },
+            helper = "Lasă gol pentru a folosi numele din profil"
         )
         Spacer(Modifier.height(14.dp))
         ScoutyCard(semantic = AccentGreen, contentPadding = PaddingValues(12.dp)) {
@@ -1731,15 +1731,15 @@ private fun ContactRecipientsCard(
                 Spacer(Modifier.width(10.dp))
                 Column {
                     Text(
-                        text = "Emergency contacts",
+                        text = "Contacte de urgență",
                         style = MaterialTheme.typography.labelLarge,
                         color = TextPrimary
                     )
                     Text(
                         text = if (contacts.isEmpty()) {
-                            "Pick phone numbers from your contacts."
+                            "Alege numere de telefon din contacte."
                         } else {
-                            "${contacts.count { it.enabled }} of ${contacts.size} selected for SMS."
+                            "${contacts.count { it.enabled }} din ${contacts.size} selectate pentru SMS."
                         },
                         fontSize = 11.sp,
                         color = TextTertiary
@@ -1747,7 +1747,7 @@ private fun ContactRecipientsCard(
                 }
             }
             SecondaryButton(
-                text = "Add",
+                text = "Adaugă",
                 onClick = onAddContact,
                 modifier = Modifier.width(86.dp)
             )
@@ -1767,7 +1767,7 @@ private fun ContactRecipientsCard(
         } else {
             Spacer(Modifier.height(10.dp))
             Text(
-                text = "No contact is stored until you pick one from the Android contact picker.",
+                text = "Niciun contact nu este stocat până când alegi unul din agenda Android.",
                 color = TextTertiary,
                 fontSize = 10.sp,
                 lineHeight = 13.sp
@@ -1797,7 +1797,7 @@ private fun ContactRecipientRow(
         )
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = contact.name.ifBlank { "Emergency contact" },
+                text = contact.name.ifBlank { "Contact de urgență" },
                 color = TextPrimary,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Medium
@@ -1818,7 +1818,7 @@ private fun ContactRecipientRow(
         ) {
             Icon(
                 imageVector = Lucide.X,
-                contentDescription = "Remove contact",
+                contentDescription = "Șterge contactul",
                 tint = TextTertiary,
                 modifier = Modifier.size(14.dp)
             )
@@ -1924,11 +1924,11 @@ private fun actionFromSwitches(sendText: Boolean, callTarget: SosCallTarget?): S
 private fun actionSummary(settings: SosSettings): String {
     val recipientText = if (settings.action.includesText) {
         val count = settings.smsRecipients.size
-        if (count == 0) "No SMS contacts configured" else "$count SMS contact(s)"
+        if (count == 0) "Niciun contact SMS configurat" else "$count contacte SMS"
     } else {
-        "No SMS step"
+        "Fără pas SMS"
     }
-    val callText = settings.action.callNumber?.let { "dial ${displayDialNumber(it)}" } ?: "no call"
+    val callText = settings.action.callNumber?.let { "apelează ${displayDialNumber(it)}" } ?: "fără apel"
     return "$recipientText · $callText"
 }
 
@@ -1939,8 +1939,8 @@ private data class LocationPillState(
 
 private fun locationPillState(status: HomeStatus): LocationPillState =
     when {
-        !status.gpsFixed -> LocationPillState("ACQUIRING…", Warning)
-        !status.isOnline -> LocationPillState("LAST KNOWN", Warning)
+        !status.gpsFixed -> LocationPillState("SE CAUTĂ…", Warning)
+        !status.isOnline -> LocationPillState("ULTIMA POZIȚIE", Warning)
         else -> LocationPillState("GPS FIX", AccentGreen)
     }
 

@@ -240,7 +240,7 @@ class ToolDispatcher(
             } ?: "Nu am diferența de nivel disponibilă pentru traseul activ."
             "weather" -> trail?.weatherForecast?.let { "Vreme pentru ${trail.name}: $it." }
                 ?: "Nu am prognoză locală disponibilă pentru traseul activ."
-            else -> "Nu am acest tip de verificare disponibil offline."
+            else -> "Nu am acest tip de verificare disponibil local."
         }
         val output = StructuredAssistantOutput(
             summary = body,
@@ -273,7 +273,7 @@ class ToolDispatcher(
             listOf(
                 StructuredResponseSection(
                     title = "Baterie",
-                    body = "Battery Safe este activ; păstrează bateria pentru navigație și apeluri.",
+                    body = "Economisirea bateriei este activă; păstrează bateria pentru navigație și apeluri.",
                     style = ResponseSectionStyle.ACTIONS
                 )
             )

@@ -58,7 +58,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                     }.onFailure { error ->
                         _uiState.value = ProfileSessionUiState(
                             stage = SessionStage.AUTH,
-                            authMessage = error.toUserMessage("Nu am putut face login.")
+                            authMessage = error.toUserMessage("Nu am putut autentifica utilizatorul.")
                         )
                     }
                 }
@@ -125,7 +125,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             }.onFailure { error ->
                 _uiState.value = ProfileSessionUiState(
                     stage = SessionStage.AUTH,
-                    authMessage = error.toUserMessage("Nu am putut face login cu Google.")
+                    authMessage = error.toUserMessage("Nu am putut autentifica utilizatorul cu Google.")
                 )
             }
         }

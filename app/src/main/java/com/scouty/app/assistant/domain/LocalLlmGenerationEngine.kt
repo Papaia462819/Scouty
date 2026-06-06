@@ -186,7 +186,7 @@ class LocalLlmGenerationEngine(
             sections.add(
                 0,
                 StructuredResponseSection(
-                    title = if (isRomanian) "Atentie" else "Caution",
+                    title = "Atenție",
                     body = warning,
                     style = ResponseSectionStyle.IMPORTANT
                 )
@@ -200,7 +200,7 @@ class LocalLlmGenerationEngine(
             val guidance = parsed.guidance.orEmpty().trim()
             if (guidance.isNotBlank()) {
                 sections += StructuredResponseSection(
-                    title = if (isRomanian) "Baza offline" else "Grounded guidance",
+                    title = "Baza locală",
                     body = guidance,
                     style = ResponseSectionStyle.GUIDANCE
                 )
@@ -365,7 +365,7 @@ class LocalLlmGenerationEngine(
         val primary = input.retrievedChunks.firstOrNull() ?: return emptyList()
         val sections = mutableListOf<StructuredResponseSection>()
         sections += StructuredResponseSection(
-            title = if (isRomanian) "Baza offline" else "Grounded guidance",
+            title = "Baza locală",
             body = sanitizeParagraph(primary.synthesizedAnswer?.takeIf { it.isNotBlank() } ?: primary.body, 320),
             style = ResponseSectionStyle.GUIDANCE
         )

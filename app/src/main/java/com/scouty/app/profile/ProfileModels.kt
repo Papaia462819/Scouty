@@ -5,16 +5,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class ScoutyLevel(val number: Int, val title: String) {
-    LEVEL_1(1, "Junior"),
-    LEVEL_2(2, "Boot Camper"),
-    LEVEL_3(3, "Trail Explorer"),
-    LEVEL_4(4, "Hill Hopper"),
-    LEVEL_5(5, "Trail Surfer"),
-    LEVEL_6(6, "Peak Hunter"),
-    LEVEL_7(7, "Ridge Rider"),
-    LEVEL_8(8, "Hiking Wizard"),
-    LEVEL_9(9, "Summit Beast"),
-    LEVEL_10(10, "Mountain Gremlin");
+    LEVEL_1(1, "Începător"),
+    LEVEL_2(2, "Drumeț în formare"),
+    LEVEL_3(3, "Explorator de poteci"),
+    LEVEL_4(4, "Călător pe dealuri"),
+    LEVEL_5(5, "Navigator de traseu"),
+    LEVEL_6(6, "Căutător de vârfuri"),
+    LEVEL_7(7, "Cuceritor de creste"),
+    LEVEL_8(8, "Expert în drumeții"),
+    LEVEL_9(9, "Maestru al vârfurilor"),
+    LEVEL_10(10, "Maestru montan");
 
     companion object {
         val starters = listOf(LEVEL_1, LEVEL_2, LEVEL_3)

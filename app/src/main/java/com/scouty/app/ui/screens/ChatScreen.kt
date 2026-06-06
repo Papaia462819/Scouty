@@ -287,7 +287,7 @@ private fun ChatTopBar(
     isOnline: Boolean,
     onMenuClick: () -> Unit
 ) {
-    val statusText = if (isOnline) "online" else "offline"
+    val statusText = if (isOnline) "conectat" else "fără internet"
     val statusTextColor = if (isOnline) AccentGreen else TextTertiary
     val statusDotColor = if (isOnline) AccentGreen else Warning
 
@@ -365,7 +365,7 @@ private fun ChatOptionsPanel(
                 .padding(horizontal = 10.dp, vertical = 10.dp)
         ) {
             Text(
-                text = "SETARI CHAT",
+                text = "SETĂRI CHAT",
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Medium,
                 letterSpacing = 1.5.sp,
@@ -383,7 +383,7 @@ private fun ChatOptionsPanel(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Chat offline",
+                    text = "Chat local",
                     fontSize = 13.sp,
                     lineHeight = 16.sp,
                     color = TextPrimary,
@@ -451,7 +451,7 @@ private fun OfflineChatDialogs(
         AlertDialog(
             onDismissRequest = onDismissMeteredDownload,
             title = {
-                Text(text = "Descarci chat offline?")
+                Text(text = "Descarci chat local?")
             },
             text = {
                 Text(
@@ -482,7 +482,7 @@ private fun OfflineChatDialogs(
         AlertDialog(
             onDismissRequest = onDismissFinished,
             title = {
-                Text(text = "Chat offline este gata")
+                Text(text = "Chatul local este gata")
             },
             text = {
                 Text(text = "Modelul Qwen a fost instalat și încărcat. Îl păstrez activ până îl oprești din meniul de chat.")
@@ -499,10 +499,10 @@ private fun OfflineChatDialogs(
         AlertDialog(
             onDismissRequest = onDismissDisable,
             title = {
-                Text(text = "Vrei să pierzi asistentul offline?")
+                Text(text = "Vrei să pierzi asistentul local?")
             },
             text = {
-                Text(text = "Modelul local va fi șters de pe telefon. Chatul va continua cu răspuns online când ai internet sau cu răspuns structurat când nu ai.")
+                Text(text = "Modelul local va fi șters de pe telefon. Chatul va continua cu răspuns prin internet când ai conexiune sau cu răspuns structurat când nu ai.")
             },
             confirmButton = {
                 TextButton(onClick = onConfirmDisable) {
@@ -539,7 +539,7 @@ private fun OfflineChatLoadingDialog(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Se activează chat offline",
+                    text = "Se activează chatul local",
                     style = MaterialTheme.typography.titleSmall,
                     color = TextPrimary,
                     fontWeight = FontWeight.Medium
@@ -558,7 +558,7 @@ private fun OfflineChatLoadingDialog(
             }
             Spacer(Modifier.height(8.dp))
             Text(
-                text = offlineChat.message ?: "Se pregătește modelul offline.",
+                text = offlineChat.message ?: "Se pregătește modelul local.",
                 fontSize = 12.sp,
                 lineHeight = 18.sp,
                 color = TextSecondary
@@ -839,7 +839,7 @@ private fun ChatInputBar(
         ) {
             Icon(
                 imageVector = Lucide.Send,
-                contentDescription = "Send",
+                contentDescription = "Trimite",
                 tint = AccentGreenOnSurface,
                 modifier = Modifier.size(14.dp),
             )

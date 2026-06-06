@@ -21,7 +21,7 @@ class DirectAnswerComposer {
             ?: primary?.shortAnswer?.let(::sanitizeParagraph)?.takeIf { it.isNotBlank() }
             ?: primary?.synthesizedAnswer?.let(::sanitizeParagraph)?.takeIf { it.isNotBlank() }
             ?: primary?.body?.let { sanitizeParagraph(it, 280) }
-            ?: if (isRomanian) "Răspuns prudent pe baza informațiilor offline disponibile." else "Conservative answer from the available offline information."
+            ?: "Răspuns prudent pe baza informațiilor locale disponibile."
 
         val sections = mutableListOf<StructuredResponseSection>()
         primary?.safetyNote
@@ -29,7 +29,7 @@ class DirectAnswerComposer {
             ?.takeIf { it.isNotBlank() && !containsNormalized(summary, it) }
             ?.let { note ->
                 sections += StructuredResponseSection(
-                    title = if (isRomanian) "Atenție" else "Caution",
+                    title = "Atenție",
                     body = note,
                     style = ResponseSectionStyle.IMPORTANT
                 )
@@ -42,7 +42,7 @@ class DirectAnswerComposer {
             ?.takeIf { it.isNotBlank() && !containsNormalized(summary, it) }
             ?.let { body ->
                 sections += StructuredResponseSection(
-                    title = if (isRomanian) "Baza offline" else "Grounded guidance",
+                    title = "Baza locală",
                     body = body,
                     style = ResponseSectionStyle.GUIDANCE
                 )
@@ -66,7 +66,7 @@ class DirectAnswerComposer {
 
         if (sections.isEmpty()) {
             sections += StructuredResponseSection(
-                title = if (isRomanian) "Baza offline" else "Grounded guidance",
+                title = "Baza locală",
                 body = summary,
                 style = ResponseSectionStyle.GUIDANCE
             )

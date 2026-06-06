@@ -25,20 +25,20 @@ enum class SosAction {
 
     val title: String
         get() = when (this) {
-            CALL_112 -> "Call 112"
-            CALL_SALVAMONT -> "Call Salvamont"
-            TEXT_ONLY -> "Text contacts"
-            TEXT_THEN_CALL_112 -> "Text, then call 112"
-            TEXT_THEN_CALL_SALVAMONT -> "Text, then call Salvamont"
+            CALL_112 -> "Sună la 112"
+            CALL_SALVAMONT -> "Sună la Salvamont"
+            TEXT_ONLY -> "Trimite SMS contactelor"
+            TEXT_THEN_CALL_112 -> "Trimite SMS, apoi sună la 112"
+            TEXT_THEN_CALL_SALVAMONT -> "Trimite SMS, apoi sună la Salvamont"
         }
 
     val description: String
         get() = when (this) {
-            CALL_112 -> "Opens the dialer with 112."
-            CALL_SALVAMONT -> "Opens the dialer with 0SALVAMONT."
-            TEXT_ONLY -> "Opens SMS with your rescue message."
-            TEXT_THEN_CALL_112 -> "Opens SMS first, then dials 112 when you return."
-            TEXT_THEN_CALL_SALVAMONT -> "Opens SMS first, then dials Salvamont when you return."
+            CALL_112 -> "Deschide apelarea cu 112."
+            CALL_SALVAMONT -> "Deschide apelarea cu 0SALVAMONT."
+            TEXT_ONLY -> "Deschide SMS cu mesajul tău de salvare."
+            TEXT_THEN_CALL_112 -> "Deschide SMS mai întâi, apoi apelează 112 când revii."
+            TEXT_THEN_CALL_SALVAMONT -> "Deschide SMS mai întâi, apoi apelează Salvamont când revii."
         }
 
     companion object {
