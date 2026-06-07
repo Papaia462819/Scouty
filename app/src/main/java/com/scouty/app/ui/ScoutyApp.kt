@@ -167,6 +167,7 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
             when (selectedRoute) {
                 ROUTE_HOME -> HomeScreen(
                     status = uiState,
+                    profile = currentProfile,
                     contentPadding = innerPadding,
                     onActiveTrailClick = {
                         if (uiState.activeTrail != null) {

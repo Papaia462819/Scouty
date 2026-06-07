@@ -159,10 +159,14 @@ fun SosScreen(
     var settings by remember { mutableStateOf(repository.load()) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
     var statusMessage by rememberSaveable { mutableStateOf<String?>(null) }
-    var pendingFollowUpCall by rememberSaveable { mutableStateOf<String?>(null) }
-    var waitingForExternalReturn by rememberSaveable { mutableStateOf(false) }
-    var externalLaunchAt by rememberSaveable { mutableLongStateOf(0L) }
     var previewLanguage by rememberSaveable { mutableStateOf(SosMessageLanguage.Romanian) }
+    val activateSos = rememberSosActivationHandler(
+        status = status,
+        displayName = profile.displayName,
+        settings = settings,
+        onStatusMessage = { statusMessage = it },
+        onRequestSettings = { showSettings = true }
+    )
 
     val previewMessage = remember(status, profile, settings, previewLanguage) {
         SosMessageBuilder.build(
@@ -170,27 +174,6 @@ fun SosScreen(
             settings = settings,
             language = previewLanguage
         )
-    }
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner, waitingForExternalReturn, pendingFollowUpCall, externalLaunchAt) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (
-                event == Lifecycle.Event.ON_RESUME &&
-                waitingForExternalReturn &&
-                pendingFollowUpCall != null &&
-                SystemClock.elapsedRealtime() - externalLaunchAt > 700L
-            ) {
-                val number = pendingFollowUpCall
-                pendingFollowUpCall = null
-                waitingForExternalReturn = false
-                if (number != null && openDialer(context, number)) {
-                    statusMessage = "Dialer pregatit pentru ${displayDialNumber(number)}."
-                }
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
     Box(
@@ -217,54 +200,7 @@ fun SosScreen(
                 )
                 SosHoldButton(
                     holdSeconds = settings.holdSeconds,
-                    onActivated = {
-                        val messageInput = status.toSosMessageInput(profile.displayName, System.currentTimeMillis())
-                        val bilingualMessage = SosMessageBuilder.buildBilingual(
-                            input = messageInput,
-                            settings = settings
-                        )
-                        val launchedText = if (settings.action.includesText) {
-                            val recipients = settings.smsRecipients
-                            if (recipients.isEmpty()) {
-                                statusMessage = "Adauga contacte SMS in setarile SOS."
-                                if (settings.action.callNumber == null) {
-                                    showSettings = true
-                                }
-                                false
-                            } else {
-                                openSmsComposer(context, recipients, bilingualMessage).also { launched ->
-                                    statusMessage = if (launched) {
-                                        "Mesaj SOS pregatit pentru ${recipients.size} contact(e)."
-                                    } else {
-                                        "Nu am gasit o aplicatie SMS disponibila."
-                                    }
-                                }
-                            }
-                        } else {
-                            false
-                        }
-
-                        val callNumber = settings.action.callNumber
-                        when {
-                            launchedText && callNumber != null -> {
-                                pendingFollowUpCall = callNumber
-                                waitingForExternalReturn = true
-                                externalLaunchAt = SystemClock.elapsedRealtime()
-                            }
-                            !settings.action.includesText && callNumber != null -> {
-                                if (openDialer(context, callNumber)) {
-                                    statusMessage = "Dialer pregatit pentru ${displayDialNumber(callNumber)}."
-                                } else {
-                                    statusMessage = "Nu am putut deschide dialer-ul."
-                                }
-                            }
-                            settings.action.includesText && !launchedText && callNumber != null -> {
-                                if (openDialer(context, callNumber)) {
-                                    statusMessage = "SMS indisponibil. Dialer pregatit pentru ${displayDialNumber(callNumber)}."
-                                }
-                            }
-                        }
-                    }
+                    onActivated = activateSos
                 )
                 statusMessage?.let { message ->
                     StatusNotice(message = message, onDismiss = { statusMessage = null })
@@ -307,6 +243,94 @@ fun SosScreen(
                         statusMessage = "Setarile SOS au fost salvate."
                     }
                 )
+            }
+        }
+    }
+}
+
+@Composable
+internal fun rememberSosActivationHandler(
+    status: HomeStatus,
+    displayName: String,
+    settings: SosSettings,
+    onStatusMessage: (String) -> Unit,
+    onRequestSettings: (() -> Unit)? = null
+): () -> Unit {
+    val context = LocalContext.current
+    var pendingFollowUpCall by rememberSaveable { mutableStateOf<String?>(null) }
+    var waitingForExternalReturn by rememberSaveable { mutableStateOf(false) }
+    var externalLaunchAt by rememberSaveable { mutableLongStateOf(0L) }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner, waitingForExternalReturn, pendingFollowUpCall, externalLaunchAt, onStatusMessage) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (
+                event == Lifecycle.Event.ON_RESUME &&
+                waitingForExternalReturn &&
+                pendingFollowUpCall != null &&
+                SystemClock.elapsedRealtime() - externalLaunchAt > 700L
+            ) {
+                val number = pendingFollowUpCall
+                pendingFollowUpCall = null
+                waitingForExternalReturn = false
+                if (number != null && openDialer(context, number)) {
+                    onStatusMessage("Dialer pregatit pentru ${displayDialNumber(number)}.")
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    return remember(context, status, displayName, settings, onStatusMessage, onRequestSettings) {
+        {
+            val messageInput = status.toSosMessageInput(displayName, System.currentTimeMillis())
+            val bilingualMessage = SosMessageBuilder.buildBilingual(
+                input = messageInput,
+                settings = settings
+            )
+            val launchedText = if (settings.action.includesText) {
+                val recipients = settings.smsRecipients
+                if (recipients.isEmpty()) {
+                    onStatusMessage("Adauga contacte SMS in setarile SOS.")
+                    if (settings.action.callNumber == null) {
+                        onRequestSettings?.invoke()
+                    }
+                    false
+                } else {
+                    openSmsComposer(context, recipients, bilingualMessage).also { launched ->
+                        onStatusMessage(
+                            if (launched) {
+                                "Mesaj SOS pregatit pentru ${recipients.size} contact(e)."
+                            } else {
+                                "Nu am gasit o aplicatie SMS disponibila."
+                            }
+                        )
+                    }
+                }
+            } else {
+                false
+            }
+
+            val callNumber = settings.action.callNumber
+            when {
+                launchedText && callNumber != null -> {
+                    pendingFollowUpCall = callNumber
+                    waitingForExternalReturn = true
+                    externalLaunchAt = SystemClock.elapsedRealtime()
+                }
+                !settings.action.includesText && callNumber != null -> {
+                    if (openDialer(context, callNumber)) {
+                        onStatusMessage("Dialer pregatit pentru ${displayDialNumber(callNumber)}.")
+                    } else {
+                        onStatusMessage("Nu am putut deschide dialer-ul.")
+                    }
+                }
+                settings.action.includesText && !launchedText && callNumber != null -> {
+                    if (openDialer(context, callNumber)) {
+                        onStatusMessage("SMS indisponibil. Dialer pregatit pentru ${displayDialNumber(callNumber)}.")
+                    }
+                }
             }
         }
     }
@@ -430,9 +454,20 @@ private fun SosHeader(
 }
 
 @Composable
-private fun SosHoldButton(
+internal fun SosHoldControl(
     holdSeconds: Int,
-    onActivated: () -> Unit
+    onActivated: () -> Unit,
+    modifier: Modifier = Modifier,
+    buttonSize: Dp = 108.dp,
+    progressSize: Dp = 104.dp,
+    progressStrokeWidth: Dp = 4.dp,
+    shadowElevation: Dp = 16.dp,
+    progressTrackColor: Color = Danger.copy(alpha = 0.25f),
+    progressColor: Color = Color.White.copy(alpha = 0.75f),
+    backgroundBrush: Brush = Brush.verticalGradient(
+        colors = listOf(Color(0xFFC73D3C), Color(0xFF8A2625)),
+    ),
+    content: @Composable (isHolding: Boolean) -> Unit
 ) {
     var isHolding by remember { mutableStateOf(false) }
     var holdProgress by remember { mutableFloatStateOf(0f) }
@@ -445,6 +480,83 @@ private fun SosHoldButton(
             holdProgress = 0f
         }
     }
+
+    val shadowModifier = if (shadowElevation > 0.dp) {
+        Modifier.shadow(
+            elevation = shadowElevation,
+            shape = CircleShape,
+            spotColor = Danger.copy(alpha = 0.35f)
+        )
+    } else {
+        Modifier
+    }
+
+    Box(
+        modifier = modifier
+            .size(buttonSize)
+            .then(shadowModifier)
+            .clip(CircleShape)
+            .background(brush = backgroundBrush)
+            .pointerInput(holdSeconds, onActivated) {
+                coroutineScope {
+                    val gestureScope = this
+                    awaitEachGesture {
+                        awaitFirstDown(requireUnconsumed = false)
+                        isHolding = true
+                        var activated = false
+                        val start = SystemClock.elapsedRealtime()
+                        val duration = holdSeconds * 1000L
+                        val holdJob = gestureScope.launch {
+                            while (holdProgress < 1f) {
+                                val elapsed = SystemClock.elapsedRealtime() - start
+                                holdProgress = (elapsed.toFloat() / duration).coerceIn(0f, 1f)
+                                if (elapsed >= duration) {
+                                    activated = true
+                                    activationToken = SystemClock.elapsedRealtime()
+                                    onActivated()
+                                    break
+                                }
+                                delay(16)
+                            }
+                        }
+                        waitForUpOrCancellation()
+                        holdJob.cancel()
+                        isHolding = false
+                        if (!activated) {
+                            holdProgress = 0f
+                        }
+                    }
+                }
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        Canvas(modifier = Modifier.size(progressSize)) {
+            drawArc(
+                color = progressTrackColor,
+                startAngle = -90f,
+                sweepAngle = 360f,
+                useCenter = false,
+                style = Stroke(width = progressStrokeWidth.toPx(), cap = StrokeCap.Round)
+            )
+            if (holdProgress > 0f) {
+                drawArc(
+                    color = progressColor,
+                    startAngle = -90f,
+                    sweepAngle = 360f * holdProgress,
+                    useCenter = false,
+                    style = Stroke(width = progressStrokeWidth.toPx(), cap = StrokeCap.Round)
+                )
+            }
+        }
+        content(isHolding)
+    }
+}
+
+@Composable
+internal fun SosHoldButton(
+    holdSeconds: Int,
+    onActivated: () -> Unit
+) {
 
     val transition = rememberInfiniteTransition(label = "sosPulse")
     val ringAlpha = transition.animateFloat(
@@ -490,71 +602,10 @@ private fun SosHoldButton(
                     .background(Danger.copy(alpha = 0.1f))
                     .border(0.5.dp, Danger.copy(alpha = 0.2f), CircleShape),
             )
-            Box(
-                modifier = Modifier
-                    .size(108.dp)
-                    .shadow(
-                        elevation = 16.dp,
-                        shape = CircleShape,
-                        spotColor = Danger.copy(alpha = 0.35f)
-                    )
-                    .clip(CircleShape)
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(Color(0xFFC73D3C), Color(0xFF8A2625)),
-                        ),
-                    )
-                    .pointerInput(holdSeconds) {
-                        coroutineScope {
-                            val gestureScope = this
-                            awaitEachGesture {
-                                awaitFirstDown(requireUnconsumed = false)
-                                isHolding = true
-                                var activated = false
-                                val start = SystemClock.elapsedRealtime()
-                                val duration = holdSeconds * 1000L
-                                val holdJob = gestureScope.launch {
-                                    while (holdProgress < 1f) {
-                                        val elapsed = SystemClock.elapsedRealtime() - start
-                                        holdProgress = (elapsed.toFloat() / duration).coerceIn(0f, 1f)
-                                        if (elapsed >= duration) {
-                                            activated = true
-                                            activationToken = SystemClock.elapsedRealtime()
-                                            onActivated()
-                                            break
-                                        }
-                                        delay(16)
-                                    }
-                                }
-                                waitForUpOrCancellation()
-                                holdJob.cancel()
-                                isHolding = false
-                                if (!activated) {
-                                    holdProgress = 0f
-                                }
-                            }
-                        }
-                    },
-                contentAlignment = Alignment.Center,
-            ) {
-                Canvas(modifier = Modifier.size(104.dp)) {
-                    drawArc(
-                        color = Danger.copy(alpha = 0.25f),
-                        startAngle = -90f,
-                        sweepAngle = 360f,
-                        useCenter = false,
-                        style = Stroke(width = 4.dp.toPx(), cap = StrokeCap.Round)
-                    )
-                    if (holdProgress > 0f) {
-                        drawArc(
-                            color = Color.White.copy(alpha = 0.75f),
-                            startAngle = -90f,
-                            sweepAngle = 360f * holdProgress,
-                            useCenter = false,
-                            style = Stroke(width = 4.dp.toPx(), cap = StrokeCap.Round)
-                        )
-                    }
-                }
+            SosHoldControl(
+                holdSeconds = holdSeconds,
+                onActivated = onActivated
+            ) { isHolding ->
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
@@ -591,7 +642,7 @@ private fun SosHoldButton(
 }
 
 @Composable
-private fun StatusNotice(message: String, onDismiss: () -> Unit) {
+internal fun StatusNotice(message: String, onDismiss: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

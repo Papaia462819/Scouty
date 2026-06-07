@@ -622,6 +622,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         }
     }
 
+    fun focusUserLocation() {
+        if (!_uiState.value.gpsFixed) return
+        _mapSessionState.update { currentState ->
+            currentState.copy(
+                isBottomSheetVisible = false,
+                userLocationFocusToken = System.currentTimeMillis()
+            )
+        }
+    }
+
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
         val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)

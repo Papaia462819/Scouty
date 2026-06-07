@@ -1,8 +1,12 @@
 package com.scouty.app.ui.screens
 
+import android.os.SystemClock
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,13 +27,30 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathMeasure
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -51,6 +72,8 @@ import com.composables.icons.lucide.Sunset
 import com.composables.icons.lucide.TrendingUp
 import com.composables.icons.lucide.TriangleAlert
 import com.scouty.app.R
+import com.scouty.app.profile.UserProfile
+import com.scouty.app.sos.SosSettingsRepository
 import com.scouty.app.ui.components.CategoryIconTile
 import com.scouty.app.ui.components.DifficultyBadge
 import com.scouty.app.ui.components.DifficultyLevel
@@ -81,17 +104,30 @@ import com.scouty.app.ui.theme.Warning
 import com.scouty.app.ui.theme.Water
 import java.util.Locale
 import kotlin.math.abs
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
     status: HomeStatus,
+    profile: UserProfile,
     contentPadding: PaddingValues,
     onActiveTrailClick: () -> Unit = {},
     onShelterClick: () -> Unit = {},
     onWaterClick: () -> Unit = {},
     onTrackClick: () -> Unit = {},
 ) {
+    val context = LocalContext.current
     val weatherSnapshot = buildWeatherSnapshot(status)
+    val sosSettings = remember(context) { SosSettingsRepository(context.applicationContext).load() }
+    var sosStatusMessage by rememberSaveable { mutableStateOf<String?>(null) }
+    val activateSos = rememberSosActivationHandler(
+        status = status,
+        displayName = profile.displayName,
+        settings = sosSettings,
+        onStatusMessage = { sosStatusMessage = it }
+    )
 
     Column(
         modifier = Modifier
@@ -126,7 +162,17 @@ fun HomeScreen(
         Spacer(Modifier.height(20.dp))
         ScoutySectionHeader(title = stringResource(R.string.home_quick_actions))
         Spacer(Modifier.height(10.dp))
-        QuickActionsRow(onShelter = onShelterClick, onWater = onWaterClick, onTrack = onTrackClick)
+        QuickActionsRow(
+            sosHoldSeconds = sosSettings.holdSeconds,
+            onSosActivated = activateSos,
+            onShelter = onShelterClick,
+            onWater = onWaterClick,
+            onTrack = onTrackClick
+        )
+        sosStatusMessage?.let { message ->
+            Spacer(Modifier.height(8.dp))
+            StatusNotice(message = message, onDismiss = { sosStatusMessage = null })
+        }
 
         Spacer(Modifier.height(20.dp))
         ScoutySectionHeader(
@@ -559,17 +605,21 @@ private fun EmptyTrailCard(message: String = "Nu ai traseu activ. Caută și set
 }
 
 @Composable
-private fun QuickActionsRow(onShelter: () -> Unit, onWater: () -> Unit, onTrack: () -> Unit) {
+private fun QuickActionsRow(
+    sosHoldSeconds: Int,
+    onSosActivated: () -> Unit,
+    onShelter: () -> Unit,
+    onWater: () -> Unit,
+    onTrack: () -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        QuickActionTile(
+        QuickSosActionTile(
             modifier = Modifier.weight(1f),
-            icon = Lucide.TriangleAlert,
-            label = "SOS",
-            color = Danger,
-            onClick = {},
+            holdSeconds = sosHoldSeconds,
+            onActivated = onSosActivated,
         )
         QuickActionTile(
             modifier = Modifier.weight(1f),
@@ -591,6 +641,104 @@ private fun QuickActionsRow(onShelter: () -> Unit, onWater: () -> Unit, onTrack:
             label = "Urma",
             color = AccentGreen,
             onClick = onTrack,
+        )
+    }
+}
+
+@Composable
+private fun QuickSosActionTile(
+    modifier: Modifier,
+    holdSeconds: Int,
+    onActivated: () -> Unit,
+) {
+    val shape = RoundedCornerShape(14.dp)
+    var holdProgress by remember { mutableFloatStateOf(0f) }
+    var activationToken by remember { mutableLongStateOf(0L) }
+
+    LaunchedEffect(activationToken) {
+        if (activationToken > 0) {
+            holdProgress = 1f
+            delay(180)
+            holdProgress = 0f
+        }
+    }
+
+    Column(
+        modifier = modifier
+            .clip(shape)
+            .background(Danger.copy(alpha = 0.06f))
+            .border(0.5.dp, Danger.copy(alpha = 0.15f), shape)
+            .drawWithContent {
+                drawContent()
+                if (holdProgress > 0f) {
+                    val strokeWidthPx = 2.dp.toPx()
+                    val inset = strokeWidthPx / 2f
+                    val cornerPx = (14.dp.toPx() - inset).coerceAtLeast(0f)
+                    val borderPath = Path().apply {
+                        addRoundRect(
+                            RoundRect(
+                                left = inset,
+                                top = inset,
+                                right = size.width - inset,
+                                bottom = size.height - inset,
+                                cornerRadius = CornerRadius(cornerPx, cornerPx),
+                            )
+                        )
+                    }
+                    val measure = PathMeasure().apply { setPath(borderPath, false) }
+                    val progressPath = Path()
+                    measure.getSegment(0f, measure.length * holdProgress, progressPath, true)
+                    drawPath(
+                        path = progressPath,
+                        color = Danger,
+                        style = Stroke(width = strokeWidthPx, cap = StrokeCap.Round),
+                    )
+                }
+            }
+            .pointerInput(holdSeconds, onActivated) {
+                coroutineScope {
+                    val gestureScope = this
+                    awaitEachGesture {
+                        awaitFirstDown(requireUnconsumed = false)
+                        var activated = false
+                        val start = SystemClock.elapsedRealtime()
+                        val duration = holdSeconds * 1000L
+                        val holdJob = gestureScope.launch {
+                            while (holdProgress < 1f) {
+                                val elapsed = SystemClock.elapsedRealtime() - start
+                                holdProgress = (elapsed.toFloat() / duration).coerceIn(0f, 1f)
+                                if (elapsed >= duration) {
+                                    activated = true
+                                    activationToken = SystemClock.elapsedRealtime()
+                                    onActivated()
+                                    break
+                                }
+                                delay(16)
+                            }
+                        }
+                        waitForUpOrCancellation()
+                        holdJob.cancel()
+                        if (!activated) {
+                            holdProgress = 0f
+                        }
+                    }
+                }
+            }
+            .padding(horizontal = 14.dp, vertical = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            imageVector = Lucide.TriangleAlert,
+            contentDescription = "SOS",
+            tint = Danger,
+            modifier = Modifier.size(20.dp),
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = "SOS",
+            style = MaterialTheme.typography.labelMedium,
+            color = Danger,
+            fontWeight = FontWeight.Medium,
         )
     }
 }

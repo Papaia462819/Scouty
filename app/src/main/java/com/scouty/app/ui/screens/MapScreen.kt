@@ -9,6 +9,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
+import android.view.Gravity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.animateColorAsState
@@ -21,6 +22,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -63,7 +65,6 @@ import com.composables.icons.lucide.ChevronUp
 import com.composables.icons.lucide.Clock
 import com.composables.icons.lucide.Crosshair
 import com.composables.icons.lucide.Droplet
-import com.composables.icons.lucide.FileText
 import com.composables.icons.lucide.History
 import com.composables.icons.lucide.House
 import com.composables.icons.lucide.Info
@@ -123,10 +124,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -236,6 +241,7 @@ import org.maplibre.geojson.Geometry
 import org.maplibre.geojson.LineString
 import org.maplibre.geojson.MultiLineString
 import org.maplibre.geojson.Point
+import java.text.Normalizer
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -651,6 +657,7 @@ fun MapScreen(
                     nearbyGuideRequest = nearbyGuideRequest,
                     mapMode = mapSession.mode,
                     focusRequestToken = mapSession.focusRequestToken,
+                    userLocationFocusToken = mapSession.userLocationFocusToken,
                     cameraSnapshot = mapSession.cameraSnapshot,
                     overlayState = overlayState,
                     onTrailClick = { selection ->
@@ -670,8 +677,7 @@ fun MapScreen(
                             showLayerMenu = false
                             isSearchExpanded = true
                         },
-                        onLayersClick = { showLayerMenu = !showLayerMenu },
-                        onCompassClick = viewModel::focusActiveTrailOnMap
+                        onLayersClick = { showLayerMenu = !showLayerMenu }
                     )
 
                     MapShortcutStack(
@@ -680,7 +686,7 @@ fun MapScreen(
                             .padding(end = 14.dp, bottom = 106.dp),
                         onWaterClick = { viewModel.requestNearbyGuide(NearbyGuideType.WATER) },
                         onShelterClick = { viewModel.requestNearbyGuide(NearbyGuideType.SHELTER) },
-                        onLocateClick = viewModel::focusActiveTrailOnMap
+                        onLocateClick = viewModel::focusUserLocation
                     )
                 }
 
@@ -784,7 +790,7 @@ fun MapScreen(
                         modifier = Modifier
                             .align(Alignment.TopCenter)
                             .padding(
-                                top = if (isActiveTrailMode) 132.dp else 20.dp,
+                                top = 20.dp,
                                 start = 16.dp,
                                 end = 16.dp
                             ),
@@ -797,7 +803,7 @@ fun MapScreen(
                         modifier = Modifier
                             .align(Alignment.TopCenter)
                             .padding(
-                                top = if (isActiveTrailMode) 132.dp else 20.dp,
+                                top = 20.dp,
                                 start = 16.dp,
                                 end = 16.dp
                             ),
@@ -857,8 +863,7 @@ private fun MapTopHeader(
     modifier: Modifier = Modifier,
     isLayerMenuOpen: Boolean,
     onSearchClick: () -> Unit,
-    onLayersClick: () -> Unit,
-    onCompassClick: () -> Unit
+    onLayersClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -901,23 +906,6 @@ private fun MapTopHeader(
             contentDescription = "Straturi hartă",
             onClick = onLayersClick
         )
-        Box(
-            modifier = Modifier
-                .size(44.dp)
-                .shadow(6.dp, RoundedCornerShape(14.dp), ambientColor = Color.Black.copy(alpha = 0.15f))
-                .clip(RoundedCornerShape(14.dp))
-                .background(Color(0xFF1A1A1A))
-                .border(0.5.dp, Color(0xFFFFFFFF).copy(alpha = 0.1f), RoundedCornerShape(14.dp))
-                .clickable(onClick = onCompassClick),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Lucide.Crosshair,
-                contentDescription = "Orientează harta",
-                tint = AccentGreen,
-                modifier = Modifier.size(18.dp)
-            )
-        }
     }
 }
 
@@ -2006,8 +1994,10 @@ private fun TrailDetailContent(
     var selectedDateMillis by rememberSaveable(trail.selectionToken) { mutableStateOf(System.currentTimeMillis()) }
     var adultCount by rememberSaveable(trail.selectionToken) { mutableStateOf(1) }
     var childCount by rememberSaveable(trail.selectionToken) { mutableStateOf(0) }
-    val markerLabel = TrailMetadataFormatter.formatTrailMarkers(trail.markingSymbols)
     val detailDescription = trail.localDescription?.takeIf { it.isNotBlank() } ?: trail.descriptionRo
+    val shortSummary = remember(trail.selectionToken) {
+        buildTrailCharacterization(trail.descriptionRo ?: trail.localDescription)
+    }
 
     Column(
         modifier = Modifier
@@ -2134,7 +2124,7 @@ private fun TrailDetailContent(
                 }
             }
 
-            trail.routeSummary?.takeIf { it.isNotBlank() }?.let { summary ->
+            shortSummary?.let { summary ->
                 item {
                     ScoutyCard {
                         Row(
@@ -2142,13 +2132,13 @@ private fun TrailDetailContent(
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             CategoryIconTile(
-                                icon = Lucide.FileText,
+                                icon = Lucide.Info,
                                 color = AccentGreen,
                                 size = 28.dp,
                                 iconSize = 14.dp
                             )
                             Text(
-                                text = "REZUMAT RAPID",
+                                text = "PE SCURT",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = TextSecondary
                             )
@@ -2171,13 +2161,13 @@ private fun TrailDetailContent(
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             CategoryIconTile(
-                                icon = Lucide.Info,
-                                color = TextSecondary,
+                                icon = Lucide.Route,
+                                color = AccentGreen,
                                 size = 28.dp,
                                 iconSize = 14.dp
                             )
                             Text(
-                                text = "DESPRE TRASEU",
+                                text = "RUTA",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = TextSecondary
                             )
@@ -2204,25 +2194,58 @@ private fun TrailDetailContent(
                 }
             }
 
-            if (!trail.fromName.isNullOrBlank() || !trail.toName.isNullOrBlank() || markerLabel != null) {
+            if (!trail.fromName.isNullOrBlank() || !trail.toName.isNullOrBlank()) {
                 item {
                     ScoutyCard {
-                        if (!trail.fromName.isNullOrBlank() || !trail.toName.isNullOrBlank()) {
+                        Text(
+                            text = listOfNotNull(trail.fromName, trail.toName).joinToString(" → "),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = TextPrimary
+                        )
+                    }
+                }
+            }
+
+            if (trail.markingSymbols.isNotEmpty()) {
+                item {
+                    ScoutyCard {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            CategoryIconTile(
+                                icon = Lucide.MapPin,
+                                color = AccentGreen,
+                                size = 28.dp,
+                                iconSize = 14.dp
+                            )
                             Text(
-                                text = listOfNotNull(trail.fromName, trail.toName).joinToString(" → "),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = TextPrimary
+                                text = "MARCAJ",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = TextSecondary
                             )
                         }
-                        markerLabel?.let { marker ->
-                            if (!trail.fromName.isNullOrBlank() || !trail.toName.isNullOrBlank()) {
-                                Spacer(Modifier.height(6.dp))
+                        Spacer(Modifier.height(12.dp))
+                        val distinctMarkers = remember(trail.selectionToken) {
+                            trail.markingSymbols
+                                .map { symbol -> symbol to detectTrailMarker(symbol) }
+                                .distinctBy { (_, marker) -> marker }
+                        }
+                        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            distinctMarkers.forEach { (symbol, marker) ->
+                                val (markerColor, markerShape) = marker
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    TrailMarkerSign(symbol = symbol)
+                                    Text(
+                                        text = trailMarkerLabel(markerColor, markerShape),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = TextPrimary
+                                    )
+                                }
                             }
-                            Text(
-                                text = "Marcaj: $marker",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = AccentGreen
-                            )
                         }
                     }
                 }
@@ -2242,28 +2265,6 @@ private fun TrailDetailContent(
                 )
             }
 
-            if (trail.sourceUrls.isNotEmpty()) {
-                item {
-                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        ScoutySectionHeader(title = "SURSE TRASEU")
-                        trail.sourceUrls.take(2).forEach { sourceUrl ->
-                            Text(
-                                text = sourceUrl,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = AccentGreen,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.clickable {
-                                    runCatching { uriHandler.openUri(sourceUrl) }
-                                        .onFailure { error ->
-                                            Log.w("ScoutyMap", "Failed to open route source $sourceUrl", error)
-                                        }
-                                }
-                            )
-                        }
-                    }
-                }
-            }
         }
 
         PrimaryButton(
@@ -2347,6 +2348,131 @@ private fun TrailStatCard(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
+    }
+}
+
+private enum class TrailMarkerShape { TRIANGLE, CROSS, STRIPE, CIRCLE, DOT }
+
+private enum class TrailMarkerColor(val color: Color) {
+    RED(Color(0xFFD7352C)),
+    BLUE(Color(0xFF2E6FD6)),
+    YELLOW(Color(0xFFEAB308)),
+    GREEN(Color(0xFF2E9E4F)),
+    UNKNOWN(Color(0xFF9AA0A6))
+}
+
+/**
+ * The raw symbol comes in mixed formats — structured (`yellow:white:yellow_triangle`) and free
+ * text in several languages (`triunghi galben`, `Red triangle with white border`,
+ * `gelbes Kreuz auf weißem Grund`) — so we detect colour and shape by scanning the whole
+ * accent-stripped string for keywords.
+ */
+private fun detectTrailMarker(symbol: String): Pair<TrailMarkerColor, TrailMarkerShape> {
+    val normalized = Normalizer.normalize(symbol.lowercase(Locale.ROOT), Normalizer.Form.NFD)
+        .replace("\\p{Mn}+".toRegex(), "")
+    val color = when {
+        listOf("verde", "green", "grun").any { it in normalized } -> TrailMarkerColor.GREEN
+        listOf("galben", "yellow", "gelb").any { it in normalized } -> TrailMarkerColor.YELLOW
+        listOf("albastr", "blue", "blau").any { it in normalized } -> TrailMarkerColor.BLUE
+        listOf("rosu", "rosie", "ros", "red", "rot").any { it in normalized } -> TrailMarkerColor.RED
+        else -> TrailMarkerColor.UNKNOWN
+    }
+    val shape = when {
+        listOf("triunghi", "triangle", "dreieck").any { it in normalized } -> TrailMarkerShape.TRIANGLE
+        listOf("cruce", "cross", "kreuz").any { it in normalized } -> TrailMarkerShape.CROSS
+        listOf("banda", "band", "stripe", "bar", "streifen", "balken").any { it in normalized } -> TrailMarkerShape.STRIPE
+        listOf("cerc", "circle", "kreis", "ring").any { it in normalized } -> TrailMarkerShape.CIRCLE
+        else -> TrailMarkerShape.DOT
+    }
+    return color to shape
+}
+
+/** Clean Romanian label with proper gender agreement, e.g. "Triunghi galben", "Cruce roșie". */
+private fun trailMarkerLabel(color: TrailMarkerColor, shape: TrailMarkerShape): String {
+    val (noun, feminine) = when (shape) {
+        TrailMarkerShape.TRIANGLE -> "Triunghi" to false
+        TrailMarkerShape.CROSS -> "Cruce" to true
+        TrailMarkerShape.STRIPE -> "Bandă" to true
+        TrailMarkerShape.CIRCLE -> "Cerc" to false
+        TrailMarkerShape.DOT -> "Punct" to false
+    }
+    val adjective = when (color) {
+        TrailMarkerColor.RED -> if (feminine) "roșie" else "roșu"
+        TrailMarkerColor.BLUE -> if (feminine) "albastră" else "albastru"
+        TrailMarkerColor.YELLOW -> if (feminine) "galbenă" else "galben"
+        TrailMarkerColor.GREEN -> "verde"
+        TrailMarkerColor.UNKNOWN -> ""
+    }
+    return listOf(noun, adjective).filter { it.isNotBlank() }.joinToString(" ")
+}
+
+/**
+ * Renders a trail blaze in the app's own style: a softly tinted rounded tile with the coloured
+ * symbol drawn on top (no white plaque).
+ */
+@Composable
+private fun TrailMarkerSign(symbol: String, modifier: Modifier = Modifier) {
+    val (markerColor, shape) = remember(symbol) { detectTrailMarker(symbol) }
+    val markColor = markerColor.color
+
+    Box(
+        modifier = modifier
+            .size(40.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(markColor.copy(alpha = 0.14f)),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.size(40.dp)) {
+            val w = size.width
+            val h = size.height
+            val cx = w / 2f
+            val cy = h / 2f
+            when (shape) {
+                TrailMarkerShape.STRIPE -> {
+                    val bandHeight = h * 0.22f
+                    drawRect(
+                        color = markColor,
+                        topLeft = Offset(w * 0.2f, cy - bandHeight / 2f),
+                        size = Size(w * 0.6f, bandHeight)
+                    )
+                }
+
+                TrailMarkerShape.DOT -> drawCircle(color = markColor, radius = w * 0.2f, center = Offset(cx, cy))
+
+                TrailMarkerShape.CIRCLE -> drawCircle(
+                    color = markColor,
+                    radius = w * 0.24f,
+                    center = Offset(cx, cy),
+                    style = Stroke(width = w * 0.11f)
+                )
+
+                TrailMarkerShape.TRIANGLE -> {
+                    val side = w * 0.56f
+                    val path = Path().apply {
+                        moveTo(cx, h * 0.28f)
+                        lineTo(cx - side / 2f, h * 0.7f)
+                        lineTo(cx + side / 2f, h * 0.7f)
+                        close()
+                    }
+                    drawPath(path, color = markColor)
+                }
+
+                TrailMarkerShape.CROSS -> {
+                    val armThickness = w * 0.15f
+                    val armLength = w * 0.52f
+                    drawRect(
+                        color = markColor,
+                        topLeft = Offset(cx - armThickness / 2f, cy - armLength / 2f),
+                        size = Size(armThickness, armLength)
+                    )
+                    drawRect(
+                        color = markColor,
+                        topLeft = Offset(cx - armLength / 2f, cy - armThickness / 2f),
+                        size = Size(armLength, armThickness)
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -2732,6 +2858,7 @@ private fun MapLibreView(
     nearbyGuideRequest: NearbyGuideRequest?,
     mapMode: MapTrailMode,
     focusRequestToken: Long,
+    userLocationFocusToken: Long,
     cameraSnapshot: MapCameraSnapshot?,
     overlayState: MapOverlayState,
     onTrailClick: (SelectedTrailDetails) -> Unit,
@@ -2754,6 +2881,7 @@ private fun MapLibreView(
     val currentNearbyGuideRequest by rememberUpdatedState(nearbyGuideRequest)
     val currentMapMode by rememberUpdatedState(mapMode)
     val currentFocusRequestToken by rememberUpdatedState(focusRequestToken)
+    val currentUserLocationFocusToken by rememberUpdatedState(userLocationFocusToken)
     val currentCameraSnapshot by rememberUpdatedState(cameraSnapshot)
     val currentOnNearbyGuideResolved by rememberUpdatedState(onNearbyGuideResolved)
     val currentOnCameraSnapshotChanged by rememberUpdatedState(onCameraSnapshotChanged)
@@ -2765,6 +2893,7 @@ private fun MapLibreView(
     var mapClickListenerBound by remember { mutableStateOf(false) }
     var cameraIdleListenerBound by remember { mutableStateOf(false) }
     var lastConsumedFocusRequestToken by remember { mutableStateOf(0L) }
+    var lastConsumedUserFocusToken by remember { mutableStateOf(0L) }
 
     DisposableEffect(lifecycle) {
         lifecycle.addObserver(lifecycleManager)
@@ -2820,6 +2949,18 @@ private fun MapLibreView(
                     map.setLatLngBoundsForCameraTarget(RomaniaCameraBounds)
                     map.setMinZoomPreference(DefaultRomaniaZoom)
                     map.setMaxZoomPreference(16.4)
+                    map.uiSettings.apply {
+                        // Move the native compass above the water shortcut button (bottom-right)
+                        // instead of its default top-right position.
+                        val density = context.resources.displayMetrics.density
+                        setCompassGravity(Gravity.BOTTOM or Gravity.END)
+                        setCompassMargins(
+                            0,
+                            0,
+                            (14 * density).toInt(),
+                            (262 * density).toInt()
+                        )
+                    }
                     if (!mapClickListenerBound) {
                         map.addOnMapClickListener { tappedPoint ->
                             if (currentMapMode == MapTrailMode.ACTIVE) {
@@ -2913,6 +3054,19 @@ private fun MapLibreView(
                             return@AndroidView
                         }
                     }
+                }
+
+                if (currentUserLocationFocusToken > lastConsumedUserFocusToken) {
+                    resolveGpsFocusTarget(currentStatus)?.let { focusTarget ->
+                        map.animateCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                focusTarget.center,
+                                focusTarget.zoom
+                            )
+                        )
+                    }
+                    lastConsumedUserFocusToken = currentUserLocationFocusToken
+                    return@AndroidView
                 }
 
                 if (currentFocusRequestToken > lastConsumedFocusRequestToken) {
@@ -3997,6 +4151,30 @@ private fun zoomForRouteBounds(bounds: RouteBounds): Double {
     val lonSpan = (bounds.maxLon - bounds.minLon).coerceAtLeast(0.002)
     val span = maxOf(latSpan, lonSpan)
     return (12.9 - log2(span / 0.02)).coerceIn(8.2, 15.0)
+}
+
+/**
+ * Pulls a short, plain-language characterization out of the full trail description.
+ * The catalog descriptions are template-generated and always contain a landscape/"atmosphere"
+ * sentence and an audience-fit sentence; we surface just those two as a quick summary.
+ */
+private fun buildTrailCharacterization(description: String?): String? {
+    if (description.isNullOrBlank()) {
+        return null
+    }
+    val sentences = description
+        .split(Regex("(?<=[.!?])\\s+"))
+        .map { it.trim() }
+        .filter { it.isNotEmpty() }
+    val atmosphere = sentences.firstOrNull {
+        it.startsWith("Peisajul") || it.startsWith("Atmosfera")
+    }
+    val audience = sentences.firstOrNull {
+        it.startsWith("Se potrive") || it.startsWith("Este o alegere")
+    }
+    return listOfNotNull(atmosphere, audience)
+        .joinToString(" ")
+        .takeIf { it.isNotBlank() }
 }
 
 private fun imageScopeLabel(scope: String): String =

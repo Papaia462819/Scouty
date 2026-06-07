@@ -165,6 +165,7 @@ data class MapSessionState(
     val isBottomSheetVisible: Boolean = false,
     val mode: MapTrailMode = MapTrailMode.BROWSING,
     val focusRequestToken: Long = 0L,
+    val userLocationFocusToken: Long = 0L,
     val cameraSnapshot: MapCameraSnapshot? = null,
     val lastCompletedTrail: CompletedTrailSnapshot? = null,
     val nearbyGuideRequest: NearbyGuideRequest? = null,
