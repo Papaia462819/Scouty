@@ -12,6 +12,7 @@ import kotlinx.serialization.json.Json
 
 class LocalLlmGenerationEngine(
     private val modelManager: ModelManager,
+    @Suppress("unused")
     private val fallbackEngine: GenerationEngine = TemplateGenerationEngine(),
     private val draftPromptBuilder: DraftAuthoredPromptBuilder = DraftAuthoredPromptBuilder(),
     private val directAnswerComposer: DirectAnswerComposer = DirectAnswerComposer(),
@@ -19,19 +20,11 @@ class LocalLlmGenerationEngine(
 ) : GenerationEngine {
 
     override suspend fun generate(input: GenerationInput): StructuredAssistantOutput {
-        if (!input.allowLocalModel) {
+        if (!input.allowLocalModel || input.modelStatus.state != ModelRuntimeState.LOADED) {
             return fallback(input, input.modelStatus)
         }
 
-        val loadStatus = if (input.modelStatus.state == ModelRuntimeState.LOADED) {
-            input.modelStatus
-        } else {
-            modelManager.ensureLoaded()
-        }
-
-        if (loadStatus.state != ModelRuntimeState.LOADED) {
-            return fallback(input, loadStatus)
-        }
+        val loadStatus = input.modelStatus
 
         return runCatching {
             val prompt = draftPromptBuilder.build(input, loadStatus)
@@ -74,7 +67,7 @@ class LocalLlmGenerationEngine(
             )
         }.getOrElse { error ->
             runCatching {
-                Log.w(LogTag, "Local LLM response fell back to structured template", error)
+                Log.w(LogTag, "Local LLM response fell back to top retrieved tile", error)
             }
             fallback(
                 input = input,
@@ -85,15 +78,17 @@ class LocalLlmGenerationEngine(
         }
     }
 
-    private suspend fun fallback(
+    private fun fallback(
         input: GenerationInput,
         modelStatus: ModelStatus
     ): StructuredAssistantOutput =
-        fallbackEngine.generate(
-            input.copy(
+        directAnswerComposer.composeFromTopRetrievedTile(
+            input = input.copy(
                 generationMode = GenerationMode.FALLBACK_STRUCTURED,
                 modelStatus = modelStatus
-            )
+            ),
+            modelStatus = modelStatus,
+            generationMode = GenerationMode.FALLBACK_STRUCTURED
         ).copy(
             generationMode = GenerationMode.FALLBACK_STRUCTURED,
             modelVersion = modelStatus.modelVersion,
@@ -293,6 +288,15 @@ class LocalLlmGenerationEngine(
                 trail.region?.takeIf { it.isNotBlank() }?.let {
                     parts += "Region=${sanitizeSingleLine(it, 48)}"
                 }
+            }
+            input.context.routeRecommendations.take(2).takeIf { it.isNotEmpty() }?.let { recommendations ->
+                parts += "RouteRecs=${sanitizeSingleLine(
+                    recommendations.joinToString("; ") { recommendation ->
+                        val proximity = recommendation.proximityKm?.let { " ${String.format("%.1f", it)}km" }.orEmpty()
+                        "${recommendation.title}$proximity"
+                    },
+                    140
+                )}"
             }
         }
         return parts.joinToString(" | ").take(320)

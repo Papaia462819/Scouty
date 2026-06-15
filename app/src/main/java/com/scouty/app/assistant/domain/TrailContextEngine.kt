@@ -58,7 +58,7 @@ class TrailContextEngine {
             TrailContextIntent.NEEDS_CHECK -> answerNeeds(trail, context, conversationState, isRomanian)
             TrailContextIntent.DURATION_ESTIMATE -> answerDuration(query, trail, isRomanian)
             TrailContextIntent.GEAR_REVIEW -> answerGearReview(trail, context, conversationState, isRomanian)
-            TrailContextIntent.GEAR_UPDATE_CONFIRM -> processGearConfirmation(query, conversationState, isRomanian)
+            TrailContextIntent.GEAR_UPDATE_CONFIRM -> processGearConfirmation(query, context, conversationState, isRomanian)
             TrailContextIntent.PERFORMANCE_HISTORY -> answerPerformanceHistory(query, context, isRomanian)
             TrailContextIntent.NONE -> null
         }
@@ -86,6 +86,8 @@ class TrailContextEngine {
                 )
             )
         }
+
+        answerHistoryPeriodOrExtreme(query, history, isRomanian)?.let { return it }
 
         val matchedTrail = findHistoryTrail(query, history)
         if (matchedTrail != null) {
@@ -142,6 +144,118 @@ class TrailContextEngine {
         return buildResult(
             summary = summary,
             sections = sections,
+            followUps = emptyList(),
+            reasoningType = ReasoningType.ROUTE_CONTEXT,
+            conversationState = AssistantConversationState(
+                lastUserMessage = query,
+                lastTrailContextIntent = "PERFORMANCE_HISTORY"
+            )
+        )
+    }
+
+    private fun answerHistoryPeriodOrExtreme(
+        query: String,
+        history: List<TrailHistoryEntry>,
+        isRomanian: Boolean
+    ): TrailContextResult? {
+        val normalized = normalize(query)
+        val metric = detectHistoryMetric(normalized)
+        val period = detectHistoryPeriod(normalized)
+        if (metric == null && period == null) {
+            return null
+        }
+
+        val periodEntries = period?.let { filterHistoryByPeriod(history, it) } ?: history
+        if (periodEntries.isEmpty()) {
+            val periodLabel = period?.labelRo ?: if (isRomanian) "intervalul cerut" else "the requested period"
+            return buildResult(
+                summary = if (isRomanian) {
+                    "Nu am gasit trasee in istoricul tau pentru $periodLabel."
+                } else {
+                    "I did not find trails in your history for $periodLabel."
+                },
+                sections = emptyList(),
+                followUps = emptyList(),
+                reasoningType = ReasoningType.ROUTE_CONTEXT,
+                conversationState = AssistantConversationState(
+                    lastUserMessage = query,
+                    lastTrailContextIntent = "PERFORMANCE_HISTORY"
+                )
+            )
+        }
+
+        val completed = periodEntries.filter { it.outcome.equals("COMPLETED", ignoreCase = true) }
+        val basis = completed.takeIf { it.isNotEmpty() } ?: periodEntries
+        val periodLabel = period?.labelRo ?: if (isRomanian) "istoricul tau" else "your history"
+
+        if (metric == null) {
+            val totalDistance = basis.sumOf { it.distanceKm }
+            val totalElevation = basis.sumOf { it.elevationGainM }
+            val latestLines = periodEntries
+                .sortedByDescending { it.completedAtEpochMillis }
+                .take(3)
+                .joinToString("\n") { entry ->
+                    "- ${entry.name}: ${formatKm(entry.distanceKm)} km, ${entry.durationText}, ${formatHistoryDate(entry.completedAtEpochMillis)}"
+                }
+            return buildResult(
+                summary = if (isRomanian) {
+                    "Pentru $periodLabel ai ${periodEntries.size} trasee in istoric: ${formatKm(totalDistance)} km si +$totalElevation m."
+                } else {
+                    "For $periodLabel you have ${periodEntries.size} trails in history: ${formatKm(totalDistance)} km and +$totalElevation m."
+                },
+                sections = listOf(
+                    StructuredResponseSection(
+                        title = if (isRomanian) "Trasee" else "Trails",
+                        body = latestLines,
+                        style = ResponseSectionStyle.CONTEXT
+                    )
+                ),
+                followUps = emptyList(),
+                reasoningType = ReasoningType.ROUTE_CONTEXT,
+                conversationState = AssistantConversationState(
+                    lastUserMessage = query,
+                    lastTrailContextIntent = "PERFORMANCE_HISTORY"
+                )
+            )
+        }
+
+        val selected = when (metric) {
+            HistoryMetric.LONGEST_DISTANCE -> basis.maxByOrNull { it.distanceKm }
+            HistoryMetric.SHORTEST_DISTANCE -> basis.minByOrNull { it.distanceKm }
+            HistoryMetric.MOST_ELEVATION -> basis.maxByOrNull { it.elevationGainM }
+            HistoryMetric.LONGEST_DURATION -> basis.maxByOrNull { parseDurationHours(it.durationText) ?: 0.0 }
+        } ?: return null
+
+        val metricLabel = when (metric) {
+            HistoryMetric.LONGEST_DISTANCE -> if (isRomanian) "cel mai lung traseu" else "the longest trail"
+            HistoryMetric.SHORTEST_DISTANCE -> if (isRomanian) "cel mai scurt traseu" else "the shortest trail"
+            HistoryMetric.MOST_ELEVATION -> if (isRomanian) "traseul cu cea mai mare diferenta de nivel" else "the trail with the most elevation gain"
+            HistoryMetric.LONGEST_DURATION -> if (isRomanian) "traseul cu cea mai lunga durata" else "the trail with the longest duration"
+        }
+        val summary = if (isRomanian) {
+            "In $periodLabel, $metricLabel a fost ${selected.name}: ${formatKm(selected.distanceKm)} km, ${selected.durationText}, +${selected.elevationGainM} m."
+        } else {
+            "In $periodLabel, $metricLabel was ${selected.name}: ${formatKm(selected.distanceKm)} km, ${selected.durationText}, +${selected.elevationGainM} m."
+        }
+        val section = StructuredResponseSection(
+            title = if (isRomanian) "Detalii traseu" else "Trail details",
+            body = buildString {
+                append(if (isRomanian) "Data: " else "Date: ")
+                append(formatHistoryDate(selected.completedAtEpochMillis))
+                selected.region.takeIf { it.isNotBlank() }?.let {
+                    append(if (isRomanian) "\nRegiune: " else "\nRegion: ")
+                    append(it)
+                }
+                append(if (isRomanian) "\nDificultate: " else "\nDifficulty: ")
+                append(difficultyLabel(selected.difficulty, isRomanian))
+                append(if (isRomanian) "\nRezultat: " else "\nOutcome: ")
+                append(outcomeLabel(selected.outcome, isRomanian))
+            },
+            style = ResponseSectionStyle.CONTEXT
+        )
+        return buildResult(
+            summary = summary,
+            sections = listOf(section),
             followUps = emptyList(),
             reasoningType = ReasoningType.ROUTE_CONTEXT,
             conversationState = AssistantConversationState(
@@ -1153,6 +1267,7 @@ class TrailContextEngine {
 
     private fun processGearConfirmation(
         query: String,
+        context: DeviceContextSnapshot,
         conversationState: AssistantConversationState,
         isRomanian: Boolean
     ): TrailContextResult? {
@@ -1220,12 +1335,40 @@ class TrailContextEngine {
 
             // If the user says something about specific items, try to parse it
             containsAny(normalized, "bifez", "impachetat", "packed", "mark", "tot", "all", "obligatoriu", "mandatory") -> {
-                val itemsToToggle = when {
-                    containsAny(normalized, "tot", "all", "totul") -> pending.packItemIds
+                val packAllExcept = isPackAllExceptIntent(normalized)
+                val excludedItems = if (packAllExcept) {
+                    findExcludedGearItems(normalized, context.gearItems)
+                } else {
+                    emptyList()
+                }
+                if (packAllExcept && excludedItems.isEmpty()) {
+                    return buildResult(
+                        summary = if (isRomanian) {
+                            "Nu am gasit clar articolul pe care vrei sa il las nebifat. Spune exact numele din lista."
+                        } else {
+                            "I could not clearly find the item you want to leave unchecked. Use the exact list name."
+                        },
+                        sections = emptyList(),
+                        followUps = if (isRomanian) {
+                            listOf("Arata-mi lista", "Ce imi lipseste?")
+                        } else {
+                            listOf("Show me the list", "What is missing?")
+                        },
+                        reasoningType = ReasoningType.GEAR_ADVICE,
+                        conversationState = conversationState.copy(
+                            lastTrailContextIntent = "GEAR_UPDATE_CONFIRM"
+                        )
+                    )
+                }
+                val excludedIds = excludedItems.map { it.id }.toSet()
+                val baseItems = when {
                     containsAny(normalized, "obligatoriu", "mandatory") ->
-                        pending.packItemIds // In a real implementation, filter by mandatory
+                        pending.packItemIds.filter { id ->
+                            context.gearItems.firstOrNull { it.id == id }?.necessity == "MANDATORY"
+                        }
                     else -> pending.packItemIds
                 }
+                val itemsToToggle = baseItems.filterNot { it in excludedIds }
                 if (itemsToToggle.isNotEmpty()) {
                     actions += AssistantAction.ToggleGearPacked(
                         itemIds = itemsToToggle,
@@ -1233,9 +1376,17 @@ class TrailContextEngine {
                     )
                 }
                 val summary = if (isRomanian) {
-                    "Am bifat ${itemsToToggle.size} articole ca impachetate."
+                    if (excludedItems.isNotEmpty()) {
+                        "Am bifat ${itemsToToggle.size} articole ca impachetate si am lasat nebifat ${excludedItems.joinToString(", ") { it.name }}."
+                    } else {
+                        "Am bifat ${itemsToToggle.size} articole ca impachetate."
+                    }
                 } else {
-                    "Marked ${itemsToToggle.size} items as packed."
+                    if (excludedItems.isNotEmpty()) {
+                        "Marked ${itemsToToggle.size} items as packed and left ${excludedItems.joinToString(", ") { it.name }} unchecked."
+                    } else {
+                        "Marked ${itemsToToggle.size} items as packed."
+                    }
                 }
                 buildResult(
                     summary = summary,
@@ -1462,6 +1613,97 @@ class TrailContextEngine {
         }
     }
 
+    private enum class HistoryMetric {
+        LONGEST_DISTANCE,
+        SHORTEST_DISTANCE,
+        MOST_ELEVATION,
+        LONGEST_DURATION
+    }
+
+    private data class HistoryPeriod(
+        val labelRo: String,
+        val startInclusive: LocalDate,
+        val endExclusive: LocalDate
+    )
+
+    private fun detectHistoryMetric(normalized: String): HistoryMetric? =
+        when {
+            containsAny(normalized, "cel mai mult timp", "cea mai lunga durata", "durata cea mai mare", "longest duration") ->
+                HistoryMetric.LONGEST_DURATION
+            containsAny(normalized, "cea mai mare diferenta", "diferenta de nivel cea mai mare", "cea mai mare urcare", "most elevation") ->
+                HistoryMetric.MOST_ELEVATION
+            containsAny(normalized, "cel mai scurt", "cea mai scurta", "shortest") ->
+                HistoryMetric.SHORTEST_DISTANCE
+            containsAny(normalized, "cel mai lung", "cea mai lunga", "longest") ->
+                HistoryMetric.LONGEST_DISTANCE
+            else -> null
+        }
+
+    private fun detectHistoryPeriod(normalized: String): HistoryPeriod? {
+        val today = LocalDate.now()
+        val startOfThisMonth = today.withDayOfMonth(1)
+        val startOfThisWeek = today.minusDays((today.dayOfWeek.value - 1).toLong())
+        return when {
+            containsAny(normalized, "luna trecuta", "last month") ->
+                HistoryPeriod(
+                    labelRo = "luna trecuta",
+                    startInclusive = startOfThisMonth.minusMonths(1),
+                    endExclusive = startOfThisMonth
+                )
+            containsAny(normalized, "luna asta", "luna curenta", "this month") ->
+                HistoryPeriod(
+                    labelRo = "luna asta",
+                    startInclusive = startOfThisMonth,
+                    endExclusive = startOfThisMonth.plusMonths(1)
+                )
+            containsAny(normalized, "saptamana trecuta", "last week") ->
+                HistoryPeriod(
+                    labelRo = "saptamana trecuta",
+                    startInclusive = startOfThisWeek.minusWeeks(1),
+                    endExclusive = startOfThisWeek
+                )
+            containsAny(normalized, "saptamana asta", "this week") ->
+                HistoryPeriod(
+                    labelRo = "saptamana asta",
+                    startInclusive = startOfThisWeek,
+                    endExclusive = startOfThisWeek.plusWeeks(1)
+                )
+            containsAny(normalized, "anul trecut", "last year") ->
+                HistoryPeriod(
+                    labelRo = "anul trecut",
+                    startInclusive = LocalDate.of(today.year - 1, 1, 1),
+                    endExclusive = LocalDate.of(today.year, 1, 1)
+                )
+            containsAny(normalized, "anul asta", "anul curent", "this year") ->
+                HistoryPeriod(
+                    labelRo = "anul asta",
+                    startInclusive = LocalDate.of(today.year, 1, 1),
+                    endExclusive = LocalDate.of(today.year + 1, 1, 1)
+                )
+            containsAny(normalized, "ultimele 30 zile", "last 30 days") ->
+                HistoryPeriod(
+                    labelRo = "ultimele 30 zile",
+                    startInclusive = today.minusDays(30),
+                    endExclusive = today.plusDays(1)
+                )
+            else -> null
+        }
+    }
+
+    private fun historyEntryDate(entry: TrailHistoryEntry): LocalDate =
+        Instant.ofEpochMilli(entry.completedAtEpochMillis)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+
+    private fun filterHistoryByPeriod(
+        history: List<TrailHistoryEntry>,
+        period: HistoryPeriod
+    ): List<TrailHistoryEntry> =
+        history.filter { entry ->
+            val date = historyEntryDate(entry)
+            !date.isBefore(period.startInclusive) && date.isBefore(period.endExclusive)
+        }
+
     private fun findHistoryTrail(
         query: String,
         history: List<TrailHistoryEntry>
@@ -1551,6 +1793,48 @@ class TrailContextEngine {
     private fun containsAny(text: String, vararg terms: String): Boolean =
         terms.any { it in text }
 
+    private fun isPackAllExceptIntent(normalized: String): Boolean =
+        containsAny(normalized, "tot", "totul", "toate", "all") &&
+            containsAny(normalized, "in afara de", "inafara de", "except", "exceptand", "mai putin", "fara")
+
+    private fun findExcludedGearItems(normalized: String, gearItems: List<GearContextItem>): List<GearContextItem> {
+        val exclusionText = extractGearExclusionText(normalized)
+        if (exclusionText.isBlank()) {
+            return emptyList()
+        }
+        return gearItems.filter { item ->
+            gearAliasesFor(item).any { alias ->
+                alias in exclusionText || exclusionText in alias
+            }
+        }
+    }
+
+    private fun extractGearExclusionText(normalized: String): String {
+        val markers = listOf("in afara de", "inafara de", "exceptand", "except", "mai putin", "fara")
+        val marker = markers
+            .filter { it in normalized }
+            .minByOrNull { normalized.indexOf(it) }
+            ?: return ""
+        return normalize(
+            normalized.substringAfter(marker)
+                .replace("ca impachetat", " ")
+                .replace("ca packed", " ")
+                .replace("impachetat", " ")
+                .replace("packed", " ")
+        )
+    }
+
+    private fun gearAliasesFor(item: GearContextItem): Set<String> {
+        val base = setOf(item.id, item.name).map(::normalize).filter { it.isNotBlank() }.toMutableSet()
+        val text = base.joinToString(" ")
+        GearAliasGroups.forEach { aliases ->
+            if (aliases.any { alias -> alias in text }) {
+                base += aliases
+            }
+        }
+        return base
+    }
+
     private fun normalize(value: String): String =
         Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD)
             .replace("\\p{Mn}+".toRegex(), "")
@@ -1601,6 +1885,17 @@ class TrailContextEngine {
             "cat", "cate", "cati", "timp", "durata", "traseu", "traseul", "trasee",
             "facut", "terminat", "luat", "avut", "performante", "istoric", "ultimul",
             "ultima", "tura", "hike", "trail", "history", "completed"
+        )
+        private val GearAliasGroups = listOf(
+            setOf("frontala", "lanterna frontala", "headlamp"),
+            setOf("apa", "water", "sticla apa", "bidon"),
+            setOf("pelerina", "poncho", "geaca ploaie", "jacheta ploaie", "rain jacket", "waterproof"),
+            setOf("bete", "betele", "bete trekking", "trekking poles"),
+            setOf("spray", "spray urs", "bear spray"),
+            setOf("manusi", "gloves"),
+            setOf("harta", "map"),
+            setOf("telefon", "phone"),
+            setOf("trusa", "first aid", "prim ajutor")
         )
     }
 }

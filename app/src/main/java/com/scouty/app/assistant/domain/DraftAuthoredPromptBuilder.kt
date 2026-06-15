@@ -64,6 +64,15 @@ class DraftAuthoredPromptBuilder {
                     parts += "Endpoints=${sanitizeSingleLine(endpoints, 80)}"
                 }
             }
+            input.context.routeRecommendations.take(2).takeIf { it.isNotEmpty() }?.let { recommendations ->
+                parts += "RouteRecs=${sanitizeSingleLine(
+                    recommendations.joinToString("; ") { recommendation ->
+                        val proximity = recommendation.proximityKm?.let { " ${String.format("%.1f", it)}km" }.orEmpty()
+                        "${recommendation.title}$proximity"
+                    },
+                    140
+                )}"
+            }
         }
         if (input.queryAnalysis.gearQuery && input.context.recommendedGear.isNotEmpty()) {
             parts += "Gear=${sanitizeSingleLine(input.context.recommendedGear.joinToString(", "), 120)}"

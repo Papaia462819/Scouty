@@ -76,6 +76,24 @@ data class TrailHistoryEntry(
     val outcome: String
 )
 
+data class RouteRecommendationContextItem(
+    val localCode: String,
+    val title: String,
+    val region: String? = null,
+    val difficulty: String,
+    val distanceKm: Double,
+    val elevationGain: Int,
+    val durationText: String,
+    val proximityKm: Double? = null,
+    val markerLabel: String? = null,
+    val routeSummary: String = "",
+    val whyItFits: String = "",
+    val fitScore: Int = 0,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
+    val sourceUrls: List<String> = emptyList()
+)
+
 data class DeviceContextSnapshot(
     val latitude: Double? = null,
     val longitude: Double? = null,
@@ -90,6 +108,8 @@ data class DeviceContextSnapshot(
     val gearItems: List<GearContextItem> = emptyList(),
     val nearbyWaterSources: List<WaterSourceContextItem> = emptyList(),
     val trailHistory: List<TrailHistoryEntry> = emptyList(),
+    val routeProfileSummary: String? = null,
+    val routeRecommendations: List<RouteRecommendationContextItem> = emptyList(),
     val localeTag: String = assistantDefaultLocale().toLanguageTag()
 )
 
@@ -179,6 +199,23 @@ data class AssistantWeatherResult(
     val hourly: AssistantHourlyWeather? = null,
     val daily: DailyForecastEntry? = null,
     val hazard: WeatherHazard? = null,
+    val errorMessage: String? = null
+)
+
+data class AssistantRouteRecommendationRequest(
+    val placeQuery: String,
+    val preferredLanguage: String = "ro",
+    val limit: Int = 4
+)
+
+data class AssistantRouteRecommendationResult(
+    val available: Boolean,
+    val isLive: Boolean,
+    val locationLabel: String? = null,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
+    val recommendations: List<RouteRecommendationContextItem> = emptyList(),
+    val summary: String,
     val errorMessage: String? = null
 )
 

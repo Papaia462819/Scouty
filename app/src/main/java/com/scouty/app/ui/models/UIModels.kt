@@ -3,6 +3,7 @@ package com.scouty.app.ui.models
 import com.scouty.app.assistant.model.DailyForecastEntry
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.GearContextItem
+import com.scouty.app.assistant.model.RouteRecommendationContextItem
 import com.scouty.app.assistant.model.TrailHistoryEntry
 import com.scouty.app.assistant.model.TrailContextSnapshot
 import com.scouty.app.assistant.model.AssistantRuntimeDebugInfo
@@ -238,5 +239,25 @@ fun HomeStatus.toDeviceContextSnapshot(): DeviceContextSnapshot =
             )
         },
         nearbyWaterSources = nearbyWaterSources,
-        trailHistory = trailHistory
+        trailHistory = trailHistory,
+        routeProfileSummary = userProfile.shortSummaryRo,
+        routeRecommendations = routeRecommendations.take(6).map { recommendation ->
+            RouteRecommendationContextItem(
+                localCode = recommendation.localCode,
+                title = recommendation.title,
+                region = recommendation.region,
+                difficulty = recommendation.difficulty.labelRo,
+                distanceKm = recommendation.distanceKm,
+                elevationGain = recommendation.elevationGain,
+                durationText = recommendation.durationText,
+                proximityKm = recommendation.proximityKm,
+                markerLabel = recommendation.markerLabel,
+                routeSummary = recommendation.routeSummary,
+                whyItFits = recommendation.whyItFits,
+                fitScore = recommendation.fitScore,
+                latitude = recommendation.centerLatitude,
+                longitude = recommendation.centerLongitude,
+                sourceUrls = recommendation.sourceUrls
+            )
+        }
     )

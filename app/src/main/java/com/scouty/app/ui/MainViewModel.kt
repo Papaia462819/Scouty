@@ -24,12 +24,15 @@ import com.scouty.app.assistant.model.DailyForecastEntry
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.AssistantRuntimeDebugInfo
 import com.scouty.app.assistant.model.AssistantHourlyWeather
+import com.scouty.app.assistant.model.AssistantRouteRecommendationRequest
+import com.scouty.app.assistant.model.AssistantRouteRecommendationResult
 import com.scouty.app.assistant.model.AssistantWeatherRequest
 import com.scouty.app.assistant.model.AssistantWeatherResult
 import com.scouty.app.assistant.domain.ModelManager
 import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.assistant.model.GearItemDraft
 import com.scouty.app.assistant.model.GearItemUpdate
+import com.scouty.app.assistant.model.RouteRecommendationContextItem
 import com.scouty.app.assistant.model.TrailHistoryEntry
 import com.scouty.app.BuildConfig
 import com.google.android.gms.location.*
@@ -1286,6 +1289,172 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             hazard = request.hazard
         )
     }
+
+    override suspend fun queryRouteRecommendations(
+        request: AssistantRouteRecommendationRequest
+    ): AssistantRouteRecommendationResult {
+        if (!isInternetAvailable()) {
+            return AssistantRouteRecommendationResult(
+                available = false,
+                isLive = false,
+                locationLabel = request.placeQuery,
+                summary = if (request.preferredLanguage == "ro") {
+                    "Am nevoie de conexiune la internet ca sa caut trasee langa ${request.placeQuery}."
+                } else {
+                    "I need an internet connection to search trails near ${request.placeQuery}."
+                },
+                errorMessage = "fara_internet"
+            )
+        }
+        if (meteoblueApiKey.isBlank()) {
+            return AssistantRouteRecommendationResult(
+                available = false,
+                isLive = false,
+                locationLabel = request.placeQuery,
+                summary = if (request.preferredLanguage == "ro") {
+                    "Nu pot cauta locatii online fara cheia Meteoblue configurata."
+                } else {
+                    "I cannot search locations online without a configured Meteoblue key."
+                },
+                errorMessage = "missing_api_key"
+            )
+        }
+
+        val place = searchRouteRecommendationPlace(request.placeQuery)
+            ?: return AssistantRouteRecommendationResult(
+                available = false,
+                isLive = true,
+                locationLabel = request.placeQuery,
+                summary = if (request.preferredLanguage == "ro") {
+                    "Nu am gasit online locul ${request.placeQuery} in Romania."
+                } else {
+                    "I could not find ${request.placeQuery} in Romania online."
+                },
+                errorMessage = "place_not_found"
+            )
+
+        val catalog = RouteEnrichmentRepository.load(getApplication())
+        val geometryIndex = RouteGeometryRepository.load(getApplication())
+        val currentState = _uiState.value
+        val recommendations = RouteRecommendationEngine.recommend(
+            profile = currentState.userProfile,
+            catalog = catalog,
+            geometryIndex = geometryIndex,
+            latitude = place.lat,
+            longitude = place.lon,
+            activeTrail = currentState.activeTrail,
+            limit = request.limit
+        )
+        val label = buildPlaceLabel(place)
+        return AssistantRouteRecommendationResult(
+            available = recommendations.isNotEmpty(),
+            isLive = true,
+            locationLabel = label,
+            latitude = place.lat,
+            longitude = place.lon,
+            recommendations = recommendations.map { it.toRouteRecommendationContextItem() },
+            summary = if (recommendations.isNotEmpty()) {
+                if (request.preferredLanguage == "ro") {
+                    "Am folosit $label ca reper online."
+                } else {
+                    "I used $label as the online reference point."
+                }
+            } else {
+                if (request.preferredLanguage == "ro") {
+                    "Am gasit $label online, dar nu am trasee potrivite in catalog pentru acel reper."
+                } else {
+                    "I found $label online, but the route catalog has no suitable trails for that reference point."
+                }
+            },
+            errorMessage = if (recommendations.isEmpty()) "no_recommendations" else null
+        )
+    }
+
+    private suspend fun searchRouteRecommendationPlace(query: String): MeteoblueLocationResult? {
+        val response = runCatching {
+            meteoblueService.searchLocations(
+                query = query,
+                apiKey = meteoblueApiKey
+            )
+        }.onFailure { error ->
+            Log.e("ScoutyAPI", "Route place search failed for $query", error)
+        }.getOrNull() ?: return null
+
+        if (!response.isSuccessful) {
+            Log.w("ScoutyAPI", "Route place search returned HTTP ${response.code()} for $query")
+            return null
+        }
+
+        val normalizedQuery = normalizePlaceQuery(query)
+        val results = response.body()?.results.orEmpty()
+        return results
+            .filter { result ->
+                result.country.equals("Romania", ignoreCase = true) ||
+                    result.country.equals("RO", ignoreCase = true) ||
+                    result.country.isNullOrBlank()
+            }
+            .sortedWith(
+                compareBy<MeteoblueLocationResult>(
+                    { routePlaceCountryPenalty(it) },
+                    { routePlaceNamePenalty(it, normalizedQuery) },
+                    { weatherLocationPriority(it) },
+                    { -(it.population ?: 0) }
+                )
+            )
+            .firstOrNull()
+    }
+
+    private fun buildPlaceLabel(place: MeteoblueLocationResult): String =
+        listOfNotNull(
+            place.name?.takeIf { it.isNotBlank() },
+            place.admin1?.takeIf { it.isNotBlank() && it != place.name },
+            place.country?.takeIf { it.isNotBlank() }
+        ).joinToString(", ").ifBlank { "locatia online" }
+
+    private fun normalizePlaceQuery(value: String): String =
+        java.text.Normalizer.normalize(value.lowercase(Locale.ROOT), java.text.Normalizer.Form.NFD)
+            .replace("\\p{Mn}+".toRegex(), "")
+            .replace("[^a-z0-9 ]".toRegex(), " ")
+            .replace("\\s+".toRegex(), " ")
+            .trim()
+
+    private fun routePlaceCountryPenalty(location: MeteoblueLocationResult): Int =
+        if (location.country.equals("Romania", ignoreCase = true) ||
+            location.country.equals("RO", ignoreCase = true)
+        ) {
+            0
+        } else {
+            1
+        }
+
+    private fun routePlaceNamePenalty(location: MeteoblueLocationResult, normalizedQuery: String): Int {
+        val normalizedName = normalizePlaceQuery(location.name.orEmpty())
+        return when {
+            normalizedName.isBlank() -> 3
+            normalizedName == normalizedQuery -> 0
+            normalizedName.contains(normalizedQuery) || normalizedQuery.contains(normalizedName) -> 1
+            else -> 2
+        }
+    }
+
+    private fun com.scouty.app.ui.models.RouteRecommendation.toRouteRecommendationContextItem(): RouteRecommendationContextItem =
+        RouteRecommendationContextItem(
+            localCode = localCode,
+            title = title,
+            region = region,
+            difficulty = difficulty.labelRo,
+            distanceKm = distanceKm,
+            elevationGain = elevationGain,
+            durationText = durationText,
+            proximityKm = proximityKm,
+            markerLabel = markerLabel,
+            routeSummary = routeSummary,
+            whyItFits = whyItFits,
+            fitScore = fitScore,
+            latitude = centerLatitude,
+            longitude = centerLongitude,
+            sourceUrls = sourceUrls
+        )
 
     private suspend fun requestForecast(
         lat: Double,

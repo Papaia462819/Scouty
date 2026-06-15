@@ -9,6 +9,8 @@ import com.scouty.app.assistant.domain.tools.GrammarToolCallPlanner
 import com.scouty.app.assistant.domain.tools.ToolCallModel
 import com.scouty.app.assistant.domain.tools.ToolDispatcher
 import com.scouty.app.assistant.model.AssistantAction
+import com.scouty.app.assistant.model.AssistantRouteRecommendationRequest
+import com.scouty.app.assistant.model.AssistantRouteRecommendationResult
 import com.scouty.app.assistant.model.AssistantWeatherRequest
 import com.scouty.app.assistant.model.AssistantWeatherResult
 import com.scouty.app.assistant.model.DeviceContextSnapshot
@@ -22,12 +24,14 @@ import com.scouty.app.assistant.model.KnowledgePackStatus
 import com.scouty.app.assistant.model.ModelRuntimeState
 import com.scouty.app.assistant.model.QueryAnalysis
 import com.scouty.app.assistant.model.ResponseSectionStyle
+import com.scouty.app.assistant.model.RouteRecommendationContextItem
 import com.scouty.app.assistant.model.SafetyOutcome
 import com.scouty.app.assistant.model.TrailHistoryEntry
 import com.scouty.app.assistant.model.TrailContextSnapshot
 import com.scouty.app.assistant.model.WaterSourceContextItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -35,6 +39,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 import java.nio.file.Files
+import java.time.LocalDate
+import java.time.ZoneId
 
 class AssistantRepositoryIntegrationTest {
     @Test
@@ -70,12 +76,32 @@ class AssistantRepositoryIntegrationTest {
     }
 
     @Test
+    fun answerEvents_offlineLocalModeEmitsPreviewBeforeFinal() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+
+        val events = repository.answerEvents(
+            query = "Mi-am sucit glezna",
+            context = DeviceContextSnapshot(localeTag = "ro", isOnline = false),
+            allowLocalModel = true
+        ).toList()
+
+        assertTrue(events.first() is AssistantAnswerEvent.DraftVisible)
+        assertTrue(events.last() is AssistantAnswerEvent.Final || events.last() is AssistantAnswerEvent.ErrorFallback)
+    }
+
+    @Test
     fun safetyOverride_staysAuthoritativeOverLocalModelOutput() = runBlocking {
         val manager = readyModelManager(
             response = """
                 {"summary":"Poți continua puțin mai lent.","sections":[{"title":"Ghid local","body":"Reduci ritmul și urmărești starea.","style":"GUIDANCE"}]}
             """.trimIndent()
         )
+        manager.ensureLoaded()
         val repository = createRepository(modelManager = manager)
 
         val response = repository.answer(
@@ -156,6 +182,64 @@ class AssistantRepositoryIntegrationTest {
         assertTrue(response.answerText.contains(body))
         assertTrue(response.answerText.contains("frontala", ignoreCase = true))
         assertTrue(response.answerText.contains("baterii", ignoreCase = true))
+    }
+
+    @Test
+    fun missingModel_localFallbackShowsTopRetrievedCardBody() = runBlocking {
+        val knowledgePackStatus = KnowledgePackStatus(
+            available = true,
+            packVersion = "pack-1",
+            hashValid = true,
+            integrityValid = true
+        )
+        val body = "Pregătește iasca foarte fină, apoi surcele subțiri și abia după ce flacăra respiră singură adaugă lemne mai groase."
+        val chunks = listOf(
+            KnowledgeChunkRecord(
+                chunkId = "cg_campfire_kindling",
+                domain = "campfire_basics",
+                topic = "fire_kindling_layers",
+                language = "ro",
+                title = "Cum aprinzi focul din prima",
+                body = body,
+                sourceTitle = "Scouty",
+                publisher = "Scouty",
+                sourceLanguage = "ro",
+                adaptedLanguage = "ro",
+                sourceTrust = 5,
+                packVersion = "pack-1",
+                keywords = "foc iasca surcele lemne aprindere",
+                metadataJson = """{"tier":"B","tone":"conversational","lead":"Construirea corectă a focului începe cu o fundație bună."}"""
+            )
+        )
+        val store = FakeSearchKnowledgeStore(chunks, knowledgePackStatus)
+        val runtimeAdapter = FakeRuntimeAdapter(response = "reformulare qwen care nu trebuie folosita")
+        val modelManager = ModelManager(
+            modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+            runtimeAdapter = runtimeAdapter
+        )
+        val repository = AssistantRepository(
+            context = null,
+            knowledgePackManager = FakeKnowledgePackStatusProvider(knowledgePackStatus),
+            knowledgeStore = store,
+            queryAnalyzer = QueryAnalyzer(),
+            retrievalEngine = RetrievalEngine(store),
+            promptBuilder = PromptBuilder(),
+            modelManager = modelManager,
+            generationEngine = LocalLlmGenerationEngine(modelManager, TemplateGenerationEngine()),
+            medicalSafetyPolicy = MedicalSafetyPolicy()
+        )
+
+        val response = repository.answer(
+            query = "Cum fac focul?",
+            context = DeviceContextSnapshot(localeTag = "ro", isOnline = false),
+            allowLocalModel = true
+        )
+
+        assertEquals(GenerationMode.FALLBACK_STRUCTURED, response.generationMode)
+        assertTrue(response.answerText.contains("Construirea corectă", ignoreCase = true))
+        assertTrue(response.answerText.contains("Pregătește iasca", ignoreCase = true))
+        assertFalse(response.answerText.contains("reformulare qwen", ignoreCase = true))
+        assertEquals(0, runtimeAdapter.loadCalls)
     }
 
     @Test
@@ -265,6 +349,212 @@ class AssistantRepositoryIntegrationTest {
     }
 
     @Test
+    fun routeRecommendations_useMapRecommendationContextWithoutActiveTrail() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+
+        val response = repository.answer(
+            query = "Da-mi niste trasee pe nivelul meu in apropiere",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                gpsFixed = true,
+                latitude = 45.6423,
+                longitude = 25.5979,
+                routeProfileSummary = "Incepator • medie • 5.0 h max • +700 m",
+                routeRecommendations = listOf(
+                    RouteRecommendationContextItem(
+                        localCode = "TAMPA_EASY",
+                        title = "Tampa pe serpentine",
+                        region = "Brasov",
+                        difficulty = "Usor",
+                        distanceKm = 4.8,
+                        elevationGain = 320,
+                        durationText = "2h 10m",
+                        proximityKm = 1.8,
+                        markerLabel = "triunghi albastru",
+                        routeSummary = "2h 10m • +320 m • usor",
+                        whyItFits = "Se incadreaza bine in plafonul tau de efort.",
+                        fitScore = 118,
+                        latitude = 45.6411,
+                        longitude = 25.5899,
+                        sourceUrls = listOf("https://example.com/tampa")
+                    )
+                )
+            )
+        )
+
+        assertEquals(GenerationMode.CARD_DIRECT, response.generationMode)
+        assertTrue(response.answerText.contains("Tampa pe serpentine"))
+        assertTrue(response.answerText.contains("1.8 km"))
+        assertTrue(response.answerText.contains("45.64110"))
+        assertTrue(response.citations.isNotEmpty())
+    }
+
+    @Test
+    fun routeRecommendations_offlineExplicitPlaceSaysInternetNeededAndUsesCurrentArea() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+
+        val response = repository.answer(
+            query = "Da-mi niste trasee pe nivelul meu in apropiere de Timisoara",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                isOnline = false,
+                gpsFixed = true,
+                latitude = 45.6423,
+                longitude = 25.5979,
+                routeRecommendations = listOf(
+                    RouteRecommendationContextItem(
+                        localCode = "CURRENT_AREA",
+                        title = "Tampa pe serpentine",
+                        region = "Brasov",
+                        difficulty = "Usor",
+                        distanceKm = 4.8,
+                        elevationGain = 320,
+                        durationText = "2h 10m",
+                        proximityKm = 1.8
+                    )
+                )
+            )
+        )
+
+        assertEquals(GenerationMode.CARD_DIRECT, response.generationMode)
+        assertTrue(response.answerText.contains("Am nevoie de conexiune la internet", ignoreCase = true))
+        assertTrue(response.answerText.contains("Timisoara", ignoreCase = true))
+        assertTrue(response.answerText.contains("zona curenta", ignoreCase = true))
+        assertTrue(response.answerText.contains("Tampa pe serpentine"))
+    }
+
+    @Test
+    fun routeRecommendations_onlineExplicitPlaceUsesHandlerRecommendations() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+        val handler = FakeChatActionHandler(
+            routeRecommendationResult = AssistantRouteRecommendationResult(
+                available = true,
+                isLive = true,
+                locationLabel = "Timisoara, Timis, Romania",
+                latitude = 45.7489,
+                longitude = 21.2087,
+                recommendations = listOf(
+                    RouteRecommendationContextItem(
+                        localCode = "TIMIS_ROUTE",
+                        title = "Padurea Verde",
+                        region = "Timis",
+                        difficulty = "Usor",
+                        distanceKm = 6.1,
+                        elevationGain = 30,
+                        durationText = "1h 40m",
+                        proximityKm = 4.2,
+                        latitude = 45.77,
+                        longitude = 21.25
+                    )
+                ),
+                summary = "Am folosit Timisoara ca reper online."
+            )
+        )
+
+        val response = repository.answer(
+            query = "Da-mi niste trasee pe nivelul meu in apropiere de Timisoara",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                isOnline = true,
+                gpsFixed = true,
+                routeRecommendations = listOf(
+                    RouteRecommendationContextItem(
+                        localCode = "CURRENT_AREA",
+                        title = "Tampa pe serpentine",
+                        region = "Brasov",
+                        difficulty = "Usor",
+                        distanceKm = 4.8,
+                        elevationGain = 320,
+                        durationText = "2h 10m",
+                        proximityKm = 1.8
+                    )
+                )
+            ),
+            interactionHandler = handler
+        )
+
+        assertEquals("timisoara", handler.routeRecommendationRequests.single().placeQuery)
+        assertTrue(response.answerText.contains("Timisoara, Timis, Romania"))
+        assertTrue(response.answerText.contains("Iata cateva trasee potrivite", ignoreCase = true))
+        assertFalse(response.answerText.contains("Am cautat online", ignoreCase = true))
+        assertFalse(response.structuredOutput.summary.contains("profilul tau", ignoreCase = true))
+        assertFalse(response.structuredOutput.summary.contains("ordonate", ignoreCase = true))
+        assertTrue(response.answerText.contains("Padurea Verde"))
+        assertFalse(response.answerText.contains("Tampa pe serpentine"))
+    }
+
+    @Test
+    fun performanceHistory_answersLongestTrailLastMonth() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+        val lastMonth = LocalDate.now().withDayOfMonth(1).minusMonths(1)
+        val thisMonth = LocalDate.now().withDayOfMonth(2)
+
+        val response = repository.answer(
+            query = "care a fost cel mai lung al meu traseu luna trecuta",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                trailHistory = listOf(
+                    TrailHistoryEntry(
+                        name = "Muchia lunga",
+                        region = "Bucegi",
+                        completedAtEpochMillis = epochMillis(lastMonth.plusDays(6)),
+                        distanceKm = 18.4,
+                        elevationGainM = 920,
+                        durationText = "6h 15min",
+                        difficulty = "HARD",
+                        outcome = "COMPLETED"
+                    ),
+                    TrailHistoryEntry(
+                        name = "Poteca scurta",
+                        region = "Bucegi",
+                        completedAtEpochMillis = epochMillis(lastMonth.plusDays(3)),
+                        distanceKm = 7.2,
+                        elevationGainM = 260,
+                        durationText = "2h 05min",
+                        difficulty = "EASY",
+                        outcome = "COMPLETED"
+                    ),
+                    TrailHistoryEntry(
+                        name = "Tura din luna curenta",
+                        region = "Piatra Craiului",
+                        completedAtEpochMillis = epochMillis(thisMonth),
+                        distanceKm = 22.0,
+                        elevationGainM = 1300,
+                        durationText = "8h",
+                        difficulty = "HARD",
+                        outcome = "COMPLETED"
+                    )
+                )
+            )
+        )
+
+        assertEquals(GenerationMode.CARD_DIRECT, response.generationMode)
+        assertTrue(response.answerText.contains("Muchia lunga"))
+        assertTrue(response.answerText.contains("18.4 km"))
+        assertFalse(response.answerText.contains("Tura din luna curenta"))
+    }
+
+    @Test
     fun grammarToolCalling_lowConfidenceCanAskClarification() = runBlocking {
         val knowledgePackStatus = KnowledgePackStatus(
             available = true,
@@ -353,6 +643,67 @@ class AssistantRepositoryIntegrationTest {
         val action = response.actions.single() as AssistantAction.ToggleGearPacked
         assertEquals(listOf("water"), action.itemIds)
         assertTrue(action.packed)
+    }
+
+    @Test
+    fun gearInteraction_marksAllExceptNamedItemPackedWithoutPendingState() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+
+        val response = repository.answer(
+            query = "bifeaza tot in afara de trusa prim ajutor ca impachetat",
+            context = DeviceContextSnapshot(
+                localeTag = "ro",
+                gearItems = listOf(
+                    GearContextItem(id = "boots", name = "Bocanci", necessity = "MANDATORY", isPacked = false),
+                    GearContextItem(id = "first-aid", name = "Trusa prim ajutor", necessity = "MANDATORY", isPacked = false),
+                    GearContextItem(id = "headlamp", name = "Lanterna frontala", necessity = "MANDATORY", isPacked = false)
+                )
+            )
+        )
+
+        val action = response.actions.single() as AssistantAction.ToggleGearPacked
+        assertEquals(listOf("boots", "headlamp"), action.itemIds)
+        assertTrue(action.packed)
+        assertTrue(response.answerText.contains("Trusa prim ajutor", ignoreCase = true))
+    }
+
+    @Test
+    fun gearConfirmation_marksAllExceptNamedItemPackedFromPendingReview() = runBlocking {
+        val repository = createRepository(
+            modelManager = ModelManager(
+                modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
+                runtimeAdapter = FakeRuntimeAdapter()
+            )
+        )
+        val context = DeviceContextSnapshot(
+            localeTag = "ro",
+            trail = TrailContextSnapshot(name = "Brasov - Tampa"),
+            gearItems = listOf(
+                GearContextItem(id = "boots", name = "Bocanci", necessity = "MANDATORY", isPacked = false),
+                GearContextItem(id = "first-aid", name = "Trusa prim ajutor", necessity = "MANDATORY", isPacked = false),
+                GearContextItem(id = "headlamp", name = "Lanterna frontala", necessity = "MANDATORY", isPacked = false)
+            )
+        )
+        val review = repository.answer(
+            query = "arata lista de echipament",
+            context = context
+        )
+
+        val response = repository.answer(
+            query = "bifeaza tot in afara de trusa prim ajutor ca impachetat",
+            context = context,
+            conversationState = review.conversationState
+        )
+
+        val action = response.actions.single() as AssistantAction.ToggleGearPacked
+        assertEquals(listOf("boots", "headlamp"), action.itemIds)
+        assertTrue(action.packed)
+        assertTrue(response.answerText.contains("Trusa prim ajutor", ignoreCase = true))
     }
 
     @Test
@@ -621,6 +972,9 @@ class AssistantRepositoryIntegrationTest {
             runtimeAdapter = FakeRuntimeAdapter(response = response)
         )
     }
+
+    private fun epochMillis(date: LocalDate): Long =
+        date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 }
 
 private class FakeKnowledgePackStatusProvider(
@@ -671,9 +1025,15 @@ private class FakeChatActionHandler(
         available = false,
         isLive = false,
         summary = "weather unavailable"
+    ),
+    private val routeRecommendationResult: AssistantRouteRecommendationResult = AssistantRouteRecommendationResult(
+        available = false,
+        isLive = false,
+        summary = "route recommendations unavailable"
     )
 ) : ChatActionHandler {
     val weatherRequests = mutableListOf<AssistantWeatherRequest>()
+    val routeRecommendationRequests = mutableListOf<AssistantRouteRecommendationRequest>()
     val addedGear = mutableListOf<GearItemDraft>()
     val removedGearIds = mutableListOf<String>()
     val updatedGear = mutableListOf<GearItemUpdate>()
@@ -698,5 +1058,12 @@ private class FakeChatActionHandler(
     override suspend fun queryWeather(request: AssistantWeatherRequest): AssistantWeatherResult {
         weatherRequests += request
         return weatherResult
+    }
+
+    override suspend fun queryRouteRecommendations(
+        request: AssistantRouteRecommendationRequest
+    ): AssistantRouteRecommendationResult {
+        routeRecommendationRequests += request
+        return routeRecommendationResult
     }
 }

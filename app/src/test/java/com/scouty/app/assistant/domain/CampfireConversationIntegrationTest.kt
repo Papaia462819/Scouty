@@ -49,8 +49,23 @@ class CampfireConversationIntegrationTest {
             conversationState = definition.conversationState
         )
         assertEquals(CardFamily.SCENARIO, third.structuredOutput.resolvedFamily)
-        assertTrue(third.answerText.contains("amnar", ignoreCase = true))
+        assertTrue(third.structuredOutput.summary.contains("amnar", ignoreCase = true))
         assertFalse(third.answerText.contains("nu transforma focul", ignoreCase = true))
+    }
+
+    @Test
+    fun missingLocalModel_campfireDirectAnswerIncludesRetrievedCardBody() = runBlocking {
+        val repository = createRepository()
+
+        val response = repository.answer(
+            query = "Pot face foc în golul alpin?",
+            context = DeviceContextSnapshot(localeTag = "ro")
+        )
+
+        assertEquals(GenerationMode.CARD_DIRECT, response.generationMode)
+        assertTrue(response.answerText.contains("aragazul portabil", ignoreCase = true))
+        assertFalse(response.answerText.contains("În golul alpin", ignoreCase = true))
+        assertFalse(response.answerText.contains("Baza locală", ignoreCase = true))
     }
 
     @Test
@@ -137,7 +152,10 @@ class CampfireConversationIntegrationTest {
         assertEquals(GenerationMode.CARD_DIRECT, response.generationMode)
         assertEquals(CardFamily.SCENARIO, response.structuredOutput.resolvedFamily)
         assertEquals("campfire_general_entry", response.conversationState.lastCardId)
-        assertTrue(response.answerText.contains("varianta simplă", ignoreCase = true) || response.answerText.contains("foc mic", ignoreCase = true))
+        assertTrue(
+            response.structuredOutput.summary.contains("varianta simplă", ignoreCase = true) ||
+                response.structuredOutput.summary.contains("foc mic", ignoreCase = true)
+        )
     }
 
     @Test
@@ -171,7 +189,10 @@ class CampfireConversationIntegrationTest {
 
         assertEquals(CardFamily.SCENARIO, response.structuredOutput.resolvedFamily)
         assertEquals("campfire_general_entry", response.conversationState.pendingScenarioCardId)
-        assertTrue(response.answerText.contains("varianta simplă", ignoreCase = true) || response.answerText.contains("foc mic", ignoreCase = true))
+        assertTrue(
+            response.structuredOutput.summary.contains("varianta simplă", ignoreCase = true) ||
+                response.structuredOutput.summary.contains("foc mic", ignoreCase = true)
+        )
     }
 
     @Test
@@ -190,7 +211,7 @@ class CampfireConversationIntegrationTest {
 
         assertEquals(CardFamily.SCENARIO, response.structuredOutput.resolvedFamily)
         assertEquals("campfire_for_warmth", response.conversationState.lastCardId)
-        assertTrue(response.answerText.contains("brichet", ignoreCase = true))
+        assertTrue(response.structuredOutput.summary.contains("brichet", ignoreCase = true))
         assertTrue(
             response.structuredOutput.followUpQuestions.any {
                 it.contains("A plouat recent", ignoreCase = true) ||
@@ -344,7 +365,7 @@ class CampfireConversationIntegrationTest {
         assertEquals("none", response.conversationState.facts["ignition_source"])
         assertEquals("lighter", response.conversationState.facts["compromised_item"])
         assertEquals("lost", response.conversationState.facts["compromised_reason"])
-        assertTrue(response.answerText.contains("Îmi pare rău", ignoreCase = true))
+        assertTrue(response.structuredOutput.summary.contains("Îmi pare rău", ignoreCase = true))
         assertEquals(listOf("Ai chibrite sau amnar?"), response.structuredOutput.followUpQuestions)
     }
 
@@ -399,7 +420,10 @@ class CampfireConversationIntegrationTest {
 
         assertEquals(CardFamily.SCENARIO, response.structuredOutput.resolvedFamily)
         assertEquals("campfire_for_warmth", response.conversationState.lastCardId)
-        assertTrue(response.answerText.contains("căldură", ignoreCase = true) || response.answerText.contains("caldura", ignoreCase = true))
+        assertTrue(
+            response.structuredOutput.summary.contains("căldură", ignoreCase = true) ||
+                response.structuredOutput.summary.contains("caldura", ignoreCase = true)
+        )
     }
 
     private fun createRepository(
@@ -498,6 +522,18 @@ class CampfireConversationIntegrationTest {
                 slotConstraints = mapOf("ignition_source" to "ferro"),
                 actionsNow = listOf("fixează tija aproape de iască", "adaugă surcele foarte fine după ce iasca prinde"),
                 followUps = listOf("Ai iască bună sau trebuie să o improvizăm?")
+            ),
+            campfireCard(
+                id = "campfire_alpine_no_open_fire",
+                family = CardFamily.SCENARIO,
+                priority = 52,
+                title = "Cafea la 2000 m fără foc de tabără",
+                lead = "În golul alpin nu ai lemne, iar focul deschis e periculos și interzis, așa că hai să vedem ce alternative reale ai pentru o masă caldă.",
+                keywords = listOf("gol alpin", "2000m", "2000 m", "cafea", "foc de tabara", "foc deschis"),
+                userPhrasings = listOf("pot face foc în golul alpin", "pot face foc in golul alpin", "cafea la 2000m"),
+                body = "Pentru cafea sau mâncare caldă la altitudine, folosește aragazul portabil ori termosul pregătit dinainte. Caută un loc ferit de vânt, stabilizează cartușul și evită complet focul deschis pe iarbă alpină.",
+                avoid = listOf("nu porni foc deschis în golul alpin"),
+                constraintMode = "override"
             ),
             campfireCard(
                 id = "campfire_wet_fuel",
@@ -652,7 +688,8 @@ class CampfireConversationIntegrationTest {
         constraintMode: String = "support",
         relatedCards: List<String> = emptyList(),
         term: String? = null,
-        plainLanguageDefinition: String? = null
+        plainLanguageDefinition: String? = null,
+        body: String? = null
     ): KnowledgeChunkRecord =
         KnowledgeChunkRecord(
             chunkId = id,
@@ -660,7 +697,7 @@ class CampfireConversationIntegrationTest {
             topic = "campfire",
             language = "ro",
             title = title,
-            body = listOf(title, lead, actionsNow.joinToString(" "), avoid.joinToString(" ")).joinToString(" "),
+            body = body ?: listOf(title, lead, actionsNow.joinToString(" "), avoid.joinToString(" ")).joinToString(" "),
             sourceTitle = "Campfire cards",
             publisher = "Scouty",
             sourceLanguage = "ro",

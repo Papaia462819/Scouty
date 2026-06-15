@@ -220,6 +220,7 @@ class AssistantViewModel(
             citations = response.citations,
             safetyOutcome = response.safetyOutcome,
             sections = response.structuredOutput.sections,
+            followUpReplies = buildInlineFollowUpReplies(response.structuredOutput.followUpQuestions),
             resolvedTopic = response.structuredOutput.resolvedTopic,
             resolvedFamily = response.structuredOutput.resolvedFamily,
             generationMode = response.generationMode,
@@ -229,20 +230,6 @@ class AssistantViewModel(
             modelRuntimeState = response.modelRuntimeState,
             modelStatusDetails = response.modelStatusDetails
         )
-        val followUpMessage = buildSequentialFollowUpPrompt(response.structuredOutput.followUpQuestions)
-            ?.let { prompt ->
-                AssistantMessageUiModel(
-                    id = UUID.randomUUID().toString(),
-                    text = prompt.question,
-                    isUser = false,
-                    followUpReplies = prompt.suggestedReplies,
-                    resolvedTopic = response.structuredOutput.resolvedTopic,
-                    resolvedFamily = response.structuredOutput.resolvedFamily,
-                    generationMode = response.generationMode,
-                    reasoningType = response.reasoningType,
-                    knowledgePackVersion = response.knowledgePackVersion
-                )
-            }
         _uiState.update { state ->
             val messages = if (replaceExisting) {
                 state.messages.map { message ->
@@ -254,7 +241,7 @@ class AssistantViewModel(
             state.copy(
                 isOnline = assistantOnline,
                 isResponding = false,
-                messages = messages + listOfNotNull(followUpMessage)
+                messages = messages
             )
         }
     }

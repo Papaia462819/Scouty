@@ -81,6 +81,8 @@ object RouteRecommendationEngine {
                         region = entry.region
                     ),
                     fitScore = score,
+                    centerLatitude = geometry.center.lat,
+                    centerLongitude = geometry.center.lon,
                     imageUrl = entry.image?.thumbnailUrl ?: entry.image?.imageUrl,
                     sourceUrls = entry.sourceUrls.ifEmpty {
                         listOfNotNull(entry.mnData?.pageUrl, entry.image?.sourcePageUrl).distinct()

@@ -3,6 +3,7 @@ package com.scouty.app.assistant.domain
 import com.scouty.app.assistant.model.DeviceContextSnapshot
 import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.assistant.model.KnowledgePackStatus
+import com.scouty.app.assistant.model.ModelRuntimeState
 import com.scouty.app.assistant.model.ModelStatus
 import com.scouty.app.assistant.model.QueryAnalysis
 import com.scouty.app.assistant.model.ReasoningType
@@ -27,7 +28,7 @@ class LocalLlmGenerationEngineTest {
             fallbackEngine = TemplateGenerationEngine()
         )
 
-        val result = engine.generate(testInput())
+        val result = engine.generate(loadedInput(manager))
 
         assertEquals(GenerationMode.LOCAL_LLM, result.generationMode)
         assertEquals("Raspuns local grounded.", result.summary)
@@ -42,7 +43,7 @@ class LocalLlmGenerationEngineTest {
             fallbackEngine = TemplateGenerationEngine()
         )
 
-        val result = engine.generate(testInput())
+        val result = engine.generate(loadedInput(manager))
 
         assertEquals(GenerationMode.LOCAL_LLM, result.generationMode)
         assertEquals("nu este json valid", result.summary)
@@ -64,7 +65,7 @@ class LocalLlmGenerationEngineTest {
             fallbackEngine = TemplateGenerationEngine()
         )
 
-        val result = engine.generate(testInput())
+        val result = engine.generate(loadedInput(manager))
 
         assertEquals(GenerationMode.LOCAL_LLM, result.generationMode)
         assertEquals("Raspuns local grounded.", result.summary)
@@ -91,6 +92,51 @@ class LocalLlmGenerationEngineTest {
         assertEquals("gemma-3-1b-it-int4", result.modelVersion)
     }
 
+    @Test
+    fun unloadedModel_fallsBackToTopTileWithoutColdLoading() = runBlocking {
+        val tempDir = Files.createTempDirectory("scouty-local-llm-unloaded").toFile()
+        val modelFile = File(tempDir, "qwen2.5-1.5b-instruct-q4_k_m.gguf").apply { writeText("bundle") }
+        val runtimeAdapter = FakeRuntimeAdapter(response = "reformulare qwen")
+        val manager = ModelManager(
+            modelLocator = FakeLocalModelLocator(
+                discovery = LocalModelDiscovery(
+                    modelVersion = "qwen2.5-1.5b-instruct-q4_k_m",
+                    availableOnDisk = true,
+                    sourceFile = modelFile,
+                    preparedFile = modelFile,
+                    details = "ready",
+                    state = ModelRuntimeState.UNLOADED
+                ),
+                preparedArtifact = LocalModelArtifact(
+                    modelVersion = "qwen2.5-1.5b-instruct-q4_k_m",
+                    sourceFile = modelFile,
+                    preparedFile = modelFile
+                )
+            ),
+            runtimeAdapter = runtimeAdapter
+        )
+        val engine = LocalLlmGenerationEngine(
+            modelManager = manager,
+            fallbackEngine = TemplateGenerationEngine()
+        )
+
+        val result = engine.generate(
+            testInput().copy(
+                modelStatus = ModelStatus(
+                    runtimeLabel = "llama.cpp",
+                    modelVersion = "qwen2.5-1.5b-instruct-q4_k_m",
+                    state = ModelRuntimeState.UNLOADED,
+                    availableOnDisk = true,
+                    details = "ready"
+                )
+            )
+        )
+
+        assertEquals(GenerationMode.FALLBACK_STRUCTURED, result.generationMode)
+        assertEquals("Protejează glezna și limitează încărcarea.", result.summary)
+        assertEquals(0, runtimeAdapter.loadCalls)
+    }
+
     private fun readyModelManager(response: String): ModelManager {
         val tempDir = Files.createTempDirectory("scouty-local-llm").toFile()
         val modelFile = File(tempDir, "gemma-3-1b-it-int4.task").apply { writeText("bundle") }
@@ -112,6 +158,12 @@ class LocalLlmGenerationEngineTest {
             runtimeAdapter = FakeRuntimeAdapter(response = response)
         )
     }
+
+    private suspend fun loadedInput(manager: ModelManager): GenerationInput =
+        testInput().copy(
+            modelStatus = manager.ensureLoaded(),
+            generationMode = GenerationMode.LOCAL_LLM
+        )
 
     private fun testInput() = GenerationInput(
         query = "Mi-am sucit glezna",

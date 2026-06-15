@@ -109,8 +109,11 @@ class FakeRuntimeAdapter(
     private val loadError: Throwable? = null
 ) : LocalLlmRuntimeAdapter {
     override val runtimeLabel: String = "Fake runtime"
+    var loadCalls: Int = 0
+        private set
 
     override suspend fun load(artifact: LocalModelArtifact): LocalLlmLoadedModelHandle {
+        loadCalls += 1
         loadError?.let { throw it }
         return object : LocalLlmLoadedModelHandle {
             override suspend fun generate(prompt: String): String = response

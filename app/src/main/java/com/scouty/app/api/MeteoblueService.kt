@@ -19,7 +19,7 @@ interface MeteoblueService {
         @Query("format") format: String = "json"
     ): Response<MeteoblueResponse>
 
-    @GET("en/server/search/query3")
+    @GET("https://www.meteoblue.com/en/server/search/query3")
     suspend fun searchLocations(
         @Query("query") query: String,
         @Query("apikey") apiKey: String

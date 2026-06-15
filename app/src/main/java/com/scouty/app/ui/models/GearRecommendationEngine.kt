@@ -28,94 +28,140 @@ object GearRecommendationEngine {
         val previousPackedState = previousItems.associate { it.id to it.isPacked }
         val generatedItems = linkedMapOf<String, GearItem>()
 
+        // --- Bază: mereu prezente, orice traseu ---
         generatedItems.register(buildFootwearItem(packingProfile))
         generatedItems.register(buildBackpackItem(packingProfile))
-        generatedItems.register(buildPhoneItem(packingProfile))
         generatedItems.register(buildWaterItem(packingProfile))
-
-        if (packingProfile.includeSnacks) {
-            generatedItems.register(buildSnackItem(packingProfile))
+        generatedItems.register(buildSnackItem(packingProfile))
+        generatedItems.register(
+            gearItem(
+                id = "powerbank",
+                name = "Powerbank",
+                quickValue = "5-10k",
+                category = CategorySafety,
+                necessity = GearNecessity.RECOMMENDED,
+                note = "Bateria scade rapid pe frig.",
+                weightGrams = 200
+            )
+        )
+        generatedItems.register(
+            gearItem(
+                id = "first_aid",
+                name = "Trusa prim ajutor",
+                quickValue = "1 kit",
+                category = CategorySafety,
+                necessity = GearNecessity.MANDATORY,
+                note = "Plasturi, fasa, dezinfectant, penseta capuse.",
+                weightGrams = 220
+            )
+        )
+        generatedItems.register(
+            gearItem(
+                id = "headlamp",
+                name = "Lanterna frontala",
+                quickValue = "1 buc",
+                category = CategorySafety,
+                necessity = GearNecessity.RECOMMENDED,
+                note = "Utila si la tura de zi.",
+                weightGrams = 95
+            )
+        )
+        generatedItems.register(
+            gearItem(
+                id = "whistle",
+                name = "Fluier",
+                quickValue = "1 buc",
+                category = CategorySafety,
+                necessity = GearNecessity.RECOMMENDED,
+                note = "Semnalizare in ceata sau padure.",
+                weightGrams = 15
+            )
+        )
+        generatedItems.register(
+            gearItem(
+                id = "blister_patches",
+                name = "Plasturi pentru bataturi",
+                quickValue = "kit",
+                category = CategorySafety,
+                necessity = GearNecessity.MANDATORY,
+                note = "Frecarea iti opreste tura.",
+                weightGrams = 20
+            )
+        )
+        generatedItems.register(
+            gearItem(
+                id = "id_cash",
+                name = "Act + ceva cash",
+                quickValue = "1 set",
+                category = CategorySafety,
+                necessity = GearNecessity.RECOMMENDED,
+                note = "Pentru cabane si urgente.",
+                weightGrams = null
+            )
+        )
+        generatedItems.register(
+            gearItem(
+                id = "trash_bag",
+                name = "Punga pentru gunoi",
+                quickValue = "1 buc",
+                category = CategoryCore,
+                necessity = GearNecessity.RECOMMENDED,
+                note = "Lasi locul curat.",
+                weightGrams = 10
+            )
+        )
+        generatedItems.register(
+            gearItem(
+                id = "multitool",
+                name = "Cutit / multi-tool mic",
+                quickValue = "optional",
+                category = CategoryCore,
+                necessity = GearNecessity.CONDITIONAL,
+                note = "Mancare si reparatii rapide.",
+                weightGrams = 90
+            )
+        )
+        generatedItems.register(
+            gearItem(
+                id = "trekking_poles",
+                name = "Bete de drumetie",
+                quickValue = "optional",
+                category = CategorySafety,
+                necessity = if (packingProfile.difficulty >= TrailDifficultyRank.HARD || packingProfile.elevationGain >= 900) {
+                    GearNecessity.RECOMMENDED
+                } else {
+                    GearNecessity.CONDITIONAL
+                },
+                note = "Ajuta pe coborari lungi.",
+                weightGrams = 420
+            )
+        )
+        // Geaca de ploaie pentru sezon cald/temperat (benzile reci au propriile straturi protectoare)
+        if (packingProfile.weatherBand == TrailWeatherBand.HOT ||
+            packingProfile.weatherBand == TrailWeatherBand.MILD
+        ) {
+            generatedItems.register(
+                gearItem(
+                    id = "rain_shell",
+                    name = "Geaca de ploaie-vant",
+                    quickValue = "1 buc",
+                    category = CategoryWeather,
+                    necessity = GearNecessity.MANDATORY,
+                    note = "Vremea se schimba rapid sus.",
+                    weightGrams = 240
+                )
+            )
         }
-        if (packingProfile.difficulty == TrailDifficultyRank.EASY) {
-            generatedItems.register(
-                gearItem(
-                    id = "blister_patches",
-                    name = "Plasturi pentru bataturi",
-                    quickValue = "kit",
-                    category = CategorySafety,
-                    necessity = GearNecessity.MANDATORY,
-                    note = "Pentru frecare și îngrijirea bătăturilor.",
-                    weightGrams = 20
-                )
-            )
-            generatedItems.register(
-                gearItem(
-                    id = "trekking_poles",
-                    name = "Bețe de drumeție",
-                    quickValue = "opțional",
-                    category = CategorySafety,
-                    necessity = GearNecessity.CONDITIONAL,
-                    note = "Mai ales dacă vrei să scazi presiunea din genunchi.",
-                    weightGrams = 420
-                )
-            )
-        } else {
-            generatedItems.register(
-                gearItem(
-                    id = "headlamp",
-                    name = "Lanterna frontala",
-                    quickValue = "1 buc",
-                    category = CategorySafety,
-                    necessity = GearNecessity.MANDATORY,
-                    note = "Rămâne în rucsac chiar dacă pleci dimineața.",
-                    weightGrams = 95
-                )
-            )
-            generatedItems.register(
-                gearItem(
-                    id = "emergency_blanket",
-                    name = "Folie de supravietuire",
-                    quickValue = "1 buc",
-                    category = CategorySafety,
-                    necessity = GearNecessity.MANDATORY,
-                    note = "Obiect mic, diferență mare dacă te oprești forțat.",
-                    weightGrams = 70
-                )
-            )
-            generatedItems.register(
-                gearItem(
-                    id = "first_aid",
-                    name = "Trusa prim ajutor",
-                    quickValue = "1 kit",
-                    category = CategorySafety,
-                    necessity = GearNecessity.MANDATORY,
-                    note = "Fașă, dezinfectant, pensetă pentru căpușe, plasturi.",
-                    weightGrams = 220
-                )
-            )
-            generatedItems.register(
-                gearItem(
-                    id = "trekking_poles",
-                    name = "Bețe de drumeție",
-                    quickValue = "opțional",
-                    category = CategorySafety,
-                    necessity = if (packingProfile.difficulty >= TrailDifficultyRank.HARD || packingProfile.elevationGain >= 900) {
-                        GearNecessity.RECOMMENDED
-                    } else {
-                        GearNecessity.CONDITIONAL
-                    },
-                    note = "Mai utile pe coborâri lungi, rădăcini și zone înclinate.",
-                    weightGrams = 420
-                )
-            )
+        // --- Escaladări după dificultate ---
+        if (packingProfile.difficulty >= TrailDifficultyRank.MEDIUM) {
             generatedItems.register(
                 gearItem(
                     id = "bear_spray",
                     name = "Spray de urs",
-                    quickValue = "opțional",
+                    quickValue = "optional",
                     category = CategorySafety,
                     necessity = GearNecessity.CONDITIONAL,
-                    note = "Merită luat pe ture mai lungi sau retrase.",
+                    note = "Pe ture lungi sau retrase.",
                     weightGrams = 280
                 )
             )
@@ -124,23 +170,12 @@ object GearRecommendationEngine {
         if (packingProfile.difficulty >= TrailDifficultyRank.HARD) {
             generatedItems.register(
                 gearItem(
-                    id = "whistle",
-                    name = "Fluier de semnalizare",
-                    quickValue = "1 buc",
-                    category = CategorySafety,
-                    necessity = GearNecessity.MANDATORY,
-                    note = "Semnalizare rapidă în ceață, pădure sau accidentare.",
-                    weightGrams = 15
-                )
-            )
-            generatedItems.register(
-                gearItem(
                     id = "water_filter",
                     name = "Filtru sau tablete apa",
-                    quickValue = "opțional",
+                    quickValue = "optional",
                     category = CategoryHydration,
                     necessity = GearNecessity.CONDITIONAL,
-                    note = "Util când rezerva de apă devine prea grea pentru toată ziua.",
+                    note = "Cand rezerva de apa devine prea grea.",
                     weightGrams = 80
                 )
             )
@@ -184,19 +219,6 @@ object GearRecommendationEngine {
                         weightGrams = 40
                     )
                 )
-                if (packingProfile.stormRisk) {
-                    generatedItems.register(
-                        gearItem(
-                            id = "storm_shell",
-                            name = "Shell usor de ploaie",
-                            quickValue = "1 buc",
-                            category = CategoryWeather,
-                            necessity = GearNecessity.MANDATORY,
-                            note = "Pentru furtună scurtă sau vânt tare peste creastă.",
-                            weightGrams = 240
-                        )
-                    )
-                }
             }
 
             TrailWeatherBand.MILD -> {
@@ -211,7 +233,7 @@ object GearRecommendationEngine {
                         } else {
                             GearNecessity.RECOMMENDED
                         },
-                        note = "Bază tehnică, polar și geacă de ploaie-vânt.",
+                        note = "Bază tehnică și polar pentru pauze.",
                         weightGrams = 760
                     )
                 )
@@ -453,14 +475,14 @@ object GearRecommendationEngine {
         gearItem(
             id = "footwear",
             name = when (profile.difficulty) {
-                TrailDifficultyRank.EASY -> "Încălțăminte de traseu cu talpă profilată"
-                TrailDifficultyRank.MEDIUM -> "Bocanci cu suport pentru gleznă"
-                TrailDifficultyRank.HARD, TrailDifficultyRank.EXPERT -> "Bocanci tehnici cu aderență bună"
+                TrailDifficultyRank.EASY -> "Bocanci cu talpă profilată"
+                TrailDifficultyRank.MEDIUM -> "Bocanci cu suport de gleznă"
+                TrailDifficultyRank.HARD, TrailDifficultyRank.EXPERT -> "Bocanci tehnici"
             },
             quickValue = if (profile.adults == 1) "adult" else "${profile.adults} adulți",
             category = CategoryCore,
             necessity = GearNecessity.MANDATORY,
-            note = "Modelul stabil se alege după dificultatea traseului.",
+            note = "După dificultatea traseului.",
             weightGrams = null
         )
 
@@ -475,27 +497,8 @@ object GearRecommendationEngine {
             },
             category = CategoryCore,
             necessity = GearNecessity.MANDATORY,
-            note = "Volum minim per adult care duce echipament.",
+            note = "Volum per adult.",
             weightGrams = null
-        )
-
-    private fun buildPhoneItem(profile: PackingProfile): GearItem =
-        gearItem(
-            id = "phone_navigation",
-            name = if (profile.difficulty >= TrailDifficultyRank.HARD) {
-                "Telefon + baterie externă + hartă locală"
-            } else {
-                "Telefon încărcat 100%"
-            },
-            quickValue = if (profile.difficulty >= TrailDifficultyRank.HARD) "energie" else "100%",
-            category = CategorySafety,
-            necessity = GearNecessity.MANDATORY,
-            note = if (profile.difficulty >= TrailDifficultyRank.HARD) {
-                "Navigație de bază pentru creastă, stâncă sau zi lungă."
-            } else {
-                "Rămâne minimul pentru orientare și apel de urgență."
-            },
-            weightGrams = if (profile.difficulty >= TrailDifficultyRank.HARD) 260 else 0
         )
 
     private fun buildWaterItem(profile: PackingProfile): GearItem =

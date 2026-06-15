@@ -57,4 +57,33 @@ class AssistantFollowUpPromptsTest {
         assertTrue(replies.isEmpty())
     }
 
+    @Test
+    fun buildInlineFollowUpReplies_keepsOpenEndedQuestionsAsChips() {
+        val replies = buildInlineFollowUpReplies(
+            listOf("Bifez totul ca impachetat", "Ce e cel mai important?")
+        )
+
+        assertEquals(
+            listOf(
+                "Bifez totul ca impachetat" to "Bifez totul ca impachetat",
+                "Ce e cel mai important" to "Ce e cel mai important?"
+            ),
+            replies.map { it.label to it.query }
+        )
+    }
+
+    @Test
+    fun buildInlineFollowUpReplies_expandsOptionQuestions() {
+        val replies = buildInlineFollowUpReplies(listOf("Ai brichetă, chibrite sau amnar?"))
+
+        assertEquals(
+            listOf(
+                "Brichetă" to "Am brichetă",
+                "Chibrite" to "Am chibrite",
+                "Amnar" to "Am amnar"
+            ),
+            replies.map { it.label to it.query }
+        )
+    }
+
 }

@@ -27,6 +27,7 @@ import com.scouty.app.assistant.model.AssistantCitation
 import com.scouty.app.assistant.model.AssistantAction
 import com.scouty.app.assistant.model.AssistantOpenQuestion
 import com.scouty.app.assistant.model.AssistantResponse
+import com.scouty.app.assistant.model.AssistantRouteRecommendationRequest
 import com.scouty.app.assistant.model.AssistantWeatherRequest
 import com.scouty.app.assistant.model.AssistantWeatherResult
 import com.scouty.app.assistant.model.CardFamily
@@ -43,6 +44,7 @@ import com.scouty.app.assistant.model.ModelRuntimeState
 import com.scouty.app.assistant.model.ModelStatus
 import com.scouty.app.assistant.model.QueryAnalysis
 import com.scouty.app.assistant.model.ReasoningType
+import com.scouty.app.assistant.model.RouteRecommendationContextItem
 import com.scouty.app.assistant.model.ResponseSectionStyle
 import com.scouty.app.assistant.model.SafetyOutcome
 import com.scouty.app.assistant.model.StructuredAssistantOutput
@@ -144,9 +146,12 @@ class QueryAnalyzer(
         val rawTokens = buildLanguageTokens(query)
         val preferredLanguage = detectLanguage(query, rawTokens, tokens, context.localeTag)
         val normalizedQuery = normalizeTokenString(query)
-        val routeContextQuery = tokens.any { it in RouteTokens } ||
-            (context.trail != null && tokens.any { it in RouteContextTokens })
+        val routeRecommendationQuery = hasRouteRecommendationTokens(normalizedQuery, tokens)
         val gearQuery = tokens.any { it in GearTokens }
+        // A bare "traseu" mention must not hijack a gear question into route context.
+        val routeContextQuery = routeRecommendationQuery ||
+            (!gearQuery && tokens.any { it in RouteTokens }) ||
+            (context.trail != null && tokens.any { it in RouteContextTokens })
         val campfireDefinitionQuery = isCampfireDefinitionQuery(normalizedQuery)
         val campfireConstraintQuery = isCampfireConstraintQuery(normalizedQuery)
         val campfireTopicQuery = tokens.any { it in CampfireTokens } ||
@@ -226,7 +231,18 @@ class QueryAnalyzer(
         rawTokens: List<String>,
         searchTokens: List<String>,
         localeTag: String
-    ): String = "ro"
+    ): String {
+        val romanianScore = rawTokens.count { it in RomanianMarkers } +
+            searchTokens.count { it in RomanianMarkers }
+        val englishScore = rawTokens.count { it in EnglishMarkers } +
+            searchTokens.count { it in EnglishMarkers }
+        return when {
+            englishScore > romanianScore -> "en"
+            romanianScore > englishScore -> "ro"
+            Locale.forLanguageTag(localeTag).language == "en" -> "en"
+            else -> "ro"
+        }
+    }
 
     private fun detectSafetyTags(tokens: List<String>): Set<String> {
         val tags = mutableSetOf<String>()
@@ -370,6 +386,30 @@ class QueryAnalyzer(
             containsAny(normalizedQuery, "cum va fi vremea", "prognoza meteo", "forecast",
                 "ce vreme", "weather", "meteo", "precipitatii", "ploua", "ninge")
 
+    private fun hasRouteRecommendationTokens(normalizedQuery: String, tokens: List<String>): Boolean {
+        val mentionsRoute = tokens.any { it in RouteTokens } ||
+            containsAny(normalizedQuery, "traseu", "trasee", "ruta", "rute", "route", "routes")
+        val asksRecommendation = containsAny(
+            normalizedQuery,
+            "recomanda",
+            "recomandari",
+            "da mi",
+            "dami",
+            "gaseste",
+            "sugereaza",
+            "potrivite",
+            "potrivit",
+            "nivelul meu",
+            "pentru mine",
+            "in apropiere",
+            "langa mine",
+            "aproape de mine",
+            "nearby",
+            "near me"
+        )
+        return mentionsRoute && asksRecommendation
+    }
+
     private fun hasCapabilityTokens(normalizedQuery: String): Boolean =
         (containsAny(normalizedQuery, "pot face", "pot sa fac", "pot merge", "pot urca",
             "reusesc", "fac fata", "can i do", "can i make", "am i able", "is it possible") ||
@@ -432,10 +472,24 @@ class QueryAnalyzer(
             "cati km am facut",
             "kilometri am facut",
             "ultima tura",
-            "ultimul traseu"
+            "ultimul traseu",
+            "cel mai lung",
+            "cea mai lunga",
+            "cel mai scurt",
+            "cea mai scurta",
+            "cea mai mare diferenta",
+            "recordul meu",
+            "luna trecuta",
+            "saptamana trecuta",
+            "anul trecut",
+            "last month",
+            "last week",
+            "longest trail"
         ) ||
             (tokens.any { it in setOf("performante", "istoric", "history") } &&
                 tokens.any { it in setOf("trasee", "traseu", "trail", "hike", "ture") }) ||
+            (containsAny(normalizedQuery, "cel mai", "cea mai", "record") &&
+                containsAny(normalizedQuery, "traseu", "trasee", "tura", "ture", "km", "kilometri")) ||
             (containsAny(normalizedQuery, "cat", "cati", "cate", "durata", "timp") &&
                 containsAny(normalizedQuery, "am facut", "am terminat", "mi a luat"))
 
@@ -443,9 +497,9 @@ class QueryAnalyzer(
         normalizedQuery.trim() in setOf("da", "yes", "ok", "sigur", "sure", "bine", "hai",
             "fa o", "go ahead", "confirm", "nu", "no", "nope", "las", "lasa", "renunt",
             "cancel", "stop") ||
-            containsAny(normalizedQuery, "bifez", "impachetat", "packed", "mark",
+            containsAny(normalizedQuery, "bifez", "bifeaza", "impachetat", "packed", "mark",
                 "actualizeaza", "update", "tot ca impachetat", "all packed",
-                "obligatoriu", "mandatory")
+                "obligatoriu", "mandatory", "in afara de", "inafara de", "except", "exceptand")
 
     private fun isCampfireFollowUpSignal(
         normalizedQuery: String,
@@ -590,8 +644,9 @@ class QueryAnalyzer(
             "wildlife_romania"
         )
         private val RouteTokens = setOf(
-            "traseu", "route", "marcaj", "marker", "durata", "distance", "distanta",
-            "plecare", "sosire", "porneste", "regiune", "provenienta", "source"
+            "traseu", "trasee", "ruta", "rute", "route", "routes", "marcaj", "marker",
+            "durata", "distance", "distanta", "plecare", "sosire", "porneste",
+            "regiune", "provenienta", "source", "recomandari", "recomanda", "apropiere"
         )
         private val RouteContextTokens = setOf("cat", "care", "ce", "unde", "from", "to", "trail")
         private val GearTokens = setOf(
@@ -626,7 +681,7 @@ class QueryAnalyzer(
             "gear_and_preparation" to setOf("gear", "echipament", "headlamp", "frontala", "water", "apa", "kit", "rucsac", "bocanci", "jacheta"),
             "wildlife_romania" to setOf("urs", "ursi", "bear", "bears", "snake", "sarpe", "lup", "wolf", "urme", "animal"),
             "weather_and_season" to setOf("weather", "vreme", "meteo", "fulger", "lightning", "avalansa", "avalanche", "ploaie", "vant", "ninsoare"),
-            "route_intelligence_romania" to setOf("traseu", "route", "marcaj", "marker", "durata", "distance", "distanta", "refugiu", "cabana"),
+            "route_intelligence_romania" to setOf("traseu", "trasee", "ruta", "rute", "route", "routes", "marcaj", "marker", "durata", "distance", "distanta", "refugiu", "cabana", "recomandari", "apropiere"),
             "survival_basics" to setOf("apa", "water", "purifica", "purify", "adapost", "shelter", "supravietuire"),
             "tips_and_tricks" to setOf("sfat", "truc", "tip", "tips", "trick", "practic", "rapid"),
             "trail_culture_ro" to setOf("cabana", "cultura", "obicei", "refugiu", "salvamont", "eticheta"),
@@ -951,7 +1006,7 @@ class PromptBuilder {
             }
         } ?: "Fără traseu activ"
 
-        val batterySummary = "Baterie ${context.batteryPercent}%${if (context.batterySafe) " / economisire activă" else ""}"
+        val batterySummary = "Baterie ${context.batteryPercent}%${if (context.batterySafe) " / Battery Safe / economisire activă" else ""}"
         val gpsSummary = if (context.gpsFixed && context.latitude != null && context.longitude != null) {
             "GPS fix (${String.format("%.4f", context.latitude)}, ${String.format("%.4f", context.longitude)})"
         } else {
@@ -960,10 +1015,16 @@ class PromptBuilder {
         val gearSummary = context.recommendedGear.takeIf { it.isNotEmpty() }?.joinToString(", ")?.let {
             "Listă scurtă echipament: $it"
         } ?: "Listă scurtă echipament indisponibilă"
+        val routeRecommendationSummary = context.routeRecommendations.takeIf { it.isNotEmpty() }?.let { recommendations ->
+            recommendations.take(3).joinToString("; ") { recommendation ->
+                val proximity = recommendation.proximityKm?.let { ", la ${String.format("%.1f", it)} km" }.orEmpty()
+                "${recommendation.title}${proximity}, ${recommendation.durationText}, ${String.format("%.1f", recommendation.distanceKm)} km"
+            }.let { "Recomandări hartă: $it" }
+        } ?: "Recomandări hartă indisponibile"
 
         return AssistantPrompt(
             query = query,
-            contextSummary = listOf(trailSummary, batterySummary, gpsSummary, gearSummary).joinToString(" | "),
+            contextSummary = listOf(trailSummary, batterySummary, gpsSummary, gearSummary, routeRecommendationSummary).joinToString(" | "),
             citationsSummary = retrievedChunks.joinToString(" | ") { "${it.sourceTitle} -> ${it.sectionTitle}" },
             reasoningSummary = queryAnalysis?.let {
                 listOfNotNull(
@@ -1239,6 +1300,16 @@ private class DeterministicInteractionEngine {
         interactionHandler: ChatActionHandler?
     ): AssistantResponse? {
         val normalized = normalize(query)
+        if (detectRouteRecommendationIntent(normalized)) {
+            return answerRouteRecommendations(
+                query = query,
+                context = context,
+                queryAnalysis = queryAnalysis,
+                conversationState = conversationState,
+                packStatus = packStatus,
+                interactionHandler = interactionHandler
+            )
+        }
         if (detectWaterSourceIntent(normalized)) {
             return answerWaterSource(
                 query = query,
@@ -1271,6 +1342,265 @@ private class DeterministicInteractionEngine {
         }
         return null
     }
+
+    private fun detectRouteRecommendationIntent(normalized: String): Boolean {
+        val mentionsRoute = containsAny(normalized, "traseu", "trasee", "ruta", "rute", "route", "routes")
+        val asksRecommendation = containsAny(
+            normalized,
+            "recomanda",
+            "recomandari",
+            "da mi",
+            "dami",
+            "gaseste",
+            "sugereaza",
+            "potrivite",
+            "potrivit",
+            "nivelul meu",
+            "pentru mine",
+            "in apropiere",
+            "langa mine",
+            "aproape de mine",
+            "nearby",
+            "near me"
+        )
+        return mentionsRoute && asksRecommendation
+    }
+
+    private suspend fun answerRouteRecommendations(
+        query: String,
+        context: DeviceContextSnapshot,
+        queryAnalysis: QueryAnalysis,
+        conversationState: AssistantConversationState,
+        packStatus: KnowledgePackStatus,
+        interactionHandler: ChatActionHandler?
+    ): AssistantResponse {
+        val isRomanian = true
+        val requestedPlace = extractRequestedPlace(normalize(query))
+        val remoteLookup = if (!requestedPlace.isNullOrBlank() && context.isOnline) {
+            interactionHandler?.queryRouteRecommendations(
+                AssistantRouteRecommendationRequest(
+                    placeQuery = requestedPlace,
+                    preferredLanguage = queryAnalysis.preferredLanguage,
+                    limit = 4
+                )
+            )
+        } else {
+            null
+        }
+        val remoteRecommendations = remoteLookup
+            ?.takeIf { it.available && it.recommendations.isNotEmpty() }
+            ?.recommendations
+            .orEmpty()
+        val recommendations = remoteRecommendations.takeIf { it.isNotEmpty() }
+            ?: context.routeRecommendations.take(4)
+        if (recommendations.isEmpty()) {
+            val summary = when {
+                !requestedPlace.isNullOrBlank() && !context.isOnline -> if (isRomanian) {
+                    "Am nevoie de conexiune la internet ca sa caut trasee langa $requestedPlace. Nu am recomandari incarcate nici pentru zona curenta."
+                } else {
+                    "I need an internet connection to search trails near $requestedPlace. I do not have current-area recommendations loaded either."
+                }
+                !requestedPlace.isNullOrBlank() && context.isOnline -> if (isRomanian) {
+                    remoteLookup?.summary ?: "Nu am putut rezolva online locul $requestedPlace si nu am recomandari pentru zona curenta."
+                } else {
+                    remoteLookup?.summary ?: "I could not resolve $requestedPlace online and I do not have current-area recommendations."
+                }
+                !context.gpsFixed -> if (isRomanian) {
+                    "Nu am inca recomandari geolocate: astept un fix GPS stabil ca sa pot folosi pozitia rutelor de pe harta."
+                } else {
+                    "I do not have geolocated recommendations yet: I need a stable GPS fix to use mapped route positions."
+                }
+                else -> if (isRomanian) {
+                    "Am pozitia GPS, dar nu am inca lista de trasee recomandate din harta in contextul chatului."
+                } else {
+                    "I have GPS position, but no map route recommendation list is available in chat context yet."
+                }
+            }
+            return structuredInteractionResponse(
+                summary = summary,
+                sections = emptyList(),
+                followUps = if (isRomanian) listOf("Reincearca dupa ce se incarca harta", "Arata-mi traseul activ") else
+                    listOf("Try again after the map loads", "Show active trail"),
+                reasoningType = ReasoningType.ROUTE_CONTEXT,
+                queryAnalysis = queryAnalysis,
+                conversationState = conversationState.copy(lastTrailContextIntent = "ROUTE_RECOMMENDATIONS"),
+                packStatus = packStatus,
+                safetyOutcome = SafetyOutcome.CAUTION
+            )
+        }
+
+        val placePrefix = when {
+            remoteRecommendations.isNotEmpty() -> {
+                val label = remoteLookup?.locationLabel ?: requestedPlace
+                if (isRomanian) {
+                    "Iata cateva trasee potrivite pentru tine${label?.let { " in zona $it" }.orEmpty()}"
+                } else {
+                    "Here are a few trails that fit you${label?.let { " near $it" }.orEmpty()}"
+                }
+            }
+            !requestedPlace.isNullOrBlank() && !context.isOnline -> {
+                if (isRomanian) {
+                    "Am nevoie de conexiune la internet ca sa caut trasee langa $requestedPlace. Iti arat recomandarile pentru zona curenta"
+                } else {
+                    "I need an internet connection to search trails near $requestedPlace. Here are recommendations for the current area"
+                }
+            }
+            !requestedPlace.isNullOrBlank() && context.isOnline -> {
+                if (isRomanian) {
+                    "${remoteLookup?.summary ?: "Nu am putut rezolva online $requestedPlace."} Iti arat recomandarile pentru zona curenta"
+                } else {
+                    "${remoteLookup?.summary ?: "I could not resolve $requestedPlace online."} Here are recommendations for the current area"
+                }
+            }
+            else -> {
+                if (isRomanian) {
+                    "Am ${recommendations.size} recomandari din harta"
+                } else {
+                    "I have ${recommendations.size} map recommendations"
+                }
+            }
+        }
+        val profilePart = context.routeProfileSummary
+            ?.takeIf { it.isNotBlank() }
+            ?.let { if (isRomanian) " pentru profilul tau ($it)" else " for your profile ($it)" }
+            .orEmpty()
+        val summary = if (isRomanian) {
+            if (remoteRecommendations.isNotEmpty()) {
+                "$placePrefix."
+            } else {
+                "$placePrefix$profilePart, ordonate dupa potrivire si apropiere."
+            }
+        } else {
+            if (remoteRecommendations.isNotEmpty()) {
+                "$placePrefix."
+            } else {
+                "$placePrefix$profilePart, ranked by fit and proximity."
+            }
+        }
+
+        val listBody = recommendations.joinToString("\n") { recommendation ->
+            val facts = listOfNotNull(
+                recommendation.durationText.takeIf { it.isNotBlank() && it != "--" },
+                recommendation.distanceKm.takeIf { it > 0.0 }?.let { "${formatRouteKm(it)} km" },
+                recommendation.elevationGain.takeIf { it > 0 }?.let { "+$it m" },
+                recommendation.difficulty.takeIf { it.isNotBlank() },
+                recommendation.proximityKm?.let { "la ${formatDistance(it)}" },
+                routeCoordinateLabel(recommendation)
+            ).joinToString(" • ")
+            val region = recommendation.region?.takeIf { it.isNotBlank() }?.let { " ($it)" }.orEmpty()
+            "- ${recommendation.title}$region: $facts"
+        }
+        val sections = mutableListOf(
+            StructuredResponseSection(
+                title = if (isRomanian) "Trasee recomandate" else "Recommended trails",
+                body = listBody,
+                style = ResponseSectionStyle.ACTIONS
+            )
+        )
+        recommendations.firstOrNull { it.whyItFits.isNotBlank() }?.let { top ->
+            sections += StructuredResponseSection(
+                title = if (isRomanian) "De ce prima optiune" else "Why the first option",
+                body = top.whyItFits,
+                style = ResponseSectionStyle.GUIDANCE
+            )
+        }
+        val locationBody = buildRouteRecommendationLocationBody(
+            context = context,
+            recommendations = recommendations,
+            isRomanian = isRomanian,
+            remoteLookupLatitude = remoteLookup?.latitude,
+            remoteLookupLongitude = remoteLookup?.longitude,
+            remoteLookupLabel = remoteLookup?.locationLabel
+        )
+        if (locationBody.isNotBlank()) {
+            sections += StructuredResponseSection(
+                title = if (isRomanian) "Pozitie" else "Position",
+                body = locationBody,
+                style = ResponseSectionStyle.CONTEXT
+            )
+        }
+
+        return structuredInteractionResponse(
+            summary = summary,
+            sections = sections,
+            followUps = if (isRomanian) {
+                listOf("Care e cel mai usor?", "Ce echipament imi trebuie?")
+            } else {
+                listOf("Which is easiest?", "What gear do I need?")
+            },
+            reasoningType = ReasoningType.ROUTE_CONTEXT,
+            queryAnalysis = queryAnalysis,
+            conversationState = conversationState.copy(lastTrailContextIntent = "ROUTE_RECOMMENDATIONS"),
+            packStatus = packStatus,
+            citations = buildRouteRecommendationCitations(recommendations),
+            generationMode = GenerationMode.CARD_DIRECT
+        )
+    }
+
+    private fun extractRequestedPlace(normalized: String): String? {
+        val markers = listOf("langa", "aproape de", "in apropiere de", "near", "nearby")
+        val marker = markers.firstOrNull { "$it " in normalized } ?: return null
+        return normalized.substringAfter(marker)
+            .split(" ")
+            .filter { it.length >= 3 && it !in setOf("mine", "meu", "mea", "trasee", "traseu", "rute", "ruta") }
+            .take(3)
+            .joinToString(" ")
+            .takeIf { it.isNotBlank() }
+    }
+
+    private fun routeCoordinateLabel(recommendation: RouteRecommendationContextItem): String? {
+        val lat = recommendation.latitude ?: return null
+        val lon = recommendation.longitude ?: return null
+        return "centru ${formatCoordinate(lat)}, ${formatCoordinate(lon)}"
+    }
+
+    private fun buildRouteRecommendationLocationBody(
+        context: DeviceContextSnapshot,
+        recommendations: List<RouteRecommendationContextItem>,
+        isRomanian: Boolean,
+        remoteLookupLatitude: Double? = null,
+        remoteLookupLongitude: Double? = null,
+        remoteLookupLabel: String? = null
+    ): String {
+        val anchor = if (remoteLookupLatitude != null && remoteLookupLongitude != null) {
+            val label = remoteLookupLabel?.takeIf { it.isNotBlank() }
+            if (isRomanian) {
+                "${label ?: "Reper online"}: ${formatCoordinate(remoteLookupLatitude)}, ${formatCoordinate(remoteLookupLongitude)}."
+            } else {
+                "${label ?: "Online place"}: ${formatCoordinate(remoteLookupLatitude)}, ${formatCoordinate(remoteLookupLongitude)}."
+            }
+        } else if (context.gpsFixed && context.latitude != null && context.longitude != null) {
+            if (isRomanian) {
+                "GPS curent: ${formatCoordinate(context.latitude)}, ${formatCoordinate(context.longitude)}."
+            } else {
+                "Current GPS: ${formatCoordinate(context.latitude)}, ${formatCoordinate(context.longitude)}."
+            }
+        } else {
+            if (isRomanian) "GPS instabil; apropierea poate fi incompleta." else "GPS is unstable; proximity may be incomplete."
+        }
+        val centers = recommendations
+            .mapNotNull { recommendation ->
+                routeCoordinateLabel(recommendation)?.let { "${recommendation.title}: $it" }
+            }
+            .take(2)
+            .joinToString(" ")
+        return listOf(anchor, centers).filter { it.isNotBlank() }.joinToString(" ")
+    }
+
+    private fun buildRouteRecommendationCitations(
+        recommendations: List<RouteRecommendationContextItem>
+    ): List<AssistantCitation> =
+        recommendations.mapNotNull { recommendation ->
+            recommendation.sourceUrls.firstOrNull()?.let { sourceUrl ->
+                AssistantCitation(
+                    sourceTitle = recommendation.title,
+                    sectionTitle = "Map route recommendation",
+                    snippet = recommendation.routeSummary.ifBlank { recommendation.whyItFits }.take(160),
+                    sourceUrl = sourceUrl,
+                    publisher = "Scouty local route catalog"
+                )
+            }
+        }.take(3)
 
     private fun detectWaterSourceIntent(normalized: String): Boolean {
         if (containsAny(normalized, "cat apa", "cata apa", "am pus apa", "am luat apa", "bifeaza apa")) {
@@ -1425,6 +1755,57 @@ private class DeterministicInteractionEngine {
         val sections = mutableListOf<StructuredResponseSection>()
         val followUps = mutableListOf<String>()
         var summary: String
+
+        if (intent == GearInteractionIntent.MARK_PACKED && isPackAllExceptIntent(normalized)) {
+            val exclusionText = extractGearExclusionText(normalized)
+            return when (val excludedMatch = matchGearItem(exclusionText, context.gearItems)) {
+                is GearItemMatch.Single -> {
+                    val itemsToPack = context.gearItems
+                        .filter { !it.isPacked && it.id != excludedMatch.item.id }
+                        .map { it.id }
+                    if (itemsToPack.isNotEmpty()) {
+                        actions += AssistantAction.ToggleGearPacked(itemsToPack, true)
+                    }
+                    summary = if (isRomanian) {
+                        "Am bifat ${itemsToPack.size} articole ca impachetate si am lasat nebifat ${excludedMatch.item.name}."
+                    } else {
+                        "I marked ${itemsToPack.size} items as packed and left ${excludedMatch.item.name} unchecked."
+                    }
+                    structuredInteractionResponse(
+                        summary = summary,
+                        sections = sections,
+                        followUps = if (isRomanian) listOf("Arata-mi lista", "Ce imi lipseste?") else listOf("Show me the list", "What is missing?"),
+                        reasoningType = ReasoningType.GEAR_ADVICE,
+                        queryAnalysis = queryAnalysis,
+                        conversationState = conversationState.copy(
+                            activeTopic = null,
+                            pendingGearAction = null,
+                            lastTrailContextIntent = "GEAR_MARK_PACKED_EXCEPT"
+                        ),
+                        packStatus = packStatus,
+                        actions = actions
+                    )
+                }
+                is GearItemMatch.Ambiguous -> ambiguousGearResponse(excludedMatch.items, queryAnalysis, conversationState, packStatus)
+                GearItemMatch.None -> structuredInteractionResponse(
+                    summary = if (isRomanian) {
+                        "Nu am gasit clar articolul pe care vrei sa il las nebifat."
+                    } else {
+                        "I could not clearly find the item you want to leave unchecked."
+                    },
+                    sections = sections,
+                    followUps = if (isRomanian) listOf("Arata-mi lista", "Ce imi lipseste?") else listOf("Show me the list", "What is missing?"),
+                    reasoningType = ReasoningType.GEAR_ADVICE,
+                    queryAnalysis = queryAnalysis,
+                    conversationState = conversationState.copy(
+                        activeTopic = null,
+                        pendingGearAction = null,
+                        lastTrailContextIntent = "GEAR_MARK_PACKED_EXCEPT"
+                    ),
+                    packStatus = packStatus
+                )
+            }
+        }
 
         when (intent) {
             GearInteractionIntent.SHOW_LIST -> {
@@ -1897,12 +2278,14 @@ private class DeterministicInteractionEngine {
         conversationState: AssistantConversationState,
         packStatus: KnowledgePackStatus,
         actions: List<AssistantAction> = emptyList(),
-        safetyOutcome: SafetyOutcome = SafetyOutcome.NORMAL
+        safetyOutcome: SafetyOutcome = SafetyOutcome.NORMAL,
+        citations: List<AssistantCitation> = emptyList(),
+        generationMode: GenerationMode = GenerationMode.FALLBACK_STRUCTURED
     ): AssistantResponse {
         val output = StructuredAssistantOutput(
             summary = summary,
             sections = sections,
-            generationMode = GenerationMode.FALLBACK_STRUCTURED,
+            generationMode = generationMode,
             reasoningType = reasoningType,
             followUpQuestions = followUps,
             knowledgePackVersion = packStatus.packVersion
@@ -1910,13 +2293,13 @@ private class DeterministicInteractionEngine {
         return AssistantResponse(
             answerText = renderInteractionOutput(output),
             structuredOutput = output,
-            citations = emptyList(),
+            citations = citations,
             safetyOutcome = safetyOutcome,
             generationMode = output.generationMode,
             reasoningType = reasoningType,
             conversationState = conversationState,
             knowledgePackVersion = output.knowledgePackVersion,
-            usedFallback = true,
+            usedFallback = output.generationMode == GenerationMode.FALLBACK_STRUCTURED,
             actions = actions
         )
     }
@@ -1940,6 +2323,9 @@ private class DeterministicInteractionEngine {
         } else {
             String.format(Locale.ROOT, "%.1f km", distanceKm)
         }
+
+    private fun formatRouteKm(distanceKm: Double): String =
+        String.format(Locale.ROOT, "%.1f", distanceKm)
 
     private fun formatCoordinate(value: Double): String =
         String.format(Locale.ROOT, "%.5f", value)
@@ -2024,6 +2410,20 @@ private class DeterministicInteractionEngine {
             .filter { it.isNotBlank() && it !in stopwords }
             .joinToString(" ")
             .trim()
+    }
+
+    private fun isPackAllExceptIntent(normalized: String): Boolean =
+        containsAny(normalized, "tot", "totul", "toate", "all") &&
+            containsAny(normalized, "in afara de", "inafara de", "except", "exceptand", "mai putin", "fara") &&
+            containsAny(normalized, "bifeaza", "bifez", "impachetat", "packed", "mark")
+
+    private fun extractGearExclusionText(normalized: String): String {
+        val markers = listOf("in afara de", "inafara de", "exceptand", "except", "mai putin", "fara")
+        val marker = markers
+            .filter { it in normalized }
+            .minByOrNull { normalized.indexOf(it) }
+            ?: return ""
+        return extractGearObject(normalized.substringAfter(marker))
     }
 
     private fun detectNecessity(normalized: String): String =
@@ -3038,9 +3438,8 @@ class AssistantRepository(
         )
         return withTimeoutOrNull(budgetMs) {
             generationEngine.generate(input)
-        } ?: directAnswerComposer.compose(
+        } ?: directAnswerComposer.composeFromTopRetrievedTile(
             input = input,
-            polishedText = "",
             modelStatus = modelManager.currentStatus(),
             generationMode = GenerationMode.FALLBACK_STRUCTURED
         )
@@ -3199,6 +3598,20 @@ class AssistantRepository(
         } else {
             null
         }
+        if (
+            output.generationMode == GenerationMode.CARD_DIRECT &&
+            output.resolvedTopic == "campfire" &&
+            emergencyLead == null
+        ) {
+            output.sections.firstOrNull { section ->
+                section.title.equals("Baza locală", ignoreCase = true)
+            }
+                ?.body
+                ?.let(::sanitizeDisplayText)
+                ?.takeIf { it.isNotBlank() }
+                ?.let { return it }
+        }
+        val emergencyLeadNorm = emergencyLead?.let(::normalizeForDisplay)
         val visibleBodies = output.sections.asSequence()
             .filter {
                 it.style == ResponseSectionStyle.IMPORTANT ||
@@ -3215,6 +3628,7 @@ class AssistantRepository(
             }
             .filter { it.isNotBlank() }
             .filter { normalizeForDisplay(it) != normalizeForDisplay(summary) }
+            .filter { emergencyLeadNorm == null || normalizeForDisplay(it) != emergencyLeadNorm }
             .distinctBy(::normalizeForDisplay)
             .take(2)
             .toList()
@@ -3266,19 +3680,15 @@ class AssistantRepository(
         when {
             shouldUseOnlineGeneration(context) -> GenerationMode.GEMINI_API
             allowLocalModel && modelStatus.state == ModelRuntimeState.LOADED -> GenerationMode.LOCAL_LLM
-            allowLocalModel && modelStatus.availableOnDisk && modelStatus.state in setOf(
-                ModelRuntimeState.UNLOADED,
-                ModelRuntimeState.PREPARING
-            ) -> GenerationMode.LOCAL_LLM
             else -> GenerationMode.FALLBACK_STRUCTURED
         }
 
     private companion object {
         private const val ToolCallingConfidenceThreshold = 0.55
-        private const val OfflineHardDeadlineMs = 5_000L
-        private const val LlmBudgetCapMs = 3_500L
-        private const val MinLlmBudgetMs = 750L
-        private const val DeadlineSlackMs = 150L
+        private const val OfflineHardDeadlineMs = 35_000L
+        private const val LlmBudgetCapMs = 30_000L
+        private const val MinLlmBudgetMs = 1_500L
+        private const val DeadlineSlackMs = 250L
 
         fun createKnowledgeStore(
             context: Context?,

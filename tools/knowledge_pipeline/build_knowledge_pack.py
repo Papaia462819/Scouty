@@ -544,7 +544,6 @@ def build_route_bodies(local_code: str, entry: dict[str, Any], catalog_generated
         ro_parts.append("Date cheie: " + ", ".join(stats) + ".")
     if local_description:
         ro_parts.append(f"Rezumat local: {local_description}.")
-    ro_parts.append(f"Versiunea de catalog folosita in pack: {catalog_generated_at}.")
 
     en_parts = [
         f"Romanian hiking route: {title}.",
@@ -569,7 +568,6 @@ def build_route_bodies(local_code: str, entry: dict[str, Any], catalog_generated
         en_parts.append("Key stats: " + ", ".join(stats_en) + ".")
     if local_description:
         en_parts.append(f"Local route line: {local_description}.")
-    en_parts.append(f"Catalog snapshot used in the pack: {catalog_generated_at}.")
 
     return {
         "ro": " ".join(ro_parts),

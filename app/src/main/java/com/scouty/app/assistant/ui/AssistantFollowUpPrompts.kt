@@ -15,6 +15,22 @@ fun buildSequentialFollowUpPrompt(followUpQuestions: List<String>): AssistantFol
     )
 }
 
+fun buildInlineFollowUpReplies(followUpQuestions: List<String>): List<AssistantQuickReplyUiModel> =
+    followUpQuestions
+        .flatMap { question ->
+            val trimmed = question.trim().takeIf { it.isNotBlank() } ?: return@flatMap emptyList()
+            extractSuggestedReplies(trimmed).ifEmpty {
+                listOf(
+                    AssistantQuickReplyUiModel(
+                        label = trimmed.removeSuffix("?").trim().take(48),
+                        query = trimmed
+                    )
+                )
+            }
+        }
+        .distinctBy { it.query.lowercase() }
+        .take(4)
+
 fun extractSuggestedReplies(question: String): List<AssistantQuickReplyUiModel> {
     val trimmed = question.trim().removeSuffix("?").trim()
     if (trimmed.isBlank()) {

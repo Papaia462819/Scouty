@@ -127,6 +127,8 @@ data class RouteRecommendation(
     val routeSummary: String = "",
     val whyItFits: String = "",
     val fitScore: Int = 0,
+    val centerLatitude: Double? = null,
+    val centerLongitude: Double? = null,
     val imageUrl: String? = null,
     val sourceUrls: List<String> = emptyList()
 ) {

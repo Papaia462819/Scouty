@@ -1189,6 +1189,7 @@ class CampfireConversationEngine(
             resolvedFamily = CardFamily.SCENARIO
         )
         val sections = mutableListOf<StructuredResponseSection>()
+        val bodySection = main.primaryBodySection()
 
         when (main.family) {
             CardFamily.DEFINITION -> {
@@ -1218,6 +1219,7 @@ class CampfireConversationEngine(
                         style = ResponseSectionStyle.ACTIONS
                     )
                 }
+                bodySection?.let { sections += it }
             }
         }
 
@@ -1587,6 +1589,43 @@ class CampfireConversationEngine(
 
     private fun renderItems(items: List<String>): String =
         items.joinToString("; ") { it.trim().removeSuffix(".") + "." }
+
+    private fun CampfireCard.primaryBodySection(): StructuredResponseSection? {
+        val body = chunk.body
+            .trim()
+            .removeLeading(chunk.title)
+            .removeLeading(payload.lead)
+            .replace("\\s+".toRegex(), " ")
+            .trim()
+            .take(520)
+            .takeIf { it.isNotBlank() && !isRedundantWithLead(payload.lead, it) }
+            ?: return null
+        return StructuredResponseSection(
+            title = "Baza locală",
+            body = body,
+            style = ResponseSectionStyle.GUIDANCE
+        )
+    }
+
+    private fun String.removeLeading(prefix: String): String =
+        if (prefix.isNotBlank() && startsWith(prefix)) {
+            removePrefix(prefix).trim()
+        } else {
+            this
+        }
+
+    private fun isRedundantWithLead(lead: String, candidate: String): Boolean {
+        val normalizedLead = normalize(lead)
+        val normalizedCandidate = normalize(candidate)
+        if (normalizedLead.isBlank() || normalizedCandidate.isBlank()) {
+            return false
+        }
+        if (normalizedLead == normalizedCandidate) {
+            return true
+        }
+        return normalizedCandidate.length <= normalizedLead.length + 24 &&
+            (normalizedLead.contains(normalizedCandidate) || normalizedCandidate.contains(normalizedLead))
+    }
 
     private fun containsAny(normalized: String, vararg phrases: String): Boolean =
         phrases.any { phraseMatches(normalized, normalize(it)) }
