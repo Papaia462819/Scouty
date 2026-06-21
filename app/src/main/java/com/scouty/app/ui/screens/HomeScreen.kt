@@ -114,6 +114,7 @@ fun HomeScreen(
     profile: UserProfile,
     contentPadding: PaddingValues,
     onActiveTrailClick: () -> Unit = {},
+    onRecommendationClick: (RouteRecommendation) -> Unit = {},
     onShelterClick: () -> Unit = {},
     onWaterClick: () -> Unit = {},
     onTrackClick: () -> Unit = {},
@@ -203,7 +204,7 @@ fun HomeScreen(
                         String.format(Locale.getDefault(), "%.0f km", it)
                     },
                     difficulty = difficultyLevel(recommendation.difficulty.name),
-                    onClick = {}
+                    onClick = { onRecommendationClick(recommendation) }
                 )
                 if (index != status.routeRecommendations.lastIndex) {
                     Spacer(Modifier.height(8.dp))

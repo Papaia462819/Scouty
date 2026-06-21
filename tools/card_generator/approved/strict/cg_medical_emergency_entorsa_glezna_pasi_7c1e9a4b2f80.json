@@ -1,0 +1,45 @@
+{
+  "chunk_id": "cg_medical_emergency_entorsa_glezna_pasi_7c1e9a4b2f80",
+  "card_id": "cg_medical_emergency_entorsa_glezna_pasi_7c1e9a4b2f80",
+  "domain": "medical_emergency",
+  "topic": "entorsa_glezna_pasi",
+  "language": "ro",
+  "title": "Entorsă de gleznă: primii pași pe traseu",
+  "body": "O entorsă de gleznă apare când articulația este răsucită brusc, iar ligamentele sunt întinse sau rupte. Semnele obișnuite sunt durerea, umflătura care apare repede, vânătaia și dificultatea de a pune greutate pe picior. Aplică principiul RICE: repaus (oprește mersul și nu forța articulația), răcire (pune ceva rece, învelit într-o haină, pentru 15-20 de minute), compresie (înfășoară glezna cu un bandaj elastic ferm, dar nu atât de strâns încât să amorțească piciorul) și ridicare (ține piciorul mai sus decât inima când stai). Lasă bocancul încălțat dacă e deja pe picior, fiindcă oferă sprijin; scoate-l doar dacă trebuie să răcești sau să bandajezi. Dacă poți păși cu sprijin parțial, coboară lent spre o cale de acces, folosind bețele de trekking sau un băț ca proptea. Cere ajutor și anunță pe cineva unde ești. Sună la 0SALVAMONT (apel: 0SALVAMONT) sau 112 dacă durerea este foarte intensă, dacă articulația și-a schimbat vizibil forma, dacă sprijinul pe picior este imposibil sau dacă umflătura și durerea se agravează rapid.",
+  "lead": "La o entorsă de gleznă aplică RICE — repaus, răcire, compresie elastică și ridicarea piciorului — coboară lent cu sprijin și sună la 0SALVAMONT/112 dacă durerea e severă sau nu poți păși deloc.",
+  "keywords": "entorsa glezna scrantit sucit picior ligamente umflatura RICE bandaj prim ajutor",
+  "card_family": "SCENARIO",
+  "priority": 80,
+  "tier": "A",
+  "source_title": "Recomandari pentru turistul montan",
+  "source_url": "https://www.salvamontromania.ro/recomandari-turist-montan.php",
+  "publisher": "Salvamont Romania",
+  "source_language": "ro",
+  "adapted_language": "ro",
+  "publish_or_review_date": "2026-06-21",
+  "source_trust": 4,
+  "safety_tags": [
+    "sprain",
+    "lower_limb",
+    "first_aid"
+  ],
+  "country_scope": "ro",
+  "metadata_json": {
+    "safety_critical": true,
+    "tone": "strict",
+    "lead": "La o entorsă de gleznă aplică RICE — repaus, răcire, compresie elastică și ridicarea piciorului — coboară lent cu sprijin și sună la 0SALVAMONT/112 dacă durerea e severă sau nu poți păși deloc.",
+    "evidence_confidence": "high",
+    "source_id": "salvamont_turist_montan",
+    "actions_now": [
+      "Oprește mersul și pune piciorul în repaus.",
+      "Răcește glezna 15-20 de minute cu ceva rece învelit într-o haină.",
+      "Înfășoară o compresie elastică fermă, fără să amorțească piciorul.",
+      "Ține piciorul ridicat mai sus decât inima când te odihnești."
+    ],
+    "watch_for": [
+      "Durere foarte intensă sau care se agravează rapid.",
+      "Articulația și-a schimbat vizibil forma.",
+      "Sprijinul pe picior este imposibil."
+    ]
+  }
+}

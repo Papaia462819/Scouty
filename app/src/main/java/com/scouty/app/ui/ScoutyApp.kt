@@ -69,7 +69,8 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                 onClearMessage = profileViewModel::clearAuthMessage,
                 onLogin = profileViewModel::login,
                 onRegister = profileViewModel::startRegistration,
-                onGoogleSignIn = { profileViewModel.signInWithGoogle(context) }
+                onGoogleSignIn = { profileViewModel.signInWithGoogle(context) },
+                onContinueWithoutAccount = profileViewModel::continueWithoutAccount
             )
             return
         }
@@ -175,6 +176,10 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                             selectedRoute = ROUTE_MAP
                         }
                     },
+                    onRecommendationClick = { recommendation ->
+                        mainViewModel.selectRecommendedTrail(recommendation)
+                        selectedRoute = ROUTE_MAP
+                    },
                     onShelterClick = {
                         mainViewModel.requestNearbyGuide(NearbyGuideType.SHELTER)
                         selectedRoute = ROUTE_MAP
@@ -224,6 +229,7 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                 ROUTE_PROFILE -> ProfileScreen(
                     contentPadding = innerPadding,
                     profile = currentProfile,
+                    isGuest = profileUiState.isGuest,
                     status = uiState,
                     onEditProfile = { editingProfile = true },
                     onSignOut = {

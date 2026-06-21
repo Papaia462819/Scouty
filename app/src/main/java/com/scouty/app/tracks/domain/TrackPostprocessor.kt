@@ -21,6 +21,7 @@ class TrackPostprocessor(
             "Inconsistent YOLO output anchor count"
         }
         val candidates = ArrayList<TrackPrediction>()
+        var bestFallback: TrackPrediction? = null
 
         for (anchor in 0 until anchorCount) {
             var bestClass = 0
@@ -32,8 +33,6 @@ class TrackPostprocessor(
                     bestClass = classIndex
                 }
             }
-            if (bestScore < confidenceThreshold) continue
-
             val centerX = output[0][anchor]
             val centerY = output[1][anchor]
             val width = output[2][anchor]
@@ -41,15 +40,27 @@ class TrackPostprocessor(
             val box = toSourceBox(centerX, centerY, width, height, letterbox)
             if (box.area <= 1f) continue
 
-            candidates += TrackPrediction(
+            val prediction = TrackPrediction(
                 classId = bestClass,
                 className = classNames[bestClass],
                 confidence = bestScore.coerceIn(0f, 1f),
                 boundingBox = box,
             )
+            if (bestScore < confidenceThreshold) {
+                if (bestFallback == null || prediction.confidence > bestFallback.confidence) {
+                    bestFallback = prediction
+                }
+                continue
+            }
+
+            candidates += prediction
         }
 
-        return nms(candidates.sortedByDescending { it.confidence })
+        val rankedPredictions = candidates.ifEmpty {
+            listOfNotNull(bestFallback)
+        }.sortedByDescending { it.confidence }
+
+        return nms(rankedPredictions)
             .take(maxDetections)
     }
 

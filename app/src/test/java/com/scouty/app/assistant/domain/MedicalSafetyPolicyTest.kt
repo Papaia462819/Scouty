@@ -219,7 +219,10 @@ class MedicalSafetyPolicyTest {
     }
 
     @Test
-    fun escalationFromChunks_notJustQuery() {
+    fun doesNotEscalateFromChunkBodiesAlone() {
+        // A benign question must NOT trigger the 112/SOS banner just because a
+        // retrieved card body mentions emergency words. Escalation is driven by
+        // what the user describes, not by neighbouring card text.
         val chunks = listOf(
             RetrievedChunk(
                 topic = "bleeding",
@@ -229,7 +232,7 @@ class MedicalSafetyPolicyTest {
                 score = 10
             )
         )
-        val outcome = policy.evaluate("ajutor", chunks)
-        assertEquals(SafetyOutcome.EMERGENCY_ESCALATION, outcome)
+        val outcome = policy.evaluate("cum fac focul daca lemnele sunt ude", chunks)
+        assertEquals(SafetyOutcome.NORMAL, outcome)
     }
 }

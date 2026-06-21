@@ -42,10 +42,13 @@ import com.scouty.app.data.ActiveTrailStore
 import com.scouty.app.data.RouteEnrichmentRepository
 import com.scouty.app.data.RouteBounds
 import com.scouty.app.data.RouteCoordinate
+import com.scouty.app.data.RouteGeometryEntry
 import com.scouty.app.data.RouteGeometryRepository
 import com.scouty.app.data.UserTrailProfileStore
+import com.scouty.app.data.bestDescriptionRo
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.scouty.app.api.MeteoblueService
+import com.scouty.app.data.RouteEnrichmentEntry
 import com.scouty.app.ui.models.ActiveTrail
 import com.scouty.app.ui.models.ActiveTrailState
 import com.scouty.app.ui.models.CompletedTrailSnapshot
@@ -59,6 +62,7 @@ import com.scouty.app.ui.models.MapTrailMode
 import com.scouty.app.ui.models.NearbyGuideRequest
 import com.scouty.app.ui.models.NearbyGuideTarget
 import com.scouty.app.ui.models.NearbyGuideType
+import com.scouty.app.ui.models.RouteRecommendation
 import com.scouty.app.ui.models.RouteRecommendationEngine
 import com.scouty.app.ui.models.TrailPartyComposition
 import com.scouty.app.ui.models.TrailCompletionStatus
@@ -72,6 +76,7 @@ import com.scouty.app.utils.MapPackRepository
 import com.scouty.app.utils.MapPackRegistryManager
 import com.scouty.app.utils.OfflineWaterSourceRepository
 import com.scouty.app.utils.SolarCalculator
+import com.scouty.app.utils.TrailDifficulty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -108,6 +113,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         const val WeatherSameDayRefreshMs = 60 * 60 * 1000L
         const val WeatherTwoDayRefreshMs = 6 * 60 * 60 * 1000L
         const val UnavailableWeatherLabel = "Indisponibil"
+        const val DefaultRomaniaCenterLatitude = 45.9432
+        const val DefaultRomaniaCenterLongitude = 24.9668
     }
 
     private data class WeatherLookupResult(
@@ -449,6 +456,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                     MapTrailMode.BROWSING
                 }
             )
+        }
+    }
+
+    fun selectRecommendedTrail(recommendation: RouteRecommendation) {
+        viewModelScope.launch {
+            val application = getApplication<Application>()
+            val catalog = RouteEnrichmentRepository.load(application)
+            val geometryIndex = RouteGeometryRepository.load(application)
+            val entry = RouteEnrichmentRepository.findByLocalCode(catalog, recommendation.localCode)
+            val geometry = RouteGeometryRepository.findByLocalCode(geometryIndex, recommendation.localCode)
+            val selection = buildTrailSelectionFromRecommendation(
+                recommendation = recommendation,
+                entry = entry,
+                geometry = geometry
+            )
+
+            _mapSessionState.update { currentState ->
+                currentState.copy(
+                    selectedTrail = selection,
+                    isBottomSheetVisible = true,
+                    nearbyGuideRequest = null,
+                    nearbyGuide = null,
+                    mode = MapTrailMode.BROWSING,
+                    focusRequestToken = selection.selectionToken
+                )
+            }
         }
     }
 
@@ -2313,6 +2346,124 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             }
         }
     }
+
+    private fun buildTrailSelectionFromRecommendation(
+        recommendation: RouteRecommendation,
+        entry: RouteEnrichmentEntry?,
+        geometry: RouteGeometryEntry?,
+        selectionToken: Long = System.currentTimeMillis()
+    ): TrailSelectionSnapshot {
+        val highlightSegments = geometry?.let(RouteGeometryRepository::decodeRenderableSegments).orEmpty()
+        val highlightBounds = routeBoundsForSegments(highlightSegments) ?: geometry?.bbox
+        val distanceKm = recommendation.distanceKm.takeIf { it > 0.0 }
+            ?: entry?.mnData?.distanceKm
+            ?: geometry?.let(::estimateRouteLengthKm)
+            ?: 0.0
+        val elevationGain = recommendation.elevationGain.takeIf { it > 0 }
+            ?: entry?.mnData?.ascentM
+            ?: 0
+        val duration = recommendation.durationText.takeIf { it.isNotBlank() && it != "--" }
+            ?: entry?.mnData?.durationText
+            ?: estimateDuration(distanceKm, elevationGain)
+        val centerLatitude = highlightBounds?.let { (it.minLat + it.maxLat) / 2 }
+            ?: geometry?.center?.lat
+            ?: recommendation.centerLatitude
+            ?: _uiState.value.latitude
+            ?: DefaultRomaniaCenterLatitude
+        val centerLongitude = highlightBounds?.let { (it.minLon + it.maxLon) / 2 }
+            ?: geometry?.center?.lon
+            ?: recommendation.centerLongitude
+            ?: _uiState.value.longitude
+            ?: DefaultRomaniaCenterLongitude
+        val markerLabel = TrailMetadataFormatter.formatTrailMarkers(entry?.symbols.orEmpty())
+        val routeSummary = recommendation.routeSummary.takeIf { it.isNotBlank() }
+            ?: entry?.let {
+                TrailMetadataFormatter.buildRouteSummary(
+                    durationText = duration,
+                    elevationGain = elevationGain,
+                    difficulty = recommendation.difficulty,
+                    markerLabel = markerLabel ?: recommendation.markerLabel,
+                    fromName = it.from,
+                    toName = it.to
+                )
+            }
+            ?: recommendation.whyItFits
+
+        return TrailSelectionSnapshot(
+            name = entry?.displayTitle ?: recommendation.title,
+            difficulty = recommendation.difficulty.toMapDifficulty(),
+            latitude = centerLatitude,
+            longitude = centerLongitude,
+            distanceKm = distanceKm,
+            elevationGain = elevationGain,
+            estimatedDuration = duration,
+            selectionToken = selectionToken,
+            localCode = recommendation.localCode,
+            region = recommendation.region ?: entry?.region,
+            descriptionRo = entry?.description?.textRo,
+            localDescription = entry?.bestDescriptionRo(),
+            routeSummary = routeSummary,
+            fromName = entry?.from,
+            toName = entry?.to,
+            markingSymbols = entry?.symbols.orEmpty(),
+            sourceUrls = recommendation.sourceUrls.ifEmpty {
+                entry?.sourceUrls?.ifEmpty {
+                    listOfNotNull(entry.mnData?.pageUrl, entry.image?.sourcePageUrl).distinct()
+                }.orEmpty()
+            },
+            imageUrl = recommendation.imageUrl ?: preferredRouteImageUrl(entry),
+            imageAttribution = entry?.image?.attributionText,
+            imageLicense = entry?.image?.license,
+            imageSourcePageUrl = entry?.image?.sourcePageUrl,
+            imageScope = entry?.image?.scope,
+            highlightSegments = highlightSegments,
+            highlightBounds = highlightBounds
+        )
+    }
+
+    private fun estimateRouteLengthKm(entry: RouteGeometryEntry): Double =
+        RouteGeometryRepository.decodeRenderableSegments(entry).sumOf { segment ->
+            if (segment.size < 2) {
+                0.0
+            } else {
+                segment.zipWithNext { start, end ->
+                    calculateDistance(start.lat, start.lon, end.lat, end.lon)
+                }.sum()
+            }
+        }
+
+    private fun routeBoundsForSegments(segments: List<List<RouteCoordinate>>): RouteBounds? {
+        val coordinates = segments.flatten()
+        if (coordinates.isEmpty()) return null
+        return RouteBounds(
+            minLat = coordinates.minOf { it.lat },
+            minLon = coordinates.minOf { it.lon },
+            maxLat = coordinates.maxOf { it.lat },
+            maxLon = coordinates.maxOf { it.lon }
+        )
+    }
+
+    private fun estimateDuration(distanceKm: Double, elevationGain: Int): String {
+        if (distanceKm <= 0.0) return "--"
+        val totalMinutes = ((distanceKm / 4.2 + elevationGain / 500.0) * 60)
+            .roundToInt()
+            .coerceAtLeast(30)
+        val hours = totalMinutes / 60
+        val minutes = totalMinutes % 60
+        return if (minutes == 0) "~${hours}h" else "~${hours}h ${minutes}m"
+    }
+
+    private fun preferredRouteImageUrl(entry: RouteEnrichmentEntry?): String? =
+        entry?.image?.imageUrl?.takeIf { it.isNotBlank() }
+            ?: entry?.image?.thumbnailUrl?.takeIf { it.isNotBlank() }
+
+    private fun com.scouty.app.ui.models.TrailDifficultyRank.toMapDifficulty(): TrailDifficulty =
+        when (this) {
+            com.scouty.app.ui.models.TrailDifficultyRank.EASY -> TrailDifficulty.EASY
+            com.scouty.app.ui.models.TrailDifficultyRank.MEDIUM -> TrailDifficulty.MEDIUM
+            com.scouty.app.ui.models.TrailDifficultyRank.HARD -> TrailDifficulty.HARD
+            com.scouty.app.ui.models.TrailDifficultyRank.EXPERT -> TrailDifficulty.EXPERT
+        }
 
     private fun ActiveTrail.toTrailSelectionSnapshot(
         selectionToken: Long = System.currentTimeMillis()

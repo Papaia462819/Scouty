@@ -41,6 +41,18 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         _uiState.update { it.copy(authMessage = null) }
     }
 
+    fun continueWithoutAccount() {
+        _uiState.value = ProfileSessionUiState(
+            stage = SessionStage.APP,
+            isLoading = false,
+            uid = GuestUid,
+            isGuest = true,
+            accountExists = false,
+            profile = buildGuestProfile(),
+            routePreferences = UserTrailProfile()
+        )
+    }
+
     fun login(email: String, password: String) {
         val normalizedEmail = email.trim()
         when {
@@ -171,15 +183,27 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun updateProfile(draft: OnboardingDraft) {
-        val uid = _uiState.value.uid ?: return
-        val currentProfile = _uiState.value.profile ?: return
-        val routePreferences = _uiState.value.routePreferences
+        val currentState = _uiState.value
+        val currentProfile = currentState.profile ?: return
+        val routePreferences = currentState.routePreferences
         val updatedProfile = ProfileAssessmentEngine.buildProfile(
             email = currentProfile.email,
             draft = draft,
             createdAtEpochMillis = System.currentTimeMillis(),
             previousProfile = currentProfile
         )
+        if (currentState.isGuest) {
+            _uiState.value = currentState.copy(
+                stage = SessionStage.APP,
+                isLoading = false,
+                authMessage = null,
+                profile = updatedProfile,
+                routePreferences = routePreferences
+            )
+            return
+        }
+
+        val uid = currentState.uid ?: return
         _uiState.update { it.copy(isLoading = true, authMessage = null) }
         viewModelScope.launch {
             runCatching {
@@ -197,11 +221,18 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun updateRoutePreferences(routePreferences: UserTrailProfile) {
-        val uid = _uiState.value.uid ?: return
-        val profile = _uiState.value.profile ?: return
-        if (_uiState.value.routePreferences == routePreferences) {
+        val currentState = _uiState.value
+        val profile = currentState.profile ?: return
+        if (currentState.routePreferences == routePreferences) {
             return
         }
+        if (currentState.isGuest) {
+            _uiState.update { it.copy(routePreferences = routePreferences) }
+            userTrailProfileStore.save(routePreferences)
+            return
+        }
+
+        val uid = currentState.uid ?: return
         _uiState.update { it.copy(routePreferences = routePreferences) }
         viewModelScope.launch {
             runCatching {
@@ -215,9 +246,12 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun recordTrailCompletion(snapshot: CompletedTrailSnapshot) {
-        val uid = _uiState.value.uid ?: return
-        val currentProfile = _uiState.value.profile ?: return
-        val routePreferences = _uiState.value.routePreferences
+        val currentState = _uiState.value
+        val currentProfile = currentState.profile ?: return
+        if (!currentState.isGuest && currentState.uid == null) {
+            return
+        }
+        val routePreferences = currentState.routePreferences
         if (currentProfile.trailHistory.any { it.id == snapshot.id }) {
             return
         }
@@ -293,6 +327,18 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             unlockedAchievements = currentProfile.unlockedAchievements + newAchievements
         )
 
+        if (currentState.isGuest) {
+            _uiState.value = currentState.copy(
+                stage = SessionStage.APP,
+                isLoading = false,
+                authMessage = null,
+                profile = updatedProfile,
+                routePreferences = routePreferences
+            )
+            return
+        }
+
+        val uid = currentState.uid ?: return
         _uiState.value = buildAuthenticatedState(uid, updatedProfile, routePreferences)
         viewModelScope.launch {
             runCatching {
@@ -306,6 +352,10 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun signOut() {
+        if (_uiState.value.isGuest) {
+            _uiState.value = ProfileSessionUiState()
+            return
+        }
         viewModelScope.launch {
             repository.signOut()
             clearCredentialState()
@@ -384,6 +434,22 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             routePreferences = routePreferences
         )
 
+    private fun buildGuestProfile(): UserProfile {
+        val now = System.currentTimeMillis()
+        return UserProfile(
+            email = "Fără cont",
+            displayName = "Oaspete",
+            avatarId = "summit",
+            homeRegion = "",
+            levelNumber = ScoutyLevel.LEVEL_1.number,
+            levelTitle = ScoutyLevel.LEVEL_1.title,
+            onboardingScore = 0,
+            experiencePoints = 0,
+            createdAtEpochMillis = now,
+            updatedAtEpochMillis = now
+        )
+    }
+
     private fun clearLegacyLocalState() {
         getApplication<Application>()
             .getSharedPreferences(LegacyProfilePreferencesName, Context.MODE_PRIVATE)
@@ -417,6 +483,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         }
 
     private companion object {
+        const val GuestUid = "guest-local"
         const val LegacyProfilePreferencesName = "scouty_profile_store"
         const val LegacyAccountKey = "local_account_json"
     }

@@ -94,6 +94,9 @@ interface KnowledgeChunkStore {
         preferredLanguage: String,
         topic: String
     ): CampfireEmbeddingStore = CampfireEmbeddingStore(topic = topic, language = preferredLanguage)
+
+    /** Diacritic-stripped word -> frequency, used by the deterministic spell corrector. */
+    suspend fun loadSearchVocabulary(): Map<String, Long> = emptyMap()
 }
 
 interface KnowledgePackStatusProvider {
@@ -340,6 +343,43 @@ class SqliteKnowledgeChunkStore(
         } finally {
             database?.close()
         }
+    }
+
+    private var vocabularyCache: Pair<String?, Map<String, Long>>? = null
+
+    override suspend fun loadSearchVocabulary(): Map<String, Long> = withContext(Dispatchers.IO) {
+        val status = manager.ensureReady()
+        if (!status.isReady || status.databasePath.isNullOrBlank()) {
+            return@withContext emptyMap()
+        }
+        vocabularyCache?.let { (version, cached) ->
+            if (version == status.packVersion) return@withContext cached
+        }
+        var database: SQLiteDatabase? = null
+        val vocab = try {
+            database = SQLiteDatabase.openDatabase(status.databasePath, null, SQLiteDatabase.OPEN_READONLY)
+            val hasTable = database.rawQuery(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='search_vocabulary'",
+                null
+            ).use { it.moveToFirst() }
+            if (!hasTable) {
+                emptyMap()
+            } else {
+                database.rawQuery("SELECT term, freq FROM search_vocabulary", null).use { cursor ->
+                    buildMap {
+                        while (cursor.moveToNext()) {
+                            put(cursor.getString(0), cursor.getLong(1))
+                        }
+                    }
+                }
+            }
+        } catch (error: Throwable) {
+            emptyMap()
+        } finally {
+            database?.close()
+        }
+        vocabularyCache = status.packVersion to vocab
+        vocab
     }
 
     override suspend fun loadCampfireEmbeddingStore(

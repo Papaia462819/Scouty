@@ -28,7 +28,11 @@
       "PowerShell(.\\\\gradlew.bat :app:testDebugUnitTest --tests \"com.scouty.app.assistant.domain.AssistantRepositoryIntegrationTest\" --console=plain 2>&1 | Select-Object -Last 50)",
       "PowerShell($adb = \"$env:LOCALAPPDATA\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe\"; if \\(-not \\(Test-Path $adb\\)\\) { $adb = \"adb\" }; & $adb logcat -c; Write-Output \"logcat cleared via $adb\")",
       "PowerShell(.\\\\gradlew.bat :app:connectedDebugAndroidTest \"-Pandroid.testInstrumentationRunnerArguments.class=com.scouty.app.assistant.RetrievalAuditTest\" --console=plain 2>&1 | Select-Object -Last 40)",
-      "PowerShell($adb = \"$env:LOCALAPPDATA\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe\"; & $adb logcat -c; .\\\\gradlew.bat :app:connectedDebugAndroidTest \"-Pandroid.testInstrumentationRunnerArguments.class=com.scouty.app.assistant.RetrievalAuditTest\" --console=plain 2>&1 | Select-Object -Last 15)"
+      "PowerShell($adb = \"$env:LOCALAPPDATA\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe\"; & $adb logcat -c; .\\\\gradlew.bat :app:connectedDebugAndroidTest \"-Pandroid.testInstrumentationRunnerArguments.class=com.scouty.app.assistant.RetrievalAuditTest\" --console=plain 2>&1 | Select-Object -Last 15)",
+      "PowerShell($adb = \"$env:LOCALAPPDATA\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe\"; & $adb logcat -c; .\\\\gradlew.bat :app:connectedDebugAndroidTest \"-Pandroid.testInstrumentationRunnerArguments.class=com.scouty.app.assistant.RetrievalAuditTest\" --console=plain 2>&1 | Select-Object -Last 8)",
+      "PowerShell($adb = \"$env:LOCALAPPDATA\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe\"; & $adb logcat -c; .\\\\gradlew.bat :app:connectedDebugAndroidTest \"-Pandroid.testInstrumentationRunnerArguments.class=com.scouty.app.assistant.RetrievalAuditTest\" --console=plain 2>&1 | Select-Object -Last 6)",
+      "PowerShell($adb = \"$env:LOCALAPPDATA\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe\"; & $adb logcat -c; .\\\\gradlew.bat :app:connectedDebugAndroidTest \"-Pandroid.testInstrumentationRunnerArguments.class=com.scouty.app.assistant.RetrievalAuditTest\" --console=plain 2>&1 | Select-Object -Last 4)",
+      "PowerShell(.\\\\gradlew.bat :app:compileDebugKotlin --console=plain 2>&1 | Select-Object -Last 15)"
     ]
   }
 }

@@ -96,6 +96,28 @@ class TrackPostprocessorTest {
         assertTrue(box.bottom in 409f..411f)
     }
 
+    @Test
+    fun keepsBestValidPredictionWhenAllScoresAreBelowThreshold() {
+        val output = Array(11) { FloatArray(2) }
+        output[0][0] = 120f
+        output[1][0] = 120f
+        output[2][0] = 40f
+        output[3][0] = 40f
+        output[4][0] = 0.12f
+
+        output[0][1] = 300f
+        output[1][1] = 300f
+        output[2][1] = 60f
+        output[3][1] = 60f
+        output[9][1] = 0.21f
+
+        val predictions = TrackPostprocessor().process(output, letterbox)
+
+        assertEquals(1, predictions.size)
+        assertEquals("red_fox", predictions.single().className)
+        assertEquals(0.21f, predictions.single().confidence, 0.0001f)
+    }
+
     @Test(expected = IllegalArgumentException::class)
     fun rejectsUnexpectedChannelCount() {
         TrackPostprocessor().process(Array(12) { FloatArray(1) }, letterbox)

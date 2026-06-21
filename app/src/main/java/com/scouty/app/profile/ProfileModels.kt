@@ -118,6 +118,7 @@ data class ProfileSessionUiState(
     val stage: SessionStage = SessionStage.AUTH,
     val isLoading: Boolean = false,
     val uid: String? = null,
+    val isGuest: Boolean = false,
     val accountExists: Boolean = false,
     val accountEmail: String? = null,
     val pendingRegistrationEmail: String? = null,

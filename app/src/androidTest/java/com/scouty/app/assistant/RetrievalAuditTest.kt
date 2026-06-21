@@ -58,7 +58,13 @@ class RetrievalAuditTest {
 
         // --- typos / colloquial ---
         Q("typo_fire", "kum fak focu", "foc (cu typo)"),
+        Q("qmark_with", "cum fac focul?", "foc — cu semn întrebare"),
+        Q("qmark_without", "cum fac focul", "foc — fără semn întrebare"),
+        Q("typo_fire_heavy", "cum aprnid focul fara brichta", "foc fără brichetă (typo dur)"),
+        Q("typo_water", "cum filtez apa de izvor", "purificare apă (typo)"),
+        Q("typo_gear", "ce echpament iau pe munte", "echipament (typo)"),
         Q("typo_entorsa", "am o entorsa la glezna ce fac", "entorsă/gleznă"),
+        Q("typo_entorsa2", "ma doare glzna am o entrsa", "entorsă (typo)"),
         Q("colloq_cold", "mi-e frig tare ce fac", "frig/hipotermie"),
 
         // --- ambiguous single words ---
@@ -90,6 +96,30 @@ class RetrievalAuditTest {
         Chain(
             "chain_gear_pronoun",
             listOf("ce bocanci sunt buni de munte", "si cum ii usuc daca se uda?")
+        ),
+        Chain(
+            "chain_fire_rain_wind",
+            listOf("cum aprind focul fara bricheta", "dar daca ploua?", "si daca bate vantul?")
+        ),
+        Chain(
+            "chain_bear_newsubject",
+            listOf("cum fac focul", "ce fac daca vad un urs?")
+        ),
+        Chain(
+            "chain_water_izvor",
+            listOf("cum filtrez apa", "si daca e de la izvor?")
+        ),
+        Chain(
+            "chain_followup_withq",
+            listOf("cum fac focul fara bricheta", "si daca ploua?")
+        ),
+        Chain(
+            "chain_followup_noq",
+            listOf("cum fac focul fara bricheta", "si daca ploua")
+        ),
+        Chain(
+            "chain_repro_rain",
+            listOf("cum fac focu", "si daca a plouat", "si daca lemnele sunt ude")
         )
     )
 

@@ -147,8 +147,8 @@ fun TrackCameraScreen(
     var showInfo by remember { mutableStateOf(false) }
 
     val topPrediction = result?.topPrediction
-    val hasDetection = result?.let { it.band != TrackConfidenceBand.INCERT && topPrediction != null } == true
-    val hasFailure = error != null || result?.band == TrackConfidenceBand.INCERT
+    val hasDetection = topPrediction != null
+    val hasFailure = error != null || (result != null && topPrediction == null)
     val scannerState = when {
         analyzing -> TrackScannerState.Processing
         hasDetection -> TrackScannerState.Detected
@@ -283,10 +283,9 @@ fun TrackCameraScreen(
             )
         }
 
-        if (hasDetection && result != null && topPrediction != null) {
+        if (result != null && topPrediction != null) {
             ScannerDim()
             TrackSuccessSheet(
-                result = result!!,
                 prediction = topPrediction,
                 onScanAgain = ::resetScan,
                 onDone = onBack,
@@ -849,7 +848,6 @@ private fun ScannerInfoSheet(
 
 @Composable
 private fun TrackSuccessSheet(
-    result: TrackIdentificationResult,
     prediction: TrackPrediction,
     onScanAgain: () -> Unit,
     onDone: () -> Unit,
@@ -865,43 +863,22 @@ private fun TrackSuccessSheet(
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Urma identificata",
+                    text = "Urma: ${displayName(prediction.className)} (estimare, nu lua ca atare)",
                     style = MaterialTheme.typography.headlineMedium,
                     color = TextPrimary,
-                )
-                Text(
-                    text = "${displayName(prediction.className)} · ${confidenceLabel(prediction.confidence)}",
-                    color = TextSecondary,
-                    fontSize = 13.sp,
-                    lineHeight = 18.sp,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
             }
         }
         Spacer(Modifier.height(14.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            StatTile(
-                label = "SCOR",
-                value = "${(prediction.confidence * 100).toInt()}",
-                unit = "%",
-                accent = AccentGreen,
-                modifier = Modifier.weight(1f),
-            )
-            StatTile(
-                label = "SIGURANȚĂ",
-                value = result.band.labelRo,
-                accent = AccentGreen,
-                modifier = Modifier.weight(1f),
-            )
-            StatTile(
-                label = "TIMP",
-                value = result.elapsedMs.toString(),
-                unit = "ms",
-                accent = InfoColor,
-                modifier = Modifier.weight(1f),
-            )
-        }
+        StatTile(
+            label = "SCOR",
+            value = "${(prediction.confidence * 100).toInt()}",
+            unit = "%",
+            accent = AccentGreen,
+            modifier = Modifier.fillMaxWidth(),
+        )
         Spacer(Modifier.height(14.dp))
         SpeciesCard(prediction = prediction)
         Spacer(Modifier.height(16.dp))
@@ -962,7 +939,7 @@ private fun TrackErrorSheet(
             text = message ?: if (result?.topPrediction == null) {
                 "Nu am detectat o urma in imagine. Incearca lumina mai buna si centreaza urma in patrat."
             } else {
-                "Am detectat o posibila urma, dar scorul nu este suficient. Fotografiaza mai aproape, direct de sus."
+                "Nu am putut procesa rezultatul. Fotografiaza mai aproape, direct de sus."
             },
             color = TextSecondary,
             fontSize = 13.sp,

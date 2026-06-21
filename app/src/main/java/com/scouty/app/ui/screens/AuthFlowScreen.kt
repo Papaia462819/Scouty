@@ -198,7 +198,8 @@ fun AuthScreen(
     onClearMessage: () -> Unit,
     onLogin: (String, String) -> Unit,
     onRegister: (String, String) -> Unit,
-    onGoogleSignIn: () -> Unit
+    onGoogleSignIn: () -> Unit,
+    onContinueWithoutAccount: () -> Unit
 ) {
     var mode by rememberSaveable(accountExists) {
         mutableStateOf(if (accountExists) AuthMode.LOGIN else AuthMode.REGISTER)
@@ -221,107 +222,140 @@ fun AuthScreen(
     val onAccent = if (mode == AuthMode.LOGIN) AccentGreenOnSurface else Color(0xFF2A1A05)
 
     ScoutyBackdrop(mode = mode) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 22.dp, vertical = 18.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(24.dp))
-            AuthHero(mode = mode, accent = accent)
-            Spacer(modifier = Modifier.height(22.dp))
-
-            ScoutyCard(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(18.dp),
-                contentPadding = PaddingValues(6.dp)
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding()
+                    .navigationBarsPadding()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 22.dp, vertical = 18.dp)
+                    .padding(bottom = 84.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp)
-                ) {
-                    AuthModeTabs(
-                        mode = mode,
-                        onModeChange = { mode = it }
-                    )
-                    Spacer(Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
+                AuthHero(mode = mode, accent = accent)
+                Spacer(modifier = Modifier.height(22.dp))
 
-                    AnimatedContent(
-                        targetState = mode,
-                        transitionSpec = {
-                            val direction = if (targetState == AuthMode.REGISTER) {
-                                AnimatedContentTransitionScope.SlideDirection.Left
-                            } else {
-                                AnimatedContentTransitionScope.SlideDirection.Right
-                            }
-                            (slideIntoContainer(direction, animationSpec = tween(320, easing = FastOutSlowInEasing)) + fadeIn(tween(200)))
-                                .togetherWith(slideOutOfContainer(direction, animationSpec = tween(320, easing = FastOutSlowInEasing)) + fadeOut(tween(180)))
-                        },
-                        label = "authForm"
-                    ) { formMode ->
-                        AuthFormContent(
-                            mode = formMode,
-                            accountExists = accountExists,
-                            email = email,
-                            password = password,
-                            confirmPassword = confirmPassword,
-                            message = if (isLoading) null else localMessage ?: authMessage,
-                            isLoading = isLoading,
-                            accent = if (formMode == AuthMode.LOGIN) AccentGreen else Warning,
-                            onAccent = if (formMode == AuthMode.LOGIN) AccentGreenOnSurface else Color(0xFF2A1A05),
-                            onEmailChange = {
-                                email = it
-                                localMessage = null
-                                onClearMessage()
-                            },
-                            onPasswordChange = {
-                                password = it
-                                localMessage = null
-                                onClearMessage()
-                            },
-                            onConfirmPasswordChange = {
-                                confirmPassword = it
-                                localMessage = null
-                            },
-                            onSubmit = {
-                                if (isLoading) return@AuthFormContent
-                                localMessage = when {
-                                    email.isBlank() || password.isBlank() -> "Completează emailul și parola."
-                                    formMode == AuthMode.REGISTER && password != confirmPassword ->
-                                        "Parolele trebuie să coincidă înainte de configurarea profilului."
-                                    else -> null
+                ScoutyCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(18.dp),
+                    contentPadding = PaddingValues(6.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp)
+                    ) {
+                        AuthModeTabs(
+                            mode = mode,
+                            onModeChange = { mode = it }
+                        )
+                        Spacer(Modifier.height(16.dp))
+
+                        AnimatedContent(
+                            targetState = mode,
+                            transitionSpec = {
+                                val direction = if (targetState == AuthMode.REGISTER) {
+                                    AnimatedContentTransitionScope.SlideDirection.Left
+                                } else {
+                                    AnimatedContentTransitionScope.SlideDirection.Right
                                 }
-                                if (localMessage == null) {
-                                    if (formMode == AuthMode.LOGIN) {
-                                        onLogin(email, password)
-                                    } else {
-                                        onRegister(email, password)
+                                (slideIntoContainer(direction, animationSpec = tween(320, easing = FastOutSlowInEasing)) + fadeIn(tween(200)))
+                                    .togetherWith(slideOutOfContainer(direction, animationSpec = tween(320, easing = FastOutSlowInEasing)) + fadeOut(tween(180)))
+                            },
+                            label = "authForm"
+                        ) { formMode ->
+                            AuthFormContent(
+                                mode = formMode,
+                                accountExists = accountExists,
+                                email = email,
+                                password = password,
+                                confirmPassword = confirmPassword,
+                                message = if (isLoading) null else localMessage ?: authMessage,
+                                isLoading = isLoading,
+                                accent = if (formMode == AuthMode.LOGIN) AccentGreen else Warning,
+                                onAccent = if (formMode == AuthMode.LOGIN) AccentGreenOnSurface else Color(0xFF2A1A05),
+                                onEmailChange = {
+                                    email = it
+                                    localMessage = null
+                                    onClearMessage()
+                                },
+                                onPasswordChange = {
+                                    password = it
+                                    localMessage = null
+                                    onClearMessage()
+                                },
+                                onConfirmPasswordChange = {
+                                    confirmPassword = it
+                                    localMessage = null
+                                },
+                                onSubmit = {
+                                    if (isLoading) return@AuthFormContent
+                                    localMessage = when {
+                                        email.isBlank() || password.isBlank() -> "Completează emailul și parola."
+                                        formMode == AuthMode.REGISTER && password != confirmPassword ->
+                                            "Parolele trebuie să coincidă înainte de configurarea profilului."
+                                        else -> null
+                                    }
+                                    if (localMessage == null) {
+                                        if (formMode == AuthMode.LOGIN) {
+                                            onLogin(email, password)
+                                        } else {
+                                            onRegister(email, password)
+                                        }
+                                    }
+                                },
+                                onGoogleSignIn = {
+                                    if (!isLoading) {
+                                        onGoogleSignIn()
                                     }
                                 }
-                            },
-                            onGoogleSignIn = {
-                                if (!isLoading) {
-                                    onGoogleSignIn()
-                                }
-                            }
-                        )
+                            )
+                        }
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "v1.0.0",
-                fontSize = 10.sp,
-                color = TextMuted,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 14.dp)
+            AuthGuestAction(
+                enabled = !isLoading,
+                onContinueWithoutAccount = onContinueWithoutAccount,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .navigationBarsPadding()
+                    .padding(horizontal = 22.dp, vertical = 12.dp)
             )
         }
+    }
+}
+
+@Composable
+private fun AuthGuestAction(
+    enabled: Boolean,
+    onContinueWithoutAccount: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Continuă fără cont",
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Medium,
+            color = if (enabled) TextSecondary else TextMuted,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(enabled = enabled, onClick = onContinueWithoutAccount)
+                .padding(vertical = 8.dp)
+        )
+        Text(
+            text = "v1.0.0",
+            fontSize = 10.sp,
+            color = TextMuted,
+            textAlign = TextAlign.Center
+        )
     }
 }
 

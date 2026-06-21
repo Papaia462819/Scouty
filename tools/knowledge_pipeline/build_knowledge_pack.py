@@ -3,8 +3,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sqlite3
 import sys
+import unicodedata
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -400,6 +402,7 @@ def expand_draft_chunks(
             "keywords": _coerce_keywords(draft.get("keywords")),
             "card_family": draft.get("card_family"),
             "priority": int(draft.get("priority", 0)),
+            "user_phrasings": list(draft.get("user_phrasings") or []),
             "metadata_json": metadata_json,
         })
 
@@ -425,6 +428,11 @@ def build_row_query_text(row: dict[str, Any]) -> str:
         str(_metadata_value(row, "lead") or ""),
         str(_metadata_value(row, "seed_topic") or ""),
     ]
+    # Synthetic user phrasings bias the card's query embedding toward how people
+    # actually ask, so base-case "hub" cards win their generic queries.
+    user_phrasings = row.get("user_phrasings") or []
+    if user_phrasings:
+        parts.append(" | ".join(str(phrasing) for phrasing in user_phrasings))
     return normalize_whitespace(" ".join(filter(None, parts)))
 
 
@@ -719,6 +727,17 @@ def initialize_database(path: Path) -> sqlite3.Connection:
     connection.execute(
         "CREATE INDEX idx_phrasing_embeddings_lookup ON phrasing_embeddings(topic, language, normalized_phrase)"
     )
+    # Vocabulary extracted from card text, used by the on-device deterministic
+    # spell corrector (SymSpell). term is diacritic-stripped to match how the app
+    # normalizes search tokens; freq biases corrections toward common words.
+    connection.execute(
+        """
+        CREATE TABLE search_vocabulary (
+            term TEXT PRIMARY KEY,
+            freq INTEGER NOT NULL
+        )
+        """
+    )
     return connection
 
 
@@ -788,6 +807,42 @@ def insert_rows(connection: sqlite3.Connection, rows: list[dict[str, Any]]) -> N
                 row["publisher"],
             ),
         )
+    connection.commit()
+
+
+_VOCAB_NORMALIZE_RE = re.compile(r"[^a-z0-9 ]+")
+
+
+def _normalize_vocab_text(text: str) -> str:
+    decomposed = unicodedata.normalize("NFD", text.lower())
+    stripped = "".join(ch for ch in decomposed if not unicodedata.combining(ch))
+    return _VOCAB_NORMALIZE_RE.sub(" ", stripped)
+
+
+def build_search_vocabulary(rows: list[dict[str, Any]]) -> list[tuple[str, int]]:
+    """Collect a diacritic-stripped word-frequency list from card text.
+
+    Used on-device by the deterministic spell corrector. Terms mirror the app's
+    search normalization so a correction lands on a token that FTS can match.
+    """
+    counts: Counter[str] = Counter()
+    for row in rows:
+        blob = " ".join(
+            str(part) for part in (row.get("title"), row.get("body"), row.get("keywords"), row.get("topic")) if part
+        )
+        for token in _normalize_vocab_text(blob).split():
+            if len(token) >= 3 and not token.isdigit():
+                counts[token] += 1
+    return sorted(counts.items(), key=lambda item: (-item[1], item[0]))
+
+
+def insert_search_vocabulary(connection: sqlite3.Connection, vocabulary: list[tuple[str, int]]) -> None:
+    if not vocabulary:
+        return
+    connection.executemany(
+        "INSERT OR REPLACE INTO search_vocabulary (term, freq) VALUES (?, ?)",
+        vocabulary,
+    )
     connection.commit()
 
 
@@ -941,6 +996,8 @@ def main(argv: list[str] | None = None) -> int:
     connection = initialize_database(db_path)
     insert_rows(connection, all_rows)
     insert_campfire_embeddings(connection, card_embedding_rows, phrasing_embedding_rows)
+    search_vocabulary = build_search_vocabulary(all_rows)
+    insert_search_vocabulary(connection, search_vocabulary)
     metadata = {
         "pack_version": pack_version,
         "generated_at": utc_now_iso(),

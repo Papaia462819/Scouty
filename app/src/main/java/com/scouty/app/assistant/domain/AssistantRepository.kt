@@ -147,7 +147,10 @@ class QueryAnalyzer(
         val preferredLanguage = detectLanguage(query, rawTokens, tokens, context.localeTag)
         val normalizedQuery = normalizeTokenString(query)
         val routeRecommendationQuery = hasRouteRecommendationTokens(normalizedQuery, tokens)
-        val gearQuery = tokens.any { it in GearTokens }
+        // Water-treatment questions mention "apa" (a gear token) but are knowledge-pack
+        // survival queries, not gear/quantity questions — don't let them grab the gear boost.
+        val waterTreatmentQuery = containsAny(normalizedQuery, "filtr", "purific", "potabil", "fierb apa", "tratez apa", "dezinfect")
+        val gearQuery = !waterTreatmentQuery && tokens.any { it in GearTokens }
         // A bare "traseu" mention must not hijack a gear question into route context.
         val routeContextQuery = routeRecommendationQuery ||
             (!gearQuery && tokens.any { it in RouteTokens }) ||
@@ -651,7 +654,10 @@ class QueryAnalyzer(
         private val RouteContextTokens = setOf("cat", "care", "ce", "unde", "from", "to", "trail")
         private val GearTokens = setOf(
             "echipament", "gear", "rucsac", "backpack", "apa", "water", "jacheta",
-            "geaca", "frontala", "headlamp", "kit", "iau"
+            "geaca", "frontala", "headlamp", "kit", "iau",
+            "imbrac", "imbracaminte", "haine", "strat", "straturi", "manusi",
+            "caciula", "sosete", "pantaloni", "bocanci",
+            "mananc", "mancare", "mancat", "manca", "hrana", "calorii", "gustari", "provizii"
         )
         private val WildlifeBreakoutTokens = setOf(
             "urs", "ursi", "bear", "bears", "sarpe", "snake", "lup", "wolf"
@@ -678,11 +684,11 @@ class QueryAnalyzer(
         )
         private val DomainKeywordMap = mapOf(
             "campfire_basics" to setOf("foc", "focul", "campfire", "iasca", "amnar", "bricheta", "chibrit", "jar", "surcele", "vreascuri"),
-            "gear_and_preparation" to setOf("gear", "echipament", "headlamp", "frontala", "water", "apa", "kit", "rucsac", "bocanci", "jacheta"),
+            "gear_and_preparation" to setOf("gear", "echipament", "headlamp", "frontala", "water", "apa", "kit", "rucsac", "bocanci", "jacheta", "imbrac", "imbracaminte", "haine", "strat", "straturi", "manusi", "caciula", "sosete", "pantaloni", "mananc", "mancare", "mancat", "hrana", "calorii", "gustari", "provizii"),
             "wildlife_romania" to setOf("urs", "ursi", "bear", "bears", "snake", "sarpe", "lup", "wolf", "urme", "animal"),
             "weather_and_season" to setOf("weather", "vreme", "meteo", "fulger", "lightning", "avalansa", "avalanche", "ploaie", "vant", "ninsoare"),
             "route_intelligence_romania" to setOf("traseu", "trasee", "ruta", "rute", "route", "routes", "marcaj", "marker", "durata", "distance", "distanta", "refugiu", "cabana", "recomandari", "apropiere"),
-            "survival_basics" to setOf("apa", "water", "purifica", "purify", "adapost", "shelter", "supravietuire"),
+            "survival_basics" to setOf("apa", "water", "purifica", "purify", "filtrez", "filtra", "filtru", "potabil", "fierb", "adapost", "shelter", "supravietuire", "orientez", "orientare", "busola", "navighez", "navigatie", "ratacit", "ratacesc", "pierdut", "pierd"),
             "tips_and_tricks" to setOf("sfat", "truc", "tip", "tips", "trick", "practic", "rapid"),
             "trail_culture_ro" to setOf("cabana", "cultura", "obicei", "refugiu", "salvamont", "eticheta"),
             "motivation_and_morale" to setOf("moral", "motivatie", "frica", "oboseala", "renunt", "continui"),
@@ -1043,10 +1049,14 @@ open class MedicalSafetyPolicy {
         retrievedChunks: List<RetrievedChunk>,
         context: DeviceContextSnapshot? = null
     ): SafetyOutcome {
+        // Escalation must be driven by what the USER describes (and active route
+        // hazards), NOT by the bodies of retrieved cards — otherwise an innocuous
+        // question that happens to retrieve a card mentioning bleeding/unconscious
+        // wrongly prepends the 112/SOS banner (e.g. a campfire follow-up).
+        @Suppress("UNUSED_PARAMETER")
+        val ignoredBodies = retrievedChunks
         val haystack = buildString {
             append(normalize(query))
-            append(' ')
-            append(retrievedChunks.joinToString(" ") { normalize(it.body) })
             context?.trail?.routeSummary?.let { append(' '); append(normalize(it)) }
         }
 
@@ -1617,6 +1627,12 @@ private class DeterministicInteractionEngine {
         if (containsAny(normalized, "cat apa", "cata apa", "am pus apa", "am luat apa", "bifeaza apa")) {
             return false
         }
+        // Purification / treatment questions are knowledge-pack queries, not a GPS
+        // lookup of the nearest mapped source — let them fall through to retrieval
+        // even when they mention "izvor".
+        if (containsAny(normalized, "filt", "purific", "potabil", "fierb", "dezinfect", "pastile", "tablet")) {
+            return false
+        }
         return containsAny(
             normalized,
             "nu mai am apa",
@@ -1625,6 +1641,12 @@ private class DeterministicInteractionEngine {
             "fara apa",
             "unde gasesc apa",
             "unde pot gasi apa",
+            "unde este apa",
+            "unde gasesc o sursa",
+            "fac rost de apa",
+            "rost de apa",
+            "de unde iau apa",
+            "de unde apa",
             "cea mai apropiata sursa",
             "cea mai apropiata apa",
             "sursa de apa",
@@ -2565,6 +2587,7 @@ class AssistantRepository(
         promptBuilder = interpreterPromptBuilder
     ),
     private val interpreterOutputValidator: InterpreterOutputValidator = InterpreterOutputValidator(),
+    private val queryResolver: DeterministicQueryResolver = DeterministicQueryResolver(knowledgeStore),
     private val groundedQueryBuilder: GroundedQueryBuilder = GroundedQueryBuilder(),
     private val groundedWordingEngine: GroundedWordingEngine = OnDeviceGroundedWordingEngine(modelManager),
     private val generationEngine: GenerationEngine = LocalLlmGenerationEngine(
@@ -2631,18 +2654,27 @@ class AssistantRepository(
         val queryAnalysis = queryAnalyzer.analyze(query, context, conversationState)
         val preprocessing = deterministicPreprocessor.preprocess(query, conversationState, queryAnalysis)
         val packStatus = knowledgePackManager.ensureReady()
-        interactionEngine.answer(
-            query = query,
-            context = context,
-            queryAnalysis = queryAnalysis,
-            conversationState = conversationState,
-            packStatus = packStatus,
-            interactionHandler = interactionHandler
-        )?.let { interactionResponse ->
-            return persistAssistantTurn(memorySession, interactionResponse)
+
+        // A short conditional/pronoun follow-up that carries no new subject
+        // ("si daca a plouat" after a fire question) must continue the existing
+        // thread, not get hijacked by the weather/gear/water interaction engine
+        // or trail-weather just because it mentions a condition word.
+        val isContextualFollowUp = queryResolver.resolve(query, conversationState, preprocessing).wasFollowUp
+
+        if (!isContextualFollowUp) {
+            interactionEngine.answer(
+                query = query,
+                context = context,
+                queryAnalysis = queryAnalysis,
+                conversationState = conversationState,
+                packStatus = packStatus,
+                interactionHandler = interactionHandler
+            )?.let { interactionResponse ->
+                return persistAssistantTurn(memorySession, interactionResponse)
+            }
         }
 
-        val response = if (queryAnalysis.trailContextIntent != TrailContextIntent.NONE) {
+        val response = if (!isContextualFollowUp && queryAnalysis.trailContextIntent != TrailContextIntent.NONE) {
             val trailResult = trailContextEngine.answer(
                 query = query,
                 context = context,
@@ -3099,15 +3131,26 @@ class AssistantRepository(
             )
         }
 
+        // Deterministic, offline query resolution: typo correction (SymSpell) plus
+        // follow-up concatenation for elliptical/pronoun fragments. Output feeds
+        // retrieval only; the user-facing answer is still a real card.
+        val resolved = queryResolver.resolve(query, conversationState, preprocessing)
+        val retrievalQuery = resolved.query.ifBlank { query }
+        val retrievalAnalysis = if (retrievalQuery != query) {
+            queryAnalyzer.analyze(retrievalQuery, context, conversationState)
+        } else {
+            initialAnalysis
+        }
+
         val initialRetrieved = retrievalEngine.retrieve(
-            query = query,
+            query = retrievalQuery,
             context = context,
-            queryAnalysis = initialAnalysis,
+            queryAnalysis = retrievalAnalysis,
             limit = 4
         )
         val initialAssessment = retrievalConfidencePolicy.assessStandard(
-            query = query,
-            queryAnalysis = initialAnalysis,
+            query = retrievalQuery,
+            queryAnalysis = retrievalAnalysis,
             conversationState = conversationState,
             retrieved = initialRetrieved,
             preprocessing = preprocessing
@@ -3140,7 +3183,7 @@ class AssistantRepository(
             conversationState = conversationState
         )
 
-        var finalAnalysis = toolResult?.queryAnalysis ?: initialAnalysis
+        var finalAnalysis = toolResult?.queryAnalysis ?: retrievalAnalysis
         var finalRetrieved = toolResult?.retrievedChunks?.takeIf { it.isNotEmpty() } ?: initialRetrieved
         var finalAssessment = toolResult?.retrievalConfidence ?: initialAssessment
         var acceptedInterpretation: ValidatedInterpretation? = null
@@ -3235,7 +3278,8 @@ class AssistantRepository(
                 originalQuery = query,
                 analysis = finalAnalysis,
                 retrieved = finalRetrieved,
-                acceptedInterpretation = acceptedInterpretation
+                acceptedInterpretation = acceptedInterpretation,
+                resolvedStandaloneQuery = retrievalQuery
             ),
             modelVersion = structuredOutput.modelVersion ?: finalModelStatus.modelVersion.takeIf {
                 finalModelStatus.availableOnDisk || finalModelStatus.state != ModelRuntimeState.MISSING
@@ -3645,13 +3689,16 @@ class AssistantRepository(
         originalQuery: String,
         analysis: QueryAnalysis,
         retrieved: List<RetrievedChunk>,
-        acceptedInterpretation: ValidatedInterpretation?
+        acceptedInterpretation: ValidatedInterpretation?,
+        resolvedStandaloneQuery: String? = null
     ): AssistantConversationState {
         val primary = retrieved.firstOrNull()
         return AssistantConversationState(
             activeTopic = null,
             lastUserMessage = originalQuery,
-            lastStandaloneQuery = acceptedInterpretation?.standaloneQuery ?: originalQuery,
+            lastStandaloneQuery = acceptedInterpretation?.standaloneQuery
+                ?: resolvedStandaloneQuery?.takeIf { it.isNotBlank() }
+                ?: originalQuery,
             lastRetrievedChunkId = primary?.chunkId,
             lastRetrievedTopic = primary?.topic ?: previousState.lastRetrievedTopic,
             lastRetrievedTitle = primary?.sectionTitle ?: previousState.lastRetrievedTitle,

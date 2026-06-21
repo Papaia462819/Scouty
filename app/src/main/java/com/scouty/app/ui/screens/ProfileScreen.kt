@@ -107,6 +107,7 @@ import kotlin.math.roundToInt
 fun ProfileScreen(
     contentPadding: PaddingValues,
     profile: UserProfile,
+    isGuest: Boolean = false,
     status: HomeStatus,
     onEditProfile: () -> Unit,
     onSignOut: () -> Unit
@@ -326,7 +327,7 @@ fun ProfileScreen(
                 modifier = Modifier.weight(1f),
             )
             DangerButton(
-                text = "Deconectare",
+                text = if (isGuest) "Ieși" else "Deconectare",
                 onClick = onSignOut,
                 modifier = Modifier.weight(1f),
             )
