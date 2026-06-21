@@ -32,6 +32,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.UUID
 
+/**
+ * Temporary kill-switch for the on-device Qwen generation/interpretation path.
+ *
+ * While we rebuild the knowledge pack around base-case "hub" cards, the local
+ * model produces low-quality Romanian and is not used for answering. Retrieval,
+ * rerank, the structured tile fallback and all deterministic app-context paths
+ * (weather API, gear inspection, trail context) are unaffected. Flip back to
+ * `true` to re-enable Qwen once the knowledge-pack work lands.
+ */
+private const val LOCAL_MODEL_GENERATION_ENABLED = false
+
 class AssistantViewModel(
     private val repository: AssistantRepository,
     private val deviceContextProvider: DeviceContextProvider,
@@ -152,7 +163,8 @@ class AssistantViewModel(
                     context = deviceContextProvider.deviceContext.value,
                     conversationState = conversationState,
                     interactionHandler = chatActionHandler,
-                    allowLocalModel = _uiState.value.offlineChat.canUseLocalModel
+                    allowLocalModel = LOCAL_MODEL_GENERATION_ENABLED &&
+                        _uiState.value.offlineChat.canUseLocalModel
                 ).collect { event ->
                     when (event) {
                         is AssistantAnswerEvent.DraftVisible -> {

@@ -6,7 +6,7 @@
     <string name="nav_map">Hartă</string>
     <string name="nav_chat">Asistent</string>
     <string name="nav_sos">SOS</string>
-    <string name="nav_gear">Echipament</string>
+    <string name="nav_gear">Echip.</string>
     <string name="nav_profile">Profil</string>
 
     <string name="header_status">Asistent montan pregătit pentru mers fără internet</string>

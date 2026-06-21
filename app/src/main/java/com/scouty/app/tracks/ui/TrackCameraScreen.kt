@@ -2,6 +2,9 @@ package com.scouty.app.tracks.ui
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -91,12 +94,8 @@ import com.composables.icons.lucide.ChevronLeft
 import com.composables.icons.lucide.ImagePlus
 import com.composables.icons.lucide.Info
 import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.RefreshCcw
 import com.composables.icons.lucide.SearchX
-import com.composables.icons.lucide.Settings
-import com.composables.icons.lucide.Sun
 import com.composables.icons.lucide.TriangleAlert
-import com.composables.icons.lucide.Zap
 import com.scouty.app.tracks.data.TrackSafetyLevel
 import com.scouty.app.tracks.data.TrackSpeciesCatalog
 import com.scouty.app.tracks.domain.TrackConfidenceBand
@@ -146,8 +145,6 @@ fun TrackCameraScreen(
     var error by remember { mutableStateOf<String?>(null) }
     var analyzing by remember { mutableStateOf(false) }
     var showInfo by remember { mutableStateOf(false) }
-    var autoFocusEnabled by remember { mutableStateOf(true) }
-    var flashEnabled by remember { mutableStateOf(false) }
 
     val topPrediction = result?.topPrediction
     val hasDetection = result?.let { it.band != TrackConfidenceBand.INCERT && topPrediction != null } == true
@@ -164,33 +161,59 @@ fun TrackCameraScreen(
         error = null
     }
 
+    fun analyzeImageFile(file: File) {
+        analyzing = true
+        error = null
+        result = null
+        scope.launch {
+            runCatching {
+                withContext(Dispatchers.Default) {
+                    useCase.identify(file)
+                }
+            }.onSuccess {
+                result = it
+            }.onFailure {
+                error = it.message ?: "Analiza a esuat."
+            }
+            analyzing = false
+        }
+    }
+
+    fun analyzeGalleryImage(uri: Uri) {
+        analyzing = true
+        error = null
+        result = null
+        scope.launch {
+            runCatching {
+                val file = withContext(Dispatchers.IO) {
+                    copyGalleryImageToCache(context, uri)
+                }
+                withContext(Dispatchers.Default) {
+                    useCase.identify(file)
+                }
+            }.onSuccess {
+                result = it
+            }.onFailure {
+                error = it.message ?: "Nu am putut analiza imaginea selectata."
+            }
+            analyzing = false
+        }
+    }
+
+    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let(::analyzeGalleryImage)
+    }
+
     fun captureCurrentFrame() {
         val capture = imageCapture ?: return
         analyzing = true
         error = null
         result = null
-        capture.flashMode = if (flashEnabled) {
-            ImageCapture.FLASH_MODE_ON
-        } else {
-            ImageCapture.FLASH_MODE_OFF
-        }
+        capture.flashMode = ImageCapture.FLASH_MODE_OFF
         captureTrackImage(
             context = context,
             imageCapture = capture,
-            onSaved = { file ->
-                scope.launch {
-                    runCatching {
-                        withContext(Dispatchers.Default) {
-                            useCase.identify(file)
-                        }
-                    }.onSuccess {
-                        result = it
-                    }.onFailure {
-                        error = it.message ?: "Analiza a esuat."
-                    }
-                    analyzing = false
-                }
-            },
+            onSaved = ::analyzeImageFile,
             onError = {
                 error = it
                 analyzing = false
@@ -239,22 +262,12 @@ fun TrackCameraScreen(
                 .padding(top = 4.dp, start = 14.dp, end = 14.dp),
         )
 
-        CameraControlStrip(
-            autoFocusEnabled = autoFocusEnabled,
-            flashEnabled = flashEnabled,
-            onAutoFocusToggle = { autoFocusEnabled = !autoFocusEnabled },
-            onFlashToggle = { flashEnabled = !flashEnabled },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = contentPadding.calculateBottomPadding() + 154.dp),
-        )
-
         BottomCaptureControls(
             captureEnabled = !analyzing && imageCapture != null,
+            galleryEnabled = !analyzing,
             processing = analyzing,
-            resetEnabled = result != null || error != null,
             onCapture = ::captureCurrentFrame,
-            onReset = ::resetScan,
+            onGallery = { galleryLauncher.launch("image/*") },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = contentPadding.calculateBottomPadding() + 28.dp),
@@ -647,72 +660,12 @@ private fun ScannerHint(
 }
 
 @Composable
-private fun CameraControlStrip(
-    autoFocusEnabled: Boolean,
-    flashEnabled: Boolean,
-    onAutoFocusToggle: () -> Unit,
-    onFlashToggle: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        ScannerToggleChip(
-            icon = Lucide.Settings,
-            label = "Focalizare auto",
-            selected = autoFocusEnabled,
-            onClick = onAutoFocusToggle,
-        )
-        ScannerToggleChip(
-            icon = if (flashEnabled) Lucide.Zap else Lucide.Sun,
-            label = if (flashEnabled) "Bliț pornit" else "Bliț oprit",
-            selected = flashEnabled,
-            onClick = onFlashToggle,
-        )
-    }
-}
-
-@Composable
-private fun ScannerToggleChip(
-    icon: ImageVector,
-    label: String,
-    selected: Boolean,
-    onClick: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
-            .background(Color.Black.copy(alpha = 0.6f))
-            .border(0.5.dp, ScannerWhite.copy(alpha = 0.08f), RoundedCornerShape(10.dp))
-            .clickable(onClick = onClick)
-            .padding(horizontal = 12.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = if (selected) AccentGreen else ScannerWhite.copy(alpha = 0.5f),
-            modifier = Modifier.size(13.dp),
-        )
-        Spacer(Modifier.width(7.dp))
-        Text(
-            text = label,
-            color = ScannerWhite.copy(alpha = 0.86f),
-            fontSize = 10.sp,
-            lineHeight = 12.sp,
-        )
-    }
-}
-
-@Composable
 private fun BottomCaptureControls(
     captureEnabled: Boolean,
+    galleryEnabled: Boolean,
     processing: Boolean,
-    resetEnabled: Boolean,
     onCapture: () -> Unit,
-    onReset: () -> Unit,
+    onGallery: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -723,21 +676,14 @@ private fun BottomCaptureControls(
         ScannerIconAction(
             icon = Lucide.ImagePlus,
             label = "Galerie",
-            enabled = false,
-            onClick = {},
+            enabled = galleryEnabled,
+            onClick = onGallery,
         )
         Spacer(Modifier.width(24.dp))
         CaptureButton(
             enabled = captureEnabled,
             processing = processing,
             onClick = onCapture,
-        )
-        Spacer(Modifier.width(24.dp))
-        ScannerIconAction(
-            icon = Lucide.RefreshCcw,
-            label = "Resetează",
-            enabled = resetEnabled,
-            onClick = onReset,
         )
     }
 }
@@ -1285,4 +1231,16 @@ private fun captureTrackImage(
             }
         },
     )
+}
+
+private fun copyGalleryImageToCache(context: Context, uri: Uri): File {
+    val file = File.createTempFile("track_gallery_", ".jpg", context.cacheDir)
+    val input = context.contentResolver.openInputStream(uri)
+        ?: error("Nu am putut citi imaginea selectata.")
+    input.use { source ->
+        file.outputStream().use { target ->
+            source.copyTo(target)
+        }
+    }
+    return file
 }

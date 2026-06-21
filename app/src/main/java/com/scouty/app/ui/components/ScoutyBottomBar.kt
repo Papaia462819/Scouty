@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.scouty.app.ui.theme.AccentGreen
@@ -113,15 +114,17 @@ private fun BottomBarTab(
             imageVector = item.icon,
             contentDescription = item.label,
             tint = iconColor,
-            modifier = Modifier.size(18.dp),
+            modifier = Modifier.size(17.dp),
         )
-        Spacer(Modifier.height(4.dp))
+        Spacer(Modifier.height(3.dp))
         Text(
             text = item.label,
             color = labelColor,
-            fontSize = 10.sp,
+            fontSize = 9.sp,
             fontWeight = if (selected) FontWeight.Medium else FontWeight.Normal,
-            letterSpacing = 0.2.sp,
+            letterSpacing = 0.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

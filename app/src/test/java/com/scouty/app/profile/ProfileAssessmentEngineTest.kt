@@ -66,7 +66,36 @@ class ProfileAssessmentEngineTest {
         )
 
         assertEquals(ScoutyLevel.LEVEL_3, result.starterLevel)
-        assertEquals("Trail Explorer", result.starterLevel.title)
+        assertEquals("Explorator de poteci", result.starterLevel.title)
         assertTrue(result.score >= 70)
+    }
+
+    @Test
+    fun newProfileStartsWithEmptyTrailStats() {
+        val profile = ProfileAssessmentEngine.buildProfile(
+            email = "test@example.com",
+            draft = OnboardingDraft(
+                displayName = "Test",
+                avatarId = "summit",
+                homeRegion = "Banat",
+                answers = mapOf(
+                    "hike_frequency" to "constant",
+                    "max_distance" to "20_plus",
+                    "physical_condition" to "endurance",
+                    "navigation" to "independent",
+                    "terrain" to "ridge",
+                    "conditions" to "winter",
+                    "gear_setup" to "locked_in",
+                    "hike_style" to "adventure",
+                    "age_range" to "18_24",
+                    "first_aid" to "confident"
+                )
+            ),
+            createdAtEpochMillis = 1_700_000_000_000L
+        )
+
+        assertEquals(0, profile.completedHikes)
+        assertEquals(0.0, profile.totalDistanceKm, 0.0)
+        assertEquals(0, profile.totalElevationGainM)
     }
 }

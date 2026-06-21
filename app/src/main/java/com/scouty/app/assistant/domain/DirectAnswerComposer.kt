@@ -30,6 +30,8 @@ class DirectAnswerComposer(
             ?: primary?.synthesizedAnswer?.let(::sanitizeParagraph)?.takeIf { it.isNotBlank() }
             ?: primary?.body?.let { sanitizeParagraph(it, 280) }
             ?: "Răspuns prudent pe baza informațiilor locale disponibile."
+        val hasPolishedAnswer = sanitizeParagraph(polishedText).isNotBlank()
+        val usePolishedOnly = generationMode == GenerationMode.LOCAL_LLM && hasPolishedAnswer
 
         val sections = mutableListOf<StructuredResponseSection>()
         primary?.safetyNote
@@ -43,35 +45,37 @@ class DirectAnswerComposer(
                 )
             }
 
-        primary
-            ?.groundingCandidates(preferBody = false)
-            ?.map { sanitizeParagraph(it, 320) }
-            ?.firstOrNull { it.isNotBlank() && !isRedundantWithSummary(summary, it) }
-            ?.let { body ->
-                sections += StructuredResponseSection(
-                    title = "Baza locală",
-                    body = stripLeadingDuplicate(summary, body),
-                    style = ResponseSectionStyle.GUIDANCE
-                )
-            }
+        if (!usePolishedOnly) {
+            primary
+                ?.groundingCandidates(preferBody = false)
+                ?.map { sanitizeParagraph(it, 320) }
+                ?.firstOrNull { it.isNotBlank() && !isRedundantWithSummary(summary, it) }
+                ?.let { body ->
+                    sections += StructuredResponseSection(
+                        title = "Baza locală",
+                        body = stripLeadingDuplicate(summary, body),
+                        style = ResponseSectionStyle.GUIDANCE
+                    )
+                }
 
-        input.retrievedChunks
-            .drop(1)
-            .firstOrNull { chunk ->
-                primary == null || (chunk.domain == primary.domain && chunk.language == primary.language)
-            }
-            ?.synthesizedAnswerOrBody()
-            ?.let { sanitizeParagraph(it, 220) }
-            ?.takeIf { it.isNotBlank() && !containsNormalized(summary, it) }
-            ?.let { detail ->
-                sections += StructuredResponseSection(
-                    title = if (isRomanian) "Detalii utile" else "Useful detail",
-                    body = detail,
-                    style = ResponseSectionStyle.CONTEXT
-                )
-            }
+            input.retrievedChunks
+                .drop(1)
+                .firstOrNull { chunk ->
+                    primary == null || (chunk.domain == primary.domain && chunk.language == primary.language)
+                }
+                ?.synthesizedAnswerOrBody()
+                ?.let { sanitizeParagraph(it, 220) }
+                ?.takeIf { it.isNotBlank() && !containsNormalized(summary, it) }
+                ?.let { detail ->
+                    sections += StructuredResponseSection(
+                        title = if (isRomanian) "Detalii utile" else "Useful detail",
+                        body = detail,
+                        style = ResponseSectionStyle.CONTEXT
+                    )
+                }
+        }
 
-        if (sections.isEmpty()) {
+        if (sections.isEmpty() && !usePolishedOnly) {
             sections += StructuredResponseSection(
                 title = "Baza locală",
                 body = summary,
@@ -186,12 +190,23 @@ class DirectAnswerComposer(
                     )
                 }
         }
+        if (sections.isEmpty()) {
+            sections += StructuredResponseSection(
+                title = if (isRomanian) "Baza locală" else "Local card",
+                body = summary,
+                style = ResponseSectionStyle.GUIDANCE
+            )
+        }
 
         return StructuredAssistantOutput(
             summary = summary,
             sections = sections.take(4),
             generationMode = generationMode,
             reasoningType = input.queryAnalysis.reasoningType,
+            // Base-case "hub" cards carry standalone refinement questions in their
+            // metadata. Surfacing them here turns into tappable follow-up chips that
+            // re-query into the specific scenario card — deterministic routing, no LLM.
+            followUpQuestions = metadata?.followUpQuestionStrings().orEmpty(),
             resolvedTopic = primary?.topic ?: input.queryAnalysis.resolvedTopic,
             resolvedFamily = primary?.cardFamily ?: input.queryAnalysis.targetFamily,
             modelVersion = modelStatus.modelVersion.takeIf {
@@ -200,6 +215,26 @@ class DirectAnswerComposer(
             knowledgePackVersion = input.knowledgePackStatus.packVersion ?: primary?.packVersion
         )
     }
+
+    /**
+     * Extracts the hub card's refinement questions from `metadata_json`. Accepts
+     * both the object form (`[{"question": "..."}]`, matching the campfire/build
+     * convention) and a plain string array.
+     */
+    private fun JsonObject.followUpQuestionStrings(): List<String> =
+        (this["follow_up_questions"] as? JsonArray)
+            ?.mapNotNull { element ->
+                when (element) {
+                    is JsonPrimitive -> element.contentOrNull
+                    is JsonObject -> (element["question"] as? JsonPrimitive)?.contentOrNull
+                    else -> null
+                }
+            }
+            ?.map { it.trim() }
+            ?.filter { it.isNotBlank() }
+            ?.distinct()
+            ?.take(4)
+            .orEmpty()
 
     private fun RetrievedChunk.synthesizedAnswerOrBody(): String =
         synthesizedAnswer?.takeIf { it.isNotBlank() } ?: body

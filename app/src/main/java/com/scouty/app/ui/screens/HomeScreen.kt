@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +32,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -654,10 +654,12 @@ private fun QuickSosActionTile(
     val shape = RoundedCornerShape(14.dp)
     var holdProgress by remember { mutableFloatStateOf(0f) }
     var activationToken by remember { mutableLongStateOf(0L) }
+    val currentOnActivated by rememberUpdatedState(onActivated)
 
     LaunchedEffect(activationToken) {
         if (activationToken > 0) {
             holdProgress = 1f
+            currentOnActivated()
             delay(180)
             holdProgress = 0f
         }
@@ -695,11 +697,12 @@ private fun QuickSosActionTile(
                     )
                 }
             }
-            .pointerInput(holdSeconds, onActivated) {
+            .pointerInput(holdSeconds) {
                 coroutineScope {
                     val gestureScope = this
                     awaitEachGesture {
-                        awaitFirstDown(requireUnconsumed = false)
+                        val down = awaitFirstDown(requireUnconsumed = false)
+                        down.consume()
                         var activated = false
                         val start = SystemClock.elapsedRealtime()
                         val duration = holdSeconds * 1000L
@@ -710,16 +713,28 @@ private fun QuickSosActionTile(
                                 if (elapsed >= duration) {
                                     activated = true
                                     activationToken = SystemClock.elapsedRealtime()
-                                    onActivated()
                                     break
                                 }
                                 delay(16)
                             }
                         }
-                        waitForUpOrCancellation()
-                        holdJob.cancel()
-                        if (!activated) {
-                            holdProgress = 0f
+                        try {
+                            while (true) {
+                                val event = awaitPointerEvent()
+                                event.changes.forEach { change ->
+                                    if (change.pressed) {
+                                        change.consume()
+                                    }
+                                }
+                                if (event.changes.none { it.pressed }) {
+                                    break
+                                }
+                            }
+                        } finally {
+                            holdJob.cancel()
+                            if (!activated) {
+                                holdProgress = 0f
+                            }
                         }
                     }
                 }

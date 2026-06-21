@@ -218,3 +218,4 @@
 {"query": "mâncarea schimbă moralul", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "food morale"}
 {"query": "dimineață mohorâtă în cort", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "morning grumpy"}
 {"query": "cântec interior pentru ritm", "expected_domain": "motivation_and_morale", "expected_tier": "B", "notes": "song pace"}
+{"query": "cum fac focul", "expected_domain": "campfire_basics", "expected_tier": "B", "notes": "generic base-case -> fire_basics_hub umbrella card"}

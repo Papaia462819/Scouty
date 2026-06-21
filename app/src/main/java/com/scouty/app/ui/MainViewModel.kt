@@ -98,6 +98,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
 
     private companion object {
         const val TrailStartDepartureKm = 0.12
+        const val TrailProgressSnapToleranceKm = 0.25
         const val TrailAutoCompleteMinElapsedMs = 90_000L
         const val ActiveTrailProgressPersistIntervalMs = 30_000L
         const val ForecastHorizonDays = 14L
@@ -856,25 +857,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             totalDistanceKm = activeTrail.distanceKm
         ) ?: return
 
-        val hasLeftStartZone = activeTrail.hasLeftStartZone || progress.distanceToStartKm >= TrailStartDepartureKm
-        val stabilizedProgressFraction = if (hasLeftStartZone) {
-            max(activeTrail.progress, progress.progressFraction)
-        } else {
-            0f
+        val isNearRoute = progress.distanceToTrailKm <= TrailProgressSnapToleranceKm
+        val hasLeftStartZone = activeTrail.hasLeftStartZone ||
+            (isNearRoute && progress.distanceToStartKm >= TrailStartDepartureKm)
+        val stabilizedProgressFraction = when {
+            !isNearRoute -> activeTrail.progress
+            hasLeftStartZone -> max(activeTrail.progress, progress.progressFraction)
+            else -> 0f
         }
-        val stabilizedCompletedKm = if (hasLeftStartZone) {
-            max(activeTrail.distanceCompletedKm, progress.distanceCompletedKm)
-        } else {
-            0.0
+        val stabilizedCompletedKm = when {
+            !isNearRoute -> activeTrail.distanceCompletedKm
+            hasLeftStartZone -> max(activeTrail.distanceCompletedKm, progress.distanceCompletedKm)
+            else -> 0.0
         }
         val stabilizedRemainingKm = (activeTrail.distanceKm - stabilizedCompletedKm).coerceAtLeast(0.0)
-        val stabilizedRemainingSegments = if (hasLeftStartZone) {
-            trimRouteSegments(
-                originalSegments = activeTrail.routeSegments,
-                routeDistanceKm = stabilizedCompletedKm
-            )
-        } else {
-            activeTrail.routeSegments
+        val stabilizedRemainingSegments = when {
+            !isNearRoute -> activeTrail.remainingRouteSegments.ifEmpty { activeTrail.routeSegments }
+            hasLeftStartZone -> {
+                trimRouteSegments(
+                    originalSegments = activeTrail.routeSegments,
+                    routeDistanceKm = stabilizedCompletedKm
+                )
+            }
+            else -> activeTrail.routeSegments
         }
 
         var updatedTrail: ActiveTrail? = null

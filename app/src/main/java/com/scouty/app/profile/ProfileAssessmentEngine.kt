@@ -171,7 +171,6 @@ object ProfileAssessmentEngine {
     ): UserProfile {
         val result = evaluate(draft.answers)
         val now = createdAtEpochMillis
-        val estimatedTrailStats = estimateTrailStats(draft.answers)
         val level = previousProfile?.let(ProfileProgressionEngine::currentLevel) ?: result.starterLevel
         return UserProfile(
             email = email,
@@ -182,9 +181,9 @@ object ProfileAssessmentEngine {
             levelTitle = level.title,
             onboardingScore = previousProfile?.onboardingScore ?: result.score,
             experiencePoints = previousProfile?.experiencePoints ?: ProfileProgressionEngine.starterExperience(result.score),
-            completedHikes = previousProfile?.completedHikes ?: estimatedTrailStats.completedHikes,
-            totalDistanceKm = previousProfile?.totalDistanceKm ?: estimatedTrailStats.totalDistanceKm,
-            totalElevationGainM = previousProfile?.totalElevationGainM ?: estimatedTrailStats.totalElevationGainM,
+            completedHikes = previousProfile?.completedHikes ?: 0,
+            totalDistanceKm = previousProfile?.totalDistanceKm ?: 0.0,
+            totalElevationGainM = previousProfile?.totalElevationGainM ?: 0,
             trailHistory = previousProfile?.trailHistory ?: emptyList(),
             unlockedAchievements = previousProfile?.unlockedAchievements ?: emptyList(),
             createdAtEpochMillis = previousProfile?.createdAtEpochMillis ?: now,

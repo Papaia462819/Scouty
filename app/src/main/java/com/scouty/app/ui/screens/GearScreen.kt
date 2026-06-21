@@ -88,12 +88,20 @@ fun GearScreen(
     val missingMandatoryCount = gearList.count {
         it.necessity == GearNecessity.MANDATORY && !it.isPacked
     }
-    val categories = gearList.map { it.category }.distinct()
-    val listKey = gearList.joinToString("|") { "${it.id}:${it.isPacked}" }
-    val expandedState = remember(status.activeTrail?.name, status.activeTrail?.difficulty, listKey) {
+    val activeFilter = remember { mutableStateOf("Toate") }
+    val filteredGearList = remember(gearList, activeFilter.value) {
+        when (activeFilter.value) {
+            "Obligatorii" -> gearList.filter { it.necessity == GearNecessity.MANDATORY }
+            "Lipsă" -> gearList.filter { !it.isPacked }
+            else -> gearList
+        }
+    }
+    val categories = filteredGearList.map { it.category }.distinct()
+    val listKey = filteredGearList.joinToString("|") { "${it.id}:${it.isPacked}" }
+    val expandedState = remember(status.activeTrail?.name, status.activeTrail?.difficulty, activeFilter.value, listKey) {
         mutableStateMapOf<String, Boolean>().apply {
             categories.forEachIndexed { index, category ->
-                val hasMissingMandatory = gearList.any {
+                val hasMissingMandatory = filteredGearList.any {
                     it.category == category &&
                         it.necessity == GearNecessity.MANDATORY &&
                         !it.isPacked
@@ -102,7 +110,6 @@ fun GearScreen(
             }
         }
     }
-    val activeFilter = remember { mutableStateOf("Toate") }
 
     Column(
         modifier = Modifier
@@ -127,29 +134,33 @@ fun GearScreen(
             )
             GearFilterChips(active = activeFilter.value, onSelect = { activeFilter.value = it })
 
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                categories.forEach { category ->
-                    val itemsInCategory = gearList.filter { it.category == category }
-                    val packedInCategory = itemsInCategory.count { it.isPacked }
-                    val totalInCategory = itemsInCategory.size
-                    val missingMandatoryInCategory = itemsInCategory.count {
-                        it.necessity == GearNecessity.MANDATORY && !it.isPacked
-                    }
-                    val isExpanded = expandedState[category] == true
+            if (filteredGearList.isEmpty()) {
+                GearEmptyFilterState(activeFilter.value)
+            } else {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    categories.forEach { category ->
+                        val itemsInCategory = filteredGearList.filter { it.category == category }
+                        val packedInCategory = itemsInCategory.count { it.isPacked }
+                        val totalInCategory = itemsInCategory.size
+                        val missingMandatoryInCategory = itemsInCategory.count {
+                            it.necessity == GearNecessity.MANDATORY && !it.isPacked
+                        }
+                        val isExpanded = expandedState[category] == true
 
-                    GearCategoryCard(
-                        title = category,
-                        icon = categoryIcon(category),
-                        accentColor = categoryAccentColor(category),
-                        status = "$packedInCategory / $totalInCategory pregătite",
-                        countLeft = totalInCategory - packedInCategory,
-                        hasMissingMandatory = missingMandatoryInCategory > 0,
-                        completed = packedInCategory == totalInCategory,
-                        expanded = isExpanded,
-                        onToggle = { expandedState[category] = !isExpanded },
-                    ) {
-                        itemsInCategory.forEach { item ->
-                            GearItemRow(item = item, onToggle = { onToggleItem(item.id) })
+                        GearCategoryCard(
+                            title = category,
+                            icon = categoryIcon(category),
+                            accentColor = categoryAccentColor(category),
+                            status = "$packedInCategory / $totalInCategory pregătite",
+                            countLeft = totalInCategory - packedInCategory,
+                            hasMissingMandatory = missingMandatoryInCategory > 0,
+                            completed = packedInCategory == totalInCategory,
+                            expanded = isExpanded,
+                            onToggle = { expandedState[category] = !isExpanded },
+                        ) {
+                            itemsInCategory.forEach { item ->
+                                GearItemRow(item = item, onToggle = { onToggleItem(item.id) })
+                            }
                         }
                     }
                 }
@@ -157,6 +168,21 @@ fun GearScreen(
         }
 
         Spacer(Modifier.height(20.dp))
+    }
+}
+
+@Composable
+private fun GearEmptyFilterState(activeFilter: String) {
+    ScoutyCard(modifier = Modifier.fillMaxWidth(), semantic = AccentGreen) {
+        Text(
+            text = when (activeFilter) {
+                "Obligatorii" -> "Nu sunt elemente obligatorii pentru filtrul curent."
+                "Lipsă" -> "Nu ai elemente lipsă în listă."
+                else -> "Lista este goală."
+            },
+            style = MaterialTheme.typography.bodyMedium,
+            color = TextSecondary,
+        )
     }
 }
 

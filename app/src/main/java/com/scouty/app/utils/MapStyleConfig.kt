@@ -232,7 +232,7 @@ object MapStyleConfig {
                     fillColor(Color.parseColor("#cfe4b6")),
                     fillOpacity(0.6f)
                 )
-                setMinZoom(6f)
+                setMinZoom(5f)
             }
         )
 
@@ -256,7 +256,7 @@ object MapStyleConfig {
                     lineOpacity(0.9f),
                     lineWidth(1.4f)
                 )
-                setMinZoom(7f)
+                setMinZoom(5.5f)
             }
         )
 
@@ -281,7 +281,7 @@ object MapStyleConfig {
                         textHaloColor(Color.parseColor("#eef7fd")),
                         textHaloWidth(1f)
                     )
-                    setMinZoom(7f)
+                    setMinZoom(5.8f)
                 }
             )
             addIfMissing(
@@ -305,7 +305,7 @@ object MapStyleConfig {
                         textHaloWidth(1f),
                         symbolPlacement(Property.SYMBOL_PLACEMENT_LINE)
                     )
-                    setMinZoom(8f)
+                    setMinZoom(6.5f)
                 }
             )
         }
@@ -343,7 +343,7 @@ object MapStyleConfig {
                     lineOpacity(0.55f),
                     lineWidth(1.2f)
                 )
-                setMinZoom(6f)
+                setMinZoom(5f)
             }
         )
 
@@ -357,6 +357,7 @@ object MapStyleConfig {
                         interpolate(
                             exponential(1.18f),
                             zoom(),
+                            stop(7, 0.62f),
                             stop(9.7, 0.7f),
                             stop(12, 0.9f),
                             stop(14, 1.06f)
@@ -365,7 +366,7 @@ object MapStyleConfig {
                     iconAllowOverlap(true),
                     iconIgnorePlacement(true)
                 )
-                setMinZoom(9.5f)
+                setMinZoom(7f)
             }
         )
 
@@ -381,6 +382,7 @@ object MapStyleConfig {
                             interpolate(
                                 exponential(1.15f),
                                 zoom(),
+                                stop(7.8, 8.8f),
                                 stop(10.7, 9.3f),
                                 stop(13, 10.7f),
                                 stop(15, 11.9f)
@@ -394,7 +396,7 @@ object MapStyleConfig {
                         textAllowOverlap(true),
                         textIgnorePlacement(true)
                     )
-                    setMinZoom(10.7f)
+                    setMinZoom(7.8f)
                 }
             )
 
@@ -409,6 +411,7 @@ object MapStyleConfig {
                             interpolate(
                                 exponential(1.1f),
                                 zoom(),
+                                stop(5.5, 8.8f),
                                 stop(7, 9.2f),
                                 stop(10, 10.6f),
                                 stop(13, 12f)
@@ -418,7 +421,7 @@ object MapStyleConfig {
                         textHaloColor(Color.parseColor("#eef1e6")),
                         textHaloWidth(1f)
                     )
-                    setMinZoom(6.7f)
+                    setMinZoom(5.5f)
                 }
             )
         }
@@ -438,6 +441,7 @@ object MapStyleConfig {
                         interpolate(
                             exponential(1.15f),
                             zoom(),
+                            stop(5.5, 0.8f),
                             stop(7, 1.1f),
                             stop(10, 2.1f),
                             stop(13, 3.1f),
@@ -445,7 +449,7 @@ object MapStyleConfig {
                         )
                     )
                 )
-                setMinZoom(7f)
+                setMinZoom(5.5f)
             }
         )
 
@@ -506,6 +510,7 @@ object MapStyleConfig {
                         interpolate(
                             exponential(1.12f),
                             zoom(),
+                            stop(10, 0.8f),
                             stop(11, 0.88f),
                             stop(13, 1.04f),
                             stop(15, 1.2f)
@@ -514,7 +519,7 @@ object MapStyleConfig {
                     iconAllowOverlap(true),
                     iconIgnorePlacement(true)
                 )
-                setMinZoom(12f)
+                setMinZoom(10f)
             }
         )
 
@@ -528,6 +533,7 @@ object MapStyleConfig {
                         interpolate(
                             exponential(1.1f),
                             zoom(),
+                            stop(7, 0.72f),
                             stop(9, 0.84f),
                             stop(12, 0.98f),
                             stop(15, 1.14f)
@@ -536,7 +542,7 @@ object MapStyleConfig {
                     iconAllowOverlap(true),
                     iconIgnorePlacement(true)
                 )
-                setMinZoom(8.5f)
+                setMinZoom(7f)
             }
         )
         if (mapDataConfig.hasLocalGlyphs) {
@@ -551,6 +557,7 @@ object MapStyleConfig {
                             interpolate(
                                 exponential(1.08f),
                                 zoom(),
+                                stop(8, 9.0f),
                                 stop(9, 9.6f),
                                 stop(12, 10.6f),
                                 stop(15, 11.4f)
@@ -561,7 +568,7 @@ object MapStyleConfig {
                         textHaloWidth(1f),
                         textOffset(arrayOf(0f, 1.0f))
                     )
-                    setMinZoom(10f)
+                    setMinZoom(8.2f)
                 }
             )
         }
@@ -576,6 +583,7 @@ object MapStyleConfig {
                         interpolate(
                             exponential(1.1f),
                             zoom(),
+                            stop(7, 0.72f),
                             stop(9, 0.82f),
                             stop(12, 0.96f),
                             stop(15, 1.12f)
@@ -584,7 +592,7 @@ object MapStyleConfig {
                     iconAllowOverlap(true),
                     iconIgnorePlacement(true)
                 )
-                setMinZoom(9f)
+                setMinZoom(7f)
             }
         )
         if (mapDataConfig.hasLocalGlyphs) {
@@ -601,7 +609,7 @@ object MapStyleConfig {
                         textHaloWidth(1f),
                         textOffset(arrayOf(0f, 1.0f))
                     )
-                    setMinZoom(10f)
+                    setMinZoom(8.2f)
                 }
             )
         }

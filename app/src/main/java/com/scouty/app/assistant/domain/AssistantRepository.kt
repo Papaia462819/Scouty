@@ -1319,6 +1319,27 @@ private class DeterministicInteractionEngine {
                 packStatus = packStatus
             )
         }
+        detectWeatherIntent(normalized)?.let { intent ->
+            return answerWeather(
+                intent = intent,
+                context = context,
+                queryAnalysis = queryAnalysis,
+                conversationState = conversationState,
+                packStatus = packStatus,
+                interactionHandler = interactionHandler
+            )
+        }
+        if (queryAnalysis.trailContextIntent in setOf(
+                TrailContextIntent.TRAIL_INFO,
+                TrailContextIntent.WEATHER_FORECAST,
+                TrailContextIntent.PERFORMANCE_HISTORY,
+                TrailContextIntent.CAPABILITY_CHECK,
+                TrailContextIntent.DURATION_ESTIMATE,
+                TrailContextIntent.NEEDS_CHECK
+            )
+        ) {
+            return null
+        }
         detectGearIntent(normalized, context)?.let { intent ->
             return answerGear(
                 intent = intent,
@@ -1328,16 +1349,6 @@ private class DeterministicInteractionEngine {
                 queryAnalysis = queryAnalysis,
                 conversationState = conversationState,
                 packStatus = packStatus
-            )
-        }
-        detectWeatherIntent(normalized)?.let { intent ->
-            return answerWeather(
-                intent = intent,
-                context = context,
-                queryAnalysis = queryAnalysis,
-                conversationState = conversationState,
-                packStatus = packStatus,
-                interactionHandler = interactionHandler
             )
         }
         return null
@@ -1713,7 +1724,9 @@ private class DeterministicInteractionEngine {
             gearTextMatches(normalized, item) || gearAliasesFor(item).any { alias -> alias in normalized }
         }
         val objectText = extractGearObject(normalized)
-        val hasAdd = containsAny(normalized, "adauga", "adaug", "pune ", "trece ", "add ")
+        val hasAdd = containsAny(normalized, "adauga", "adaug", "pune in lista", "pune pe lista", "trece pe lista", "add ") ||
+            containsWholeToken(normalized, "pune") ||
+            containsWholeToken(normalized, "trece")
         val hasRemove = containsAny(normalized, "scoate", "sterge", "elimina", "remove", "delete")
         val hasUpdate = containsAny(normalized, "obligator", "recomandat", "recomandata", "optional", "conditionat")
         val hasPacked = containsAny(normalized, "bifeaza", "am pus", "am luat", "am impachetat", "impachetat", "packed", "mark")
@@ -2402,7 +2415,7 @@ private class DeterministicInteractionEngine {
             "fa", "schimba", "marcheaza", "din lista", "in lista", "pe lista", "ca", "la",
             "obligatorie", "obligatoriu", "recomandata", "recomandat", "optional", "conditionat"
         ).forEach { phrase ->
-            text = text.replace(phrase, " ")
+            text = text.removeWholePhrase(phrase)
         }
         val stopwords = setOf("te", "rog", "imi", "mi", "si", "lista", "echipament", "gear", "rucsac", "un", "o", "ul")
         return text.split(" ")
@@ -2411,6 +2424,12 @@ private class DeterministicInteractionEngine {
             .joinToString(" ")
             .trim()
     }
+
+    private fun containsWholeToken(normalized: String, token: String): Boolean =
+        Regex("""(?<![a-z0-9])${Regex.escape(token)}(?![a-z0-9])""").containsMatchIn(normalized)
+
+    private fun String.removeWholePhrase(phrase: String): String =
+        replace(Regex("""(?<![a-z0-9])${Regex.escape(phrase)}(?![a-z0-9])"""), " ")
 
     private fun isPackAllExceptIntent(normalized: String): Boolean =
         containsAny(normalized, "tot", "totul", "toate", "all") &&
@@ -2716,6 +2735,16 @@ class AssistantRepository(
     ): AssistantAnswerEvent.DraftVisible? {
         val queryAnalysis = queryAnalyzer.analyze(query, context, conversationState)
         if (queryAnalysis.trailContextIntent != TrailContextIntent.NONE && context.trail != null) {
+            return null
+        }
+        if (
+            shouldUseOnlineGeneration(context) &&
+            shouldAnswerDirectlyWithGemini(
+                generationMode = GenerationMode.GEMINI_API,
+                analysis = queryAnalysis,
+                conversationState = conversationState
+            )
+        ) {
             return null
         }
         val packStatus = knowledgePackManager.ensureReady()
@@ -3049,6 +3078,27 @@ class AssistantRepository(
             generationMode = generationMode
         )
 
+        if (
+            shouldAnswerDirectlyWithGemini(
+                generationMode = generationMode,
+                analysis = initialAnalysis,
+                conversationState = conversationState
+            )
+        ) {
+            return answerDirectGemini(
+                query = query,
+                context = context,
+                conversationState = conversationState,
+                analysis = initialAnalysis,
+                packStatus = packStatus,
+                modelStatus = modelStatus,
+                generationMode = generationMode,
+                conversationHistory = conversationHistory,
+                allowLocalModel = allowLocalModel,
+                startedAtNanos = answerStartedAtNanos
+            )
+        }
+
         val initialRetrieved = retrievalEngine.retrieve(
             query = query,
             context = context,
@@ -3186,6 +3236,81 @@ class AssistantRepository(
                 analysis = finalAnalysis,
                 retrieved = finalRetrieved,
                 acceptedInterpretation = acceptedInterpretation
+            ),
+            modelVersion = structuredOutput.modelVersion ?: finalModelStatus.modelVersion.takeIf {
+                finalModelStatus.availableOnDisk || finalModelStatus.state != ModelRuntimeState.MISSING
+            },
+            modelRuntimeState = finalModelStatus.state,
+            modelStatusDetails = finalModelStatus.details,
+            knowledgePackVersion = structuredOutput.knowledgePackVersion,
+            usedFallback = structuredOutput.generationMode == GenerationMode.FALLBACK_STRUCTURED
+        )
+    }
+
+    private suspend fun answerDirectGemini(
+        query: String,
+        context: DeviceContextSnapshot,
+        conversationState: AssistantConversationState,
+        analysis: QueryAnalysis,
+        packStatus: KnowledgePackStatus,
+        modelStatus: ModelStatus,
+        generationMode: GenerationMode,
+        conversationHistory: ConversationHistory?,
+        allowLocalModel: Boolean,
+        startedAtNanos: Long
+    ): AssistantResponse {
+        val retrievedChunks = emptyList<RetrievedChunk>()
+        val prompt = promptBuilder.build(
+            query = query,
+            context = context,
+            retrievedChunks = retrievedChunks,
+            queryAnalysis = analysis
+        )
+        val safetyOutcome = medicalSafetyPolicy.evaluate(query, retrievedChunks, context)
+        val structuredOutput = medicalSafetyPolicy.applyFinalGuardrails(
+            output = generateWithDeadline(
+                input = GenerationInput(
+                    query = query,
+                    prompt = prompt,
+                    queryAnalysis = analysis,
+                    retrievedChunks = retrievedChunks,
+                    context = context,
+                    safetyOutcome = safetyOutcome,
+                    generationMode = generationMode,
+                    modelStatus = modelStatus,
+                    knowledgePackStatus = packStatus,
+                    conversationHistory = conversationHistory,
+                    allowLocalModel = allowLocalModel
+                ),
+                startedAtNanos = startedAtNanos
+            ),
+            safetyOutcome = safetyOutcome,
+            isRomanian = analysis.preferredLanguage == "ro"
+        )
+        val finalModelStatus = modelManager.currentStatus()
+        AssistantDiagnostics.logAnswerEnd(
+            query = query,
+            packStatus = packStatus,
+            modelStatus = finalModelStatus,
+            generationMode = structuredOutput.generationMode,
+            safetyOutcome = safetyOutcome,
+            retrievedChunks = retrievedChunks,
+            totalElapsedMs = elapsedMsSince(startedAtNanos)
+        )
+
+        return AssistantResponse(
+            answerText = buildDisplayText(structuredOutput, safetyOutcome),
+            structuredOutput = structuredOutput,
+            citations = emptyList(),
+            safetyOutcome = safetyOutcome,
+            generationMode = structuredOutput.generationMode,
+            reasoningType = structuredOutput.reasoningType,
+            conversationState = buildStandardConversationState(
+                previousState = conversationState,
+                originalQuery = query,
+                analysis = analysis,
+                retrieved = retrievedChunks,
+                acceptedInterpretation = null
             ),
             modelVersion = structuredOutput.modelVersion ?: finalModelStatus.modelVersion.takeIf {
                 finalModelStatus.availableOnDisk || finalModelStatus.state != ModelRuntimeState.MISSING
@@ -3436,12 +3561,34 @@ class AssistantRepository(
             LlmBudgetCapMs,
             (OfflineHardDeadlineMs - elapsedBeforeGeneration - DeadlineSlackMs).coerceAtLeast(MinLlmBudgetMs)
         )
+        var attemptedInput = input
         return withTimeoutOrNull(budgetMs) {
-            generationEngine.generate(input)
+            attemptedInput = prepareOfflineLocalGenerationInput(input)
+            generationEngine.generate(attemptedInput)
         } ?: directAnswerComposer.composeFromTopRetrievedTile(
-            input = input,
+            input = attemptedInput,
             modelStatus = modelManager.currentStatus(),
             generationMode = GenerationMode.FALLBACK_STRUCTURED
+        )
+    }
+
+    private suspend fun prepareOfflineLocalGenerationInput(input: GenerationInput): GenerationInput {
+        if (shouldUseOnlineGeneration(input.context) || !input.allowLocalModel) {
+            return input
+        }
+
+        val readyStatus = when {
+            input.modelStatus.state == ModelRuntimeState.LOADED -> input.modelStatus
+            input.modelStatus.availableOnDisk -> modelManager.ensureLoaded()
+            else -> input.modelStatus
+        }
+        return input.copy(
+            modelStatus = readyStatus,
+            generationMode = generationModeForAttempt(
+                modelStatus = readyStatus,
+                context = input.context,
+                allowLocalModel = input.allowLocalModel
+            )
         )
     }
 
@@ -3668,6 +3815,31 @@ class AssistantRepository(
             .replace("[^a-z0-9 ]".toRegex(), " ")
             .replace("\\s+".toRegex(), " ")
             .trim()
+
+    private fun shouldAnswerDirectlyWithGemini(
+        generationMode: GenerationMode,
+        analysis: QueryAnalysis,
+        conversationState: AssistantConversationState
+    ): Boolean {
+        if (generationMode != GenerationMode.GEMINI_API) {
+            return false
+        }
+        if (analysis.trailContextIntent != TrailContextIntent.NONE) {
+            return false
+        }
+        if (analysis.routeContextQuery || analysis.gearQuery) {
+            return false
+        }
+        if (analysis.knowledgeLane == ConversationLane.FIELD_KNOW_HOW) {
+            return false
+        }
+        if (conversationState.pendingGearAction != null || conversationState.openQuestion != null) {
+            return false
+        }
+        return analysis.domainHints.none { hint ->
+            hint.domain in setOf("route_intelligence_romania", "gear_and_preparation")
+        }
+    }
 
     private fun shouldUseOnlineGeneration(context: DeviceContextSnapshot): Boolean =
         canAttemptOnlineGeneration(context)

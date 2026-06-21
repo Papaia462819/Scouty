@@ -91,7 +91,8 @@ internal class GeminiRemoteGenerationEngine(
                 parts = listOf(
                     GeminiPart(
                         text = "You are Scouty, a grounded hiking and mountain-safety assistant for Romania. " +
-                            "Use only the supplied Scouty facts, conversation context, and device context. " +
+                            "Use supplied Scouty facts, conversation context, and device context when they are present. " +
+                            "For general questions without Scouty facts, answer directly from general knowledge. " +
                             "Do not invent weather or trail metrics."
                     )
                 )
@@ -119,8 +120,9 @@ internal class GeminiRemoteGenerationEngine(
             appendLine("- Write like a helpful in-app mountain guide.")
             appendLine("- Use short paragraphs or bullets when they make the answer easier to scan on a phone.")
             appendLine("- Prefer plain text; do not use Markdown emphasis markers like **bold**.")
-            appendLine("- Ground the answer in the supplied Scouty facts, conversation context, and device context.")
-            appendLine("- If the supplied facts are missing or weak, say that clearly and stay conservative.")
+            appendLine("- When Scouty facts are supplied, ground the answer in those facts, conversation context, and device context.")
+            appendLine("- When no Scouty facts are supplied, answer general questions directly and keep app-specific claims conservative.")
+            appendLine("- If app context, live data, or Scouty facts are needed but missing, say that clearly and stay conservative.")
             appendLine("- Do not invent weather, trail metrics, route details, live conditions, or personal data.")
             appendLine("- For serious safety signals, prioritize 112 / SOS and immediate risk reduction.")
             appendLine("- Do not mention Gemini, API calls, prompts, internal routing, or hidden context.")
@@ -146,7 +148,7 @@ internal class GeminiRemoteGenerationEngine(
 
     private fun buildFactBlock(input: GenerationInput): String {
         if (input.retrievedChunks.isEmpty()) {
-            return "- No retrieved Scouty facts. Say the grounding is incomplete and give a safe next step."
+            return "- No retrieved Scouty facts. For general non-app questions, answer directly from general knowledge. For app context, route details, live weather, trail metrics, or personal data, say the needed context is missing."
         }
         return input.retrievedChunks.take(4).mapIndexed { index, chunk ->
             buildString {

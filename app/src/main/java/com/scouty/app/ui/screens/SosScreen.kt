@@ -27,7 +27,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -66,6 +65,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -291,21 +291,22 @@ internal fun rememberSosActivationHandler(
             )
             val launchedText = if (settings.action.includesText) {
                 val recipients = settings.smsRecipients
-                if (recipients.isEmpty()) {
-                    onStatusMessage("Adauga contacte SMS in setarile SOS.")
-                    if (settings.action.callNumber == null) {
-                        onRequestSettings?.invoke()
-                    }
-                    false
-                } else {
-                    openSmsComposer(context, recipients, bilingualMessage).also { launched ->
-                        onStatusMessage(
-                            if (launched) {
+                openSmsComposer(context, recipients, bilingualMessage).also { launched ->
+                    onStatusMessage(
+                        when {
+                            launched && recipients.isEmpty() -> {
+                                "Mesaj SOS pregatit. Alege destinatarul in aplicatia SMS."
+                            }
+                            launched -> {
                                 "Mesaj SOS pregatit pentru ${recipients.size} contact(e)."
-                            } else {
+                            }
+                            else -> {
                                 "Nu am gasit o aplicatie SMS disponibila."
                             }
-                        )
+                        }
+                    )
+                    if (!launched && recipients.isEmpty() && settings.action.callNumber == null) {
+                        onRequestSettings?.invoke()
                     }
                 }
             } else {
@@ -472,10 +473,12 @@ internal fun SosHoldControl(
     var isHolding by remember { mutableStateOf(false) }
     var holdProgress by remember { mutableFloatStateOf(0f) }
     var activationToken by remember { mutableLongStateOf(0L) }
+    val currentOnActivated by rememberUpdatedState(onActivated)
 
     LaunchedEffect(activationToken) {
         if (activationToken > 0) {
             holdProgress = 1f
+            currentOnActivated()
             delay(180)
             holdProgress = 0f
         }
@@ -497,11 +500,12 @@ internal fun SosHoldControl(
             .then(shadowModifier)
             .clip(CircleShape)
             .background(brush = backgroundBrush)
-            .pointerInput(holdSeconds, onActivated) {
+            .pointerInput(holdSeconds) {
                 coroutineScope {
                     val gestureScope = this
                     awaitEachGesture {
-                        awaitFirstDown(requireUnconsumed = false)
+                        val down = awaitFirstDown(requireUnconsumed = false)
+                        down.consume()
                         isHolding = true
                         var activated = false
                         val start = SystemClock.elapsedRealtime()
@@ -513,17 +517,29 @@ internal fun SosHoldControl(
                                 if (elapsed >= duration) {
                                     activated = true
                                     activationToken = SystemClock.elapsedRealtime()
-                                    onActivated()
                                     break
                                 }
                                 delay(16)
                             }
                         }
-                        waitForUpOrCancellation()
-                        holdJob.cancel()
-                        isHolding = false
-                        if (!activated) {
-                            holdProgress = 0f
+                        try {
+                            while (true) {
+                                val event = awaitPointerEvent()
+                                event.changes.forEach { change ->
+                                    if (change.pressed) {
+                                        change.consume()
+                                    }
+                                }
+                                if (event.changes.none { it.pressed }) {
+                                    break
+                                }
+                            }
+                        } finally {
+                            holdJob.cancel()
+                            isHolding = false
+                            if (!activated) {
+                                holdProgress = 0f
+                            }
                         }
                     }
                 }
@@ -1034,8 +1050,6 @@ private fun SosSettingsDialog(
             }
         }
     }
-    val canSave = !draft.action.includesText || draft.smsRecipients.isNotEmpty()
-
     Dialog(
         onDismissRequest = onDismiss,
         properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)
@@ -1123,8 +1137,7 @@ private fun SosSettingsDialog(
                     when (tab) {
                         SosSettingsTab.Trigger -> TriggerSettingsTab(
                             draft = draft,
-                            onDraftChange = { draft = it },
-                            onNeedContacts = { selectedTab = SosSettingsTab.Contacts }
+                            onDraftChange = { draft = it }
                         )
                         SosSettingsTab.Contacts -> ContactsSettingsTab(
                             draft = draft,
@@ -1166,7 +1179,7 @@ private fun SosSettingsDialog(
                     text = "Salvează",
                     onClick = { onSave(draft) },
                     icon = Lucide.Check,
-                    enabled = canSave,
+                    enabled = true,
                     modifier = Modifier.weight(1.5f)
                 )
             }
@@ -1222,8 +1235,7 @@ private fun SettingsTabs(
 @Composable
 private fun TriggerSettingsTab(
     draft: SosSettings,
-    onDraftChange: (SosSettings) -> Unit,
-    onNeedContacts: () -> Unit
+    onDraftChange: (SosSettings) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -1279,33 +1291,62 @@ private fun TriggerSettingsTab(
         Spacer(Modifier.height(18.dp))
         SettingsSectionLabel("ACȚIUNE DUPĂ APĂSARE")
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            val hasContacts = draft.smsRecipients.isNotEmpty()
+            val sendText = draft.action.includesText
+            val callTarget = draft.action.callTarget()
             ActionChoiceCard(
                 title = "SMS către contacte",
-                subtitle = "Trimite pachetul de salvare",
+                subtitle = if (draft.smsRecipients.isEmpty()) {
+                    "Alegi destinatarul în aplicația SMS"
+                } else {
+                    "Trimite pachetul de salvare"
+                },
                 semantic = Info,
                 icon = Lucide.MessageSquare,
-                selected = draft.action == SosAction.TEXT_ONLY,
-                enabled = hasContacts,
-                disabledPill = "0 contacte",
-                onDisabledClick = onNeedContacts,
-                onSelect = { onDraftChange(draft.copy(action = SosAction.TEXT_ONLY)) }
+                selected = sendText,
+                onSelect = {
+                    onDraftChange(
+                        draft.copy(
+                            action = actionFromSwitches(
+                                sendText = !sendText,
+                                callTarget = callTarget
+                            )
+                        )
+                    )
+                }
             )
             ActionChoiceCard(
                 title = "Sună la 112",
                 subtitle = "Apel direct, fără meniu",
                 semantic = Danger,
                 icon = Lucide.Phone,
-                selected = draft.action == SosAction.CALL_112 || draft.action == SosAction.TEXT_THEN_CALL_112,
-                onSelect = { onDraftChange(draft.copy(action = SosAction.CALL_112)) }
+                selected = callTarget == SosCallTarget.Emergency,
+                onSelect = {
+                    onDraftChange(
+                        draft.copy(
+                            action = nextActionForCallTarget(
+                                currentAction = draft.action,
+                                selectedTarget = SosCallTarget.Emergency
+                            )
+                        )
+                    )
+                }
             )
             ActionChoiceCard(
                 title = "Sună la Salvamont",
                 subtitle = "0SALVAMONT",
                 semantic = Warning,
                 icon = Lucide.ShieldPlus,
-                selected = draft.action == SosAction.CALL_SALVAMONT || draft.action == SosAction.TEXT_THEN_CALL_SALVAMONT,
-                onSelect = { onDraftChange(draft.copy(action = SosAction.CALL_SALVAMONT)) }
+                selected = callTarget == SosCallTarget.Salvamont,
+                onSelect = {
+                    onDraftChange(
+                        draft.copy(
+                            action = nextActionForCallTarget(
+                                currentAction = draft.action,
+                                selectedTarget = SosCallTarget.Salvamont
+                            )
+                        )
+                    )
+                }
             )
         }
         Spacer(Modifier.height(12.dp))
@@ -1321,7 +1362,7 @@ private fun TriggerSettingsTab(
         ) {
             Icon(Lucide.Info, contentDescription = null, tint = Warning, modifier = Modifier.size(11.dp))
             Text(
-                text = "Doar o singură acțiune principală poate fi activă",
+                text = "Poți combina SMS cu 112 sau Salvamont; apelul se deschide după revenirea din SMS.",
                 color = TextPrimary.copy(alpha = 0.75f),
                 fontSize = 10.sp,
                 lineHeight = 14.sp
@@ -1478,32 +1519,6 @@ private fun ContactsSettingsTab(
             }
         }
 
-        Spacer(Modifier.height(16.dp))
-        ScoutyCard(contentPadding = PaddingValues(12.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                CategoryIconTile(icon = Lucide.ShieldPlus, color = Warning, size = 32.dp, iconSize = 15.dp)
-                Column(modifier = Modifier.weight(1f)) {
-                    Text("Trimite și la Salvamont", color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
-                    Text("Anunță dispeceratul român de salvare montană", color = TextSecondary, fontSize = 10.sp)
-                }
-                MiniSwitch(
-                    checked = draft.action == SosAction.TEXT_THEN_CALL_SALVAMONT,
-                    color = Warning,
-                    onClick = {
-                        onDraftChange(
-                            draft.copy(
-                                action = if (draft.action == SosAction.TEXT_THEN_CALL_SALVAMONT) {
-                                    SosAction.TEXT_ONLY
-                                } else {
-                                    SosAction.TEXT_THEN_CALL_SALVAMONT
-                                }
-                            )
-                        )
-                    },
-                    modifier = Modifier.size(width = 36.dp, height = 20.dp)
-                )
-            }
-        }
     }
 }
 
@@ -1972,6 +1987,16 @@ private fun actionFromSwitches(sendText: Boolean, callTarget: SosCallTarget?): S
         null -> if (sendText) SosAction.TEXT_ONLY else SosAction.CALL_112
     }
 
+private fun nextActionForCallTarget(
+    currentAction: SosAction,
+    selectedTarget: SosCallTarget
+): SosAction {
+    val sendText = currentAction.includesText
+    val currentTarget = currentAction.callTarget()
+    val nextTarget = if (currentTarget == selectedTarget) null else selectedTarget
+    return actionFromSwitches(sendText = sendText || nextTarget == null, callTarget = nextTarget)
+}
+
 private fun actionSummary(settings: SosSettings): String {
     val recipientText = if (settings.action.includesText) {
         val count = settings.smsRecipients.size
@@ -1999,12 +2024,16 @@ private fun holdHelperText(): String =
     "tine apasat pentru ajutor"
 
 private fun openSmsComposer(context: Context, recipients: List<String>, message: String): Boolean {
-    if (recipients.isEmpty()) return false
     val joinedRecipients = recipients.joinToString(";")
     val uri = Uri.parse("smsto:" + recipients.joinToString(";") { Uri.encode(it) })
     val intent = Intent(Intent.ACTION_SENDTO, uri)
         .putExtra("sms_body", message)
-        .putExtra("address", joinedRecipients)
+        .apply {
+            if (joinedRecipients.isNotBlank()) {
+                putExtra("address", joinedRecipients)
+            }
+        }
+        .withExternalLaunchFlags(context)
     return runCatching {
         context.startActivity(intent)
         true
@@ -2064,11 +2093,19 @@ private fun SosContact.initials(): String {
 
 private fun openDialer(context: Context, number: String): Boolean {
     val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${Uri.encode(number)}"))
+        .withExternalLaunchFlags(context)
     return runCatching {
         context.startActivity(intent)
         true
     }.getOrElse { false }
 }
+
+private fun Intent.withExternalLaunchFlags(context: Context): Intent =
+    apply {
+        if (context !is Activity) {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+    }
 
 private fun displayDialNumber(number: String): String =
     if (number == SosAction.SalvamontDialNumber) "0SALVAMONT" else number

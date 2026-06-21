@@ -111,8 +111,7 @@ fun ProfileScreen(
     onEditProfile: () -> Unit,
     onSignOut: () -> Unit
 ) {
-    val estimatedStats = ProfileAssessmentEngine.estimateTrailStats(profile.answers)
-    val profileStats = resolveProfileStats(profile, estimatedStats)
+    val profileStats = resolveProfileStats(profile)
     val levelProgress = ProfileProgressionEngine.progress(profile)
     val memberSince = formatMonthYear(profile.createdAtEpochMillis)
     val historyEntries = profile.trailHistory.sortedByDescending(ProfileTrailRecord::completedAtEpochMillis)
@@ -1419,14 +1418,11 @@ private fun performanceIntervalLabel(
         ProfileChartPeriod.YEAR -> SimpleDateFormat("yyyy", Locale.forLanguageTag("ro")).format(start.time)
     }
 
-private fun resolveProfileStats(
-    profile: UserProfile,
-    estimatedStats: TrailStatsSummary
-): TrailStatsSummary =
+private fun resolveProfileStats(profile: UserProfile): TrailStatsSummary =
     TrailStatsSummary(
-        completedHikes = profile.completedHikes.takeIf { it > 0 } ?: estimatedStats.completedHikes,
-        totalDistanceKm = profile.totalDistanceKm.takeIf { it > 0.0 } ?: estimatedStats.totalDistanceKm,
-        totalElevationGainM = profile.totalElevationGainM.takeIf { it > 0 } ?: estimatedStats.totalElevationGainM
+        completedHikes = profile.completedHikes.coerceAtLeast(0),
+        totalDistanceKm = profile.totalDistanceKm.coerceAtLeast(0.0),
+        totalElevationGainM = profile.totalElevationGainM.coerceAtLeast(0)
     )
 
 private fun answerLabel(profile: UserProfile, questionId: String): String =

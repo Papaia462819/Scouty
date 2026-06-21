@@ -17,7 +17,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -1050,7 +1049,7 @@ private fun BadgeOptionCard(
     )
     Box(
         modifier = modifier
-            .aspectRatio(1.34f)
+            .heightIn(min = 96.dp)
             .then(
                 if (selected) {
                     Modifier.border(4.dp, avatar.tint.copy(alpha = 0.08f), RoundedCornerShape(15.dp))
@@ -1062,7 +1061,7 @@ private fun BadgeOptionCard(
             .background(bg)
             .border(if (selected) 1.5.dp else 0.5.dp, borderColor, RoundedCornerShape(12.dp))
             .clickable(onClick = onClick)
-            .padding(horizontal = 8.dp, vertical = 12.dp),
+            .padding(horizontal = 8.dp, vertical = 10.dp),
     ) {
         if (selected) {
             Box(
@@ -1082,9 +1081,11 @@ private fun BadgeOptionCard(
             }
         }
         Column(
-            modifier = Modifier.align(Alignment.Center),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(7.dp),
         ) {
             Box(
                 modifier = Modifier
