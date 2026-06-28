@@ -11,8 +11,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Retrieval-quality audit for the DETERMINISTIC path (Qwen disabled,
- * allowLocalModel = false). Runs a battery of representative Romanian queries
+ * Retrieval-quality audit for the deterministic offline path. Runs a battery
+ * of representative Romanian queries with allowLocalModel = false
  * through the real on-device pipeline (FTS + embeddings + jina rerank) and logs,
  * per query, which card won (citations) and the answer summary.
  *
@@ -72,7 +72,7 @@ class RetrievalAuditTest {
         Q("amb_foc", "foc", "foc (ambiguu)"),
         Q("amb_frig", "frig", "frig (ambiguu)"),
 
-        // --- elliptical WITHOUT context (expected weak: Qwen-interpreter territory) ---
+        // --- elliptical WITHOUT context (expected weak without prior context) ---
         Q("ellip_rain_noctx", "si daca ploua?", "ELIPTIC fără context"),
         Q("ellip_winter_noctx", "dar iarna?", "ELIPTIC fără context"),
         Q("ellip_pronoun_noctx", "cum fac pe el?", "PRONUME fără context")

@@ -6,16 +6,14 @@ import org.junit.Test
 
 class RuntimeFeatureFlagsTest {
     @Test
-    fun defaultsEnableQwenValidationPath() {
+    fun defaultsUseDeterministicOfflineAssistantPath() {
         val flags = RuntimeFeatureFlags()
 
         assertTrue(flags.useCrossEncoderReranker)
         assertTrue(flags.useGeneralPathReranker)
         assertFalse(flags.useCampfireLane)
-        assertTrue(flags.useLlamaCpp)
         assertTrue(flags.useConversationMemory)
         assertTrue(flags.useLlmSummarizer)
-        assertTrue(flags.useQwenDefault)
         assertTrue(flags.useGeminiApi)
         assertFalse(flags.useCardParaphraseExpression)
         assertFalse(flags.useGroundedWording)

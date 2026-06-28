@@ -66,37 +66,7 @@ class AssistantRuntimeDebugTest {
                 }
             }
 
-            val internalModelDir = File(context.noBackupFilesDir, "models/qwen-2.5-1.5b")
-            val internalDirListing = internalModelDir.listFiles()?.map { file ->
-                "${file.name}:${file.length()}:${file.canRead()}"
-            }
-            Log.d(
-                LogTag,
-                "internalModelDir=${internalModelDir.absolutePath} exists=${internalModelDir.exists()} " +
-                    "canRead=${internalModelDir.canRead()} canExecute=${internalModelDir.canExecute()} " +
-                    "listing=$internalDirListing"
-            )
-
-            val externalModelDir = context.getExternalFilesDir(null)?.let { File(it, "models/qwen-2.5-1.5b") }
-            val externalDirListing = externalModelDir?.listFiles()?.map { file ->
-                "${file.name}:${file.length()}:${file.canRead()}"
-            }
-            Log.d(
-                LogTag,
-                "externalModelDir=${externalModelDir?.absolutePath} exists=${externalModelDir?.exists()} " +
-                    "canRead=${externalModelDir?.canRead()} canExecute=${externalModelDir?.canExecute()} " +
-                    "listing=$externalDirListing"
-            )
-
-            val preferredPaths = PreferredModelNames.map { name ->
-                externalModelDir?.let { dir ->
-                    val file = File(dir, name)
-                    "${file.name}:exists=${file.exists()}:len=${file.length()}:canRead=${file.canRead()}"
-                }
-            }
-            Log.d(LogTag, "preferredModelPaths=$preferredPaths")
-
-            val modelManager = ModelManager(context, RuntimeFeatureFlags(useLlamaCpp = true))
+            val modelManager = ModelManager(context, RuntimeFeatureFlags())
             val modelStatus = modelManager.refreshStatus()
             Log.d(LogTag, "modelStatus=$modelStatus generationMode=${modelManager.currentGenerationMode()}")
             if (modelStatus.availableOnDisk) {
@@ -108,11 +78,5 @@ class AssistantRuntimeDebugTest {
 
     private companion object {
         private const val LogTag = "ScoutyRuntimeTest"
-        private val PreferredModelNames = listOf(
-            "qwen2.5-1.5b-instruct-q4_k_m.gguf",
-            "qwen2_5-1.5b-instruct-q4_k_m.gguf",
-            "qwen2.5-1.5b-instruct.gguf",
-            "qwen2-5-1.5b-instruct-q4_k_m.gguf"
-        )
     }
 }

@@ -46,7 +46,7 @@ seeds/conversational_topics_ro.jsonl ──► conversational_gen.py ──► d
 
 ## Domenii și ținte de acoperire
 
-Țintele inițiale (per migration-qwen.md):
+Țintele inițiale pentru extinderea pachetului local:
 
 | Domain | Tier | Țintă |
 | --- | --- | --- |
@@ -192,7 +192,7 @@ ca echipa să le promoveze manual la Tier A.
 
 ## Deviații de la brief
 
-Următoarele sunt diferențe față de prompt-ul original `migration-qwen.md`,
+Următoarele sunt diferențe față de brief-ul inițial de extindere,
 intenționate pentru a integra cu pipeline-ul existent:
 
 | Brief | Implementare actuală |

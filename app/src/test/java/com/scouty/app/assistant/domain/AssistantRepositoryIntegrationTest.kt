@@ -212,7 +212,7 @@ class AssistantRepositoryIntegrationTest {
             )
         )
         val store = FakeSearchKnowledgeStore(chunks, knowledgePackStatus)
-        val runtimeAdapter = FakeRuntimeAdapter(response = "reformulare qwen care nu trebuie folosita")
+        val runtimeAdapter = FakeRuntimeAdapter(response = "reformulare locala care nu trebuie folosita")
         val modelManager = ModelManager(
             modelLocator = FakeLocalModelLocator(LocalModelDiscovery(details = "missing bundle")),
             runtimeAdapter = runtimeAdapter
@@ -238,7 +238,7 @@ class AssistantRepositoryIntegrationTest {
         assertEquals(GenerationMode.FALLBACK_STRUCTURED, response.generationMode)
         assertTrue(response.answerText.contains("Construirea corectă", ignoreCase = true))
         assertTrue(response.answerText.contains("Pregătește iasca", ignoreCase = true))
-        assertFalse(response.answerText.contains("reformulare qwen", ignoreCase = true))
+        assertFalse(response.answerText.contains("reformulare locala", ignoreCase = true))
         assertEquals(0, runtimeAdapter.loadCalls)
     }
 

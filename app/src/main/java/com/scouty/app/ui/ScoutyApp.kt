@@ -207,14 +207,7 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
                     onPhotoClick = {
                         trackReturnRoute = ROUTE_CHAT
                         selectedRoute = ROUTE_TRACKS
-                    },
-                    onOfflineChatToggle = assistantViewModel::setOfflineChatEnabled,
-                    onConfirmOfflineChatMeteredDownload = assistantViewModel::confirmOfflineChatMeteredDownload,
-                    onDismissOfflineChatMeteredDownload = assistantViewModel::dismissOfflineChatMeteredDownload,
-                    onDismissOfflineChatLoading = assistantViewModel::dismissOfflineChatLoadingDialog,
-                    onDismissOfflineChatFinished = assistantViewModel::dismissOfflineChatFinishedDialog,
-                    onConfirmDisableOfflineChat = assistantViewModel::confirmDisableOfflineChat,
-                    onDismissDisableOfflineChat = assistantViewModel::dismissDisableOfflineChat
+                    }
                 )
                 ROUTE_SOS -> SosScreen(
                     contentPadding = innerPadding,

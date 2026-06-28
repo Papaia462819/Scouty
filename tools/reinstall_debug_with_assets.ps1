@@ -2,10 +2,7 @@ param(
     [string]$PackageName = "com.nego.scouty",
     [string]$TestPackageName = "com.nego.scouty.test",
     [string]$Serial,
-    [string]$ModelPath,
-    [switch]$DownloadIfMissing,
     [switch]$SkipBuild,
-    [switch]$SkipModel,
     [switch]$SkipMaps
 )
 
@@ -14,7 +11,6 @@ $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $appApk = Join-Path $repoRoot "app\build\outputs\apk\debug\app-debug.apk"
 $testApk = Join-Path $repoRoot "app\build\outputs\apk\androidTest\debug\app-debug-androidTest.apk"
-$pushQwenScript = Join-Path $PSScriptRoot "push_qwen_to_device.ps1"
 $pushMapsScript = Join-Path $PSScriptRoot "push_map_packs_to_device.ps1"
 
 function Get-AdbCommand {
@@ -103,9 +99,6 @@ if (-not $SkipBuild) {
     }
 }
 
-if (!(Test-Path $pushQwenScript)) {
-    throw "Missing Qwen push script '$pushQwenScript'."
-}
 if (!(Test-Path $pushMapsScript)) {
     throw "Missing map push script '$pushMapsScript'."
 }
@@ -127,13 +120,6 @@ foreach ($permission in @(
     Invoke-AdbQuiet -CommandArgs @("shell", "pm", "grant", $PackageName, $permission)
 }
 
-if (-not $SkipModel) {
-    & $pushQwenScript -PackageName $PackageName -Serial $Serial -ModelPath $ModelPath -DownloadIfMissing:$DownloadIfMissing
-    if ($LASTEXITCODE -ne 0) {
-        throw "Qwen model push failed."
-    }
-}
-
 if (-not $SkipMaps) {
     & $pushMapsScript -PackageName $PackageName -Serial $Serial
     if ($LASTEXITCODE -ne 0) {
@@ -146,7 +132,6 @@ $apkPathLine = Invoke-Adb -CommandArgs @("shell", "pm", "path", $PackageName) -C
     Select-Object -First 1
 $apkDevicePath = ($apkPathLine -replace "^package:", "").Trim()
 $apkStat = Invoke-Adb -CommandArgs @("shell", "ls", "-l", $apkDevicePath) -CaptureOutput
-$modelStat = Invoke-Adb -CommandArgs @("shell", "run-as", $PackageName, "ls", "-ln", "no_backup/models/qwen-2.5-1.5b") -CaptureOutput -IgnoreExitCode
 $mapsStat = Invoke-Adb -CommandArgs @("shell", "run-as", $PackageName, "ls", "-ln", "files/maps") -CaptureOutput -IgnoreExitCode
 
 Write-Host ""
@@ -155,12 +140,6 @@ $storageStats | ForEach-Object { Write-Host "  $_" }
 Write-Host ""
 Write-Host "Installed base APK:"
 $apkStat | ForEach-Object { Write-Host "  $_" }
-
-if ($modelStat) {
-    Write-Host ""
-    Write-Host "Installed model files:"
-    $modelStat | ForEach-Object { Write-Host "  $_" }
-}
 
 if ($mapsStat) {
     Write-Host ""

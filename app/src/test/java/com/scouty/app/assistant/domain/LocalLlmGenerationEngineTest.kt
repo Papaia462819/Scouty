@@ -95,12 +95,12 @@ class LocalLlmGenerationEngineTest {
     @Test
     fun unloadedModel_fallsBackToTopTileWithoutColdLoading() = runBlocking {
         val tempDir = Files.createTempDirectory("scouty-local-llm-unloaded").toFile()
-        val modelFile = File(tempDir, "qwen2.5-1.5b-instruct-q4_k_m.gguf").apply { writeText("bundle") }
-        val runtimeAdapter = FakeRuntimeAdapter(response = "reformulare qwen")
+        val modelFile = File(tempDir, "gemma-3-1b-it-int4.task").apply { writeText("bundle") }
+        val runtimeAdapter = FakeRuntimeAdapter(response = "reformulare locala")
         val manager = ModelManager(
             modelLocator = FakeLocalModelLocator(
                 discovery = LocalModelDiscovery(
-                    modelVersion = "qwen2.5-1.5b-instruct-q4_k_m",
+                    modelVersion = "gemma-3-1b-it-int4",
                     availableOnDisk = true,
                     sourceFile = modelFile,
                     preparedFile = modelFile,
@@ -108,7 +108,7 @@ class LocalLlmGenerationEngineTest {
                     state = ModelRuntimeState.UNLOADED
                 ),
                 preparedArtifact = LocalModelArtifact(
-                    modelVersion = "qwen2.5-1.5b-instruct-q4_k_m",
+                    modelVersion = "gemma-3-1b-it-int4",
                     sourceFile = modelFile,
                     preparedFile = modelFile
                 )
@@ -123,8 +123,8 @@ class LocalLlmGenerationEngineTest {
         val result = engine.generate(
             testInput().copy(
                 modelStatus = ModelStatus(
-                    runtimeLabel = "llama.cpp",
-                    modelVersion = "qwen2.5-1.5b-instruct-q4_k_m",
+                    runtimeLabel = "Motor local Google MediaPipe",
+                    modelVersion = "gemma-3-1b-it-int4",
                     state = ModelRuntimeState.UNLOADED,
                     availableOnDisk = true,
                     details = "ready"

@@ -100,7 +100,7 @@ def main() -> int:
         "valid_count": sum(1 for row in rows if row["valid"]),
         "valid_rate": sum(1 for row in rows if row["valid"]) / len(rows) if rows else 0.0,
         "model_validated": False,
-        "notes": "Validates the expected JSON schema/catalog for the 50-query corpus; does not call Qwen.",
+        "notes": "Validates the expected JSON schema/catalog for the 50-query corpus; does not call a text generator.",
     }
     args.json_out.write_text(
         json.dumps({"summary": summary, "rows": rows}, ensure_ascii=False, indent=2) + "\n",

@@ -168,4 +168,4 @@ Statusul rezultat este expus în debug UI, în `ProfileScreen`.
 
 - Pipeline-ul actual este determinist și integrat în repo, dar baza canonică pe PC nu este încă mutată într-un backend complet cu PostgreSQL + pgvector.
 - Unele surse externe pot refuza fetch-ul automat în anumite momente. Acest lucru este vizibil în manifestul de fetch și nu este ascuns de pipeline.
-- Runtime-ul mobil folosește retrieval lexical și rerank multi-factor; integrarea unui model local Google AI Edge rămâne pasul următor peste acest strat deja stabil.
+- Runtime-ul mobil folosește retrieval lexical, corecție deterministă și rerank semantic; pașii următori țin de extinderea cardurilor locale și de benchmark-uri de întrebări românești.

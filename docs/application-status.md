@@ -100,20 +100,20 @@ Ce livrează:
 - motive clare pentru fiecare item
 - adaptare la traseu activ, vreme, apus și profil
 
-### Assistant local
+### Assistant offline
 
-`ChatScreen` și `AssistantRepository` folosesc acum retrieval offline din knowledge pack versionat.
+`ChatScreen` și `AssistantRepository` folosesc retrieval offline din knowledge pack versionat. Răspunsul offline este selectat determinist din carduri locale, fără descărcare sau rulare de model generativ pe dispozitiv.
 
 Fluxul implementat:
 
 1. detectare limbă
-2. clasificare probabilă de domeniu
-3. candidate retrieval din `knowledge_pack.sqlite`
-4. rerank multi-factor
-5. selecție top 4 chunk-uri
-6. safety policy separat
-7. generare fallback structurată
-8. răspuns cu secțiuni și citări
+2. corecție typo pe vocabularul din `search_vocabulary`
+3. rezolvare deterministă pentru follow-up-uri și pronume, când contextul o permite
+4. candidate retrieval din `knowledge_pack.sqlite`
+5. rerank lexical/contextual și semantic
+6. selecție card top
+7. safety policy separat pe textul utilizatorului
+8. răspuns cu secțiuni, citări și chips de follow-up pentru cardurile hub
 
 Rerank-ul combină:
 
@@ -150,9 +150,9 @@ Assistant-ul folosește și context local de teren:
 
 ## Ce este încă parțial
 
-### Runtime local LLM
+### Asistent conversațional offline
 
-Arhitectura este pregătită pentru un engine local compatibil Google AI Edge, dar integrarea modelului 1B nu este încă finalizată. `ModelManager` expune explicit placeholder-ul și aplicația folosește momentan `FALLBACK_STRUCTURED`.
+Runtime-ul activ pentru offline este determinist: pachet local de cunoștințe, FTS SQLite, reranking și compunere directă din cardul selectat. Modelarea generativă rămâne pe calea online, prin Gemini, când există conexiune și politica de runtime o permite.
 
 ### SOS
 

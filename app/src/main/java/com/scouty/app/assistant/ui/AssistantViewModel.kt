@@ -9,16 +9,12 @@ import com.scouty.app.assistant.data.DeviceContextProvider
 import com.scouty.app.assistant.domain.AssistantAnswerEvent
 import com.scouty.app.assistant.domain.AssistantRuntimeGraph
 import com.scouty.app.assistant.domain.AssistantRepository
-import com.scouty.app.assistant.domain.OfflineChatModelController
 import com.scouty.app.assistant.model.AssistantAction
 import com.scouty.app.assistant.model.AssistantConversationState
 import com.scouty.app.assistant.model.AssistantMessageUiModel
 import com.scouty.app.assistant.model.AssistantResponse
 import com.scouty.app.assistant.model.AssistantUiState
 import com.scouty.app.assistant.model.GenerationMode
-import com.scouty.app.assistant.model.OfflineChatModelState
-import com.scouty.app.assistant.model.OfflineChatModelStatus
-import com.scouty.app.assistant.model.OfflineChatUiState
 import com.scouty.app.assistant.model.SafetyOutcome
 import com.scouty.app.assistant.model.assistantDefaultLocale
 import com.scouty.app.assistant.model.buildWelcomeMessage
@@ -32,21 +28,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.UUID
 
-/**
- * Temporary kill-switch for the on-device Qwen generation/interpretation path.
- *
- * While we rebuild the knowledge pack around base-case "hub" cards, the local
- * model produces low-quality Romanian and is not used for answering. Retrieval,
- * rerank, the structured tile fallback and all deterministic app-context paths
- * (weather API, gear inspection, trail context) are unaffected. Flip back to
- * `true` to re-enable Qwen once the knowledge-pack work lands.
- */
-private const val LOCAL_MODEL_GENERATION_ENABLED = false
-
 class AssistantViewModel(
     private val repository: AssistantRepository,
     private val deviceContextProvider: DeviceContextProvider,
-    private val offlineChatModelController: OfflineChatModelController,
     private val chatActionHandler: ChatActionHandler? = null
 ) : ViewModel() {
 
@@ -55,9 +39,6 @@ class AssistantViewModel(
     private var conversationState = AssistantConversationState()
     private var lastTrailPresent: Boolean = false
     private var remoteFallbackActive: Boolean = false
-    private var offlineLoadingDialogDismissed: Boolean = false
-    private var dismissedOfflineFinishedEventId: Long = 0L
-    private var showOfflineDisableConfirmation: Boolean = false
 
     init {
         viewModelScope.launch {
@@ -81,21 +62,6 @@ class AssistantViewModel(
                     state.copy(
                         isOnline = canAttemptOnlineGeneration && !remoteFallbackActive,
                         starterPrompts = updatedStarterPrompts ?: state.starterPrompts
-                    )
-                }
-            }
-        }
-        viewModelScope.launch {
-            offlineChatModelController.state.collect { modelState ->
-                if (!modelState.isBusy) {
-                    offlineLoadingDialogDismissed = false
-                }
-                _uiState.update { state ->
-                    val canAttemptOnlineGeneration =
-                        repository.canAttemptOnlineGeneration(deviceContextProvider.deviceContext.value)
-                    state.copy(
-                        offlineChat = modelState.toOfflineChatUiState(),
-                        isOnline = canAttemptOnlineGeneration && !remoteFallbackActive
                     )
                 }
             }
@@ -163,8 +129,7 @@ class AssistantViewModel(
                     context = deviceContextProvider.deviceContext.value,
                     conversationState = conversationState,
                     interactionHandler = chatActionHandler,
-                    allowLocalModel = LOCAL_MODEL_GENERATION_ENABLED &&
-                        _uiState.value.offlineChat.canUseLocalModel
+                    allowLocalModel = false
                 ).collect { event ->
                     when (event) {
                         is AssistantAnswerEvent.DraftVisible -> {
@@ -309,73 +274,6 @@ class AssistantViewModel(
         }
     }
 
-    fun setOfflineChatEnabled(enabled: Boolean) {
-        if (enabled) {
-            showOfflineDisableConfirmation = false
-            offlineLoadingDialogDismissed = false
-            offlineChatModelController.requestEnable()
-        } else {
-            showOfflineDisableConfirmation = true
-            refreshOfflineChatUiState()
-        }
-    }
-
-    fun confirmOfflineChatMeteredDownload() {
-        offlineLoadingDialogDismissed = false
-        offlineChatModelController.confirmMeteredDownload()
-    }
-
-    fun dismissOfflineChatMeteredDownload() {
-        offlineChatModelController.cancelMeteredConfirmation()
-    }
-
-    fun dismissOfflineChatLoadingDialog() {
-        offlineLoadingDialogDismissed = true
-        refreshOfflineChatUiState()
-    }
-
-    fun dismissOfflineChatFinishedDialog() {
-        dismissedOfflineFinishedEventId = offlineChatModelController.state.value.completedEventId
-        refreshOfflineChatUiState()
-    }
-
-    fun confirmDisableOfflineChat() {
-        showOfflineDisableConfirmation = false
-        offlineChatModelController.requestDisable()
-        refreshOfflineChatUiState()
-    }
-
-    fun dismissDisableOfflineChat() {
-        showOfflineDisableConfirmation = false
-        refreshOfflineChatUiState()
-    }
-
-    private fun refreshOfflineChatUiState() {
-        val modelState = offlineChatModelController.state.value
-        val canAttemptOnlineGeneration = repository.canAttemptOnlineGeneration(deviceContextProvider.deviceContext.value)
-        _uiState.update { state ->
-            state.copy(
-                offlineChat = modelState.toOfflineChatUiState(),
-                isOnline = canAttemptOnlineGeneration && !remoteFallbackActive
-            )
-        }
-    }
-
-    private fun OfflineChatModelState.toOfflineChatUiState(): OfflineChatUiState =
-        OfflineChatUiState(
-            enabled = enabled,
-            status = status,
-            progressPercent = progressPercent,
-            message = message,
-            errorMessage = errorMessage,
-            modelSizeBytes = modelSizeBytes,
-            completedEventId = completedEventId,
-            showMeteredConfirmation = status == OfflineChatModelStatus.WAITING_METERED_CONFIRMATION,
-            showLoadingDialog = isBusy && !offlineLoadingDialogDismissed,
-            showFinishedDialog = completedEventId > 0L && completedEventId != dismissedOfflineFinishedEventId,
-            showDisableConfirmation = showOfflineDisableConfirmation
-        )
-
     class Factory(
         private val application: Application,
         private val deviceContextProvider: DeviceContextProvider,
@@ -388,7 +286,6 @@ class AssistantViewModel(
                 return AssistantViewModel(
                     repository = runtimeGraph.repository,
                     deviceContextProvider = deviceContextProvider,
-                    offlineChatModelController = runtimeGraph.offlineChatModelController,
                     chatActionHandler = chatActionHandler
                 ) as T
             }

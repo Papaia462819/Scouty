@@ -17,10 +17,8 @@ data class RuntimeFeatureFlags(
     val useCrossEncoderReranker: Boolean = true,
     val useGeneralPathReranker: Boolean = true,
     val useCampfireLane: Boolean = false,
-    val useLlamaCpp: Boolean = true,
     val useConversationMemory: Boolean = true,
     val useLlmSummarizer: Boolean = true,
-    val useQwenDefault: Boolean = true,
     val useGeminiApi: Boolean = true,
     val useCardParaphraseExpression: Boolean = false,
     val useGroundedWording: Boolean = false,
@@ -34,7 +32,6 @@ class AssistantRuntimeGraph private constructor(
 ) {
     val knowledgePackManager = KnowledgePackManager(context)
     val modelManager = ModelManager(context, featureFlags)
-    val offlineChatModelController = OfflineChatModelController(context, modelManager)
 
     private val queryAnalyzer = QueryAnalyzer(useCampfireLane = featureFlags.useCampfireLane)
     private val knowledgeStore = SqliteKnowledgeChunkStore(knowledgePackManager)

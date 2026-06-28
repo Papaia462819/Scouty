@@ -40,8 +40,8 @@ class AssistantRepositoryRuntimeTest {
             )
             Log.d(LogTag, "response text=${response.answerText.replace("\n", "\\n").take(3000)}")
 
-            assertEquals(GenerationMode.LOCAL_LLM, response.generationMode)
-            assertEquals(ModelRuntimeState.LOADED, response.modelRuntimeState)
+            assertEquals(GenerationMode.FALLBACK_STRUCTURED, response.generationMode)
+            assertEquals(ModelRuntimeState.MISSING, response.modelRuntimeState)
             assertTrue(response.answerText.contains("foc", ignoreCase = true))
             assertFalse(response.answerText.contains("Raspuns prudent", ignoreCase = true))
             assertFalse(response.answerText.contains("Cautious answer", ignoreCase = true))
@@ -77,8 +77,8 @@ class AssistantRepositoryRuntimeTest {
             )
 
             Log.d(LogTag, "romanianTypo response=${response.answerText.replace("\n", "\\n").take(3000)}")
-            assertEquals(GenerationMode.LOCAL_LLM, response.generationMode)
-            assertEquals(ModelRuntimeState.LOADED, response.modelRuntimeState)
+            assertEquals(GenerationMode.FALLBACK_STRUCTURED, response.generationMode)
+            assertEquals(ModelRuntimeState.MISSING, response.modelRuntimeState)
             assertFalse(response.answerText.contains("what should", ignoreCase = true))
             assertFalse(response.answerText.contains("call salvamont", ignoreCase = true))
             assertTrue(

@@ -5,7 +5,6 @@ import android.util.Log
 import com.google.mediapipe.tasks.genai.llminference.LlmInference
 import com.google.mediapipe.tasks.genai.llminference.LlmInferenceSession
 import com.google.mediapipe.tasks.genai.llminference.PromptTemplates
-import com.scouty.app.assistant.domain.runtime.LlamaCppRuntimeAdapter
 import com.scouty.app.assistant.model.GenerationMode
 import com.scouty.app.assistant.model.ModelRuntimeState
 import com.scouty.app.assistant.model.ModelStatus
@@ -23,7 +22,6 @@ import java.io.File
 
 private const val DefaultModelVersion = "gemma-3-1b-it-int4"
 private const val DefaultMaxTokens = 4_096
-private const val QwenModelVersion = "qwen2.5-1.5b-instruct-q4_k_m"
 
 data class LocalLlmSamplerParams(
     val maxTokens: Int = 512,
@@ -101,8 +99,7 @@ enum class LocalModelBackend {
 }
 
 enum class LocalModelRuntime {
-    MEDIAPIPE,
-    LLAMA_CPP
+    MEDIAPIPE
 }
 
 class ModelManager(
@@ -115,15 +112,8 @@ class ModelManager(
     )
 
     constructor(context: Context, featureFlags: RuntimeFeatureFlags) : this(
-        modelLocator = AndroidLocalModelLocator(
-            context = context.applicationContext,
-            includeLlamaCpp = featureFlags.useLlamaCpp
-        ),
-        runtimeAdapter = if (featureFlags.useLlamaCpp) {
-            LlamaCppRuntimeAdapter()
-        } else {
-            MediaPipeLocalLlmRuntimeAdapter(context.applicationContext)
-        }
+        modelLocator = AndroidLocalModelLocator(context.applicationContext),
+        runtimeAdapter = MediaPipeLocalLlmRuntimeAdapter(context.applicationContext)
     )
 
     private val mutex = Mutex()
@@ -319,19 +309,12 @@ class ModelManager(
 
 private class AndroidLocalModelLocator(
     context: Context,
-    private val includeLlamaCpp: Boolean = false,
     private val json: Json = Json { ignoreUnknownKeys = true }
 ) : LocalModelLocator {
     private val gemmaInternalDir = File(context.noBackupFilesDir, "models/gemma-3-1b")
     private val gemmaExternalDir = context.getExternalFilesDir(null)?.let { File(it, "models/gemma-3-1b") }
-    private val qwenInternalDir = File(context.noBackupFilesDir, "models/qwen-2.5-1.5b")
-    private val qwenExternalDir = context.getExternalFilesDir(null)?.let { File(it, "models/qwen-2.5-1.5b") }
 
     private val searchRoots: List<ModelSearchRoot> = buildList {
-        if (includeLlamaCpp) {
-            add(ModelSearchRoot(qwenInternalDir, LocalModelRuntime.LLAMA_CPP, "internal app storage"))
-            qwenExternalDir?.let { add(ModelSearchRoot(it, LocalModelRuntime.LLAMA_CPP, "external app storage")) }
-        }
         add(ModelSearchRoot(gemmaInternalDir, LocalModelRuntime.MEDIAPIPE, "internal app storage"))
         gemmaExternalDir?.let { add(ModelSearchRoot(it, LocalModelRuntime.MEDIAPIPE, "external app storage")) }
     }
@@ -355,14 +338,14 @@ private class AndroidLocalModelLocator(
         }
 
         LocalModelDiscovery(
-            modelVersion = if (includeLlamaCpp) QwenModelVersion else DefaultModelVersion,
-            runtime = if (includeLlamaCpp) LocalModelRuntime.LLAMA_CPP else LocalModelRuntime.MEDIAPIPE,
+            modelVersion = DefaultModelVersion,
+            runtime = LocalModelRuntime.MEDIAPIPE,
             details = buildString {
                 append("No supported local model bundle detected.")
                 append(" Checked ")
                 append(searchRoots.joinToString(separator = ", ") { it.dir.absolutePath })
                 append(". Expected ")
-                append(if (includeLlamaCpp) "Qwen GGUF or Gemma MediaPipe bundle" else "Gemma 3 1B `.task` or `.litertlm` bundle")
+                append("Gemma 3 1B `.task` or `.litertlm` bundle")
                 append(". Structured fallback remains active.")
             }
         )
@@ -420,21 +403,18 @@ private class AndroidLocalModelLocator(
     private fun isSupportedFile(file: File, runtime: LocalModelRuntime): Boolean =
         file.extension.lowercase() in when (runtime) {
             LocalModelRuntime.MEDIAPIPE -> MediaPipeExtensions
-            LocalModelRuntime.LLAMA_CPP -> LlamaCppExtensions
         }
 
     private fun matchesExpectedModel(fileName: String, runtime: LocalModelRuntime): Boolean {
         val normalized = fileName.lowercase()
         return when (runtime) {
             LocalModelRuntime.MEDIAPIPE -> normalized.contains("gemma") && normalized.contains("1b")
-            LocalModelRuntime.LLAMA_CPP -> QwenFilenameMarkers.any(normalized::contains)
         }
     }
 
     private fun preferredRank(fileName: String, runtime: LocalModelRuntime): Int {
         val preferred = when (runtime) {
             LocalModelRuntime.MEDIAPIPE -> PreferredMediaPipeModelNames
-            LocalModelRuntime.LLAMA_CPP -> PreferredLlamaCppModelNames
         }
         return preferred.indexOf(fileName.lowercase())
             .takeIf { it >= 0 }
@@ -488,7 +468,6 @@ private class AndroidLocalModelLocator(
 
         val runtime: LocalModelRuntime?
             get() = when (runtimeRaw?.lowercase()) {
-                "llama_cpp" -> LocalModelRuntime.LLAMA_CPP
                 "mediapipe" -> LocalModelRuntime.MEDIAPIPE
                 else -> null
             }
@@ -510,8 +489,6 @@ private class AndroidLocalModelLocator(
 
     private companion object {
         private val MediaPipeExtensions = setOf("task", "litertlm")
-        private val LlamaCppExtensions = setOf("gguf")
-        private val QwenFilenameMarkers = listOf("qwen2.5", "qwen2", "qwen")
         private val PreferredMediaPipeModelNames = listOf(
             "gemma-3-1b-it-int4.task",
             "gemma3-1b-it-int4.task",
@@ -526,19 +503,12 @@ private class AndroidLocalModelLocator(
             "gemma-3-1b.litertlm",
             "gemma3-1b.litertlm"
         )
-        private val PreferredLlamaCppModelNames = listOf(
-            "qwen2.5-1.5b-instruct-q4_k_m.gguf",
-            "qwen2_5-1.5b-instruct-q4_k_m.gguf",
-            "qwen2.5-1.5b-instruct.gguf",
-            "qwen2-5-1.5b-instruct-q4_k_m.gguf"
-        )
     }
 }
 
 private val LocalModelRuntime.displayName: String
     get() = when (this) {
         LocalModelRuntime.MEDIAPIPE -> "MediaPipe"
-        LocalModelRuntime.LLAMA_CPP -> "llama.cpp"
     }
 
 private class MediaPipeLocalLlmRuntimeAdapter(

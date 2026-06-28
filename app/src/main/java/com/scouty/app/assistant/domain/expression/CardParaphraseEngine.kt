@@ -111,12 +111,12 @@ class CardParaphraseEngine(
         val prompt = buildPrompt(request)
         val startedAt = System.nanoTime()
         val raw = runCatching {
-            withTimeout(QwenParaphraseTimeoutMs) {
+            withTimeout(ParaphraseTimeoutMs) {
                 model.generate(
                     prompt = prompt,
                     options = LocalLlmGenerationOptions(
                         sampler = LocalLlmSamplerParams(
-                            maxTokens = QwenParaphraseMaxTokens,
+                            maxTokens = ParaphraseMaxTokens,
                             temperature = 0.25f,
                             topK = 40,
                             topP = 0.9f,
@@ -345,8 +345,8 @@ class CardParaphraseEngine(
         private const val MaxResponseToCardRatio = 2.5
         private const val MinResponseCharacters = 120
         private const val MaxCacheEntries = 64
-        private const val QwenParaphraseTimeoutMs = 2_000L
-        private const val QwenParaphraseMaxTokens = 72
+        private const val ParaphraseTimeoutMs = 2_000L
+        private const val ParaphraseMaxTokens = 72
         private val NumberRegex = Regex("\\b\\d+(?:[.,:/-]\\d+)*\\b")
         private val CapitalizedWordRegex = Regex("\\b\\p{Lu}[\\p{L}0-9-]{2,}\\b")
         private val StopWords = setOf(

@@ -1,6 +1,6 @@
 # CONTEXT LICENȚĂ — Scouty 1.0.0
 
-> **Notă de adaptare a template-ului.** Promptul original a fost scris pentru un proiect numit „AutoNaut Ai" (asistență mecanică auto cu Qwen + YOLO11 + OBD-II). Proiectul real din acest repo este **Scouty 1.0.0** — asistent outdoor offline pentru drumeții în Carpați. Am păstrat structura template-ului 1:1, dar am marcat secțiunile irelevante (OBD-II, automotive) cu `[NU SE APLICĂ — proiectul este Scouty, asistent outdoor, nu auto]` și am adaptat conținutul la tehnologiile reale găsite în cod: Qwen 2.5 1.5B prin llama.cpp, Gemma 3 1B prin MediaPipe (fallback), YOLO11n pentru detecție urme animale (NU martori auto), Jina reranker v2 pentru retrieval, knowledge pack SQLite pre-built. **Fără Firebase, fără Gemini/OpenAI/Anthropic remote, fără OBD-II** — toate verificate în cod.
+> **Notă de adaptare a template-ului.** Promptul original a fost scris pentru un proiect numit „AutoNaut Ai" (asistență mecanică auto + OBD-II). Proiectul real din acest repo este **Scouty 1.0.0** — asistent outdoor offline pentru drumeții în Carpați. Conținutul relevant pentru varianta curentă este: knowledge pack SQLite pre-built, căutare locală FTS, corecție deterministă a întrebării, Jina reranker v2 pentru reordonare semantică, YOLO11n/ONNX pentru detecție urme animale și Gemini pentru formularea online când există conexiune. Offline, chatul nu descarcă și nu rulează un model generativ local.
 
 > **Surse extracție.** Codul Android principal: `C:\Scouty\scouty_app\app\` (sub git, branch `main`, commit `7ae896c`). Dataset YOLO și artefacte antrenare: `D:\ScoutyDatasets\scouty_tracks_dataset_generated\`. Pipeline Python: `C:\Scouty\scouty_app\tools\`. Toate căile din raport sunt **relative la `C:\Scouty\scouty_app\`** dacă nu se specifică altfel.
 
@@ -25,7 +25,7 @@
 | **KSP** | `2.0.21-1.0.27` | `build.gradle.kts:5` |
 | **Compose plugin** | `2.0.21` | `build.gradle.kts:4` |
 | **kotlinx.serialization plugin** | `2.0.21` | `build.gradle.kts:6` |
-| **NDK version** (build script) | `27.2.12479018` | `tools/build_llama_jni.ps1:5` |
+| **NDK version** | n/a | Nu există runtime nativ pentru chatul offline curent |
 | **APK debug existent** | `app/build/intermediates/apk/debug/app-debug.apk` | (build local, dimensiunea în secțiunea 11) |
 
 ### 0.1. Limbaje și volum cod (LOC)
@@ -35,10 +35,10 @@
 | **Kotlin (main)** | `app/src/main/java/com/scouty/app/` | **105** | **31 427** |
 | **Kotlin (test)** | `app/src/test/java/` | **26** | **4 760** *(diferența 36 187 − 31 427)* |
 | **Kotlin (androidTest)** | `app/src/androidTest/java/` | **6** | (incluse în diferență) |
-| **C++ (native JNI)** | `app/src/main/cpp/scouty_llama_jni.cpp` | **1** | ≈ 300 |
-| **CMake** | `app/src/main/cpp/CMakeLists.txt` | **1** | 52 |
+| **C++ (native JNI)** | n/a | **0** | 0 |
+| **CMake** | n/a | **0** | 0 |
 | **Python (tools/)** | `tools/` și `tools/knowledge_pipeline/` și `tools/benchmarks/` și `tools/card_generator/` | ~ **14** scripturi | ≈ 4 500 (estimat) |
-| **PowerShell (build JNI)** | `tools/build_llama_jni.ps1` | 1 | 70 |
+| **PowerShell (tooling debug/date)** | `tools/*.ps1` | mai multe | n/a |
 | **XML resurse** | `app/src/main/res/` | 4 | 136 |
 | **Procent dominanță** | Kotlin ≈ 85 %, Python ≈ 12 %, C++ ≈ 2 %, alte ≈ 1 % | — | (estimat din LOC) |
 
@@ -56,12 +56,7 @@ scouty_app/
 │       ├── main/
 │       │   ├── AndroidManifest.xml
 │       │   ├── assets/             (gol — vezi sourceSets remap la scouty_assets)
-│       │   ├── cpp/                (cod nativ JNI: CMakeLists.txt + scouty_llama_jni.cpp)
 │       │   ├── java/com/scouty/app (toate sursele Kotlin — vezi 2.1)
-│       │   ├── jniLibs/            (libscouty_llama_jni.so pre-built per ABI)
-│       │   │   ├── arm64-v8a/
-│       │   │   ├── armeabi-v7a/
-│       │   │   └── x86_64/
 │       │   ├── res/                (values/, values-ro/, xml/, font_certs.xml)
 │       │   └── scouty_assets/      (folderul folosit de fapt — vezi sourceSets în build.gradle)
 │       │       ├── Atractii.geojson           (4.59 MB)
@@ -99,7 +94,6 @@ scouty_app/
     │   └── bench_tool_call_parser.py
     ├── bin/                        (pmtiles.exe, go-pmtiles_windows zip)
     ├── build_bucegi_demo_bbox.py
-    ├── build_llama_jni.ps1
     ├── build_offline_map_packs.py
     ├── card_generator/             (pipeline cards conversaționale — sute de JSON-uri)
     ├── knowledge_pipeline/
@@ -124,14 +118,13 @@ assistant/domain/AssistantRepository.kt                   (2 902 LOC — orchest
 assistant/domain/AssistantRuntimeGraph.kt
 assistant/domain/CampfireConversationEngine.kt           (1 778 LOC)
 assistant/domain/InterpretationPipeline.kt                (948 LOC)
-assistant/domain/LocalLlmGenerationEngine.kt             (Qwen/Gemma prompt + parse JSON structured)
-assistant/domain/ModelManager.kt                         (Discovery + load Qwen GGUF / Gemma .task)
+assistant/domain/LocalLlmGenerationEngine.kt             (wrapper legacy/fallback; chat offline trece allowLocalModel=false)
+assistant/domain/ModelManager.kt                         (status/discovery pentru bundle MediaPipe legacy; chatul offline nu folosește model generativ local)
 assistant/domain/TrailContextEngine.kt                    (1 443 LOC)
 assistant/domain/expression/CardParaphraseEngine.kt
 assistant/domain/memory/ConversationContextAssembler.kt
 assistant/domain/memory/SummaryCompactor.kt
 assistant/domain/retrieval/CrossEncoderReranker.kt       (Jina reranker ONNX)
-assistant/domain/runtime/LlamaCppRuntimeAdapter.kt       (JNI bridge + ChatML Qwen)
 assistant/domain/tools/AssistantTools.kt
 assistant/domain/tools/ToolDispatcher.kt
 assistant/model/AssistantModels.kt
@@ -195,7 +188,6 @@ utils/TrailEntity.kt                                      (declarat dar nefolosi
 ```
 tools/build_bucegi_demo_bbox.py
 tools/build_offline_map_packs.py
-tools/build_llama_jni.ps1                       (PowerShell, nu Python)
 tools/benchmarks/bench_expression_layer.py
 tools/benchmarks/bench_jina_reranker.py
 tools/benchmarks/bench_tool_call_parser.py
@@ -236,7 +228,6 @@ tools/bin/                      → PMTiles CLI (go-pmtiles_windows)
 docs/                           → application-status.md, planning/, offline-map-packs.md, project-structure.md
 scratch/                        → workspace local (gitignored)
 D:\ScoutyDatasets\              → datasets YOLO + runs antrenare (EXTERN, nu în repo)
-D:\ScoutyScratch\llama.cpp\     → sursa llama.cpp pentru build JNI (EXTERN)
 ```
 
 **[VERIFICAT]** secțiune 0.
@@ -269,7 +260,7 @@ Reprodus în secțiunea **14.2**. Highlight-urile:
 - `packaging.resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"`
 - **Asset-uri remap**: `sourceSets.main.assets.setSrcDirs(listOf("src/main/scouty_assets"))` (NU folosește `src/main/assets/` standard)
 - `release { isMinifyEnabled = false }` — **R8/ProGuard DEZACTIVAT pe release** [WIP — vezi 13]
-- **Niciun `externalNativeBuild` în build.gradle.kts** — native lib `libscouty_llama_jni.so` este build-uit extern cu `tools/build_llama_jni.ps1` și comis pre-built în `app/src/main/jniLibs/{arm64-v8a,armeabi-v7a,x86_64}/`
+- **Niciun `externalNativeBuild` în build.gradle.kts** — chatul offline curent nu folosește runtime nativ JNI pentru generare text.
 
 ### 1.3. Dependențe — lista completă cu versiuni
 
@@ -321,7 +312,7 @@ Reprodus în secțiunea **14.2**. Highlight-urile:
 | `androidx.camera:camera-core`, `camera-camera2`, `camera-lifecycle`, `camera-view` | `1.4.2` |
 
 **Native runtime LLM**
-- `libscouty_llama_jni.so` (custom, pre-built, în `app/src/main/jniLibs/`), wraps `llama.cpp` static — vezi 14.1 și 14.5
+- Nu există runtime nativ LLM în varianta curentă a produsului.
 
 **Test**
 | Lib | Versiune |
@@ -335,7 +326,7 @@ Reprodus în secțiunea **14.2**. Highlight-urile:
 **Observații cheie:**
 - **NU există** dependențe Firebase (auth, firestore, storage), nu există Gemini/OpenAI/Anthropic SDK-uri, nu există MLKit, nu există ZXing, nu există TensorFlow Lite, nu există PyTorch Mobile.
 - **NU există** plugin `com.google.gms.google-services` și nici `google-services.json`.
-- Runtime LLM principal este **llama.cpp** (via JNI custom) cu modelul **Qwen 2.5 1.5B Instruct Q4_K_M GGUF**. Runtime secundar este **MediaPipe Tasks GenAI** cu modelul **Gemma 3 1B IT INT4** (`.task` / `.litertlm`). Selecția se face prin `RuntimeFeatureFlags.useLlamaCpp` (default `true` în `AssistantRuntimeGraph.kt:18`).
+- Chatul offline nu folosește un LLM local. Răspunsul este selectat din cardurile locale și reordonat semantic; generarea naturală este disponibilă doar pe calea online prin Gemini.
 
 ### 1.4. `gradle.properties`
 
@@ -400,8 +391,8 @@ Pattern-ul asistentului este o **RAG (Retrieval-Augmented Generation) pipeline**
 1. **QueryAnalyzer** (clasificare query: route_context, gear, campfire, etc.)
 2. **SqliteKnowledgeChunkStore + KnowledgePackManager** (retrieval prin FTS4 SQLite)
 3. **CrossEncoderReranker** (re-ranking cu Jina v2 ONNX)
-4. **ModelManager + LocalLlmGenerationEngine** (generare prin Qwen llama.cpp sau Gemma MediaPipe)
-5. **TemplateGenerationEngine** (fallback determinist când LLM nu e disponibil)
+4. **DirectAnswerComposer / TemplateGenerationEngine** (compunere deterministă din cardul local selectat)
+5. **GeminiRemoteGenerationEngine** (formulare online când există conexiune)
 6. **MedicalSafetyPolicy** (clasificare safety înainte de generare)
 7. **ConversationStore** (SQLite cu summary compaction)
 
@@ -419,7 +410,6 @@ Schema runtime cablată în `AssistantRuntimeGraph.kt` (vezi 14.6).
 | `com.scouty.app.assistant.domain.expression` | Domain — paraphrase | `CardParaphraseEngine`, `ModelManagerCardParaphraseModel` |
 | `com.scouty.app.assistant.domain.memory` | Domain — context conversational | `ConversationContextAssembler`, `ConversationHistory`, `SummaryCompactor` |
 | `com.scouty.app.assistant.domain.retrieval` | Domain — reranking | `CrossEncoderReranker` (Jina v2 ONNX cu DJL HF tokenizer, padded sequence length 96, sigmoid scoring) |
-| `com.scouty.app.assistant.domain.runtime` | Domain — adaptor JNI llama.cpp | `LlamaCppRuntimeAdapter`, `LlamaCppLoadedModel`, `LlamaCppNativeBridge` (JNI external functions: `loadModel`, `generate`, `release`), `LlamaCppPromptTemplate` cu `QwenChatMl` și `Raw` |
 | `com.scouty.app.assistant.domain.tools` | Domain — grammar-constrained tool calling | `AssistantTools`, `ToolDispatcher`, `GrammarToolCallPlanner`, `ModelManagerToolCallModel` |
 | `com.scouty.app.assistant.model` | Domain — DTO | `SafetyOutcome` (enum), `DeviceContextSnapshot`, `TrailContextSnapshot`, `AssistantCitation`, `AssistantResponse`, `AssistantUiState`, `StructuredAssistantOutput`, `StructuredResponseSection`, `ResponseSectionStyle`, `ModelStatus`, `ModelRuntimeState`, `KnowledgePackStatus`, `KnowledgePackManifest`, `KnowledgeChunkRecord`, `GenerationMode`, `ReasoningType`, `ConversationLane`, `DomainHint`, `QueryAnalysis`, `CardFamily`, etc. (~ 30+ data classes/enum-uri în 2 fișiere) |
 | `com.scouty.app.assistant.ui` | UI — assistant | `AssistantViewModel`, `AssistantFollowUpPrompts` |
@@ -510,7 +500,7 @@ Manifest (`knowledge_pack_manifest.json`, vezi 9.4):
 | `KnowledgePackManager` | `assistant/data/KnowledgePackManager.kt` | Instalează knowledge_pack.sqlite din assets în `noBackupFilesDir/knowledge_pack/`, verifică SHA-256 + PRAGMA integrity_check | `Context` |
 | `SqliteKnowledgeChunkStore` | `assistant/data/KnowledgePackManager.kt` | Implementare `KnowledgeChunkStore` cu FTS4 queries, fallback cross-domain, embedding cache | `KnowledgePackManager` |
 | `ConversationStore` | `assistant/data/ConversationStore.kt` | Persistare conversații în SQLite cu summary compaction | `Context` |
-| `ModelManager` | `assistant/domain/ModelManager.kt` | Discovery + load model local (Qwen GGUF în `models/qwen-2.5-1.5b/` sau Gemma `.task` în `models/gemma-3-1b/`) | `LocalModelLocator`, `LocalLlmRuntimeAdapter` |
+| `ModelManager` | `assistant/domain/ModelManager.kt` | Status/discovery pentru bundle MediaPipe legacy; chatul offline curent folosește `allowLocalModel=false` și răspunde din carduri locale | `LocalModelLocator`, `LocalLlmRuntimeAdapter` |
 | `LocalAccountRepository` | `profile/LocalAccountRepository.kt` | Persistă LocalAccountRecord (JSON serializat) în SharedPreferences | `Context` |
 | `RouteEnrichmentRepository` (object) | `data/RouteEnrichmentCatalog.kt` | Încarcă și cache-uiește `local_route_enriched_catalog.json`; search accent-insensitive cu scoring | (object) |
 | `RouteGeometryRepository` (object) | `data/RouteGeometryIndex.kt` | Decodează polilinii Google + pruning de leaf segments | (object) |

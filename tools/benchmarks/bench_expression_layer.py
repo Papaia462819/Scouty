@@ -278,10 +278,10 @@ def main() -> int:
         "expression_latency_ms_p50": None,
         "expression_latency_ms_p95": None,
         "expression_mode": "ideal_answer_simulation",
-        "qwen_validated": False,
+        "local_generation_validated": False,
         "notes": (
             "This host benchmark validates retrieval and the deterministic faithfulness checker. "
-            "Qwen expression latency and output quality require a device/llama.cpp run."
+            "Offline production answers are served from local cards, not from a local text generator."
         ),
     }
     result = {"summary": summary, "rows": rows}
