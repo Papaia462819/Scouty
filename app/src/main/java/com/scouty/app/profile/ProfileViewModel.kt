@@ -29,6 +29,9 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     private val repository = FirebaseProfileRepository()
     private val userTrailProfileStore = UserTrailProfileStore(application)
+    private val profileCacheStore = ProfileCacheStore(application)
+    private val pendingTrailCompletionStore = PendingTrailCompletionStore(application)
+    private var pendingSyncInProgress = false
 
     private val _uiState = MutableStateFlow(ProfileSessionUiState(isLoading = true))
     val uiState: StateFlow<ProfileSessionUiState> = _uiState.asStateFlow()
@@ -170,7 +173,9 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             runCatching {
                 repository.saveProfile(uid, profile, routePreferences)
                 userTrailProfileStore.save(routePreferences)
+                profileCacheStore.save(uid, profile, routePreferences)
                 _uiState.value = buildAuthenticatedState(uid, profile, routePreferences)
+                syncPendingTrailCompletions()
             }.onFailure { error ->
                 _uiState.update {
                     it.copy(
@@ -208,6 +213,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             runCatching {
                 repository.saveProfile(uid, updatedProfile, routePreferences)
+                profileCacheStore.save(uid, updatedProfile, routePreferences)
                 _uiState.value = buildAuthenticatedState(uid, updatedProfile, routePreferences)
             }.onFailure { error ->
                 _uiState.update {
@@ -234,6 +240,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
         val uid = currentState.uid ?: return
         _uiState.update { it.copy(routePreferences = routePreferences) }
+        profileCacheStore.save(uid, profile.copy(updatedAtEpochMillis = System.currentTimeMillis()), routePreferences)
         viewModelScope.launch {
             runCatching {
                 repository.saveProfile(uid, profile.copy(updatedAtEpochMillis = System.currentTimeMillis()), routePreferences)
@@ -247,13 +254,118 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     fun recordTrailCompletion(snapshot: CompletedTrailSnapshot) {
         val currentState = _uiState.value
-        val currentProfile = currentState.profile ?: return
-        if (!currentState.isGuest && currentState.uid == null) {
+        val ownerUid = snapshot.ownerUid ?: currentState.uid?.takeUnless { currentState.isGuest }
+        if (ownerUid == null) {
+            val currentProfile = currentState.profile ?: return
+            val update = buildTrailCompletionUpdate(currentProfile, snapshot) ?: return
+            _uiState.value = currentState.copy(
+                stage = SessionStage.APP,
+                isLoading = false,
+                authMessage = null,
+                profile = update.profile,
+                routePreferences = currentState.routePreferences
+            )
             return
         }
-        val routePreferences = currentState.routePreferences
-        if (currentProfile.trailHistory.any { it.id == snapshot.id }) {
+
+        pendingTrailCompletionStore.upsert(
+            PendingTrailCompletion(
+                ownerUid = ownerUid,
+                snapshot = snapshot.copy(ownerUid = ownerUid)
+            )
+        )
+
+        val ownerBundle = when {
+            !currentState.isGuest && currentState.uid == ownerUid && currentState.profile != null -> {
+                CachedProfileBundle(
+                    profile = currentState.profile,
+                    routePreferences = currentState.routePreferences
+                )
+            }
+            else -> profileCacheStore.load(ownerUid)
+        }
+
+        if (ownerBundle == null) {
+            _uiState.update {
+                it.copy(authMessage = "Tura a fost salvată local și va fi sincronizată când contul revine online.")
+            }
+            syncPendingTrailCompletions()
             return
+        }
+
+        buildTrailCompletionUpdate(ownerBundle.profile, snapshot)?.let { update ->
+            profileCacheStore.save(ownerUid, update.profile, ownerBundle.routePreferences)
+            if (!currentState.isGuest && currentState.uid == ownerUid) {
+                _uiState.value = buildAuthenticatedState(ownerUid, update.profile, ownerBundle.routePreferences)
+            }
+        }
+        syncPendingTrailCompletions()
+    }
+
+    fun syncPendingTrailCompletions() {
+        val currentState = _uiState.value
+        val uid = currentState.uid?.takeUnless { currentState.isGuest } ?: repository.currentUser?.uid ?: return
+        if (repository.currentUser?.uid != uid || pendingSyncInProgress) {
+            return
+        }
+
+        pendingSyncInProgress = true
+        viewModelScope.launch {
+            try {
+                runCatching {
+                    syncPendingTrailCompletionsForUser(uid)
+                }.onFailure { error ->
+                    if (_uiState.value.uid == uid) {
+                        _uiState.update {
+                            it.copy(authMessage = error.toUserMessage("Turele offline sunt salvate local și vor fi resincronizate."))
+                        }
+                    }
+                }
+            } finally {
+                pendingSyncInProgress = false
+            }
+        }
+    }
+
+    private suspend fun syncPendingTrailCompletionsForUser(uid: String) {
+        val pending = pendingTrailCompletionStore.loadForUser(uid)
+        if (pending.isEmpty()) {
+            return
+        }
+        val bundle = repository.loadProfile(uid) ?: return
+        var profile = bundle.profile
+        val routePreferences = bundle.routePreferences
+        val syncedIds = mutableListOf<String>()
+
+        try {
+            for (completion in pending) {
+                val update = buildTrailCompletionUpdate(profile, completion.snapshot)
+                if (update == null) {
+                    syncedIds += completion.snapshot.id
+                    continue
+                }
+
+                repository.saveTrailCompletion(uid, update.profile, routePreferences, update.record)
+                profile = update.profile
+                syncedIds += completion.snapshot.id
+            }
+        } finally {
+            pendingTrailCompletionStore.removeForUser(uid, syncedIds)
+        }
+
+        profileCacheStore.save(uid, profile, routePreferences)
+        userTrailProfileStore.save(routePreferences)
+        if (_uiState.value.uid == uid && !_uiState.value.isGuest) {
+            _uiState.value = buildAuthenticatedState(uid, profile, routePreferences)
+        }
+    }
+
+    private fun buildTrailCompletionUpdate(
+        currentProfile: UserProfile,
+        snapshot: CompletedTrailSnapshot
+    ): TrailCompletionUpdate? {
+        if (currentProfile.trailHistory.any { it.id == snapshot.id }) {
+            return null
         }
 
         val outcome = when (snapshot.status) {
@@ -327,36 +439,20 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             unlockedAchievements = currentProfile.unlockedAchievements + newAchievements
         )
 
-        if (currentState.isGuest) {
-            _uiState.value = currentState.copy(
-                stage = SessionStage.APP,
-                isLoading = false,
-                authMessage = null,
-                profile = updatedProfile,
-                routePreferences = routePreferences
-            )
-            return
-        }
-
-        val uid = currentState.uid ?: return
-        _uiState.value = buildAuthenticatedState(uid, updatedProfile, routePreferences)
-        viewModelScope.launch {
-            runCatching {
-                repository.saveTrailCompletion(uid, updatedProfile, routePreferences, newRecord)
-            }.onFailure { error ->
-                _uiState.update {
-                    it.copy(authMessage = error.toUserMessage("Tura a fost salvată local în sesiune, dar nu a fost sincronizată încă."))
-                }
-            }
-        }
+        return TrailCompletionUpdate(
+            profile = updatedProfile,
+            record = newRecord
+        )
     }
 
     fun signOut() {
-        if (_uiState.value.isGuest) {
+        val currentState = _uiState.value
+        if (currentState.isGuest) {
             _uiState.value = ProfileSessionUiState()
             return
         }
         viewModelScope.launch {
+            currentState.uid?.let(profileCacheStore::clear)
             repository.signOut()
             clearCredentialState()
             _uiState.value = ProfileSessionUiState()
@@ -374,10 +470,21 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                 clearLegacyLocalState()
                 loadSessionForUser(user.uid, user.email.orEmpty(), user.displayName)
             }.onFailure { error ->
-                repository.signOut()
-                _uiState.value = ProfileSessionUiState(
-                    authMessage = error.toUserMessage("Sesiunea nu a putut fi încărcată.")
-                )
+                val cachedBundle = profileCacheStore.load(user.uid)
+                if (cachedBundle != null) {
+                    userTrailProfileStore.save(cachedBundle.routePreferences)
+                    _uiState.value = buildAuthenticatedState(
+                        uid = user.uid,
+                        profile = cachedBundle.profile,
+                        routePreferences = cachedBundle.routePreferences
+                    ).copy(
+                        authMessage = error.toUserMessage("Profilul a fost restaurat din cache-ul local.")
+                    )
+                } else {
+                    _uiState.value = ProfileSessionUiState(
+                        authMessage = error.toUserMessage("Sesiunea nu a putut fi încărcată.")
+                    )
+                }
             }
         }
     }
@@ -389,7 +496,9 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             return
         }
         userTrailProfileStore.save(bundle.routePreferences)
+        profileCacheStore.save(uid, bundle.profile, bundle.routePreferences)
         _uiState.value = buildAuthenticatedState(uid, bundle.profile, bundle.routePreferences)
+        syncPendingTrailCompletions()
     }
 
     private fun startOnboardingForUser(uid: String, email: String, displayName: String?) {
@@ -481,6 +590,11 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             is GetCredentialException -> "Autentificarea Google a fost anulată sau nu este disponibilă."
             else -> localizedMessage ?: fallback
         }
+
+    private data class TrailCompletionUpdate(
+        val profile: UserProfile,
+        val record: ProfileTrailRecord
+    )
 
     private companion object {
         const val GuestUid = "guest-local"

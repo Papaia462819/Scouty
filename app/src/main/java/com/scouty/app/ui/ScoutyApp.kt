@@ -120,9 +120,12 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
     val mapSessionState by mainViewModel.mapSessionState.collectAsState()
     val assistantUiState by assistantViewModel.uiState.collectAsState()
 
-    LaunchedEffect(profileUiState.uid, profileUiState.routePreferences) {
+    LaunchedEffect(profileUiState.uid, profileUiState.isGuest, profileUiState.routePreferences) {
         if (profileUiState.stage == SessionStage.APP) {
-            mainViewModel.replaceUserProfileFromFirebase(profileUiState.routePreferences)
+            mainViewModel.replaceUserProfileFromFirebase(
+                profile = profileUiState.routePreferences,
+                ownerUid = profileUiState.uid?.takeUnless { profileUiState.isGuest }
+            )
         }
     }
 
@@ -142,6 +145,12 @@ fun ScoutyApp(mainViewModel: MainViewModel = viewModel()) {
         mapSessionState.lastCompletedTrail?.let { completedTrail ->
             profileViewModel.recordTrailCompletion(completedTrail)
             mainViewModel.consumeLastCompletedTrail()
+        }
+    }
+
+    LaunchedEffect(uiState.isOnline, profileUiState.uid, profileUiState.isGuest) {
+        if (uiState.isOnline && profileUiState.stage == SessionStage.APP && !profileUiState.isGuest) {
+            profileViewModel.syncPendingTrailCompletions()
         }
     }
 

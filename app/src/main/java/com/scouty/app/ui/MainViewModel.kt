@@ -105,6 +105,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         const val TrailStartDepartureKm = 0.12
         const val TrailProgressSnapToleranceKm = 0.25
         const val TrailAutoCompleteMinElapsedMs = 90_000L
+        const val TrailManualCompleteProgressThreshold = 0.94f
         const val ActiveTrailProgressPersistIntervalMs = 30_000L
         const val ForecastHorizonDays = 14L
         const val RecentHistoryDays = 4L
@@ -170,6 +171,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private var lastRecommendationRefreshMs: Long = 0L
     private var lastActiveTrailPersistMs: Long = 0L
     private var lastWaterContextAnchor: Pair<Double, Double>? = null
+    private var currentProfileOwnerUid: String? = null
 
     private val json = Json { ignoreUnknownKeys = true }
     private val retrofit = Retrofit.Builder()
@@ -405,7 +407,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         maybeRefreshRouteRecommendations(force = true)
     }
 
-    fun replaceUserProfileFromFirebase(profile: UserTrailProfile) {
+    fun replaceUserProfileFromFirebase(profile: UserTrailProfile, ownerUid: String? = currentProfileOwnerUid) {
+        currentProfileOwnerUid = ownerUid
         saveUserTrailProfile(profile, notifyFirebase = false)
         updateUiState { currentState ->
             currentState.copy(
@@ -543,6 +546,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         updateUiState { currentState ->
             val trail = currentState.activeTrail ?: return@updateUiState currentState
             val nextTrail = trail.copy(
+                ownerUid = trail.ownerUid ?: currentProfileOwnerUid,
                 trackingState = ActiveTrailState.ACTIVE,
                 startedAtEpochMillis = System.currentTimeMillis(),
                 progress = 0f,
@@ -967,9 +971,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
     private fun completeActiveTrail(manual: Boolean) {
         val activeTrail = _uiState.value.activeTrail ?: return
         val completedAtEpochMillis = System.currentTimeMillis()
+        val endedEarly = manual && activeTrail.progress.coerceIn(0f, 1f) < TrailManualCompleteProgressThreshold
         val completionSnapshot = activeTrail.toCompletedTrailSnapshot(
             completedAtEpochMillis = completedAtEpochMillis,
-            endedEarly = manual,
+            endedEarly = endedEarly,
             gearReady = isTrailGearReady(_uiState.value.gearList)
         )
         activeTrailStore.clear()
@@ -2041,6 +2046,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
                 name = name,
                 date = date,
                 partyComposition = partyComposition,
+                ownerUid = if (recordSelection) {
+                    currentProfileOwnerUid
+                } else {
+                    cachedTrail?.ownerUid ?: currentProfileOwnerUid
+                },
                 latitude = lat,
                 longitude = lon,
                 localCode = localCode,
@@ -2157,6 +2167,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
         } ?: estimatedDuration
         return CompletedTrailSnapshot(
             id = listOfNotNull(localCode, completedAtEpochMillis.toString()).joinToString(":"),
+            ownerUid = ownerUid,
             name = name,
             region = region?.takeIf { it.isNotBlank() } ?: "Regiune necunoscută",
             localCode = localCode,

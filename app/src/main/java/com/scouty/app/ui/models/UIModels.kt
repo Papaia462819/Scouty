@@ -11,6 +11,7 @@ import com.scouty.app.assistant.model.WaterSourceContextItem
 import com.scouty.app.data.RouteBounds
 import com.scouty.app.data.RouteCoordinate
 import com.scouty.app.utils.TrailDifficulty
+import kotlinx.serialization.Serializable
 
 import java.util.Calendar
 
@@ -38,6 +39,7 @@ data class ActiveTrail(
     val name: String,
     val date: Calendar,
     val partyComposition: TrailPartyComposition = TrailPartyComposition(),
+    val ownerUid: String? = null,
     val latitude: Double,
     val longitude: Double,
     val localCode: String? = null,
@@ -107,6 +109,7 @@ data class NearbyGuideTarget(
     val bearingDegrees: Double
 )
 
+@Serializable
 enum class TrailCompletionStatus {
     COMPLETED,
     ENDED_EARLY
@@ -146,8 +149,10 @@ data class TrailSelectionSnapshot(
     val highlightBounds: RouteBounds? = null
 )
 
+@Serializable
 data class CompletedTrailSnapshot(
     val id: String,
+    val ownerUid: String? = null,
     val name: String,
     val region: String,
     val localCode: String? = null,
