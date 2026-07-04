@@ -9,132 +9,132 @@ object ProfileAssessmentEngine {
     val questions: List<ProfileQuestion> = listOf(
         ProfileQuestion(
             id = "hike_frequency",
-            title = "Cât de des mergi în drumeții?",
-            helper = "Asta îi arată lui Scouty cât de activ ești deja pe trasee.",
+            title = "Cât de des ajungi pe munte?",
+            helper = "Ne ajută să vedem cât de experimentat ești deja pe trasee.",
             weight = 16,
             options = listOf(
-                ProfileOption("rarely", "Rar", "De câteva ori pe an sau mai puțin.", 0),
-                ProfileOption("seasonal", "La câteva luni", "Ieși când apare un weekend bun.", 1),
-                ProfileOption("monthly", "1-2 ori pe lună", "Drumeția face deja parte din rutină.", 2),
-                ProfileOption("weekly", "Aproape săptămânal", "Ajungi pe traseu în majoritatea săptămânilor.", 3),
-                ProfileOption("constant", "De mai multe ori pe săptămână", "Traseele sunt ritmul tău normal.", 4)
+                ProfileOption("rarely", "Rar", "Câteva ieșiri pe an, cel mult.", 0),
+                ProfileOption("seasonal", "Din când în când", "Când prind un weekend liber și vreme bună.", 1),
+                ProfileOption("monthly", "O dată-două pe lună", "Muntele e deja parte din rutina mea.", 2),
+                ProfileOption("weekly", "Aproape săptămânal", "Rar trece o săptămână fără o tură.", 3),
+                ProfileOption("constant", "De mai multe ori pe săptămână", "Practic trăiesc pe trasee.", 4)
             )
         ),
         ProfileQuestion(
             id = "max_distance",
-            title = "Care este cea mai lungă tură de o zi pe care ai terminat-o?",
-            helper = "Alege distanța unei singure zile, nu totalul unei ture de mai multe zile.",
+            title = "Cea mai lungă tură de o zi pe care ai dus-o până la capăt?",
+            helper = "Distanța totală dus-întors, dintr-o singură zi de mers (nu doar până în vârf).",
             weight = 14,
             options = listOf(
-                ProfileOption("under_5", "Sub 5 km", "Plimbări scurte sau bucle ușoare.", 0),
-                ProfileOption("5_10", "5-10 km", "Ture scurte spre medii, de jumătate de zi.", 1),
-                ProfileOption("10_15", "10-15 km", "Zona clasică pentru o tură de o zi.", 2),
-                ProfileOption("15_20", "15-20 km", "Efort mai lung, cu ritm real.", 3),
-                ProfileOption("20_plus", "20+ km", "Zilele lungi sunt deja în plan.", 4)
+                ProfileOption("under_5", "Sub 5 km", "O plimbare scurtă și lejeră.", 0),
+                ProfileOption("5_10", "5-10 km", "O tură de-o jumătate de zi.", 1),
+                ProfileOption("10_15", "10-15 km", "Clasica tură de o zi.", 2),
+                ProfileOption("15_20", "15-20 km", "O zi lungă, cu ceva ritm.", 3),
+                ProfileOption("20_plus", "Peste 20 km", "Zilele lungi nu mă sperie.", 4)
             )
         ),
         ProfileQuestion(
             id = "physical_condition",
-            title = "Cum este condiția ta fizică acum?",
-            helper = "Contează forma actuală, nu cel mai bun an al tău.",
+            title = "Cum stai cu condiția fizică acum?",
+            helper = "Cum te simți în perioada asta, nu în cea mai bună formă a ta.",
             weight = 14,
             options = listOf(
-                ProfileOption("restart", "Reîncep ușor", "Vrei să revii treptat și cu grijă.", 0),
-                ProfileOption("short", "Bun pentru ture scurte", "Poți ține un ritm stabil în zile mai ușoare.", 1),
-                ProfileOption("solid", "Solid", "O zi întreagă de drumeție pare realistă.", 2),
-                ProfileOption("strong", "Foarte bun", "Te refaci bine după efort lung.", 3),
-                ProfileOption("endurance", "Pregătit pentru anduranță", "Efortul susținut face parte din plan.", 4)
+                ProfileOption("restart", "O iau ușor", "Vreau să revin treptat, fără să forțez.", 0),
+                ProfileOption("short", "Bună pentru ture scurte", "Țin un ritm ok pe distanțe mici.", 1),
+                ProfileOption("solid", "Solidă", "O zi întreagă pe munte nu-i o problemă.", 2),
+                ProfileOption("strong", "Foarte bună", "Mă refac repede după un efort lung.", 3),
+                ProfileOption("endurance", "De anduranță", "Efortul susținut e terenul meu.", 4)
             )
         ),
         ProfileQuestion(
             id = "navigation",
-            title = "Cât de sigur ești pe orientare?",
-            helper = "Gândește-te la hărți, decizii de traseu, rerutare și calm când poteca devine neclară.",
+            title = "Cât de bine te orientezi pe munte?",
+            helper = "Gândește-te la hărți, la GPS și la cât de calm rămâi când poteca nu mai e clară.",
             weight = 14,
             options = listOf(
-                ProfileOption("marked_only", "Doar trasee marcate", "Te bazezi pe marcaje evidente.", 0),
-                ProfileOption("basic_map", "Traseu + hartă simplă", "Poți urma indicații de bază pentru rută.", 1),
-                ProfileOption("gps_ok", "Folosesc GPS bine", "Navigația pe telefon îți este deja utilă.", 2),
-                ProfileOption("map_gps", "Hartă + GPS + rerutare", "Poți corecta mici greșeli de traseu.", 3),
-                ProfileOption("independent", "Planific și navighez singur", "Poți construi și urma o rută pe cont propriu.", 4)
+                ProfileOption("marked_only", "Doar după marcaje", "Merg pe traseu marcat și după indicatoare.", 0),
+                ProfileOption("gps_ok", "Cu harta și GPS-ul din aplicație", "Mă uit pe telefon și văd unde sunt.", 1),
+                ProfileOption("basic_map", "Citesc harta și înțeleg traseul", "Îmi dau seama de distanțe, urcușuri, direcție.", 2),
+                ProfileOption("map_gps", "Mă descurc și fără marcaje", "Dacă dispar semnele, tot găsesc drumul.", 3),
+                ProfileOption("independent", "Îmi planific singur traseul", "Hartă, busolă, GPS — merg și pe unde nu-s poteci.", 4)
             )
         ),
         ProfileQuestion(
             id = "terrain",
-            title = "Ce teren poți gestiona controlat?",
-            helper = "Alege varianta care încă se simte stabilă, nu haotică.",
+            title = "Cu ce fel de teren te simți stăpân pe situație?",
+            helper = "Alege ce încă ți se pare sigur, nu ce te-ar scoate din zona de confort.",
             weight = 12,
             options = listOf(
-                ProfileOption("forest_road", "Drumuri forestiere", "Poteci late și teren foarte blând.", 0),
-                ProfileOption("standard", "Trasee standard", "Traseele marcate normale sunt în regulă.", 1),
-                ProfileOption("steep", "Urcări abrupte", "Ești ok cu urcare susținută.", 2),
-                ProfileOption("technical_light", "Piatra instabilă / pasaje tehnice", "Rămâi calm pe teren mai dificil.", 3),
-                ProfileOption("ridge", "Creste / zone expuse", "Liniile înguste și aeriene sunt gestionabile.", 4)
+                ProfileOption("forest_road", "Teren plan", "Drumuri largi, poteci line, fără bătăi de cap.", 0),
+                ProfileOption("standard", "Poteci normale, cu ceva urcuș", "Traseele marcate obișnuite.", 1),
+                ProfileOption("steep", "Urcușuri lungi și abrupte", "Nu mă sperie o pantă serioasă.", 2),
+                ProfileOption("technical_light", "Teren stâncos și accidentat", "Rămân calm pe piatră instabilă și pasaje tehnice.", 3),
+                ProfileOption("ridge", "Cățărări", "Trasee care cer escaladă propriu-zisă, cu pasaje expuse.", 4)
             )
         ),
         ProfileQuestion(
             id = "conditions",
-            title = "În ce condiții ieși totuși pe traseu?",
-            helper = "Ajută la estimarea rezistenței și a nivelului de prudență.",
+            title = "Cum te descurci cu vremea?",
+            helper = "Ne ajută să știm cât de departe poți merge când nu e soare.",
             weight = 10,
             options = listOf(
-                ProfileOption("perfect", "Doar vreme perfectă", "Uscat, stabil și ușor de citit.", 0),
-                ProfileOption("cool", "Răcoare sau vânt ușor", "Un pic de disconfort este acceptabil.", 1),
-                ProfileOption("mixed", "Ploaie sau vânt mai tare", "Poți continua când vremea se strică.", 2),
-                ProfileOption("three_season", "Zile mixte trei sezoane", "Vremea schimbătoare de munte intră în calcul.", 3),
-                ProfileOption("winter", "Și iarna sau pe zăpadă", "Turele de sezon rece sunt deja în joc.", 4)
+                ProfileOption("perfect", "Doar pe vreme bună", "Uscat, senin, plăcut.", 0),
+                ProfileOption("cool", "Puțină ploaie sau vânt nu mă sperie", "Un pic de disconfort e ok.", 1),
+                ProfileOption("mixed", "Continui și când se strică serios", "Ploaie, vânt puternic — merg mai departe.", 2),
+                ProfileOption("three_season", "Frig, ceață și ploaie rece", "Le-am prins pe toate.", 3),
+                ProfileOption("winter", "Zăpadă, viscol, ger", "Vremea nu mă oprește!", 4)
             )
         ),
         ProfileQuestion(
             id = "gear_setup",
-            title = "Cât de bine este pus la punct echipamentul tău?",
-            helper = "Scouty folosește asta pentru recomandări mai bune mai târziu.",
+            title = "Cât de bine îți dai seama ce echipament îți trebuie pe un traseu?",
+            helper = "Ne ajută să-ți dăm recomandări mai bune mai târziu.",
             weight = 8,
             options = listOf(
-                ProfileOption("improvise", "Improvizez", "Împachetezi mai mult după instinct.", 0),
-                ProfileOption("basics", "Știu baza", "De obicei iei lucrurile esențiale.", 1),
-                ProfileOption("checklist", "Am listă", "Urmărești o structură repetabilă.", 2),
-                ProfileOption("route_tuned", "Adaptez la traseu", "Ajustezi după distanță, teren și prognoză.", 3),
-                ProfileOption("locked_in", "Kitul e stabil", "Ai deja un sistem rafinat.", 4)
+                ProfileOption("improvise", "Improvizez", "Iau ce-mi pică în mână și sper că-i bine.", 0),
+                ProfileOption("basics", "Știu esențialul", "Apă, un strat în plus, încălțări bune.", 1),
+                ProfileOption("checklist", "Merg pe o listă", "Am o rutină și o urmez.", 2),
+                ProfileOption("route_tuned", "Adaptez la traseu", "Aleg după distanță, teren și vreme.", 3),
+                ProfileOption("locked_in", "Am totul pus la punct", "Știu exact ce-mi trebuie, până la ultimul detaliu.", 4)
             )
         ),
         ProfileQuestion(
             id = "hike_style",
-            title = "Ce fel de ture te atrag?",
-            helper = "Preferința contează, dar nu trebuie să domine nivelul de start.",
+            title = "Ce fel de ture te atrag cel mai mult?",
+            helper = "Preferința ta contează, dar nu-ți stabilește ea nivelul.",
             weight = 6,
             options = listOf(
-                ProfileOption("scenic", "Scurt și scenic", "Recompensă rapidă și stres mic.", 0),
-                ProfileOption("classic_day", "Ture clasice de o zi", "Plan montan echilibrat, pe o zi întreagă.", 1),
-                ProfileOption("long_effort", "Zile lungi de efort", "Îți plac distanța și ritmul susținut.", 2),
-                ProfileOption("peaks", "Vârfuri și creste", "Vârfurile și terenul mai ascuțit te atrag.", 3),
-                ProfileOption("adventure", "Zile solicitante de aventură", "Obiectivele mari fac parte din plăcere.", 4)
+                ProfileOption("scenic", "Scurte și cu priveliște", "Răsplată rapidă, fără bătăi de cap.", 0),
+                ProfileOption("classic_day", "Ture clasice de o zi", "Echilibrate, cât o zi întreagă.", 1),
+                ProfileOption("long_effort", "Zile lungi, cu efort", "Îmi place distanța și ritmul.", 2),
+                ProfileOption("peaks", "Vârfuri și creste", "Mă cheamă înălțimile.", 3),
+                ProfileOption("adventure", "Aventuri solicitante", "Cu cât e mai greu, cu atât îmi place mai mult.", 4)
             )
         ),
         ProfileQuestion(
             id = AgeQuestionId,
-            title = "Care este intervalul tău de vârstă?",
-            helper = "Este folosit pentru context de profil și recomandări, nu ca să îți scadă nivelul de start.",
+            title = "Ce vârstă ai?",
+            helper = "Doar pentru context și recomandări — nu-ți scade nivelul.",
             weight = 0,
             options = listOf(
-                ProfileOption("under_18", "Sub 18", "Energie tânără, motor în creștere.", 0),
-                ProfileOption("18_24", "18-24", "Ani cu recuperare rapidă.", 0),
-                ProfileOption("25_34", "25-34", "Fereastră puternică pentru drumeții.", 0),
-                ProfileOption("35_44", "35-44", "Bază solidă și experiență în amestec.", 0),
-                ProfileOption("45_54", "45-54", "Eficiența începe să conteze mai mult.", 0),
-                ProfileOption("55_plus", "55+", "Tehnica și ritmul conduc ziua.", 0)
+                ProfileOption("under_18", "Sub 18", "", 0),
+                ProfileOption("18_24", "18-24", "", 0),
+                ProfileOption("25_34", "25-34", "", 0),
+                ProfileOption("35_44", "35-44", "", 0),
+                ProfileOption("45_54", "45-54", "", 0),
+                ProfileOption("55_plus", "55+", "", 0)
             )
         ),
         ProfileQuestion(
             id = "first_aid",
-            title = "Cunoști primul ajutor de bază pe traseu?",
-            helper = "Asta crește autonomia pe care Scouty o presupune pentru tine în teren.",
+            title = "Cunoști primul ajutor?",
+            helper = "Ne ajută să știm cât de autonom te putem lăsa în teren.",
             weight = 6,
             options = listOf(
-                ProfileOption("none", "Nu prea", "Preferi să eviți mișcările greșite.", 0),
-                ProfileOption("few_basics", "Câteva baze", "Știi ideile generale.", 1),
-                ProfileOption("common_issues", "Da, probleme comune", "Poți gestiona situații simple pe traseu.", 3),
-                ProfileOption("confident", "Da, cu încredere", "Poți acționa calm în scenarii comune.", 4)
+                ProfileOption("none", "Nu prea", "Prefer să nu risc mișcări greșite.", 0),
+                ProfileOption("few_basics", "Câteva noțiuni de bază", "Știu ideea generală.", 1),
+                ProfileOption("common_issues", "Da, situații comune", "Mă descurc cu ce apare des pe traseu.", 3),
+                ProfileOption("confident", "Da, cu încredere", "Pot acționa calm la nevoie.", 4)
             )
         )
     )

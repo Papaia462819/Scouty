@@ -772,8 +772,7 @@ fun ProfileOnboardingScreen(
                 displayName = displayName,
                 homeRegion = homeRegion,
                 avatarId = avatarId,
-                result = result,
-                answers = answers
+                result = result
             )
         }
     }
@@ -1273,13 +1272,15 @@ private fun SingleSelectOptionCard(
                 fontWeight = FontWeight.Medium,
                 lineHeight = 18.sp,
             )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = helper,
-                color = if (selected) TextSecondary else TextTertiary,
-                fontSize = 11.sp,
-                lineHeight = 15.sp,
-            )
+            if (helper.isNotBlank()) {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = helper,
+                    color = if (selected) TextSecondary else TextTertiary,
+                    fontSize = 11.sp,
+                    lineHeight = 15.sp,
+                )
+            }
         }
     }
 }
@@ -1290,16 +1291,10 @@ private fun ResultStep(
     displayName: String,
     homeRegion: String,
     avatarId: String,
-    result: AssessmentResult,
-    answers: Map<String, String>
+    result: AssessmentResult
 ) {
     val currentLevel = result.starterLevel
     val topStarterLevel = ScoutyLevel.LEVEL_3
-    val summaryTags = listOfNotNull(
-        localizedAnswerLabel("navigation", answers["navigation"]),
-        localizedAnswerLabel("terrain", answers["terrain"]),
-        localizedAnswerLabel("first_aid", answers["first_aid"])
-    )
     val avatar = remember(avatarId) { profileAvatars.firstOrNull { it.id == avatarId } ?: profileAvatars.first() }
 
     Column(
@@ -1426,25 +1421,6 @@ private fun ResultStep(
             }
         }
 
-        if (summaryTags.isNotEmpty()) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                FieldLabel("SEMNALE CHEIE")
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp),
-                ) {
-                    summaryTags.forEachIndexed { index, tag ->
-                        val semantic = when (index) {
-                            0 -> Info
-                            1 -> AccentGreen
-                            else -> Warning
-                        }
-                        SignalPill(text = tag, semantic = semantic)
-                    }
-                }
-            }
-        }
-
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -1528,24 +1504,6 @@ private fun TierPill(level: ScoutyLevel) {
             fontWeight = FontWeight.Medium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-        )
-    }
-}
-
-@Composable
-private fun SignalPill(text: String, semantic: Color) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
-            .background(semantic.copy(alpha = 0.1f))
-            .border(0.5.dp, semantic.copy(alpha = 0.2f), RoundedCornerShape(20.dp))
-            .padding(horizontal = 10.dp, vertical = 5.dp),
-    ) {
-        Text(
-            text = text,
-            color = semantic,
-            fontSize = 11.sp,
-            lineHeight = 13.sp,
         )
     }
 }
@@ -1668,44 +1626,44 @@ private fun localizedStepTitle(question: ProfileQuestion): String =
 private fun localizedQuestion(question: ProfileQuestion): LocalizedQuestionText =
     when (question.id) {
         "hike_frequency" -> LocalizedQuestionText(
-            "Cat de des mergi in drumetii?",
-            "Asta ii arata lui Scouty cat de activ esti deja pe trasee.",
+            "Cât de des ajungi pe munte?",
+            "Ne ajută să vedem cât de experimentat ești deja pe trasee.",
         )
         "max_distance" -> LocalizedQuestionText(
-            "Care este cea mai lunga tura de o zi pe care ai terminat-o?",
-            "Alege distanta unei singure zile, nu totalul unei ture de mai multe zile.",
+            "Cea mai lungă tură de o zi pe care ai dus-o până la capăt?",
+            "Distanța totală dus-întors, dintr-o singură zi de mers (nu doar până în vârf).",
         )
         "physical_condition" -> LocalizedQuestionText(
-            "Cum este conditia ta fizica acum?",
-            "Conteaza forma actuala, nu cel mai bun an al tau.",
+            "Cum stai cu condiția fizică acum?",
+            "Cum te simți în perioada asta, nu în cea mai bună formă a ta.",
         )
         "navigation" -> LocalizedQuestionText(
-            "Cat de sigur esti pe orientare?",
-            "Gandeste-te la harti, decizii de traseu, rerutare si calm cand poteca devine neclara.",
+            "Cât de bine te orientezi pe munte?",
+            "Gândește-te la hărți, la GPS și la cât de calm rămâi când poteca nu mai e clară.",
         )
         "terrain" -> LocalizedQuestionText(
-            "Ce teren poti gestiona controlat?",
-            "Alege varianta care inca se simte stabila, nu haotica.",
+            "Cu ce fel de teren te simți stăpân pe situație?",
+            "Alege ce încă ți se pare sigur, nu ce te-ar scoate din zona de confort.",
         )
         "conditions" -> LocalizedQuestionText(
-            "In ce conditii iesi totusi pe traseu?",
-            "Ajuta la estimarea rezistentei si a nivelului de prudenta.",
+            "Cum te descurci cu vremea?",
+            "Ne ajută să știm cât de departe poți merge când nu e soare.",
         )
         "gear_setup" -> LocalizedQuestionText(
-            "Cat de bine este pus la punct echipamentul tau?",
-            "Scouty foloseste asta pentru recomandari mai bune mai tarziu.",
+            "Cât de bine îți dai seama ce echipament îți trebuie pe un traseu?",
+            "Ne ajută să-ți dăm recomandări mai bune mai târziu.",
         )
         "hike_style" -> LocalizedQuestionText(
-            "Ce fel de ture te atrag?",
-            "Preferinta conteaza, dar nu trebuie sa domine scorul de abilitate.",
+            "Ce fel de ture te atrag cel mai mult?",
+            "Preferința ta contează, dar nu-ți stabilește ea nivelul.",
         )
         ProfileAssessmentEngine.AgeQuestionId -> LocalizedQuestionText(
-            "Care este intervalul tau de varsta?",
-            "Este folosit pentru context de profil si recomandari, nu ca sa iti scada nivelul de start.",
+            "Ce vârstă ai?",
+            "Doar pentru context și recomandări — nu-ți scade nivelul.",
         )
         "first_aid" -> LocalizedQuestionText(
-            "Cunosti primul ajutor de baza pe traseu?",
-            "Asta creste autonomia pe care Scouty o presupune pentru tine in teren.",
+            "Cunoști primul ajutor?",
+            "Ne ajută să știm cât de autonom te putem lăsa în teren.",
         )
         else -> LocalizedQuestionText(question.title, question.helper)
     }
@@ -1718,70 +1676,66 @@ private fun localizedOption(
 ): LocalizedOptionText =
     localizedOptions[questionId to optionId] ?: LocalizedOptionText(fallbackLabel, fallbackDescription)
 
-private fun localizedAnswerLabel(questionId: String, optionId: String?): String? =
-    optionId?.let { localizedOptions[questionId to it]?.label }
-        ?: ProfileAssessmentEngine.answerLabel(questionId, optionId)
-
 private val localizedOptions = mapOf(
-    ("hike_frequency" to "rarely") to LocalizedOptionText("Rar", "De cateva ori pe an sau mai putin."),
-    ("hike_frequency" to "seasonal") to LocalizedOptionText("La cateva luni", "Iesi cand apare un weekend bun."),
-    ("hike_frequency" to "monthly") to LocalizedOptionText("1-2 ori pe luna", "Drumetia face deja parte din rutina."),
-    ("hike_frequency" to "weekly") to LocalizedOptionText("Aproape saptamanal", "Ajungi pe traseu in majoritatea saptamanilor."),
-    ("hike_frequency" to "constant") to LocalizedOptionText("De mai multe ori pe saptamana", "Traseele sunt ritmul tau normal."),
+    ("hike_frequency" to "rarely") to LocalizedOptionText("Rar", "Câteva ieșiri pe an, cel mult."),
+    ("hike_frequency" to "seasonal") to LocalizedOptionText("Din când în când", "Când prind un weekend liber și vreme bună."),
+    ("hike_frequency" to "monthly") to LocalizedOptionText("O dată-două pe lună", "Muntele e deja parte din rutina mea."),
+    ("hike_frequency" to "weekly") to LocalizedOptionText("Aproape săptămânal", "Rar trece o săptămână fără o tură."),
+    ("hike_frequency" to "constant") to LocalizedOptionText("De mai multe ori pe săptămână", "Practic trăiesc pe trasee."),
 
-    ("max_distance" to "under_5") to LocalizedOptionText("Sub 5 km", "Plimbari scurte sau bucle usoare."),
-    ("max_distance" to "5_10") to LocalizedOptionText("5-10 km", "Ture scurte spre medii, de jumatate de zi."),
-    ("max_distance" to "10_15") to LocalizedOptionText("10-15 km", "Zona clasica de tura de o zi."),
-    ("max_distance" to "15_20") to LocalizedOptionText("15-20 km", "Efort mai lung, cu ritm real."),
-    ("max_distance" to "20_plus") to LocalizedOptionText("20+ km", "Zilele mari sunt deja pe masa."),
+    ("max_distance" to "under_5") to LocalizedOptionText("Sub 5 km", "O plimbare scurtă și lejeră."),
+    ("max_distance" to "5_10") to LocalizedOptionText("5-10 km", "O tură de-o jumătate de zi."),
+    ("max_distance" to "10_15") to LocalizedOptionText("10-15 km", "Clasica tură de o zi."),
+    ("max_distance" to "15_20") to LocalizedOptionText("15-20 km", "O zi lungă, cu ceva ritm."),
+    ("max_distance" to "20_plus") to LocalizedOptionText("Peste 20 km", "Zilele lungi nu mă sperie."),
 
-    ("physical_condition" to "restart") to LocalizedOptionText("Reincep usor", "Vrei sa revii treptat si cu grija."),
-    ("physical_condition" to "short") to LocalizedOptionText("Bun pentru ture scurte", "Poti tine un ritm stabil in zile mai usoare."),
-    ("physical_condition" to "solid") to LocalizedOptionText("Solid", "O zi intreaga de drumetie pare realista."),
-    ("physical_condition" to "strong") to LocalizedOptionText("Foarte bun", "Te refaci bine dupa efort lung."),
-    ("physical_condition" to "endurance") to LocalizedOptionText("Pregatit pentru anduranta", "Efortul sustinut face parte din plan."),
+    ("physical_condition" to "restart") to LocalizedOptionText("O iau ușor", "Vreau să revin treptat, fără să forțez."),
+    ("physical_condition" to "short") to LocalizedOptionText("Bună pentru ture scurte", "Țin un ritm ok pe distanțe mici."),
+    ("physical_condition" to "solid") to LocalizedOptionText("Solidă", "O zi întreagă pe munte nu-i o problemă."),
+    ("physical_condition" to "strong") to LocalizedOptionText("Foarte bună", "Mă refac repede după un efort lung."),
+    ("physical_condition" to "endurance") to LocalizedOptionText("De anduranță", "Efortul susținut e terenul meu."),
 
-    ("navigation" to "marked_only") to LocalizedOptionText("Doar trasee marcate", "Te bazezi pe marcaje evidente."),
-    ("navigation" to "basic_map") to LocalizedOptionText("Traseu + harta simpla", "Poti urma ajutoare de baza pentru ruta."),
-    ("navigation" to "gps_ok") to LocalizedOptionText("Folosesc GPS bine", "Navigatia pe telefon iti este deja utila."),
-    ("navigation" to "map_gps") to LocalizedOptionText("Harta + GPS + rerutare", "Poti repara mici greseli de traseu."),
-    ("navigation" to "independent") to LocalizedOptionText("Planific si navighez singur", "Poti construi si urma o ruta pe cont propriu."),
+    ("navigation" to "marked_only") to LocalizedOptionText("Doar după marcaje", "Merg pe traseu marcat și după indicatoare."),
+    ("navigation" to "gps_ok") to LocalizedOptionText("Cu harta și GPS-ul din aplicație", "Mă uit pe telefon și văd unde sunt."),
+    ("navigation" to "basic_map") to LocalizedOptionText("Citesc harta și înțeleg traseul", "Îmi dau seama de distanțe, urcușuri, direcție."),
+    ("navigation" to "map_gps") to LocalizedOptionText("Mă descurc și fără marcaje", "Dacă dispar semnele, tot găsesc drumul."),
+    ("navigation" to "independent") to LocalizedOptionText("Îmi planific singur traseul", "Hartă, busolă, GPS — merg și pe unde nu-s poteci."),
 
-    ("terrain" to "forest_road") to LocalizedOptionText("Drumuri forestiere", "Poteci late si teren foarte bland."),
-    ("terrain" to "standard") to LocalizedOptionText("Trasee standard", "Traseele marcate normale sunt in regula."),
-    ("terrain" to "steep") to LocalizedOptionText("Urcari abrupte", "Esti ok cu urcare sustinuta."),
-    ("terrain" to "technical_light") to LocalizedOptionText("Piatra instabila / pasaje tehnice", "Ramanai calm pe teren mai dificil."),
-    ("terrain" to "ridge") to LocalizedOptionText("Creste / zone expuse", "Liniile inguste si aeriene sunt gestionabile."),
+    ("terrain" to "forest_road") to LocalizedOptionText("Teren plan", "Drumuri largi, poteci line, fără bătăi de cap."),
+    ("terrain" to "standard") to LocalizedOptionText("Poteci normale, cu ceva urcuș", "Traseele marcate obișnuite."),
+    ("terrain" to "steep") to LocalizedOptionText("Urcușuri lungi și abrupte", "Nu mă sperie o pantă serioasă."),
+    ("terrain" to "technical_light") to LocalizedOptionText("Teren stâncos și accidentat", "Rămân calm pe piatră instabilă și pasaje tehnice."),
+    ("terrain" to "ridge") to LocalizedOptionText("Cățărări", "Trasee care cer escaladă propriu-zisă, cu pasaje expuse."),
 
-    ("conditions" to "perfect") to LocalizedOptionText("Doar vreme perfecta", "Uscat, stabil si usor de citit."),
-    ("conditions" to "cool") to LocalizedOptionText("Racoare sau vant usor", "Un pic de disconfort este acceptabil."),
-    ("conditions" to "mixed") to LocalizedOptionText("Ploaie sau vant mai tare", "Poti continua cand vremea se strica."),
-    ("conditions" to "three_season") to LocalizedOptionText("Zile mixte trei sezoane", "Vremea schimbatoare de munte intra in calcul."),
-    ("conditions" to "winter") to LocalizedOptionText("Si iarna sau zapada", "Turele de sezon rece sunt deja in joc."),
+    ("conditions" to "perfect") to LocalizedOptionText("Doar pe vreme bună", "Uscat, senin, plăcut."),
+    ("conditions" to "cool") to LocalizedOptionText("Puțină ploaie sau vânt nu mă sperie", "Un pic de disconfort e ok."),
+    ("conditions" to "mixed") to LocalizedOptionText("Continui și când se strică serios", "Ploaie, vânt puternic — merg mai departe."),
+    ("conditions" to "three_season") to LocalizedOptionText("Frig, ceață și ploaie rece", "Le-am prins pe toate."),
+    ("conditions" to "winter") to LocalizedOptionText("Zăpadă, viscol, ger", "Vremea nu mă oprește!"),
 
-    ("gear_setup" to "improvise") to LocalizedOptionText("Improvizez", "Impachetezi mai mult dupa instinct."),
-    ("gear_setup" to "basics") to LocalizedOptionText("Stiu baza", "De obicei iei lucrurile esentiale."),
-    ("gear_setup" to "checklist") to LocalizedOptionText("Am listă", "Urmaresti o structura repetabila."),
-    ("gear_setup" to "route_tuned") to LocalizedOptionText("Adaptez la traseu", "Ajustezi dupa distanta, teren si prognoza."),
-    ("gear_setup" to "locked_in") to LocalizedOptionText("Kitul e stabil", "Ai deja un sistem rafinat."),
+    ("gear_setup" to "improvise") to LocalizedOptionText("Improvizez", "Iau ce-mi pică în mână și sper că-i bine."),
+    ("gear_setup" to "basics") to LocalizedOptionText("Știu esențialul", "Apă, un strat în plus, încălțări bune."),
+    ("gear_setup" to "checklist") to LocalizedOptionText("Merg pe o listă", "Am o rutină și o urmez."),
+    ("gear_setup" to "route_tuned") to LocalizedOptionText("Adaptez la traseu", "Aleg după distanță, teren și vreme."),
+    ("gear_setup" to "locked_in") to LocalizedOptionText("Am totul pus la punct", "Știu exact ce-mi trebuie, până la ultimul detaliu."),
 
-    ("hike_style" to "scenic") to LocalizedOptionText("Scurt si scenic", "Recompensa rapida si stres mic."),
-    ("hike_style" to "classic_day") to LocalizedOptionText("Ture clasice de o zi", "Plan montan echilibrat, pe o zi intreaga."),
-    ("hike_style" to "long_effort") to LocalizedOptionText("Zile lungi de efort", "Iti plac distanta si ritmul sustinut."),
-    ("hike_style" to "peaks") to LocalizedOptionText("Vârfuri și creste", "Vârfurile și terenul ascuțit te atrag."),
-    ("hike_style" to "adventure") to LocalizedOptionText("Zile solicitante de aventura", "Obiectivele mari fac parte din placere."),
+    ("hike_style" to "scenic") to LocalizedOptionText("Scurte și cu priveliște", "Răsplată rapidă, fără bătăi de cap."),
+    ("hike_style" to "classic_day") to LocalizedOptionText("Ture clasice de o zi", "Echilibrate, cât o zi întreagă."),
+    ("hike_style" to "long_effort") to LocalizedOptionText("Zile lungi, cu efort", "Îmi place distanța și ritmul."),
+    ("hike_style" to "peaks") to LocalizedOptionText("Vârfuri și creste", "Mă cheamă înălțimile."),
+    ("hike_style" to "adventure") to LocalizedOptionText("Aventuri solicitante", "Cu cât e mai greu, cu atât îmi place mai mult."),
 
-    (ProfileAssessmentEngine.AgeQuestionId to "under_18") to LocalizedOptionText("Sub 18", "Energie tanara, motor in crestere."),
-    (ProfileAssessmentEngine.AgeQuestionId to "18_24") to LocalizedOptionText("18-24", "Ani cu recuperare rapida."),
-    (ProfileAssessmentEngine.AgeQuestionId to "25_34") to LocalizedOptionText("25-34", "Fereastra puternica pentru drumetii."),
-    (ProfileAssessmentEngine.AgeQuestionId to "35_44") to LocalizedOptionText("35-44", "Baza solida si experienta in amestec."),
-    (ProfileAssessmentEngine.AgeQuestionId to "45_54") to LocalizedOptionText("45-54", "Eficienta incepe sa conteze mai mult."),
-    (ProfileAssessmentEngine.AgeQuestionId to "55_plus") to LocalizedOptionText("55+", "Tehnica si ritmul conduc ziua."),
+    (ProfileAssessmentEngine.AgeQuestionId to "under_18") to LocalizedOptionText("Sub 18", ""),
+    (ProfileAssessmentEngine.AgeQuestionId to "18_24") to LocalizedOptionText("18-24", ""),
+    (ProfileAssessmentEngine.AgeQuestionId to "25_34") to LocalizedOptionText("25-34", ""),
+    (ProfileAssessmentEngine.AgeQuestionId to "35_44") to LocalizedOptionText("35-44", ""),
+    (ProfileAssessmentEngine.AgeQuestionId to "45_54") to LocalizedOptionText("45-54", ""),
+    (ProfileAssessmentEngine.AgeQuestionId to "55_plus") to LocalizedOptionText("55+", ""),
 
-    ("first_aid" to "none") to LocalizedOptionText("Nu prea", "Preferi sa eviti miscari gresite."),
-    ("first_aid" to "few_basics") to LocalizedOptionText("Cateva baze", "Stii ideile generale."),
-    ("first_aid" to "common_issues") to LocalizedOptionText("Da, probleme comune", "Poti gestiona situatii simple pe traseu."),
-    ("first_aid" to "confident") to LocalizedOptionText("Da, cu incredere", "Poti actiona calm in scenarii comune."),
+    ("first_aid" to "none") to LocalizedOptionText("Nu prea", "Prefer să nu risc mișcări greșite."),
+    ("first_aid" to "few_basics") to LocalizedOptionText("Câteva noțiuni de bază", "Știu ideea generală."),
+    ("first_aid" to "common_issues") to LocalizedOptionText("Da, situații comune", "Mă descurc cu ce apare des pe traseu."),
+    ("first_aid" to "confident") to LocalizedOptionText("Da, cu încredere", "Pot acționa calm la nevoie."),
 )
 
 private fun levelTitleRo(level: ScoutyLevel): String =

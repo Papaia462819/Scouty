@@ -1329,7 +1329,7 @@ private class DeterministicInteractionEngine {
                 packStatus = packStatus
             )
         }
-        detectWeatherIntent(normalized)?.let { intent ->
+        detectWeatherIntent(normalized, context.trail?.scheduledDate)?.let { intent ->
             return answerWeather(
                 intent = intent,
                 context = context,
@@ -2130,7 +2130,10 @@ private class DeterministicInteractionEngine {
         )
     }
 
-    private fun detectWeatherIntent(normalized: String): WeatherInteraction? {
+    private fun detectWeatherIntent(
+        normalized: String,
+        scheduledTrailDate: String?
+    ): WeatherInteraction? {
         val hazard = detectWeatherHazard(normalized)
         val mentionsWeather = containsAny(
             normalized,
@@ -2160,15 +2163,40 @@ private class DeterministicInteractionEngine {
             ?.getOrNull(1)
             ?.toIntOrNull()
             ?.takeIf { it in 0..23 }
+        val today = LocalDate.now()
+        val scheduledDate = scheduledTrailDate?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
+        val scheduledIsFuture = scheduledDate != null && scheduledDate.isAfter(today)
+
+        // Referire explicită la ziua traseului programat
+        val referencesScheduledDay = containsAny(
+            normalized,
+            "ziua programata", "zilei programate", "data programata", "in ziua programata",
+            "traseul programat", "traseului programat", "traseul planificat", "traseului planificat",
+            "ziua plecarii", "data plecarii", "la plecare", "ziua traseului", "in ziua traseului",
+            "cand plec", "cand merg pe traseu", "cand ajung pe traseu"
+        )
+        // Formulare la timp viitor
+        val referencesFuture = containsAny(
+            normalized,
+            "cum va fi", "cum o sa fie", "va fi", "o sa fie", "va ploua", "o sa ploua",
+            "o sa ninga", "va ninge"
+        )
+        // Folosim ziua programată doar dacă NU e o cerere relativă „peste N ore”
+        val useScheduledDate = scheduledDate != null && offsetHours == null &&
+            (referencesScheduledDay || (referencesFuture && scheduledIsFuture))
+
         val targetDate = when {
-            containsAny(normalized, "maine", "miine", "tomorrow") -> LocalDate.now().plusDays(1).toString()
-            containsAny(normalized, "poimaine") -> LocalDate.now().plusDays(2).toString()
-            else -> LocalDate.now().toString()
+            containsAny(normalized, "poimaine") -> today.plusDays(2).toString()
+            containsAny(normalized, "maine", "miine", "tomorrow") -> today.plusDays(1).toString()
+            useScheduledDate -> scheduledDate!!.toString()
+            else -> today.toString()
         }
+        val usesFutureDay = targetDate != today.toString()
+
         val intent = when {
             hazard != null -> WeatherInteractionIntent.HAZARD_CHECK
             offsetHours != null || targetHour != null || containsAny(normalized, "diseara", "seara") -> WeatherInteractionIntent.HOURLY_OFFSET
-            containsAny(normalized, "maine", "miine", "poimaine", "tomorrow") -> WeatherInteractionIntent.DAILY_FORECAST
+            usesFutureDay -> WeatherInteractionIntent.DAILY_FORECAST
             else -> WeatherInteractionIntent.CURRENT
         }
         val resolvedHour = targetHour ?: if (containsAny(normalized, "diseara", "seara")) 18 else null

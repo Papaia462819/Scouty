@@ -1,5 +1,7 @@
 # CONTEXT LICENȚĂ — Scouty 1.0.0
 
+> **STATUS 2026-07-02:** document istoric/de lucru, nu sursa de adevar pentru starea curenta a aplicatiei. Pentru prezentarea actualizata foloseste `SCOUTY_PREZENTARE_TEHNICA.md`. Sectiunile de mai jos pot contine metadate si concluzii depasite despre `applicationId`, Firebase, module mock, Qwen/local LLM sau starea testelor.
+
 > **Notă de adaptare a template-ului.** Promptul original a fost scris pentru un proiect numit „AutoNaut Ai" (asistență mecanică auto + OBD-II). Proiectul real din acest repo este **Scouty 1.0.0** — asistent outdoor offline pentru drumeții în Carpați. Conținutul relevant pentru varianta curentă este: knowledge pack SQLite pre-built, căutare locală FTS, corecție deterministă a întrebării, Jina reranker v2 pentru reordonare semantică, YOLO11n/ONNX pentru detecție urme animale și Gemini pentru formularea online când există conexiune. Offline, chatul nu descarcă și nu rulează un model generativ local.
 
 > **Surse extracție.** Codul Android principal: `C:\Scouty\scouty_app\app\` (sub git, branch `main`, commit `7ae896c`). Dataset YOLO și artefacte antrenare: `D:\ScoutyDatasets\scouty_tracks_dataset_generated\`. Pipeline Python: `C:\Scouty\scouty_app\tools\`. Toate căile din raport sunt **relative la `C:\Scouty\scouty_app\`** dacă nu se specifică altfel.

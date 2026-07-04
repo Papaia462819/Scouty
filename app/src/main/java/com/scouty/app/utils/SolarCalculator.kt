@@ -60,8 +60,8 @@ object SolarCalculator {
 
     private fun normalizeHours(h: Double): Double {
         var hour = h
-        while (h < 0) hour += 24.0
-        while (h >= 24) hour -= 24.0
+        while (hour < 0) hour += 24.0
+        while (hour >= 24) hour -= 24.0
         return hour
     }
 }

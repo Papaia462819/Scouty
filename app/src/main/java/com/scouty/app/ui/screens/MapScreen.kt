@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.RectF
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -26,6 +27,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -123,6 +126,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -748,10 +752,13 @@ fun MapScreen(
                 }
 
                 activeTrail?.takeIf { hasPlannedTrail && !hasNearbyGuideOverlay }?.let { plannedTrail ->
-                    SubtleMapRecenterButton(
+                    SubtleMapActionButton(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .padding(end = 18.dp, bottom = 112.dp),
+                            .padding(end = 14.dp, bottom = 262.dp),
+                        icon = Lucide.Route,
+                        contentDescription = "Încadrează traseul selectat",
+                        tint = AccentGreen,
                         onClick = { viewModel.orientToTrail(plannedTrail.toSelectionSnapshot()) }
                     )
                     PlannedTrailActions(
@@ -1588,10 +1595,15 @@ private fun SubtleMapActionButton(
     Box(
         modifier = modifier
             .size(44.dp)
+            .shadow(4.dp, RoundedCornerShape(14.dp), ambientColor = Color.Black.copy(alpha = 0.18f))
             .clip(RoundedCornerShape(14.dp))
-            .background(BgSurface)
+            .background(BgPrimary)
             .border(0.5.dp, BorderSubtle, RoundedCornerShape(14.dp))
-            .clickable(onClick = onClick),
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            ),
         contentAlignment = Alignment.Center
     ) {
         Icon(
@@ -1799,6 +1811,7 @@ private fun ActiveTrailHud(
     onEndTrail: () -> Unit
 ) {
     var visible by remember { mutableStateOf(false) }
+    var dragAccumPx by remember { mutableStateOf(0f) }
     val elapsedSeconds = rememberTrailElapsedSeconds(trail.startedAtEpochMillis)
     val completionPercent = (trail.progress.coerceIn(0f, 1f) * 100).roundToInt()
     val markerLabel = TrailMetadataFormatter.formatTrailMarkers(trail.markingSymbols)
@@ -1846,6 +1859,21 @@ private fun ActiveTrailHud(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .pointerInput(Unit) {
+                        detectVerticalDragGestures(
+                            onDragEnd = {
+                                when {
+                                    dragAccumPx < -40f -> onExpandedChange(true)
+                                    dragAccumPx > 40f -> onExpandedChange(false)
+                                }
+                                dragAccumPx = 0f
+                            },
+                            onVerticalDrag = { change, dragAmount ->
+                                change.consume()
+                                dragAccumPx += dragAmount
+                            }
+                        )
+                    }
                     .clickable { onExpandedChange(!expanded) },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -2950,15 +2978,15 @@ private fun MapLibreView(
                     map.setMinZoomPreference(DefaultRomaniaZoom)
                     map.setMaxZoomPreference(16.4)
                     map.uiSettings.apply {
-                        // Move the native compass above the water shortcut button (bottom-right)
-                        // instead of its default top-right position.
+                        // Keep the native compass in the top-right, clear of the bottom-right
+                        // action buttons (they overlap in active/tracking mode otherwise).
                         val density = context.resources.displayMetrics.density
-                        setCompassGravity(Gravity.BOTTOM or Gravity.END)
+                        setCompassGravity(Gravity.TOP or Gravity.END)
                         setCompassMargins(
                             0,
-                            0,
+                            (110 * density).toInt(),
                             (14 * density).toInt(),
-                            (262 * density).toInt()
+                            0
                         )
                     }
                     if (!mapClickListenerBound) {
@@ -2971,7 +2999,8 @@ private fun MapLibreView(
                                 tappedPoint = tappedPoint,
                                 routeCatalog = currentRouteCatalog,
                                 routeGeometryIndex = currentRouteGeometryIndex,
-                                mapDataConfig = currentMapDataConfig
+                                mapDataConfig = currentMapDataConfig,
+                                tolerancePx = 24f * context.resources.displayMetrics.density
                             )?.let { selection ->
                     currentOnTrailClick(selection)
                                 true
@@ -3174,10 +3203,18 @@ private fun handleMapTap(
     tappedPoint: LatLng,
     routeCatalog: RouteEnrichmentCatalog,
     routeGeometryIndex: RouteGeometryIndex,
-    mapDataConfig: MapDataConfig
+    mapDataConfig: MapDataConfig,
+    tolerancePx: Float
 ): SelectedTrailDetails? {
     val screenPoint = map.projection.toScreenLocation(tappedPoint)
-    val features = map.queryRenderedFeatures(screenPoint, *MapStyleConfig.trailQueryLayerIds(mapDataConfig))
+    // Widen the hit area around the tap so thin trail lines are easier to select.
+    val tapArea = RectF(
+        screenPoint.x - tolerancePx,
+        screenPoint.y - tolerancePx,
+        screenPoint.x + tolerancePx,
+        screenPoint.y + tolerancePx
+    )
+    val features = map.queryRenderedFeatures(tapArea, *MapStyleConfig.trailQueryLayerIds(mapDataConfig))
     val feature = features.firstOrNull { !featureRouteCode(it).isNullOrBlank() } ?: features.firstOrNull() ?: return null
     val routeCode = resolveTappedRouteCode(feature, tappedPoint, routeGeometryIndex) ?: return null
     val enrichment = RouteEnrichmentRepository.findByLocalCode(routeCatalog, routeCode)

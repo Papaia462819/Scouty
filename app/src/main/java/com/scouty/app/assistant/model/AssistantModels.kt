@@ -19,6 +19,8 @@ data class TrailContextSnapshot(
     val longitude: Double? = null,
     val localCode: String? = null,
     val region: String? = null,
+    /** Ziua programată a traseului, ISO yyyy-MM-dd. Pentru prognoza din data plecării. */
+    val scheduledDate: String? = null,
     val fromName: String? = null,
     val toName: String? = null,
     val markingLabel: String? = null,

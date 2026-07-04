@@ -409,6 +409,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
 
     fun replaceUserProfileFromFirebase(profile: UserTrailProfile, ownerUid: String? = currentProfileOwnerUid) {
         currentProfileOwnerUid = ownerUid
+        discardActiveTrailIfForeign(ownerUid)
         saveUserTrailProfile(profile, notifyFirebase = false)
         updateUiState { currentState ->
             currentState.copy(
@@ -421,6 +422,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application), D
             )
         }
         maybeRefreshRouteRecommendations(force = true)
+    }
+
+    /**
+     * Traseul activ e persistat local intr-un singur slot global (vezi [ActiveTrailStore]).
+     * restoreActiveTrail() ruleaza in init(), inainte sa stim cine e logat, asa ca poate
+     * incarca un traseu ramas de la alt cont. Cand aflam identitatea utilizatorului, aruncam
+     * orice traseu care nu ii apartine, ca un cont nou sa nu mosteneasca traseul altcuiva.
+     */
+    private fun discardActiveTrailIfForeign(currentOwnerUid: String?) {
+        val activeTrail = _uiState.value.activeTrail ?: return
+        if (activeTrail.ownerUid == currentOwnerUid) return
+        activeTrailStore.clear()
+        updateUiState { currentState ->
+            currentState.copy(
+                activeTrail = null,
+                gearList = emptyList()
+            )
+        }
+        _mapSessionState.update { currentState ->
+            currentState.copy(
+                selectedTrail = null,
+                isBottomSheetVisible = false,
+                mode = MapTrailMode.BROWSING
+            )
+        }
+        releaseOfflineMapForCurrentTrail()
     }
 
     fun updateTrailHistory(history: List<ProfileTrailRecord>) {

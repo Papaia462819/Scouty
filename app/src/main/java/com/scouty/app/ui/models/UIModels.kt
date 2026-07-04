@@ -214,6 +214,9 @@ fun HomeStatus.toDeviceContextSnapshot(): DeviceContextSnapshot =
                 longitude = trail.longitude,
                 localCode = trail.localCode,
                 region = trail.region,
+                scheduledDate = trail.date.let { cal ->
+                    cal.time.toInstant().atZone(cal.timeZone.toZoneId()).toLocalDate().toString()
+                },
                 fromName = trail.fromName,
                 toName = trail.toName,
                 markingLabel = TrailMetadataFormatter.formatTrailMarkers(trail.markingSymbols),

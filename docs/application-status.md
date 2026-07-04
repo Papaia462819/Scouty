@@ -1,5 +1,7 @@
 # Starea aplicației în repo-ul de producție
 
+Actualizat local pe 2026-07-02. Pentru descrierea completă tehnică și funcțională folosește `../SCOUTY_PREZENTARE_TEHNICA.md`; acest fișier este un status scurt.
+
 ## Versiune
 
 Versiunea declarată în aplicație rămâne `1.0.0`.
@@ -53,11 +55,14 @@ Ce face acum:
 
 - randare hartă prin MapLibre
 - folosește master-ul online `romania-high-detail.pmtiles` când există internet
-- pregătește automat pack-ul offline `trails/{trailCode}/offline.pmtiles` pentru traseul curent+
+- pregătește automat pack-ul offline `trails/{trailCode}/offline.pmtiles` pentru traseul curent
 - păstrează local pack-ul traseului curent și ultimele 3 pack-uri recente
 - căutare locală de trasee din asset-uri
-- selectare traseu și highlight pe hartă
+- selectare traseu și highlight pe hartă, inclusiv tap tolerance extins pentru linii subțiri
 - setare traseu activ
+- buton discret de reîncadrare a traseului planificat
+- HUD pentru traseul activ care se extinde/restrânge prin tap sau drag vertical
+- busolă MapLibre repoziționată sus-dreapta ca să nu intre peste acțiunile din dreapta-jos
 - expunere clară a metadata-ului de traseu:
   - regiune
   - descriere locală / rezumat
@@ -71,12 +76,15 @@ Ce face acum:
 
 ### Profil utilizator
 
-`UserTrailProfileStore` persistă onboarding-ul scurt și preferințele principale folosite de recomandări:
+Profilul curent este legat de Firebase Auth și Firestore, cu fallback local pentru situații offline. `ProfileAssessmentEngine` construiește profilul inițial din onboarding, iar `ProfileProgressionEngine` calculează XP, niveluri și achievement-uri.
 
-- nivel și ritm estimat
-- preferință pentru durată / efort
-- confort pentru diferență de nivel
-- preferință de siguranță și experiență
+Persistența curentă:
+
+- Firestore pentru profil, preferințe și istoric trasee
+- `ProfileCacheStore` pentru ultimul profil autentificat
+- `PendingTrailCompletionStore` pentru finalizări făcute offline
+- `ActiveTrail.ownerUid` pentru legarea traseului activ de contul care l-a selectat
+- `MainViewModel.discardActiveTrailIfForeign(...)` elimină traseul restaurat local dacă aparține altui UID
 
 ### Recomandări de trasee
 
@@ -156,15 +164,19 @@ Runtime-ul activ pentru offline este determinist: pachet local de cunoștințe, 
 
 ### SOS
 
-`SosScreen` rămâne separat de assistant și safety policy, dar fluxul operațional complet de escaladare 112/SOS nu este încă extins peste partea demo existentă.
+`SosScreen` construiește un mesaj de urgență din GPS, baterie, traseu activ, progres și date medicale opționale. Aplicația deschide compozitorul SMS sau dialer-ul prin intent-uri de sistem; nu trimite SMS și nu sună automat în fundal.
+
+Limitarea rămasă: nu există un flux automat de escaladare fără confirmarea utilizatorului, intenționat din motive de siguranță și control Android.
 
 ## Dependențe externe la runtime
 
 Produsul rămâne offline-first pentru reasoning și datele locale de trasee, dar există în continuare dependențe externe pentru:
 
-- tileset-urile hărții
+- autentificare și sincronizare Firebase
+- tileset-urile hărții când nu există pack local pentru traseul curent
 - forecast-ul Meteoblue
 - imagini externe de traseu, unde există
+- formulare Gemini pe calea online
 
 ## Testare și validare
 
@@ -179,9 +191,10 @@ Sunt acoperite teste unitare pentru:
 Comenzile de validare folosite în repo:
 
 ```powershell
-.\gradlew.bat :app:assembleDebug
-.\gradlew.bat :app:testDebugUnitTest
-.\gradlew.bat :app:installDebug
-adb shell am start -n com.nego.scouty/.MainActivity
-adb logcat -d
+.\gradlew.bat :app:compileDebugKotlin :app:testDebugUnitTest --continue
 ```
+
+Rezultat 2026-07-02:
+
+- `:app:compileDebugKotlin` trece
+- `:app:testDebugUnitTest` rulează 210 teste și are 6 eșecuri rămase în `SosMessageBuilderTest` și `GearRecommendationEngineTest`
