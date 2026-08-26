@@ -326,7 +326,7 @@ Reprodus în secțiunea **14.2**. Highlight-urile:
 | `androidx.compose.ui:ui-tooling`, `ui-test-manifest` (debug) | BOM |
 
 **Observații cheie:**
-- **NU există** dependențe Firebase (auth, firestore, storage), nu există Gemini/OpenAI/Anthropic SDK-uri, nu există MLKit, nu există ZXing, nu există TensorFlow Lite, nu există PyTorch Mobile.
+- **NU există** dependențe Firebase (auth, firestore, storage), nu există SDK-uri generative suplimentare, nu există MLKit, nu există ZXing, nu există TensorFlow Lite, nu există PyTorch Mobile.
 - **NU există** plugin `com.google.gms.google-services` și nici `google-services.json`.
 - Chatul offline nu folosește un LLM local. Răspunsul este selectat din cardurile locale și reordonat semantic; generarea naturală este disponibilă doar pe calea online prin Gemini.
 
